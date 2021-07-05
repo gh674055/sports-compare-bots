@@ -44,6 +44,7 @@ Playoffs | The default is to only show regular season stats, but you can get any
 Playoff shortcuts| Shortcuts to only grab certain playoff rounds | World Series, Stanley Cup, Super Bowl, Conference Finals, First Round
 Series Game | Only grab certain playoff series games | series-game:7, series-game:1-4
 Location | Can have any comparison only be for home/away games| away, 2016 away, last 10 home starts
+Arena/Stadium | Only include games played in a specific arena. | stadium:(fenway park), 2012 arena:(nassau coliseum), stadium:(gillette)
 Team | Can have any comparison only include while playing for a specific team, or a combo of em. Based on the abbreviations used by Sports Reference | T:NYY, 2018 T:NYR-WSH
 Opponent | Can have any comparison only include against a specific opponent or a combo of em. Based on the abbreviations used by Sports Reference | O:NYY, 2018 O:NYR-WSH
 Rookie | Can have any comparison only include games the player was rookie-eligible | Rookie
@@ -59,6 +60,7 @@ Career Game | Can have any comparison only include a specific career game or car
 Days Rest | Can have any comparison only include a games where a player had a specific amount of days rest, or a range of days rest. | 2015 Days-Rest:7, 2018 Dr:6-10, Days-Rest:1-8
 Days/Games In A Row | Can have any comparison only include games where a player played a specific amount of days/games in a row, including the given game. Can provided a range of days/games | 2015 Days-In-A-Row:3, 2018 Games-In-A-Row:2-4, Games-In-A-Row:1-3
 Result | Can have any comparison only include games the player won/lost/tied | Win, 2018 Loss, Tie
+Time | Can have any comparison only include day or night games | day, 2016 night
 Month | Can have any comparison only include during a specific month, or a combo of em | December, 2018 June-July
 Temperate Season | Can have any comparison only include during a season. This is determined by the equinox/solstice days of that year | summer, winter, fall, spring
 Day | Can have a comparison only count games played on a certain day, or a combo of them | Sunday, 2018 Saturday-Sunday
