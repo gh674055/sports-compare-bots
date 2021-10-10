@@ -195,27 +195,27 @@ stat_groups = {
                 "game-np" : 1970
             }
         },
-        "Cmp/16G" : {
+        "Cmp/17G" : {
             "positive" : True,
             "round" : 2
         },
-        "Att/16G" : {
+        "Att/17G" : {
             "positive" : True,
             "round" : 2
         },
-        "Yds/16G": {
+        "Yds/17G": {
             "positive" : True,
             "round" : 2
         },
-        "TD/16G": {
+        "TD/17G": {
             "positive" : True,
             "round" : 2
         },
-        "Int/16G": {
+        "Int/17G": {
             "positive" : False,
             "round" : 2
         },
-        "Sk/16G": {
+        "Sk/17G": {
             "positive" : False,
             "round" : 2,
             "valid_since" : {
@@ -223,7 +223,7 @@ stat_groups = {
                 "game-np" : 1970
             }
         },
-        "SkYds/16G": {
+        "SkYds/17G": {
             "positive" : False,
             "display" : False,
             "round" : 2,
@@ -326,11 +326,11 @@ stat_groups = {
                 "season" : 1994
             }
         },
-        "Yds/16G": {
+        "Yds/17G": {
             "positive" : True,
             "round" : 2
         },
-        "TD/16G": {
+        "TD/17G": {
             "positive" : True,
             "round" : 2
         },
@@ -339,7 +339,7 @@ stat_groups = {
             "round" : "percent",
             "display" : False
         },
-        "Tnv/16G": {
+        "Tnv/17G": {
             "positive" : False,
             "round" : 2,
             "valid_since" : {
@@ -347,7 +347,7 @@ stat_groups = {
                 "season" : 1994
             }
         },
-        "Pick6/16G": {
+        "Pick6/17G": {
             "positive" : False,
             "round" : 2,
             "valid_since" : {
@@ -369,7 +369,7 @@ stat_groups = {
                 "game" : 1950
             }
         },
-        "4QC/16G" : {
+        "4QC/17G" : {
             "positive" : True,
             "round" : 2,
             "valid_since" : {
@@ -377,7 +377,7 @@ stat_groups = {
                 "game" : 1950
             }
         },
-        "GWD/16G" : {
+        "GWD/17G" : {
             "positive" : True,
             "round" : 2,
             "valid_since" : {
@@ -393,7 +393,7 @@ stat_groups = {
                 "game" : 1950
             }
         },
-        "QBW/16G" : {
+        "QBW/17G" : {
             "positive" : True,
             "display" : False,
             "valid_since" : {
@@ -409,7 +409,7 @@ stat_groups = {
                 "game" : 1950
             }
         },
-        "QBL/16G" : {
+        "QBL/17G" : {
             "positive" : False,
             "display" : False,
             "valid_since" : {
@@ -425,7 +425,7 @@ stat_groups = {
                 "game" : 1950
             }
         },
-        "QBT/16G" : {
+        "QBT/17G" : {
             "positive" : False,
             "display" : False,
             "valid_since" : {
@@ -440,7 +440,7 @@ stat_groups = {
                 "game" : 1950
             }
         },
-        "Rec/16G" : {
+        "Rec/17G" : {
             "positive" : True,
             "valid_since" : {
                 "season" : 1950,
@@ -921,26 +921,26 @@ stat_groups = {
                 "season" : 1994
             }
         },
-        "Att/16G": {
+        "Att/17G": {
             "positive" : True,
             "round" : 2
         },
-        "Yds/16G": {
+        "Yds/17G": {
             "positive" : True,
             "round" : 2
         },
-        "TD/16G": {
+        "TD/17G": {
             "positive" : True,
             "round" : 2
         },
-        "Fmb/16G": {
+        "Fmb/17G": {
             "positive" : False,
             "round" : 2,
             "valid_since" : {
                 "game-np" : 1994
             }
         },
-        "FmbLst/16G": {
+        "FmbLst/17G": {
             "positive" : False,
             "round" : 2,
             "valid_since" : {
@@ -1258,11 +1258,11 @@ stat_groups = {
             "positive" : True,
             "round" : 2
         },
-        "Rec/16G": {
+        "Rec/17G": {
             "positive" : True,
             "round" : 2
         },
-        "Tgt/16G": {
+        "Tgt/17G": {
             "positive" : True,
             "round" : 2,
             "valid_since" : {
@@ -1270,11 +1270,11 @@ stat_groups = {
                 "game" : 1992
             }
         },
-        "Yds/16G": {
+        "Yds/17G": {
             "positive" : True,
             "round" : 2
         },
-        "TD/16G": {
+        "TD/17G": {
             "positive" : True,
             "round" : 2
         }
@@ -1608,30 +1608,30 @@ stat_groups = {
                 "season" : 1994
             }
         },
-        "Tch/16G": {
+        "Tch/17G": {
             "positive" : True,
             "round" : 2
         },
-        "Yds/16G": {
+        "Yds/17G": {
             "positive" : True,
             "round" : 2
         },
-        "TD/16G": {
+        "TD/17G": {
             "positive" : True,
             "round" : 2
         },
-        "2PM/16G": {
+        "2PM/17G": {
             "positive" : True,
             "round" : 2
         },
-        "Fmb/16G": {
+        "Fmb/17G": {
             "positive" : False,
             "round" : 2,
             "valid_since" : {
                 "game-np" : 1994
             }
         },
-        "FmbLst/16G": {
+        "FmbLst/17G": {
             "positive" : False,
             "round" : 2,
             "valid_since" : {
@@ -1653,11 +1653,11 @@ stat_groups = {
             "positive" : True,
             "round" : 2
         },
-        "APYds/16G": {
+        "APYds/17G": {
             "positive" : True,
             "round" : 2
         },
-        "APTD/16G": {
+        "APTD/17G": {
             "positive" : True,
             "round" : 2
         }
@@ -1825,7 +1825,7 @@ stat_groups = {
                 "game" : 2006
             }
         },
-        "Solo/16": {
+        "Solo/17": {
             "positive" : True,
             "round" : 2,
             "valid_since" : {
@@ -1833,7 +1833,7 @@ stat_groups = {
                 "game" : 1999
             }
         },
-        "Ast/16": {
+        "Ast/17": {
             "positive" : True,
             "round" : 2,
             "valid_since" : {
@@ -1841,7 +1841,7 @@ stat_groups = {
                 "game" : 1999
             }
         },
-        "Comb/16": {
+        "Comb/17": {
             "positive" : True,
             "round" : 2,
             "valid_since" : {
@@ -1849,7 +1849,7 @@ stat_groups = {
                 "game" : 1999
              }
         },
-        "TFL/16": {
+        "TFL/17": {
             "positive" : True,
             "round" : 2,
             "valid_since" : {
@@ -1858,7 +1858,7 @@ stat_groups = {
                 "inconsistent" : 2008
             }
         },
-        "Sk/16": {
+        "Sk/17": {
             "positive" : True,
             "round" : 2,
             "valid_since" : {
@@ -1867,7 +1867,7 @@ stat_groups = {
                 "inconsistent" : 1982
             }
         },
-        "QBHits/16": {
+        "QBHits/17": {
             "positive" : True,
             "round" : 2,
             "valid_since" : {
@@ -1875,19 +1875,19 @@ stat_groups = {
                 "game" : 2006
             }
         },
-        "FF/16": {
+        "FF/17": {
             "positive" : True,
             "round" : 2
         },
-        "Int/16": {
+        "Int/17": {
             "positive" : True,
             "round" : 2
         },
-        "TD/16" : {
+        "TD/17" : {
             "positive" : True,
             "round" : 2
         },
-        "PD/16": {
+        "PD/17": {
             "positive" : True,
             "round" : 2,
             "valid_since" : {
@@ -2526,7 +2526,7 @@ stat_groups = {
                 "game" : 1994
             }
         },
-        "Pen/16G": {
+        "Pen/17G": {
             "positive" : False,
             "round" : 2,
             "valid_since" : {
@@ -2534,7 +2534,7 @@ stat_groups = {
                 "game" : 1994
             }
         },
-        "AcptPen/16G": {
+        "AcptPen/17G": {
             "positive" : False,
             "round" : 2,
             "valid_since" : {
@@ -2542,7 +2542,7 @@ stat_groups = {
                 "game" : 1994
             }
         },
-        "PenYds/16G": {
+        "PenYds/17G": {
             "positive" : False,
             "round" : 2,
             "valid_since" : {
@@ -2787,23 +2787,23 @@ stat_groups = {
             "positive" : True,
             "round" : 2
         },
-        "FGM/16G": {
+        "FGM/17G": {
             "positive" : True,
             "round" : 2
         },
-        "FGA/16G": {
+        "FGA/17G": {
             "positive" : True,
             "round" : 2
         },
-        "XPM/16G": {
+        "XPM/17G": {
             "positive" : True,
             "round" : 2
         },
-        "XPAtt/16G": {
+        "XPAtt/17G": {
             "positive" : True,
             "round" : 2
         },
-        "Pts/16G": {
+        "Pts/17G": {
             "positive" : True,
             "round" : 2
         }
@@ -2909,15 +2909,15 @@ stat_groups = {
             "positive" : True,
             "round" : 2
         },
-        "Pnt/16G": {
+        "Pnt/17G": {
             "positive" : True,
             "round" : 2
         },
-        "Yds/16G": {
+        "Yds/17G": {
             "positive" : True,
             "round" : 2
         },
-        "Blck/16G": {
+        "Blck/17G": {
             "positive" : False,
             "round": 2
         }
@@ -2962,15 +2962,15 @@ stat_groups = {
             "round" : 2,
             "display": False
         },
-        "Rt/16G": {
+        "Rt/17G": {
             "positive" : True,
             "round" : 2
         },
-        "Yds/16G": {
+        "Yds/17G": {
             "positive" : True,
             "round" : 2
         },
-        "TD/16G": {
+        "TD/17G": {
             "positive" : True,
             "round" : 2
         }
@@ -3006,15 +3006,15 @@ stat_groups = {
             "round" : 2,
             "display" : False
         },
-        "Rt/16G": {
+        "Rt/17G": {
             "positive" : True,
             "round" : 2
         },
-        "Yds/16G": {
+        "Yds/17G": {
             "positive" : True,
             "round" : 2
         },
-        "TD/16G": {
+        "TD/17G": {
             "positive" : True,
             "round" : 2
         }
@@ -3066,7 +3066,7 @@ stat_groups = {
                 "game-np" : 1994
             }
         },
-        "STD/16G": {
+        "STD/17G": {
             "positive" : True,
             "round" : 2,
             "valid_since" : {
@@ -3117,7 +3117,7 @@ stat_groups = {
                 "game-np" : 1994
             }
         },
-        "0.5PPR/16G": {
+        "0.5PPR/17G": {
             "positive" : True,
             "round" : 2,
             "valid_for" : ["Receiving"],
@@ -3173,7 +3173,7 @@ stat_groups = {
                 "game-np" : 1994
             }
         },
-        "PPR/16G": {
+        "PPR/17G": {
             "positive" : True,
             "round" : 2,
             "valid_for" : ["Receiving"],
@@ -4618,49 +4618,49 @@ formulas = {
     "Passing" : {
         "Att/G" : "Att / G",
         "Cmp/G" : "Cmp / G",
-        "Att/16G" : "Att / (G / 16)",
-        "Cmp/16G" : "Cmp / (G / 16)",
+        "Att/17G" : "Att / (G / 17)",
+        "Cmp/17G" : "Cmp / (G / 17)",
         "Cmp%" : "Cmp / Att",
         "Yds/G": "Yds / G",
-        "Yds/16G": "Yds / (G / 16)",
+        "Yds/17G": "Yds / (G / 17)",
         "Y/C" : "Yds / Cmp",
         "Y/A" : "Yds / Att",
         "AY/A": "(Yds + 20*(TD) - 45*(Int))/(Att)",
         "NY/A": "(Yds - SkYds) / (Att + Sk)",
         "ANY/A": "(Yds - SkYds + 20*(TD) - 45*(Int)) / (Att + Sk)",
         "TD/G" : "TD / G",
-        "TD/16G" : "TD / (G / 16)",
+        "TD/17G" : "TD / (G / 17)",
         "TD%" : "TD / Att",
         "Int/G" : "Int / G",
-        "Int/16G" : "Int / (G / 16)",
+        "Int/17G" : "Int / (G / 17)",
         "Int%" : "Int / Att",
         "TD/Int" : "TD / Int",
         "Rate" : "Special",
         "Sk/G" : "Sk / G",
-        "Sk/16G" : "Sk / (G / 16)",
+        "Sk/17G" : "Sk / (G / 17)",
         "Sk%" : "Sk / (Att + Sk)",
         "SkYds/G" : "SkYds / G",
-        "SkYds/16G" : "SkYds / (G / 16)",
+        "SkYds/17G" : "SkYds / (G / 17)",
         "Yds/Sk" : "SkYds / Sk"
     },
     "Era Adjusted Passing" : {
-        "4QC/16G" : "4QC / (G / 16)",
-        "GWD/16G" : "GWD / (G / 16)",
-        "QBW/16G" : "QBW / ((QBW + QBL + QBT) / 16)",
-        "QBL/16G" : "QBL / ((QBW + QBL + QBT) / 16)",
-        "QBT/16G" : "QBT / ((QBW + QBL + QBT) / 16)",
+        "4QC/17G" : "4QC / (G / 17)",
+        "GWD/17G" : "GWD / (G / 17)",
+        "QBW/17G" : "QBW / ((QBW + QBL + QBT) / 17)",
+        "QBL/17G" : "QBL / ((QBW + QBL + QBT) / 17)",
+        "QBT/17G" : "QBT / ((QBW + QBL + QBT) / 17)",
         "TtlYds" : "Special",
         "Yds/G": "TtlYds / G",
-        "Yds/16G": "TtlYds / (G / 16)",
+        "Yds/17G": "TtlYds / (G / 17)",
         "Tnv" : "Special",
         "Tnv/G": "Tnv / G",
-        "Tnv/16G": "Tnv / (G / 16)",
-        "Pick6/16G" : "Pick6 / (G / 16)",
+        "Tnv/17G": "Tnv / (G / 17)",
+        "Pick6/17G" : "Pick6 / (G / 17)",
         "Rec" : "Special",
-        "Rec/16G" : "Special",
+        "Rec/17G" : "Special",
         "TtlTD" : "Special",
         "TD/G" : "TtlTD / G",
-        "TD/16G" : "TtlTD / (G / 16)",
+        "TD/17G" : "TtlTD / (G / 17)",
         "TtlTD%" : "Special",
         "TtlTDTnv" : "Special",
         "TD/Tnv" : "TtlTDTnv/Tnv",
@@ -4694,17 +4694,17 @@ formulas = {
     },
     "Rushing" : {
         "Att/G" : "Att / G",
-        "Att/16G" : "Att / (G / 16)",
+        "Att/17G" : "Att / (G / 17)",
         "Yds/G": "Yds / G",
-        "Yds/16G": "Yds / (G / 16)",
+        "Yds/17G": "Yds / (G / 17)",
         "Yds/Att": "Yds / Att",
         "TD/G" : "TD / G",
-        "TD/16G" : "TD / (G / 16)",
+        "TD/17G" : "TD / (G / 17)",
         "TD%": "TD / Att",
         "Fmb/G" : "Fmb / G",
-        "Fmb/16G" : "Fmb / (G / 16)",
+        "Fmb/17G" : "Fmb / (G / 17)",
         "FmbLst/G" : "FmbLst / G",
-        "FmbLst/16G" : "FmbLst / (G / 16)",
+        "FmbLst/17G" : "FmbLst / (G / 17)",
         "Fmb%" : "Special",
         "FmbLst%" : "FmbLst / Fmb"
     },
@@ -4729,16 +4729,16 @@ formulas = {
     },
     "Receiving" : {
         "Tgt/G" : "Tgt / G",
-        "Tgt/16G" : "Tgt / (G / 16)",
+        "Tgt/17G" : "Tgt / (G / 17)",
         "Rec/G" : "Rec / G",
-        "Rec/16G" : "Rec / (G / 16)",
+        "Rec/17G" : "Rec / (G / 17)",
         "Yds/G": "Yds / G",
-        "Yds/16G": "Yds / (G / 16)",
+        "Yds/17G": "Yds / (G / 17)",
         "Yds/Rec": "Yds / Rec",
         "Yds/Tgt": "Yds / Tgt",
         "Catch%" : "Rec / Tgt",
         "TD/G": "TD / G",
-        "TD/16G" : "TD / (G / 16)",
+        "TD/17G" : "TD / (G / 17)",
         "TD%": "TD / Rec"
     },
     "Advanced/Receiving" : {
@@ -4762,54 +4762,54 @@ formulas = {
     },
     "Scrimmage/All Purpose" : {
         "Tch/G" : "Touch / G",
-        "Tch/16G" : "Touch / (G / 16)",
+        "Tch/17G" : "Touch / (G / 17)",
         "Yds/G": "Yds / G",
-        "Yds/16G": "Yds / (G / 16)",
+        "Yds/17G": "Yds / (G / 17)",
         "Yds/Tch": "Yds / Touch",
         "TD/G": "TD / G",
-        "TD/16G" : "TD / (G / 16)",
-        "2PM/16G" : "2PM / (G / 16)",
+        "TD/17G" : "TD / (G / 17)",
+        "2PM/17G" : "2PM / (G / 17)",
         "TD%": "TD / Touch",
         "Fmb/G" : "Fmb / G",
-        "Fmb/16G" : "Fmb / (G / 16)",
+        "Fmb/17G" : "Fmb / (G / 17)",
         "FmbLst/G" : "FmbLst / G",
-        "FmbLst/16G" : "FmbLst / (G / 16)",
+        "FmbLst/17G" : "FmbLst / (G / 17)",
         "Fmb%" : "Special",
         "FmbLst%" : "FmbLst / Fmb",
         "APYds/G": "APYds / G",
-        "APYds/16G": "APYds / (G / 16)",
+        "APYds/17G": "APYds / (G / 17)",
         "APTD/G": "APTD / G",
-        "APTD/16G" : "APTD / (G / 16)",
+        "APTD/17G" : "APTD / (G / 17)",
     },
     "Defense" : {
         "Ttl TD" : "Special"
     },
     "Defense Per Game/Snap" : {
-        "Int/16" : "Int / (G / 16)",
+        "Int/17" : "Int / (G / 17)",
         "Int%" : "Int / DefSnp",
-        "PD/16" : "PD/ (G / 16)",
+        "PD/17" : "PD/ (G / 17)",
         "PD%" : "PD / DefSnp",
-        "FF/16" : "FF / (G / 16)",
+        "FF/17" : "FF / (G / 17)",
         "FF%" : "FF / DefSnp",
         "Solo" : "Solo / G",
-        "Solo/16" : "Solo / (G / 16)",
+        "Solo/17" : "Solo / (G / 17)",
         "Solo%" : "Solo / DefSnp",
         "Ast" : "Ast / G",
-        "Ast/16" : "Ast / (G / 16)",
+        "Ast/17" : "Ast / (G / 17)",
         "Ast%" : "Ast / DefSnp",
         "Comb" : "Comb / G",
-        "Comb/16" : "Comb / (G / 16)",
+        "Comb/17" : "Comb / (G / 17)",
         "Comb%" : "Comb / DefSnp",
         "TFL" : "TFL / G",
-        "TFL/16" : "TFL / (G / 16)",
+        "TFL/17" : "TFL / (G / 17)",
         "TFL%" : "TFL / DefSnp",
         "Sk" : "Sk / G",
-        "Sk/16" : "Sk / (G / 16)",
+        "Sk/17" : "Sk / (G / 17)",
         "Sk%" : "Sk / DefSnp",
         "QBHits" : "QBHits / G",
-        "QBHits/16" : "QBHits / (G / 16)",
+        "QBHits/17" : "QBHits / (G / 17)",
         "QBHit%" : "QBHits / DefSnp",
-        "TD/16" : "Ttl TD / (G / 16)"
+        "TD/17" : "Ttl TD / (G / 17)"
     },
     "Advanced/Defense" : {
         "MTckl%" : "MissTckl / (MissTckl + Comb)",
@@ -4839,13 +4839,13 @@ formulas = {
         "STSnp/G" : "STSnp / G",
         "Snp/G" : "Snp / G",
         "Pen/G" : "Pen / G",
-        "Pen/16G" : "Pen / (G / 16)",
+        "Pen/17G" : "Pen / (G / 17)",
         "Pen%" : "Pen / Snp",
         "AcptPen/G" : "AcptPen / G",
-        "AcptPen/16G" : "AcptPen / (G / 16)",
+        "AcptPen/17G" : "AcptPen / (G / 17)",
         "AcptPen%" : "AcptPen / Snp",
         "PenYds/G" : "PenYds / G",
-        "PenYds/16G" : "PenYds / (G / 16)",
+        "PenYds/17G" : "PenYds / (G / 17)",
         "PenYds/Pen" : "PenYds / AcptPen"
     },
     "Snaps" : {
@@ -4857,18 +4857,18 @@ formulas = {
     },
     "Scoring" : {
         "FGM/G" : "FGM / G",
-        "FGM/16G" : "FGM / (G / 16)",
+        "FGM/17G" : "FGM / (G / 17)",
         "FGA/G" : "FGA / G",
-        "FGA/16G" : "FGA / (G / 16)",
+        "FGA/17G" : "FGA / (G / 17)",
         "FG%" : "FGM / FGA",
         "XPM/G": "XPM / G",
-        "XPM/16G": "XPM / (G / 16)",
+        "XPM/17G": "XPM / (G / 17)",
         "XPAtt/G": "XPA / G",
-        "XPAtt/16G": "XPA / (G / 16)",
+        "XPAtt/17G": "XPA / (G / 17)",
         "XP%" : "XPM / XPA",
         "Pts" : "(FGM * 3) + XPM",
         "Pts/G" : "Pts / G",
-        "Pts/16G" : "Pts / (G / 16)"
+        "Pts/17G" : "Pts / (G / 17)"
     },
     "Advanced/Kicking" : {
         "Lng" : "MAX",
@@ -4883,33 +4883,33 @@ formulas = {
     "Punting" : {
         "Yds/Pnt" : "Yds / Pnt",
         "Pnt/G" : "Pnt / G",
-        "Pnt/16G" : "Pnt / (G / 16)",
+        "Pnt/17G" : "Pnt / (G / 17)",
         "Yds/G": "Yds / G",
-        "Yds/16G": "Yds / (G / 16)",
-        "Blck/16G": "Blck / (G / 16)"
+        "Yds/17G": "Yds / (G / 17)",
+        "Blck/17G": "Blck / (G / 17)"
     },
     "Advanced/Punting" : {
         "Lng" : "MAX"
     },
     "Kick Returns" : {
         "Rt/G" : "Yds / G",
-        "Rt/16G" : "Yds / (G / 16)",
+        "Rt/17G" : "Yds / (G / 17)",
         "Yds/G" : "Yds / G",
-        "Yds/16G": "Yds / (G / 16)",
+        "Yds/17G": "Yds / (G / 17)",
         "Yds/Rt": "Yds / Rt",
         "TD%": "TD / Rt",
         "TD/G": "TD / G",
-        "TD/16G" : "TD / (G / 16)"
+        "TD/17G" : "TD / (G / 17)"
     },
     "Punt Returns" : {
         "Rt/G" : "Yds / G",
-        "Rt/16G" : "Yds / (G / 16)",
+        "Rt/17G" : "Yds / (G / 17)",
         "Yds/G" : "Yds / G",
-        "Yds/16G": "Yds / (G / 16)",
+        "Yds/17G": "Yds / (G / 17)",
         "Yds/Rt": "Yds / Rt",
         "TD%": "TD / Rt",
         "TD/G": "TD / G",
-        "TD/16G" : "TD / (G / 16)"
+        "TD/17G" : "TD / (G / 17)"
     },
     "Advanced/Kick Returns" : {
         "KickLng" : "MAX",
@@ -5674,8 +5674,8 @@ def calculate_formula(stat, formula, data, header, headers, player_type, all_row
             return str(data[header]["ATSTeamW"]) + ":" + str(data[header]["ATSTeamL"]) + ":" + str(data[header]["ATSTeamT"])
         elif stat == "O/U TmRec":
             return str(data[header]["OUTeamW"]) + ":" + str(data[header]["OUTeamL"]) + ":" + str(data[header]["OUTeamT"])
-        elif stat == "Rec/16G":
-            return str(data[header]["QBW/16G"]) + ":" + str(data[header]["QBL/16G"]) + ":" + str(data[header]["QBT/16G"])
+        elif stat == "Rec/17G":
+            return str(data[header]["QBW/17G"]) + ":" + str(data[header]["QBL/17G"]) + ":" + str(data[header]["QBT/17G"])
         elif stat == "TtlYds":
             total_yds = 0
             if "Passing" in data:

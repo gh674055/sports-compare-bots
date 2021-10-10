@@ -6674,7 +6674,7 @@ def calculate_values(all_rows, player_type, og_player_data, extra_stats={}):
                     pass
 
                 player_data["stat_values"]["Fantasy"][stat + "/G"] = per_game_val
-                player_data["stat_values"]["Fantasy"][stat + "/16G"] = per_game_val * 16
+                player_data["stat_values"]["Fantasy"][stat + "/17G"] = per_game_val * 17
 
                 all_vals = []
                 for row in all_rows:
@@ -13768,7 +13768,7 @@ def comb_rows(matching_rows, player_type, lower=True, stats=None):
                 pass
 
             comb_row["Fantasy"][stat + "/G"] = per_game_val
-            comb_row["Fantasy"][stat + "/16G"] = per_game_val * 16
+            comb_row["Fantasy"][stat + "/17G"] = per_game_val * 17
 
             all_vals = []
             for row in matching_rows:
@@ -14764,7 +14764,7 @@ def fill_row(row, player_type, lower=True, stats=None):
                     pass
 
                 row["Fantasy"][fantasy_stat + "/G"] = per_game_val
-                row["Fantasy"][fantasy_stat + "/16G"] = per_game_val * 16
+                row["Fantasy"][fantasy_stat + "/17G"] = per_game_val * 17
     
     if stats == None or ("Era Adjusted Passing" in stats and set(stats["Era Adjusted Passing"]).intersection(advanced_stats)):
         missing_advanced = False
@@ -19975,7 +19975,7 @@ def handle_table_data(player_data, player_type, header, over_header, highest_val
         if "valid_for" not in get_constant_data.stat_groups[over_header][header] or set(get_constant_data.stat_groups[over_header][header]["valid_for"]) & set(headers[player_type["da_type"]]):
             if "Fmb" not in header or over_header != "Rushing" or "Scrimmage/All Purpose" not in headers[player_type["da_type"]] or not headers[player_type["da_type"]]["Scrimmage/All Purpose"]:
                 if over_header != "Fantasy" or ("Receiving" in headers[player_type["da_type"]] and headers[player_type["da_type"]]["Receiving"]) or "PPR" not in header:
-                    if over_header == "Era Adjusted Passing" and (header == "Rec" or header == "Rec/16G" or header == "W/L%") and not any(True for true_player_type in player_data["stat_values"]["Shared"]["Types"] if true_player_type and "Passing" in headers[true_player_type] and headers[true_player_type]["Passing"]):
+                    if over_header == "Era Adjusted Passing" and (header == "Rec" or header == "Rec/17G" or header == "W/L%") and not any(True for true_player_type in player_data["stat_values"]["Shared"]["Types"] if true_player_type and "Passing" in headers[true_player_type] and headers[true_player_type]["Passing"]):
                         return "N/A"
                     elif over_header.startswith("Awards/Honors") and player_data["stat_values"]["Shared"]["is_playoffs"] == "Only" and not (header.startswith("Champ") or header.startswith("SB") or header.startswith("Seasons") or header.startswith("Player") or header.startswith("G")):
                         if has_non_playoffs:
