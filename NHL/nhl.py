@@ -6280,7 +6280,7 @@ def sub_parse_input(curr, comment, debug_mode, comment_obj, force_through):
         if not isinstance(comment, Message):
             reddit_message += "\n\n^(Made a mistake? Edit your comment and send me this )[^message](https://www.reddit.com/message/compose?to=nhlcomparebot&subject=Re-Run&message=" + comment.id + ")^( to re-run the comparison)"
             reddit_message += "\n\n^(Or delete the comparison by sending me this )[^message](https://www.reddit.com/message/compose?to=nhlcomparebot&subject=Delete&message=" + comment.id + ")"
-        reddit_message += "\n\n^(Instructions for usage and code can be found )[^here](https://github.com/gh674055/sports-compare-bots/wiki)"
+        reddit_message += "\n\n^(Instructions for usage and issue tracking can be found )[^here](https://github.com/gh674055/sports-compare-bots/wiki)"
         if len(reddit_message) > 10000:
             reddit_message = "Oh no, I had a problem with your request: Comment would be over the reddit max of 10000 characters!"
             if imgur_link:
@@ -6293,7 +6293,7 @@ def sub_parse_input(curr, comment, debug_mode, comment_obj, force_through):
             if not isinstance(comment, Message):
                 reddit_message += "\n\n^(Made a mistake? Edit your comment and send me this )[^message](https://www.reddit.com/message/compose?to=nhlcomparebot&subject=Re-Run&message=" + comment.id + ")^( to re-run the comparison)"
                 reddit_message += "\n\n^(Or delete the comparison by sending me this )[^message](https://www.reddit.com/message/compose?to=nhlcomparebot&subject=Delete&message=" + comment.id + ")"
-            reddit_message += "\n\n^(Instructions for usage and code can be found )[^here](https://github.com/gh674055/sports-compare-bots/wiki)"
+            reddit_message += "\n\n^(Instructions for usage and issue tracking can be found )[^here](https://github.com/gh674055/sports-compare-bots/wiki)"
         failed_counter = 0
         try_counter = 0
         last_wait_time = None
@@ -6316,7 +6316,7 @@ def sub_parse_input(curr, comment, debug_mode, comment_obj, force_through):
                 if (e.error_type == "RATELIMIT"):
                     if failed_counter == 0 and not isinstance(comment_obj["reply"], Message):
                         non_message_reddit_message = "Reddit is currently rate limiting this bot's comments! If this bot gets added to the approved users of r/" + comment.subreddit.display_name + " this should no longer occur. We will delay and try a few more times, but in the meantime here is your comparison as a message\n\n---\n" + non_message_reddit_message
-                        non_message_reddit_message += "\n\n^(Instructions for usage and code can be found )[^here](https://github.com/gh674055/sports-compare-bots/wiki)"
+                        non_message_reddit_message += "\n\n^(Instructions for usage and issue tracking can be found )[^here](https://github.com/gh674055/sports-compare-bots/wiki)"
                         if len(non_message_reddit_message) > 10000:
                             non_message_reddit_message = "Reddit is currently rate limiting this bot's comments! If this bot gets added to the approved users of r/" + comment.subreddit.display_name + " this should no longer occur. We will delay and try a few more times, but in the meantime here is your comparison as a message\n\n---\n"
                             non_message_reddit_message += "Oh no, I had a problem with your request: Comment would be over the reddit max of 10000 characters!"
@@ -6327,7 +6327,7 @@ def sub_parse_input(curr, comment, debug_mode, comment_obj, force_through):
                             non_message_reddit_message += "\n\n---"
                             if last_updated:
                                 reddit_message += "\n^(Stats last updated " + last_updated.strftime("%b %d %Y, %I:%M%p %Z") + ")"
-                            non_message_reddit_message += "\n\n^(Instructions for usage and code can be found )[^here](https://github.com/gh674055/sports-compare-bots/wiki)"
+                            non_message_reddit_message += "\n\n^(Instructions for usage and issue tracking can be found )[^here](https://github.com/gh674055/sports-compare-bots/wiki)"
                         try:
                             comment.author.message("NHLCompareBot Comparison " + comment.id, non_message_reddit_message)
                             logger.info("#" + str(threading.get_ident()) + "#   " + "Delay message sent")
