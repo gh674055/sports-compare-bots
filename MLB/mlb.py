@@ -12951,9 +12951,9 @@ def handle_player_data(player_data, time_frame, player_type, player_page, valid_
     if "Facing Stat Rank" in time_frame["qualifiers"] or "Facing League Stat Rank" in time_frame["qualifiers"] or "Facing AL Stat Rank" in time_frame["qualifiers"] or "Facing NL Stat Rank" in time_frame["qualifiers"] or "Facing Stat Percent" in time_frame["qualifiers"] or "Facing League Stat Percent" in time_frame["qualifiers"] or "Facing AL Stat Percent" in time_frame["qualifiers"] or "Facing NL Stat Percent" in time_frame["qualifiers"] or "Facing Stat" in time_frame["qualifiers"] or "Facing AL Stat" in time_frame["qualifiers"] or "Facing NL Stat" in time_frame["qualifiers"]:
         handle_stat_rank_stats(all_rows, time_frame["qualifiers"], player_type)
 
-    if ("Event Stat" in time_frame["qualifiers"] or "Event Stat Reversed" in time_frame["qualifiers"]) and has_other_game_quals(time_frame["qualifiers"]):
+    if ("Event Stat" in time_frame["qualifiers"] or "Event Stat Reversed" in time_frame["qualifiers"] or "Event Stats" in time_frame["qualifiers"] or "Event Stats Reversed" in time_frame["qualifiers"]):
         all_rows, missing_games = handle_mlb_game_stats_single_thread(all_rows, time_frame["qualifiers"], player_data, player_type, missing_games, extra_stats)
-    elif has_result_stat_qual or "Facing Lefty" in time_frame["qualifiers"] or "Facing Righty" in time_frame["qualifiers"] or "Batting Lefty" in time_frame["qualifiers"] or "Batting Righty" in time_frame["qualifiers"] or "Pitching Lefty" in time_frame["qualifiers"] or "Pitching Righty" in time_frame["qualifiers"] or "Stadium" in time_frame["qualifiers"] or "Start Time" in time_frame["qualifiers"] or "Local Start Time" in time_frame["qualifiers"] or "Game Number" in time_frame["qualifiers"] or "Event Formula" in time_frame["qualifiers"] or "Exact Pitch Type" in time_frame["qualifiers"] or "Pitch Type" in time_frame["qualifiers"] or "Exact Event Type" in time_frame["qualifiers"] or "Local Event Time" in time_frame["qualifiers"] or "Event Time" in time_frame["qualifiers"] or "Event Type" in time_frame["qualifiers"] or "Previous Exact Event Type" in time_frame["qualifiers"] or "Previous Event Type" in time_frame["qualifiers"] or "Upcoming Exact Player Event Type" in time_frame["qualifiers"] or "Upcoming Player Event Type" in time_frame["qualifiers"] or "Previous Exact Player Event Type" in time_frame["qualifiers"] or "Previous Player Event Type" in time_frame["qualifiers"] or "Upcoming Exact Event Type" in time_frame["qualifiers"] or "Upcoming Event Type" in time_frame["qualifiers"] or "Exact City" in time_frame["qualifiers"] or "City" in time_frame["qualifiers"] or "Exact State" in time_frame["qualifiers"] or "State" in time_frame["qualifiers"] or "Exact Time Zone" in time_frame["qualifiers"] or "Time Zone" in time_frame["qualifiers"] or "Exact Country" in time_frame["qualifiers"] or "Country" in time_frame["qualifiers"] or "Exact Event Description" in time_frame["qualifiers"] or "Event Description" in time_frame["qualifiers"] or "Hit Trajectory" in time_frame["qualifiers"] or "Hit Hardness" in time_frame["qualifiers"] or "Exact Stadium" in time_frame["qualifiers"] or "Facing Stat Rank" in time_frame["qualifiers"] or "Facing League Stat Rank" in time_frame["qualifiers"] or "Facing AL Stat Rank" in time_frame["qualifiers"] or "Facing NL Stat Rank" in time_frame["qualifiers"] or "Facing Stat Percent" in time_frame["qualifiers"] or "Facing League Stat Percent" in time_frame["qualifiers"] or "Facing AL Stat Percent" in time_frame["qualifiers"] or "Facing NL Stat Percent" in time_frame["qualifiers"] or "Facing Stat" in time_frame["qualifiers"] or "Facing NL Stat" in time_frame["qualifiers"] or "Facing AL Stat" in time_frame["qualifiers"] or "Inning Stat" in time_frame["qualifiers"] or "Batting Against" in time_frame["qualifiers"] or "Pitching Against" in time_frame["qualifiers"] or "Batting Against First Name" in time_frame["qualifiers"] or "Pitching Against First Name" in time_frame["qualifiers"] or "Batting Against Last Name" in time_frame["qualifiers"] or "Pitching Against Last Name" in time_frame["qualifiers"] or "Driven In" in time_frame["qualifiers"] or "Batted In" in time_frame["qualifiers"] or "Back To Back With" in time_frame["qualifiers"] or "Batting In Front Of" in time_frame["qualifiers"] or "Batting Behind" in time_frame["qualifiers"] or "Caught By" in time_frame["qualifiers"] or "Stealing On" in time_frame["qualifiers"] or "On Field With" in time_frame["qualifiers"] or "On Field Against" in time_frame["qualifiers"] or "Position" in time_frame["qualifiers"] or "Hit Location" in time_frame["qualifiers"] or "Exact Hit Location" in time_frame["qualifiers"] or "Facing Position" in time_frame["qualifiers"] or "Facing Primary Position" in time_frame["qualifiers"] or "Facing Main Position" in time_frame["qualifiers"] or "Bases Empty" in time_frame["qualifiers"] or "Men On Base" in time_frame["qualifiers"] or "Walk Off" in time_frame["qualifiers"] or "Inside The Park HR" in time_frame["qualifiers"] or "Walk Off Opportunity" in time_frame["qualifiers"] or "Game Tying" in time_frame["qualifiers"] or "Late" in time_frame["qualifiers"] or "Close" in time_frame["qualifiers"] or "Game Tying Opportunity" in time_frame["qualifiers"] or "Go Ahead" in time_frame["qualifiers"] or "Go Ahead Opportunity" in time_frame["qualifiers"] or "Go Ahead Or Game Tying" in time_frame["qualifiers"] or "Go Ahead Or Game Tying Opportunity" in time_frame["qualifiers"] or "Game Winning" in time_frame["qualifiers"] or "Tying On Deck" in time_frame["qualifiers"] or "Winning On Deck" in time_frame["qualifiers"] or "Tying At Bat" in time_frame["qualifiers"] or "Winning At Bat" in time_frame["qualifiers"] or "Tying In Scoring" in time_frame["qualifiers"] or "Winning In Scoring" in time_frame["qualifiers"] or "Tying On Base" in time_frame["qualifiers"] or "Winning On Base" in time_frame["qualifiers"] or "Last Inning" in time_frame["qualifiers"] or "Last Out" in time_frame["qualifiers"] or "Last Batter" in time_frame["qualifiers"] or "Extra Innings" in time_frame["qualifiers"] or "RISP" in time_frame["qualifiers"] or "Pitcher First Batter Faced" in time_frame["qualifiers"] or "Batter First Plate Appearance" in time_frame["qualifiers"]  or "Pitcher Last Batter Faced" in time_frame["qualifiers"] or "Batter Last Plate Appearance" in time_frame["qualifiers"] or "Facing Pitcher" in time_frame["qualifiers"] or "Facing Position Player" in time_frame["qualifiers"] or "Stealing Second" in time_frame["qualifiers"] or "Stealing Third" in time_frame["qualifiers"] or "Stealing Home" in time_frame["qualifiers"] or "Bunting" in time_frame["qualifiers"] or "Fastball" in time_frame["qualifiers"] or "Out Of Zone" in time_frame["qualifiers"] or "In Zone" in time_frame["qualifiers"] or "Breaking" in time_frame["qualifiers"] or "Offspeed" in time_frame["qualifiers"] or "Pinch Hitting" in time_frame["qualifiers"] or "Facing Starter" in time_frame["qualifiers"] or "Facing Reliever" in time_frame["qualifiers"] or "Leading Off Inning" in time_frame["qualifiers"] or "Inning Started" in time_frame["qualifiers"] or "Leading Off Game" in time_frame["qualifiers"] or "Leading Off Whole Game" in time_frame["qualifiers"] or "Swung At First Pitch" in time_frame["qualifiers"] or "First Pitch" in time_frame["qualifiers"] or "Batter Ahead" in time_frame["qualifiers"] or "Even Count" in time_frame["qualifiers"] or "Pitcher Ahead" in time_frame["qualifiers"] or "After Batter Ahead" in time_frame["qualifiers"] or "After Even Count" in time_frame["qualifiers"] or "After Pitcher Ahead" in time_frame["qualifiers"] or "Bottom Inning" in time_frame["qualifiers"] or "Top Inning" in time_frame["qualifiers"] or "Full Count" in time_frame["qualifiers"] or "Man On First" in time_frame["qualifiers"] or "Man On Second" in time_frame["qualifiers"] or "Man On Third" in time_frame["qualifiers"] or "Bases Loaded" in time_frame["qualifiers"] or "Ending Outs" in time_frame["qualifiers"] or "Outs" in time_frame["qualifiers"] or "Outs Remaining" in time_frame["qualifiers"] or "Swinging On Strikes" in time_frame["qualifiers"] or "Swinging On Balls" in time_frame["qualifiers"] or "After Swinging On Strikes" in time_frame["qualifiers"] or "After Swinging On Balls" in time_frame["qualifiers"] or "After Strikes" in time_frame["qualifiers"] or "After Balls" in time_frame["qualifiers"] or "Strikes" in time_frame["qualifiers"] or "Balls" in time_frame["qualifiers"] or "Runs" in time_frame["qualifiers"] or "Play Outs" in time_frame["qualifiers"] or "RBIs" in time_frame["qualifiers"] or "Number Drove In" in time_frame["qualifiers"] or "Pitch Speed" in time_frame["qualifiers"] or "Pitch Zone" in time_frame["qualifiers"] or "Pitch Spin" in time_frame["qualifiers"] or "Exit Velocity" in time_frame["qualifiers"] or "Hit Distance" in time_frame["qualifiers"] or "Launch Angle" in time_frame["qualifiers"] or "Inning" in time_frame["qualifiers"] or "Inning Reversed" in time_frame["qualifiers"] or "Scheduled Inning Reversed" in time_frame["qualifiers"] or "Pitching Against Batting Order" in time_frame["qualifiers"] or "Count" in time_frame["qualifiers"] or "After Count" in time_frame["qualifiers"] or "After Swinging On Count" in time_frame["qualifiers"] or "Swinging On Count" in time_frame["qualifiers"] or "Surface" in time_frame["qualifiers"] or "Condition" in time_frame["qualifiers"] or "Temperature" in time_frame["qualifiers"] or "Wind" in time_frame["qualifiers"] or "Umpire" in time_frame["qualifiers"] or "Home Plate Umpire" in time_frame["qualifiers"] or "Team Score" in time_frame["qualifiers"] or "Ending Team Score" in time_frame["qualifiers"] or "Game Pitch Count" in time_frame["qualifiers"] or "Team Pitch Count" in time_frame["qualifiers"] or "Pitch Count" in time_frame["qualifiers"] or "Pitcher Batters Faced" in time_frame["qualifiers"] or "Batter Plate Appearance" in time_frame["qualifiers"] or "Pitcher Batters Faced Reversed" in time_frame["qualifiers"] or "Batter Plate Appearance Reversed" in time_frame["qualifiers"] or "Starting Pitch Count" in time_frame["qualifiers"] or "At Bat Pitch Count" in time_frame["qualifiers"] or "Ending Innings Pitched" in time_frame["qualifiers"] or "Innings Pitched" in time_frame["qualifiers"] or "Men On Base" in time_frame["qualifiers"] or "Time Facing Opponent" in time_frame["qualifiers"] or "Time Through Lineup" in time_frame["qualifiers"] or "Number Of Men On Base" in time_frame["qualifiers"] or "Number Of Men In Scoring" in time_frame["qualifiers"] or "Run Support" in time_frame["qualifiers"] or "Opponent Score" in time_frame["qualifiers"] or "Score Margin" in time_frame["qualifiers"] or "Score Difference" in time_frame["qualifiers"] or "Ending Opponent Score" in time_frame["qualifiers"] or "Ending Score Margin" in time_frame["qualifiers"] or "Ending Score Difference" in time_frame["qualifiers"] or "Event Stat" in time_frame["qualifiers"] or "Event Stat Reversed" in time_frame["qualifiers"] or "Event Stats" in time_frame["qualifiers"] or "Event Stats Reversed" in time_frame["qualifiers"] or "current-stats" in extra_stats or "run-support-record" in extra_stats or "run-support" in extra_stats or "advanced-runner" in extra_stats or "exit-record" in extra_stats:
+    elif has_result_stat_qual or "Facing Lefty" in time_frame["qualifiers"] or "Facing Righty" in time_frame["qualifiers"] or "Batting Lefty" in time_frame["qualifiers"] or "Batting Righty" in time_frame["qualifiers"] or "Pitching Lefty" in time_frame["qualifiers"] or "Pitching Righty" in time_frame["qualifiers"] or "Stadium" in time_frame["qualifiers"] or "Start Time" in time_frame["qualifiers"] or "Local Start Time" in time_frame["qualifiers"] or "Game Number" in time_frame["qualifiers"] or "Event Formula" in time_frame["qualifiers"] or "Exact Pitch Type" in time_frame["qualifiers"] or "Pitch Type" in time_frame["qualifiers"] or "Exact Event Type" in time_frame["qualifiers"] or "Local Event Time" in time_frame["qualifiers"] or "Event Time" in time_frame["qualifiers"] or "Event Type" in time_frame["qualifiers"] or "Previous Exact Event Type" in time_frame["qualifiers"] or "Previous Event Type" in time_frame["qualifiers"] or "Upcoming Exact Player Event Type" in time_frame["qualifiers"] or "Upcoming Player Event Type" in time_frame["qualifiers"] or "Previous Exact Player Event Type" in time_frame["qualifiers"] or "Previous Player Event Type" in time_frame["qualifiers"] or "Upcoming Exact Event Type" in time_frame["qualifiers"] or "Upcoming Event Type" in time_frame["qualifiers"] or "Exact City" in time_frame["qualifiers"] or "City" in time_frame["qualifiers"] or "Exact State" in time_frame["qualifiers"] or "State" in time_frame["qualifiers"] or "Exact Time Zone" in time_frame["qualifiers"] or "Time Zone" in time_frame["qualifiers"] or "Exact Country" in time_frame["qualifiers"] or "Country" in time_frame["qualifiers"] or "Exact Event Description" in time_frame["qualifiers"] or "Event Description" in time_frame["qualifiers"] or "Hit Trajectory" in time_frame["qualifiers"] or "Hit Hardness" in time_frame["qualifiers"] or "Exact Stadium" in time_frame["qualifiers"] or "Facing Stat Rank" in time_frame["qualifiers"] or "Facing League Stat Rank" in time_frame["qualifiers"] or "Facing AL Stat Rank" in time_frame["qualifiers"] or "Facing NL Stat Rank" in time_frame["qualifiers"] or "Facing Stat Percent" in time_frame["qualifiers"] or "Facing League Stat Percent" in time_frame["qualifiers"] or "Facing AL Stat Percent" in time_frame["qualifiers"] or "Facing NL Stat Percent" in time_frame["qualifiers"] or "Facing Stat" in time_frame["qualifiers"] or "Facing NL Stat" in time_frame["qualifiers"] or "Facing AL Stat" in time_frame["qualifiers"] or "Inning Stat" in time_frame["qualifiers"] or "Batting Against" in time_frame["qualifiers"] or "Pitching Against" in time_frame["qualifiers"] or "Batting Against First Name" in time_frame["qualifiers"] or "Pitching Against First Name" in time_frame["qualifiers"] or "Batting Against Last Name" in time_frame["qualifiers"] or "Pitching Against Last Name" in time_frame["qualifiers"] or "Driven In" in time_frame["qualifiers"] or "Batted In" in time_frame["qualifiers"] or "Back To Back With" in time_frame["qualifiers"] or "Batting In Front Of" in time_frame["qualifiers"] or "Batting Behind" in time_frame["qualifiers"] or "Caught By" in time_frame["qualifiers"] or "Stealing On" in time_frame["qualifiers"] or "On Field With" in time_frame["qualifiers"] or "On Field Against" in time_frame["qualifiers"] or "Position" in time_frame["qualifiers"] or "Hit Location" in time_frame["qualifiers"] or "Exact Hit Location" in time_frame["qualifiers"] or "Facing Position" in time_frame["qualifiers"] or "Facing Primary Position" in time_frame["qualifiers"] or "Facing Main Position" in time_frame["qualifiers"] or "Bases Empty" in time_frame["qualifiers"] or "Men On Base" in time_frame["qualifiers"] or "Walk Off" in time_frame["qualifiers"] or "Inside The Park HR" in time_frame["qualifiers"] or "Walk Off Opportunity" in time_frame["qualifiers"] or "Game Tying" in time_frame["qualifiers"] or "Late" in time_frame["qualifiers"] or "Close" in time_frame["qualifiers"] or "Game Tying Opportunity" in time_frame["qualifiers"] or "Go Ahead" in time_frame["qualifiers"] or "Go Ahead Opportunity" in time_frame["qualifiers"] or "Go Ahead Or Game Tying" in time_frame["qualifiers"] or "Go Ahead Or Game Tying Opportunity" in time_frame["qualifiers"] or "Game Winning" in time_frame["qualifiers"] or "Tying On Deck" in time_frame["qualifiers"] or "Winning On Deck" in time_frame["qualifiers"] or "Tying At Bat" in time_frame["qualifiers"] or "Winning At Bat" in time_frame["qualifiers"] or "Tying In Scoring" in time_frame["qualifiers"] or "Winning In Scoring" in time_frame["qualifiers"] or "Tying On Base" in time_frame["qualifiers"] or "Winning On Base" in time_frame["qualifiers"] or "Last Inning" in time_frame["qualifiers"] or "Last Out" in time_frame["qualifiers"] or "Last Batter" in time_frame["qualifiers"] or "Extra Innings" in time_frame["qualifiers"] or "RISP" in time_frame["qualifiers"] or "Pitcher First Batter Faced" in time_frame["qualifiers"] or "Batter First Plate Appearance" in time_frame["qualifiers"]  or "Pitcher Last Batter Faced" in time_frame["qualifiers"] or "Batter Last Plate Appearance" in time_frame["qualifiers"] or "Facing Pitcher" in time_frame["qualifiers"] or "Facing Position Player" in time_frame["qualifiers"] or "Stealing Second" in time_frame["qualifiers"] or "Stealing Third" in time_frame["qualifiers"] or "Stealing Home" in time_frame["qualifiers"] or "Bunting" in time_frame["qualifiers"] or "Fastball" in time_frame["qualifiers"] or "Out Of Zone" in time_frame["qualifiers"] or "In Zone" in time_frame["qualifiers"] or "Breaking" in time_frame["qualifiers"] or "Offspeed" in time_frame["qualifiers"] or "Pinch Hitting" in time_frame["qualifiers"] or "Facing Starter" in time_frame["qualifiers"] or "Facing Reliever" in time_frame["qualifiers"] or "Leading Off Inning" in time_frame["qualifiers"] or "Inning Started" in time_frame["qualifiers"] or "Leading Off Game" in time_frame["qualifiers"] or "Leading Off Whole Game" in time_frame["qualifiers"] or "Swung At First Pitch" in time_frame["qualifiers"] or "First Pitch" in time_frame["qualifiers"] or "Batter Ahead" in time_frame["qualifiers"] or "Even Count" in time_frame["qualifiers"] or "Pitcher Ahead" in time_frame["qualifiers"] or "After Batter Ahead" in time_frame["qualifiers"] or "After Even Count" in time_frame["qualifiers"] or "After Pitcher Ahead" in time_frame["qualifiers"] or "Bottom Inning" in time_frame["qualifiers"] or "Top Inning" in time_frame["qualifiers"] or "Full Count" in time_frame["qualifiers"] or "Man On First" in time_frame["qualifiers"] or "Man On Second" in time_frame["qualifiers"] or "Man On Third" in time_frame["qualifiers"] or "Bases Loaded" in time_frame["qualifiers"] or "Ending Outs" in time_frame["qualifiers"] or "Outs" in time_frame["qualifiers"] or "Outs Remaining" in time_frame["qualifiers"] or "Swinging On Strikes" in time_frame["qualifiers"] or "Swinging On Balls" in time_frame["qualifiers"] or "After Swinging On Strikes" in time_frame["qualifiers"] or "After Swinging On Balls" in time_frame["qualifiers"] or "After Strikes" in time_frame["qualifiers"] or "After Balls" in time_frame["qualifiers"] or "Strikes" in time_frame["qualifiers"] or "Balls" in time_frame["qualifiers"] or "Runs" in time_frame["qualifiers"] or "Play Outs" in time_frame["qualifiers"] or "RBIs" in time_frame["qualifiers"] or "Number Drove In" in time_frame["qualifiers"] or "Pitch Speed" in time_frame["qualifiers"] or "Pitch Zone" in time_frame["qualifiers"] or "Pitch Spin" in time_frame["qualifiers"] or "Exit Velocity" in time_frame["qualifiers"] or "Hit Distance" in time_frame["qualifiers"] or "Launch Angle" in time_frame["qualifiers"] or "Inning" in time_frame["qualifiers"] or "Inning Reversed" in time_frame["qualifiers"] or "Scheduled Inning Reversed" in time_frame["qualifiers"] or "Pitching Against Batting Order" in time_frame["qualifiers"] or "Count" in time_frame["qualifiers"] or "After Count" in time_frame["qualifiers"] or "After Swinging On Count" in time_frame["qualifiers"] or "Swinging On Count" in time_frame["qualifiers"] or "Surface" in time_frame["qualifiers"] or "Condition" in time_frame["qualifiers"] or "Temperature" in time_frame["qualifiers"] or "Wind" in time_frame["qualifiers"] or "Umpire" in time_frame["qualifiers"] or "Home Plate Umpire" in time_frame["qualifiers"] or "Team Score" in time_frame["qualifiers"] or "Ending Team Score" in time_frame["qualifiers"] or "Game Pitch Count" in time_frame["qualifiers"] or "Team Pitch Count" in time_frame["qualifiers"] or "Pitch Count" in time_frame["qualifiers"] or "Pitcher Batters Faced" in time_frame["qualifiers"] or "Batter Plate Appearance" in time_frame["qualifiers"] or "Pitcher Batters Faced Reversed" in time_frame["qualifiers"] or "Batter Plate Appearance Reversed" in time_frame["qualifiers"] or "Starting Pitch Count" in time_frame["qualifiers"] or "At Bat Pitch Count" in time_frame["qualifiers"] or "Ending Innings Pitched" in time_frame["qualifiers"] or "Innings Pitched" in time_frame["qualifiers"] or "Men On Base" in time_frame["qualifiers"] or "Time Facing Opponent" in time_frame["qualifiers"] or "Time Through Lineup" in time_frame["qualifiers"] or "Number Of Men On Base" in time_frame["qualifiers"] or "Number Of Men In Scoring" in time_frame["qualifiers"] or "Run Support" in time_frame["qualifiers"] or "Opponent Score" in time_frame["qualifiers"] or "Score Margin" in time_frame["qualifiers"] or "Score Difference" in time_frame["qualifiers"] or "Ending Opponent Score" in time_frame["qualifiers"] or "Ending Score Margin" in time_frame["qualifiers"] or "Ending Score Difference" in time_frame["qualifiers"] or "current-stats" in extra_stats or "run-support-record" in extra_stats or "run-support" in extra_stats or "advanced-runner" in extra_stats or "exit-record" in extra_stats:
         all_rows, missing_games = handle_mlb_game_stats(all_rows, time_frame["qualifiers"], player_data, player_type, missing_games, extra_stats)
 
     if time_frame["qualifiers"]:
@@ -23174,49 +23174,6 @@ def get_team_schedule(player_data, seasons, needs_reg_season, needs_playoffs, ne
 def handle_mlb_game_stats(all_rows, qualifiers, player_data, player_type, missing_games, extra_stats):
     if not all_rows:
         return [], missing_games
-    
-    saved_row_data = []
-    event_stats_needed = {}
-    event_reversed_stats_needed = {}
-    events_stats_needed = {}
-    events_reversed_stats_needed = {}
-    if "Event Stat" in qualifiers or "Event Stat Reversed" in qualifiers or "Event Stats" in qualifiers or "Event Stats Reversed" in qualifiers:
-        if "Event Stat" in qualifiers:
-            for qual_obj in qualifiers["Event Stat"]:
-                if qual_obj["stat"] not in event_stats_needed:
-                    event_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
-                if qual_obj["values"]["end_val"] < event_stats_needed[qual_obj["stat"]]:
-                    event_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
-        if "Event Stat Reversed" in qualifiers:
-            for qual_obj in qualifiers["Event Stat Reversed"]:
-                if qual_obj["stat"] not in event_reversed_stats_needed:
-                    event_reversed_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
-                if qual_obj["values"]["end_val"] < event_reversed_stats_needed[qual_obj["stat"]]:
-                    event_reversed_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
-        if "Event Stats" in qualifiers:
-            for qual_obj in qualifiers["Event Stats"]:
-                if qual_obj["stat"] not in events_stats_needed:
-                    events_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
-                if qual_obj["values"]["end_val"] < events_stats_needed[qual_obj["stat"]]:
-                    events_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
-        if "Event Stats Reversed" in qualifiers:
-            for qual_obj in qualifiers["Event Stats Reversed"]:
-                if qual_obj["stat"] not in events_reversed_stats_needed:
-                    events_reversed_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
-                if qual_obj["values"]["end_val"] < events_reversed_stats_needed[qual_obj["stat"]]:
-                    events_reversed_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
-
-        stats_needed = set(list(event_stats_needed.keys()) + list(event_reversed_stats_needed.keys()) + list(events_stats_needed.keys()) + list(events_reversed_stats_needed.keys()))
-        if ("Pit" in stats_needed) and player_type["da_type"] == "Batter":
-            sub_extra_stats = copy.deepcopy(extra_stats)
-            sub_extra_stats.add("current-stats")
-            all_rows, missing_games = handle_mlb_game_stats(all_rows, {}, player_data, player_type, missing_games, sub_extra_stats)
-            
-        for sub_row_data in sorted(all_rows, key=lambda row: row["DateTime"]):
-            saved_row_data_obj = {}
-            for stat in stats_needed:
-                saved_row_data_obj[stat] = sub_row_data.get(stat, 0)
-            saved_row_data.append(saved_row_data_obj)
 
     games_to_skip = set()
     if "Batting Against" in qualifiers:
@@ -23395,102 +23352,8 @@ def handle_mlb_game_stats(all_rows, qualifiers, player_data, player_type, missin
                 
                     if not has_match:
                         games_to_skip.add(row_data["GameLink"])
-    
-    if "Event Stat" in qualifiers:
-        hit_end = False
-        for index, row_data in enumerate(sorted(all_rows, key=lambda row: row["DateTime"])):
-            if hit_end:
-                games_to_skip.add(row_data["GameLink"])
-                continue
 
-            has_match = False
-            at_bat_event = {}
-            for qual_obj in qualifiers["Event Stat"]:
-                total_entering = 0
-                for sub_row_data in saved_row_data[:index]:
-                    total_entering += sub_row_data[qual_obj["stat"]]
-                total_exiting = total_entering + saved_row_data[index][qual_obj["stat"]]
-
-                at_bat_event["career_stat_" + qual_obj["stat"]] = total_entering
-                at_bat_event["career_stat_reversed_" + qual_obj["stat"]] = total_exiting
-
-                if total_exiting >= event_stats_needed[qual_obj["stat"]]:
-                    hit_end = True
-            
-            if handle_stat_num_qual(at_bat_event, qualifiers["Event Stat"], False) or handle_stat_num_qual(at_bat_event, qualifiers["Event Stat"], True):
-                has_match = True
-
-            if not has_match:
-                games_to_skip.add(row_data["GameLink"])
-    
-    if "Event Stat Reversed" in qualifiers:
-        hit_end = False
-        for index, row_data in enumerate(sorted(all_rows, key=lambda row: row["DateTime"], reverse=True)):
-            index = len(all_rows) - index - 1
-            if hit_end:
-                games_to_skip.add(row_data["GameLink"])
-                continue
-            
-            has_match = False
-            at_bat_event = {}
-            for qual_obj in qualifiers["Event Stat Reversed"]:
-                total_entering = 0
-                for sub_row_data in reversed(saved_row_data[(index + 1):]):
-                    total_entering += sub_row_data[qual_obj["stat"]]
-                total_exiting = total_entering + saved_row_data[index][qual_obj["stat"]]
-
-                at_bat_event["career_stat_" + qual_obj["stat"]] = total_entering
-                at_bat_event["career_stat_reversed_" + qual_obj["stat"]] = total_exiting
-
-                if total_exiting >= event_reversed_stats_needed[qual_obj["stat"]]:
-                    hit_end = True
-
-            if handle_stat_num_qual(at_bat_event, qualifiers["Event Stat Reversed"], False) or handle_stat_num_qual(at_bat_event, qualifiers["Event Stat Reversed"], True):
-                has_match = True
-
-            if not has_match:
-                games_to_skip.add(row_data["GameLink"])
-    
-    if "Event Stats" in qualifiers:
-        for index, row_data in enumerate(sorted(all_rows, key=lambda row: row["DateTime"])):
-            has_match = False
-            at_bat_event = {}
-            for qual_obj in qualifiers["Event Stats"]:
-                total_entering = 0
-                for sub_row_data in saved_row_data[:index]:
-                    total_entering += sub_row_data[qual_obj["stat"]]
-                total_exiting = total_entering + saved_row_data[index][qual_obj["stat"]]
-
-                at_bat_event["career_stats_" + qual_obj["stat"]] = total_entering
-                at_bat_event["career_stats_reversed_" + qual_obj["stat"]] = total_exiting
-            
-            if handle_stats_num_qual(at_bat_event, qualifiers["Event Stats"], False) or handle_stats_num_qual(at_bat_event, qualifiers["Event Stats"], True):
-                has_match = True
-
-            if not has_match:
-                games_to_skip.add(row_data["GameLink"])
-    
-    if "Event Stats Reversed" in qualifiers:
-        for index, row_data in enumerate(sorted(all_rows, key=lambda row: row["DateTime"], reverse=True)):
-            index = len(all_rows) - index - 1            
-            has_match = False
-            at_bat_event = {}
-            for qual_obj in qualifiers["Event Stats Reversed"]:
-                total_entering = 0
-                for sub_row_data in reversed(saved_row_data[(index + 1):]):
-                    total_entering += sub_row_data[qual_obj["stat"]]
-                total_exiting = total_entering + saved_row_data[index][qual_obj["stat"]]
-
-                at_bat_event["career_stats_" + qual_obj["stat"]] = total_entering
-                at_bat_event["career_stats_reversed_" + qual_obj["stat"]] = total_exiting
-
-            if handle_stats_num_qual(at_bat_event, qualifiers["Event Stats Reversed"], False) or handle_stats_num_qual(at_bat_event, qualifiers["Event Stats Reversed"], True):
-                has_match = True
-
-            if not has_match:
-                games_to_skip.add(row_data["GameLink"])
-
-    return get_mlb_game_stats(all_rows, qualifiers, games_to_skip, player_data, missing_games, player_type, extra_stats, saved_row_data, True)
+    return get_mlb_game_stats(all_rows, qualifiers, games_to_skip, player_data, missing_games, player_type, extra_stats, True)
 
 def handle_mlb_game_stats_single_thread(all_rows, qualifiers, player_data, player_type, missing_games, extra_stats):
     if not all_rows:
@@ -23720,13 +23583,8 @@ def setup_career_stats(row_data, player_game_info, saved_row_data, index, player
     for stat in event_stats_needed:
         career_stats_info[stat] = 0
         
-    if isinstance(saved_row_data, list):
-        for sub_row_data in saved_row_data[:index]:
-            for stat in event_stats_needed:
-                career_stats_info[stat] += sub_row_data[stat]
-    else:
-        for stat in event_stats_needed:
-            career_stats_info[stat] += saved_row_data[stat]
+    for stat in event_stats_needed:
+        career_stats_info[stat] += saved_row_data[stat]
 
     hit_end = False
     last_hit_end_pa = True
@@ -23806,13 +23664,8 @@ def setup_career_stats(row_data, player_game_info, saved_row_data, index, player
     for stat in event_reversed_stats_needed:
         career_stats_info[stat] = 0
     
-    if isinstance(saved_row_data, list):
-        for sub_row_data in reversed(saved_row_data[(index + 1):]):
-            for stat in event_reversed_stats_needed:
-                career_stats_info[stat] += sub_row_data[stat]
-    else:
-        for stat in event_reversed_stats_needed:
-            career_stats_info[stat] += saved_row_data[stat]
+    for stat in event_reversed_stats_needed:
+        career_stats_info[stat] += saved_row_data[stat]
 
     for at_bat_event in player_game_info["pitching_run_events"]:
         if copied_quals and not handle_da_mlb_quals(row_data, "pitching_run_events", at_bat_event, copied_quals, player_data, player_type, player_game_info):
@@ -23893,13 +23746,8 @@ def setup_career_stats(row_data, player_game_info, saved_row_data, index, player
     for stat in events_stats_needed:
         career_stats_info[stat] = 0
         
-    if isinstance(saved_row_data, list):
-        for sub_row_data in saved_row_data[:index]:
-            for stat in events_stats_needed:
-                career_stats_info[stat] += sub_row_data[stat]
-    else:
-        for stat in events_stats_needed:
-            career_stats_info[stat] += saved_row_data[stat]
+    for stat in events_stats_needed:
+        career_stats_info[stat] += saved_row_data[stat]
 
     for at_bat_event in player_game_info["batting_events" if player_type["da_type"] == "Batter" else "pitching_events"]:        
         for stat in events_stats_needed:
@@ -23963,13 +23811,8 @@ def setup_career_stats(row_data, player_game_info, saved_row_data, index, player
     for stat in events_reversed_stats_needed:
         career_stats_info[stat] = 0
     
-    if isinstance(saved_row_data, list):
-        for sub_row_data in reversed(saved_row_data[(index + 1):]):
-            for stat in events_reversed_stats_needed:
-                career_stats_info[stat] += sub_row_data[stat]
-    else:
-        for stat in events_reversed_stats_needed:
-            career_stats_info[stat] += saved_row_data[stat]
+    for stat in events_reversed_stats_needed:
+        career_stats_info[stat] += saved_row_data[stat]
 
     for at_bat_event in player_game_info["pitching_run_events"]:
         if at_bat_event["is_inherited"]:
@@ -28552,7 +28395,7 @@ def perform_mlb_game_qualifiers(row, qualifiers):
     
     return True
 
-def get_mlb_game_stats(all_rows, qualifiers, games_to_skip, player_data, missing_games, player_type, extra_stats, saved_row_data, needs_plays):
+def get_mlb_game_stats(all_rows, qualifiers, games_to_skip, player_data, missing_games, player_type, extra_stats, needs_plays):
     if needs_plays:
         logger.info("#" + str(threading.get_ident()) + "#   " + player_data["id"] + " starting game data")
     count_info = {
@@ -28573,7 +28416,7 @@ def get_mlb_game_stats(all_rows, qualifiers, games_to_skip, player_data, missing
         for index, row_data in enumerate(sorted(all_rows, key=lambda row: row["DateTime"])):
             if row_data["GameLink"] not in games_to_skip:
                 future = sub_executor.submit(get_live_game_data, index, player_data, row_data, player_type, qualifiers, needs_plays)
-                future.add_done_callback(functools.partial(result_call_back, qualifiers, count_info, saved_row_data, new_rows, player_type, player_data, needs_plays, extra_stats))
+                future.add_done_callback(functools.partial(result_call_back, qualifiers, count_info, new_rows, player_type, player_data, needs_plays, extra_stats))
     
     if count_info["exception"]:
         raise count_info["exception"]
@@ -28838,7 +28681,7 @@ def perform_mlb_schedule_qualifiers(row, qualifiers):
     
     return True
 
-def result_call_back(qualifiers, count_info, saved_row_data, new_rows, player_type, player_data, needs_plays, extra_stats, result):
+def result_call_back(qualifiers, count_info, new_rows, player_type, player_data, needs_plays, extra_stats, result):
     try:
         if result.exception():
             if not count_info["exception"]:
@@ -28853,7 +28696,7 @@ def result_call_back(qualifiers, count_info, saved_row_data, new_rows, player_ty
 
         game_data, row_data, index, sub_missing_games = result.result()
 
-        if handle_result_qualifiers(game_data, index, row_data, sub_missing_games, player_type, player_data, qualifiers, saved_row_data, count_info, extra_stats)[0]:
+        if handle_result_qualifiers(game_data, index, row_data, sub_missing_games, player_type, player_data, qualifiers, None, count_info, extra_stats)[0]:
             new_rows.append(row_data)
 
         percent_complete = 100 * (count_info["count"] / count_info["total_count"])
