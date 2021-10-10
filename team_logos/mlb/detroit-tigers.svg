@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="512"
+   height="512"
+   viewBox="0 0 512 512"
+   version="1.1"
+   id="svg6"
+   sodipodi:docname="detroit-tigers.svg"
+   inkscape:version="0.92.5 (2060ec1f9f, 2020-04-08)">
+  <metadata
+     id="metadata12">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs10" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="640"
+     inkscape:window-height="480"
+     id="namedview8"
+     showgrid="false"
+     inkscape:zoom="0.4609375"
+     inkscape:cx="256"
+     inkscape:cy="256"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg6" />
+  <title
+     id="title2">detroit-tigers</title>
+  <path
+     d="m 307.03,180.265 c -10.983,-6.82 -27.638,-7.065 -39.65,-1.368 v 41.96 c 13.67,-6.47 27.002,-6.47 39.65,1.368 z m -39.65,108.482 c 13.67,6.48 27.002,6.48 39.65,-1.36 v -45.034 c -12.648,-7.843 -25.98,-7.843 -39.65,-1.36 z m 0,76.08 15.722,7.503 c 6.842,-4.097 17.086,-8.87 23.928,-10.927 V 308.19 c -12.648,7.85 -25.98,7.85 -39.65,1.368 v 55.27 z m -37.592,-175.01 v 165.79 l 12.99,2.05 v -182.51 c -6.158,0.685 -12.99,4.778 -12.99,14.67 z m -66.302,-55.6 H 294.72 c 32.137,0 53.998,21.83 53.998,51.847 0,28.655 -8.21,141.914 2.742,188.99 -30.085,-2.047 -60.152,11.594 -80.654,37.535 -21.19,-11.61 -34.86,-12.977 -58.785,-12.977 -19.13,0 -46.48,6.142 -67.664,14.33 -8.06,3.115 -5.472,-1.03 -0.69,-7.848 12.31,-17.537 36.91,-39.235 62.887,-49.464 V 180.61 c -9.565,9.547 -13.663,19.787 -13.663,38.89 v 104.39 c 0,18.417 -6.847,31.382 -17.094,40.25 -10.254,8.867 -23.24,11.596 -30.078,12.964 -6.835,1.357 -9.57,0 -4.104,-6.823 5.477,-6.82 10.945,-12.28 10.945,-36.84 v -49.8 c -5.47,2.038 -12.106,7.62 -15.725,12.955 -3.592,5.295 -6.83,3.77 -6.83,-2.05 0,-16.37 10.247,-32.06 22.554,-38.21 V 244.06 c -5.47,2.048 -11.623,7.51 -15.724,12.965 -3.806,5.07 -6.83,4.017 -6.83,-2.045 0,-16.382 10.247,-32.072 22.554,-38.214 0,-25.242 10.247,-34.11 26.655,-42.98 -23.585,-4.076 -44.775,-31.363 -47.223,-44.784 7.57,3.87 21.245,5.194 31.5,5.216 z"
+     id="path4"
+     inkscape:connector-curvature="0"
+     style="fill:#0c2c56;fill-rule:evenodd" />
+</svg>

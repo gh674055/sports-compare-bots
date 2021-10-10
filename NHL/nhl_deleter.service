@@ -1,0 +1,17 @@
+[Unit]
+Description=nhl deleter service
+After=multi-user.target
+BindsTo=nhl.service
+
+[Service]
+Type=idle
+WorkingDirectory=/opt/reddit-bots/nhl
+ExecStart=/usr/bin/python3 /opt/reddit-bots/nhl/comment_deleter.py
+ExecStartPost=/usr/bin/python3 /opt/reddit-bots/service_email.py --start --service=NHL_DELETER
+ExecStopPost=/usr/bin/python3 /opt/reddit-bots/service_email.py --stop --service=NHL_DELETER
+Restart=on-failure
+RestartSec=120
+StartLimitInterval=0
+
+[Install]
+WantedBy=multi-user.target

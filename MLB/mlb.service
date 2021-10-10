@@ -1,0 +1,18 @@
+[Unit]
+Description=mlb service
+After=multi-user.target
+Wants=mlb_deleter.service
+Before=mlb_deleter.service
+
+[Service]
+Type=idle
+WorkingDirectory=/opt/reddit-bots/mlb
+ExecStart=/usr/bin/python3 /opt/reddit-bots/mlb/mlb.py
+ExecStartPost=/usr/bin/python3 /opt/reddit-bots/service_email.py --start --service=MLB
+ExecStopPost=/usr/bin/python3 /opt/reddit-bots/service_email.py --stop --service=MLB
+Restart=on-failure
+RestartSec=120
+StartLimitInterval=0
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,65 @@
+h2 {
+  text-align: center;
+  margin: 0;
+}
+
+caption {
+  font-size: 15px;
+  font-weight: bold;
+  text-align: left;
+}
+
+table {
+  border: 1px solid #1C6EA4;
+  background-color: #EEEEEE;
+  width: 100%;
+  text-align: center;
+  border-collapse: collapse;
+}
+
+table td, table th {
+  border: 1px solid #AAAAAA;
+  padding: 3px 2px;
+  white-space: nowrap;
+}
+
+table tbody td {
+  font-size: 13px;
+}
+
+table thead {
+  background: #1C6EA4;
+  border-bottom: 2px solid #444444;
+}
+
+table thead th {
+  font-size: 15px;
+  font-weight: bold;
+  color: #FFFFFF;
+  text-align: center;
+  border-left: 2px solid #D0E4F5;
+}
+
+table thead th:first-child {
+  border-left: none;
+}
+
+table tfoot td {
+  font-size: 14px;
+}
+
+table tfoot .links {
+  text-align: right;
+}
+
+table tfoot .links a {
+  display: inline-block;
+  background: #1C6EA4;
+  color: #FFFFFF;
+  padding: 2px 8px;
+  border-radius: 5px;
+}
+
+table, tr, td, th, tbody, thead, tfoot {
+  page-break-inside: avoid !important;
+}

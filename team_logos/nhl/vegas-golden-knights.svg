@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   inkscape:version="0.92.5 (2060ec1f9f, 2020-04-08)"
+   sodipodi:docname="vegas-golden-knights.svg"
+   id="svg14"
+   version="1.1"
+   viewBox="0 0 512 512"
+   height="512"
+   width="512">
+  <metadata
+     id="metadata20">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs18" />
+  <sodipodi:namedview
+     inkscape:document-rotation="0"
+     inkscape:current-layer="svg14"
+     inkscape:window-maximized="0"
+     inkscape:window-y="125"
+     inkscape:window-x="597"
+     inkscape:cy="256"
+     inkscape:cx="256"
+     inkscape:zoom="0.4609375"
+     showgrid="false"
+     id="namedview16"
+     inkscape:window-height="480"
+     inkscape:window-width="705"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0"
+     guidetolerance="10"
+     gridtolerance="10"
+     objecttolerance="10"
+     borderopacity="1"
+     bordercolor="#666666"
+     pagecolor="#ffffff" />
+  <g
+     style="fill:none;fill-rule:evenodd"
+     transform="translate(-38,12)"
+     id="g12">
+    <path
+       style="fill:#010101"
+       inkscape:connector-curvature="0"
+       id="path2"
+       d="m 315.688,422.782 v 6.962 h -1.74 v -6.962 h -2.016 v -1.73 h 5.77 v 1.73 z m 9.434,6.962 v -5.13 l -1.466,3.196 h -1.538 l -1.466,-3.196 v 5.13 h -1.74 v -8.692 h 1.74 l 2.235,4.642 2.235,-4.642 h 1.74 v 8.692 z" />
+    <path
+       style="fill:#ffffff"
+       inkscape:connector-curvature="0"
+       id="path4"
+       d="M 277.97,88.212 C 274.19,84.662 256,67.587 256,67.587 L 234.03,88.213 H 116.796 v 257.475 c 43.766,48.516 80.51,71.69 139.205,98.726 58.583,-26.984 95.368,-50.13 139.206,-98.726 V 88.212 Z" />
+    <path
+       style="fill:#b4975a"
+       inkscape:connector-curvature="0"
+       id="path6"
+       d="M 276.048,93.06 C 275.845,92.86 256,74.235 256,74.235 c 0,0 -19.844,18.625 -20.048,18.825 h -114.31 v 250.765 c 41.008,45.47 77.568,69.088 134.358,95.25 56.67,-26.107 93.22,-49.638 134.358,-95.25 V 93.06 Z m -110.78,107.556 v 132.64 a 289.41,289.41 0 0 1 -4.846,-4.9 v -127.74 c 0,-54.082 31.11,-91.36 75.52,-107.547 0.538,0.374 1.495,2.726 1.73,3.34 0.687,1.796 1.25,3.83 1.69,5.722 0,0 -2.427,-2.03 -4.847,-3.19 -47.424,19.813 -69.246,56.32 -69.246,101.673 z m 87.55,110.492 -21.44,-69.337 7.206,-7.203 -1.71,8.566 19.126,61.859 -3.183,6.115 z m 25.44,67.94 -8.53,9.8 63.468,-183.01 6.156,-2.96 -61.095,176.17 z" />
+    <path
+       style="fill:#010101"
+       inkscape:connector-curvature="0"
+       id="path8"
+       d="M 380.663,102.754 V 340.098 C 343.213,381.628 303.97,406.3 256,428.402 208.03,406.3 168.788,381.627 131.337,340.098 V 102.754 h 83.85 c -33.047,19.225 -54.765,52.677 -54.765,97.862 v 127.74 c 22.534,23.353 52.992,46.855 81.85,60.49 l -63.47,-183.008 59.782,28.728 -7.205,7.205 21.436,69.34 h 6.367 l 21.438,-69.338 -7.204,-7.204 59.78,-28.728 -63.468,183.01 c 28.662,-13.545 59.136,-36.953 81.85,-60.493 v -127.74 c 0,-45.184 -21.718,-78.636 -54.765,-97.86 h 83.848 z" />
+    <path
+       style="fill:#333f42"
+       inkscape:connector-curvature="0"
+       id="path10"
+       d="m 272.64,102.132 c 1.7,-7.326 3.417,-9.063 3.417,-9.063 0.007,0 -17.697,-16.62 -19.842,-18.634 L 256,74.233 V 257.3 l 13.303,-42.813 70.88,-34.11 c -6.33,-36.65 -30.208,-64.638 -67.544,-78.245 z m 74.09,116.785 -52.738,152.63 9.14,-11.804 c 0,0 24.035,-18.4 38.752,-35.342 v -77.987 l 4.847,-27.495 z m -181.46,0 43.89,127.023 -24.4,-57.498 -14.644,-42.03 -4.847,-27.495 z m 72.616,-12.487 -56.447,-21.423 61.257,29.48 v -89.702 l -4.812,81.645 z" />
+  </g>
+</svg>

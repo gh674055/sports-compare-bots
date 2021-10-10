@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="512"
+   height="512"
+   viewBox="0 0 512 512"
+   version="1.1"
+   id="svg12"
+   sodipodi:docname="chicago-bears.svg"
+   inkscape:version="0.92.5 (2060ec1f9f, 2020-04-08)">
+  <metadata
+     id="metadata18">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs16" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="640"
+     inkscape:window-height="480"
+     id="namedview14"
+     showgrid="false"
+     inkscape:zoom="0.4609375"
+     inkscape:cx="256"
+     inkscape:cy="256"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg12" />
+  <title
+     id="title2">chicago-bears</title>
+  <g
+     id="g10"
+     transform="translate(0,6)"
+     style="fill:none;fill-rule:evenodd">
+    <path
+       d="m 367.91,264.443 h 65.714 c -18.364,122.815 -257.2,152.872 -328.084,26.186 -11.894,-21.26 -26.294,-30.65 -38.044,-36.08 13.012,-5.11 32.22,-22.72 38.535,-39.53 43.22,-115.02 259.3,-113.41 318.7,-10.38 h -78.06 c -63.07,-50.41 -189.24,-27.17 -189.24,49.9 0,54.01 149.9,115.4 210.49,9.882 z m 51.878,9.882 h -44.472 c -60.584,105.517 -229.258,49.508 -229.258,-19.762 0,-85.477 140.496,-110.69 203.57,-60.285 h 54.348 c -61.382,-71.894 -235.756,-89.01 -289.543,26.19 -4.613,12.68 -13.174,24.048 -25.694,34.09 11.75,5.428 20.19,15.833 26.68,29.155 70.05,127.8 286,78.84 304.36,-9.388 z"
+       id="path4"
+       inkscape:connector-curvature="0"
+       style="fill:#ffffff" />
+    <path
+       d="m 375.316,274.325 h 44.472 c -18.364,88.23 -234.315,137.19 -304.367,9.388 -6.49,-13.322 -14.92,-23.727 -26.68,-29.155 12.52,-10.042 21.08,-21.41 25.7,-34.09 53.79,-115.2 228.16,-98.084 289.55,-26.19 h -54.35 c -63.07,-50.404 -203.57,-25.192 -203.57,60.285 0,69.27 168.68,125.28 229.26,19.762"
+       id="path6"
+       inkscape:connector-curvature="0"
+       style="fill:#c83803" />
+    <path
+       d="m 424.73,204.656 h -0.004 0.005 z m -0.004,0 c -59.404,-103.028 -275.48,-104.642 -318.695,10.377 -6.31,16.807 -25.52,34.42 -38.53,39.525 11.75,5.428 26.15,14.818 38.05,36.07 70.89,126.687 309.72,96.63 328.09,-26.185 h -65.72 c -60.59,105.518 -210.49,44.126 -210.49,-9.885 0,-77.07 126.18,-100.31 189.248,-49.902 h 78.064 z"
+       id="path8"
+       inkscape:connector-curvature="0"
+       style="stroke:#0b162a;stroke-width:11.34000015;stroke-linecap:square;stroke-linejoin:round" />
+  </g>
+</svg>

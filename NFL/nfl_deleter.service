@@ -1,0 +1,17 @@
+[Unit]
+Description=nfl deleter service
+After=multi-user.target
+BindsTo=nfl.service
+
+[Service]
+Type=idle
+WorkingDirectory=/opt/reddit-bots/nfl
+ExecStart=/usr/bin/python3 /opt/reddit-bots/nfl/comment_deleter.py
+ExecStartPost=/usr/bin/python3 /opt/reddit-bots/service_email.py --start --service=NFL_DELETER
+ExecStopPost=/usr/bin/python3 /opt/reddit-bots/service_email.py --stop --service=NFL_DELETER
+Restart=on-failure
+RestartSec=120
+StartLimitInterval=0
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,17 @@
+[Unit]
+Description=mlb deleter service
+After=multi-user.target
+BindsTo=mlb.service
+
+[Service]
+Type=idle
+WorkingDirectory=/opt/reddit-bots/mlb
+ExecStart=/usr/bin/python3 /opt/reddit-bots/mlb/comment_deleter.py
+ExecStartPost=/usr/bin/python3 /opt/reddit-bots/service_email.py --start --service=MLB_DELETER
+ExecStopPost=/usr/bin/python3 /opt/reddit-bots/service_email.py --stop --service=MLB_DELETER
+Restart=on-failure
+RestartSec=120
+StartLimitInterval=0
+
+[Install]
+WantedBy=multi-user.target

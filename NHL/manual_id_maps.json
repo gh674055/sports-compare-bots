@@ -1,0 +1,16 @@
+{
+    "smithgi01" : {
+        "id" : 8479379,
+        "name" : "Givani Smith",
+        "birthday" : "1998-02-27",
+        "position" : "RW",
+        "handiness" : "L"
+    }, 
+    "trottbr02" : {
+        "id" : 8474436,
+        "name" : "Brock Trotter",
+        "birthday" : "1987-01-16",
+        "position" : "LW",
+        "handiness" : "R"
+    }
+}

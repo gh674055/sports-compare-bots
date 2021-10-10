@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="512"
+   height="512"
+   viewBox="0 0 512 512"
+   version="1.1"
+   id="svg6"
+   sodipodi:docname="cleveland-indians.svg"
+   inkscape:version="0.92.5 (2060ec1f9f, 2020-04-08)">
+  <metadata
+     id="metadata12">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs10" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="640"
+     inkscape:window-height="480"
+     id="namedview8"
+     showgrid="false"
+     inkscape:zoom="0.4609375"
+     inkscape:cx="256"
+     inkscape:cy="256"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg6" />
+  <title
+     id="title2">cleveland-indians</title>
+  <path
+     d="m 168.103,111.25 c 34.37,-0.034 68.746,-0.02 103.122,-0.007 3.905,3.98 7.816,7.974 11.89,11.79 0.05,-3.94 0,-7.87 0.028,-11.804 16.922,0 33.842,0.002 50.763,-0.01 0.013,36.41 0.006,72.83 0.006,109.24 a 61383.35,61383.35 0 0 0 -50.775,0 c -0.013,-12.21 0.02,-24.417 -0.013,-36.625 a 1707.5,1707.5 0 0 1 -21.518,-21.405 35541.55,35541.55 0 0 0 -71.54,0.008 1471.715,1471.715 0 0 1 -21.496,21.376 c -0.048,53.78 -0.028,107.56 -0.014,161.34 a 1725.884,1725.884 0 0 1 22.19,22.08 c 23.4,0.02 46.796,0.026 70.2,-0.008 a 1723.63,1723.63 0 0 1 22.178,-22.067 c 0.035,-11.984 0,-23.966 0.013,-35.948 h 50.776 c -0.013,19.717 0.028,39.44 -0.02,59.16 -6.766,6.526 -13.353,13.244 -20.044,19.854 -0.89,0.744 -1.97,1.22 -2.78,2.054 -9.116,9.205 -18.42,18.224 -27.49,27.468 -38.72,0.034 -77.448,0.034 -116.167,0 a 8266.49,8266.49 0 0 0 -50.31,-50.066 c -0.027,-68.57 -0.027,-137.137 0,-205.705 A 8491.17,8491.17 0 0 0 168.1,111.24 Z"
+     id="path4"
+     inkscape:connector-curvature="0"
+     style="fill:#e31937;fill-rule:evenodd" />
+</svg>

@@ -1,0 +1,4428 @@
+{
+    "cycle": {
+        "rosared01": [
+            {
+                "date": "2021-09-19",
+                "is_playoffs": false,
+                "team": "ATL"
+            }
+        ],
+        "croneja01": [
+            {
+                "date": "2021-07-16",
+                "is_playoffs": false,
+                "team": "SDP"
+            }
+        ],
+        "abreujo02": [
+            {
+                "date": "2017-09-09",
+                "is_playoffs": false,
+                "team": "CHW"
+            }
+        ],
+        "ageeto01": [
+            {
+                "date": "1970-07-06",
+                "is_playoffs": false,
+                "team": "NYM"
+            }
+        ],
+        "arenano01": [
+            {
+                "date": "2017-06-18",
+                "is_playoffs": false,
+                "team": "COL"
+            }
+        ],
+        "averiea01": [
+            {
+                "date": "1933-08-17",
+                "is_playoffs": false,
+                "team": "CLE"
+            }
+        ],
+        "bagweje01": [
+            {
+                "date": "2001-07-18",
+                "is_playoffs": false,
+                "team": "HOU"
+            }
+        ],
+        "bakerfr01": [
+            {
+                "date": "1911-07-03 02:00:00",
+                "is_playoffs": false,
+                "team": "PHA"
+            }
+        ],
+        "bancrda01": [
+            {
+                "date": "1921-06-01",
+                "is_playoffs": false,
+                "team": "NYG"
+            }
+        ],
+        "barklsa01": [
+            {
+                "date": "1888-06-13",
+                "is_playoffs": false,
+                "team": "KCC"
+            }
+        ],
+        "barnebr02": [
+            {
+                "date": "2013-07-19",
+                "is_playoffs": false,
+                "team": "HOU"
+            }
+        ],
+        "batesjo02": [
+            {
+                "date": "1907-04-26",
+                "is_playoffs": false,
+                "team": "BSN"
+            }
+        ],
+        "bauerja01": [
+            {
+                "date": "2019-06-14",
+                "is_playoffs": false,
+                "team": "CLE"
+            }
+        ],
+        "bellda01": [
+            {
+                "date": "2004-06-28",
+                "is_playoffs": false,
+                "team": "PHI"
+            }
+        ],
+        "bellgu01": [
+            {
+                "date": "1951-06-04",
+                "is_playoffs": false,
+                "team": "PIT"
+            }
+        ],
+        "bellico01": [
+            {
+                "date": "2017-07-15",
+                "is_playoffs": false,
+                "team": "LAD"
+            }
+        ],
+        "beltrad01": [
+            {
+                "date": "2008-09-01",
+                "is_playoffs": false,
+                "team": "SEA"
+            },
+            {
+                "date": "2012-08-24",
+                "is_playoffs": false,
+                "team": "TEX"
+            },
+            {
+                "date": "2015-08-03",
+                "is_playoffs": false,
+                "team": "TEX"
+            }
+        ],
+        "bettsmo01": [
+            {
+                "date": "2018-08-09",
+                "is_playoffs": false,
+                "team": "BOS"
+            }
+        ],
+        "bicheda01": [
+            {
+                "date": "1998-06-10",
+                "is_playoffs": false,
+                "team": "COL"
+            }
+        ],
+        "biggica01": [
+            {
+                "date": "2019-09-17",
+                "is_playoffs": false,
+                "team": "TOR"
+            }
+        ],
+        "biggicr01": [
+            {
+                "date": "2002-04-08",
+                "is_playoffs": false,
+                "team": "HOU"
+            }
+        ],
+        "blackch02": [
+            {
+                "date": "2018-09-30",
+                "is_playoffs": false,
+                "team": "COL"
+            }
+        ],
+        "blowemi01": [
+            {
+                "date": "1998-05-18",
+                "is_playoffs": false,
+                "team": "OAK"
+            }
+        ],
+        "bostoly01": [
+            {
+                "date": "1976-07-24",
+                "is_playoffs": false,
+                "team": "MIN"
+            }
+        ],
+        "bottoji01": [
+            {
+                "date": "1927-07-15",
+                "is_playoffs": false,
+                "team": "STL"
+            }
+        ],
+        "boyerke01": [
+            {
+                "date": "1961-09-14",
+                "is_playoffs": false,
+                "team": "STL"
+            },
+            {
+                "date": "1964-06-16",
+                "is_playoffs": false,
+                "team": "STL"
+            }
+        ],
+        "bradlbi01": [
+            {
+                "date": "1903-09-24",
+                "is_playoffs": false,
+                "team": "CLV"
+            }
+        ],
+        "brettge01": [
+            {
+                "date": "1979-05-28",
+                "is_playoffs": false,
+                "team": "KCR"
+            },
+            {
+                "date": "1990-07-25",
+                "is_playoffs": false,
+                "team": "KCR"
+            }
+        ],
+        "brocklo01": [
+            {
+                "date": "1975-05-27",
+                "is_playoffs": false,
+                "team": "STL"
+            }
+        ],
+        "brohaja01": [
+            {
+                "date": "1977-09-24",
+                "is_playoffs": false,
+                "team": "CHW"
+            }
+        ],
+        "brownpe01": [
+            {
+                "date": "1886-08-08",
+                "is_playoffs": false,
+                "team": "LOU"
+            },
+            {
+                "date": "1889-06-07",
+                "is_playoffs": false,
+                "team": "LOU"
+            }
+        ],
+        "buhneja01": [
+            {
+                "date": "1993-06-23",
+                "is_playoffs": false,
+                "team": "SEA"
+            }
+        ],
+        "burnsge01": [
+            {
+                "date": "1920-09-17",
+                "is_playoffs": false,
+                "team": "NYG"
+            }
+        ],
+        "burnsto01": [
+            {
+                "date": "1890-08-01",
+                "is_playoffs": false,
+                "team": "BRO"
+            }
+        ],
+        "byrneer01": [
+            {
+                "date": "2003-06-29",
+                "is_playoffs": false,
+                "team": "OAK"
+            }
+        ],
+        "cabreme01": [
+            {
+                "date": "2009-08-02",
+                "is_playoffs": false,
+                "team": "NYY"
+            }
+        ],
+        "callijo01": [
+            {
+                "date": "1963-06-27",
+                "is_playoffs": false,
+                "team": "PHI"
+            }
+        ],
+        "carewro01": [
+            {
+                "date": "1970-05-20",
+                "is_playoffs": false,
+                "team": "MIN"
+            }
+        ],
+        "careyma01": [
+            {
+                "date": "1925-06-20",
+                "is_playoffs": false,
+                "team": "PIT"
+            }
+        ],
+        "carlyro01": [
+            {
+                "date": "1925-07-21",
+                "is_playoffs": false,
+                "team": "BOS"
+            }
+        ],
+        "carrofr01": [
+            {
+                "date": "1887-05-02",
+                "is_playoffs": false,
+                "team": "PIT"
+            }
+        ],
+        "cartwed01": [
+            {
+                "date": "1895-09-30",
+                "is_playoffs": false,
+                "team": "WHS"
+            }
+        ],
+        "cedenan01": [
+            {
+                "date": "1992-08-25",
+                "is_playoffs": false,
+                "team": "HOU"
+            }
+        ],
+        "cedence01": [
+            {
+                "date": "1972-08-02",
+                "is_playoffs": false,
+                "team": "HOU"
+            },
+            {
+                "date": "1976-08-09",
+                "is_playoffs": false,
+                "team": "HOU"
+            }
+        ],
+        "chapmsa01": [
+            {
+                "date": "1939-05-05",
+                "is_playoffs": false,
+                "team": "PHA"
+            }
+        ],
+        "chaveer01": [
+            {
+                "date": "2000-06-21",
+                "is_playoffs": false,
+                "team": "OAK"
+            }
+        ],
+        "choosh01": [
+            {
+                "date": "2015-07-21",
+                "is_playoffs": false,
+                "team": "TEX"
+            }
+        ],
+        "clarkfr01": [
+            {
+                "date": "1901-07-23",
+                "is_playoffs": false,
+                "team": "PIT"
+            },
+            {
+                "date": "1903-05-07",
+                "is_playoffs": false,
+                "team": "PIT"
+            }
+        ],
+        "clintlo01": [
+            {
+                "date": "1962-07-13",
+                "is_playoffs": false,
+                "team": "BOS"
+            }
+        ],
+        "clymeot01": [
+            {
+                "date": "1908-10-02",
+                "is_playoffs": false,
+                "team": "WSH"
+            }
+        ],
+        "cochrmi01": [
+            {
+                "date": "1932-07-22",
+                "is_playoffs": false,
+                "team": "PHA"
+            },
+            {
+                "date": "1933-08-02",
+                "is_playoffs": false,
+                "team": "PHA"
+            }
+        ],
+        "colbrgr01": [
+            {
+                "date": "2002-09-18",
+                "is_playoffs": false,
+                "team": "ARI"
+            }
+        ],
+        "collibi02": [
+            {
+                "date": "1910-10-06",
+                "is_playoffs": false,
+                "team": "BSN"
+            }
+        ],
+        "connoro01": [
+            {
+                "date": "1890-07-21",
+                "is_playoffs": false,
+                "team": "NYG"
+            }
+        ],
+        "cooledu01": [
+            {
+                "date": "1904-06-20 02:00:00",
+                "is_playoffs": false,
+                "team": "BSN"
+            }
+        ],
+        "coopesc01": [
+            {
+                "date": "1994-04-12",
+                "is_playoffs": false,
+                "team": "BOS"
+            }
+        ],
+        "craftha01": [
+            {
+                "date": "1940-06-08",
+                "is_playoffs": false,
+                "team": "CIN"
+            }
+        ],
+        "cramedo01": [
+            {
+                "date": "1934-06-10",
+                "is_playoffs": false,
+                "team": "PHA"
+            }
+        ],
+        "cronijo01": [
+            {
+                "date": "1929-09-02",
+                "is_playoffs": false,
+                "team": "WSH"
+            },
+            {
+                "date": "1940-08-02",
+                "is_playoffs": false,
+                "team": "BOS"
+            }
+        ],
+        "crossla01": [
+            {
+                "date": "1894-04-24",
+                "is_playoffs": false,
+                "team": "PHI"
+            }
+        ],
+        "cubbami01": [
+            {
+                "date": "1978-07-27",
+                "is_playoffs": false,
+                "team": "MIN"
+            }
+        ],
+        "cuddymi01": [
+            {
+                "date": "2009-05-22",
+                "is_playoffs": false,
+                "team": "MIN"
+            },
+            {
+                "date": "2014-08-17",
+                "is_playoffs": false,
+                "team": "COL"
+            }
+        ],
+        "culbele01": [
+            {
+                "date": "1943-07-03",
+                "is_playoffs": false,
+                "team": "BOS"
+            }
+        ],
+        "cuyleki01": [
+            {
+                "date": "1925-06-04",
+                "is_playoffs": false,
+                "team": "PIT"
+            }
+        ],
+        "dalryab01": [
+            {
+                "date": "1891-08-12",
+                "is_playoffs": false,
+                "team": "MIL"
+            }
+        ],
+        "daniebe01": [
+            {
+                "date": "1912-07-25",
+                "is_playoffs": false,
+                "team": "NYY"
+            }
+        ],
+        "danniha01": [
+            {
+                "date": "1940-06-15",
+                "is_playoffs": false,
+                "team": "NYG"
+            }
+        ],
+        "davanje02": [
+            {
+                "date": "2004-08-25",
+                "is_playoffs": false,
+                "team": "ANA"
+            }
+        ],
+        "daviser01": [
+            {
+                "date": "1989-06-02",
+                "is_playoffs": false,
+                "team": "CIN"
+            }
+        ],
+        "davisju01": [
+            {
+                "date": "1890-07-18",
+                "is_playoffs": false,
+                "team": "BRG"
+            }
+        ],
+        "davisra01": [
+            {
+                "date": "2016-07-02",
+                "is_playoffs": false,
+                "team": "CLE"
+            }
+        ],
+        "dawsoan01": [
+            {
+                "date": "1987-04-29",
+                "is_playoffs": false,
+                "team": "CHC"
+            }
+        ],
+        "dejesiv01": [
+            {
+                "date": "1980-04-22",
+                "is_playoffs": false,
+                "team": "CHC"
+            }
+        ],
+        "dimagjo01": [
+            {
+                "date": "1937-07-09",
+                "is_playoffs": false,
+                "team": "NYY"
+            },
+            {
+                "date": "1948-05-20",
+                "is_playoffs": false,
+                "team": "NYY"
+            }
+        ],
+        "dobyla01": [
+            {
+                "date": "1952-06-04",
+                "is_playoffs": false,
+                "team": "CLE"
+            }
+        ],
+        "doerrbo01": [
+            {
+                "date": "1944-05-17",
+                "is_playoffs": false,
+                "team": "BOS"
+            },
+            {
+                "date": "1947-05-13",
+                "is_playoffs": false,
+                "team": "BOS"
+            }
+        ],
+        "doughpa01": [
+            {
+                "date": "1903-07-29",
+                "is_playoffs": false,
+                "team": "BOS"
+            }
+        ],
+        "dowdto01": [
+            {
+                "date": "1895-08-16",
+                "is_playoffs": false,
+                "team": "STL"
+            }
+        ],
+        "drewst01": [
+            {
+                "date": "2008-09-01",
+                "is_playoffs": false,
+                "team": "ARI"
+            }
+        ],
+        "dunlafr01": [
+            {
+                "date": "1886-05-04",
+                "is_playoffs": false,
+                "team": "SLM"
+            }
+        ],
+        "easleda01": [
+            {
+                "date": "2001-06-08",
+                "is_playoffs": false,
+                "team": "DET"
+            }
+        ],
+        "easlemi01": [
+            {
+                "date": "1980-06-12",
+                "is_playoffs": false,
+                "team": "PIT"
+            }
+        ],
+        "elliobo01": [
+            {
+                "date": "1945-07-15",
+                "is_playoffs": false,
+                "team": "PIT"
+            }
+        ],
+        "ellisma01": [
+            {
+                "date": "2007-06-04",
+                "is_playoffs": false,
+                "team": "OAK"
+            }
+        ],
+        "evansdw01": [
+            {
+                "date": "1984-06-28",
+                "is_playoffs": false,
+                "team": "BOS"
+            }
+        ],
+        "eversho01": [
+            {
+                "date": "1950-09-07",
+                "is_playoffs": false,
+                "team": "DET"
+            }
+        ],
+        "fernato01": [
+            {
+                "date": "1995-09-03",
+                "is_playoffs": false,
+                "team": "NYY"
+            }
+        ],
+        "figgich01": [
+            {
+                "date": "2006-09-16",
+                "is_playoffs": false,
+                "team": "LAA"
+            }
+        ],
+        "fiskca01": [
+            {
+                "date": "1984-05-16",
+                "is_playoffs": false,
+                "team": "CHW"
+            }
+        ],
+        "foleycu01": [
+            {
+                "date": "1882-05-25",
+                "is_playoffs": false,
+                "team": "BUF"
+            }
+        ],
+        "foliti01": [
+            {
+                "date": "1976-04-21",
+                "is_playoffs": false,
+                "team": "MON"
+            }
+        ],
+        "fordda01": [
+            {
+                "date": "1979-08-10",
+                "is_playoffs": false,
+                "team": "CAL"
+            }
+        ],
+        "fothebo01": [
+            {
+                "date": "1926-09-26",
+                "is_playoffs": false,
+                "team": "DET"
+            }
+        ],
+        "foxxji01": [
+            {
+                "date": "1933-08-14",
+                "is_playoffs": false,
+                "team": "PHA"
+            }
+        ],
+        "freembu01": [
+            {
+                "date": "1903-06-21",
+                "is_playoffs": false,
+                "team": "BOS"
+            }
+        ],
+        "freemfr01": [
+            {
+                "date": "2016-06-15",
+                "is_playoffs": false,
+                "team": "ATL"
+            },
+            {
+                "date": "2021-08-18",
+                "is_playoffs": false,
+                "team": "ATL"
+            }
+        ],
+        "fregoji01": [
+            {
+                "date": "1964-07-28",
+                "is_playoffs": false,
+                "team": "LAA"
+            },
+            {
+                "date": "1968-05-20",
+                "is_playoffs": false,
+                "team": "CAL"
+            }
+        ],
+        "fryeje01": [
+            {
+                "date": "2001-08-17",
+                "is_playoffs": false,
+                "team": "TOR"
+            }
+        ],
+        "frymatr01": [
+            {
+                "date": "1993-07-28",
+                "is_playoffs": false,
+                "team": "DET"
+            }
+        ],
+        "gedmari01": [
+            {
+                "date": "1985-09-18",
+                "is_playoffs": false,
+                "team": "BOS"
+            }
+        ],
+        "gehrich01": [
+            {
+                "date": "1939-05-27",
+                "is_playoffs": false,
+                "team": "DET"
+            }
+        ],
+        "gehrilo01": [
+            {
+                "date": "1934-06-25",
+                "is_playoffs": false,
+                "team": "NYY"
+            },
+            {
+                "date": "1937-08-01",
+                "is_playoffs": false,
+                "team": "NYY"
+            }
+        ],
+        "gerutjo01": [
+            {
+                "date": "2010-05-08",
+                "is_playoffs": false,
+                "team": "MIL"
+            }
+        ],
+        "glassja01": [
+            {
+                "date": "1889-08-08",
+                "is_playoffs": false,
+                "team": "IND"
+            }
+        ],
+        "gomezca01": [
+            {
+                "date": "2008-05-07",
+                "is_playoffs": false,
+                "team": "MIN"
+            },
+            {
+                "date": "2017-04-29",
+                "is_playoffs": false,
+                "team": "TEX"
+            }
+        ],
+        "gonzaca01": [
+            {
+                "date": "2010-07-31",
+                "is_playoffs": false,
+                "team": "COL"
+            }
+        ],
+        "gonzalu01": [
+            {
+                "date": "2000-07-05",
+                "is_playoffs": false,
+                "team": "ARI"
+            }
+        ],
+        "gordojo01": [
+            {
+                "date": "1940-09-08",
+                "is_playoffs": false,
+                "team": "NYY"
+            }
+        ],
+        "gosligo01": [
+            {
+                "date": "1924-08-28",
+                "is_playoffs": false,
+                "team": "WSH"
+            }
+        ],
+        "gracema01": [
+            {
+                "date": "1993-05-09",
+                "is_playoffs": false,
+                "team": "CHC"
+            }
+        ],
+        "greenmi01": [
+            {
+                "date": "1988-09-14",
+                "is_playoffs": false,
+                "team": "BOS"
+            }
+        ],
+        "grohhe01": [
+            {
+                "date": "1915-07-05",
+                "is_playoffs": false,
+                "team": "CIN"
+            }
+        ],
+        "grubeke01": [
+            {
+                "date": "1989-04-16",
+                "is_playoffs": false,
+                "team": "TOR"
+            }
+        ],
+        "grudzma01": [
+            {
+                "date": "2005-04-27",
+                "is_playoffs": false,
+                "team": "STL"
+            }
+        ],
+        "guerrvl01": [
+            {
+                "date": "2003-09-14",
+                "is_playoffs": false,
+                "team": "MON"
+            }
+        ],
+        "guillca01": [
+            {
+                "date": "2006-08-01",
+                "is_playoffs": false,
+                "team": "DET"
+            }
+        ],
+        "guzmacr01": [
+            {
+                "date": "2008-08-28",
+                "is_playoffs": false,
+                "team": "WSN"
+            }
+        ],
+        "hafeych01": [
+            {
+                "date": "1930-08-21",
+                "is_playoffs": false,
+                "team": "STL"
+            }
+        ],
+        "hafnetr01": [
+            {
+                "date": "2003-08-14",
+                "is_playoffs": false,
+                "team": "CLE"
+            }
+        ],
+        "hairssc01": [
+            {
+                "date": "2012-04-27",
+                "is_playoffs": false,
+                "team": "NYM"
+            }
+        ],
+        "haleod01": [
+            {
+                "date": "1938-07-12",
+                "is_playoffs": false,
+                "team": "CLE"
+            }
+        ],
+        "hallal02": [
+            {
+                "date": "1987-09-23",
+                "is_playoffs": false,
+                "team": "ATL"
+            }
+        ],
+        "hartji01": [
+            {
+                "date": "1970-07-08",
+                "is_playoffs": false,
+                "team": "SFG"
+            }
+        ],
+        "hassabi01": [
+            {
+                "date": "1894-06-13",
+                "is_playoffs": false,
+                "team": "WHS"
+            }
+        ],
+        "heathcl01": [
+            {
+                "date": "1918-06-13",
+                "is_playoffs": false,
+                "team": "STL"
+            }
+        ],
+        "heganmi01": [
+            {
+                "date": "1976-09-03",
+                "is_playoffs": false,
+                "team": "MIL"
+            }
+        ],
+        "heltoto01": [
+            {
+                "date": "1999-06-19",
+                "is_playoffs": false,
+                "team": "COL"
+            }
+        ],
+        "hermaba01": [
+            {
+                "date": "1931-05-18",
+                "is_playoffs": false,
+                "team": "BRO"
+            },
+            {
+                "date": "1931-07-24",
+                "is_playoffs": false,
+                "team": "BRO"
+            },
+            {
+                "date": "1933-09-30",
+                "is_playoffs": false,
+                "team": "CHC"
+            }
+        ],
+        "hernake01": [
+            {
+                "date": "1985-07-04",
+                "is_playoffs": false,
+                "team": "NYM"
+            }
+        ],
+        "hickmji02": [
+            {
+                "date": "1963-08-07",
+                "is_playoffs": false,
+                "team": "NYM"
+            }
+        ],
+        "higgipi01": [
+            {
+                "date": "1933-08-06",
+                "is_playoffs": false,
+                "team": "PHA"
+            }
+        ],
+        "hillaa01": [
+            {
+                "date": "2012-06-18",
+                "is_playoffs": false,
+                "team": "ARI"
+            },
+            {
+                "date": "2012-06-29",
+                "is_playoffs": false,
+                "team": "ARI"
+            }
+        ],
+        "hislela01": [
+            {
+                "date": "1976-06-04",
+                "is_playoffs": false,
+                "team": "MIN"
+            }
+        ],
+        "hodgegi01": [
+            {
+                "date": "1949-06-25",
+                "is_playoffs": false,
+                "team": "BRO"
+            }
+        ],
+        "holtbr01": [
+            {
+                "date": "2015-06-16",
+                "is_playoffs": false,
+                "team": "BOS"
+            },
+            {
+                "date": "2018-10-08",
+                "is_playoffs": true,
+                "team": "BOS"
+            }
+        ],
+        "hortoto01": [
+            {
+                "date": "1970-07-02",
+                "is_playoffs": false,
+                "team": "CLE"
+            }
+        ],
+        "hudsoor01": [
+            {
+                "date": "2009-04-13",
+                "is_playoffs": false,
+                "team": "LAD"
+            }
+        ],
+        "huffau01": [
+            {
+                "date": "2007-06-29",
+                "is_playoffs": false,
+                "team": "BAL"
+            }
+        ],
+        "hundlra01": [
+            {
+                "date": "1966-08-11",
+                "is_playoffs": false,
+                "team": "CHC"
+            }
+        ],
+        "jacobba01": [
+            {
+                "date": "1924-04-17",
+                "is_playoffs": false,
+                "team": "SLB"
+            }
+        ],
+        "jasojo01": [
+            {
+                "date": "2016-09-28",
+                "is_playoffs": false,
+                "team": "PIT"
+            }
+        ],
+        "jeffegr01": [
+            {
+                "date": "1995-08-25",
+                "is_playoffs": false,
+                "team": "PHI"
+            }
+        ],
+        "johnsbo01": [
+            {
+                "date": "1944-07-06",
+                "is_playoffs": false,
+                "team": "BOS"
+            }
+        ],
+        "johnsji01": [
+            {
+                "date": "1922-05-25",
+                "is_playoffs": false,
+                "team": "BRO"
+            }
+        ],
+        "johnske05": [
+            {
+                "date": "2010-07-23",
+                "is_playoffs": false,
+                "team": "ARI"
+            }
+        ],
+        "joycebi01": [
+            {
+                "date": "1896-05-30",
+                "is_playoffs": false,
+                "team": "WHS"
+            }
+        ],
+        "kellge01": [
+            {
+                "date": "1950-06-02",
+                "is_playoffs": false,
+                "team": "DET"
+            }
+        ],
+        "kempma01": [
+            {
+                "date": "2015-08-14",
+                "is_playoffs": false,
+                "team": "SDP"
+            }
+        ],
+        "kendaja01": [
+            {
+                "date": "2000-05-19",
+                "is_playoffs": false,
+                "team": "PIT"
+            }
+        ],
+        "kentje01": [
+            {
+                "date": "1999-05-03",
+                "is_playoffs": false,
+                "team": "SFG"
+            }
+        ],
+        "kinerra01": [
+            {
+                "date": "1950-06-25",
+                "is_playoffs": false,
+                "team": "PIT"
+            }
+        ],
+        "kingji01": [
+            {
+                "date": "1964-05-26",
+                "is_playoffs": false,
+                "team": "WSA"
+            }
+        ],
+        "kingmda01": [
+            {
+                "date": "1972-04-16",
+                "is_playoffs": false,
+                "team": "SFG"
+            }
+        ],
+        "kinslia01": [
+            {
+                "date": "2009-04-15",
+                "is_playoffs": false,
+                "team": "TEX"
+            }
+        ],
+        "kleinch01": [
+            {
+                "date": "1931-07-01",
+                "is_playoffs": false,
+                "team": "PHI"
+            },
+            {
+                "date": "1933-05-26",
+                "is_playoffs": false,
+                "team": "PHI"
+            }
+        ],
+        "knighlo01": [
+            {
+                "date": "1883-07-30",
+                "is_playoffs": false,
+                "team": "PHA"
+            }
+        ],
+        "kotsama01": [
+            {
+                "date": "2008-08-14",
+                "is_playoffs": false,
+                "team": "ATL"
+            }
+        ],
+        "kottage01": [
+            {
+                "date": "2011-09-03",
+                "is_playoffs": false,
+                "team": "MIL"
+            }
+        ],
+        "kubelja01": [
+            {
+                "date": "2009-04-17",
+                "is_playoffs": false,
+                "team": "MIN"
+            }
+        ],
+        "lajoina01": [
+            {
+                "date": "1901-07-30",
+                "is_playoffs": false,
+                "team": "PHA"
+            }
+        ],
+        "lankfra01": [
+            {
+                "date": "1991-09-15",
+                "is_playoffs": false,
+                "team": "STL"
+            }
+        ],
+        "lansimi01": [
+            {
+                "date": "2000-06-18",
+                "is_playoffs": false,
+                "team": "COL"
+            }
+        ],
+        "larkihe01": [
+            {
+                "date": "1885-06-16",
+                "is_playoffs": false,
+                "team": "PHA"
+            }
+        ],
+        "lazzeto01": [
+            {
+                "date": "1932-06-03",
+                "is_playoffs": false,
+                "team": "NYY"
+            }
+        ],
+        "lennoed01": [
+            {
+                "date": "1914-05-06",
+                "is_playoffs": false,
+                "team": "PBS"
+            }
+        ],
+        "leonaje01": [
+            {
+                "date": "1985-06-27",
+                "is_playoffs": false,
+                "team": "SFG"
+            }
+        ],
+        "leslisa01": [
+            {
+                "date": "1936-05-24",
+                "is_playoffs": false,
+                "team": "NYG"
+            }
+        ],
+        "lewisfr02": [
+            {
+                "date": "2007-05-13",
+                "is_playoffs": false,
+                "team": "SFG"
+            }
+        ],
+        "lindsfr01": [
+            {
+                "date": "1930-05-08",
+                "is_playoffs": false,
+                "team": "NYG"
+            }
+        ],
+        "longhe01": [
+            {
+                "date": "1896-05-09",
+                "is_playoffs": false,
+                "team": "BSN"
+            }
+        ],
+        "longoev01": [
+            {
+                "date": "2017-08-01",
+                "is_playoffs": false,
+                "team": "TBR"
+            }
+        ],
+        "lynnfr01": [
+            {
+                "date": "1980-05-13",
+                "is_playoffs": false,
+                "team": "BOS"
+            }
+        ],
+        "mabryjo01": [
+            {
+                "date": "1996-05-18",
+                "is_playoffs": false,
+                "team": "STL"
+            }
+        ],
+        "maldoca01": [
+            {
+                "date": "1987-05-04",
+                "is_playoffs": false,
+                "team": "SFG"
+            }
+        ],
+        "mantlmi01": [
+            {
+                "date": "1957-07-23",
+                "is_playoffs": false,
+                "team": "NYY"
+            }
+        ],
+        "martipe01": [
+            {
+                "date": "1933-05-05",
+                "is_playoffs": false,
+                "team": "STL"
+            }
+        ],
+        "matthga02": [
+            {
+                "date": "2006-09-13",
+                "is_playoffs": false,
+                "team": "TEX"
+            }
+        ],
+        "maybejo01": [
+            {
+                "date": "1977-08-05",
+                "is_playoffs": false,
+                "team": "KCR"
+            }
+        ],
+        "mcdowod01": [
+            {
+                "date": "1985-07-23",
+                "is_playoffs": false,
+                "team": "TEX"
+            }
+        ],
+        "mcgarch01": [
+            {
+                "date": "1886-09-23",
+                "is_playoffs": false,
+                "team": "PHA"
+            }
+        ],
+        "mcgeewi01": [
+            {
+                "date": "1984-06-23",
+                "is_playoffs": false,
+                "team": "STL"
+            }
+        ],
+        "mcphebi01": [
+            {
+                "date": "1887-08-26",
+                "is_playoffs": false,
+                "team": "CIN"
+            }
+        ],
+        "mcquemo01": [
+            {
+                "date": "1885-09-28",
+                "is_playoffs": false,
+                "team": "DTN"
+            }
+        ],
+        "mcquige02": [
+            {
+                "date": "1941-07-19",
+                "is_playoffs": false,
+                "team": "SLB"
+            }
+        ],
+        "mcreyke01": [
+            {
+                "date": "1989-08-01",
+                "is_playoffs": false,
+                "team": "NYM"
+            }
+        ],
+        "medwijo01": [
+            {
+                "date": "1935-06-29",
+                "is_playoffs": false,
+                "team": "STL"
+            }
+        ],
+        "melilsk01": [
+            {
+                "date": "1929-05-23",
+                "is_playoffs": false,
+                "team": "SLB"
+            }
+        ],
+        "mertesa01": [
+            {
+                "date": "1904-10-04",
+                "is_playoffs": false,
+                "team": "NYG"
+            }
+        ],
+        "meusebo01": [
+            {
+                "date": "1921-05-07",
+                "is_playoffs": false,
+                "team": "NYY"
+            },
+            {
+                "date": "1922-07-03",
+                "is_playoffs": false,
+                "team": "NYY"
+            },
+            {
+                "date": "1928-07-26",
+                "is_playoffs": false,
+                "team": "NYY"
+            }
+        ],
+        "meyerch01": [
+            {
+                "date": "1912-06-10",
+                "is_playoffs": false,
+                "team": "NYG"
+            }
+        ],
+        "mizejo01": [
+            {
+                "date": "1940-07-13",
+                "is_playoffs": false,
+                "team": "STL"
+            }
+        ],
+        "moellch01": [
+            {
+                "date": "2004-04-27",
+                "is_playoffs": false,
+                "team": "MIL"
+            }
+        ],
+        "molinbe01": [
+            {
+                "date": "2010-07-16",
+                "is_playoffs": false,
+                "team": "TEX"
+            }
+        ],
+        "molitpa01": [
+            {
+                "date": "1991-05-15",
+                "is_playoffs": false,
+                "team": "MIL"
+            }
+        ],
+        "moorech02": [
+            {
+                "date": "1980-10-01",
+                "is_playoffs": false,
+                "team": "MIL"
+            }
+        ],
+        "muelldo01": [
+            {
+                "date": "1954-07-11",
+                "is_playoffs": false,
+                "team": "NYG"
+            }
+        ],
+        "murcebo01": [
+            {
+                "date": "1972-08-29",
+                "is_playoffs": false,
+                "team": "NYY"
+            }
+        ],
+        "murphda02": [
+            {
+                "date": "1910-08-25",
+                "is_playoffs": false,
+                "team": "PHA"
+            }
+        ],
+        "musiast01": [
+            {
+                "date": "1949-07-24",
+                "is_playoffs": false,
+                "team": "STL"
+            }
+        ],
+        "myerswi01": [
+            {
+                "date": "2017-04-10",
+                "is_playoffs": false,
+                "team": "SDP"
+            }
+        ],
+        "o'neiti01": [
+            {
+                "date": "1887-04-30",
+                "is_playoffs": false,
+                "team": "STL"
+            },
+            {
+                "date": "1887-05-07",
+                "is_playoffs": false,
+                "team": "STL"
+            }
+        ],
+        "o'rouji01": [
+            {
+                "date": "1884-06-16",
+                "is_playoffs": false,
+                "team": "BUF"
+            }
+        ],
+        "ochoaal01": [
+            {
+                "date": "1996-07-03",
+                "is_playoffs": false,
+                "team": "NYM"
+            }
+        ],
+        "ohtansh01": [
+            {
+                "date": "2019-06-13",
+                "is_playoffs": false,
+                "team": "LAA"
+            }
+        ],
+        "olerujo01": [
+            {
+                "date": "1997-09-11",
+                "is_playoffs": false,
+                "team": "NYM"
+            },
+            {
+                "date": "2001-06-16",
+                "is_playoffs": false,
+                "team": "SEA"
+            }
+        ],
+        "orrda01": [
+            {
+                "date": "1885-06-12",
+                "is_playoffs": false,
+                "team": "NYP"
+            },
+            {
+                "date": "1887-08-10",
+                "is_playoffs": false,
+                "team": "NYP"
+            }
+        ],
+        "ottme01": [
+            {
+                "date": "1929-05-16",
+                "is_playoffs": false,
+                "team": "NYG"
+            }
+        ],
+        "parkewe01": [
+            {
+                "date": "1970-05-07",
+                "is_playoffs": false,
+                "team": "LAD"
+            }
+        ],
+        "parroto01": [
+            {
+                "date": "1894-09-28",
+                "is_playoffs": false,
+                "team": "CIN"
+            }
+        ],
+        "patekfr01": [
+            {
+                "date": "1971-07-09",
+                "is_playoffs": false,
+                "team": "KCR"
+            }
+        ],
+        "perezne01": [
+            {
+                "date": "1998-07-25",
+                "is_playoffs": false,
+                "team": "COL"
+            }
+        ],
+        "phillmi01": [
+            {
+                "date": "1976-06-25",
+                "is_playoffs": false,
+                "team": "NYM"
+            }
+        ],
+        "phillto02": [
+            {
+                "date": "1986-05-16",
+                "is_playoffs": false,
+                "team": "OAK"
+            }
+        ],
+        "piefe01": [
+            {
+                "date": "2009-08-14",
+                "is_playoffs": false,
+                "team": "BAL"
+            }
+        ],
+        "polanjo01": [
+            {
+                "date": "2019-04-05",
+                "is_playoffs": false,
+                "team": "MIN"
+            }
+        ],
+        "puckeki01": [
+            {
+                "date": "1986-08-01",
+                "is_playoffs": false,
+                "team": "MIN"
+            }
+        ],
+        "raineti01": [
+            {
+                "date": "1987-08-16",
+                "is_playoffs": false,
+                "team": "MON"
+            }
+        ],
+        "redusga01": [
+            {
+                "date": "1989-08-25",
+                "is_playoffs": false,
+                "team": "PIT"
+            }
+        ],
+        "reilljo01": [
+            {
+                "date": "1883-09-12",
+                "is_playoffs": false,
+                "team": "CIN"
+            },
+            {
+                "date": "1883-09-19",
+                "is_playoffs": false,
+                "team": "CIN"
+            },
+            {
+                "date": "1890-08-06",
+                "is_playoffs": false,
+                "team": "CIN"
+            }
+        ],
+        "reyesjo01": [
+            {
+                "date": "2006-06-21",
+                "is_playoffs": false,
+                "team": "NYM"
+            }
+        ],
+        "riosal01": [
+            {
+                "date": "2013-09-23",
+                "is_playoffs": false,
+                "team": "TEX"
+            }
+        ],
+        "ripkeca01": [
+            {
+                "date": "1984-05-06",
+                "is_playoffs": false,
+                "team": "BAL"
+            }
+        ],
+        "roberda01": [
+            {
+                "date": "1921-08-30",
+                "is_playoffs": false,
+                "team": "PIT"
+            }
+        ],
+        "robinbr01": [
+            {
+                "date": "1960-07-15",
+                "is_playoffs": false,
+                "team": "BAL"
+            }
+        ],
+        "robinfr02": [
+            {
+                "date": "1959-05-02",
+                "is_playoffs": false,
+                "team": "CIN"
+            }
+        ],
+        "robinja02": [
+            {
+                "date": "1948-08-29",
+                "is_playoffs": false,
+                "team": "BRO"
+            }
+        ],
+        "rodrial01": [
+            {
+                "date": "1997-06-05",
+                "is_playoffs": false,
+                "team": "SEA"
+            }
+        ],
+        "rosarbu01": [
+            {
+                "date": "1940-07-19",
+                "is_playoffs": false,
+                "team": "NYY"
+            }
+        ],
+        "roweja01": [
+            {
+                "date": "1886-08-21",
+                "is_playoffs": false,
+                "team": "DTN"
+            }
+        ],
+        "ryanji01": [
+            {
+                "date": "1888-07-28",
+                "is_playoffs": false,
+                "team": "CHC"
+            },
+            {
+                "date": "1891-07-01",
+                "is_playoffs": false,
+                "team": "CHC"
+            }
+        ],
+        "salkebi01": [
+            {
+                "date": "1945-08-04",
+                "is_playoffs": false,
+                "team": "PIT"
+            }
+        ],
+        "sandopa01": [
+            {
+                "date": "2011-09-15",
+                "is_playoffs": false,
+                "team": "SFG"
+            }
+        ],
+        "schalra01": [
+            {
+                "date": "1922-06-27",
+                "is_playoffs": false,
+                "team": "CHW"
+            }
+        ],
+        "scottlu01": [
+            {
+                "date": "2006-07-28",
+                "is_playoffs": false,
+                "team": "HOU"
+            }
+        ],
+        "singlch01": [
+            {
+                "date": "1999-07-06",
+                "is_playoffs": false,
+                "team": "CHW"
+            }
+        ],
+        "sislege01": [
+            {
+                "date": "1920-08-08",
+                "is_playoffs": false,
+                "team": "SLB"
+            },
+            {
+                "date": "1921-08-13",
+                "is_playoffs": false,
+                "team": "SLB"
+            }
+        ],
+        "smallro01": [
+            {
+                "date": "1950-06-28",
+                "is_playoffs": false,
+                "team": "CHC"
+            }
+        ],
+        "soltemo01": [
+            {
+                "date": "1934-08-19",
+                "is_playoffs": false,
+                "team": "BOS"
+            }
+        ],
+        "speaktr01": [
+            {
+                "date": "1912-06-09",
+                "is_playoffs": false,
+                "team": "BOS"
+            }
+        ],
+        "speiech01": [
+            {
+                "date": "1978-07-20",
+                "is_playoffs": false,
+                "team": "MON"
+            },
+            {
+                "date": "1988-07-09",
+                "is_playoffs": false,
+                "team": "SFG"
+            }
+        ],
+        "stargwi01": [
+            {
+                "date": "1964-07-22",
+                "is_playoffs": false,
+                "team": "PIT"
+            }
+        ],
+        "stoveha01": [
+            {
+                "date": "1888-05-15",
+                "is_playoffs": false,
+                "team": "PHA"
+            }
+        ],
+        "teixema01": [
+            {
+                "date": "2004-08-17",
+                "is_playoffs": false,
+                "team": "TEX"
+            }
+        ],
+        "tejadmi01": [
+            {
+                "date": "2001-09-29",
+                "is_playoffs": false,
+                "team": "OAK"
+            }
+        ],
+        "terrybi01": [
+            {
+                "date": "1928-05-29",
+                "is_playoffs": false,
+                "team": "NYG"
+            }
+        ],
+        "thompro01": [
+            {
+                "date": "1991-04-22",
+                "is_playoffs": false,
+                "team": "SFG"
+            }
+        ],
+        "thompsa01": [
+            {
+                "date": "1894-08-17",
+                "is_playoffs": false,
+                "team": "PHI"
+            }
+        ],
+        "thornan01": [
+            {
+                "date": "1978-04-22",
+                "is_playoffs": false,
+                "team": "CLE"
+            }
+        ],
+        "tiernmi01": [
+            {
+                "date": "1888-08-25",
+                "is_playoffs": false,
+                "team": "NYG"
+            },
+            {
+                "date": "1890-06-28",
+                "is_playoffs": false,
+                "team": "NYG"
+            }
+        ],
+        "torrejo01": [
+            {
+                "date": "1973-06-27",
+                "is_playoffs": false,
+                "team": "STL"
+            }
+        ],
+        "tovarce01": [
+            {
+                "date": "1972-09-19",
+                "is_playoffs": false,
+                "team": "MIN"
+            }
+        ],
+        "traynpi01": [
+            {
+                "date": "1923-07-07",
+                "is_playoffs": false,
+                "team": "PIT"
+            }
+        ],
+        "troutmi01": [
+            {
+                "date": "2013-05-21",
+                "is_playoffs": false,
+                "team": "LAA"
+            }
+        ],
+        "tulowtr01": [
+            {
+                "date": "2009-08-10",
+                "is_playoffs": false,
+                "team": "COL"
+            }
+        ],
+        "turnetr01": [
+            {
+                "date": "2017-04-25",
+                "is_playoffs": false,
+                "team": "WSN"
+            },
+            {
+                "date": "2019-07-23",
+                "is_playoffs": false,
+                "team": "WSN"
+            },
+            {
+                "date": "2021-06-30",
+                "is_playoffs": false,
+                "team": "WSN"
+            }
+        ],
+        "twitcla01": [
+            {
+                "date": "1889-08-15",
+                "is_playoffs": false,
+                "team": "CLV"
+            }
+        ],
+        "uptonbj01": [
+            {
+                "date": "2009-10-02",
+                "is_playoffs": false,
+                "team": "TBR"
+            }
+        ],
+        "valener01": [
+            {
+                "date": "2004-07-29",
+                "is_playoffs": false,
+                "team": "NYM"
+            }
+        ],
+        "valenjo02": [
+            {
+                "date": "1996-06-06",
+                "is_playoffs": false,
+                "team": "BOS"
+            }
+        ],
+        "valenjo03": [
+            {
+                "date": "2000-04-27",
+                "is_playoffs": false,
+                "team": "CHW"
+            }
+        ],
+        "valoel01": [
+            {
+                "date": "1950-08-02",
+                "is_playoffs": false,
+                "team": "PHA"
+            }
+        ],
+        "vandybi01": [
+            {
+                "date": "1890-07-05",
+                "is_playoffs": false,
+                "team": "TOL"
+            }
+        ],
+        "vaughar01": [
+            {
+                "date": "1933-06-24",
+                "is_playoffs": false,
+                "team": "PIT"
+            },
+            {
+                "date": "1939-07-19",
+                "is_playoffs": false,
+                "team": "PIT"
+            }
+        ],
+        "veachbo01": [
+            {
+                "date": "1920-09-17",
+                "is_playoffs": false,
+                "team": "DET"
+            }
+        ],
+        "vernomi01": [
+            {
+                "date": "1946-05-19",
+                "is_playoffs": false,
+                "team": "WSH"
+            }
+        ],
+        "villajo01": [
+            {
+                "date": "2019-08-05",
+                "is_playoffs": false,
+                "team": "BAL"
+            }
+        ],
+        "wagneho01": [
+            {
+                "date": "1912-08-22 02:00:00",
+                "is_playoffs": false,
+                "team": "PIT"
+            }
+        ],
+        "walkedi02": [
+            {
+                "date": "1944-09-02",
+                "is_playoffs": false,
+                "team": "BRO"
+            }
+        ],
+        "walkege02": [
+            {
+                "date": "1937-04-20",
+                "is_playoffs": false,
+                "team": "DET"
+            }
+        ],
+        "wallsle01": [
+            {
+                "date": "1957-07-02",
+                "is_playoffs": false,
+                "team": "CHC"
+            }
+        ],
+        "wardda01": [
+            {
+                "date": "2004-05-26",
+                "is_playoffs": false,
+                "team": "PIT"
+            }
+        ],
+        "wardga01": [
+            {
+                "date": "1980-09-18",
+                "is_playoffs": false,
+                "team": "MIN"
+            }
+        ],
+        "watsobo01": [
+            {
+                "date": "1977-06-24",
+                "is_playoffs": false,
+                "team": "HOU"
+            },
+            {
+                "date": "1979-09-15",
+                "is_playoffs": false,
+                "team": "BOS"
+            }
+        ],
+        "weavefa01": [
+            {
+                "date": "1890-08-12",
+                "is_playoffs": false,
+                "team": "LOU"
+            }
+        ],
+        "wertzvi01": [
+            {
+                "date": "1947-09-14",
+                "is_playoffs": false,
+                "team": "DET"
+            }
+        ],
+        "westlwa01": [
+            {
+                "date": "1948-07-30",
+                "is_playoffs": false,
+                "team": "PIT"
+            },
+            {
+                "date": "1949-06-14",
+                "is_playoffs": false,
+                "team": "PIT"
+            }
+        ],
+        "whitebi03": [
+            {
+                "date": "1960-08-14",
+                "is_playoffs": false,
+                "team": "STL"
+            }
+        ],
+        "whitefr01": [
+            {
+                "date": "1979-09-26",
+                "is_playoffs": false,
+                "team": "KCR"
+            },
+            {
+                "date": "1982-08-03",
+                "is_playoffs": false,
+                "team": "KCR"
+            }
+        ],
+        "whitero02": [
+            {
+                "date": "1995-06-11",
+                "is_playoffs": false,
+                "team": "MON"
+            }
+        ],
+        "wilkebr01": [
+            {
+                "date": "2003-06-24",
+                "is_playoffs": false,
+                "team": "MON"
+            },
+            {
+                "date": "2005-04-06",
+                "is_playoffs": false,
+                "team": "WSN"
+            }
+        ],
+        "willibi01": [
+            {
+                "date": "1966-07-17",
+                "is_playoffs": false,
+                "team": "CHC"
+            }
+        ],
+        "willicy01": [
+            {
+                "date": "1927-08-05",
+                "is_playoffs": false,
+                "team": "PHI"
+            }
+        ],
+        "willite01": [
+            {
+                "date": "1946-07-21",
+                "is_playoffs": false,
+                "team": "BOS"
+            }
+        ],
+        "wilsoch01": [
+            {
+                "date": "1910-07-03",
+                "is_playoffs": false,
+                "team": "PIT"
+            }
+        ],
+        "wilsoha01": [
+            {
+                "date": "1930-06-23",
+                "is_playoffs": false,
+                "team": "CHC"
+            }
+        ],
+        "winfida01": [
+            {
+                "date": "1991-06-24",
+                "is_playoffs": false,
+                "team": "CAL"
+            }
+        ],
+        "winnra01": [
+            {
+                "date": "2005-08-15",
+                "is_playoffs": false,
+                "team": "SFG"
+            }
+        ],
+        "woodge01": [
+            {
+                "date": "1885-06-13",
+                "is_playoffs": false,
+                "team": "DTN"
+            }
+        ],
+        "yastrca01": [
+            {
+                "date": "1965-05-14",
+                "is_playoffs": false,
+                "team": "BOS"
+            }
+        ],
+        "yelicch01": [
+            {
+                "date": "2018-08-29",
+                "is_playoffs": false,
+                "team": "MIL"
+            },
+            {
+                "date": "2018-09-17",
+                "is_playoffs": false,
+                "team": "MIL"
+            }
+        ],
+        "youngro01": [
+            {
+                "date": "1922-04-29",
+                "is_playoffs": false,
+                "team": "NYG"
+            }
+        ],
+        "yountro01": [
+            {
+                "date": "1988-06-12",
+                "is_playoffs": false,
+                "team": "MIL"
+            }
+        ],
+        "ziskri01": [
+            {
+                "date": "1974-06-09",
+                "is_playoffs": false,
+                "team": "PIT"
+            }
+        ]
+    },
+    "no_hit": {
+        "gilbety01" : [
+            {
+                "date": "2021-08-14 00:00:00",
+                "is_playoffs": false,
+                "team": "ARI"
+            }
+        ],
+        "klubeco01" : [
+            {
+                "date": "2021-05-19 00:00:00",
+                "is_playoffs": false,
+                "team": "NYY"
+            }
+        ],
+        "turnbsp01" : [
+            {
+                "date": "2021-05-18 00:00:00",
+                "is_playoffs": false,
+                "team": "DET"
+            }
+        ],
+        "mileywa01" : [
+            {
+                "date": "2021-05-07 00:00:00",
+                "is_playoffs": false,
+                "team": "CIN"
+            }
+        ],
+        "abbotji01": [
+            {
+                "date": "1993-09-04 00:00:00",
+                "is_playoffs": false,
+                "team": "NYY"
+            }
+        ],
+        "allenfr01": [
+            {
+                "date": "1915-04-24 00:00:00",
+                "is_playoffs": false,
+                "team": "PBS"
+            }
+        ],
+        "alvarhe01": [
+            {
+                "date": "2013-09-29 00:00:00",
+                "is_playoffs": false,
+                "team": "MIA"
+            }
+        ],
+        "alvarwi01": [
+            {
+                "date": "1991-08-11 00:00:00",
+                "is_playoffs": false,
+                "team": "CHW"
+            }
+        ],
+        "arrieja01": [
+            {
+                "date": "2016-04-21 00:00:00",
+                "is_playoffs": false,
+                "team": "CHC"
+            },
+            {
+                "date": "2015-08-30 00:00:00",
+                "is_playoffs": false,
+                "team": "CHC"
+            }
+        ],
+        "atkinal01": [
+            {
+                "date": "1886-05-01 00:00:00",
+                "is_playoffs": false,
+                "team": "PHA"
+            },
+            {
+                "date": "1884-05-24 00:00:00",
+                "is_playoffs": false,
+                "team": "PHA"
+            }
+        ],
+        "baileho02": [
+            {
+                "date": "2013-07-02 00:00:00",
+                "is_playoffs": false,
+                "team": "CIN"
+            },
+            {
+                "date": "2012-09-28 00:00:00",
+                "is_playoffs": false,
+                "team": "CIN"
+            }
+        ],
+        "barkele01": [
+            {
+                "date": "1981-05-15 00:00:00",
+                "is_playoffs": false,
+                "team": "CLE"
+            }
+        ],
+        "barneje01": [
+            {
+                "date": "1922-05-07 00:00:00",
+                "is_playoffs": false,
+                "team": "NYG"
+            }
+        ],
+        "barnere02": [
+            {
+                "date": "1948-09-09 00:00:00",
+                "is_playoffs": false,
+                "team": "BRO"
+            }
+        ],
+        "beckejo02": [
+            {
+                "date": "2014-05-25 00:00:00",
+                "is_playoffs": false,
+                "team": "LAD"
+            }
+        ],
+        "belinbo01": [
+            {
+                "date": "1962-05-05 00:00:00",
+                "is_playoffs": false,
+                "team": "LAA"
+            }
+        ],
+        "bendech01": [
+            {
+                "date": "1910-05-12 00:00:00",
+                "is_playoffs": false,
+                "team": "PHA"
+            }
+        ],
+        "benzjo01": [
+            {
+                "date": "1914-05-31 00:00:00",
+                "is_playoffs": false,
+                "team": "CHW"
+            }
+        ],
+        "bibbyji01": [
+            {
+                "date": "1973-07-30 00:00:00",
+                "is_playoffs": false,
+                "team": "TEX"
+            }
+        ],
+        "bickfve01": [
+            {
+                "date": "1950-08-11 00:00:00",
+                "is_playoffs": false,
+                "team": "BSN"
+            }
+        ],
+        "blackdo01": [
+            {
+                "date": "1947-07-10 01:00:00",
+                "is_playoffs": false,
+                "team": "CLE"
+            }
+        ],
+        "blackew01": [
+            {
+                "date": "1947-06-18 00:00:00",
+                "is_playoffs": false,
+                "team": "CIN"
+            }
+        ],
+        "bluevi01": [
+            {
+                "date": "1970-09-21 00:00:00",
+                "is_playoffs": false,
+                "team": "OAK"
+            }
+        ],
+        "blylebe01": [
+            {
+                "date": "1977-09-22 00:00:00",
+                "is_playoffs": false,
+                "team": "TEX"
+            }
+        ],
+        "bordejo01": [
+            {
+                "date": "1875-07-28 00:00:00",
+                "is_playoffs": false,
+                "team": "PHI"
+            }
+        ],
+        "bosioch01": [
+            {
+                "date": "1993-04-22 00:00:00",
+                "is_playoffs": false,
+                "team": "SEA"
+            }
+        ],
+        "bosmadi01": [
+            {
+                "date": "1974-07-19 00:00:00",
+                "is_playoffs": false,
+                "team": "CLE"
+            }
+        ],
+        "bradeda01": [
+            {
+                "date": "2010-05-09 00:00:00",
+                "is_playoffs": false,
+                "team": "OAK"
+            }
+        ],
+        "bradlge01": [
+            {
+                "date": "1876-07-15 00:00:00",
+                "is_playoffs": false,
+                "team": "STL"
+            }
+        ],
+        "breitte01": [
+            {
+                "date": "1898-04-22 00:00:00",
+                "is_playoffs": false,
+                "team": "CIN"
+            },
+            {
+                "date": "1891-10-04 01:00:00",
+                "is_playoffs": false,
+                "team": "STL"
+            }
+        ],
+        "brownke01": [
+            {
+                "date": "1997-06-10 00:00:00",
+                "is_playoffs": false,
+                "team": "FLA"
+            }
+        ],
+        "brownto05": [
+            {
+                "date": "1988-09-16 00:00:00",
+                "is_playoffs": false,
+                "team": "CIN"
+            }
+        ],
+        "buchhcl01": [
+            {
+                "date": "2007-09-01 00:00:00",
+                "is_playoffs": false,
+                "team": "BOS"
+            }
+        ],
+        "buehrma01": [
+            {
+                "date": "2009-07-23 00:00:00",
+                "is_playoffs": false,
+                "team": "CHW"
+            },
+            {
+                "date": "2007-04-18 00:00:00",
+                "is_playoffs": false,
+                "team": "CHW"
+            }
+        ],
+        "bunniji01": [
+            {
+                "date": "1964-06-21 01:00:00",
+                "is_playoffs": false,
+                "team": "PHI"
+            },
+            {
+                "date": "1958-07-20 01:00:00",
+                "is_playoffs": false,
+                "team": "DET"
+            }
+        ],
+        "burdele01": [
+            {
+                "date": "1960-08-18 00:00:00",
+                "is_playoffs": false,
+                "team": "MLN"
+            }
+        ],
+        "burkebo01": [
+            {
+                "date": "1931-08-08 00:00:00",
+                "is_playoffs": false,
+                "team": "WSH"
+            }
+        ],
+        "burnea.01": [
+            {
+                "date": "2001-05-12 00:00:00",
+                "is_playoffs": false,
+                "team": "FLA"
+            }
+        ],
+        "burnsdi01": [
+            {
+                "date": "1884-08-26 00:00:00",
+                "is_playoffs": false,
+                "team": "COR"
+            }
+        ],
+        "busbyst01": [
+            {
+                "date": "1974-06-19 00:00:00",
+                "is_playoffs": false,
+                "team": "KCR"
+            },
+            {
+                "date": "1973-04-27 00:00:00",
+                "is_playoffs": false,
+                "team": "KCR"
+            }
+        ],
+        "bushjo01": [
+            {
+                "date": "1916-08-26 00:00:00",
+                "is_playoffs": false,
+                "team": "PHA"
+            }
+        ],
+        "cainma01": [
+            {
+                "date": "2012-06-13 00:00:00",
+                "is_playoffs": false,
+                "team": "SFG"
+            }
+        ],
+        "caldwra02": [
+            {
+                "date": "1919-09-10 01:00:00",
+                "is_playoffs": false,
+                "team": "CLE"
+            }
+        ],
+        "callani01": [
+            {
+                "date": "1902-09-20 01:00:00",
+                "is_playoffs": false,
+                "team": "CHW"
+            }
+        ],
+        "candejo01": [
+            {
+                "date": "1976-08-09 00:00:00",
+                "is_playoffs": false,
+                "team": "PIT"
+            }
+        ],
+        "cardwdo01": [
+            {
+                "date": "1960-05-15 02:00:00",
+                "is_playoffs": false,
+                "team": "CHC"
+            }
+        ],
+        "carlete01": [
+            {
+                "date": "1940-04-30 00:00:00",
+                "is_playoffs": false,
+                "team": "BRO"
+            }
+        ],
+        "chambcl01": [
+            {
+                "date": "1951-05-06 02:00:00",
+                "is_playoffs": false,
+                "team": "PIT"
+            }
+        ],
+        "chancde01": [
+            {
+                "date": "1967-08-25 02:00:00",
+                "is_playoffs": false,
+                "team": "MIN"
+            }
+        ],
+        "cicoted01": [
+            {
+                "date": "1917-04-14 00:00:00",
+                "is_playoffs": false,
+                "team": "CHW"
+            }
+        ],
+        "clarkjo01": [
+            {
+                "date": "1885-07-27 00:00:00",
+                "is_playoffs": false,
+                "team": "CHC"
+            }
+        ],
+        "colboji01": [
+            {
+                "date": "1977-05-14 00:00:00",
+                "is_playoffs": false,
+                "team": "KCR"
+            }
+        ],
+        "coneda01": [
+            {
+                "date": "1999-07-18 00:00:00",
+                "is_playoffs": false,
+                "team": "NYY"
+            }
+        ],
+        "corcola01": [
+            {
+                "date": "1884-06-27 00:00:00",
+                "is_playoffs": false,
+                "team": "CHC"
+            },
+            {
+                "date": "1882-09-20 00:00:00",
+                "is_playoffs": false,
+                "team": "CHC"
+            },
+            {
+                "date": "1880-08-19 00:00:00",
+                "is_playoffs": false,
+                "team": "CHC"
+            }
+        ],
+        "cowlejo01": [
+            {
+                "date": "1986-09-19 00:00:00",
+                "is_playoffs": false,
+                "team": "CHW"
+            }
+        ],
+        "culvege01": [
+            {
+                "date": "1968-07-29 02:00:00",
+                "is_playoffs": false,
+                "team": "CIN"
+            }
+        ],
+        "cushmed01": [
+            {
+                "date": "1884-09-28 00:00:00",
+                "is_playoffs": false,
+                "team": "MIL"
+            }
+        ],
+        "dailyhu01": [
+            {
+                "date": "1883-09-13 00:00:00",
+                "is_playoffs": false,
+                "team": "CLV"
+            }
+        ],
+        "davenda01": [
+            {
+                "date": "1915-09-07 01:00:00",
+                "is_playoffs": false,
+                "team": "SLM"
+            }
+        ],
+        "davisge02": [
+            {
+                "date": "1914-09-09 02:00:00",
+                "is_playoffs": false,
+                "team": "BSN"
+            }
+        ],
+        "deanpa01": [
+            {
+                "date": "1934-09-21 02:00:00",
+                "is_playoffs": false,
+                "team": "STL"
+            }
+        ],
+        "dierkla01": [
+            {
+                "date": "1976-07-09 00:00:00",
+                "is_playoffs": false,
+                "team": "HOU"
+            }
+        ],
+        "dietrbi01": [
+            {
+                "date": "1937-06-01 00:00:00",
+                "is_playoffs": false,
+                "team": "CHW"
+            }
+        ],
+        "dinnebi01": [
+            {
+                "date": "1905-09-27 01:00:00",
+                "is_playoffs": false,
+                "team": "BOS"
+            }
+        ],
+        "donahre01": [
+            {
+                "date": "1898-07-08 00:00:00",
+                "is_playoffs": false,
+                "team": "PHI"
+            }
+        ],
+        "dowlipe01": [
+            {
+                "date": "1901-06-30 00:00:00",
+                "is_playoffs": false,
+                "team": "CLE"
+            }
+        ],
+        "easonma01": [
+            {
+                "date": "1906-07-20 00:00:00",
+                "is_playoffs": false,
+                "team": "BRO"
+            }
+        ],
+        "eckerde01": [
+            {
+                "date": "1977-05-30 00:00:00",
+                "is_playoffs": false,
+                "team": "CLE"
+            }
+        ],
+        "ehmkeho01": [
+            {
+                "date": "1923-09-07 00:00:00",
+                "is_playoffs": false,
+                "team": "BOS"
+            }
+        ],
+        "ellerho01": [
+            {
+                "date": "1919-05-11 00:00:00",
+                "is_playoffs": false,
+                "team": "CIN"
+            }
+        ],
+        "ellisdo01": [
+            {
+                "date": "1970-06-12 01:00:00",
+                "is_playoffs": false,
+                "team": "PIT"
+            }
+        ],
+        "ericksc01": [
+            {
+                "date": "1994-04-27 00:00:00",
+                "is_playoffs": false,
+                "team": "MIN"
+            }
+        ],
+        "erskica01": [
+            {
+                "date": "1956-05-12 00:00:00",
+                "is_playoffs": false,
+                "team": "BRO"
+            },
+            {
+                "date": "1952-06-19 00:00:00",
+                "is_playoffs": false,
+                "team": "BRO"
+            }
+        ],
+        "fellebo01": [
+            {
+                "date": "1951-07-01 01:00:00",
+                "is_playoffs": false,
+                "team": "CLE"
+            },
+            {
+                "date": "1946-04-30 00:00:00",
+                "is_playoffs": false,
+                "team": "CLE"
+            },
+            {
+                "date": "1940-04-16 00:00:00",
+                "is_playoffs": false,
+                "team": "CLE"
+            }
+        ],
+        "ferguch01": [
+            {
+                "date": "1885-08-29 00:00:00",
+                "is_playoffs": false,
+                "team": "PHI"
+            }
+        ],
+        "ferrewe01": [
+            {
+                "date": "1931-04-29 00:00:00",
+                "is_playoffs": false,
+                "team": "CLE"
+            }
+        ],
+        "fiersmi01": [
+            {
+                "date": "2019-05-07 00:00:00",
+                "is_playoffs": false,
+                "team": "OAK"
+            },
+            {
+                "date": "2015-08-21 00:00:00",
+                "is_playoffs": false,
+                "team": "HOU"
+            }
+        ],
+        "forscbo01": [
+            {
+                "date": "1983-09-26 00:00:00",
+                "is_playoffs": false,
+                "team": "STL"
+            },
+            {
+                "date": "1978-04-16 00:00:00",
+                "is_playoffs": false,
+                "team": "STL"
+            }
+        ],
+        "forscke01": [
+            {
+                "date": "1979-04-07 00:00:00",
+                "is_playoffs": false,
+                "team": "HOU"
+            }
+        ],
+        "fosteru01": [
+            {
+                "date": "1916-06-21 00:00:00",
+                "is_playoffs": false,
+                "team": "BOS"
+            }
+        ],
+        "fowledi01": [
+            {
+                "date": "1945-09-09 02:00:00",
+                "is_playoffs": false,
+                "team": "PHA"
+            }
+        ],
+        "frasech01": [
+            {
+                "date": "1903-09-18 02:00:00",
+                "is_playoffs": false,
+                "team": "PHI"
+            }
+        ],
+        "galvipu01": [
+            {
+                "date": "1884-08-04 00:00:00",
+                "is_playoffs": false,
+                "team": "BUF"
+            },
+            {
+                "date": "1880-08-20 00:00:00",
+                "is_playoffs": false,
+                "team": "BUF"
+            }
+        ],
+        "garzama01": [
+            {
+                "date": "2010-07-26 00:00:00",
+                "is_playoffs": false,
+                "team": "TBR"
+            }
+        ],
+        "gibsobo01": [
+            {
+                "date": "1971-08-14 00:00:00",
+                "is_playoffs": false,
+                "team": "STL"
+            }
+        ],
+        "giolilu01": [
+            {
+                "date": "2020-08-25 00:00:00",
+                "is_playoffs": false,
+                "team": "CHW"
+            }
+        ],
+        "goodedw01": [
+            {
+                "date": "1996-05-14 00:00:00",
+                "is_playoffs": false,
+                "team": "NYY"
+            }
+        ],
+        "greento01": [
+            {
+                "date": "1991-05-23 00:00:00",
+                "is_playoffs": false,
+                "team": "PHI"
+            }
+        ],
+        "groombo01": [
+            {
+                "date": "1917-05-06 02:00:00",
+                "is_playoffs": false,
+                "team": "SLB"
+            }
+        ],
+        "grosske01": [
+            {
+                "date": "1992-08-17 00:00:00",
+                "is_playoffs": false,
+                "team": "LAD"
+            }
+        ],
+        "hahnno01": [
+            {
+                "date": "1900-07-12 00:00:00",
+                "is_playoffs": false,
+                "team": "CIN"
+            }
+        ],
+        "haineje01": [
+            {
+                "date": "1924-07-17 00:00:00",
+                "is_playoffs": false,
+                "team": "STL"
+            }
+        ],
+        "haliced01": [
+            {
+                "date": "1975-08-24 02:00:00",
+                "is_playoffs": false,
+                "team": "SFG"
+            }
+        ],
+        "hallaro01": [
+            {
+                "date": "2010-10-06 00:00:00",
+                "is_playoffs": true,
+                "team": "PHI"
+            },
+            {
+                "date": "2010-05-29 00:00:00",
+                "is_playoffs": false,
+                "team": "PHI"
+            }
+        ],
+        "hamelco01": [
+            {
+                "date": "2015-07-25 00:00:00",
+                "is_playoffs": false,
+                "team": "PHI"
+            }
+        ],
+        "hamilea01": [
+            {
+                "date": "1912-08-30 00:00:00",
+                "is_playoffs": false,
+                "team": "SLB"
+            }
+        ],
+        "hawkebi01": [
+            {
+                "date": "1893-08-16 00:00:00",
+                "is_playoffs": false,
+                "team": "BLN"
+            }
+        ],
+        "headed01": [
+            {
+                "date": "1946-04-23 00:00:00",
+                "is_playoffs": false,
+                "team": "BRO"
+            }
+        ],
+        "heckegu01": [
+            {
+                "date": "1882-09-19 00:00:00",
+                "is_playoffs": false,
+                "team": "LOU"
+            }
+        ],
+        "hendrcl01": [
+            {
+                "date": "1915-05-15 00:00:00",
+                "is_playoffs": false,
+                "team": "CHI"
+            }
+        ],
+        "henlewe01": [
+            {
+                "date": "1905-07-22 01:00:00",
+                "is_playoffs": false,
+                "team": "PHA"
+            }
+        ],
+        "hernafe02": [
+            {
+                "date": "2012-08-15 00:00:00",
+                "is_playoffs": false,
+                "team": "SEA"
+            }
+        ],
+        "hestoch01": [
+            {
+                "date": "2015-06-09 00:00:00",
+                "is_playoffs": false,
+                "team": "SFG"
+            }
+        ],
+        "hollobo01": [
+            {
+                "date": "1953-05-06 00:00:00",
+                "is_playoffs": false,
+                "team": "SLB"
+            }
+        ],
+        "holtzke01": [
+            {
+                "date": "1971-06-03 00:00:00",
+                "is_playoffs": false,
+                "team": "CHC"
+            },
+            {
+                "date": "1969-08-19 00:00:00",
+                "is_playoffs": false,
+                "team": "CHC"
+            }
+        ],
+        "hootobu01": [
+            {
+                "date": "1972-04-16 00:00:00",
+                "is_playoffs": false,
+                "team": "CHC"
+            }
+        ],
+        "horlejo01": [
+            {
+                "date": "1967-09-10 01:00:00",
+                "is_playoffs": false,
+                "team": "CHW"
+            }
+        ],
+        "hubbeca01": [
+            {
+                "date": "1929-05-08 00:00:00",
+                "is_playoffs": false,
+                "team": "NYG"
+            }
+        ],
+        "hugheja01": [
+            {
+                "date": "1898-04-22 00:00:00",
+                "is_playoffs": false,
+                "team": "BLN"
+            }
+        ],
+        "hugheto02": [
+            {
+                "date": "1916-06-16 00:00:00",
+                "is_playoffs": false,
+                "team": "BSN"
+            }
+        ],
+        "humbeph01": [
+            {
+                "date": "2012-04-21 00:00:00",
+                "is_playoffs": false,
+                "team": "CHW"
+            }
+        ],
+        "hunteca01": [
+            {
+                "date": "1968-05-08 00:00:00",
+                "is_playoffs": false,
+                "team": "OAK"
+            }
+        ],
+        "iwakuhi01": [
+            {
+                "date": "2015-08-12 00:00:00",
+                "is_playoffs": false,
+                "team": "SEA"
+            }
+        ],
+        "jacksed01": [
+            {
+                "date": "2010-06-25 00:00:00",
+                "is_playoffs": false,
+                "team": "ARI"
+            }
+        ],
+        "jimenjo01": [
+            {
+                "date": "1999-06-25 00:00:00",
+                "is_playoffs": false,
+                "team": "STL"
+            }
+        ],
+        "jimenub01": [
+            {
+                "date": "2010-04-17 00:00:00",
+                "is_playoffs": false,
+                "team": "COL"
+            }
+        ],
+        "johnske02": [
+            {
+                "date": "1964-04-23 00:00:00",
+                "is_playoffs": false,
+                "team": "HOU"
+            }
+        ],
+        "johnsra05": [
+            {
+                "date": "2004-05-18 00:00:00",
+                "is_playoffs": false,
+                "team": "ARI"
+            },
+            {
+                "date": "1990-06-02 00:00:00",
+                "is_playoffs": false,
+                "team": "SEA"
+            }
+        ],
+        "johnswa01": [
+            {
+                "date": "1920-07-01 00:00:00",
+                "is_playoffs": false,
+                "team": "WSH"
+            }
+        ],
+        "jonesbu01": [
+            {
+                "date": "1892-10-15 00:00:00",
+                "is_playoffs": false,
+                "team": "CIN"
+            }
+        ],
+        "jonessa01": [
+            {
+                "date": "1923-09-04 00:00:00",
+                "is_playoffs": false,
+                "team": "NYY"
+            }
+        ],
+        "jonessa02": [
+            {
+                "date": "1955-05-12 00:00:00",
+                "is_playoffs": false,
+                "team": "CHC"
+            }
+        ],
+        "jossad01": [
+            {
+                "date": "1910-04-20 00:00:00",
+                "is_playoffs": false,
+                "team": "CLE"
+            },
+            {
+                "date": "1908-10-02 00:00:00",
+                "is_playoffs": false,
+                "team": "CLE"
+            }
+        ],
+        "keegabo01": [
+            {
+                "date": "1957-08-20 02:00:00",
+                "is_playoffs": false,
+                "team": "CHW"
+            }
+        ],
+        "kenneve01": [
+            {
+                "date": "1935-08-31 00:00:00",
+                "is_playoffs": false,
+                "team": "CHW"
+            }
+        ],
+        "kershcl01": [
+            {
+                "date": "2014-06-18 00:00:00",
+                "is_playoffs": false,
+                "team": "LAD"
+            }
+        ],
+        "kileda01": [
+            {
+                "date": "1993-09-08 00:00:00",
+                "is_playoffs": false,
+                "team": "HOU"
+            }
+        ],
+        "kilroma01": [
+            {
+                "date": "1886-10-06 00:00:00",
+                "is_playoffs": false,
+                "team": "BAL"
+            }
+        ],
+        "kimbesa01": [
+            {
+                "date": "1884-10-04 00:00:00",
+                "is_playoffs": false,
+                "team": "BRO"
+            }
+        ],
+        "koober01": [
+            {
+                "date": "1917-05-05 00:00:00",
+                "is_playoffs": false,
+                "team": "SLB"
+            }
+        ],
+        "koufasa01": [
+            {
+                "date": "1965-09-09 00:00:00",
+                "is_playoffs": false,
+                "team": "LAD"
+            },
+            {
+                "date": "1964-06-04 00:00:00",
+                "is_playoffs": false,
+                "team": "LAD"
+            },
+            {
+                "date": "1963-05-11 00:00:00",
+                "is_playoffs": false,
+                "team": "LAD"
+            },
+            {
+                "date": "1962-06-30 00:00:00",
+                "is_playoffs": false,
+                "team": "LAD"
+            }
+        ],
+        "kralija01": [
+            {
+                "date": "1962-08-26 00:00:00",
+                "is_playoffs": false,
+                "team": "MIN"
+            }
+        ],
+        "lafited01": [
+            {
+                "date": "1914-09-19 01:00:00",
+                "is_playoffs": false,
+                "team": "BTT"
+            }
+        ],
+        "larsedo01": [
+            {
+                "date": "1956-10-08 00:00:00",
+                "is_playoffs": true,
+                "team": "NYY"
+            }
+        ],
+        "lavenji01": [
+            {
+                "date": "1915-08-31 01:00:00",
+                "is_playoffs": false,
+                "team": "CHC"
+            }
+        ],
+        "leach01": [
+            {
+                "date": "1981-05-10 02:00:00",
+                "is_playoffs": false,
+                "team": "MON"
+            }
+        ],
+        "leiteal01": [
+            {
+                "date": "1996-05-11 00:00:00",
+                "is_playoffs": false,
+                "team": "FLA"
+            }
+        ],
+        "lemonbo01": [
+            {
+                "date": "1948-06-30 00:00:00",
+                "is_playoffs": false,
+                "team": "CLE"
+            }
+        ],
+        "leonadu01": [
+            {
+                "date": "1918-06-03 00:00:00",
+                "is_playoffs": false,
+                "team": "BOS"
+            },
+            {
+                "date": "1916-08-30 00:00:00",
+                "is_playoffs": false,
+                "team": "BOS"
+            }
+        ],
+        "lestejo01": [
+            {
+                "date": "2008-05-19 00:00:00",
+                "is_playoffs": false,
+                "team": "BOS"
+            }
+        ],
+        "linceti01": [
+            {
+                "date": "2014-06-25 00:00:00",
+                "is_playoffs": false,
+                "team": "SFG"
+            },
+            {
+                "date": "2013-07-13 00:00:00",
+                "is_playoffs": false,
+                "team": "SFG"
+            }
+        ],
+        "liriafr01": [
+            {
+                "date": "2011-05-03 00:00:00",
+                "is_playoffs": false,
+                "team": "MIN"
+            }
+        ],
+        "lovetto01": [
+            {
+                "date": "1891-06-22 00:00:00",
+                "is_playoffs": false,
+                "team": "BRO"
+            }
+        ],
+        "lowede01": [
+            {
+                "date": "2002-04-27 00:00:00",
+                "is_playoffs": false,
+                "team": "BOS"
+            }
+        ],
+        "lushjo01": [
+            {
+                "date": "1906-05-01 00:00:00",
+                "is_playoffs": false,
+                "team": "PHI"
+            }
+        ],
+        "lyonste01": [
+            {
+                "date": "1926-08-21 00:00:00",
+                "is_playoffs": false,
+                "team": "CHW"
+            }
+        ],
+        "maddoni01": [
+            {
+                "date": "1907-09-20 00:00:00",
+                "is_playoffs": false,
+                "team": "PIT"
+            }
+        ],
+        "maglisa01": [
+            {
+                "date": "1956-09-25 00:00:00",
+                "is_playoffs": false,
+                "team": "BRO"
+            }
+        ],
+        "mainal01": [
+            {
+                "date": "1915-08-16 00:00:00",
+                "is_playoffs": false,
+                "team": "KCP"
+            }
+        ],
+        "malonji01": [
+            {
+                "date": "1969-04-30 00:00:00",
+                "is_playoffs": false,
+                "team": "CIN"
+            },
+            {
+                "date": "1965-08-19 01:00:00",
+                "is_playoffs": false,
+                "team": "CIN"
+            }
+        ],
+        "manaese01": [
+            {
+                "date": "2018-04-21 00:00:00",
+                "is_playoffs": false,
+                "team": "OAK"
+            }
+        ],
+        "maricju01": [
+            {
+                "date": "1963-06-15 00:00:00",
+                "is_playoffs": false,
+                "team": "SFG"
+            }
+        ],
+        "marquru01": [
+            {
+                "date": "1915-04-15 00:00:00",
+                "is_playoffs": false,
+                "team": "NYG"
+            }
+        ],
+        "martide01": [
+            {
+                "date": "1991-07-28 00:00:00",
+                "is_playoffs": false,
+                "team": "MON"
+            }
+        ],
+        "martira02": [
+            {
+                "date": "1995-07-14 00:00:00",
+                "is_playoffs": false,
+                "team": "LAD"
+            }
+        ],
+        "mathech01": [
+            {
+                "date": "1905-06-13 00:00:00",
+                "is_playoffs": false,
+                "team": "NYG"
+            },
+            {
+                "date": "1901-07-15 00:00:00",
+                "is_playoffs": false,
+                "team": "NYG"
+            }
+        ],
+        "mccahbi01": [
+            {
+                "date": "1947-09-03 00:00:00",
+                "is_playoffs": false,
+                "team": "PHA"
+            }
+        ],
+        "merckke01": [
+            {
+                "date": "1994-04-08 00:00:00",
+                "is_playoffs": false,
+                "team": "ATL"
+            }
+        ],
+        "millsal02": [
+            {
+                "date": "2020-09-13 00:00:00",
+                "is_playoffs": false,
+                "team": "CHC"
+            }
+        ],
+        "millwke01": [
+            {
+                "date": "2003-04-27 00:00:00",
+                "is_playoffs": false,
+                "team": "PHI"
+            }
+        ],
+        "miltoer01": [
+            {
+                "date": "1999-09-11 00:00:00",
+                "is_playoffs": false,
+                "team": "MIN"
+            }
+        ],
+        "mogrige01": [
+            {
+                "date": "1917-04-24 00:00:00",
+                "is_playoffs": false,
+                "team": "NYY"
+            }
+        ],
+        "monbobi01": [
+            {
+                "date": "1962-08-01 00:00:00",
+                "is_playoffs": false,
+                "team": "BOS"
+            }
+        ],
+        "montejo01": [
+            {
+                "date": "1976-09-29 00:00:00",
+                "is_playoffs": false,
+                "team": "SFG"
+            }
+        ],
+        "moosebo01": [
+            {
+                "date": "1969-09-20 00:00:00",
+                "is_playoffs": false,
+                "team": "PIT"
+            }
+        ],
+        "morehda01": [
+            {
+                "date": "1965-09-16 00:00:00",
+                "is_playoffs": false,
+                "team": "BOS"
+            }
+        ],
+        "morried01": [
+            {
+                "date": "1884-05-29 00:00:00",
+                "is_playoffs": false,
+                "team": "COL"
+            }
+        ],
+        "morrija02": [
+            {
+                "date": "1984-04-07 00:00:00",
+                "is_playoffs": false,
+                "team": "DET"
+            }
+        ],
+        "mountfr01": [
+            {
+                "date": "1884-06-05 00:00:00",
+                "is_playoffs": false,
+                "team": "COL"
+            }
+        ],
+        "mulhote01": [
+            {
+                "date": "1990-08-15 00:00:00",
+                "is_playoffs": false,
+                "team": "PHI"
+            }
+        ],
+        "mullato01": [
+            {
+                "date": "1882-09-11 00:00:00",
+                "is_playoffs": false,
+                "team": "LOU"
+            }
+        ],
+        "mullige01": [
+            {
+                "date": "1912-07-04 02:00:00",
+                "is_playoffs": false,
+                "team": "DET"
+            }
+        ],
+        "niekrph01": [
+            {
+                "date": "1973-08-05 00:00:00",
+                "is_playoffs": false,
+                "team": "ATL"
+            }
+        ],
+        "nieveju01": [
+            {
+                "date": "1987-04-15 00:00:00",
+                "is_playoffs": false,
+                "team": "MIL"
+            }
+        ],
+        "nomohi01": [
+            {
+                "date": "2001-04-04 00:00:00",
+                "is_playoffs": false,
+                "team": "BOS"
+            },
+            {
+                "date": "1996-09-17 00:00:00",
+                "is_playoffs": false,
+                "team": "LAD"
+            }
+        ],
+        "nottedo01": [
+            {
+                "date": "1963-05-17 00:00:00",
+                "is_playoffs": false,
+                "team": "HOU"
+            }
+        ],
+        "palmeji01": [
+            {
+                "date": "1969-08-13 00:00:00",
+                "is_playoffs": false,
+                "team": "BAL"
+            }
+        ],
+        "pappami01": [
+            {
+                "date": "1972-09-02 00:00:00",
+                "is_playoffs": false,
+                "team": "CHC"
+            }
+        ],
+        "parneme01": [
+            {
+                "date": "1956-07-14 00:00:00",
+                "is_playoffs": false,
+                "team": "BOS"
+            }
+        ],
+        "paxtoja01": [
+            {
+                "date": "2018-05-08 00:00:00",
+                "is_playoffs": false,
+                "team": "SEA"
+            }
+        ],
+        "pearsmo01": [
+            {
+                "date": "1938-08-27 02:00:00",
+                "is_playoffs": false,
+                "team": "NYY"
+            }
+        ],
+        "perryga01": [
+            {
+                "date": "1968-09-17 00:00:00",
+                "is_playoffs": false,
+                "team": "SFG"
+            }
+        ],
+        "pfeffbi01": [
+            {
+                "date": "1907-05-08 00:00:00",
+                "is_playoffs": false,
+                "team": "BSN"
+            }
+        ],
+        "phillde01": [
+            {
+                "date": "1899-05-25 00:00:00",
+                "is_playoffs": false,
+                "team": "LOU"
+            }
+        ],
+        "phoebto01": [
+            {
+                "date": "1968-04-27 00:00:00",
+                "is_playoffs": false,
+                "team": "BAL"
+            }
+        ],
+        "portehe01": [
+            {
+                "date": "1888-06-06 00:00:00",
+                "is_playoffs": false,
+                "team": "KCC"
+            }
+        ],
+        "radboch01": [
+            {
+                "date": "1883-07-25 00:00:00",
+                "is_playoffs": false,
+                "team": "PRO"
+            }
+        ],
+        "reussje01": [
+            {
+                "date": "1980-06-27 00:00:00",
+                "is_playoffs": false,
+                "team": "LAD"
+            }
+        ],
+        "reynoal01": [
+            {
+                "date": "1951-09-28 01:00:00",
+                "is_playoffs": false,
+                "team": "NYY"
+            },
+            {
+                "date": "1951-07-12 00:00:00",
+                "is_playoffs": false,
+                "team": "NYY"
+            }
+        ],
+        "rhoadbo01": [
+            {
+                "date": "1908-09-18 00:00:00",
+                "is_playoffs": false,
+                "team": "CLE"
+            }
+        ],
+        "richmle01": [
+            {
+                "date": "1880-06-12 00:00:00",
+                "is_playoffs": false,
+                "team": "WOR"
+            }
+        ],
+        "righeda01": [
+            {
+                "date": "1983-07-04 00:00:00",
+                "is_playoffs": false,
+                "team": "NYY"
+            }
+        ],
+        "roberch01": [
+            {
+                "date": "1922-04-30 00:00:00",
+                "is_playoffs": false,
+                "team": "CHW"
+            }
+        ],
+        "rogerke01": [
+            {
+                "date": "1994-07-28 00:00:00",
+                "is_playoffs": false,
+                "team": "TEX"
+            }
+        ],
+        "ruckena01": [
+            {
+                "date": "1908-09-05 02:00:00",
+                "is_playoffs": false,
+                "team": "BRO"
+            }
+        ],
+        "rusieam01": [
+            {
+                "date": "1891-07-31 00:00:00",
+                "is_playoffs": false,
+                "team": "NYG"
+            }
+        ],
+        "ryanno01": [
+            {
+                "date": "1991-05-01 00:00:00",
+                "is_playoffs": false,
+                "team": "TEX"
+            },
+            {
+                "date": "1990-06-11 00:00:00",
+                "is_playoffs": false,
+                "team": "TEX"
+            },
+            {
+                "date": "1981-09-26 00:00:00",
+                "is_playoffs": false,
+                "team": "HOU"
+            },
+            {
+                "date": "1975-06-01 00:00:00",
+                "is_playoffs": false,
+                "team": "CAL"
+            },
+            {
+                "date": "1974-09-28 00:00:00",
+                "is_playoffs": false,
+                "team": "CAL"
+            },
+            {
+                "date": "1973-07-15 00:00:00",
+                "is_playoffs": false,
+                "team": "CAL"
+            },
+            {
+                "date": "1973-05-15 00:00:00",
+                "is_playoffs": false,
+                "team": "CAL"
+            }
+        ],
+        "saberbr01": [
+            {
+                "date": "1991-08-26 00:00:00",
+                "is_playoffs": false,
+                "team": "KCR"
+            }
+        ],
+        "sanchan01": [
+            {
+                "date": "2006-09-06 00:00:00",
+                "is_playoffs": false,
+                "team": "FLA"
+            }
+        ],
+        "sanchjo01": [
+            {
+                "date": "2009-07-10 00:00:00",
+                "is_playoffs": false,
+                "team": "SFG"
+            }
+        ],
+        "sandebe01": [
+            {
+                "date": "1892-08-22 00:00:00",
+                "is_playoffs": false,
+                "team": "LOU"
+            }
+        ],
+        "santaer01": [
+            {
+                "date": "2011-07-27 00:00:00",
+                "is_playoffs": false,
+                "team": "LAA"
+            }
+        ],
+        "santajo02": [
+            {
+                "date": "2012-06-01 00:00:00",
+                "is_playoffs": false,
+                "team": "NYM"
+            }
+        ],
+        "scherma01": [
+            {
+                "date": "2015-10-03 02:00:00",
+                "is_playoffs": false,
+                "team": "WSN"
+            },
+            {
+                "date": "2015-06-20 00:00:00",
+                "is_playoffs": false,
+                "team": "WSN"
+            }
+        ],
+        "scottmi03": [
+            {
+                "date": "1986-09-25 00:00:00",
+                "is_playoffs": false,
+                "team": "HOU"
+            }
+        ],
+        "seaveto01": [
+            {
+                "date": "1978-06-16 00:00:00",
+                "is_playoffs": false,
+                "team": "CIN"
+            }
+        ],
+        "sewared01": [
+            {
+                "date": "1888-07-26 00:00:00",
+                "is_playoffs": false,
+                "team": "PHA"
+            }
+        ],
+        "shouncl01": [
+            {
+                "date": "1944-05-15 00:00:00",
+                "is_playoffs": false,
+                "team": "CIN"
+            }
+        ],
+        "siebeso01": [
+            {
+                "date": "1966-06-10 00:00:00",
+                "is_playoffs": false,
+                "team": "CLE"
+            }
+        ],
+        "singebi01": [
+            {
+                "date": "1970-07-20 00:00:00",
+                "is_playoffs": false,
+                "team": "LAD"
+            }
+        ],
+        "smithbu02": [
+            {
+                "date": "2001-09-03 00:00:00",
+                "is_playoffs": false,
+                "team": "STL"
+            }
+        ],
+        "smithfr03": [
+            {
+                "date": "1908-09-20 00:00:00",
+                "is_playoffs": false,
+                "team": "CHW"
+            },
+            {
+                "date": "1905-09-06 02:00:00",
+                "is_playoffs": false,
+                "team": "CHW"
+            }
+        ],
+        "spahnwa01": [
+            {
+                "date": "1961-04-28 00:00:00",
+                "is_playoffs": false,
+                "team": "MLN"
+            },
+            {
+                "date": "1960-09-16 00:00:00",
+                "is_playoffs": false,
+                "team": "MLN"
+            }
+        ],
+        "stewada01": [
+            {
+                "date": "1990-06-29 00:00:00",
+                "is_playoffs": false,
+                "team": "OAK"
+            }
+        ],
+        "stiebda01": [
+            {
+                "date": "1990-09-02 00:00:00",
+                "is_playoffs": false,
+                "team": "TOR"
+            }
+        ],
+        "stiveja01": [
+            {
+                "date": "1892-08-06 00:00:00",
+                "is_playoffs": false,
+                "team": "BSN"
+            }
+        ],
+        "stonebi01": [
+            {
+                "date": "1972-10-02 01:00:00",
+                "is_playoffs": false,
+                "team": "MON"
+            },
+            {
+                "date": "1969-04-17 00:00:00",
+                "is_playoffs": false,
+                "team": "MON"
+            }
+        ],
+        "tanneje01": [
+            {
+                "date": "1904-08-17 00:00:00",
+                "is_playoffs": false,
+                "team": "BOS"
+            }
+        ],
+        "terryad01": [
+            {
+                "date": "1888-05-27 00:00:00",
+                "is_playoffs": false,
+                "team": "BRO"
+            },
+            {
+                "date": "1886-07-24 00:00:00",
+                "is_playoffs": false,
+                "team": "BRO"
+            }
+        ],
+        "tesreje01": [
+            {
+                "date": "1912-09-06 01:00:00",
+                "is_playoffs": false,
+                "team": "NYG"
+            }
+        ],
+        "thornwa01": [
+            {
+                "date": "1898-08-21 02:00:00",
+                "is_playoffs": false,
+                "team": "CHC"
+            }
+        ],
+        "titcoca01": [
+            {
+                "date": "1890-09-15 00:00:00",
+                "is_playoffs": false,
+                "team": "ROC"
+            }
+        ],
+        "tobinji01": [
+            {
+                "date": "1944-04-27 00:00:00",
+                "is_playoffs": false,
+                "team": "BSN"
+            }
+        ],
+        "toneyfr01": [
+            {
+                "date": "1917-05-02 00:00:00",
+                "is_playoffs": false,
+                "team": "CIN"
+            }
+        ],
+        "truckvi01": [
+            {
+                "date": "1952-08-25 00:00:00",
+                "is_playoffs": false,
+                "team": "DET"
+            },
+            {
+                "date": "1952-05-15 00:00:00",
+                "is_playoffs": false,
+                "team": "DET"
+            }
+        ],
+        "valenfe01": [
+            {
+                "date": "1990-06-29 00:00:00",
+                "is_playoffs": false,
+                "team": "LAD"
+            }
+        ],
+        "vanceda01": [
+            {
+                "date": "1925-09-13 01:00:00",
+                "is_playoffs": false,
+                "team": "BRO"
+            }
+        ],
+        "vandejo01": [
+            {
+                "date": "1938-06-15 00:00:00",
+                "is_playoffs": false,
+                "team": "CIN"
+            },
+            {
+                "date": "1938-06-11 00:00:00",
+                "is_playoffs": false,
+                "team": "CIN"
+            }
+        ],
+        "verlaju01": [
+            {
+                "date": "2019-09-01 00:00:00",
+                "is_playoffs": false,
+                "team": "HOU"
+            },
+            {
+                "date": "2011-05-07 00:00:00",
+                "is_playoffs": false,
+                "team": "DET"
+            },
+            {
+                "date": "2007-06-12 00:00:00",
+                "is_playoffs": false,
+                "team": "DET"
+            }
+        ],
+        "volqued01": [
+            {
+                "date": "2017-06-03 00:00:00",
+                "is_playoffs": false,
+                "team": "MIA"
+            }
+        ],
+        "walshed01": [
+            {
+                "date": "1911-08-27 00:00:00",
+                "is_playoffs": false,
+                "team": "CHW"
+            }
+        ],
+        "wardjo01": [
+            {
+                "date": "1880-06-17 00:00:00",
+                "is_playoffs": false,
+                "team": "PRO"
+            }
+        ],
+        "warnelo01": [
+            {
+                "date": "1941-08-30 00:00:00",
+                "is_playoffs": false,
+                "team": "STL"
+            }
+        ],
+        "warremi01": [
+            {
+                "date": "1983-09-29 00:00:00",
+                "is_playoffs": false,
+                "team": "OAK"
+            }
+        ],
+        "washbra01": [
+            {
+                "date": "1968-09-18 00:00:00",
+                "is_playoffs": false,
+                "team": "STL"
+            }
+        ],
+        "weaveje02": [
+            {
+                "date": "2012-05-02 00:00:00",
+                "is_playoffs": false,
+                "team": "LAA"
+            }
+        ],
+        "wellsda01": [
+            {
+                "date": "1998-05-17 00:00:00",
+                "is_playoffs": false,
+                "team": "NYY"
+            }
+        ],
+        "weyhigu01": [
+            {
+                "date": "1888-07-31 00:00:00",
+                "is_playoffs": false,
+                "team": "PHA"
+            }
+        ],
+        "wilheho01": [
+            {
+                "date": "1958-09-20 00:00:00",
+                "is_playoffs": false,
+                "team": "BAL"
+            }
+        ],
+        "willivi01": [
+            {
+                "date": "1899-08-07 00:00:00",
+                "is_playoffs": false,
+                "team": "BSN"
+            }
+        ],
+        "wilsodo01": [
+            {
+                "date": "1969-05-01 00:00:00",
+                "is_playoffs": false,
+                "team": "HOU"
+            },
+            {
+                "date": "1967-06-18 00:00:00",
+                "is_playoffs": false,
+                "team": "HOU"
+            }
+        ],
+        "wilsoea01": [
+            {
+                "date": "1962-06-26 00:00:00",
+                "is_playoffs": false,
+                "team": "BOS"
+            }
+        ],
+        "wilsoji02": [
+            {
+                "date": "1954-06-12 00:00:00",
+                "is_playoffs": false,
+                "team": "MLN"
+            }
+        ],
+        "wiltsho01": [
+            {
+                "date": "1908-07-04 01:00:00",
+                "is_playoffs": false,
+                "team": "NYG"
+            }
+        ],
+        "wiseri01": [
+            {
+                "date": "1971-06-23 00:00:00",
+                "is_playoffs": false,
+                "team": "PHI"
+            }
+        ],
+        "wittmi01": [
+            {
+                "date": "1984-09-30 00:00:00",
+                "is_playoffs": false,
+                "team": "CAL"
+            }
+        ],
+        "woodjo02": [
+            {
+                "date": "1911-07-29 01:00:00",
+                "is_playoffs": false,
+                "team": "BOS"
+            }
+        ],
+        "wrighcl01": [
+            {
+                "date": "1970-07-03 00:00:00",
+                "is_playoffs": false,
+                "team": "CAL"
+            }
+        ],
+        "youngcy01": [
+            {
+                "date": "1908-06-30 00:00:00",
+                "is_playoffs": false,
+                "team": "BOS"
+            },
+            {
+                "date": "1904-05-05 00:00:00",
+                "is_playoffs": false,
+                "team": "BOS"
+            },
+            {
+                "date": "1897-09-18 01:00:00",
+                "is_playoffs": false,
+                "team": "CLV"
+            }
+        ],
+        "zambrca01": [
+            {
+                "date": "2008-09-14 00:00:00",
+                "is_playoffs": false,
+                "team": "CHC"
+            }
+        ],
+        "zimmejo02": [
+            {
+                "date": "2014-09-28 00:00:00",
+                "is_playoffs": false,
+                "team": "WSN"
+            }
+        ],
+        "meansjo01": [
+            {
+                "date": "2021-05-05 00:00:00",
+                "is_playoffs": false,
+                "team": "BAL"
+            }
+        ],
+        "musgrjo01": [
+            {
+                "date": "2021-04-09 00:00:00",
+                "is_playoffs": false,
+                "team": "SDP"
+            }
+        ],
+        "rodonca01": [
+            {
+                "date": "2021-04-14 00:00:00",
+                "is_playoffs": false,
+                "team": "CHW"
+            }
+        ]
+    },
+    "perfect": {
+        "barkele01": [
+            {
+                "date": "1981-05-15 00:00:00",
+                "is_playoffs": false,
+                "team": "CLE"
+            }
+        ],
+        "bradeda01": [
+            {
+                "date": "2010-05-09 00:00:00",
+                "is_playoffs": false,
+                "team": "OAK"
+            }
+        ],
+        "brownto05": [
+            {
+                "date": "1988-09-16 00:00:00",
+                "is_playoffs": false,
+                "team": "CIN"
+            }
+        ],
+        "buehrma01": [
+            {
+                "date": "2009-07-23 00:00:00",
+                "is_playoffs": false,
+                "team": "CHW"
+            }
+        ],
+        "bunniji01": [
+            {
+                "date": "1964-06-21 01:00:00",
+                "is_playoffs": false,
+                "team": "PHI"
+            }
+        ],
+        "cainma01": [
+            {
+                "date": "2012-06-13 00:00:00",
+                "is_playoffs": false,
+                "team": "SFG"
+            }
+        ],
+        "coneda01": [
+            {
+                "date": "1999-07-18 00:00:00",
+                "is_playoffs": false,
+                "team": "NYY"
+            }
+        ],
+        "hallaro01": [
+            {
+                "date": "2010-05-29 00:00:00",
+                "is_playoffs": false,
+                "team": "PHI"
+            }
+        ],
+        "hernafe02": [
+            {
+                "date": "2012-08-15 00:00:00",
+                "is_playoffs": false,
+                "team": "SEA"
+            }
+        ],
+        "humbeph01": [
+            {
+                "date": "2012-04-21 00:00:00",
+                "is_playoffs": false,
+                "team": "CHW"
+            }
+        ],
+        "hunteca01": [
+            {
+                "date": "1968-05-08 00:00:00",
+                "is_playoffs": false,
+                "team": "OAK"
+            }
+        ],
+        "johnsra05": [
+            {
+                "date": "2004-05-18 00:00:00",
+                "is_playoffs": false,
+                "team": "ARI"
+            }
+        ],
+        "jossad01": [
+            {
+                "date": "1908-10-02 00:00:00",
+                "is_playoffs": false,
+                "team": "CLE"
+            }
+        ],
+        "koufasa01": [
+            {
+                "date": "1965-09-09 00:00:00",
+                "is_playoffs": false,
+                "team": "LAD"
+            }
+        ],
+        "larsedo01": [
+            {
+                "date": "1956-10-08 00:00:00",
+                "is_playoffs": true,
+                "team": "NYY"
+            }
+        ],
+        "martide01": [
+            {
+                "date": "1991-07-28 00:00:00",
+                "is_playoffs": false,
+                "team": "MON"
+            }
+        ],
+        "richmle01": [
+            {
+                "date": "1880-06-12 00:00:00",
+                "is_playoffs": false,
+                "team": "WOR"
+            }
+        ],
+        "roberch01": [
+            {
+                "date": "1922-04-30 00:00:00",
+                "is_playoffs": false,
+                "team": "CHW"
+            }
+        ],
+        "rogerke01": [
+            {
+                "date": "1994-07-28 00:00:00",
+                "is_playoffs": false,
+                "team": "TEX"
+            }
+        ],
+        "wardjo01": [
+            {
+                "date": "1880-06-17 00:00:00",
+                "is_playoffs": false,
+                "team": "PRO"
+            }
+        ],
+        "wellsda01": [
+            {
+                "date": "1998-05-17 00:00:00",
+                "is_playoffs": false,
+                "team": "NYY"
+            }
+        ],
+        "wittmi01": [
+            {
+                "date": "1984-09-30 00:00:00",
+                "is_playoffs": false,
+                "team": "CAL"
+            }
+        ],
+        "youngcy01": [
+            {
+                "date": "1904-05-05 00:00:00",
+                "is_playoffs": false,
+                "team": "BOS"
+            }
+        ]
+    }
+}

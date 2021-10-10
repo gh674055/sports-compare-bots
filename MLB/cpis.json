@@ -1,0 +1,434 @@
+{
+    "1913": {
+        "total_cpi": 118.60000000000001,
+        "total_months": 12
+    },
+    "1914": {
+        "total_cpi": 120.19999999999999,
+        "total_months": 12
+    },
+    "1915": {
+        "total_cpi": 121.29999999999998,
+        "total_months": 12
+    },
+    "1916": {
+        "total_cpi": 130.6,
+        "total_months": 12
+    },
+    "1917": {
+        "total_cpi": 153.89999999999998,
+        "total_months": 12
+    },
+    "1918": {
+        "total_cpi": 180.5,
+        "total_months": 12
+    },
+    "1919": {
+        "total_cpi": 208.0,
+        "total_months": 12
+    },
+    "1920": {
+        "total_cpi": 240.50000000000006,
+        "total_months": 12
+    },
+    "1921": {
+        "total_cpi": 214.20000000000005,
+        "total_months": 12
+    },
+    "1922": {
+        "total_cpi": 201.0,
+        "total_months": 12
+    },
+    "1923": {
+        "total_cpi": 204.60000000000005,
+        "total_months": 12
+    },
+    "1924": {
+        "total_cpi": 205.49999999999997,
+        "total_months": 12
+    },
+    "1925": {
+        "total_cpi": 210.49999999999997,
+        "total_months": 12
+    },
+    "1926": {
+        "total_cpi": 212.39999999999998,
+        "total_months": 12
+    },
+    "1927": {
+        "total_cpi": 208.30000000000004,
+        "total_months": 12
+    },
+    "1928": {
+        "total_cpi": 205.89999999999998,
+        "total_months": 12
+    },
+    "1929": {
+        "total_cpi": 205.9,
+        "total_months": 12
+    },
+    "1930": {
+        "total_cpi": 200.4,
+        "total_months": 12
+    },
+    "1931": {
+        "total_cpi": 182.49999999999997,
+        "total_months": 12
+    },
+    "1932": {
+        "total_cpi": 163.7,
+        "total_months": 12
+    },
+    "1933": {
+        "total_cpi": 155.2,
+        "total_months": 12
+    },
+    "1934": {
+        "total_cpi": 160.6,
+        "total_months": 12
+    },
+    "1935": {
+        "total_cpi": 164.70000000000002,
+        "total_months": 12
+    },
+    "1936": {
+        "total_cpi": 166.4,
+        "total_months": 12
+    },
+    "1937": {
+        "total_cpi": 172.60000000000002,
+        "total_months": 12
+    },
+    "1938": {
+        "total_cpi": 169.09999999999997,
+        "total_months": 12
+    },
+    "1939": {
+        "total_cpi": 166.89999999999998,
+        "total_months": 12
+    },
+    "1940": {
+        "total_cpi": 168.1,
+        "total_months": 12
+    },
+    "1941": {
+        "total_cpi": 176.70000000000005,
+        "total_months": 12
+    },
+    "1942": {
+        "total_cpi": 196.0,
+        "total_months": 12
+    },
+    "1943": {
+        "total_cpi": 207.70000000000005,
+        "total_months": 12
+    },
+    "1944": {
+        "total_cpi": 211.09999999999997,
+        "total_months": 12
+    },
+    "1945": {
+        "total_cpi": 215.89999999999995,
+        "total_months": 12
+    },
+    "1946": {
+        "total_cpi": 234.20000000000002,
+        "total_months": 12
+    },
+    "1947": {
+        "total_cpi": 267.9,
+        "total_months": 12
+    },
+    "1948": {
+        "total_cpi": 288.5,
+        "total_months": 12
+    },
+    "1949": {
+        "total_cpi": 285.7,
+        "total_months": 12
+    },
+    "1950": {
+        "total_cpi": 288.8,
+        "total_months": 12
+    },
+    "1951": {
+        "total_cpi": 311.5,
+        "total_months": 12
+    },
+    "1952": {
+        "total_cpi": 318.59999999999997,
+        "total_months": 12
+    },
+    "1953": {
+        "total_cpi": 321.2,
+        "total_months": 12
+    },
+    "1954": {
+        "total_cpi": 322.2,
+        "total_months": 12
+    },
+    "1955": {
+        "total_cpi": 321.3,
+        "total_months": 12
+    },
+    "1956": {
+        "total_cpi": 326.20000000000005,
+        "total_months": 12
+    },
+    "1957": {
+        "total_cpi": 337.09999999999997,
+        "total_months": 12
+    },
+    "1958": {
+        "total_cpi": 346.29999999999995,
+        "total_months": 12
+    },
+    "1959": {
+        "total_cpi": 349.7999999999999,
+        "total_months": 12
+    },
+    "1960": {
+        "total_cpi": 354.90000000000003,
+        "total_months": 12
+    },
+    "1961": {
+        "total_cpi": 358.70000000000005,
+        "total_months": 12
+    },
+    "1962": {
+        "total_cpi": 362.99999999999994,
+        "total_months": 12
+    },
+    "1963": {
+        "total_cpi": 367.5,
+        "total_months": 12
+    },
+    "1964": {
+        "total_cpi": 372.2,
+        "total_months": 12
+    },
+    "1965": {
+        "total_cpi": 378.09999999999997,
+        "total_months": 12
+    },
+    "1966": {
+        "total_cpi": 389.49999999999994,
+        "total_months": 12
+    },
+    "1967": {
+        "total_cpi": 400.30000000000007,
+        "total_months": 12
+    },
+    "1968": {
+        "total_cpi": 417.40000000000003,
+        "total_months": 12
+    },
+    "1969": {
+        "total_cpi": 440.20000000000005,
+        "total_months": 12
+    },
+    "1970": {
+        "total_cpi": 465.9,
+        "total_months": 12
+    },
+    "1971": {
+        "total_cpi": 485.9,
+        "total_months": 12
+    },
+    "1972": {
+        "total_cpi": 501.8,
+        "total_months": 12
+    },
+    "1973": {
+        "total_cpi": 532.8000000000001,
+        "total_months": 12
+    },
+    "1974": {
+        "total_cpi": 591.7,
+        "total_months": 12
+    },
+    "1975": {
+        "total_cpi": 645.8000000000001,
+        "total_months": 12
+    },
+    "1976": {
+        "total_cpi": 682.9000000000001,
+        "total_months": 12
+    },
+    "1977": {
+        "total_cpi": 727.3,
+        "total_months": 12
+    },
+    "1978": {
+        "total_cpi": 782.8000000000001,
+        "total_months": 12
+    },
+    "1979": {
+        "total_cpi": 870.9,
+        "total_months": 12
+    },
+    "1980": {
+        "total_cpi": 988.8999999999999,
+        "total_months": 12
+    },
+    "1981": {
+        "total_cpi": 1091.1,
+        "total_months": 12
+    },
+    "1982": {
+        "total_cpi": 1158.0,
+        "total_months": 12
+    },
+    "1983": {
+        "total_cpi": 1195.2,
+        "total_months": 12
+    },
+    "1984": {
+        "total_cpi": 1246.6,
+        "total_months": 12
+    },
+    "1985": {
+        "total_cpi": 1290.7999999999997,
+        "total_months": 12
+    },
+    "1986": {
+        "total_cpi": 1315.3000000000002,
+        "total_months": 12
+    },
+    "1987": {
+        "total_cpi": 1363.5,
+        "total_months": 12
+    },
+    "1988": {
+        "total_cpi": 1419.1,
+        "total_months": 12
+    },
+    "1989": {
+        "total_cpi": 1487.6,
+        "total_months": 12
+    },
+    "1990": {
+        "total_cpi": 1567.8999999999999,
+        "total_months": 12
+    },
+    "1991": {
+        "total_cpi": 1634.3,
+        "total_months": 12
+    },
+    "1992": {
+        "total_cpi": 1683.8000000000002,
+        "total_months": 12
+    },
+    "1993": {
+        "total_cpi": 1733.4999999999998,
+        "total_months": 12
+    },
+    "1994": {
+        "total_cpi": 1778.7000000000003,
+        "total_months": 12
+    },
+    "1995": {
+        "total_cpi": 1828.6000000000001,
+        "total_months": 12
+    },
+    "1996": {
+        "total_cpi": 1882.1999999999996,
+        "total_months": 12
+    },
+    "1997": {
+        "total_cpi": 1926.1999999999998,
+        "total_months": 12
+    },
+    "1998": {
+        "total_cpi": 1956.1000000000001,
+        "total_months": 12
+    },
+    "1999": {
+        "total_cpi": 1998.9,
+        "total_months": 12
+    },
+    "2000": {
+        "total_cpi": 2066.3999999999996,
+        "total_months": 12
+    },
+    "2001": {
+        "total_cpi": 2124.7999999999997,
+        "total_months": 12
+    },
+    "2002": {
+        "total_cpi": 2158.5,
+        "total_months": 12
+    },
+    "2003": {
+        "total_cpi": 2207.5,
+        "total_months": 12
+    },
+    "2004": {
+        "total_cpi": 2266.6000000000004,
+        "total_months": 12
+    },
+    "2005": {
+        "total_cpi": 2343.5000000000005,
+        "total_months": 12
+    },
+    "2006": {
+        "total_cpi": 2419.1000000000004,
+        "total_months": 12
+    },
+    "2007": {
+        "total_cpi": 2488.1090000000004,
+        "total_months": 12
+    },
+    "2008": {
+        "total_cpi": 2583.63,
+        "total_months": 12
+    },
+    "2009": {
+        "total_cpi": 2574.444,
+        "total_months": 12
+    },
+    "2010": {
+        "total_cpi": 2616.666,
+        "total_months": 12
+    },
+    "2011": {
+        "total_cpi": 2699.27,
+        "total_months": 12
+    },
+    "2012": {
+        "total_cpi": 2755.1270000000004,
+        "total_months": 12
+    },
+    "2013": {
+        "total_cpi": 2795.4849999999997,
+        "total_months": 12
+    },
+    "2014": {
+        "total_cpi": 2840.834,
+        "total_months": 12
+    },
+    "2015": {
+        "total_cpi": 2844.204,
+        "total_months": 12
+    },
+    "2016": {
+        "total_cpi": 2880.0859999999993,
+        "total_months": 12
+    },
+    "2017": {
+        "total_cpi": 2941.435,
+        "total_months": 12
+    },
+    "2018": {
+        "total_cpi": 3013.2820000000006,
+        "total_months": 12
+    },
+    "2019": {
+        "total_cpi": 3067.889,
+        "total_months": 12
+    },
+    "2020": {
+        "total_cpi": 1545.344,
+        "total_months": 6
+    }
+}

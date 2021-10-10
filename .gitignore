@@ -1,0 +1,6 @@
+*.ppk
+*.ini
+*.pem
+*.db
+*.log*
+*.pyc

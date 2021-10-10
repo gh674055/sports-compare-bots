@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="512"
+   height="512"
+   viewBox="0 0 512 512"
+   version="1.1"
+   id="svg14"
+   sodipodi:docname="cincinnati-bengals.svg"
+   inkscape:version="0.92.4 (5da689c313, 2019-01-14)">
+  <metadata
+     id="metadata20">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs18" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="640"
+     inkscape:window-height="480"
+     id="namedview16"
+     showgrid="false"
+     inkscape:zoom="0.4609375"
+     inkscape:cx="256"
+     inkscape:cy="256"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg14" />
+  <title
+     id="title2">cincinnati-bengals</title>
+  <g
+     id="g12"
+     transform="translate(-21.694915,23.355932)"
+     style="fill:none;fill-rule:evenodd">
+    <path
+       d="m 81.825,299.242 44.566,76.552 205.83,-0.02 c 66.42,0 95.14,-34.663 95.14,-71.857 0,-24.622 -17.48,-44.602 -35.27,-53.64 -1.83,-0.952 -1.59,-2.602 -0.29,-3.573 15.58,-11.53 26.05,-26.306 26.05,-49.13 0,-27.01 -19.32,-64.93 -94.86,-64.93 H 128.27 l -44.116,76.83 h 32.402 c 3.602,0 6.534,2.93 6.534,6.535 v 76.7 c 0,3.59 -2.933,6.52 -6.535,6.52 h -34.73"
+       id="path4"
+       inkscape:connector-curvature="0"
+       style="fill:#ffffff" />
+    <path
+       d="m 81.825,299.242 44.566,76.552 205.83,-0.02 c 66.42,0 95.14,-34.663 95.14,-71.857 0,-24.622 -17.48,-44.602 -35.27,-53.64 -1.83,-0.952 -1.59,-2.602 -0.29,-3.573 15.58,-11.53 26.05,-26.306 26.05,-49.13 0,-27.01 -19.32,-64.93 -94.86,-64.93 H 128.27 l -44.116,76.83 h 32.402 c 3.602,0 6.534,2.93 6.534,6.535 v 76.7 c 0,3.59 -2.933,6.52 -6.535,6.52 h -34.73"
+       id="path6"
+       inkscape:connector-curvature="0"
+       style="stroke:#000000;stroke-width:3" />
+    <path
+       d="m 276.782,237.255 h -32.015 v -30.798 c 0.035,-3.235 2.65,-5.82 5.874,-5.82 h 26.15 c 15.31,0 21.01,7.81 21.01,18 0,10.807 -5.7,18.618 -21.01,18.618 z m 0,70.82 h -26.14 c -3.246,0 -5.875,-2.617 -5.875,-5.863 v -30.76 h 32.015 c 15.307,0 21.01,7.533 21.01,18.038 0,10.816 -5.703,18.586 -21.01,18.586 z m 91.272,-56.073 c -2.345,-0.568 -1.962,-3.428 -0.24,-4.08 21.12,-8 33.438,-22.225 33.438,-47.285 0.294,-33.62 -29.422,-56.727 -77.743,-56.727 H 140.39 l -32.116,56.763 h 22.118 c 4.352,0 7.883,3.53 7.883,7.882 v 91.603 c 0,4.363 -3.532,7.9 -7.884,7.9 h -21.87 l 32.36,56.48 191.34,-0.038 c 54.62,0 77.14,-36.296 77.14,-63.004 0,-23.48 -17.3,-43.756 -41.3,-49.494 z"
+       id="path8"
+       inkscape:connector-curvature="0"
+       style="fill:#fb4f14" />
+    <path
+       d="m 202.695,348.498 c -33.95,-63.81 -42.867,-137.2 -30.238,-204.588 h -32.063 l -32.116,56.763 h 22.118 c 4.352,0 7.883,3.53 7.883,7.882 v 70.282 c 16.47,26.747 40.35,52.376 64.41,69.66 z M 362.83,150.215 c -38.864,57.625 -59.926,131.097 -50.485,198.01 11.585,-56.318 41.795,-108.287 88.835,-145.92 0.035,-0.56 0.072,-1.11 0.072,-1.67 0.202,-23.178 -13.858,-41.353 -38.423,-50.42 z m -65.17,-6.305 c -6.068,15.948 -12.483,35.215 -17.87,56.837 -0.953,-0.074 -1.962,-0.11 -3.008,-0.11 h -26.14 c -3.226,0 -5.84,2.585 -5.875,5.82 v 30.796 h 27.47 c -1.797,11.046 -3.3,22.484 -4.25,34.198 h -23.22 v 30.76 c 0,3.25 2.63,5.87 5.874,5.87 h 16.03 c 0.26,18.44 1.91,37.35 5.35,56.43 h -23.87 c -18.82,-45.46 -44.75,-122.4 -18.98,-220.59 h 68.5 z"
+       id="path10"
+       inkscape:connector-curvature="0"
+       style="fill:#000000" />
+  </g>
+</svg>

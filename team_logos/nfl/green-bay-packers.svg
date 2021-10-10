@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="512"
+   height="512"
+   viewBox="0 0 512 512"
+   version="1.1"
+   id="svg12"
+   sodipodi:docname="green-bay-packers.svg"
+   inkscape:version="0.92.5 (2060ec1f9f, 2020-04-08)">
+  <metadata
+     id="metadata18">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs16" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="640"
+     inkscape:window-height="480"
+     id="namedview14"
+     showgrid="false"
+     inkscape:zoom="0.4609375"
+     inkscape:cx="256"
+     inkscape:cy="256"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg12" />
+  <title
+     id="title2">green-bay-packers</title>
+  <g
+     id="g10"
+     transform="translate(-8,28)"
+     style="fill:none;fill-rule:evenodd">
+    <path
+       d="m 437.918,255.76 c 0,66.135 -81.695,119.746 -182.47,119.746 -100.774,0 -182.47,-53.61 -182.47,-119.745 0,-66.13 81.696,-119.74 182.47,-119.74 93.05,0 171.198,45.95 181.376,106.65"
+       id="path4"
+       inkscape:connector-curvature="0"
+       style="fill:#ffb612" />
+    <path
+       d="m 419.012,213.325 c 36.148,58.977 -7.777,125.916 -98.108,149.516 -90.33,23.61 -192.86,-5.07 -229.007,-64.05 -36.148,-58.97 7.775,-125.91 98.105,-149.51 90.04,-23.52 192.265,4.89 228.708,63.57"
+       id="path6"
+       inkscape:connector-curvature="0"
+       style="fill:#203731" />
+    <path
+       d="m 100.22,255.13 c -0.087,-52.443 77.263,-98.05 161.563,-96.305 87.333,-0.198 130.812,47.32 140.654,65.892 h -69.694 c -15.4,-25.628 -35.743,-36.39 -80.464,-36.114 -62.39,3.368 -90.7,38.868 -89.34,65.892 0.41,15.41 6.32,57.752 86.16,58.923 35.33,-1.33 77.56,-3.155 85.75,-36.987 l -106.668,0.24 v -27.24 l 181.84,1.27 c 2.134,49.68 -48.2,101.43 -160.705,103.14 -95.48,-0.67 -150.79,-56.5 -149.115,-98.7 v 0.01"
+       id="path8"
+       inkscape:connector-curvature="0"
+       style="fill:#ffffff" />
+  </g>
+</svg>

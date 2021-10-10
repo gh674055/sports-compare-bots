@@ -1,0 +1,18 @@
+[Unit]
+Description=nfl service
+After=multi-user.target
+Wants=nfl_deleter.service
+Before=nfl_deleter.service
+
+[Service]
+Type=idle
+WorkingDirectory=/opt/reddit-bots/nfl
+ExecStart=/usr/bin/python3 /opt/reddit-bots/nfl/nfl.py
+ExecStartPost=/usr/bin/python3 /opt/reddit-bots/service_email.py --start --service=NFL
+ExecStopPost=/usr/bin/python3 /opt/reddit-bots/service_email.py --stop --service=NFL
+Restart=on-failure
+RestartSec=120
+StartLimitInterval=0
+
+[Install]
+WantedBy=multi-user.target

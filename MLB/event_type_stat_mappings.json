@@ -1,0 +1,130 @@
+{
+    "single" : {
+        "BF" : 1,
+        "PA" : 1,
+        "AB" : 1,
+        "H" : 1,
+        "1B" : 1,
+        "TB" : 1,
+        "TOB" : 1
+    },
+    "double" : {
+        "BF" : 1,
+        "PA" : 1,
+        "AB" : 1,
+        "H" : 1,
+        "2B" : 1,
+        "TB" : 2,
+        "XBH" : 1,
+        "TOB" : 1
+    },
+    "triple" : {
+        "BF" : 1,
+        "PA" : 1,
+        "AB" : 1,
+        "H" : 1,
+        "3B" : 1,
+        "TB" : 3,
+        "XBH" : 1,
+        "TOB" : 1
+    },
+    "home_run" : {
+        "BF" : 1,
+        "PA" : 1,
+        "AB" : 1,
+        "H" : 1,
+        "HR" : 1,
+        "TB" : 4,
+        "XBH" : 1,
+        "TOB" : 1
+    },
+    "inside_the_park_home_run" : {
+        "BF" : 1,
+        "PA" : 1,
+        "AB" : 1,
+        "H" : 1,
+        "HR" : 1,
+        "TB" : 4,
+        "XBH" : 1,
+        "TOB" : 1
+    },
+    "walk" : {
+        "BF" : 1,
+        "PA" : 1,
+        "BB" : 1,
+        "TOB" : 1
+    },
+    "intent_walk" : {
+        "BF" : 1,
+        "PA" : 1,
+        "BB" : 1,
+        "TOB" : 1,
+        "IBB" : 1
+    },
+    "hit_by_pitch" : {
+        "BF" : 1,
+        "PA" : 1,
+        "HBP" : 1,
+        "TOB" : 1
+    },
+    "error" : {
+        "BF" : 1,
+        "PA" : 1,
+        "AB" : 1
+    },
+    "out" : {
+        "BF" : 1,
+        "PA" : 1,
+        "AB" : 1
+    },
+    "no_stats" : {
+    },
+    "grounded_into_double_play" : {
+        "BF" : 1,
+        "PA" : 1,
+        "AB" : 1,
+        "GDP" : 1
+    },
+    "grounded_into_triple_play" : {
+        "BF" : 1,
+        "PA" : 1,
+        "AB" : 1,
+        "GDP" : 1
+    },
+    "strikeout" : {
+        "BF" : 1,
+        "PA" : 1,
+        "AB" : 1,
+        "SO" : 1
+    },
+    "sac_fly" : {
+        "BF" : 1,
+        "PA" : 1,
+        "SF" : 1
+    },
+    "sac_bunt" : {
+        "BF" : 1,
+        "PA" : 1,
+        "SH" : 1
+    },
+    "catcher_interf" : {
+        "BF" : 1,
+        "PA" : 1
+    },
+    "fielder_interference" : {
+        "BF" : 1,
+        "PA" : 1
+    },
+    "stolen_base" : {
+        "SB" : 1
+    },
+    "caught_stealing" : {
+        "CS" : 1
+    },
+    "run_scored" : {
+        "R" : 1
+    },
+    "pick_off" : {
+        "PO" : 1
+    }
+}
