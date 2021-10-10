@@ -23124,6 +23124,15 @@ def get_team_schedule(player_data, seasons, needs_reg_season, needs_playoffs, ne
                         if postseason_games_div:
                             postseason_games_by_date = postseason_games_div.find_all("div")
                             for postseason_game_by_date in postseason_games_by_date:
+                                is_preview = False
+                                games = postseason_game_by_date.find_all("p", {"class" : "game"})
+                                for game in games:
+                                    if game.find("em").find(text=True) == "Preview":
+                                        is_preview = True
+                                        break
+                                if is_preview:
+                                    continue
+                                
                                 date = postseason_game_by_date.find("h3")
                                 if date:
                                     date = dateutil.parser.parse(str(date.find(text=True)))
