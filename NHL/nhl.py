@@ -9122,7 +9122,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 if last_match and not last_match.group(3).endswith("to") and not last_match.group(3).endswith("yester") and playoffs == "Only":
                                     time_frame_type = "special-qual"
                             if last_match and not last_match.group(3).endswith("to") and not last_match.group(3).endswith("yester"):
-                                compare_type = last_match.group(1)
+                                compare_type = last_match.group(2)
                                 if not compare_type or not compare_type.strip():
                                     if unit == "season" or (last_match.group(4) and (last_match.group(4).startswith("season") or last_match.group(3).startswith("year"))):
                                         compare_type = "special"
