@@ -26365,7 +26365,7 @@ def parse_row(row, time_frame, year, is_playoffs, player_type, header_values, ta
 
         return row_data
 
-    return all_rows + data_to_include, missing_games
+    return None
 
 def fix_playoffs_data(all_rows, time_frame):
     is_qual_match = False
