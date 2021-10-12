@@ -15108,7 +15108,7 @@ def get_nhl_schedule(player_data, all_rows, qualifiers):
 
                     row_data["CurrOppWins"] = game["games"][0]["teams"]["away"]["leagueRecord"]["wins"]
                     row_data["CurrOppLosses"] = game["games"][0]["teams"]["away"]["leagueRecord"]["losses"]
-                     if "ot" in game["games"][0]["teams"]["away"]["leagueRecord"]:
+                    if "ot" in game["games"][0]["teams"]["away"]["leagueRecord"]:
                         row_data["CurrOppTies"] = 0
                         row_data["CurrOppLosses"] += game["games"][0]["teams"]["away"]["leagueRecord"]["ot"]
                     else:
@@ -15124,7 +15124,7 @@ def get_nhl_schedule(player_data, all_rows, qualifiers):
 
                     row_data["CurrOppWins"] = game["games"][0]["teams"]["home"]["leagueRecord"]["wins"]
                     row_data["CurrOppLosses"] = game["games"][0]["teams"]["home"]["leagueRecord"]["losses"]
-                     if "ot" in game["games"][0]["teams"]["home"]["leagueRecord"]:
+                    if "ot" in game["games"][0]["teams"]["home"]["leagueRecord"]:
                         row_data["CurrOppTies"] = 0
                         row_data["CurrOppLosses"] += game["games"][0]["teams"]["home"]["leagueRecord"]["ot"]
                     else:
