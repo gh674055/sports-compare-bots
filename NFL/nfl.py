@@ -16292,6 +16292,8 @@ def handle_schedule_stats(all_rows, qualifiers, is_playoffs):
                                 row_data["Shared"]["Time"] = data["Time"]
                                 row_data["Shared"]["StartTime"] = data["StartTime"]
                             row_data["Shared"]["TmGm"] = data["TmGm"]
+                            row_data["Shared"]["Previous Team Result"] = data["Previous Team Result"]
+                            row_data["Shared"]["Upcoming Team Result"] = data["Upcoming Team Result"]
                             row_data["Shared"]["TmGmRev"] = max_team_games - data["TmGm"] + 1
                             if "BeforeBye" in data:
                                 row_data["Shared"]["BeforeBye"] = data["BeforeBye"]
@@ -16353,6 +16355,8 @@ def handle_schedule_stats(all_rows, qualifiers, is_playoffs):
                                 row_data["Shared"]["Time"] = data["Time"]
                                 row_data["Shared"]["StartTime"] = data["StartTime"]
                             row_data["Shared"]["TmGm"] = data["TmGm"]
+                            row_data["Shared"]["Previous Team Result"] = data["Previous Team Result"]
+                            row_data["Shared"]["Upcoming Team Result"] = data["Upcoming Team Result"]
                             row_data["Shared"]["TmGmRev"] = max_team_games - data["TmGm"] + 1
                             if "BeforeBye" in data:
                                 row_data["Shared"]["BeforeBye"] = data["BeforeBye"]
@@ -16679,6 +16683,28 @@ def perform_schedule_qualifiers(row, qualifiers):
                     return False
             else:
                 if not row["Shared"]["HadBye"]:
+                    return False
+
+    if "Previous Team Result" in qualifiers:
+        if not row["Shared"]["Previous Team Result"]:
+            return False
+        for qual_object in qualifiers["Previous Team Result"]:
+            if qual_object["negate"]:
+                if row["Shared"]["Previous Team Result"] in qual_object["values"]:
+                    return False
+            else:
+                if not row["Shared"]["Previous Team Result"] in qual_object["values"]:
+                    return False
+
+    if "Upcoming Team Result" in qualifiers:
+        if not row["Shared"]["Upcoming Team Result"]:
+            return False
+        for qual_object in qualifiers["Upcoming Team Result"]:
+            if qual_object["negate"]:
+                if row["Shared"]["Upcoming Team Result"] in qual_object["values"]:
+                    return False
+            else:
+                if not row["Shared"]["Upcoming Team Result"] in qual_object["values"]:
                     return False
     
     return True

@@ -15103,32 +15103,40 @@ def get_nhl_schedule(player_data, all_rows, qualifiers):
                     if "ot" in game["games"][0]["teams"]["home"]["leagueRecord"]:
                         row_data["CurrTmTies"] = 0
                         row_data["CurrTmLosses"] += game["games"][0]["teams"]["home"]["leagueRecord"]["ot"]
-                    else:
+                    elif "ties" in game["games"][0]["teams"]["home"]["leagueRecord"]:
                         row_data["CurrTmTies"] = game["games"][0]["teams"]["home"]["leagueRecord"]["ties"]
+                    else:
+                        row_data["CurrTmTies"] = 0
 
                     row_data["CurrOppWins"] = game["games"][0]["teams"]["away"]["leagueRecord"]["wins"]
                     row_data["CurrOppLosses"] = game["games"][0]["teams"]["away"]["leagueRecord"]["losses"]
                     if "ot" in game["games"][0]["teams"]["away"]["leagueRecord"]:
                         row_data["CurrOppTies"] = 0
                         row_data["CurrOppLosses"] += game["games"][0]["teams"]["away"]["leagueRecord"]["ot"]
-                    else:
+                    elif "ties" in game["games"][0]["teams"]["away"]["leagueRecord"]:
                         row_data["CurrOppTies"] = game["games"][0]["teams"]["away"]["leagueRecord"]["ties"]
+                    else:
+                        row_data["CurrOppTies"] = 0
                 else:
                     row_data["CurrTmWins"] = game["games"][0]["teams"]["away"]["leagueRecord"]["wins"]
                     row_data["CurrTmLosses"] = game["games"][0]["teams"]["away"]["leagueRecord"]["losses"]
                     if "ot" in game["games"][0]["teams"]["away"]["leagueRecord"]:
                         row_data["CurrTmTies"] = 0
                         row_data["CurrTmLosses"] += game["games"][0]["teams"]["away"]["leagueRecord"]["ot"]
-                    else:
+                    elif "ties" in game["games"][0]["teams"]["away"]["leagueRecord"]:
                         row_data["CurrTmTies"] = game["games"][0]["teams"]["away"]["leagueRecord"]["ties"]
+                    else:
+                        row_data["CurrTmTies"] = 0
 
                     row_data["CurrOppWins"] = game["games"][0]["teams"]["home"]["leagueRecord"]["wins"]
                     row_data["CurrOppLosses"] = game["games"][0]["teams"]["home"]["leagueRecord"]["losses"]
                     if "ot" in game["games"][0]["teams"]["home"]["leagueRecord"]:
                         row_data["CurrOppTies"] = 0
                         row_data["CurrOppLosses"] += game["games"][0]["teams"]["home"]["leagueRecord"]["ot"]
-                    else:
+                    elif "ties" in game["games"][0]["teams"]["home"]["leagueRecord"]:
                         row_data["CurrOppTies"] = game["games"][0]["teams"]["home"]["leagueRecord"]["ties"]
+                    else:
+                        row_data["CurrOppTies"] = 0
 
                 if is_final:
                     if row_data["Team Score"] > row_data["Opponent Score"]:
@@ -26713,6 +26721,8 @@ def handle_schedule_stats(player_data, all_rows, qualifiers, is_playoffs, missin
                             row_data["CurrOppTies"] = data["CurrOppTies"]
                             row_data["Result"] = data["Result"]
                             row_data["TmGm"] = data["TmGm"]
+                            row_data["Previous Team Result"] = data["Previous Team Result"]
+                            row_data["Upcoming Team Result"] = data["Upcoming Team Result"]
                             row_data["TmGmRev"] = max_team_games - data["TmGm"] + 1
 
                             if "IsNational" in data:
@@ -26940,6 +26950,8 @@ def handle_schedule_stats(player_data, all_rows, qualifiers, is_playoffs, missin
                         row_data["CurrOppTies"] = data["CurrOppTies"]
                         row_data["Result"] = data["Result"]
                         row_data["TmGm"] = data["TmGm"]
+                        row_data["Previous Team Result"] = data["Previous Team Result"]
+                        row_data["Upcoming Team Result"] = data["Upcoming Team Result"]
                         row_data["TmGmRev"] = max_team_games - data["TmGm"] + 1
 
                         if "IsNational" in data:

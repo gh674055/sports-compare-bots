@@ -21582,6 +21582,8 @@ def handle_schedule_stats(player_data, live_game, all_rows, qualifiers, is_playo
                 row_data["Upcoming Team Result"] = None
             else:
                 row_data["Upcoming Team Result"] = all_rows_order[index + 1]["Result"]
+
+    
     
     for da_year in team_schedule:
         player_data["team_games_map"][da_year] = {}
@@ -21609,6 +21611,8 @@ def handle_schedule_stats(player_data, live_game, all_rows, qualifiers, is_playo
                             if "Time" in data:
                                 row_data["Time"] = data["Time"]
                             row_data["TmGm"] = data["TmGm"]
+                            row_data["Previous Team Result"] = data["Previous Team Result"]
+                            row_data["Upcoming Team Result"] = data["Upcoming Team Result"]
                             row_data["TmGmRev"] = max_team_games - data["TmGm"] + 1
 
                             if not isinstance(row_data["Date"], int):
@@ -21766,6 +21770,8 @@ def handle_schedule_stats(player_data, live_game, all_rows, qualifiers, is_playo
                         row_data["SeriesOpponentWins"] = opponent_wins
                         row_data["SeriesScore"] = team_wins - opponent_wins
                         row_data["TmGm"] = data["TmGm"]
+                        row_data["Previous Team Result"] = data["Previous Team Result"]
+                        row_data["Upcoming Team Result"] = data["Upcoming Team Result"]
                         row_data["TmGmRev"] = max_team_games - data["TmGm"] + 1
                         if "Time" in data:
                             row_data["Time"] = data["Time"]
