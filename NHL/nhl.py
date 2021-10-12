@@ -14219,7 +14219,7 @@ def perform_opponent_schedule_qualifiers(row, qualifiers):
                 if not (win_percentage >= qual_object["values"]["start_val"] and win_percentage <= qual_object["values"]["end_val"]):
                     return False
 
-    if "Opponent Points Percentage " in qualifiers:
+    if "Opponent Points Percentage" in qualifiers:
         for qual_object in qualifiers["Opponent Points Percentage"]:
             points = (row["OppWins"] * 2) + (row["OppTies"] * 1) + (row["OppOTLosses"] * 1)
             points_percentage = points / ((row["OppWins"] + row["OppLosses"] + row["OppTies"] + row["OppOTLosses"]) * 2)
@@ -14374,7 +14374,7 @@ def perform_opponent_schedule_qualifiers(row, qualifiers):
                 if not (win_percentage >= qual_object["values"]["start_val"] and win_percentage <= qual_object["values"]["end_val"]):
                     return False
 
-    if "Team Points Percentage " in qualifiers:
+    if "Team Points Percentage" in qualifiers:
         for qual_object in qualifiers["Team Points Percentage"]:
             points = (row["TmWins"] * 2) + (row["TmTies"] * 1) + (row["TmOTLosses"] * 1)
             points_percentage = points / ((row["TmWins"] + row["TmLosses"] + row["TmTies"] + row["TmOTLosses"]) * 2)
@@ -27920,7 +27920,7 @@ def perform_schedule_qualifiers(row, qualifiers):
                 if not (win_percentage >= qual_object["values"]["start_val"] and win_percentage <= qual_object["values"]["end_val"]):
                     return False
 
-    if "Current Team Points Percentage " in qualifiers:
+    if "Current Team Points Percentage" in qualifiers:
         if "CurrTmWins" not in row or row["CurrTmWins"] == None:
             return False
 
@@ -28009,7 +28009,7 @@ def perform_schedule_qualifiers(row, qualifiers):
                 if not (win_percentage >= qual_object["values"]["start_val"] and win_percentage <= qual_object["values"]["end_val"]):
                     return False
     
-    if "Current Opponent Points Percentage " in qualifiers:
+    if "Current Opponent Points Percentage" in qualifiers:
         if "CurrOppWins" not in row or row["CurrOppWins"] == None:
             return False
 
