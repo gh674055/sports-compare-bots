@@ -14211,7 +14211,10 @@ def perform_opponent_schedule_qualifiers(row, qualifiers):
     
     if "Opponent Win Percentage" in qualifiers:
         for qual_object in qualifiers["Opponent Win Percentage"]:
-            win_percentage = row["OppWins"] / (row["OppWins"] + (row["OppLosses"] + row["OppOTLosses"]))
+            try:
+                win_percentage = row["OppWins"] / (row["OppWins"] + (row["OppLosses"] + row["OppOTLosses"]))
+            except ZeroDivisionError:
+                win_percentage = 0
             if qual_object["negate"]:
                 if win_percentage >= qual_object["values"]["start_val"] and win_percentage <= qual_object["values"]["end_val"]:
                     return False
@@ -14222,7 +14225,10 @@ def perform_opponent_schedule_qualifiers(row, qualifiers):
     if "Opponent Points Percentage" in qualifiers:
         for qual_object in qualifiers["Opponent Points Percentage"]:
             points = (row["OppWins"] * 2) + (row["OppTies"] * 1) + (row["OppOTLosses"] * 1)
-            points_percentage = points / ((row["OppWins"] + row["OppLosses"] + row["OppTies"] + row["OppOTLosses"]) * 2)
+            try:
+                points_percentage = points / ((row["OppWins"] + row["OppLosses"] + row["OppTies"] + row["OppOTLosses"]) * 2)
+            except ZeroDivisionError:
+                points_percentage = 0
             if qual_object["negate"]:
                 if points_percentage >= qual_object["values"]["start_val"] and points_percentage <= qual_object["values"]["end_val"]:
                     return False
@@ -14366,7 +14372,10 @@ def perform_opponent_schedule_qualifiers(row, qualifiers):
     
     if "Team Win Percentage" in qualifiers:
         for qual_object in qualifiers["Team Win Percentage"]:
-            win_percentage = row["TmWins"] / (row["TmWins"] + (row["TmLosses"] + row["TmOTLosses"]))
+            try:
+                win_percentage = row["TmWins"] / (row["TmWins"] + (row["TmLosses"] + row["TmOTLosses"]))
+            except ZeroDivisionError:
+                win_percentage = 0
             if qual_object["negate"]:
                 if win_percentage >= qual_object["values"]["start_val"] and win_percentage <= qual_object["values"]["end_val"]:
                     return False
@@ -14377,7 +14386,10 @@ def perform_opponent_schedule_qualifiers(row, qualifiers):
     if "Team Points Percentage" in qualifiers:
         for qual_object in qualifiers["Team Points Percentage"]:
             points = (row["TmWins"] * 2) + (row["TmTies"] * 1) + (row["TmOTLosses"] * 1)
-            points_percentage = points / ((row["TmWins"] + row["TmLosses"] + row["TmTies"] + row["TmOTLosses"]) * 2)
+            try:
+                points_percentage = points / ((row["TmWins"] + row["TmLosses"] + row["TmTies"] + row["TmOTLosses"]) * 2)
+            except ZeroDivisionError:
+                points_percentage = 0
             if qual_object["negate"]:
                 if points_percentage >= qual_object["values"]["start_val"] and points_percentage <= qual_object["values"]["end_val"]:
                     return False
@@ -27912,7 +27924,10 @@ def perform_schedule_qualifiers(row, qualifiers):
             return False
 
         for qual_object in qualifiers["Current Team Win Percentage"]:
-            win_percentage = row["CurrTmWins"] / (row["CurrTmWins"] + (row["CurrTmLosses"] + row["CurrTmOTLosses"]))
+            try:
+                win_percentage = row["CurrTmWins"] / (row["CurrTmWins"] + (row["CurrTmLosses"] + row["CurrTmOTLosses"]))
+            except ZeroDivisionError:
+                win_percentage = 0
             if qual_object["negate"]:
                 if win_percentage >= qual_object["values"]["start_val"] and win_percentage <= qual_object["values"]["end_val"]:
                     return False
@@ -27926,7 +27941,10 @@ def perform_schedule_qualifiers(row, qualifiers):
 
         for qual_object in qualifiers["Current Team Points Percentage"]:
             points = (row["CurrTmWins"] * 2) + (row["CurrTmTies"] * 1) + (row["CurrTmOTLosses"] * 1)
-            points_percentage = points / ((row["CurrTmWins"] + row["CurrTmLosses"] + row["CurrTmTies"] + row["CurrTmOTLosses"]) * 2)
+            try:
+                points_percentage = points / ((row["CurrTmWins"] + row["CurrTmLosses"] + row["CurrTmTies"] + row["CurrTmOTLosses"]) * 2)
+            except ZeroDivisionError:
+                points_percentage = 0
             if qual_object["negate"]:
                 if points_percentage >= qual_object["values"]["start_val"] and points_percentage <= qual_object["values"]["end_val"]:
                     return False
@@ -28001,7 +28019,10 @@ def perform_schedule_qualifiers(row, qualifiers):
             return False
 
         for qual_object in qualifiers["Current Opponent Win Percentage"]:
-            win_percentage = row["CurrOppWins"] / (row["CurrOppWins"] + (row["CurrOppLosses"] + row["CurrOppOTLosses"]))
+            try:
+                win_percentage = row["CurrOppWins"] / (row["CurrOppWins"] + (row["CurrOppLosses"] + row["CurrOppOTLosses"]))
+            except ZeroDivisionError:
+                win_percentage = 0
             if qual_object["negate"]:
                 if win_percentage >= qual_object["values"]["start_val"] and win_percentage <= qual_object["values"]["end_val"]:
                     return False
@@ -28015,7 +28036,10 @@ def perform_schedule_qualifiers(row, qualifiers):
 
         for qual_object in qualifiers["Current Opponent Points Percentage"]:
             points = (row["CurrOppWins"] * 2) + (row["CurrOppTies"] * 1) + (row["CurrOppOTLosses"] * 1)
-            points_percentage = points / ((row["CurrOppWins"] + row["CurrOppLosses"] + row["CurrOppTies"] + row["CurrOppOTLosses"]) * 2)
+            try:
+                points_percentage = points / ((row["CurrOppWins"] + row["CurrOppLosses"] + row["CurrOppTies"] + row["CurrOppOTLosses"]) * 2)
+            except ZeroDivisionError:
+                points_percentage = 0
             if qual_object["negate"]:
                 if points_percentage >= qual_object["values"]["start_val"] and points_percentage <= qual_object["values"]["end_val"]:
                     return False

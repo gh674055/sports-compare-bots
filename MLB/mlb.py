@@ -22806,7 +22806,10 @@ def perform_opponent_schedule_qualifiers(row, qualifiers):
 
     if "Opponent Win Percentage" in qualifiers:
         for qual_object in qualifiers["Opponent Win Percentage"]:
-            win_percentage = row["OppWins"] / (row["OppWins"] + row["OppLosses"])
+            try:
+                win_percentage = row["OppWins"] / (row["OppWins"] + row["OppLosses"])
+            except ZeroDivisionError:
+                win_percentage = 0
             if qual_object["negate"]:
                 if win_percentage >= qual_object["values"]["start_val"] and win_percentage <= qual_object["values"]["end_val"]:
                     return False
@@ -23015,7 +23018,10 @@ def perform_opponent_schedule_qualifiers(row, qualifiers):
 
     if "Team Win Percentage" in qualifiers:
         for qual_object in qualifiers["Team Win Percentage"]:
-            win_percentage = row["TmWins"] / (row["TmWins"] + row["TmLosses"])
+            try:
+                win_percentage = row["TmWins"] / (row["TmWins"] + row["TmLosses"])
+            except ZeroDivisionError:
+                win_percentage = 0
             if qual_object["negate"]:
                 if win_percentage >= qual_object["values"]["start_val"] and win_percentage <= qual_object["values"]["end_val"]:
                     return False
@@ -28977,7 +28983,10 @@ def perform_mlb_schedule_qualifiers(row, qualifiers):
             return False
 
         for qual_object in qualifiers["Current Team Win Percentage"]:
-            win_percentage = row["CurrTmWins"] / (row["CurrTmWins"] + row["CurrTmLosses"])
+            try:
+                win_percentage = row["CurrTmWins"] / (row["CurrTmWins"] + row["CurrTmLosses"])
+            except ZeroDivisionError:
+                win_percentage = 0
             if qual_object["negate"]:
                 if win_percentage >= qual_object["values"]["start_val"] and win_percentage <= qual_object["values"]["end_val"]:
                     return False
@@ -29027,7 +29036,10 @@ def perform_mlb_schedule_qualifiers(row, qualifiers):
             return False
 
         for qual_object in qualifiers["Current Opponent Win Percentage"]:
-            win_percentage = row["CurrOppWins"] / (row["CurrOppWins"] + row["CurrOppLosses"])
+            try:
+                win_percentage = row["CurrOppWins"] / (row["CurrOppWins"] + row["CurrOppLosses"])
+            except ZeroDivisionError:
+                win_percentage = 0
             if qual_object["negate"]:
                 if win_percentage >= qual_object["values"]["start_val"] and win_percentage <= qual_object["values"]["end_val"]:
                     return False
