@@ -12702,6 +12702,9 @@ def handle_player_data(player_data, time_frame, player_type, player_page, valid_
         is_seasons = (time_frame["type"].startswith("season") and not is_qual_match) or time_frame["playoffs"] == "Only"
         if not is_seasons:
             valid_years = player_data["game_valid_years"]
+            if player_data["id"][len(player_data["id"]) - 1].isdigit():
+                if len(set(player_data["year_valid_years"]) - set(player_data["total_game_valid_years"])):
+                    missing_games = True
     
     missing_salary = False
     missing_inf = False
