@@ -8352,7 +8352,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                         "start_val" : ordinal_to_number(split_vals[0]),
                                         "end_val" : ordinal_to_number(split_vals[1])
                                     }
-                            elif qualifier_str.startswith("opponent-runs-rank:") or qualifier_str.startswith("opponent-standings-rank:") or qualifier_str.startswith("opponent-runs-allowed-rank:") or qualifier_str.startswith("opponent-run-rank:") or qualifier_str.startswith("opponent-run-allowed-rank:") or qualifier_str.startswith("opponent-wrc\+-rank:") or qualifier_str.startswith("opponent-avg-rank:") or qualifier_str.startswith("opponent-obp-rank:") or qualifier_str.startswith("opponent-slg-rank:") or qualifier_str.startswith("opponent-ops-rank:") or qualifier_str.startswith("opponent-era--rank:") or qualifier_str.startswith("opponent-era-rank:") or qualifier_str.startswith("opponent-win-percent:") or qualifier_str.startswith("opponent-winning-percent:") or qualifier_str.startswith("current-opponent-win-percent:") or qualifier_str.startswith("current-opponent-winning-percent:") or qualifier_str.startswith("team-wins:") or qualifier_str.startswith("team-losses:") or qualifier_str.startswith("opponent-wins:") or qualifier_str.startswith("opponent-losses:") or qualifier_str.startswith("current-team-wins:") or qualifier_str.startswith("current-team-losses:") or qualifier_str.startswith("current-opponent-wins:") or qualifier_str.startswith("current-opponent-losses:"):
+                            elif qualifier_str.startswith("opponent-runs-rank:") or qualifier_str.startswith("opponent-standings-rank:") or qualifier_str.startswith("opponent-runs-allowed-rank:") or qualifier_str.startswith("opponent-run-rank:") or qualifier_str.startswith("opponent-run-allowed-rank:") or qualifier_str.startswith("opponent-wrc\+-rank:") or qualifier_str.startswith("opponent-avg-rank:") or qualifier_str.startswith("opponent-obp-rank:") or qualifier_str.startswith("opponent-slg-rank:") or qualifier_str.startswith("opponent-ops-rank:") or qualifier_str.startswith("opponent-era--rank:") or qualifier_str.startswith("opponent-era-rank:") or qualifier_str.startswith("opponent-win-percent:") or qualifier_str.startswith("opponent-winning-percent:") or qualifier_str.startswith("current-opponent-win-percent:") or qualifier_str.startswith("current-opponent-winning-percent:") or qualifier_str.startswith("opponent-wins:") or qualifier_str.startswith("opponent-losses:") or qualifier_str.startswith("current-opponent-wins:") or qualifier_str.startswith("current-opponent-losses:"):
                                 if qualifier_str.startswith("opponent-runs-rank:"):
                                     qual_str = "opponent-runs-rank:"
                                     qual_type = "Opponent Runs Rank"
@@ -8395,36 +8395,18 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 elif qualifier_str.startswith("opponent-winning-percent:"):
                                     qual_str = "opponent-winning-percent:"
                                     qual_type = "Opponent Win Percentage"
-                                elif qualifier_str.startswith("team-wins:"):
-                                    qual_str = "team-wins:"
-                                    qual_type = "Team Wins"
-                                elif qualifier_str.startswith("team-losses:"):
-                                    qual_str = "team-losses:"
-                                    qual_type = "Team Losses"
                                 elif qualifier_str.startswith("opponent-wins:"):
                                     qual_str = "opponent-wins:"
                                     qual_type = "Opponent Wins"
                                 elif qualifier_str.startswith("opponent-losses:"):
                                     qual_str = "opponent-losses:"
                                     qual_type = "Opponent Losses"
-                                elif qualifier_str.startswith("current-team-wins:"):
-                                    qual_str = "current-team-wins:"
-                                    qual_type = "Current Team Wins"
-                                elif qualifier_str.startswith("current-team-losses:"):
-                                    qual_str = "current-team-losses:"
-                                    qual_type = "Current Team Losses"
                                 elif qualifier_str.startswith("current-opponent-wins:"):
                                     qual_str = "current-opponent-wins:"
                                     qual_type = "Current Opponent Wins"
                                 elif qualifier_str.startswith("current-opponent-losses:"):
                                     qual_str = "current-opponent-losses:"
                                     qual_type = "Current Opponent Losses"
-                                elif qualifier_str.startswith("current-team-win-percent:"):
-                                    qual_str = "current-team-win-percent:"
-                                    qual_type = "Current Team Win Percentage"
-                                elif qualifier_str.startswith("current-team-winning-percent:"):
-                                    qual_str = "current-team-winning-percent:"
-                                    qual_type = "Current Team Win Percentage"
                                 elif qualifier_str.startswith("current-opponent-win-percent:"):
                                     qual_str = "current-opponent-win-percent:"
                                     qual_type = "Current Opponent Win Percentage"
@@ -8440,7 +8422,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
 
                                 split_vals = re.split(r"(?<!\\)\-", re.split(r"(?<!\\)" + qual_str, qualifier_str)[1])
                                 if len(split_vals) == 1:
-                                    if qual_type == "Opponent Win Percentage":
+                                    if qual_type == "Opponent Win Percentage" or qual_type == "Opponent Team Win Percentage":
                                         qualifier_obj["values"] = {
                                             "start_val" : ordinal_to_number(split_vals[0]),
                                             "end_val" : 1,
@@ -8459,7 +8441,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                         "reverse" : reverse
                                     }
                                 
-                                if qual_type == "Opponent Win Percentage":
+                                if qual_type == "Opponent Win Percentage" or qual_type == "Opponent Team Win Percentage":
                                     if qualifier_obj["values"]["start_val"] > 1:
                                         qualifier_obj["values"]["start_val"] = qualifier_obj["values"]["start_val"] / 100
                                     if qualifier_obj["values"]["end_val"] > 1:
@@ -8626,8 +8608,20 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                                 "end_val" : ordinal_to_number(split_vals[1])
                                             })
 
-                            elif qualifier_str.startswith("team-runs-rank:") or qualifier_str.startswith("team-standings-rank:") or qualifier_str.startswith("team-runs-allowed-rank:") or qualifier_str.startswith("team-run-rank:") or qualifier_str.startswith("team-run-allowed-rank:") or qualifier_str.startswith("team-wrc\+-rank:") or qualifier_str.startswith("team-avg-rank:") or qualifier_str.startswith("team-obp-rank:") or qualifier_str.startswith("team-slg-rank:") or qualifier_str.startswith("team-ops-rank:") or qualifier_str.startswith("team-era--rank:") or qualifier_str.startswith("team-era-rank:") or qualifier_str.startswith("team-win-percent:") or qualifier_str.startswith("team-winning-percent:") or qualifier_str.startswith("current-team-winning-percent:") or qualifier_str.startswith("current-team-win-percent:"):
-                                if qualifier_str.startswith("team-runs-rank:"):
+                            elif qualifier_str.startswith("team-runs-rank:") or qualifier_str.startswith("team-standings-rank:") or qualifier_str.startswith("team-runs-allowed-rank:") or qualifier_str.startswith("team-run-rank:") or qualifier_str.startswith("team-run-allowed-rank:") or qualifier_str.startswith("team-wrc\+-rank:") or qualifier_str.startswith("team-avg-rank:") or qualifier_str.startswith("team-obp-rank:") or qualifier_str.startswith("team-slg-rank:") or qualifier_str.startswith("team-ops-rank:") or qualifier_str.startswith("team-era--rank:") or qualifier_str.startswith("team-era-rank:") or qualifier_str.startswith("team-wins:") or qualifier_str.startswith("team-losses:") or qualifier_str.startswith("current-team-wins:") or qualifier_str.startswith("current-team-losses:") or qualifier_str.startswith("team-win-percent:") or qualifier_str.startswith("team-winning-percent:") or qualifier_str.startswith("current-team-winning-percent:") or qualifier_str.startswith("current-team-win-percent:"):
+                                if qualifier_str.startswith("team-wins:"):
+                                    qual_str = "team-wins:"
+                                    qual_type = "Team Wins"
+                                elif qualifier_str.startswith("team-losses:"):
+                                    qual_str = "team-losses:"
+                                    qual_type = "Team Losses"
+                                elif qualifier_str.startswith("current-team-wins:"):
+                                    qual_str = "current-team-wins:"
+                                    qual_type = "Current Team Wins"
+                                elif qualifier_str.startswith("current-team-losses:"):
+                                    qual_str = "current-team-losses:"
+                                    qual_type = "Current Team Losses"
+                                elif qualifier_str.startswith("team-runs-rank:"):
                                     qual_str = "team-runs-rank:"
                                     qual_type = "Team Runs Rank"
                                 elif qualifier_str.startswith("team-standings-rank:"):
@@ -8669,6 +8663,12 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 elif qualifier_str.startswith("team-winning-percent:"):
                                     qual_str = "team-winning-percent:"
                                     qual_type = "Team Win Percentage"
+                                elif qualifier_str.startswith("current-team-win-percent:"):
+                                    qual_str = "current-team-win-percent:"
+                                    qual_type = "Current Team Win Percentage"
+                                elif qualifier_str.startswith("current-team-winning-percent:"):
+                                    qual_str = "current-team-winning-percent:"
+                                    qual_type = "Current Team Win Percentage"
 
                                 split_vals = re.split(r"(?<!\\)\:", qualifier_str)
                                 reverse = False
@@ -8678,7 +8678,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
 
                                 split_vals = re.split(r"(?<!\\)\-", re.split(r"(?<!\\)" + qual_str, qualifier_str)[1])
                                 if len(split_vals) == 1:
-                                    if qual_type == "Team Win Percentage":
+                                    if qual_type == "Team Win Percentage" or qual_type == "Current Team Win Percentage":
                                         qualifier_obj["values"] = {
                                             "start_val" : ordinal_to_number(split_vals[0]),
                                             "end_val" : 1,
@@ -8697,7 +8697,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                         "reverse" : reverse
                                     }
 
-                                if qual_type == "Team Win Percentage":
+                                if qual_type == "Team Win Percentage" or qual_type == "Current Team Win Percentage":
                                     if qualifier_obj["values"]["start_val"] > 1:
                                         qualifier_obj["values"]["start_val"] = qualifier_obj["values"]["start_val"] / 100
                                     if qualifier_obj["values"]["end_val"] > 1:

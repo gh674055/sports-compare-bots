@@ -5723,13 +5723,17 @@ qualifier_map = {
     "Opponent Wins" : {},
     "Opponent Losses" : {},
     "Opponent Ties" : {},
+    "Opponent Points" : {},
     "Opponent Games Over 500" : {},
     "Opponent Win Percentage" : {},
+    "Opponent Points Percentage" : {},
     "Current Opponent Wins" : {},
     "Current Opponent Losses" : {},
     "Current Opponent Ties" : {},
+    "Current Opponent Points" : {},
     "Current Opponent Games Over 500" : {},
     "Current Opponent Win Percentage" : {},
+    "Current Opponent Points Percentage" : {},
     "Cup Winner Opponent" : {},
     "Conference Winner Opponent" : {},
     "Opponent Standings Rank" : {},
@@ -5749,13 +5753,17 @@ qualifier_map = {
     "Team Wins" : {},
     "Team Losses" : {},
     "Team Ties" : {},
+    "Team Points" : {},
     "Team Games Over 500" : {},
     "Team Win Percentage" : {},
+    "Team Points Percentage" : {},
     "Current Team Wins" : {},
     "Current Team Losses" : {},
     "Current Team Ties" : {},
+    "Current Team Points" : {},
     "Current Team Games Over 500" : {},
     "Current Team Win Percentage" : {},
+    "Current Team Points Percentage" : {},
     "Cup Winner Team" : {},
     "Conference Winner Team" : {},
     "Team Standings Rank" : {},
@@ -7331,7 +7339,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
 
                                 time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
                         
-                        last_match = re.finditer(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?(current-season-age|first-minutes?|current-minutes?|first-shots?|current-shots?|first-games?|current-games?|first-seasons?|current-seasons?|last-minutes?|last-shots?|last-games?|last-seasons?|first-starts?|last-starts?|start-if-goalie|decision|current-age|rook|rookie|facing-former-franchise|facing-former-team|even-year|odd-year|interconference|intraconference|interdivision|intradivision|complete-games?|current-winning-opponents?|current-losing-opponents?|current-tied-opponents?|current-winning-or-tied-opponents?|current-losing-or-tied-opponents?|winning-opponents?|losing-opponents?|winning-or-tied-opponents?|losing-or-tied-opponents?|tied-opponents?|playoff-opponents?|cup-winner-opponent|conf-winner-opponent|current-winning-teams?|current-losing-teams?|current-tied-teams?|current-winning-or-tied-teams?|current-losing-or-tied-teams?|winning-teams?|losing-teams?|tied-teams?|winning-or-tied-teams?|losing-or-tied-teams?|playoff-teams?|cup-winner-team|conf-winner-team|penalty-shot|shootout|overtime|game-winning|offensive-zone|defensive-zone|neutral-zone|unassisted|even-skaters|team-goalie-pulled|opponent-goalie-pulled|more-skaters|less-skaters|power-play|short-handed|even-strength|elimination-or-clinching|elimination(?:-games?)?|eliminating(?:-games?)?|clinching(?:-games?)?|clinch(?:-games?)?|winner-take-all|behind-in-series|ahead-in-series|even-in-series|(?:nhl(?: |-))?(?:finals?|championship)|stanley(?: |-)cup|stanley|cup|sc|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?(?:league|conference)(?:(?: |-)finals?|(?: |-)championship)|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?cf|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?second(?: |-)round|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?sr|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?(?:league|conference) semi-?finals?|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?cs|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?first round|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?fr|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?(?:league|conference) quarter-?finals?|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?cq|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?qr|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?qualify(?:ing|er)?(?:(?: |-)round)?|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?pr|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?play(?:-| )?in(?:(?: |-)round)?|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?rr|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?(?:round )?robin|force-dates|first-half|second-half|pre-all-star|post-all-star|t:[\w-]+|o:[\w-]+|m:[\w-]+|d:[\w-]+|dt:[\w-]+|team-franchise:[\w-]+|opponent-franchise:[\w-]+|franchise:[\w-]+|tf:[\w-]+|of:[\w-]+|f:[\w-]+|team:[\w-]+|opponent:[\w-]+|tv-network:[\w-]+|raw-tv-network:[\w-]+|national-tv-network:[\w-]+|national-raw-tv-network:[\w-]+|any-national-tv-network:[\w-]+|any-national-raw-tv-network:[\w-]+|any-us-national-game|us-national-game|any-ca-national-game|ca-national-game|any-national-game|national-game|month:[\w-]+|day:[\w-]+|date:[\w-]+|series-game:[\w-]+|gm:[\w-]+|game:[\w-]+|season-gm:[\w-]+|season-game:[\w-]+|season:[\w-]+|season-reversed:[\w-]+|crgm:[\w-]+|career-game-reversed:[\w-]+|team-game-reversed:[\w-]+|season-game-reversed:[\w-]+|game-reversed:[\w-]+|career-game:[\w-]+|tmgm:[\w-]+|team-game:[\w-]+|game-number:[\w-]+|season-number:[\w-]+|number:[\w-]+|dr:[\w-]+|starts-days-rest:[\w-]+|days-rest:[\w-]+|prv-dr:[\w-]+|previous-days-rest:[\w-]+|upc-dr:[\w-]+|upcoming-starts-days-rest:[\w-]+|upcoming-days-rest:[\w-]+|gr:[\w-]+|games-rest:[\w-]+|starts-rest:[\w-]+|prv-gr:[\w-]+|-?starts?|-?started|-?starting|-?ignore-starts?|-?ignore-started?|-?ignore-starting|previous-games-rest:[\w-]+|upc-gr:[\w-]+|upcoming-games-rest:[\w-]+|days-in-a-row:[\w-]+|games-in-a-row:[\w-]+|starts-in-a-row:[\w-]+|prv-t:[\w-]+|prv-o:[\w-]+|upc-t:[\w-]+|upc-o:[\w-]+|upcoming-same-opponent|previous-same-opponent|previous-franchise:[\w-]+|previous-team-franchise:[\w-]+|previous-opponent-franchise:[\w-]+|upcoming-franchise:[\w-]+|upcoming-team-franchise:[\w-]+|upcoming-opponent-franchise:[\w-]+|previous-team:[\w-]+|previous-opponent:[\w-]+|upcoming-team:[\w-]+|upcoming-opponent:[\w-]+|score:[\S-]+|final-score:[\S-]+|previous-score:[\S-]+|upcoming-score:[\S-]+|final-team-score:[\w-]+|final-opponent-score:[\w-]+|final-score-margin:[\S-]+|final-score-difference:[\S-]+|team-score:[\w-]+|opponent-score:[\w-]+|score-margin:[\S-]+|score-difference:[\S-]+|period:[\w-]+|coordinates:[\S-]+|exact-coordinates:[\S-]+|team-skaters:[\w-]+|opponent-skaters:[\w-]+|team-players:[\w-]+|opponent-players:[\w-]+|period-time-remaining:[\S-]+|period-time:[\S-]+|season-st:[\S-]+|period-stat:[\S-]+|season-stat:[\S-]+|season-prv-st:[\S-]+|season-previous-stat:[\S-]+|season-upc-st:[\S-]+|season-upcoming-stat:[\S-]+|st:[\S-]+|stat:[\S-]+|prv-st:[\S-]+|previous-stat:[\S-]+|upc-st:[\S-]+|upcoming-stat:[\S-]+|min-st:[\S-]+|min-stat:[\S-]+|max-st:[\S-]+|max-stat:[\S-]+|totalgames-st:[\S-]+|totalgames-stat:[\S-]+|max-str:[\S-]+|max-streak:[\S-]+|max-stretch:[\S-]+|ctn-str:[\S-]+|count-streak:[\S-]+|q:[\S-]+|quickest:[\S-]+|s:[\S-]+|slowest:[\S-]+|with-new-team|with-new-franchise|summer|spring|winter|fall|autumn|away|home|road|previous-away|previous-home|previous-road|upcoming-away|upcoming-home|upcoming-road|win(?:s)?|loss(?:es)?|tie(?:es)?|w-ot|w-so|l-ot|l-so|so|ot|w|l|t|prv-w|prv-l|prv-t|prv-w-ot|prv-w-so|prv-l-ot|prv-l-so|prv-so|prv-ot|upc-w|upc-l|upc-t|upc-w-ot|upc-w-so|upc-l-ot|upc-l-so|upc-so|upc-ot|previous-win(?:s)?|previous-loss(?:es)?|previous-tie(?:es)|upcoming-win(?:s)?|upcoming-loss(?:es)?|upcoming-tie(?:es)|prv-t-w|prv-t-l|prv-t-t|prv-t-w-ot|prv-t-w-so|prv-t-l-ot|prv-t-l-so|prv-t-so|prv-t-ot|upc-t-w|upc-t-l|upc-t-t|upc-t-w-ot|upc-t-w-so|upc-t-l-ot|upc-t-l-so|upc-t-so|upc-t-ot|previous-team-win(?:s)?|previous-team-loss(?:es)?|previous-team-tie(?:es)|upcoming-team-win(?:s)?|upcoming-team-loss(?:es)?|upcoming-team-tie(?:es)|series-team-wins:[\w-]+|series-opponent-wins:[\w-]+|series-score-margin:[\S-]+|series-score-difference:[\S-]+|series-score:[\w-]+|current-team-wins:[\w-]+|current-team-losses:[\w-]+|current-team-ties:[\w-]+|current-team-games-over-500:[\S-]+|current-opponent-wins:[\w-]+|current-opponent-losses:[\w-]+|current-opponent-ties:[\w-]+|current-opponent-games-over-500:[\S-]+|team-wins:[\w-]+|team-losses:[\w-]+|team-ties:[\w-]+|team-games-over-500:[\S-]+|opponent-wins:[\w-]+|opponent-losses:[\w-]+|opponent-ties:[\w-]+|opponent-games-over-500:[\S-]+|opponent-goals?-rank:[\S-]+|opponent-standings-rank:[\S-]+|opponent-goals?-allowed-rank:[\S-]+|current-opponent-win(?:ning)?-percent:[\S-]+|opponent-win(?:ning)?-percent:[\S-]+|team-goals?-rank:[\S-]+|team-standings-rank:[\S-]+|team-goals?-allowed-rank:[\S-]+|years?:[\w-]+|current-team-win(?:ning)?-percent:[\S-]+|team-win(?:ning)?-percent:[\S-]+|early-?afternoon|late-?afternoon|morning|early|afternoon|day|night(?:time)?|late|team-conference:[\S-]+|opponent-conference:[\S-]+|team-division:[\S-]+|opponent-division:[\S-]+|birthda(?:y|te)|skat(?:(?:er)|(?:ing))|goalie|skater|" + all_months_re + r"|" + all_days_re + r")\b", time_frame)
+                        last_match = re.finditer(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?(current-season-age|first-minutes?|current-minutes?|first-shots?|current-shots?|first-games?|current-games?|first-seasons?|current-seasons?|last-minutes?|last-shots?|last-games?|last-seasons?|first-starts?|last-starts?|start-if-goalie|decision|current-age|rook|rookie|facing-former-franchise|facing-former-team|even-year|odd-year|interconference|intraconference|interdivision|intradivision|complete-games?|current-winning-opponents?|current-losing-opponents?|current-tied-opponents?|current-winning-or-tied-opponents?|current-losing-or-tied-opponents?|winning-opponents?|losing-opponents?|winning-or-tied-opponents?|losing-or-tied-opponents?|tied-opponents?|playoff-opponents?|cup-winner-opponent|conf-winner-opponent|current-winning-teams?|current-losing-teams?|current-tied-teams?|current-winning-or-tied-teams?|current-losing-or-tied-teams?|winning-teams?|losing-teams?|tied-teams?|winning-or-tied-teams?|losing-or-tied-teams?|playoff-teams?|cup-winner-team|conf-winner-team|penalty-shot|shootout|overtime|game-winning|offensive-zone|defensive-zone|neutral-zone|unassisted|even-skaters|team-goalie-pulled|opponent-goalie-pulled|more-skaters|less-skaters|power-play|short-handed|even-strength|elimination-or-clinching|elimination(?:-games?)?|eliminating(?:-games?)?|clinching(?:-games?)?|clinch(?:-games?)?|winner-take-all|behind-in-series|ahead-in-series|even-in-series|(?:nhl(?: |-))?(?:finals?|championship)|stanley(?: |-)cup|stanley|cup|sc|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?(?:league|conference)(?:(?: |-)finals?|(?: |-)championship)|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?cf|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?second(?: |-)round|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?sr|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?(?:league|conference) semi-?finals?|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?cs|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?first round|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?fr|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?(?:league|conference) quarter-?finals?|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?cq|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?qr|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?qualify(?:ing|er)?(?:(?: |-)round)?|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?pr|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?play(?:-| )?in(?:(?: |-)round)?|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?rr|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?(?:round )?robin|force-dates|first-half|second-half|pre-all-star|post-all-star|t:[\w-]+|o:[\w-]+|m:[\w-]+|d:[\w-]+|dt:[\w-]+|team-franchise:[\w-]+|opponent-franchise:[\w-]+|franchise:[\w-]+|tf:[\w-]+|of:[\w-]+|f:[\w-]+|team:[\w-]+|opponent:[\w-]+|tv-network:[\w-]+|raw-tv-network:[\w-]+|national-tv-network:[\w-]+|national-raw-tv-network:[\w-]+|any-national-tv-network:[\w-]+|any-national-raw-tv-network:[\w-]+|any-us-national-game|us-national-game|any-ca-national-game|ca-national-game|any-national-game|national-game|month:[\w-]+|day:[\w-]+|date:[\w-]+|series-game:[\w-]+|gm:[\w-]+|game:[\w-]+|season-gm:[\w-]+|season-game:[\w-]+|season:[\w-]+|season-reversed:[\w-]+|crgm:[\w-]+|career-game-reversed:[\w-]+|team-game-reversed:[\w-]+|season-game-reversed:[\w-]+|game-reversed:[\w-]+|career-game:[\w-]+|tmgm:[\w-]+|team-game:[\w-]+|game-number:[\w-]+|season-number:[\w-]+|number:[\w-]+|dr:[\w-]+|starts-days-rest:[\w-]+|days-rest:[\w-]+|prv-dr:[\w-]+|previous-days-rest:[\w-]+|upc-dr:[\w-]+|upcoming-starts-days-rest:[\w-]+|upcoming-days-rest:[\w-]+|gr:[\w-]+|games-rest:[\w-]+|starts-rest:[\w-]+|prv-gr:[\w-]+|-?starts?|-?started|-?starting|-?ignore-starts?|-?ignore-started?|-?ignore-starting|previous-games-rest:[\w-]+|upc-gr:[\w-]+|upcoming-games-rest:[\w-]+|days-in-a-row:[\w-]+|games-in-a-row:[\w-]+|starts-in-a-row:[\w-]+|prv-t:[\w-]+|prv-o:[\w-]+|upc-t:[\w-]+|upc-o:[\w-]+|upcoming-same-opponent|previous-same-opponent|previous-franchise:[\w-]+|previous-team-franchise:[\w-]+|previous-opponent-franchise:[\w-]+|upcoming-franchise:[\w-]+|upcoming-team-franchise:[\w-]+|upcoming-opponent-franchise:[\w-]+|previous-team:[\w-]+|previous-opponent:[\w-]+|upcoming-team:[\w-]+|upcoming-opponent:[\w-]+|score:[\S-]+|final-score:[\S-]+|previous-score:[\S-]+|upcoming-score:[\S-]+|final-team-score:[\w-]+|final-opponent-score:[\w-]+|final-score-margin:[\S-]+|final-score-difference:[\S-]+|team-score:[\w-]+|opponent-score:[\w-]+|score-margin:[\S-]+|score-difference:[\S-]+|period:[\w-]+|coordinates:[\S-]+|exact-coordinates:[\S-]+|team-skaters:[\w-]+|opponent-skaters:[\w-]+|team-players:[\w-]+|opponent-players:[\w-]+|period-time-remaining:[\S-]+|period-time:[\S-]+|season-st:[\S-]+|period-stat:[\S-]+|season-stat:[\S-]+|season-prv-st:[\S-]+|season-previous-stat:[\S-]+|season-upc-st:[\S-]+|season-upcoming-stat:[\S-]+|st:[\S-]+|stat:[\S-]+|prv-st:[\S-]+|previous-stat:[\S-]+|upc-st:[\S-]+|upcoming-stat:[\S-]+|min-st:[\S-]+|min-stat:[\S-]+|max-st:[\S-]+|max-stat:[\S-]+|totalgames-st:[\S-]+|totalgames-stat:[\S-]+|max-str:[\S-]+|max-streak:[\S-]+|max-stretch:[\S-]+|ctn-str:[\S-]+|count-streak:[\S-]+|q:[\S-]+|quickest:[\S-]+|s:[\S-]+|slowest:[\S-]+|with-new-team|with-new-franchise|summer|spring|winter|fall|autumn|away|home|road|previous-away|previous-home|previous-road|upcoming-away|upcoming-home|upcoming-road|win(?:s)?|loss(?:es)?|tie(?:es)?|w-ot|w-so|l-ot|l-so|so|ot|w|l|t|prv-w|prv-l|prv-t|prv-w-ot|prv-w-so|prv-l-ot|prv-l-so|prv-so|prv-ot|upc-w|upc-l|upc-t|upc-w-ot|upc-w-so|upc-l-ot|upc-l-so|upc-so|upc-ot|previous-win(?:s)?|previous-loss(?:es)?|previous-tie(?:es)|upcoming-win(?:s)?|upcoming-loss(?:es)?|upcoming-tie(?:es)|prv-t-w|prv-t-l|prv-t-t|prv-t-w-ot|prv-t-w-so|prv-t-l-ot|prv-t-l-so|prv-t-so|prv-t-ot|upc-t-w|upc-t-l|upc-t-t|upc-t-w-ot|upc-t-w-so|upc-t-l-ot|upc-t-l-so|upc-t-so|upc-t-ot|previous-team-win(?:s)?|previous-team-loss(?:es)?|previous-team-tie(?:es)|upcoming-team-win(?:s)?|upcoming-team-loss(?:es)?|upcoming-team-tie(?:es)|series-team-wins:[\w-]+|series-opponent-wins:[\w-]+|series-score-margin:[\S-]+|series-score-difference:[\S-]+|series-score:[\w-]+|current-team-wins:[\w-]+|current-team-losses:[\w-]+|current-team-ties:[\w-]+|current-team-points:[\w-]+|current-team-games-over-500:[\S-]+|current-opponent-wins:[\w-]+|current-opponent-losses:[\w-]+|current-opponent-ties:[\w-]+|current-opponent-points:[\w-]+|current-opponent-games-over-500:[\S-]+|team-wins:[\w-]+|team-losses:[\w-]+|team-ties:[\w-]+|team-points:[\w-]+|team-games-over-500:[\S-]+|opponent-wins:[\w-]+|opponent-losses:[\w-]+|opponent-ties:[\w-]+|opponent-points:[\w-]+|opponent-games-over-500:[\S-]+|opponent-goals?-rank:[\S-]+|opponent-standings-rank:[\S-]+|opponent-goals?-allowed-rank:[\S-]+|current-opponent-win(?:ning)?-percent:[\S-]+|opponent-win(?:ning)?-percent:[\S-]+|current-opponent-points-percent:[\S-]+|opponent-points-percent:[\S-]+|team-goals?-rank:[\S-]+|team-standings-rank:[\S-]+|team-goals?-allowed-rank:[\S-]+|years?:[\w-]+|current-team-win(?:ning)?-percent:[\S-]+|team-win(?:ning)?-percent:[\S-]+|current-team-points-percent:[\S-]+|team-points-percent:[\S-]+|early-?afternoon|late-?afternoon|morning|early|afternoon|day|night(?:time)?|late|team-conference:[\S-]+|opponent-conference:[\S-]+|team-division:[\S-]+|opponent-division:[\S-]+|birthda(?:y|te)|skat(?:(?:er)|(?:ing))|goalie|skater|" + all_months_re + r"|" + all_days_re + r")\b", time_frame)
                         for m in last_match:
                             qualifier_obj = {}
                             
@@ -8514,7 +8522,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                         "start_val" : ordinal_to_number(split_vals[0]),
                                         "end_val" : ordinal_to_number(split_vals[1])
                                     }
-                            elif qualifier_str.startswith("opponent-goals-rank:") or qualifier_str.startswith("opponent-standings-rank:") or qualifier_str.startswith("opponent-goals-allowed-rank:") or qualifier_str.startswith("opponent-goal-rank:") or qualifier_str.startswith("opponent-goal-allowed-rank:") or qualifier_str.startswith("opponent-win-percent:") or qualifier_str.startswith("opponent-winning-percent:") or qualifier_str.startswith("current-opponent-win-percent:") or qualifier_str.startswith("current-opponent-winning-percent:") or qualifier_str.startswith("team-wins:") or qualifier_str.startswith("team-losses:") or qualifier_str.startswith("team-ties:") or qualifier_str.startswith("opponent-wins:") or qualifier_str.startswith("opponent-losses:") or qualifier_str.startswith("opponent-ties:") or qualifier_str.startswith("current-team-wins:") or qualifier_str.startswith("current-team-losses:") or qualifier_str.startswith("current-team-ties:") or qualifier_str.startswith("current-opponent-wins:") or qualifier_str.startswith("current-opponent-losses:") or qualifier_str.startswith("current-opponent-ties:"):
+                            elif qualifier_str.startswith("opponent-goals-rank:") or qualifier_str.startswith("opponent-standings-rank:") or qualifier_str.startswith("opponent-goals-allowed-rank:") or qualifier_str.startswith("opponent-goal-rank:") or qualifier_str.startswith("opponent-goal-allowed-rank:") or qualifier_str.startswith("opponent-win-percent:") or qualifier_str.startswith("opponent-winning-percent:") or qualifier_str.startswith("current-opponent-win-percent:") or qualifier_str.startswith("current-opponent-winning-percent:") or qualifier_str.startswith("opponent-points-percent:") or qualifier_str.startswith("current-opponent-points-percent:") or qualifier_str.startswith("opponent-wins:") or qualifier_str.startswith("opponent-losses:") or qualifier_str.startswith("opponent-ties:") or qualifier_str.startswith("opponent-points:") or qualifier_str.startswith("current-opponent-wins:") or qualifier_str.startswith("current-opponent-losses:") or qualifier_str.startswith("current-opponent-ties:") or qualifier_str.startswith("current-opponent-points:"):
                                 if qualifier_str.startswith("opponent-goals-rank:"):
                                     qual_str = "opponent-goals-rank:"
                                     qual_type = "Opponent Goals Rank"
@@ -8536,15 +8544,9 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 elif qualifier_str.startswith("opponent-winning-percent:"):
                                     qual_str = "opponent-winning-percent:"
                                     qual_type = "Opponent Win Percentage"
-                                elif qualifier_str.startswith("team-wins:"):
-                                    qual_str = "team-wins:"
-                                    qual_type = "Team Wins"
-                                elif qualifier_str.startswith("team-losses:"):
-                                    qual_str = "team-losses:"
-                                    qual_type = "Team Losses"
-                                elif qualifier_str.startswith("team-ties:"):
-                                    qual_str = "team-ties:"
-                                    qual_type = "Team Ties"
+                                elif qualifier_str.startswith("opponent-points-percent:"):
+                                    qual_str = "opponent-points-percent:"
+                                    qual_type = "Opponent Points Percentage"
                                 elif qualifier_str.startswith("opponent-wins:"):
                                     qual_str = "opponent-wins:"
                                     qual_type = "Opponent Wins"
@@ -8554,15 +8556,9 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 elif qualifier_str.startswith("opponent-ties:"):
                                     qual_str = "opponent-ties:"
                                     qual_type = "Opponent Ties"
-                                elif qualifier_str.startswith("current-team-wins:"):
-                                    qual_str = "current-team-wins:"
-                                    qual_type = "Current Team Wins"
-                                elif qualifier_str.startswith("current-team-losses:"):
-                                    qual_str = "current-team-losses:"
-                                    qual_type = "Current Team Losses"
-                                elif qualifier_str.startswith("current-team-ties:"):
-                                    qual_str = "current-team-ties:"
-                                    qual_type = "Current Team Ties"
+                                elif qualifier_str.startswith("opponent-points:"):
+                                    qual_str = "opponent-points:"
+                                    qual_type = "Opponent Points"
                                 elif qualifier_str.startswith("current-opponent-wins:"):
                                     qual_str = "current-opponent-wins:"
                                     qual_type = "Current Opponent Wins"
@@ -8572,18 +8568,18 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 elif qualifier_str.startswith("current-opponent-ties:"):
                                     qual_str = "current-opponent-ties:"
                                     qual_type = "Current Opponent Ties"
-                                elif qualifier_str.startswith("current-team-win-percent:"):
-                                    qual_str = "current-team-win-percent:"
-                                    qual_type = "Current Team Win Percentage"
-                                elif qualifier_str.startswith("current-team-winning-percent:"):
-                                    qual_str = "current-team-winning-percent:"
-                                    qual_type = "Current Team Win Percentage"
+                                elif qualifier_str.startswith("current-opponent-points:"):
+                                    qual_str = "current-opponent-points:"
+                                    qual_type = "Current Opponent Points"
                                 elif qualifier_str.startswith("current-opponent-win-percent:"):
                                     qual_str = "current-opponent-win-percent:"
                                     qual_type = "Current Opponent Win Percentage"
                                 elif qualifier_str.startswith("current-opponent-winning-percent:"):
                                     qual_str = "current-opponent-winning-percent:"
                                     qual_type = "Current Opponent Win Percentage"
+                                elif qualifier_str.startswith("current-opponent-points-percent:"):
+                                    qual_str = "current-opponent-points-percent:"
+                                    qual_type = "Current Opponent Points Percentage"
 
                                 split_vals = re.split(r"(?<!\\)\:", qualifier_str)
                                 reverse = False
@@ -8593,7 +8589,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
 
                                 split_vals = re.split(r"(?<!\\)\-", re.split(r"(?<!\\)" + qual_str, qualifier_str)[1])
                                 if len(split_vals) == 1:
-                                    if qual_type == "Opponent Win Percentage":
+                                    if qual_type == "Opponent Win Percentage" or qual_type == "Opponent Points Percentage" or qual_type == "Current Opponent Win Percentage" or qual_type == "Current Opponent Points Percentage":
                                         qualifier_obj["values"] = {
                                             "start_val" : ordinal_to_number(split_vals[0]),
                                             "end_val" : 1,
@@ -8612,13 +8608,37 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                         "reverse" : reverse
                                     }
                                 
-                                if qual_type == "Opponent Win Percentage":
+                                if qual_type == "Opponent Win Percentage" or qual_type == "Opponent Points Percentage" or qual_type == "Current Opponent Win Percentage" or qual_type == "Current Opponent Points Percentage":
                                     if qualifier_obj["values"]["start_val"] > 1:
                                         qualifier_obj["values"]["start_val"] = qualifier_obj["values"]["start_val"] / 100
                                     if qualifier_obj["values"]["end_val"] > 1:
                                         qualifier_obj["values"]["end_val"] = qualifier_obj["values"]["end_val"] / 100
-                            elif qualifier_str.startswith("team-goals-rank:") or  qualifier_str.startswith("team-standings-rank:") or qualifier_str.startswith("team-goals-allowed-rank:") or qualifier_str.startswith("team-goal-rank:") or qualifier_str.startswith("team-goal-allowed-rank:") or qualifier_str.startswith("team-win-percent:") or qualifier_str.startswith("team-winning-percent:") or qualifier_str.startswith("current-team-winning-percent:") or qualifier_str.startswith("current-team-win-percent:"):
-                                if qualifier_str.startswith("team-goals-rank:"):
+                            elif qualifier_str.startswith("team-goals-rank:") or  qualifier_str.startswith("team-standings-rank:") or qualifier_str.startswith("team-goals-allowed-rank:") or qualifier_str.startswith("team-goal-rank:") or qualifier_str.startswith("team-goal-allowed-rank:") or qualifier_str.startswith("team-win-percent:") or qualifier_str.startswith("team-wins:") or qualifier_str.startswith("team-losses:") or qualifier_str.startswith("team-ties:") or qualifier_str.startswith("team-points:") or qualifier_str.startswith("current-team-wins:") or qualifier_str.startswith("current-team-losses:") or qualifier_str.startswith("current-team-ties:") or qualifier_str.startswith("current-team-points:") or qualifier_str.startswith("team-winning-percent:") or qualifier_str.startswith("current-team-winning-percent:") or qualifier_str.startswith("current-team-win-percent:") or qualifier_str.startswith("current-team-points-percent:") or qualifier_str.startswith("current-team-points-percent:"):
+                                if qualifier_str.startswith("team-wins:"):
+                                    qual_str = "team-wins:"
+                                    qual_type = "Team Wins"
+                                elif qualifier_str.startswith("team-losses:"):
+                                    qual_str = "team-losses:"
+                                    qual_type = "Team Losses"
+                                elif qualifier_str.startswith("team-ties:"):
+                                    qual_str = "team-ties:"
+                                    qual_type = "Team Ties"
+                                elif qualifier_str.startswith("team-points:"):
+                                    qual_str = "team-points:"
+                                    qual_type = "Team Points"
+                                elif qualifier_str.startswith("current-team-wins:"):
+                                    qual_str = "current-team-wins:"
+                                    qual_type = "Current Team Wins"
+                                elif qualifier_str.startswith("current-team-losses:"):
+                                    qual_str = "current-team-losses:"
+                                    qual_type = "Current Team Losses"
+                                elif qualifier_str.startswith("current-team-ties:"):
+                                    qual_str = "current-team-ties:"
+                                    qual_type = "Current Team Ties"
+                                elif qualifier_str.startswith("current-team-points:"):
+                                    qual_str = "current-team-points:"
+                                    qual_type = "Current Team Points"
+                                elif qualifier_str.startswith("team-goals-rank:"):
                                     qual_str = "team-goals-rank:"
                                     qual_type = "Team Goals Rank"
                                 elif qualifier_str.startswith("team-standings-rank:"):
@@ -8639,6 +8659,18 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 elif qualifier_str.startswith("team-winning-percent:"):
                                     qual_str = "team-winning-percent:"
                                     qual_type = "Team Win Percentage"
+                                elif qualifier_str.startswith("team-points-percent:"):
+                                    qual_str = "team-points-percent:"
+                                    qual_type = "Team Points Percentage"
+                                elif qualifier_str.startswith("current-team-win-percent:"):
+                                    qual_str = "current-team-win-percent:"
+                                    qual_type = "Current Team Win Percentage"
+                                elif qualifier_str.startswith("current-team-winning-percent:"):
+                                    qual_str = "current-team-winning-percent:"
+                                    qual_type = "Current Team Win Percentage"
+                                elif qualifier_str.startswith("current-team-points-percent:"):
+                                    qual_str = "current-team-points-percent:"
+                                    qual_type = "Current Team Points Percentage"
 
                                 split_vals = re.split(r"(?<!\\)\:", qualifier_str)
                                 reverse = False
@@ -8648,7 +8680,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
 
                                 split_vals = re.split(r"(?<!\\)\-", re.split(r"(?<!\\)" + qual_str, qualifier_str)[1])
                                 if len(split_vals) == 1:
-                                    if qual_type == "Team Win Percentage":
+                                    if qual_type == "Team Win Percentage" or qual_type == "Team Points Percentage" or qual_type == "Current Team Win Percentage" or qual_type == "Current Team Points Percentage":
                                         qualifier_obj["values"] = {
                                             "start_val" : ordinal_to_number(split_vals[0]),
                                             "end_val" : 1,
@@ -8667,7 +8699,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                         "reverse" : reverse
                                     }
                                 
-                                if qual_type == "Team Win Percentage":
+                                if qual_type == "Team Win Percentage" or qual_type == "Team Points Percentage" or qual_type == "Current Team Win Percentage" or qual_type == "Current Team Points Percentage":
                                     if qualifier_obj["values"]["start_val"] > 1:
                                         qualifier_obj["values"]["start_val"] = qualifier_obj["values"]["start_val"] / 100
                                     if qualifier_obj["values"]["end_val"] > 1:
@@ -12007,7 +12039,7 @@ def determine_raw_str(subbb_frame):
                         if qual_obj["negate"]:
                             qual_str += "Not "
                         qual_str += "(" + player["query"].replace("Query: ", "", 1) + ")"
-                elif qualifier == "Days Rest" or qualifier == "Career Shot" or qualifier == "Career Shot Reversed" or qualifier == "Game Shot" or qualifier == "Game Shot Reversed" or qualifier == "Upcoming Days Rest" or qualifier == "Starts Days Rest" or qualifier == "Upcoming Starts Days Rest" or qualifier == "Days In A Row" or qualifier == "Games In A Row" or qualifier == "Starts In A Row" or qualifier == "Games Rest" or qualifier == "Starts Rest" or qualifier == "Team Score" or qualifier == "Opponent Score" or qualifier == "Series Team Wins" or qualifier == "Series Opponent Wins" or qualifier == "Series Score Margin" or qualifier == "Series Score Difference" or qualifier == "Game Number" or qualifier == "Season Number" or qualifier == "Final Team Score" or qualifier == "Final Opponent Score" or qualifier == "Team Skaters" or qualifier == "Opponent Skaters" or qualifier == "Team Players" or qualifier == "Opponent Players" or qualifier == "Team Wins" or qualifier == "Team Losses" or qualifier == "Team Ties" or qualifier == "Opponent Wins" or qualifier == "Opponent Losses" or qualifier == "Opponent Ties" or qualifier == "Current Team Wins" or qualifier == "Current Team Losses" or qualifier == "Current Team Ties" or qualifier == "Current Opponent Wins" or qualifier == "Current Opponent Losses" or qualifier == "Current Opponent Ties" or qualifier == "Team Games Over 500" or qualifier == "Opponent Games Over 500" or qualifier == "Current Team Games Over 500" or qualifier == "Current Opponent Games Over 500":
+                elif qualifier == "Days Rest" or qualifier == "Career Shot" or qualifier == "Career Shot Reversed" or qualifier == "Game Shot" or qualifier == "Game Shot Reversed" or qualifier == "Upcoming Days Rest" or qualifier == "Starts Days Rest" or qualifier == "Upcoming Starts Days Rest" or qualifier == "Days In A Row" or qualifier == "Games In A Row" or qualifier == "Starts In A Row" or qualifier == "Games Rest" or qualifier == "Starts Rest" or qualifier == "Team Score" or qualifier == "Opponent Score" or qualifier == "Series Team Wins" or qualifier == "Series Opponent Wins" or qualifier == "Series Score Margin" or qualifier == "Series Score Difference" or qualifier == "Game Number" or qualifier == "Season Number" or qualifier == "Final Team Score" or qualifier == "Final Opponent Score" or qualifier == "Team Skaters" or qualifier == "Opponent Skaters" or qualifier == "Team Players" or qualifier == "Opponent Players" or qualifier == "Team Wins" or qualifier == "Team Losses" or qualifier == "Team Ties" or qualifier == "Team Points" or qualifier == "Opponent Wins" or qualifier == "Opponent Losses" or qualifier == "Opponent Ties" or qualifier == "Opponent Points" or qualifier == "Current Team Wins" or qualifier == "Current Team Losses" or qualifier == "Current Team Ties" or qualifier == "Current Team Points" or qualifier == "Current Opponent Wins" or qualifier == "Current Opponent Losses" or qualifier == "Current Opponent Ties" or qualifier == "Current Opponent Points" or qualifier == "Team Games Over 500" or qualifier == "Opponent Games Over 500" or qualifier == "Current Team Games Over 500" or qualifier == "Current Opponent Games Over 500":
                     if qual_obj["negate"]:
                         qual_str += "Not "
                     if qual_obj["values"]["start_val"] == qual_obj["values"]["end_val"]:
@@ -12081,7 +12113,7 @@ def determine_raw_str(subbb_frame):
                         qual_str += (get_time_str(qual_obj["values"]["start_val"], True)) + "-" + (get_time_str(qual_obj["values"]["end_val"], True))
                         if "reverse" in qual_obj["values"] and qual_obj["values"]["reverse"]:
                             qual_str += " [Reverse]"
-                elif qualifier == "Opponent Win Percentage" or qualifier == "Team Win Percentage" or qualifier == "Current Opponent Win Percentage" or qualifier == "Current Team Win Percentage":
+                elif qualifier == "Opponent Win Percentage" or qualifier == "Team Win Percentage" or qualifier == "Current Opponent Win Percentage" or qualifier == "Current Team Win Percentage" or qualifier == "Opponent Points Percentage" or qualifier == "Team Points Percentage" or qualifier == "Current Opponent Points Percentage" or qualifier == "Current Team Points Percentage":
                     if qual_obj["negate"]:
                         qual_str += "Not "
                     if qual_obj["values"]["start_val"] == qual_obj["values"]["end_val"]:
@@ -12439,7 +12471,7 @@ def handle_player_data(player_data, time_frame, player_type, player_page, valid_
     is_qual_match = False
     is_qual_match_excl_round = False
     for qualifier in time_frame["qualifiers"]:
-        if qualifier != "Team" and qualifier != "Team Franchise" and qualifier != "Team Conference" and qualifier != "Team Division" and qualifier != "Rookie" and qualifier != "Max Stat" and qualifier != "Min Stat" and qualifier != "Max Streak" and qualifier != "Max Stretch" and qualifier != "Count Streak" and qualifier != "Quickest"  and qualifier != "Slowest" and qualifier != "Season Stat" and qualifier != "Season Age" and qualifier != "Season" and qualifier != "Season Reversed" and qualifier != "Previous Season Stat"  and qualifier != "Upcoming Season Stat" and qualifier != "Season Sub Query" and qualifier != "Season Before Sub Query" and qualifier != "Season After Sub Query" and qualifier != "Winning Team" and  qualifier != "Losing Team" and qualifier !=  "Winning Or Tied Team" and qualifier !=  "Losing Or Tied Team" and  qualifier != "Tied Team" and  qualifier != "Playoff Team" and qualifier != "Team Win Percentage" and qualifier != "Team Games Over 500" and qualifier != "Team Wins" and qualifier != "Team Losses" and qualifier != "Team Ties" and  qualifier != "Cup Winner Team" and qualifier != "Conference Winner Team" and  qualifier != "Team Goals Rank" and  qualifier != "Team Goals Allowed Rank" and qualifier != "Season Formula" and qualifier != "Season Number" and qualifier != "Even Year" and qualifier != "Odd Year" and qualifier != "Year":
+        if qualifier != "Team" and qualifier != "Team Franchise" and qualifier != "Team Conference" and qualifier != "Team Division" and qualifier != "Rookie" and qualifier != "Max Stat" and qualifier != "Min Stat" and qualifier != "Max Streak" and qualifier != "Max Stretch" and qualifier != "Count Streak" and qualifier != "Quickest"  and qualifier != "Slowest" and qualifier != "Season Stat" and qualifier != "Season Age" and qualifier != "Season" and qualifier != "Season Reversed" and qualifier != "Previous Season Stat"  and qualifier != "Upcoming Season Stat" and qualifier != "Season Sub Query" and qualifier != "Season Before Sub Query" and qualifier != "Season After Sub Query" and qualifier != "Winning Team" and  qualifier != "Losing Team" and qualifier !=  "Winning Or Tied Team" and qualifier !=  "Losing Or Tied Team" and  qualifier != "Tied Team" and  qualifier != "Playoff Team" and qualifier != "Team Win Percentage" and qualifier != "Team Points Percentage" and qualifier != "Team Games Over 500" and qualifier != "Team Wins" and qualifier != "Team Losses" and qualifier != "Team Ties" and qualifier != "Team Points" and  qualifier != "Cup Winner Team" and qualifier != "Conference Winner Team" and  qualifier != "Team Goals Rank" and  qualifier != "Team Goals Allowed Rank" and qualifier != "Season Formula" and qualifier != "Season Number" and qualifier != "Even Year" and qualifier != "Odd Year" and qualifier != "Year":
             is_qual_match = True
             if qualifier != "Round":
                 is_qual_match_excl_round = True
@@ -12628,10 +12660,10 @@ def handle_player_data(player_data, time_frame, player_type, player_page, valid_
             if str(year) not in all_star_games:
                 needs_half = True
 
-    if has_result_stat_qual or "Time" in time_frame["qualifiers"] or "Arena" in time_frame["qualifiers"] or "Exact Arena" in time_frame["qualifiers"] or "Result" in time_frame["qualifiers"] or "Previous Result" in time_frame["qualifiers"] or "Upcoming Result" in time_frame["qualifiers"] or "Elimination" in time_frame["qualifiers"] or "Clinching" in time_frame["qualifiers"] or "Elimination Or Clinching" in time_frame["qualifiers"] or "Winner Take All" in time_frame["qualifiers"] or "Ahead In Series" in time_frame["qualifiers"] or "Behind In Series" in time_frame["qualifiers"] or "Even In Series" in time_frame["qualifiers"] or "Series Team Wins" in time_frame["qualifiers"] or "Series Opponent Wins" in time_frame["qualifiers"] or "Series Score Margin" in time_frame["qualifiers"] or "Series Score Difference" in time_frame["qualifiers"] or "Round" in time_frame["qualifiers"] or "Series Game" in time_frame["qualifiers"] or "Final Team Score" in time_frame["qualifiers"] or "Final Opponent Score" in time_frame["qualifiers"] or "Final Score Margin" in time_frame["qualifiers"] or "Final Score Difference" in time_frame["qualifiers"] or "Team Game" in time_frame["qualifiers"] or "Team Game Reversed" in time_frame["qualifiers"] or "Games Rest" in time_frame["qualifiers"] or "Starts Rest" in time_frame["qualifiers"] or "Days In A Row" in time_frame["qualifiers"] or "Games In A Row" in time_frame["qualifiers"] or "Starts In A Row" in time_frame["qualifiers"] or "Previous Team Result" in time_frame["qualifiers"] or "Upcoming Team Result" in time_frame["qualifiers"] or "National Game" in time_frame["qualifiers"] or "Any National Game" in time_frame["qualifiers"] or "US National Game" in time_frame["qualifiers"] or "Any US National Game" in time_frame["qualifiers"] or "CA National Game" in time_frame["qualifiers"] or "Any CA National Game" in time_frame["qualifiers"] or "TV Network" in time_frame["qualifiers"] or "Raw TV Network" in time_frame["qualifiers"] or "National TV Network" in time_frame["qualifiers"] or "National Raw TV Network" in time_frame["qualifiers"] or "Any National TV Network" in time_frame["qualifiers"] or "Any National Raw TV Network" in time_frame["qualifiers"] or "Start Time" in time_frame["qualifiers"] or "Current Winning Opponent" in time_frame["qualifiers"] or "Current Losing Opponent" in time_frame["qualifiers"] or "Current Tied Opponent" in time_frame["qualifiers"] or "Current Winning Or Tied Opponent" in time_frame["qualifiers"] or "Current Losing Or Tied Opponent" in time_frame["qualifiers"] or "Current Winning Team" in time_frame["qualifiers"] or "Current Losing Team" in time_frame["qualifiers"] or "Current Tied Team" in time_frame["qualifiers"] or "Current Winning Or Tied Team" in time_frame["qualifiers"] or "Current Losing Or Tied Team" in time_frame["qualifiers"] or "Current Team Win Percentage" in time_frame["qualifiers"] or "Current Opponent Win Percentage" in time_frame["qualifiers"] or "Current Team Wins" in time_frame["qualifiers"] or "Current Team Losses" in time_frame["qualifiers"] or "Current Team Ties" in time_frame["qualifiers"] or "Current Opponent Wins" in time_frame["qualifiers"] or "Current Opponent Losses" in time_frame["qualifiers"] or "Current Opponent Ties" in time_frame["qualifiers"] or "Current Team Games Over 500" in time_frame["qualifiers"] or "Current Opponent Games Over 500" in time_frame["qualifiers"] or needs_half or "score" in extra_stats or "record" in extra_stats:
+    if has_result_stat_qual or "Time" in time_frame["qualifiers"] or "Arena" in time_frame["qualifiers"] or "Exact Arena" in time_frame["qualifiers"] or "Result" in time_frame["qualifiers"] or "Previous Result" in time_frame["qualifiers"] or "Upcoming Result" in time_frame["qualifiers"] or "Elimination" in time_frame["qualifiers"] or "Clinching" in time_frame["qualifiers"] or "Elimination Or Clinching" in time_frame["qualifiers"] or "Winner Take All" in time_frame["qualifiers"] or "Ahead In Series" in time_frame["qualifiers"] or "Behind In Series" in time_frame["qualifiers"] or "Even In Series" in time_frame["qualifiers"] or "Series Team Wins" in time_frame["qualifiers"] or "Series Opponent Wins" in time_frame["qualifiers"] or "Series Score Margin" in time_frame["qualifiers"] or "Series Score Difference" in time_frame["qualifiers"] or "Round" in time_frame["qualifiers"] or "Series Game" in time_frame["qualifiers"] or "Final Team Score" in time_frame["qualifiers"] or "Final Opponent Score" in time_frame["qualifiers"] or "Final Score Margin" in time_frame["qualifiers"] or "Final Score Difference" in time_frame["qualifiers"] or "Team Game" in time_frame["qualifiers"] or "Team Game Reversed" in time_frame["qualifiers"] or "Games Rest" in time_frame["qualifiers"] or "Starts Rest" in time_frame["qualifiers"] or "Days In A Row" in time_frame["qualifiers"] or "Games In A Row" in time_frame["qualifiers"] or "Starts In A Row" in time_frame["qualifiers"] or "Previous Team Result" in time_frame["qualifiers"] or "Upcoming Team Result" in time_frame["qualifiers"] or "National Game" in time_frame["qualifiers"] or "Any National Game" in time_frame["qualifiers"] or "US National Game" in time_frame["qualifiers"] or "Any US National Game" in time_frame["qualifiers"] or "CA National Game" in time_frame["qualifiers"] or "Any CA National Game" in time_frame["qualifiers"] or "TV Network" in time_frame["qualifiers"] or "Raw TV Network" in time_frame["qualifiers"] or "National TV Network" in time_frame["qualifiers"] or "National Raw TV Network" in time_frame["qualifiers"] or "Any National TV Network" in time_frame["qualifiers"] or "Any National Raw TV Network" in time_frame["qualifiers"] or "Start Time" in time_frame["qualifiers"] or "Current Winning Opponent" in time_frame["qualifiers"] or "Current Losing Opponent" in time_frame["qualifiers"] or "Current Tied Opponent" in time_frame["qualifiers"] or "Current Winning Or Tied Opponent" in time_frame["qualifiers"] or "Current Losing Or Tied Opponent" in time_frame["qualifiers"] or "Current Winning Team" in time_frame["qualifiers"] or "Current Losing Team" in time_frame["qualifiers"] or "Current Tied Team" in time_frame["qualifiers"] or "Current Winning Or Tied Team" in time_frame["qualifiers"] or "Current Losing Or Tied Team" in time_frame["qualifiers"] or "Current Team Win Percentage" in time_frame["qualifiers"] or "Current Opponent Win Percentage" in time_frame["qualifiers"] or "Current Team Points Percentage" in time_frame["qualifiers"] or "Current Opponent Points Percentage" in time_frame["qualifiers"] or "Current Team Wins" in time_frame["qualifiers"] or "Current Team Losses" in time_frame["qualifiers"] or "Current Team Ties" in time_frame["qualifiers"] or "Current Team Points" in time_frame["qualifiers"] or "Current Opponent Wins" in time_frame["qualifiers"] or "Current Opponent Losses" in time_frame["qualifiers"] or "Current Opponent Ties" in time_frame["qualifiers"] or "Current Opponent Points" in time_frame["qualifiers"] or "Current Team Games Over 500" in time_frame["qualifiers"] or "Current Opponent Games Over 500" in time_frame["qualifiers"] or needs_half or "score" in extra_stats or "record" in extra_stats:
         all_rows, missing_games = handle_schedule_stats(player_data, all_rows, time_frame["qualifiers"], time_frame["playoffs"], missing_games)
     
-    if "Winning Opponent" in time_frame["qualifiers"] or "Losing Opponent" in time_frame["qualifiers"] or "Tied Opponent" in time_frame["qualifiers"] or "Winning Or Tied Opponent" in time_frame["qualifiers"] or "Losing Or Tied Opponent" in time_frame["qualifiers"] or "Playoff Opponent" in time_frame["qualifiers"] or "Cup Winner Opponent" in time_frame["qualifiers"] or "Conference Winner Opponent" in time_frame["qualifiers"] or "Opponent Goals Rank" in time_frame["qualifiers"] or "Opponent Goals Allowed Rank" in time_frame["qualifiers"] or "Opponent Win Percentage" in time_frame["qualifiers"] or "Winning Team" in time_frame["qualifiers"] or "Losing Team" in time_frame["qualifiers"] or "Tied Team" in time_frame["qualifiers"] or "Winning Or Tied Team" in time_frame["qualifiers"] or "Losing Or Tied Team" in time_frame["qualifiers"] or "Playoff Team" in time_frame["qualifiers"] or "Cup Winner Team" in time_frame["qualifiers"] or "Conference Winner Team" in time_frame["qualifiers"] or "Team Goals Rank" in time_frame["qualifiers"] or "Team Goals Allowed Rank" in time_frame["qualifiers"] or "Team Win Percentage" in time_frame["qualifiers"] or "Team Wins" in time_frame["qualifiers"] or "Team Losses" in time_frame["qualifiers"] or "Team Ties" in time_frame["qualifiers"] or "Opponent Wins" in time_frame["qualifiers"] or "Opponent Losses" in time_frame["qualifiers"] or "Opponent Ties" in time_frame["qualifiers"] or "Team Conference" in time_frame["qualifiers"] or "Team Division" in time_frame["qualifiers"] or "Opponent Conference" in time_frame["qualifiers"] or "Opponent Division" in time_frame["qualifiers"] or "Interconference" in time_frame["qualifiers"] or "Intraconference" in time_frame["qualifiers"] or "Intradivision" in time_frame["qualifiers"] or "Interdivision" in time_frame["qualifiers"] or "Team Standings Rank" in time_frame["qualifiers"] or "Opponent Standings Rank" in time_frame["qualifiers"] or "Team Games Over 500" in time_frame["qualifiers"] or "Opponent Games Over 500" in time_frame["qualifiers"]:
+    if "Winning Opponent" in time_frame["qualifiers"] or "Losing Opponent" in time_frame["qualifiers"] or "Tied Opponent" in time_frame["qualifiers"] or "Winning Or Tied Opponent" in time_frame["qualifiers"] or "Losing Or Tied Opponent" in time_frame["qualifiers"] or "Playoff Opponent" in time_frame["qualifiers"] or "Cup Winner Opponent" in time_frame["qualifiers"] or "Conference Winner Opponent" in time_frame["qualifiers"] or "Opponent Goals Rank" in time_frame["qualifiers"] or "Opponent Goals Allowed Rank" in time_frame["qualifiers"] or "Opponent Win Percentage" in time_frame["qualifiers"] or "Opponent Points Percentage" in time_frame["qualifiers"] or "Winning Team" in time_frame["qualifiers"] or "Losing Team" in time_frame["qualifiers"] or "Tied Team" in time_frame["qualifiers"] or "Winning Or Tied Team" in time_frame["qualifiers"] or "Losing Or Tied Team" in time_frame["qualifiers"] or "Playoff Team" in time_frame["qualifiers"] or "Cup Winner Team" in time_frame["qualifiers"] or "Conference Winner Team" in time_frame["qualifiers"] or "Team Goals Rank" in time_frame["qualifiers"] or "Team Goals Allowed Rank" in time_frame["qualifiers"] or "Team Win Percentage" in time_frame["qualifiers"] or "Team Points Percentage" in time_frame["qualifiers"] or "Team Wins" in time_frame["qualifiers"] or "Team Losses" in time_frame["qualifiers"] or "Team Ties" in time_frame["qualifiers"] or "Team Points" in time_frame["qualifiers"] or "Opponent Wins" in time_frame["qualifiers"] or "Opponent Losses" in time_frame["qualifiers"] or "Opponent Ties" in time_frame["qualifiers"] or "Opponent Points" in time_frame["qualifiers"] or "Team Conference" in time_frame["qualifiers"] or "Team Division" in time_frame["qualifiers"] or "Opponent Conference" in time_frame["qualifiers"] or "Opponent Division" in time_frame["qualifiers"] or "Interconference" in time_frame["qualifiers"] or "Intraconference" in time_frame["qualifiers"] or "Intradivision" in time_frame["qualifiers"] or "Interdivision" in time_frame["qualifiers"] or "Team Standings Rank" in time_frame["qualifiers"] or "Opponent Standings Rank" in time_frame["qualifiers"] or "Team Games Over 500" in time_frame["qualifiers"] or "Opponent Games Over 500" in time_frame["qualifiers"]:
         all_rows = handle_opponent_schedule_stats(all_rows, time_frame["qualifiers"])
 
     has_neg_qual = False
@@ -14025,6 +14057,7 @@ def handle_opponent_schedule_stats(all_rows, qualifiers):
                 row_data["OppWins"] = opponent_data["Wins"]
                 row_data["OppLosses"] = opponent_data["Losses"]
                 row_data["OppTies"] = opponent_data["Ties"]
+                row_data["OppOTLosses"] = opponent_data["OTLosses"]
                 row_data["OppGoals"] = opponent_data["Goals"]
                 row_data["OppGoalsAllowed"] = opponent_data["GoalsAllowed"]
                 row_data["OppGoalDiff"] = opponent_data["GoalDiff"]
@@ -14049,6 +14082,7 @@ def handle_opponent_schedule_stats(all_rows, qualifiers):
                 row_data["TmWins"] = team_data["Wins"]
                 row_data["TmLosses"] = team_data["Losses"]
                 row_data["TmTies"] = team_data["Ties"]
+                row_data["TmOTLosses"] = opponent_data["OTLosses"]
                 row_data["TmGoals"] = team_data["Goals"]
                 row_data["TmGoalsAllowed"] = team_data["GoalsAllowed"]
                 row_data["TmGoalDiff"] = team_data["GoalDiff"]
@@ -14071,7 +14105,7 @@ def handle_opponent_schedule_stats(all_rows, qualifiers):
 
 def perform_opponent_schedule_qualifiers(row, qualifiers):
     if "Winning Opponent" in qualifiers:
-        opponent_match = row["OppWins"] > row["OppLosses"]
+        opponent_match = row["OppWins"] > (row["OppLosses"] + row["OppOTLosses"])
         for qual_object in qualifiers["Winning Opponent"]:
             if qual_object["negate"]:
                 if opponent_match:
@@ -14081,7 +14115,7 @@ def perform_opponent_schedule_qualifiers(row, qualifiers):
                     return False
     
     if "Losing Opponent" in qualifiers:
-        opponent_match = row["OppWins"] < row["OppLosses"]
+        opponent_match = row["OppWins"] < (row["OppLosses"] + row["OppOTLosses"])
         for qual_object in qualifiers["Losing Opponent"]:
             if qual_object["negate"]:
                 if opponent_match:
@@ -14091,7 +14125,7 @@ def perform_opponent_schedule_qualifiers(row, qualifiers):
                     return False
     
     if "Tied Opponent" in qualifiers:   
-        opponent_match = row["OppWins"] == row["OppLosses"]
+        opponent_match = row["OppWins"] == (row["OppLosses"] + row["OppOTLosses"])
         for qual_object in qualifiers["Tied Opponent"]:
             if qual_object["negate"]:
                 if opponent_match:
@@ -14101,7 +14135,7 @@ def perform_opponent_schedule_qualifiers(row, qualifiers):
                     return False
     
     if "Winning Or Tied Opponent" in qualifiers:
-        opponent_match = row["OppWins"] >= row["OppLosses"]
+        opponent_match = row["OppWins"] >= (row["OppLosses"] + row["OppOTLosses"])
         for qual_object in qualifiers["Winning Or Tied Opponent"]:
             if qual_object["negate"]:
                 if opponent_match:
@@ -14112,7 +14146,7 @@ def perform_opponent_schedule_qualifiers(row, qualifiers):
     
     
     if "Losing Or Tied Opponent" in qualifiers:
-        opponent_match = row["OppWins"] <= row["OppLosses"]
+        opponent_match = row["OppWins"] <= (row["OppLosses"] + row["OppOTLosses"])
         for qual_object in qualifiers["Losing Or Tied Opponent"]:
             if qual_object["negate"]:
                 if opponent_match:
@@ -14177,7 +14211,7 @@ def perform_opponent_schedule_qualifiers(row, qualifiers):
     
     if "Opponent Win Percentage" in qualifiers:
         for qual_object in qualifiers["Opponent Win Percentage"]:
-            win_percentage = row["OppWins"] / (row["OppWins"] + row["OppLosses"])
+            win_percentage = row["OppWins"] / (row["OppWins"] + (row["OppLosses"] + row["OppOTLosses"]))
             if qual_object["negate"]:
                 if win_percentage >= qual_object["values"]["start_val"] and win_percentage <= qual_object["values"]["end_val"]:
                     return False
@@ -14185,9 +14219,20 @@ def perform_opponent_schedule_qualifiers(row, qualifiers):
                 if not (win_percentage >= qual_object["values"]["start_val"] and win_percentage <= qual_object["values"]["end_val"]):
                     return False
 
+    if "Opponent Points Percentage " in qualifiers:
+        for qual_object in qualifiers["Opponent Points Percentage"]:
+            points = (row["OppWins"] * 2) + (row["OppTies"] * 1) + (row["OppOTLosses"] * 1)
+            points_percentage = points / ((row["OppWins"] + row["OppLosses"] + row["OppTies"] + row["OppOTLosses"]) * 2)
+            if qual_object["negate"]:
+                if points_percentage >= qual_object["values"]["start_val"] and points_percentage <= qual_object["values"]["end_val"]:
+                    return False
+            else:
+                if not (points_percentage >= qual_object["values"]["start_val"] and points_percentage <= qual_object["values"]["end_val"]):
+                    return False
+
     if "Opponent Games Over 500" in qualifiers:
         for qual_object in qualifiers["Opponent Games Over 500"]:
-            games_over_500 = row["OppWins"] - row["OppLosses"]
+            games_over_500 = row["OppWins"] - (row["OppLosses"] + row["OppOTLosses"])
             if qual_object["negate"]:
                 if games_over_500 >= qual_object["values"]["start_val"] and games_over_500 <= qual_object["values"]["end_val"]:
                     return False
@@ -14216,7 +14261,7 @@ def perform_opponent_schedule_qualifiers(row, qualifiers):
                     return False
     
     if "Winning Team" in qualifiers:
-        team_match = row["TmWins"] > row["TmLosses"]
+        team_match = row["TmWins"] > (row["TmLosses"] + row["TmOTLosses"])
         for qual_object in qualifiers["Winning Team"]:
             if qual_object["negate"]:
                 if team_match:
@@ -14226,7 +14271,7 @@ def perform_opponent_schedule_qualifiers(row, qualifiers):
                     return False
     
     if "Losing Team" in qualifiers:
-        team_match = row["TmWins"] < row["TmLosses"]
+        team_match = row["TmWins"] < (row["TmLosses"] + row["TmOTLosses"])
         for qual_object in qualifiers["Losing Team"]:
             if qual_object["negate"]:
                 if team_match:
@@ -14236,7 +14281,7 @@ def perform_opponent_schedule_qualifiers(row, qualifiers):
                     return False
     
     if "Tied Team" in qualifiers:   
-        team_match = row["TmWins"] == row["TmLosses"]
+        team_match = row["TmWins"] == (row["TmLosses"] + row["TmOTLosses"])
         for qual_object in qualifiers["Tied Team"]:
             if qual_object["negate"]:
                 if team_match:
@@ -14246,7 +14291,7 @@ def perform_opponent_schedule_qualifiers(row, qualifiers):
                     return False
     
     if "Winning Or Tied Team" in qualifiers:
-        team_match = row["TmWins"] >= row["TmLosses"]
+        team_match = row["TmWins"] >= (row["TmLosses"] + row["TmOTLosses"])
         for qual_object in qualifiers["Winning Or Tied Team"]:
             if qual_object["negate"]:
                 if team_match:
@@ -14256,7 +14301,7 @@ def perform_opponent_schedule_qualifiers(row, qualifiers):
                     return False
     
     if "Losing Or Tied Team" in qualifiers:
-        team_match = row["TmWins"] <= row["TmLosses"]
+        team_match = row["TmWins"] <= (row["TmLosses"] + row["TmOTLosses"])
         for qual_object in qualifiers["Losing Or Tied Team"]:
             if qual_object["negate"]:
                 if team_match:
@@ -14321,17 +14366,28 @@ def perform_opponent_schedule_qualifiers(row, qualifiers):
     
     if "Team Win Percentage" in qualifiers:
         for qual_object in qualifiers["Team Win Percentage"]:
-            win_percentage = row["TmWins"] / (row["TmWins"] + row["TmLosses"])
+            win_percentage = row["TmWins"] / (row["TmWins"] + (row["TmLosses"] + row["TmOTLosses"]))
             if qual_object["negate"]:
                 if win_percentage >= qual_object["values"]["start_val"] and win_percentage <= qual_object["values"]["end_val"]:
                     return False
             else:
                 if not (win_percentage >= qual_object["values"]["start_val"] and win_percentage <= qual_object["values"]["end_val"]):
                     return False
+
+    if "Team Points Percentage " in qualifiers:
+        for qual_object in qualifiers["Team Points Percentage"]:
+            points = (row["TmWins"] * 2) + (row["TmTies"] * 1) + (row["TmOTLosses"] * 1)
+            points_percentage = points / ((row["TmWins"] + row["TmLosses"] + row["TmTies"] + row["TmOTLosses"]) * 2)
+            if qual_object["negate"]:
+                if points_percentage >= qual_object["values"]["start_val"] and points_percentage <= qual_object["values"]["end_val"]:
+                    return False
+            else:
+                if not (points_percentage >= qual_object["values"]["start_val"] and points_percentage <= qual_object["values"]["end_val"]):
+                    return False
     
     if "Team Games Over 500" in qualifiers:
         for qual_object in qualifiers["Team Games Over 500"]:
-            games_over_500 = row["TmWins"] - row["TmLosses"]
+            games_over_500 = row["TmWins"] - (row["TmLosses"] + row["TmOTLosses"])
             if qual_object["negate"]:
                 if games_over_500 >= qual_object["values"]["start_val"] and games_over_500 <= qual_object["values"]["end_val"]:
                     return False
@@ -14351,10 +14407,10 @@ def perform_opponent_schedule_qualifiers(row, qualifiers):
     if "Team Losses" in qualifiers:
         for qual_object in qualifiers["Team Losses"]:
             if qual_object["negate"]:
-                if row["TmLosses"] >= qual_object["values"]["start_val"] and row["TmLosses"] <= qual_object["values"]["end_val"]:
+                if (row["TmLosses"] + row["TmOTLosses"]) >= qual_object["values"]["start_val"] and (row["TmLosses"] + row["TmOTLosses"]) <= qual_object["values"]["end_val"]:
                     return False
             else:
-                if not (row["TmLosses"] >= qual_object["values"]["start_val"] and row["TmLosses"] <= qual_object["values"]["end_val"]):
+                if not ((row["TmLosses"] + row["TmOTLosses"]) >= qual_object["values"]["start_val"] and (row["TmLosses"] + row["TmOTLosses"]) <= qual_object["values"]["end_val"]):
                     return False
     
     if "Team Ties" in qualifiers:
@@ -14364,6 +14420,16 @@ def perform_opponent_schedule_qualifiers(row, qualifiers):
                     return False
             else:
                 if not (row["TmTies"] >= qual_object["values"]["start_val"] and row["TmTies"] <= qual_object["values"]["end_val"]):
+                    return False
+
+    if "Team Points" in qualifiers:
+        for qual_object in qualifiers["Team Points"]:
+            points = (row["TmWins"] * 2) + (row["TmTies"] * 1) + (row["TmOTLosses"] * 1)
+            if qual_object["negate"]:
+                if points >= qual_object["values"]["start_val"] and points <= qual_object["values"]["end_val"]:
+                    return False
+            else:
+                if not (points >= qual_object["values"]["start_val"] and points <= qual_object["values"]["end_val"]):
                     return False
     
     if "Opponent Wins" in qualifiers:
@@ -14378,10 +14444,10 @@ def perform_opponent_schedule_qualifiers(row, qualifiers):
     if "Opponent Losses" in qualifiers:
         for qual_object in qualifiers["Opponent Losses"]:
             if qual_object["negate"]:
-                if row["OppLosses"] >= qual_object["values"]["start_val"] and row["OppLosses"] <= qual_object["values"]["end_val"]:
+                if (row["OppLosses"] + row["OppOTLosses"]) >= qual_object["values"]["start_val"] and (row["OppLosses"] + row["OppOTLosses"]) <= qual_object["values"]["end_val"]:
                     return False
             else:
-                if not (row["OppLosses"] >= qual_object["values"]["start_val"] and row["OppLosses"] <= qual_object["values"]["end_val"]):
+                if not ((row["OppLosses"] + row["OppOTLosses"]) >= qual_object["values"]["start_val"] and (row["OppLosses"] + row["OppOTLosses"]) <= qual_object["values"]["end_val"]):
                     return False
     
     if "Opponent Ties" in qualifiers:
@@ -14391,6 +14457,16 @@ def perform_opponent_schedule_qualifiers(row, qualifiers):
                     return False
             else:
                 if not (row["OppTies"] >= qual_object["values"]["start_val"] and row["OppTies"] <= qual_object["values"]["end_val"]):
+                    return False
+    
+    if "Opponent Points" in qualifiers:
+        for qual_object in qualifiers["Opponent Points"]:
+            points = (row["OppWins"] * 2) + (row["OppTies"] * 1) + (row["OppOTLosses"] * 1)
+            if qual_object["negate"]:
+                if points >= qual_object["values"]["start_val"] and points <= qual_object["values"]["end_val"]:
+                    return False
+            else:
+                if not (points >= qual_object["values"]["start_val"] and points <= qual_object["values"]["end_val"]):
                     return False
     
     if "Team Conference" in qualifiers:
@@ -14530,8 +14606,9 @@ def get_opponent_schedule(seasons):
                         row_data["Ties"] = 0
                         if ties_el:
                             row_data["Ties"] += int(str(ties_el.find(text=True)))
+                        row_data["OTLosses"] = 0
                         if ot_losses_el:
-                            row_data["Losses"] += int(str(ot_losses_el.find(text=True)))
+                            row_data["OTLosses"] += int(str(ot_losses_el.find(text=True)))
                         row_data["Goals"] = float(str(row.find("td", {"data-stat" : "goals"}).find(text=True)))
                         row_data["GoalsAllowed"] = float(str(row.find("td", {"data-stat" : "goals_against"}).find(text=True)))
                         row_data["GoalDiff"] = row_data["Goals"] - row_data["GoalsAllowed"]
@@ -15096,57 +15173,62 @@ def get_nhl_schedule(player_data, all_rows, qualifiers):
                         row_data["Team Goals"] -= 1
                     else:
                         row_data["Opponent Goals"] -= 1
+                is_ot = False
+                if not is_shootout and len(game["games"][0]["linescore"]["periods"]) > 3:
+                    is_ot = True
 
                 if is_home:
                     row_data["CurrTmWins"] = game["games"][0]["teams"]["home"]["leagueRecord"]["wins"]
                     row_data["CurrTmLosses"] = game["games"][0]["teams"]["home"]["leagueRecord"]["losses"]
+                    row_data["CurrTmTies"] = 0
+                    row_data["CurrTmOTLosses"] = 0
                     if "ot" in game["games"][0]["teams"]["home"]["leagueRecord"]:
-                        row_data["CurrTmTies"] = 0
-                        row_data["CurrTmLosses"] += game["games"][0]["teams"]["home"]["leagueRecord"]["ot"]
+                        row_data["CurrTmOTLosses"] += game["games"][0]["teams"]["home"]["leagueRecord"]["ot"]
                     elif "ties" in game["games"][0]["teams"]["home"]["leagueRecord"]:
                         row_data["CurrTmTies"] = game["games"][0]["teams"]["home"]["leagueRecord"]["ties"]
-                    else:
-                        row_data["CurrTmTies"] = 0
 
                     row_data["CurrOppWins"] = game["games"][0]["teams"]["away"]["leagueRecord"]["wins"]
                     row_data["CurrOppLosses"] = game["games"][0]["teams"]["away"]["leagueRecord"]["losses"]
+                    row_data["CurrOppTies"] = 0
+                    row_data["CurrOppOTLosses"] = 0
                     if "ot" in game["games"][0]["teams"]["away"]["leagueRecord"]:
-                        row_data["CurrOppTies"] = 0
-                        row_data["CurrOppLosses"] += game["games"][0]["teams"]["away"]["leagueRecord"]["ot"]
+                        row_data["CurrOppOTLosses"] += game["games"][0]["teams"]["away"]["leagueRecord"]["ot"]
                     elif "ties" in game["games"][0]["teams"]["away"]["leagueRecord"]:
                         row_data["CurrOppTies"] = game["games"][0]["teams"]["away"]["leagueRecord"]["ties"]
-                    else:
-                        row_data["CurrOppTies"] = 0
                 else:
                     row_data["CurrTmWins"] = game["games"][0]["teams"]["away"]["leagueRecord"]["wins"]
                     row_data["CurrTmLosses"] = game["games"][0]["teams"]["away"]["leagueRecord"]["losses"]
+                    row_data["CurrTmTies"] = 0
+                    row_data["CurrTmOTLosses"] = 0
                     if "ot" in game["games"][0]["teams"]["away"]["leagueRecord"]:
-                        row_data["CurrTmTies"] = 0
-                        row_data["CurrTmLosses"] += game["games"][0]["teams"]["away"]["leagueRecord"]["ot"]
+                        row_data["CurrTmOTLosses"] += game["games"][0]["teams"]["away"]["leagueRecord"]["ot"]
                     elif "ties" in game["games"][0]["teams"]["away"]["leagueRecord"]:
                         row_data["CurrTmTies"] = game["games"][0]["teams"]["away"]["leagueRecord"]["ties"]
-                    else:
-                        row_data["CurrTmTies"] = 0
 
                     row_data["CurrOppWins"] = game["games"][0]["teams"]["home"]["leagueRecord"]["wins"]
                     row_data["CurrOppLosses"] = game["games"][0]["teams"]["home"]["leagueRecord"]["losses"]
+                    row_data["CurrOppTies"] = 0
+                    row_data["CurrOppOTLosses"] = 0
                     if "ot" in game["games"][0]["teams"]["home"]["leagueRecord"]:
-                        row_data["CurrOppTies"] = 0
-                        row_data["CurrOppLosses"] += game["games"][0]["teams"]["home"]["leagueRecord"]["ot"]
+                        row_data["CurrOppOTLosses"] += game["games"][0]["teams"]["home"]["leagueRecord"]["ot"]
                     elif "ties" in game["games"][0]["teams"]["home"]["leagueRecord"]:
                         row_data["CurrOppTies"] = game["games"][0]["teams"]["home"]["leagueRecord"]["ties"]
-                    else:
-                        row_data["CurrOppTies"] = 0
 
                 if is_final:
                     if row_data["Team Score"] > row_data["Opponent Score"]:
                         result_str = "W"
                         row_data["CurrTmWins"] -= 1
-                        row_data["CurrOppLosses"] -= 1
+                        if is_ot or is_shootout:
+                            row_data["CurrOppOTLosses"] -= 1
+                        else:
+                            row_data["CurrOppLosses"] -= 1
                     elif row_data["Team Score"] < row_data["Opponent Score"]:
                         result_str = "L"
                         row_data["CurrOppWins"] -= 1
-                        row_data["CurrTmLosses"] -= 1
+                        if is_ot or is_shootout:
+                            row_data["CurrTmOTLosses"] -= 1
+                        else:
+                            row_data["CurrTmLosses"] -= 1
                     else:
                         result_str = "T"
                         row_data["CurrTmTies"] -= 1
@@ -26601,7 +26683,7 @@ def parse_row(row, time_frame, year, is_playoffs, player_type, header_values, ta
 def fix_playoffs_data(all_rows, time_frame):
     is_qual_match = False
     for qualifier in time_frame["qualifiers"]:
-        if qualifier != "Team" and qualifier != "Team Franchise" and qualifier != "Team Conference" and qualifier != "Team Division" and qualifier != "Rookie" and qualifier != "Max Stat" and qualifier != "Min Stat" and qualifier != "Max Streak" and qualifier != "Max Stretch" and qualifier != "Count Streak" and qualifier != "Quickest"  and qualifier != "Slowest" and qualifier != "Season Stat" and qualifier != "Season Age" and qualifier != "Season" and qualifier != "Season Reversed" and qualifier != "Previous Season Stat"  and qualifier != "Upcoming Season Stat" and qualifier != "Season Sub Query" and qualifier != "Season Before Sub Query" and qualifier != "Season After Sub Query" and qualifier != "Winning Team" and  qualifier != "Losing Team" and  qualifier != "Tied Team" and qualifier !=  "Winning Or Tied Team" and qualifier !=  "Losing Or Tied Team" and  qualifier != "Playoff Team" and qualifier != "Team Win Percentage" and qualifier != "Team Games Over 500" and qualifier != "Team Wins" and qualifier != "Team Losses" and qualifier != "Team Ties" and  qualifier != "Cup Winner Team" and qualifier != "Conference Winner Team" and  qualifier != "Team Goals Rank" and  qualifier != "Team Goals Allowed Rank" and qualifier != "Season Formula" and qualifier != "Season Number" and qualifier != "Even Year" and qualifier != "Odd Year" and qualifier != "Year":
+        if qualifier != "Team" and qualifier != "Team Franchise" and qualifier != "Team Conference" and qualifier != "Team Division" and qualifier != "Rookie" and qualifier != "Max Stat" and qualifier != "Min Stat" and qualifier != "Max Streak" and qualifier != "Max Stretch" and qualifier != "Count Streak" and qualifier != "Quickest"  and qualifier != "Slowest" and qualifier != "Season Stat" and qualifier != "Season Age" and qualifier != "Season" and qualifier != "Season Reversed" and qualifier != "Previous Season Stat"  and qualifier != "Upcoming Season Stat" and qualifier != "Season Sub Query" and qualifier != "Season Before Sub Query" and qualifier != "Season After Sub Query" and qualifier != "Winning Team" and  qualifier != "Losing Team" and  qualifier != "Tied Team" and qualifier !=  "Winning Or Tied Team" and qualifier !=  "Losing Or Tied Team" and  qualifier != "Playoff Team" and qualifier != "Team Win Percentage" and qualifier != "Team Points Percentage" and qualifier != "Team Games Over 500" and qualifier != "Team Wins" and qualifier != "Team Losses" and qualifier != "Team Ties" and qualifier != "Team Points" and  qualifier != "Cup Winner Team" and qualifier != "Conference Winner Team" and  qualifier != "Team Goals Rank" and  qualifier != "Team Goals Allowed Rank" and qualifier != "Season Formula" and qualifier != "Season Number" and qualifier != "Even Year" and qualifier != "Odd Year" and qualifier != "Year":
             is_qual_match = True
         elif qualifier == "Max Stat" or qualifier == "Min Stat" or qualifier == "Max Streak" or qualifier == "Max Stretch" or qualifier == "Count Streak" or qualifier == "Quickest" or qualifier == "Slowest":
             for qual_object in time_frame["qualifiers"][qualifier]:
@@ -26715,9 +26797,11 @@ def handle_schedule_stats(player_data, all_rows, qualifiers, is_playoffs, missin
                             row_data["Opponent Goals"] = data["Opponent Goals"]
                             row_data["CurrTmWins"] = data["CurrTmWins"]
                             row_data["CurrTmLosses"] = data["CurrTmLosses"]
+                            row_data["CurrTmOTLosses"] = data["CurrTmOTLosses"]
                             row_data["CurrTmTies"] = data["CurrTmTies"]
                             row_data["CurrOppWins"] = data["CurrOppWins"]
                             row_data["CurrOppLosses"] = data["CurrOppLosses"]
+                            row_data["CurrOppOTLosses"] = data["CurrOppOTLosses"]
                             row_data["CurrOppTies"] = data["CurrOppTies"]
                             row_data["Result"] = data["Result"]
                             row_data["TmGm"] = data["TmGm"]
@@ -26944,9 +27028,11 @@ def handle_schedule_stats(player_data, all_rows, qualifiers, is_playoffs, missin
                         row_data["Opponent Goals"] = data["Opponent Goals"]
                         row_data["CurrTmWins"] = data["CurrTmWins"]
                         row_data["CurrTmLosses"] = data["CurrTmLosses"]
+                        row_data["CurrTmOTLosses"] = data["CurrTmOTLosses"]
                         row_data["CurrTmTies"] = data["CurrTmTies"]
                         row_data["CurrOppWins"] = data["CurrOppWins"]
                         row_data["CurrOppLosses"] = data["CurrOppLosses"]
+                        row_data["CurrOppOTLosses"] = data["CurrOppOTLosses"]
                         row_data["CurrOppTies"] = data["CurrOppTies"]
                         row_data["Result"] = data["Result"]
                         row_data["TmGm"] = data["TmGm"]
@@ -27695,7 +27781,7 @@ def perform_schedule_qualifiers(row, qualifiers):
         if "CurrOppWins" not in row or row["CurrOppWins"] == None:
             return False
 
-        opponent_match = row["CurrOppWins"] > row["CurrOppLosses"]
+        opponent_match = row["CurrOppWins"] > (row["CurrOppLosses"] + row["CurrOppOTLosses"])
         for qual_object in qualifiers["Current Winning Opponent"]:
             if qual_object["negate"]:
                 if opponent_match:
@@ -27708,7 +27794,7 @@ def perform_schedule_qualifiers(row, qualifiers):
         if "CurrOppWins" not in row or row["CurrOppWins"] == None:
             return False
 
-        opponent_match = row["CurrOppWins"] < row["CurrOppLosses"]
+        opponent_match = row["CurrOppWins"] < (row["CurrOppLosses"] + row["CurrOppOTLosses"])
         for qual_object in qualifiers["Current Losing Opponent"]:
             if qual_object["negate"]:
                 if opponent_match:
@@ -27721,7 +27807,7 @@ def perform_schedule_qualifiers(row, qualifiers):
         if "CurrOppWins" not in row or row["CurrOppWins"] == None:
             return False
 
-        opponent_match = row["CurrOppWins"] == row["CurrOppLosses"]
+        opponent_match = row["CurrOppWins"] == (row["CurrOppLosses"] + row["CurrOppOTLosses"])
         for qual_object in qualifiers["Current Tied Opponent"]:
             if qual_object["negate"]:
                 if opponent_match:
@@ -27734,7 +27820,7 @@ def perform_schedule_qualifiers(row, qualifiers):
         if "CurrOppWins" not in row or row["CurrOppWins"] == None:
             return False
 
-        opponent_match = row["CurrOppWins"] >= row["CurrOppLosses"]
+        opponent_match = row["CurrOppWins"] >= (row["CurrOppLosses"] + row["CurrOppOTLosses"])
         for qual_object in qualifiers["Current Winning Or Tied Opponent"]:
             if qual_object["negate"]:
                 if opponent_match:
@@ -27747,7 +27833,7 @@ def perform_schedule_qualifiers(row, qualifiers):
         if "CurrOppWins" not in row or row["CurrOppWins"] == None:
             return False
 
-        opponent_match = row["CurrOppWins"] <= row["CurrOppLosses"]
+        opponent_match = row["CurrOppWins"] <= (row["CurrOppLosses"] + row["CurrOppOTLosses"])
         for qual_object in qualifiers["Current Losing Or Tied Opponent"]:
             if qual_object["negate"]:
                 if opponent_match:
@@ -27760,7 +27846,7 @@ def perform_schedule_qualifiers(row, qualifiers):
         if "CurrOppWins" not in row or row["CurrOppWins"] == None:
             return False
 
-        opponent_match = row["CurrTmWins"] > row["CurrTmLosses"]
+        opponent_match = row["CurrTmWins"] > (row["CurrTmLosses"] + row["CurrTmOTLosses"])
         for qual_object in qualifiers["Current Winning Team"]:
             if qual_object["negate"]:
                 if opponent_match:
@@ -27773,7 +27859,7 @@ def perform_schedule_qualifiers(row, qualifiers):
         if "CurrOppWins" not in row or row["CurrOppWins"] == None:
             return False
             
-        opponent_match = row["CurrTmWins"] < row["CurrTmLosses"]
+        opponent_match = row["CurrTmWins"] < (row["CurrTmLosses"] + row["CurrTmOTLosses"])
         for qual_object in qualifiers["Current Losing Team"]:
             if qual_object["negate"]:
                 if opponent_match:
@@ -27786,7 +27872,7 @@ def perform_schedule_qualifiers(row, qualifiers):
         if "CurrOppWins" not in row or row["CurrOppWins"] == None:
             return False
 
-        opponent_match = row["CurrTmWins"] == row["CurrTmLosses"]
+        opponent_match = row["CurrTmWins"] == (row["CurrTmLosses"] + row["CurrTmOTLosses"])
         for qual_object in qualifiers["Current Tied Team"]:
             if qual_object["negate"]:
                 if opponent_match:
@@ -27799,7 +27885,7 @@ def perform_schedule_qualifiers(row, qualifiers):
         if "CurrOppWins" not in row or row["CurrOppWins"] == None:
             return False
 
-        opponent_match = row["CurrTmWins"] >= row["CurrTmLosses"]
+        opponent_match = row["CurrTmWins"] >= (row["CurrTmLosses"] + row["CurrTmOTLosses"])
         for qual_object in qualifiers["Current Winning Or Tied Team"]:
             if qual_object["negate"]:
                 if opponent_match:
@@ -27812,7 +27898,7 @@ def perform_schedule_qualifiers(row, qualifiers):
         if "CurrOppWins" not in row or row["CurrOppWins"] == None:
             return False
             
-        opponent_match = row["CurrTmWins"] <= row["CurrTmLosses"]
+        opponent_match = row["CurrTmWins"] <= (row["CurrTmLosses"] + row["CurrTmOTLosses"])
         for qual_object in qualifiers["Current Losing Or Tied Team"]:
             if qual_object["negate"]:
                 if opponent_match:
@@ -27826,12 +27912,26 @@ def perform_schedule_qualifiers(row, qualifiers):
             return False
 
         for qual_object in qualifiers["Current Team Win Percentage"]:
-            win_percentage = row["CurrTmWins"] / (row["CurrTmWins"] + row["CurrTmLosses"])
+            win_percentage = row["CurrTmWins"] / (row["CurrTmWins"] + (row["CurrTmLosses"] + row["CurrTmOTLosses"]))
             if qual_object["negate"]:
                 if win_percentage >= qual_object["values"]["start_val"] and win_percentage <= qual_object["values"]["end_val"]:
                     return False
             else:
                 if not (win_percentage >= qual_object["values"]["start_val"] and win_percentage <= qual_object["values"]["end_val"]):
+                    return False
+
+    if "Current Team Points Percentage " in qualifiers:
+        if "CurrTmWins" not in row or row["CurrTmWins"] == None:
+            return False
+
+        for qual_object in qualifiers["Current Team Points Percentage"]:
+            points = (row["CurrTmWins"] * 2) + (row["CurrTmTies"] * 1) + (row["CurrTmOTLosses"] * 1)
+            points_percentage = points / ((row["CurrTmWins"] + row["CurrTmLosses"] + row["CurrTmTies"] + row["CurrTmOTLosses"]) * 2)
+            if qual_object["negate"]:
+                if points_percentage >= qual_object["values"]["start_val"] and points_percentage <= qual_object["values"]["end_val"]:
+                    return False
+            else:
+                if not (points_percentage >= qual_object["values"]["start_val"] and points_percentage <= qual_object["values"]["end_val"]):
                     return False
     
     if "Current Team Games Over 500" in qualifiers:
@@ -27839,7 +27939,7 @@ def perform_schedule_qualifiers(row, qualifiers):
             return False
 
         for qual_object in qualifiers["Current Team Games Over 500"]:
-            games_over_500 = row["CurrTmWins"] - row["CurrTmLosses"]
+            games_over_500 = row["CurrTmWins"] - (row["CurrTmLosses"] + row["CurrTmOTLosses"])
             if qual_object["negate"]:
                 if games_over_500 >= qual_object["values"]["start_val"] and games_over_500 <= qual_object["values"]["end_val"]:
                     return False
@@ -27865,10 +27965,10 @@ def perform_schedule_qualifiers(row, qualifiers):
 
         for qual_object in qualifiers["Current Team Losses"]:
             if qual_object["negate"]:
-                if row["CurrTmLosses"] >= qual_object["values"]["start_val"] and row["CurrTmLosses"] <= qual_object["values"]["end_val"]:
+                if (row["CurrTmLosses"] + row["CurrTmOTLosses"]) >= qual_object["values"]["start_val"] and (row["CurrTmLosses"] + row["CurrTmOTLosses"]) <= qual_object["values"]["end_val"]:
                     return False
             else:
-                if not (row["CurrTmLosses"] >= qual_object["values"]["start_val"] and row["CurrTmLosses"] <= qual_object["values"]["end_val"]):
+                if not ((row["CurrTmLosses"] + row["CurrTmOTLosses"]) >= qual_object["values"]["start_val"] and (row["CurrTmLosses"] + row["CurrTmOTLosses"]) <= qual_object["values"]["end_val"]):
                     return False
     
     if "Current Team Ties" in qualifiers:
@@ -27882,18 +27982,45 @@ def perform_schedule_qualifiers(row, qualifiers):
             else:
                 if not (row["CurrTmTies"] >= qual_object["values"]["start_val"] and row["CurrTmTies"] <= qual_object["values"]["end_val"]):
                     return False
+
+    if "Current Team Points" in qualifiers:
+        if "CurrOppWins" not in row or row["CurrOppWins"] == None:
+            return False
+
+        for qual_object in qualifiers["Curre t Team Points"]:
+            points = (row["CurrTmWins"] * 2) + (row["CurrTmTies"] * 1) + (row["CurrTmOTLosses"] * 1)
+            if qual_object["negate"]:
+                if points >= qual_object["values"]["start_val"] and points <= qual_object["values"]["end_val"]:
+                    return False
+            else:
+                if not (points >= qual_object["values"]["start_val"] and points <= qual_object["values"]["end_val"]):
+                    return False
     
     if "Current Opponent Win Percentage" in qualifiers:
         if "CurrOppWins" not in row or row["CurrOppWins"] == None:
             return False
 
         for qual_object in qualifiers["Current Opponent Win Percentage"]:
-            win_percentage = row["CurrOppWins"] / (row["CurrOppWins"] + row["CurrOppLosses"])
+            win_percentage = row["CurrOppWins"] / (row["CurrOppWins"] + (row["CurrOppLosses"] + row["CurrOppOTLosses"]))
             if qual_object["negate"]:
                 if win_percentage >= qual_object["values"]["start_val"] and win_percentage <= qual_object["values"]["end_val"]:
                     return False
             else:
                 if not (win_percentage >= qual_object["values"]["start_val"] and win_percentage <= qual_object["values"]["end_val"]):
+                    return False
+    
+    if "Current Opponent Points Percentage " in qualifiers:
+        if "CurrOppWins" not in row or row["CurrOppWins"] == None:
+            return False
+
+        for qual_object in qualifiers["Current Opponent Points Percentage"]:
+            points = (row["CurrOppWins"] * 2) + (row["CurrOppTies"] * 1) + (row["CurrOppOTLosses"] * 1)
+            points_percentage = points / ((row["CurrOppWins"] + row["CurrOppLosses"] + row["CurrOppTies"] + row["CurrOppOTLosses"]) * 2)
+            if qual_object["negate"]:
+                if points_percentage >= qual_object["values"]["start_val"] and points_percentage <= qual_object["values"]["end_val"]:
+                    return False
+            else:
+                if not (points_percentage >= qual_object["values"]["start_val"] and points_percentage <= qual_object["values"]["end_val"]):
                     return False
 
     if "Current Opponent Games Over 500" in qualifiers:
@@ -27901,7 +28028,7 @@ def perform_schedule_qualifiers(row, qualifiers):
             return False
 
         for qual_object in qualifiers["Current Opponent Games Over 500"]:
-            games_over_500 = row["CurrOppWins"] - row["CurrOppLosses"]
+            games_over_500 = row["CurrOppWins"] - (row["CurrOppLosses"] + row["CurrOppOTLosses"])
             if qual_object["negate"]:
                 if games_over_500 >= qual_object["values"]["start_val"] and games_over_500 <= qual_object["values"]["end_val"]:
                     return False
@@ -27927,10 +28054,10 @@ def perform_schedule_qualifiers(row, qualifiers):
 
         for qual_object in qualifiers["Current Opponent Losses"]:
             if qual_object["negate"]:
-                if row["CurrOppLosses"] >= qual_object["values"]["start_val"] and row["CurrOppLosses"] <= qual_object["values"]["end_val"]:
+                if (row["CurrOppLosses"] + row["CurrOppOTLosses"]) >= qual_object["values"]["start_val"] and (row["CurrOppLosses"] + row["CurrOppOTLosses"]) <= qual_object["values"]["end_val"]:
                     return False
             else:
-                if not (row["CurrOppLosses"] >= qual_object["values"]["start_val"] and row["CurrOppLosses"] <= qual_object["values"]["end_val"]):
+                if not ((row["CurrOppLosses"] + row["CurrOppOTLosses"]) >= qual_object["values"]["start_val"] and (row["CurrOppLosses"] + row["CurrOppOTLosses"]) <= qual_object["values"]["end_val"]):
                     return False
     
     if "Current Opponent Ties" in qualifiers:
@@ -27943,6 +28070,19 @@ def perform_schedule_qualifiers(row, qualifiers):
                     return False
             else:
                 if not (row["CurrOppTies"] >= qual_object["values"]["start_val"] and row["CurrOppTies"] <= qual_object["values"]["end_val"]):
+                    return False
+
+    if "Current Opponent Points" in qualifiers:
+        if "CurrOppWins" not in row or row["CurrOppWins"] == None:
+            return False
+
+        for qual_object in qualifiers["Current Opponent Points"]:
+            points = (row["CurrOppWins"] * 2) + (row["CurrOppTies"] * 1) + (row["CurrOppOTLosses"] * 1)
+            if qual_object["negate"]:
+                if points >= qual_object["values"]["start_val"] and points <= qual_object["values"]["end_val"]:
+                    return False
+            else:
+                if not (points >= qual_object["values"]["start_val"] and points <= qual_object["values"]["end_val"]):
                     return False
 
     return True

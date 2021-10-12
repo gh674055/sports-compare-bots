@@ -2876,7 +2876,7 @@ def handle_player_string(comment, player_type, is_fantasy, last_updated, hide_ta
                                         "start_val" : ordinal_to_number(split_vals[0]),
                                         "end_val" : ordinal_to_number(split_vals[1])
                                     }
-                            elif qualifier_str.startswith("opponent-points-rank:") or qualifier_str.startswith("opponent-points-allowed-rank:") or qualifier_str.startswith("opponent-yards-rank:") or qualifier_str.startswith("opponent-yds-rank:") or qualifier_str.startswith("opponent-yards-allowed-rank:") or qualifier_str.startswith("opponent-yds-allowed-rank:") or qualifier_str.startswith("opponent-pass-td-rank:") or qualifier_str.startswith("opponent-pass-td-allowed-rank:")  or qualifier_str.startswith("opponent-pass-tds-rank:") or qualifier_str.startswith("opponent-pass-tds-allowed-rank:") or qualifier_str.startswith("opponent-pass-yards-rank:") or qualifier_str.startswith("opponent-pass-yards-allowed-rank:") or qualifier_str.startswith("opponent-pass-yds-rank:") or qualifier_str.startswith("opponent-pass-yds-allowed-rank:") or qualifier_str.startswith("opponent-rush-td-rank:") or qualifier_str.startswith("opponent-rush-td-allowed-rank:") or qualifier_str.startswith("opponent-rush-tds-rank:") or qualifier_str.startswith("opponent-rush-tds-allowed-rank:") or qualifier_str.startswith("opponent-rush-yards-rank:") or qualifier_str.startswith("opponent-rush-yards-allowed-rank:") or qualifier_str.startswith("opponent-rush-yds-rank:") or qualifier_str.startswith("opponent-rush-yds-allowed-rank:") or qualifier_str.startswith("opponent-any/a-rank:") or qualifier_str.startswith("opponent-any/a-allowed-rank:") or qualifier_str.startswith("opponent-win-percent:") or qualifier_str.startswith("opponent-winning-percent:") or qualifier_str.startswith("current-opponent-win-percent:") or qualifier_str.startswith("current-opponent-winning-percent:") or qualifier_str.startswith("opponent-passer-rating-rank:") or qualifier_str.startswith("opponent-passer-rating-allowed-rank:") or qualifier_str.startswith("opponent-pass-rating-rank:") or qualifier_str.startswith("opponent-pass-rating-allowed-rank:") or qualifier_str.startswith("opponent-passer-rate-rank:") or qualifier_str.startswith("opponent-passer-rate-allowed-rank:") or qualifier_str.startswith("opponent-pass-rate-rank:") or qualifier_str.startswith("opponent-pass-rate-rank:") or qualifier_str.startswith("opponent-pass-rate-allowed-rank:") or qualifier_str.startswith("opponent-fantasy-qb-rank:") or qualifier_str.startswith("opponent-fantasy-hb-rank:") or qualifier_str.startswith("opponent-fantasy-rb-rank:") or qualifier_str.startswith("opponent-fantasy-wr-rank:") or qualifier_str.startswith("opponent-fantasy-te-rank:"):
+                            elif qualifier_str.startswith("opponent-points-rank:") or qualifier_str.startswith("opponent-points-allowed-rank:") or qualifier_str.startswith("opponent-yards-rank:") or qualifier_str.startswith("opponent-yds-rank:") or qualifier_str.startswith("opponent-yards-allowed-rank:") or qualifier_str.startswith("opponent-yds-allowed-rank:") or qualifier_str.startswith("opponent-pass-td-rank:") or qualifier_str.startswith("opponent-pass-td-allowed-rank:")  or qualifier_str.startswith("opponent-pass-tds-rank:") or qualifier_str.startswith("opponent-pass-tds-allowed-rank:") or qualifier_str.startswith("opponent-pass-yards-rank:") or qualifier_str.startswith("opponent-pass-yards-allowed-rank:") or qualifier_str.startswith("opponent-pass-yds-rank:") or qualifier_str.startswith("opponent-pass-yds-allowed-rank:") or qualifier_str.startswith("opponent-rush-td-rank:") or qualifier_str.startswith("opponent-rush-td-allowed-rank:") or qualifier_str.startswith("opponent-rush-tds-rank:") or qualifier_str.startswith("opponent-rush-tds-allowed-rank:") or qualifier_str.startswith("opponent-rush-yards-rank:") or qualifier_str.startswith("opponent-rush-yards-allowed-rank:") or qualifier_str.startswith("opponent-rush-yds-rank:") or qualifier_str.startswith("opponent-rush-yds-allowed-rank:") or qualifier_str.startswith("opponent-any/a-rank:") or qualifier_str.startswith("opponent-any/a-allowed-rank:") or qualifier_str.startswith("opponent-passer-rating-rank:") or qualifier_str.startswith("opponent-passer-rating-allowed-rank:") or qualifier_str.startswith("opponent-pass-rating-rank:") or qualifier_str.startswith("opponent-pass-rating-allowed-rank:") or qualifier_str.startswith("opponent-passer-rate-rank:") or qualifier_str.startswith("opponent-passer-rate-allowed-rank:") or qualifier_str.startswith("opponent-pass-rate-rank:") or qualifier_str.startswith("opponent-pass-rate-rank:") or qualifier_str.startswith("opponent-pass-rate-allowed-rank:") or qualifier_str.startswith("opponent-fantasy-qb-rank:") or qualifier_str.startswith("opponent-fantasy-hb-rank:") or qualifier_str.startswith("opponent-fantasy-rb-rank:") or qualifier_str.startswith("opponent-fantasy-wr-rank:") or qualifier_str.startswith("opponent-fantasy-te-rank:") or qualifier_str.startswith("opponent-wins:") or qualifier_str.startswith("opponent-losses:") or qualifier_str.startswith("opponent-ties:") or qualifier_str.startswith("current-opponent-wins:") or qualifier_str.startswith("current-opponent-losses:") or qualifier_str.startswith("current-opponent-ties:") or qualifier_str.startswith("opponent-win-percent:") or qualifier_str.startswith("opponent-winning-percent:") or qualifier_str.startswith("current-opponent-win-percent:") or qualifier_str.startswith("current-opponent-winning-percent:"):
                                 position = None
                                 if qualifier_str.startswith("opponent-points-rank:"):
                                     qual_str = "opponent-points-rank:"
@@ -2974,12 +2974,36 @@ def handle_player_string(comment, player_type, is_fantasy, last_updated, hide_ta
                                 elif qualifier_str.startswith("opponent-pass-rate-allowed-rank:"):
                                     qual_str = "opponent-pass-rate-allowed-rank:"
                                     qual_type = "Opponent Passer Rating Allowed Rank"
+                                elif qualifier_str.startswith("opponent-wins:"):
+                                    qual_str = "opponent-wins:"
+                                    qual_type = "Opponent Wins"
+                                elif qualifier_str.startswith("opponent-losses:"):
+                                    qual_str = "opponent-losses:"
+                                    qual_type = "Opponent Losses"
+                                elif qualifier_str.startswith("opponent-ties:"):
+                                    qual_str = "opponent-ties:"
+                                    qual_type = "Opponent Ties"
+                                elif qualifier_str.startswith("current-opponent-wins:"):
+                                    qual_str = "current-opponent-wins:"
+                                    qual_type = "Current Opponent Wins"
+                                elif qualifier_str.startswith("current-opponent-losses:"):
+                                    qual_str = "current-opponent-losses:"
+                                    qual_type = "Current Opponent Losses"
+                                elif qualifier_str.startswith("current-opponent-ties:"):
+                                    qual_str = "current-opponent-ties:"
+                                    qual_type = "Current Opponent Ties"
                                 elif qualifier_str.startswith("opponent-win-percent:"):
                                     qual_str = "opponent-win-percent:"
                                     qual_type = "Opponent Win Percentage"
                                 elif qualifier_str.startswith("opponent-winning-percent:"):
                                     qual_str = "opponent-winning-percent:"
                                     qual_type = "Opponent Win Percentage"
+                                elif qualifier_str.startswith("current-opponent-win-percent:"):
+                                    qual_str = "current-opponent-win-percent:"
+                                    qual_type = "Current Opponent Win Percentage"
+                                elif qualifier_str.startswith("current-opponent-winning-percent:"):
+                                    qual_str = "current-opponent-winning-percent:"
+                                    qual_type = "Current Opponent Win Percentage"
                                 elif qualifier_str.startswith("opponent-fantasy-qb-rank:"):
                                     qual_str = "opponent-fantasy-qb-rank:"
                                     qual_type = "Opponent Fantasy Position Rank"
@@ -3030,7 +3054,7 @@ def handle_player_string(comment, player_type, is_fantasy, last_updated, hide_ta
 
                                 split_vals = re.split(r"(?<!\\)\-", re.split(r"(?<!\\)" + qual_str, qualifier_str)[1])
                                 if len(split_vals) == 1:
-                                    if qual_type == "Opponent Win Percentage":
+                                    if qual_type == "Opponent Win Percentage" or qual_type == "Opponent Team Win Percentage":
                                         qualifier_obj["values"] = {
                                             "start_val" : ordinal_to_number(split_vals[0]),
                                             "end_val" : 1,
@@ -3055,12 +3079,12 @@ def handle_player_string(comment, player_type, is_fantasy, last_updated, hide_ta
                                         "position" : position
                                     }
                                 
-                                if qual_type == "Opponent Win Percentage":
+                                if qual_type == "Opponent Win Percentage" or qual_type == "Current Opponent Win Percentage":
                                     if qualifier_obj["values"]["start_val"] > 1:
                                         qualifier_obj["values"]["start_val"] = qualifier_obj["values"]["start_val"] / 100
                                     if qualifier_obj["values"]["end_val"] > 1:
                                         qualifier_obj["values"]["end_val"] = qualifier_obj["values"]["end_val"] / 100
-                            elif qualifier_str.startswith("team-points-rank:") or qualifier_str.startswith("team-points-allowed-rank:") or qualifier_str.startswith("team-yards-rank:") or qualifier_str.startswith("team-yds-rank:") or qualifier_str.startswith("team-yards-allowed-rank:") or qualifier_str.startswith("team-yds-allowed-rank:") or qualifier_str.startswith("team-pass-td-rank:") or qualifier_str.startswith("team-pass-td-allowed-rank:")  or qualifier_str.startswith("team-pass-tds-rank:") or qualifier_str.startswith("team-pass-tds-allowed-rank:") or qualifier_str.startswith("team-pass-yards-rank:") or qualifier_str.startswith("team-pass-yards-allowed-rank:") or qualifier_str.startswith("team-pass-yds-rank:") or qualifier_str.startswith("team-pass-yds-allowed-rank:") or qualifier_str.startswith("team-rush-td-rank:") or qualifier_str.startswith("team-rush-td-allowed-rank:") or qualifier_str.startswith("team-rush-tds-rank:") or qualifier_str.startswith("team-rush-tds-allowed-rank:") or qualifier_str.startswith("team-rush-yards-rank:") or qualifier_str.startswith("team-rush-yards-allowed-rank:") or qualifier_str.startswith("team-rush-yds-rank:") or qualifier_str.startswith("team-rush-yds-allowed-rank:") or qualifier_str.startswith("team-any/a-rank:") or qualifier_str.startswith("team-any/a-allowed-rank:") or qualifier_str.startswith("team-win-percent:") or qualifier_str.startswith("current-team-winning-percent:") or qualifier_str.startswith("current-team-win-percent:") or qualifier_str.startswith("opponent-win-percent:") or qualifier_str.startswith("current-opponent-winning-percent:") or qualifier_str.startswith("team-winning-percent:") or qualifier_str.startswith("team-passer-rating-rank:") or qualifier_str.startswith("team-passer-rating-allowed-rank:") or qualifier_str.startswith("team-pass-rating-rank:") or qualifier_str.startswith("team-pass-rating-allowed-rank:") or qualifier_str.startswith("team-passer-rate-rank:") or qualifier_str.startswith("team-passer-rate-allowed-rank:") or qualifier_str.startswith("team-pass-rate-rank:") or qualifier_str.startswith("team-pass-rate-rank:") or qualifier_str.startswith("team-pass-rate-allowed-rank:") or qualifier_str.startswith("team-fantasy-qb-rank:") or qualifier_str.startswith("team-fantasy-hb-rank:") or qualifier_str.startswith("team-fantasy-rb-rank:") or qualifier_str.startswith("team-fantasy-wr-rank:") or qualifier_str.startswith("team-fantasy-te-rank:") or qualifier_str.startswith("team-wins:") or qualifier_str.startswith("team-losses:") or qualifier_str.startswith("team-ties:") or qualifier_str.startswith("opponent-wins:") or qualifier_str.startswith("opponent-losses:") or qualifier_str.startswith("opponent-ties:") or qualifier_str.startswith("current-team-wins:") or qualifier_str.startswith("current-team-losses:") or qualifier_str.startswith("current-team-ties:") or qualifier_str.startswith("current-opponent-wins:") or qualifier_str.startswith("current-opponent-losses:") or qualifier_str.startswith("current-opponent-ties:"):
+                            elif qualifier_str.startswith("team-points-rank:") or qualifier_str.startswith("team-points-allowed-rank:") or qualifier_str.startswith("team-yards-rank:") or qualifier_str.startswith("team-yds-rank:") or qualifier_str.startswith("team-yards-allowed-rank:") or qualifier_str.startswith("team-yds-allowed-rank:") or qualifier_str.startswith("team-pass-td-rank:") or qualifier_str.startswith("team-pass-td-allowed-rank:")  or qualifier_str.startswith("team-pass-tds-rank:") or qualifier_str.startswith("team-pass-tds-allowed-rank:") or qualifier_str.startswith("team-pass-yards-rank:") or qualifier_str.startswith("team-pass-yards-allowed-rank:") or qualifier_str.startswith("team-pass-yds-rank:") or qualifier_str.startswith("team-pass-yds-allowed-rank:") or qualifier_str.startswith("team-rush-td-rank:") or qualifier_str.startswith("team-rush-td-allowed-rank:") or qualifier_str.startswith("team-rush-tds-rank:") or qualifier_str.startswith("team-rush-tds-allowed-rank:") or qualifier_str.startswith("team-rush-yards-rank:") or qualifier_str.startswith("team-rush-yards-allowed-rank:") or qualifier_str.startswith("team-rush-yds-rank:") or qualifier_str.startswith("team-rush-yds-allowed-rank:") or qualifier_str.startswith("team-any/a-rank:") or qualifier_str.startswith("team-any/a-allowed-rank:") or qualifier_str.startswith("team-passer-rating-rank:") or qualifier_str.startswith("team-passer-rating-allowed-rank:") or qualifier_str.startswith("team-pass-rating-rank:") or qualifier_str.startswith("team-pass-rating-allowed-rank:") or qualifier_str.startswith("team-passer-rate-rank:") or qualifier_str.startswith("team-passer-rate-allowed-rank:") or qualifier_str.startswith("team-pass-rate-rank:") or qualifier_str.startswith("team-pass-rate-rank:") or qualifier_str.startswith("team-pass-rate-allowed-rank:") or qualifier_str.startswith("team-fantasy-qb-rank:") or qualifier_str.startswith("team-fantasy-hb-rank:") or qualifier_str.startswith("team-fantasy-rb-rank:") or qualifier_str.startswith("team-fantasy-wr-rank:") or qualifier_str.startswith("team-fantasy-te-rank:") or qualifier_str.startswith("team-wins:") or qualifier_str.startswith("team-losses:") or qualifier_str.startswith("team-ties:") or qualifier_str.startswith("current-team-wins:") or qualifier_str.startswith("current-team-losses:") or qualifier_str.startswith("current-team-ties:") or qualifier_str.startswith("team-win-percent:") or qualifier_str.startswith("current-team-winning-percent:") or qualifier_str.startswith("current-team-win-percent:") or qualifier_str.startswith("team-winning-percent:"):
                                 position = None
                                 if qualifier_str.startswith("team-points-rank:"):
                                     qual_str = "team-points-rank:"
@@ -3167,15 +3191,6 @@ def handle_player_string(comment, player_type, is_fantasy, last_updated, hide_ta
                                 elif qualifier_str.startswith("team-ties:"):
                                     qual_str = "team-ties:"
                                     qual_type = "Team Ties"
-                                elif qualifier_str.startswith("opponent-wins:"):
-                                    qual_str = "opponent-wins:"
-                                    qual_type = "Opponent Wins"
-                                elif qualifier_str.startswith("opponent-losses:"):
-                                    qual_str = "opponent-losses:"
-                                    qual_type = "Opponent Losses"
-                                elif qualifier_str.startswith("opponent-ties:"):
-                                    qual_str = "opponent-ties:"
-                                    qual_type = "Opponent Ties"
                                 elif qualifier_str.startswith("team-win-percent:"):
                                     qual_str = "team-win-percent:"
                                     qual_type = "Team Win Percentage"
@@ -3191,27 +3206,12 @@ def handle_player_string(comment, player_type, is_fantasy, last_updated, hide_ta
                                 elif qualifier_str.startswith("current-team-ties:"):
                                     qual_str = "current-team-ties:"
                                     qual_type = "Current Team Ties"
-                                elif qualifier_str.startswith("current-opponent-wins:"):
-                                    qual_str = "current-opponent-wins:"
-                                    qual_type = "Current Opponent Wins"
-                                elif qualifier_str.startswith("current-opponent-losses:"):
-                                    qual_str = "current-opponent-losses:"
-                                    qual_type = "Current Opponent Losses"
-                                elif qualifier_str.startswith("current-opponent-ties:"):
-                                    qual_str = "current-opponent-ties:"
-                                    qual_type = "Current Opponent Ties"
                                 elif qualifier_str.startswith("current-team-win-percent:"):
                                     qual_str = "current-team-win-percent:"
                                     qual_type = "Current Team Win Percentage"
                                 elif qualifier_str.startswith("current-team-winning-percent:"):
                                     qual_str = "current-team-winning-percent:"
                                     qual_type = "Current Team Win Percentage"
-                                elif qualifier_str.startswith("current-opponent-win-percent:"):
-                                    qual_str = "current-opponent-win-percent:"
-                                    qual_type = "Current Opponent Win Percentage"
-                                elif qualifier_str.startswith("current-opponent-winning-percent:"):
-                                    qual_str = "current-opponent-winning-percent:"
-                                    qual_type = "Current Opponent Win Percentage"
                                 elif qualifier_str.startswith("team-fantasy-qb-rank:"):
                                     qual_str = "team-fantasy-qb-rank:"
                                     qual_type = "Team Fantasy Position Rank"
@@ -3262,7 +3262,7 @@ def handle_player_string(comment, player_type, is_fantasy, last_updated, hide_ta
 
                                 split_vals = re.split(r"(?<!\\)\-", re.split(r"(?<!\\)" + qual_str, qualifier_str)[1])
                                 if len(split_vals) == 1:
-                                    if qual_type == "Team Win Percentage":
+                                    if qual_type == "Team Win Percentage" or qual_type == "Current Team Win Percentage":
                                         qualifier_obj["values"] = {
                                             "start_val" : ordinal_to_number(split_vals[0]),
                                             "end_val" : 1,
@@ -3287,7 +3287,7 @@ def handle_player_string(comment, player_type, is_fantasy, last_updated, hide_ta
                                         "position" : position
                                     }
                                 
-                                if qual_type == "Team Win Percentage":
+                                if qual_type == "Team Win Percentage" or qual_type == "Current Team Win Percentage":
                                     if qualifier_obj["values"]["start_val"] > 1:
                                         qualifier_obj["values"]["start_val"] = qualifier_obj["values"]["start_val"] / 100
                                     if qualifier_obj["values"]["end_val"] > 1:
