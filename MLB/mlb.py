@@ -27470,10 +27470,10 @@ def handle_da_pitch_quals(row, event_name, at_bat_event, qualifiers, player_data
     sub_score_diff = sub_pitch_score - sub_bat_score
     if sub_score_diff >= 0:
         sub_go_ahead_or_game_tying_opp = sub_score_diff <= sub_men_on_base + 1
-        if sub_go_ahead_opp:
-            sub_go_ahead_or_game_tying = sub_num_runs > sub_score_diff
-        else:
+        if sub_game_tying_opp:
             sub_go_ahead_or_game_tying = sub_num_runs >= sub_score_diff
+        else:
+            sub_go_ahead_or_game_tying = sub_num_runs > sub_score_diff
     
     sub_tying_on_deck = False
     sub_score_diff = sub_pitch_score - sub_bat_score
@@ -30388,14 +30388,14 @@ def get_live_game_data(row_index, player_data, row_data, player_type, qualifiers
             score_diff = pitch_score - bat_score
             if score_diff >= 0:
                 go_ahead_or_game_tying_opp = score_diff <= men_on_base + 1
-                if go_ahead_opp:
-                    go_ahead_or_game_tying = num_runs > score_diff
-                    if go_ahead_or_game_tying:
-                        go_ahead_or_game_tying_index = score_diff
-                else:
+                if game_tying_opp:
                     go_ahead_or_game_tying = num_runs >= score_diff
                     if go_ahead_or_game_tying:
                         go_ahead_or_game_tying_index = score_diff - 1
+                else:
+                    go_ahead_or_game_tying = num_runs > score_diff
+                    if go_ahead_or_game_tying:
+                        go_ahead_or_game_tying_index = score_diff
 
             tying_on_deck = False
             score_diff = pitch_score - bat_score
@@ -31111,10 +31111,10 @@ def get_live_game_data(row_index, player_data, row_data, player_type, qualifiers
                 sub_score_diff = sub_play_pitch_score - sub_play_bat_score
                 if sub_score_diff >= 0:
                     sub_go_ahead_or_game_tying_opp = sub_score_diff <= sub_men_on_base + 1
-                    if sub_go_ahead_opp:
-                        sub_go_ahead_or_game_tying = sub_num_runs > sub_score_diff
-                    else:
+                    if sub_game_tying_opp:
                         sub_go_ahead_or_game_tying = sub_num_runs >= sub_score_diff
+                    else:
+                        sub_go_ahead_or_game_tying = sub_num_runs > sub_score_diff
                 
                 sub_tying_on_deck = False
                 sub_score_diff = sub_play_pitch_score - sub_play_bat_score
