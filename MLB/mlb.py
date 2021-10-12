@@ -23193,7 +23193,7 @@ def get_team_schedule(player_data, seasons, needs_reg_season, needs_playoffs, ne
                                 new_season_obj["regular_season"].append(row_data)
 
         if needs_playoffs:
-            if season_obj["Year"] in []:
+            if season_obj["Year"] in [current_season]:
                 if not needs_reg_season:
                     request = urllib.request.Request(team_schedule_url_format.format(season_obj["Tm"], season_obj["Year"]), headers=request_headers)
                     try:
