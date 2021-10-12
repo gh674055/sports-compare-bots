@@ -6873,8 +6873,6 @@ def handle_player_data(player_data, time_frame, player_type, player_page, is_fan
         is_seasons = (time_frame["type"].startswith("season") and not is_qual_match) or time_frame["playoffs"] == "Only"
         if not is_seasons:
             valid_years = player_data["game_valid_years"]
-            if len(set(player_data["year_valid_years"]) - set(player_data["game_valid_years"])):
-                missing_games = True
 
     all_rows = []
 
