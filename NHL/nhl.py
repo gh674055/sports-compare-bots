@@ -7936,7 +7936,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                         "start_val" : ordinal_to_number(split_vals[0]),
                                         "end_val" : ordinal_to_number(split_vals[1])
                                     }
-                            elif qualifier_str.startswith("team-score:") or qualifier_str.startswith("opponent-score:") or qualifier_str.startswith("score-margin:") or qualifier_str.startswith("series-score-margin:") or qualifier_str.startswith("score-difference:") or qualifier_str.startswith("series-score-difference:") or qualifier_str.startswith("final-team-score:") or qualifier_str.startswith("final-opponent-score:") or qualifier_str.startswith("final-score-margin:") or qualifier_str.startswith("final-score-difference:") or qualifier_str.startswith("year") or qualifier_str.startswith("period:") or qualifier_str.startswith("team-skaters:") or qualifier_str.startswith("opponent-skaters:") or qualifier_str.startswith("team-players:") or qualifier_str.startswith("opponent-players:") or qualifier_str.startswith("period-time-remaining:") or qualifier_str.startswith("period-time:"):
+                            elif qualifier_str.startswith("team-score:") or qualifier_str.startswith("opponent-score:") or qualifier_str.startswith("score-margin:") or qualifier_str.startswith("series-score-margin:") or qualifier_str.startswith("score-difference:") or qualifier_str.startswith("series-score-difference:") or qualifier_str.startswith("final-team-score:") or qualifier_str.startswith("final-opponent-score:") or qualifier_str.startswith("final-score-margin:") or qualifier_str.startswith("final-score-difference:") or qualifier_str.startswith("year") or qualifier_str.startswith("period:") or qualifier_str.startswith("team-skaters:") or qualifier_str.startswith("opponent-skaters:") or qualifier_str.startswith("team-players:") or qualifier_str.startswith("opponent-players:") or qualifier_str.startswith("period-time-remaining:") or qualifier_str.startswith("period-time:") or qualifier_str.startswith("team-games-over-500:") or qualifier_str.startswith("opponent-games-over-500:") or qualifier_str.startswith("current-team-games-over-500:") or qualifier_str.startswith("current-opponent-games-over-500:"):
                                 if qualifier_str.startswith("team-score:"):
                                     qual_str = "team-score:"
                                     qual_type = "Team Score"
@@ -8010,6 +8010,18 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                     qual_type = "Series Score Difference"
                                     if not playoffs:
                                         playoffs = "Only"
+                                elif qualifier_str.startswith("team-games-over-500:"):
+                                    qual_str = "team-games-over-500:"
+                                    qual_type = "Team Games Over 500"
+                                elif qualifier_str.startswith("opponent-games-over-500:"):
+                                    qual_str = "opponent-games-over-500:"
+                                    qual_type = "Opponent Games Over 500"
+                                elif qualifier_str.startswith("current-team-games-over-500:"):
+                                    qual_str = "current-team-games-over-500:"
+                                    qual_type = "Current Team Games Over 500"
+                                elif qualifier_str.startswith("current-opponent-games-over-500:"):
+                                    qual_str = "current-opponent-games-over-500:"
+                                    qual_type = "Current Opponent Games Over 500"
 
                                 split_vals = re.split(r"(?<!\\)(?<!^)\-", re.split(r"(?<!\\)" + qual_str, qualifier_str, 1)[1], 1)
                                 if qual_type.startswith("Period Time"):
@@ -8502,7 +8514,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                         "start_val" : ordinal_to_number(split_vals[0]),
                                         "end_val" : ordinal_to_number(split_vals[1])
                                     }
-                            elif qualifier_str.startswith("opponent-goals-rank:") or qualifier_str.startswith("opponent-standings-rank:") or qualifier_str.startswith("opponent-goals-allowed-rank:") or qualifier_str.startswith("opponent-goal-rank:") or qualifier_str.startswith("opponent-goal-allowed-rank:") or qualifier_str.startswith("opponent-win-percent:") or qualifier_str.startswith("opponent-winning-percent:") or qualifier_str.startswith("current-opponent-win-percent:") or qualifier_str.startswith("current-opponent-winning-percent:") or qualifier_str.startswith("team-wins:") or qualifier_str.startswith("team-losses:") or qualifier_str.startswith("team-ties:") or qualifier_str.startswith("team-games-over-500:") or qualifier_str.startswith("opponent-wins:") or qualifier_str.startswith("opponent-losses:") or qualifier_str.startswith("opponent-ties:") or qualifier_str.startswith("opponent-games-over-500:") or qualifier_str.startswith("current-team-wins:") or qualifier_str.startswith("current-team-losses:") or qualifier_str.startswith("current-team-ties:") or qualifier_str.startswith("current-team-games-over-500:") or qualifier_str.startswith("current-opponent-wins:") or qualifier_str.startswith("current-opponent-losses:") or qualifier_str.startswith("current-opponent-ties:") or qualifier_str.startswith("current-opponent-games-over-500:"):
+                            elif qualifier_str.startswith("opponent-goals-rank:") or qualifier_str.startswith("opponent-standings-rank:") or qualifier_str.startswith("opponent-goals-allowed-rank:") or qualifier_str.startswith("opponent-goal-rank:") or qualifier_str.startswith("opponent-goal-allowed-rank:") or qualifier_str.startswith("opponent-win-percent:") or qualifier_str.startswith("opponent-winning-percent:") or qualifier_str.startswith("current-opponent-win-percent:") or qualifier_str.startswith("current-opponent-winning-percent:") or qualifier_str.startswith("team-wins:") or qualifier_str.startswith("team-losses:") or qualifier_str.startswith("team-ties:") or qualifier_str.startswith("opponent-wins:") or qualifier_str.startswith("opponent-losses:") or qualifier_str.startswith("opponent-ties:") or qualifier_str.startswith("current-team-wins:") or qualifier_str.startswith("current-team-losses:") or qualifier_str.startswith("current-team-ties:") or qualifier_str.startswith("current-opponent-wins:") or qualifier_str.startswith("current-opponent-losses:") or qualifier_str.startswith("current-opponent-ties:"):
                                 if qualifier_str.startswith("opponent-goals-rank:"):
                                     qual_str = "opponent-goals-rank:"
                                     qual_type = "Opponent Goals Rank"
@@ -8572,18 +8584,6 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 elif qualifier_str.startswith("current-opponent-winning-percent:"):
                                     qual_str = "current-opponent-winning-percent:"
                                     qual_type = "Current Opponent Win Percentage"
-                                elif qualifier_str.startswith("team-games-over-500:"):
-                                    qual_str = "team-games-over-500:"
-                                    qual_type = "Team Games Over 500"
-                                elif qualifier_str.startswith("opponent-games-over-500:"):
-                                    qual_str = "opponent-games-over-500:"
-                                    qual_type = "Opponent Games Over 500"
-                                elif qualifier_str.startswith("current-team-games-over-500:"):
-                                    qual_str = "current-team-games-over-500:"
-                                    qual_type = "Current Team Games Over 500"
-                                elif qualifier_str.startswith("current-opponent-games-over-500:"):
-                                    qual_str = "current-opponent-games-over-500:"
-                                    qual_type = "Current Opponent Games Over 500"
 
                                 split_vals = re.split(r"(?<!\\)\:", qualifier_str)
                                 reverse = False
