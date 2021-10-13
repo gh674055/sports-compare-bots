@@ -13647,7 +13647,9 @@ def handle_live_stats(player_type, player_data, player_link, time_frame, all_row
         row_data["Gm"] = 1
         row_data["CrGm"] = 1
 
-    game_data, sub_row_data, sub_missing_games = get_game_data(0, player_data, row_data, player_id, player_type, {"qualifiers" : {}}, set())
+    temp_extra_stats = set()
+    temp_extra_stats.add("current-stats")
+    game_data, sub_row_data, sub_missing_games = get_game_data(0, player_data, row_data, player_id, player_type, {"qualifiers" : {}}, temp_extra_stats)
     if sub_missing_games:
         missing_games.append("[" + str(row_data["Date"]) + "](" + "https://www.nhl.com/gamecenter/" + str(row_data["NHLGameLink"]) + ")")
     shift_data = game_data["shift_data"]
