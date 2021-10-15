@@ -29892,6 +29892,10 @@ def is_against_header(header, extra_stats, player_type):
     if "current-stats-no-game" in extra_stats and "GP" in header:
         return True
 
+    if "current-stats" in extra_stats and ("/GP" in header or "/82GP" in header) and "TOI" not in header:
+        if "show-stat-" + header.lower() not in extra_stats:
+            return True
+
     if header.startswith("GP") and not header.startswith("GP_TOI"):
         return False
 
@@ -29944,6 +29948,9 @@ def is_against_header(header, extra_stats, player_type):
             if "type" in headers[player_type["da_type"]["type"]][header] and (headers[player_type["da_type"]["type"]][header]["type"] == "Awards/Honors"):
                 return True
             if "type" in headers[player_type["da_type"]["type"]][header] and (headers[player_type["da_type"]["type"]][header]["type"] == "Advanced") and ("S%" in header or "PEN" in header or "PenDrawn" in header or "Post" in header):
+                if "show-stat-" + header.lower() not in extra_stats:
+                    return True
+            if "Adj" in header:
                 if "show-stat-" + header.lower() not in extra_stats:
                     return True
         else:
