@@ -21564,10 +21564,8 @@ def handle_schedule_stats(player_data, live_game, all_rows, qualifiers, is_playo
         all_rows_order = []
         for season_obj in team_schedule[da_year]:
             da_games = []
-            if not is_playoffs or is_playoffs == "Include":
-                da_games += season_obj["regular_season"]
-            if is_playoffs:
-                da_games += season_obj["playoffs"]
+            da_games += season_obj["regular_season"]
+            da_games += season_obj["playoffs"]
             for data in da_games:
                 all_rows_order.append(data)
     

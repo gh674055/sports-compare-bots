@@ -1952,6 +1952,62 @@ def handle_player_string(comment, player_type, is_fantasy, last_updated, hide_ta
                             qualifiers[qual_type].append(qualifier_obj)
 
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
+                        
+                        last_match = re.finditer(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?((\S+)-(week)s?)\b", time_frame)
+                        for m in last_match:
+                            qualifier_obj = {}
+                            
+                            negate_str = m.group(1)
+                            if negate_str:
+                                qualifier_obj["negate"] = True
+                            else:
+                                qualifier_obj["negate"] = False
+                            
+                            qualifier_str = m.group(4)
+                            if qualifier_str == "week":
+                                qual_type = "Week"
+
+                            value = ordinal_to_number(m.group(3))
+
+                            if isinstance(value, int):
+                                qualifier_obj["values"] = {
+                                    "start_val" : value,
+                                    "end_val" : value
+                                }
+
+                                if not qual_type in qualifiers:
+                                    qualifiers[qual_type] = []
+                                qualifiers[qual_type].append(qualifier_obj)
+
+                                time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
+                        
+                        last_match = re.finditer(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?((week)-(\S+))\b", time_frame)
+                        for m in last_match:
+                            qualifier_obj = {}
+                            
+                            negate_str = m.group(1)
+                            if negate_str:
+                                qualifier_obj["negate"] = True
+                            else:
+                                qualifier_obj["negate"] = False
+                            
+                            qualifier_str = m.group(3)
+                            if qualifier_str == "week":
+                                qual_type = "Week"
+
+                            value = ordinal_to_number(m.group(4))
+
+                            if isinstance(value, int):
+                                qualifier_obj["values"] = {
+                                    "start_val" : value,
+                                    "end_val" : value
+                                }
+
+                                if not qual_type in qualifiers:
+                                    qualifiers[qual_type] = []
+                                qualifiers[qual_type].append(qualifier_obj)
+
+                                time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
 
                         last_match = re.finditer(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?(current-season-age|first-games?|current-games?|first-seasons?|current-seasons?|last-games?|last-seasons?|first-starts?|last-starts?|current-age|rookie|facing-former-franchise|facing-former-team|rook|interleague|intraleague|interconference|intraconference|interdivision|intradivision|first-half|second-half|force-dates|even-year|odd-year|current-winning-opponents?|current-losing-opponents?|current-tied-opponents?|current-winning-or-tied-opponents?|current-losing-or-tied-opponents?|winning-opponents?|losing-opponents?|tied-opponents?|winning-or-tied-opponents?|losing-or-tied-opponents?|playoff-opponents?|champ-winner-opponent|conf-winner-opponent|division-winner-opponents?|current-winning-teams?|current-losing-teams?|current-tied-teams?|current-winning-or-tied-teams?|current-losing-or-tied-teams?|winning-teams?|losing-teams?|tied-teams?|winning-or-tied-teams?|losing-or-tied-teams?|playoff-teams?|champ-winner-team|conf-winner-team|division-winner-teams?|national-game|t:[\w-]+|o:[\w-]+|m:[\w-]+|d:[\w-]+|dt:[\w-]+|wk:\w+(?:-\w+)?|week:\w+(?:-\w+)?|team-franchise:[\w-]+|opponent-franchise:[\w-]+|franchise:[\w-]+|tf:[\w-]+|of:[\w-]+|f:[\w-]+|team:[\w-]+|opponent:[\w-]+|month:[\w-]+|short|middle|long|deep|right|left|middle|center|overtime|redzone|day:[\w-]+|date:[\w-]+|gm:[\w-]+|game:[\w-]+|season-gm:[\w-]+|season-game:[\w-]+|season:[\w-]+|quarter:[\w-]+|down:[\w-]+|down-distance:[\w-]+|field-position:[\w-]+|quarter-time:[\S-]+|quarter-time-remaining:[\S-]+|current-team-score:[\w-]+|current-opponent-score:[\w-]+|current-score-margin:[\S-]+|current-score-difference:[\S-]+|season-reversed:[\w-]+|crgm:[\w-]+|career-game-reversed:[\w-]+|team-game-reversed:[\w-]+|season-game-reversed:[\w-]+|game-reversed:[\w-]+|career-game:[\w-]+|tmgm:[\w-]+|team-game:[\w-]+|number:[\w-]+|dr:[\w-]+|starts-days-rest:[\w-]+|days-rest:[\w-]+|prv-dr:[\w-]+|previous-days-rest:[\w-]+|upc-dr:[\w-]+|upcoming-starts-days-rest:[\w-]+|upcoming-days-rest:[\w-]+|gr:[\w-]+|games-rest:[\w-]+|starts-rest:[\w-]+|prv-gr:[\w-]+|previous-games-rest:[\w-]+|upc-gr:[\w-]+|upcoming-games-rest:[\w-]+|days-in-a-row:[\w-]+|games-in-a-row:[\w-]+|starts-in-a-row:[\w-]+|prv-t:[\w-]+|prv-o:[\w-]+|upc-t:[\w-]+|upc-o:[\w-]+|upcoming-same-opponent|previous-same-opponent|previous-franchise:[\w-]+|previous-team-franchise:[\w-]+|previous-opponent-franchise:[\w-]+|upcoming-franchise:[\w-]+|upcoming-team-franchise:[\w-]+|upcoming-opponent-franchise:[\w-]+|previous-team:[\w-]+|previous-opponent:[\w-]+|upcoming-team:[\w-]+|upcoming-opponent:[\w-]+|season-st:[\S-]+|season-stat:[\S-]+|season-prv-st:[\S-]+|season-previous-stat:[\S-]+|season-upc-st:[\S-]+|season-upcoming-stat:[\S-]+|st:[\S-]+|stat:[\S-]+|prv-st:[\S-]+|previous-stat:[\S-]+|upc-st:[\S-]+|upcoming-stat:[\S-]+|min-st:[\S-]+|min-stat:[\S-]+|max-st:[\S-]+|max-stat:[\S-]+|totalgames-st:[\S-]+|totalgames-stat:[\S-]+|max-str:[\S-]+|max-streak:[\S-]+|max-stretch:[\S-]+|ctn-str:[\S-]+|count-streak:[\S-]+|q:[\S-]+|quickest:[\S-]+|s:[\S-]+|slowest:[\S-]+|champ(?:ionship)?(?:s)?|ch|super(?: |-)?bowl(?:s)?(:?[\w-]+)?|sb(:?[\w-]+)?|league(?: |-)champ(?:ionship)?(?:s)?|lc|(?:(?:(?:american|afc|national|nfc)(?:(?: |-)league)?)(?: |-)?)?conf(?:erence)?((?: |-)champ(?:ionship)?(?:s)?)?|(?:(?:(?:american|afc|national|nfc)(?:(?: |-)league)?)(?: |-)?)?(?:conf(?:erence)?(?: |-))?(champ(?:ionship)?(?:s)?)|(?:(?:(?:american|afc|national|nfc)(?:(?: |-)league)?)(?: |-)?)?cc|(?:(?:(?:american|afc|national|nfc)(?:(?: |-)league)?)(?: |-)?)c|(?:(?:(?:american|afc|national|nfc)(?:(?: |-)league)?)(?: |-)?)?division(?:al)(?:(?: |-)round(?:s)?)?|(?:(?:(?:american|afc|national|nfc)(?:(?: |-)league)?)(?: |-)?)?dr|(?:(?:(?:american|afc|national|nfc)(?:(?: |-)league)?)(?: |-)?)?wild card(?:(?: |-)round(?:s)?)?|(?:(?:(?:american|afc|national|nfc)(?:(?: |-)league)?)(?: |-)?)?wc|with-new-team|with-new-franchise|summer|spring|winter|fall|autumn|away|home|road|neutral|previous-away|previous-home|previous-road|previous-neutral|upcoming-away|upcoming-home|upcoming-road|upcoming-neutral|outdoors|dome|retroof|retroof-closed|retroof-open|grass|artificial|after-bye|before-bye|game-after-bye|game-before-bye|had-bye|underdogs?|favorites?|probable|questionable|doubtful|injured|start-if-qb|-?starts?|-?started|-?starting|-?ignore-starts?|-?ignore-started?|-?ignore-starting|win(?:s)?|loss(?:es)?|tie(?:s)?|w|l|t|prv-w|prv-l|prv-t|upc-w|upc-l|upc-t|previous-win(?:s)?|previous-loss(?:es)?|previous-tie(?:s)?|upcoming-win(?:s)?|upcoming-loss(?:es)?|upcoming-tie(?:s)?|team-score:[\w-]+|opponent-score:[\w-]+|score-margin:[\S-]+|score-difference:[\S-]+|spread:[\S-]+|over-under:[\w-]+|spread-margin:[\S-]+|over-under-margin:[\S-]+|previous-team-score:[\w-]+|previous-opponent-score:[\w-]+|previous-score-margin:[\S-]+|previous-score-difference:[\S-]+|upcoming-team-score:[\w-]+|upcoming-opponent-score:[\w-]+|upcoming-score-margin:[\S-]+|upcoming-score-difference:[\S-]+|humidity:[\w-]+|wind:[\w-]+|wind-chill:[\w-]+|temperature:[\w-]+|current-team-wins:[\w-]+|current-team-losses:[\w-]+|current-team-ties:[\w-]+|current-team-games-over-500:[\S-]+|current-opponent-wins:[\w-]+|current-opponent-losses:[\w-]+|current-opponent-games-over-500:[\S-]+|current-opponent-ties:[\w-]+|team-wins:[\w-]+|team-losses:[\w-]+|team-ties:[\w-]+|team-games-over-500:[\S-]+|opponent-wins:[\w-]+|opponent-losses:[\w-]+|opponent-ties:[\w-]+|opponent-games-over-500:[\S-]+|opponent-points-rank:[\S-]+|opponent-points-allowed-rank:[\S-]+|opponent-yards-rank:[\S-]+|opponent-yards-allowed-rank:[\S-]+|opponent-yds-rank:[\S-]+|opponent-yds-allowed-rank:[\S-]+|opponent-pass-tds?-rank:[\S-]+|opponent-pass-tds?-allowed-rank:[\S-]+|opponent-pass-yards-rank:[\S-]+|opponent-pass-yards-allowed-rank:[\S-]+|opponent-pass-yds-rank:[\S-]+|opponent-pass-yds-allowed-rank:[\S-]+|opponent-rush-tds?-rank:[\S-]+|opponent-rush-tds?-allowed-rank:[\S-]+|opponent-rush-yards-rank:[\S-]+|opponent-rush-yards-allowed-rank:[\S-]+|opponent-rush-yds-rank:[\S-]+|opponent-rush-yds-allowed-rank:[\S-]+|opponent-any/a-rank:[\S-]+|opponent-any/a-allowed-rank:[\S-]+|opponent-pass(?:er)?-rat(?:e|ing)-rank:[\S-]+|opponent-pass(?:er)?-rat(?:e|ing)-allowed-rank:[\S-]+|opponent-fantasy-qb-rank:[\S-]+|opponent-fantasy-(?:rb|hb)-rank:[\S-]+|opponent-fantasy-wr-rank:[\S-]+|opponent-fantasy-te-rank:[\S-]+|current-team-win(?:ning)?-percent:[\S-]+|team-win(?:ning)?-percent:[\S-]+|current-opponent-win(?:ning)?-percent:[\S-]+|opponent-win(?:ning)?-percent:[\S-]+|team-points-rank:[\S-]+|team-points-allowed-rank:[\S-]+|team-yards-rank:[\S-]+|team-yards-allowed-rank:[\S-]+|team-yds-rank:[\S-]+|team-yds-allowed-rank:[\S-]+|team-pass-tds?-rank:[\S-]+|team-pass-tds?-allowed-rank:[\S-]+|team-pass-yards-rank:[\S-]+|team-pass-yards-allowed-rank:[\S-]+|team-pass-yds-rank:[\S-]+|team-pass-yds-allowed-rank:[\S-]+|team-rush-tds?-rank:[\S-]+|team-rush-tds?-allowed-rank:[\S-]+|team-rush-yards-rank:[\S-]+|team-rush-yards-allowed-rank:[\S-]+|team-rush-yds-rank:[\S-]+|team-rush-yds-allowed-rank:[\S-]+|team-any/a-rank:[\S-]+|team-any/a-allowed-rank:[\S-]+|team-pass(?:er)?-rat(?:e|ing)-rank:[\S-]+|team-pass(?:er)?-rat(?:e|ing)-allowed-rank:[\S-]+|team-fantasy-qb-rank:[\S-]+|team-fantasy-(?:rb|hb)-rank:[\S-]+|team-fantasy-wr-rank:[\S-]+|team-fantasy-te-rank:[\S-]+|team-win(?:ning)?-percent:[\S-]+|years?:[\w-]+|early-?afternoon|late-?afternoon|morning|early|afternoon|day|night(?:time)?|late|team-league:[\w-]+|opponent-league:[\w-]+|team-conference:[\S-]+|opponent-conference:[\S-]+|team-division:[\S-]+|opponent-division:[\S-]+|birthda(?:y|te)|defense|" + all_months_re + r"|"  + all_days_re + r"|" + "|".join([pos.lower() for pos in headers]) + r")\b", time_frame)
                         for m in last_match:
@@ -16256,10 +16312,8 @@ def handle_schedule_stats(all_rows, qualifiers, is_playoffs):
         all_rows_order = []
         for season_obj in team_schedule[da_year]:
             da_games = []
-            if not is_playoffs or is_playoffs == "Include":
-                da_games += season_obj["regular_season"]
-            if is_playoffs:
-                da_games += season_obj["playoffs"]
+            da_games += season_obj["regular_season"]
+            da_games += season_obj["playoffs"]
             for data in da_games:
                 all_rows_order.append(data)
     
