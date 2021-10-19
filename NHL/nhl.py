@@ -10309,13 +10309,12 @@ def calculate_best(player_data, player_datas, player_type, extra_stats, is_best)
         if not sub_player_datas["has_season_stats"]:
             has_season_stats = False
 
-    has_toi_stats = not has_against_quals(extra_stats) or "current-stats" in extra_stats
-    if player_type["da_type"]["type"] == "Skater":
-        for index, sub_player_datas in enumerate(player_datas):
-            value = handle_table_data(sub_player_datas, player_type, "Per Game/60 Minutes", "TOI/GP", {}, {}, index, has_season_stats, has_playoffs, has_non_playoffs, True, True, extra_stats)
-            if value == "N/A" or value == None:
-                has_toi_stats = False
-                break
+    has_toi_stats = True
+    for index, sub_player_datas in enumerate(player_datas):
+        value = handle_table_data(sub_player_datas, player_type, "Per Game/60 Minutes", "TOI/GP", {}, {}, index, has_season_stats, has_playoffs, has_non_playoffs, True, True, extra_stats)
+        if value == "N/A" or value == None:
+            has_toi_stats = False
+            break
 
     highest_vals, lowest_vals = calculate_highest_lowest_vals(player_datas, player_type, has_non_playoffs, has_playoffs, has_season_stats, has_toi_stats, 0, extra_stats)
     if is_best:
@@ -29706,7 +29705,7 @@ def handle_table_data(player_data, player_type, over_header, header, highest_val
         if seasons_leading and header not in div_id_to_stat[player_type["da_type"]["type"]].values() and not header.startswith("Player") and not header == "Seasons":
             return "N/A"
 
-        if is_against_header(header, extra_stats, player_type):
+        if is_against_header(header, extra_stats, player_type, has_toi_stats):
             return "N/A"
         
         if player_type["da_type"]["type"] == "Skater" and not has_against_quals(extra_stats):
@@ -29865,7 +29864,7 @@ def has_against_quals(extra_stats):
 def has_against_quals_no_so(extra_stats):
     return "Shot On" in extra_stats or "Assisted On" in extra_stats or "Points On" in extra_stats or "Assisted By" in extra_stats or "Hit On" in extra_stats or "Block On" in extra_stats or "Penalty On" in extra_stats or "Faceoff Against" in extra_stats or "Fight Against" in extra_stats or "current-stats" in extra_stats or "current-stats-zone" in extra_stats or "scoring-stats" in extra_stats
 
-def is_against_header(header, extra_stats, player_type):
+def is_against_header(header, extra_stats, player_type, has_toi_stats):
     if not has_against_quals(extra_stats):
         return False
 
@@ -29890,7 +29889,7 @@ def is_against_header(header, extra_stats, player_type):
     if "current-stats-no-game" in extra_stats and "GP" in header:
         return True
 
-    if "current-stats" in extra_stats and ("/GP" in header or "/82GP" in header) and "TOI" not in header:
+    if "current-stats" in extra_stats and ("/GP" in header or "/82GP" in header) and "TOI" not in header and has_toi_stats:
         if "show-stat-" + header.lower() not in extra_stats:
             return True
 
