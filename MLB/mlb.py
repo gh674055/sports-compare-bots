@@ -23328,7 +23328,7 @@ def get_team_schedule(player_data, seasons, needs_reg_season, needs_playoffs, ne
                                             new_season_obj["playoffs"].append(row_data)
             
             if needs_time:
-                get_mlb_game_stats(new_season_obj["playoffs"], {}, set(), player_data, False, player_type, {}, [], False)
+                get_mlb_game_stats(new_season_obj["playoffs"], {}, set(), player_data, False, player_type, set(), False)
 
             new_season_obj["playoffs"] = sorted(new_season_obj["playoffs"], key=lambda row: row["DateTime"])
 
