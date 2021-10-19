@@ -1114,7 +1114,7 @@ headers = {
         "WPA/162" : {
             "positive" : True,
             "display" : False,
-            "round" : 1,
+            "round" : 2,
             "type" : "Per Game/Advanced",
             "valid_since" : {
                 "game-np" : 1916,
@@ -1126,7 +1126,7 @@ headers = {
         "cWPA/162" : {
             "positive" : True,
             "display" : False,
-            "round" : "percent-1",
+            "round" : "percent",
             "type" : "Per Game/Advanced",
             "valid_since" : {
                 "game-np" : 1916,
@@ -1244,7 +1244,7 @@ headers = {
         },
         "WPA" : {
             "positive" : True,
-            "round" : 1,
+            "round" : 2,
             "valid_since" : {
                 "game-np" : 1916,
                 "season-np" : 1916,
@@ -1255,7 +1255,7 @@ headers = {
         "WPA/LI" : {
             "positive" : True,
             "display" : False,
-            "round" : 1,
+            "round" : 2,
             "valid_since" : {
                 "game-np" : 1916,
                 "season-np" : 1916,
@@ -1265,7 +1265,7 @@ headers = {
         },
         "cWPA" : {
             "positive" : True,
-            "round" : "percent-1",
+            "round" : "percent",
             "valid_since" : {
                 "game-np" : 1916,
                 "season-np" : 1916,
@@ -3551,7 +3551,7 @@ headers = {
         },
         "WPA" : {
             "positive" : True,
-            "round" : 1,
+            "round" : 2,
             "valid_since" : {
                 "game-np" : 1916,
                 "season-np" : 1916,
@@ -3562,7 +3562,7 @@ headers = {
         "WPA/LI" : {
             "positive" : True,
             "display" : False,
-            "round" : 1,
+            "round" : 2,
             "valid_since" : {
                 "game-np" : 1916,
                 "season-np" : 1916,
@@ -3572,7 +3572,7 @@ headers = {
         },
         "cWPA" : {
             "positive" : True,
-            "round" : "percent-1",
+            "round" : "percent",
             "valid_since" : {
                 "game-np" : 1916,
                 "season-np" : 1916,
@@ -12936,7 +12936,7 @@ def handle_player_data(player_data, time_frame, player_type, player_page, valid_
                 if time_frame["playoffs"]:
                     all_rows = handle_playoffs_data(all_rows, player_data, player_type, playoff_data, time_frame)
 
-    if not is_game and time_frame["playoffs"] != "Only" and player_type["da_type"] != "Batter":
+    if not is_game and time_frame["playoffs"] != "Only":
         handle_missing_game_data(all_rows, player_data, player_type, time_frame, valid_years)
         
     if not is_game:
@@ -14493,16 +14493,6 @@ def handle_season_only_stats(player_page, player_data, player_type, time_frame, 
         stat_sum_range = ",".join(all_years) if len(all_years) > 1 else list(all_years)[0] + "-" + list(all_years)[0]
     
     is_full_current_year = min_year == max_year and min_year == current_season
-        
-    if stat_sum_range and (not has_team_quals or is_full_teams):
-        if player_type["da_type"] != "Batter":
-            split_table_names.append("pitching_start")
-            split_table_names.append("pitching_win_probability")
-        else:
-            split_table_names.append("batting_win_probability")
-        for row in all_rows:
-            row["WPA"] = 0
-            row["cWPA"] = 0
     
     comments = None
     previous_headers = set()
@@ -14667,10 +14657,8 @@ def handle_season_only_stats(player_page, player_data, player_type, time_frame, 
                         for pot_row in reversed(all_rows):
                             if pot_row["Year"] == row_data["Year"] and ((stat_sum_range and not table_has_teeam_quals) or pot_row["Tm"] == row_data["Tm"]):
                                 for stat in row_data:
-                                    if stat in headers[player_type["da_type"]] and (stat == "WPA" or stat == "cWPA" or ("type" in headers[player_type["da_type"]][stat] and headers[player_type["da_type"]][stat]["type"].startswith("Defense"))):
+                                    if stat in headers[player_type["da_type"]] and (("type" in headers[player_type["da_type"]][stat] and headers[player_type["da_type"]][stat]["type"].startswith("Defense"))):
                                         if stat == "Salary":
-                                            continue
-                                        if table_name.endswith("win_probability") and stat != "WPA" and stat != "cWPA":
                                             continue
                                         if not stat in pot_row:
                                             pot_row[stat] = 0.0
@@ -21158,9 +21146,9 @@ def parse_table(player_data, time_frame, year, player_type):
         player_url = playoffs_url_format.format(player_data["id"], format_str)
     elif not year:
         format_str = "bat"
-        table_names = ["batting_standard", "batting_win_probability"]
+        table_names = ["batting_standard"]
         if player_type["da_type"] != "Batter":
-            table_names = ["pitching_standard", "pitching_starter", "pitching_reliever", "pitching_batting", "pitching_pitches", "pitching_basesituation", "pitching_win_probability"]
+            table_names = ["pitching_standard", "pitching_starter", "pitching_reliever", "pitching_batting", "pitching_pitches", "pitching_basesituation"]
             format_str = "pitch"
         player_url = advanced_page_url_format.format(player_data["id"][0], player_data["id"], format_str)
     else:
@@ -21245,16 +21233,23 @@ def handle_missing_game_data(all_rows, player_data, player_type, time_frame, val
         for year_row in year_rows:
             for row_data in all_rows:
                 if row_data["Year"] == year_row["Year"] and row_data["Tm"] == year_row["Tm"] and not row_data["is_playoffs"]:
-                    if year_row["Start"]:
-                        if "IPStart" not in row_data:
-                            row_data["IPStart"] = 0
-                        if "PitStart" not in row_data:
-                            row_data["PitStart"] = 0
-                        if "GSc" not in row_data:
-                            row_data["GSc"] = 0
-                        row_data["IPStart"] += year_row.get("IP", 0)
-                        row_data["PitStart"] += year_row.get("Pit", 0)
-                        row_data["GSc"] += year_row.get("GSc", 0)
+                    if "WPA" not in row_data:
+                        row_data["WPA"] = 0
+                    if "cWPA" not in row_data:
+                        row_data["cWPA"] = 0
+                    row_data["WPA"] += year_row.get("WPA", 0)
+                    row_data["cWPA"] += year_row.get("cWPA", 0)
+                    if player_type["da_type"] != "Batter":
+                        if year_row["Start"]:
+                            if "IPStart" not in row_data:
+                                row_data["IPStart"] = 0
+                            if "PitStart" not in row_data:
+                                row_data["PitStart"] = 0
+                            if "GSc" not in row_data:
+                                row_data["GSc"] = 0
+                            row_data["IPStart"] += year_row.get("IP", 0)
+                            row_data["PitStart"] += year_row.get("Pit", 0)
+                            row_data["GSc"] += year_row.get("GSc", 0)
                     break
     
 def parse_row(row, time_frame, year, is_playoffs, player_type, header_values, previous_headers, table_index, table_name):
