@@ -6477,109 +6477,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                         time_end = None
 
                         og_time_str = time_frame
-
-                        last_match = re.finditer(r"\bshow(?: |-)?(career(?: |-)?(year|season|game|team|franchise|number))s?\b", time_frame)
-                        for m in last_match:
-                            if m.group(1) == "career-season":
-                                extra_stats.add("career-year")
-                            else:
-                                extra_stats.add(m.group(1))
-                            time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
-                        
-                        last_match = re.finditer(r"\b(hide(?: |-)?table)\(.+?\)", time_frame)
-                        for m in last_match:
-                            for stat in re.split(r"(?<!\\)\-", re.split(r"(?<!\\)" + m.group(1), m.group(0))[1].strip("()")):
-                                extra_stats.add("hide-table-" + stat.strip())
-                            time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
-
-                        time_frame = re.sub(r"\s+", " ", re.sub(r"(?:career|regular(?: | -)?season)(?!-)", "", time_frame)).strip()
-
-                        time_frame = re.sub(r"tables?", "", time_frame).strip()
-                        time_frame, is_image = re.subn(r"images?", "", time_frame)
-                        if is_image:
-                            time_frame = time_frame.strip()
-                            hide_table = True
-                        
-                        last_match = re.search(r"\bremove[-\s]duplicate-games?\b", time_frame)
-                        if last_match:
-                            remove_duplicate_games = True
-                            time_frame = re.sub(r"\s+", " ", time_frame.replace(last_match.group(0), "", 1)).strip()
-                        
-                        last_match = re.search(r"\bremove[-\s]duplicates?\b", time_frame)
-                        if last_match:
-                            remove_duplicates = True
-                            time_frame = re.sub(r"\s+", " ", time_frame.replace(last_match.group(0), "", 1)).strip()
-
-                        last_match = re.finditer(r"\bshow(?: |-)?(seasons-leading)s?:(\S+)-(\S+)", time_frame)
-                        for m in last_match:
-                            extra_stats.add(m.group(1) + "-" + str(ordinal_to_number(m.group(2))) + "-" + str(str(ordinal_to_number(m.group(3)))))
-                            time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
-
-                        last_match = re.finditer(r"\bshow(?: |-)?(best-game|worst-game|best-season|worst-season|seasons-leading)s?:(\S+)", time_frame)
-                        for m in last_match:
-                            extra_stats.add(m.group(1) + "-" + str(ordinal_to_number(m.group(2))))
-                            time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
-                        
-                        last_match = re.finditer(r"\bshow(?: |-)?(record|score|goal|year|seasons-leading|season|date|game|adjusted|advanced|missing-game|missing-toi|best-game|worst-game|best-season|worst-season|ng|team|franchise|number|fight|penaltie|penalty|award|star|play)s?\b", time_frame)
-                        for m in last_match:
-                            if "penalt" in m.group(1) or m.group(1) == "fight":
-                                extra_stats.add("penalties")
-                                player_type["da_type"] = {
-                                    "type" : "Skater"
-                                }
-                            elif m.group(1) == "season":
-                                extra_stats.add("year")
-                            else:
-                                extra_stats.add(m.group(1))
-                                if m.group(1) == "play":
-                                    extra_stats.add("current-stats")
-                                elif m.group(1) == "advanced":
-                                    extra_stats.add("current-stats")
-                                elif m.group(1) == "goal":
-                                    extra_stats.add("score")
-                            time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
-                                                
-                        last_match = re.finditer(r"\bhide(?: |-)?(name|year|season|date|query|queries)s?\b", time_frame)
-                        for m in last_match:
-                            if m.group(1) == "date" or m.group(1) == "season":
-                                extra_stats.add("hide-year")
-                            elif m.group(1).startswith("quer"):
-                                extra_stats.add("hide-query")
-                            else:
-                                extra_stats.add("hide-" + m.group(1))
-                            time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
-                        
-                        last_match = re.finditer(r"\b(show(?: |-)?stat:)\(.+?\)", time_frame)
-                        for m in last_match:
-                            for stat in re.split(r"(?<!\\)\-", re.split(r"(?<!\\)" + m.group(1), m.group(0))[1].strip("()")):
-                                extra_stats.add("show-stat-" + stat.strip())
-                            time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
-
-                        last_match = re.finditer(r"\b(hide(?: |-)?stat:)\(.+?\)", time_frame)
-                        for m in last_match:
-                            for stat in re.split(r"(?<!\\)\-", re.split(r"(?<!\\)" + m.group(1), m.group(0))[1].strip("()")):
-                                extra_stats.add("hide-stat-" + stat.strip())
-                            time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
-
-                        playoffs = None
                         qualifiers = {}
-                        last_match = re.search(r"\b(no(?:t|n)? ?)?-?(?:includes?|including)(?: |-)?(?:playoffs?|post-?seasons?)(?!-)\b", time_frame)
-                        if last_match:
-                            playoff_match_str = last_match.group(1)
-                            if playoff_match_str:
-                                playoffs = "No"
-                            else:
-                                playoffs = "Include"
-                            time_frame = re.sub(r"\s+", " ", time_frame.replace(last_match.group(0), "", 1)).strip()
-                        else:
-                            last_match = re.search(r"\b(no(?:t|n)? ?)?-?(?:playoffs?|post-?seasons?)(?!-)\b", time_frame)
-                            if last_match:
-                                playoff_match_str = last_match.group(1)
-                                if playoff_match_str:
-                                    playoffs = "No"
-                                else:
-                                    playoffs = "Only"
-                                time_frame = re.sub(r"\s+", " ", time_frame.replace(last_match.group(0), "", 1)).strip()
 
                         last_match = re.finditer(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?((?:sub-query|day-after-sub-query|day-before-sub-query|day-of-sub-query|game-after-sub-query|game-before-sub-query|season-sub-query|season-after-sub-query|season-before-sub-query|w|(?:playing|starting)-with|a|(?:playing|starting)-against|(?:playing|starting)-same-game|prv-w|previous-playing-with|prv-a|previous-playing-against|upc-w|upcoming-playing-with|upc-a|upcoming-playing-against|(?:playing|starting)-same-opponents?|(?:playing|starting)-same-dates?|holidays?|dts|dates|arena|exact-arena|stadiun|exact-stadium|penalty-type|shot-on|on-ice-with|on-ice-against|assisted-on|assisted-with|points-with|assisted-by|primary-assisted-on|primary-assisted-with|primary-points-with|primary-assisted-by|hit-on|penalty-on|faceoff-against|fight-against|event-time|start-time):(?<!\\)\(.*?(?<!\\)\))", time_frame)
                         for m in last_match:
@@ -6926,6 +6824,108 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                             qualifiers[qual_type].append(qualifier_obj)
 
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
+
+                        last_match = re.finditer(r"\bshow(?: |-)?(career(?: |-)?(year|season|game|team|franchise|number))s?\b", time_frame)
+                        for m in last_match:
+                            if m.group(1) == "career-season":
+                                extra_stats.add("career-year")
+                            else:
+                                extra_stats.add(m.group(1))
+                            time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
+                        
+                        last_match = re.finditer(r"\b(hide(?: |-)?table)\(.+?\)", time_frame)
+                        for m in last_match:
+                            for stat in re.split(r"(?<!\\)\-", re.split(r"(?<!\\)" + m.group(1), m.group(0))[1].strip("()")):
+                                extra_stats.add("hide-table-" + stat.strip())
+                            time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
+
+                        time_frame = re.sub(r"\s+", " ", re.sub(r"(?:career|regular(?: | -)?season)(?!-)", "", time_frame)).strip()
+
+                        time_frame = re.sub(r"tables?", "", time_frame).strip()
+                        time_frame, is_image = re.subn(r"images?", "", time_frame)
+                        if is_image:
+                            time_frame = time_frame.strip()
+                            hide_table = True
+                        
+                        last_match = re.search(r"\bremove[-\s]duplicate-games?\b", time_frame)
+                        if last_match:
+                            remove_duplicate_games = True
+                            time_frame = re.sub(r"\s+", " ", time_frame.replace(last_match.group(0), "", 1)).strip()
+                        
+                        last_match = re.search(r"\bremove[-\s]duplicates?\b", time_frame)
+                        if last_match:
+                            remove_duplicates = True
+                            time_frame = re.sub(r"\s+", " ", time_frame.replace(last_match.group(0), "", 1)).strip()
+
+                        last_match = re.finditer(r"\bshow(?: |-)?(seasons-leading)s?:(\S+)-(\S+)", time_frame)
+                        for m in last_match:
+                            extra_stats.add(m.group(1) + "-" + str(ordinal_to_number(m.group(2))) + "-" + str(str(ordinal_to_number(m.group(3)))))
+                            time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
+
+                        last_match = re.finditer(r"\bshow(?: |-)?(best-game|worst-game|best-season|worst-season|seasons-leading)s?:(\S+)", time_frame)
+                        for m in last_match:
+                            extra_stats.add(m.group(1) + "-" + str(ordinal_to_number(m.group(2))))
+                            time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
+                        
+                        last_match = re.finditer(r"\bshow(?: |-)?(record|score|goal|year|seasons-leading|season|date|game|adjusted|advanced|missing-game|missing-toi|best-game|worst-game|best-season|worst-season|ng|team|franchise|number|fight|penaltie|penalty|award|star|play)s?\b", time_frame)
+                        for m in last_match:
+                            if "penalt" in m.group(1) or m.group(1) == "fight":
+                                extra_stats.add("penalties")
+                                player_type["da_type"] = {
+                                    "type" : "Skater"
+                                }
+                            elif m.group(1) == "season":
+                                extra_stats.add("year")
+                            else:
+                                extra_stats.add(m.group(1))
+                                if m.group(1) == "play":
+                                    extra_stats.add("current-stats")
+                                elif m.group(1) == "advanced":
+                                    extra_stats.add("current-stats")
+                                elif m.group(1) == "goal":
+                                    extra_stats.add("score")
+                            time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
+                                                
+                        last_match = re.finditer(r"\bhide(?: |-)?(name|year|season|date|query|queries)s?\b", time_frame)
+                        for m in last_match:
+                            if m.group(1) == "date" or m.group(1) == "season":
+                                extra_stats.add("hide-year")
+                            elif m.group(1).startswith("quer"):
+                                extra_stats.add("hide-query")
+                            else:
+                                extra_stats.add("hide-" + m.group(1))
+                            time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
+                        
+                        last_match = re.finditer(r"\b(show(?: |-)?stat:)\(.+?\)", time_frame)
+                        for m in last_match:
+                            for stat in re.split(r"(?<!\\)\-", re.split(r"(?<!\\)" + m.group(1), m.group(0))[1].strip("()")):
+                                extra_stats.add("show-stat-" + stat.strip())
+                            time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
+
+                        last_match = re.finditer(r"\b(hide(?: |-)?stat:)\(.+?\)", time_frame)
+                        for m in last_match:
+                            for stat in re.split(r"(?<!\\)\-", re.split(r"(?<!\\)" + m.group(1), m.group(0))[1].strip("()")):
+                                extra_stats.add("hide-stat-" + stat.strip())
+                            time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
+
+                        playoffs = None
+                        last_match = re.search(r"\b(no(?:t|n)? ?)?-?(?:includes?|including|and|with)(?: |-)?(?:playoffs?|post-?seasons?)(?!-)\b", time_frame)
+                        if last_match:
+                            playoff_match_str = last_match.group(1)
+                            if playoff_match_str:
+                                playoffs = "No"
+                            else:
+                                playoffs = "Include"
+                            time_frame = re.sub(r"\s+", " ", time_frame.replace(last_match.group(0), "", 1)).strip()
+                        else:
+                            last_match = re.search(r"\b(no(?:t|n)? ?)?-?(?:playoffs?|post-?seasons?)(?!-)\b", time_frame)
+                            if last_match:
+                                playoff_match_str = last_match.group(1)
+                                if playoff_match_str:
+                                    playoffs = "No"
+                                else:
+                                    playoffs = "Only"
+                                time_frame = re.sub(r"\s+", " ", time_frame.replace(last_match.group(0), "", 1)).strip()
                         
                         last_match = re.finditer(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?((?:(?:playing|starting)-with|(?:playing|starting)-against|(?:playing|starting)-same-game|prv-w|previous-playing-with|prv-a|previous-playing-against|upc-w|upcoming-playing-with|upc-a|upcoming-playing-against|(?:playing|starting)-same-opponents?|(?:playing|starting)-same-dates?|shot-on|on-ice-with|on-ice-against|assisted-on|assisted-with|points-with|assisted-by|primary-assisted-on|primary-assisted-with|primary-points-with|primary-assisted-by|hit-on|block-on|penalty-on|faceoff-against|fight-against))\b", time_frame)
                         for m in last_match:
@@ -10729,7 +10729,7 @@ def determine_player_str(qualifier, player_str, time_frame, qual_str):
         except ValueError:
             player_str += " []"
 
-        if time_frame["playoffs"] and time_frame["playoffs"] != "No":
+        if time_frame["playoffs"] and time_frame["playoffs"] != "No" and not re.search(r"\b(no(?:t|n)? ?)?-?(?:includes?|including|and|with)(?: |-)?(?:playoffs?|post-?seasons?)(?!-)\b", player_str) and not re.search(r"\b(no(?:t|n)? ?)?-?(?:playoffs?|post-?seasons?)(?!-)\b", player_str):
             bracket_index = player_str.index("]")
             playoffs_str = "playoffs" if time_frame["playoffs"] == "Only" else "including playoffs"
             player_str = player_str[:bracket_index] + " " + playoffs_str + player_str[bracket_index:]
