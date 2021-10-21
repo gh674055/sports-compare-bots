@@ -10632,7 +10632,7 @@ def sub_handle_the_quals(players, qualifier, qual_str, player_str, time_frame, k
         player_games = {}
 
         missing_games = player_data["stat_values"]["any_missing_games"]
-        missing_toi = player_data["stat_values"]["any_missing_games"]
+        missing_toi = player_data["stat_values"]["any_missing_toi"]
 
         if "all_rows" in player_data["stat_values"]:
             for row in player_data["stat_values"]["all_rows"]:
