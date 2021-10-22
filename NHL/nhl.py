@@ -6862,12 +6862,12 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                             extra_stats.add(m.group(1) + "-" + str(ordinal_to_number(m.group(2))) + "-" + str(str(ordinal_to_number(m.group(3)))))
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
 
-                        last_match = re.finditer(r"\bshow(?: |-)?(best-game|worst-game|best-season|worst-season|seasons-leading)s?:(\S+)", time_frame)
+                        last_match = re.finditer(r"\bshow(?: |-)?(best-season|worst-season|seasons-leading)s?:(\S+)", time_frame)
                         for m in last_match:
                             extra_stats.add(m.group(1) + "-" + str(ordinal_to_number(m.group(2))))
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
                         
-                        last_match = re.finditer(r"\bshow(?: |-)?(record|score|goal|year|seasons-leading|season|date|game|adjusted|advanced|missing-game|missing-toi|best-game|worst-game|best-season|worst-season|ng|team|franchise|number|fight|penaltie|penalty|award|star|play)s?\b", time_frame)
+                        last_match = re.finditer(r"\bshow(?: |-)?(record|score|goal|year|seasons-leading|season|date|game|adjusted|advanced|missing-game|missing-toi|best-season|worst-season|ng|team|franchise|number|fight|penaltie|penalty|award|star|play)s?\b", time_frame)
                         for m in last_match:
                             if "penalt" in m.group(1) or m.group(1) == "fight":
                                 extra_stats.add("penalties")
