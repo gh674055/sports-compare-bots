@@ -4202,12 +4202,12 @@ def handle_player_string(comment, player_type, is_fantasy, last_updated, hide_ta
     best_games_table = 0
     worst_games_table = 0
     for extra_stat in extra_stats:
-        if extra_stat.startswith("best-games"):
+        if extra_stat.startswith("best-game"):
             if "-" in extra_stat:
                 best_games_table = int(extra_stat.split("-")[2])
             else:
                 best_games_table = 1
-        elif extra_stat.startswith("worst-games"):
+        elif extra_stat.startswith("worst-game"):
             if "-" in extra_stat:
                 worst_games_table = int(extra_stat.split("-")[2])
             else:
@@ -4547,12 +4547,12 @@ def handle_name_threads(sub_name, parse_time_frames, index, player_type, is_fant
         best_games_table = 0
         worst_games_table = 0
         for extra_stat in extra_stats:
-            if extra_stat.startswith("best-games"):
+            if extra_stat.startswith("best-game"):
                 if len(extra_stat.split("-")) == 3:
                     best_games_table = int(extra_stat.split("-")[2])
                 else:
                     best_games_table = 1
-            elif extra_stat.startswith("worst-games"):
+            elif extra_stat.startswith("worst-game"):
                 if len(extra_stat.split("-")) == 3:
                     worst_games_table = int(extra_stat.split("-")[2])
                 else:
@@ -6142,12 +6142,12 @@ def combine_player_datas(player_datas, player_type, any_missing_games, time_fram
     best_games_table = 0
     worst_games_table = 0
     for extra_stat in extra_stats:
-        if extra_stat.startswith("best-games"):
+        if extra_stat.startswith("best-game"):
             if len(extra_stat.split("-")) == 3:
                 best_games_table = int(extra_stat.split("-")[2])
             else:
                 best_games_table = 1
-        elif extra_stat.startswith("worst-games"):
+        elif extra_stat.startswith("worst-game"):
             if len(extra_stat.split("-")) == 3:
                 worst_games_table = int(extra_stat.split("-")[2])
             else:
