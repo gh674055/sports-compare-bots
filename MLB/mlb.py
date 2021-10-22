@@ -29236,9 +29236,6 @@ def get_mlb_game_links(player_data, player_type, player_link, all_rows):
                 game_type = sub_game["gameType"]
                 if game_type != "R" and game_type != "F" and game_type != "D" and game_type != "L" and game_type != "W":
                     continue
-                if sub_game["status"]["detailedState"]:
-                    if sub_game["status"]["detailedState"] == "Cancelled" or sub_game["status"]["detailedState"] == "Warmup" or sub_game["status"]["detailedState"] == "Postponed" or sub_game["status"]["detailedState"].startswith("Suspended"):
-                        continue
             
                 game_datetime = dateutil.parser.parse(sub_game["date"])
                 game_date = game_datetime.date()
