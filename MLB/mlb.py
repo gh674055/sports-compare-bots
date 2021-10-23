@@ -21405,7 +21405,7 @@ def parse_row(row, time_frame, year, is_playoffs, player_type, header_values, pr
                 if header_value == "G":
                     header_value = "PosG"
             
-            if header_value in headers[player_type["da_type"]] and (not header_value in formulas[player_type["da_type"]] or header_value == "Rdrs/yr") and (not header_value in previous_headers or header_value == "Tm" or header_value == "Salary"):
+            if header_value in headers[player_type["da_type"]] and ((not header_value in formulas[player_type["da_type"]] and not header_value in advanced_stats["Batter"] and not header_value in advanced_stats["Pitcher"]) or header_value == "Rdrs/yr") and (not header_value in previous_headers or header_value == "Tm" or header_value == "Salary"):
                 column_value = column.find(text=True)
                 if column_value and column_value.strip():
                     column_value = str(column_value)
