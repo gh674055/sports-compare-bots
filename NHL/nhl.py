@@ -26648,7 +26648,7 @@ def parse_row(row, time_frame, year, is_playoffs, player_type, header_values, ta
                 elif header_value == "EVGA":
                     header_value = "xEVGA"
             
-            if header_value in headers[player_type["da_type"]["type"]] and not header_value in formulas[player_type["da_type"]["type"]] and header_value != "GS" and header_value != "SO" and header_value != "QS" and header_value != "RBS":
+            if header_value in headers[player_type["da_type"]["type"]] and (not header_value in formulas[player_type["da_type"]["type"]] and not header_value in advanced_stats) and header_value != "GS" and header_value != "SO" and header_value != "QS" and header_value != "RBS":
                 if header_value.startswith("TOI") and header_value != "TOI_5v5" and player_type["da_type"]["type"] == "Skater":
                     continue
 

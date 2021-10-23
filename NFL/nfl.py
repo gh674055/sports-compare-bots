@@ -15932,7 +15932,7 @@ def parse_row(row, table_name, time_frame, year, is_playoffs, player_type, ind_p
                 continue
             
             if over_header_value in headers[player_type["da_type"]] or over_header_value == "Shared":
-                if header_value in get_constant_data.stat_groups[over_header_value] and (not header_value in get_constant_data.formulas[over_header_value] or get_constant_data.formulas[over_header_value][header_value] == "MAX") and (over_header_value != "Shared" or not header_value in previous_headers or header_value == "Tm" or header_value == "G" or header_value == "GS"):
+                if header_value in get_constant_data.stat_groups[over_header_value] and ((not header_value in get_constant_data.formulas[over_header_value] and not header_value in advanced_stats) or get_constant_data.formulas[over_header_value][header_value] == "MAX") and (over_header_value != "Shared" or not header_value in previous_headers or header_value == "Tm" or header_value == "G" or header_value == "GS"):
                     if header_value == "Yds":
                         if over_header_value == "Passing":
                             if column.get("data-stat") == "pass_sacked_yds":
