@@ -13664,7 +13664,8 @@ def handle_live_stats(player_type, player_data, player_link, time_frame, all_row
                 if sub_player["person"]["id"] == goalie:
                     if "goalieStats" not in sub_player["stats"]:
                         continue
-                    goalies.append(goalie)
+                    if start_time_to_str(sub_player["stats"]["goalieStats"]["timeOnIce"]):
+                        goalies.append(goalie)
 
         is_start = True
         if shift_data:
