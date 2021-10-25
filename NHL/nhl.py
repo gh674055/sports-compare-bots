@@ -13704,6 +13704,9 @@ def handle_live_stats(player_type, player_data, player_link, time_frame, all_row
                 if len(goalies) == 1:
                     row_data["CG"] = 1
 
+                    if not row_data["GA"]:
+                        row_data["SO"] = 1
+
         if is_final:
             is_ot = False
             if not is_shootout and len(sub_data["liveData"]["linescore"]["periods"]) > 3:
@@ -13711,13 +13714,11 @@ def handle_live_stats(player_type, player_data, player_link, time_frame, all_row
 
             game = player["stats"][ "goalieStats"]
             if "decision" in game:
-                decision = game["decision"]            
+                decision = game["decision"]
                 if decision == "W":
                     row_data["W"] = 1
                     if not is_shootout:
                         row_data["ROW"] = 1
-                    if row_data["GS"] and row_data["CG"] and not row_data["GA"]:
-                        row_data["SO"] = 1
                 elif decision == "L":
                     if not row_data["is_playoffs"] and (is_ot or is_shootout):
                         row_data["OTL"] = 1
