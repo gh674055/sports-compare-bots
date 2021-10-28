@@ -1126,7 +1126,7 @@ headers = {
         "cWPA/162" : {
             "positive" : True,
             "display" : False,
-            "round" : "percent-0",
+            "round" : "percent-1",
             "type" : "Per Game/Advanced",
             "valid_since" : {
                 "game-np" : 1916,
@@ -1265,7 +1265,7 @@ headers = {
         },
         "cWPA" : {
             "positive" : True,
-            "round" : "percent-0",
+            "round" : "percent-1",
             "valid_since" : {
                 "game-np" : 1916,
                 "season-np" : 1916,
@@ -3572,7 +3572,7 @@ headers = {
         },
         "cWPA" : {
             "positive" : True,
-            "round" : "percent-0",
+            "round" : "percent-1",
             "valid_since" : {
                 "game-np" : 1916,
                 "season-np" : 1916,
