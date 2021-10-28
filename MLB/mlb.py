@@ -1126,7 +1126,7 @@ headers = {
         "cWPA/162" : {
             "positive" : True,
             "display" : False,
-            "round" : "percent-1",
+            "round" : "percent-0",
             "type" : "Per Game/Advanced",
             "valid_since" : {
                 "game-np" : 1916,
@@ -1265,7 +1265,7 @@ headers = {
         },
         "cWPA" : {
             "positive" : True,
-            "round" : "percent-1",
+            "round" : "percent-0",
             "valid_since" : {
                 "game-np" : 1916,
                 "season-np" : 1916,
@@ -3572,7 +3572,7 @@ headers = {
         },
         "cWPA" : {
             "positive" : True,
-            "round" : "percent-1",
+            "round" : "percent-0",
             "valid_since" : {
                 "game-np" : 1916,
                 "season-np" : 1916,
@@ -17606,8 +17606,9 @@ def handle_max_min_data(all_rows, player_data, player_type, qualifiers):
                     if isinstance(round_val, str):
                         if round_val == "percent":
                             value = ("{:.2f}").format(round_value(100 * value, 2)) + "%"
-                        elif round_val == "percent-1":
-                            value = ("{:.1f}").format(round_value(100 * value, 1)) + "%"
+                        elif round_val.startswith("percent-"):
+                            rount_int = int(round_val.split("-")[1])
+                            value = ("{:." + str(rount_int) + "f}").format(round_value(100 * value, rount_int)) + "%"
                         elif round_val == "dollar":
                             value = round_value(value / 1000000, 2)
                             value = ("{:." + str(2) + "f}").format(value)
@@ -34367,8 +34368,10 @@ def handle_table_data(over_header, player_data, player_datas, player_type, heade
                     if isinstance(round_val, str):
                         if round_val == "percent":
                             value = ("{:.2f}").format(round_value(100 * value, 2)) + "%"
-                        elif round_val == "percent-1":
-                            value = ("{:.1f}").format(round_value(100 * value, 1)) + "%"
+                        elif round_val.startswith("percent-"):
+                            print(value)
+                            rount_int = int(round_val.split("-")[1])
+                            value = ("{:." + str(rount_int) + "f}").format(round_value(100 * value, rount_int)) + "%"
                         elif round_val == "dollar":
                             value = round_value(value / 1000000, 2)
                             value = ("{:." + str(2) + "f}").format(value)
