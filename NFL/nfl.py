@@ -18939,6 +18939,13 @@ def print_player_data(player_datas, player_type, highest_vals, lowest_vals, has_
         if not player_data["has_award_stats"]:
             has_award_stats = False
             break
+    if has_award_stats:
+        previous_playoffs = None
+        for player_data in player_datas:
+            if player_data["stat_values"]["Shared"]["is_playoffs"] != previous_playoffs:
+                has_award_stats = False
+                break
+            previous_playoffs = player_data["stat_values"]["Shared"]["is_playoffs"]
     error_getting_pen = False
     for player_data in player_datas:
         if player_data["error_getting_pen"]:
@@ -19258,6 +19265,13 @@ def get_reddit_player_table(player_datas, player_type, is_fantasy, debug_mode, o
         if not player_data["has_award_stats"]:
             has_award_stats = False
             break
+    if has_award_stats:
+        previous_playoffs = None
+        for player_data in player_datas:
+            if player_data["stat_values"]["Shared"]["is_playoffs"] != previous_playoffs:
+                has_award_stats = False
+                break
+            previous_playoffs = player_data["stat_values"]["Shared"]["is_playoffs"]
     error_getting_pen = False
     for player_data in player_datas:
         if player_data["error_getting_pen"]:

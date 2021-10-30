@@ -28406,6 +28406,14 @@ def print_player_data(player_datas, player_type, highest_vals, lowest_vals, has_
                             if player_type["da_type"]["type"] == "Skater":
                                 if handle_table_data(player_data, player_type, "Awards/Honors", "Selke", highest_vals, lowest_vals, index, has_season_stats, has_playoffs, has_non_playoffs, has_toi_stats, True, extra_stats) != "N/A":
                                     show_selke = True
+        
+        if has_award_stats:
+            previous_playoffs = None
+            for player_data in player_datas:
+                if player_data["stat_values"]["is_playoffs"] != previous_playoffs:
+                    has_award_stats = False
+                    break
+                previous_playoffs = player_data["stat_values"]["is_playoffs"]
                 
         if has_award_stats:
             if not show_selke:
@@ -28696,6 +28704,14 @@ def get_reddit_player_table(player_datas, player_type, debug_mode, original_comm
                             if player_type["da_type"]["type"] == "Skater":
                                 if handle_table_data(player_data, player_type, "Awards/Honors", "Selke", highest_vals, lowest_vals, index, has_season_stats, has_playoffs, has_non_playoffs, has_toi_stats, True, extra_stats) != "N/A":
                                     show_selke = True
+        
+        if has_award_stats:
+            previous_playoffs = None
+            for player_data in player_datas:
+                if player_data["stat_values"]["is_playoffs"] != previous_playoffs:
+                    has_award_stats = False
+                    break
+                previous_playoffs = player_data["stat_values"]["is_playoffs"]
                 
         if has_award_stats:
             if not show_selke:

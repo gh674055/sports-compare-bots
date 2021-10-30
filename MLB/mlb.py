@@ -33162,6 +33162,13 @@ def print_player_data(player_datas, player_type, highest_vals, lowest_vals, has_
                 has_award_stats = False
                 break
         if has_award_stats:
+            previous_playoffs = None
+            for player_data in player_datas:
+                if player_data["stat_values"]["is_playoffs"] != previous_playoffs:
+                    has_award_stats = False
+                    break
+                previous_playoffs = player_data["stat_values"]["is_playoffs"]
+        if has_award_stats:
             if non_rate_headers and "Player" in non_rate_headers:
                 award_headers.update({"Seasons" : non_rate_headers["Seasons"]})
                 award_headers.move_to_end("Seasons", last=False)
@@ -33380,6 +33387,13 @@ def get_reddit_player_table(player_datas, player_type, debug_mode, original_comm
             if not player_data["has_award_stats"]:
                 has_award_stats = False
                 break
+        if has_award_stats:
+            previous_playoffs = None
+            for player_data in player_datas:
+                if player_data["stat_values"]["is_playoffs"] != previous_playoffs:
+                    has_award_stats = False
+                    break
+                previous_playoffs = player_data["stat_values"]["is_playoffs"]
         if has_award_stats:
             if non_rate_headers and "Player" in non_rate_headers:
                 award_headers.update({"Seasons" : non_rate_headers["Seasons"]})
@@ -34369,7 +34383,6 @@ def handle_table_data(over_header, player_data, player_datas, player_type, heade
                         if round_val == "percent":
                             value = ("{:.2f}").format(round_value(100 * value, 2)) + "%"
                         elif round_val.startswith("percent-"):
-                            print(value)
                             rount_int = int(round_val.split("-")[1])
                             value = ("{:." + str(rount_int) + "f}").format(round_value(100 * value, rount_int)) + "%"
                         elif round_val == "dollar":
