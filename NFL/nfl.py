@@ -18940,12 +18940,18 @@ def print_player_data(player_datas, player_type, highest_vals, lowest_vals, has_
             has_award_stats = False
             break
     if has_award_stats:
-        previous_playoffs = None
+        has_playoffs = False
+        has_reg_season = False
         for player_data in player_datas:
-            if player_data["stat_values"]["Shared"]["is_playoffs"] != previous_playoffs:
-                has_award_stats = False
-                break
-            previous_playoffs = player_data["stat_values"]["Shared"]["is_playoffs"]
+            if player_data["stat_values"]["Shared"]["is_playoffs"]:
+                if player_data["stat_values"]["Shared"]["is_playoffs"] == "Only":
+                    has_playoffs = True
+                else:
+                    has_reg_season = True
+            else:
+                has_reg_season = True
+        if has_playoffs and has_reg_season:
+            has_award_stats = False
     error_getting_pen = False
     for player_data in player_datas:
         if player_data["error_getting_pen"]:
@@ -19266,12 +19272,18 @@ def get_reddit_player_table(player_datas, player_type, is_fantasy, debug_mode, o
             has_award_stats = False
             break
     if has_award_stats:
-        previous_playoffs = None
+        has_playoffs = False
+        has_reg_season = False
         for player_data in player_datas:
-            if player_data["stat_values"]["Shared"]["is_playoffs"] != previous_playoffs:
-                has_award_stats = False
-                break
-            previous_playoffs = player_data["stat_values"]["Shared"]["is_playoffs"]
+            if player_data["stat_values"]["Shared"]["is_playoffs"]:
+                if player_data["stat_values"]["Shared"]["is_playoffs"] == "Only":
+                    has_playoffs = True
+                else:
+                    has_reg_season = True
+            else:
+                has_reg_season = True
+        if has_playoffs and has_reg_season:
+            has_award_stats = False
     error_getting_pen = False
     for player_data in player_datas:
         if player_data["error_getting_pen"]:

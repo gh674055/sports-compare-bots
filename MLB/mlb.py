@@ -33162,12 +33162,18 @@ def print_player_data(player_datas, player_type, highest_vals, lowest_vals, has_
                 has_award_stats = False
                 break
         if has_award_stats:
-            previous_playoffs = None
+            has_playoffs = False
+            has_reg_season = False
             for player_data in player_datas:
-                if player_data["stat_values"]["is_playoffs"] != previous_playoffs:
-                    has_award_stats = False
-                    break
-                previous_playoffs = player_data["stat_values"]["is_playoffs"]
+                if player_data["stat_values"]["is_playoffs"]:
+                    if player_data["stat_values"]["is_playoffs"] == "Only":
+                        has_playoffs = True
+                    else:
+                        has_reg_season = True
+                else:
+                    has_reg_season = True
+            if has_playoffs and has_reg_season:
+                has_award_stats = False
         if has_award_stats:
             if non_rate_headers and "Player" in non_rate_headers:
                 award_headers.update({"Seasons" : non_rate_headers["Seasons"]})
@@ -33388,12 +33394,18 @@ def get_reddit_player_table(player_datas, player_type, debug_mode, original_comm
                 has_award_stats = False
                 break
         if has_award_stats:
-            previous_playoffs = None
+            has_playoffs = False
+            has_reg_season = False
             for player_data in player_datas:
-                if player_data["stat_values"]["is_playoffs"] != previous_playoffs:
-                    has_award_stats = False
-                    break
-                previous_playoffs = player_data["stat_values"]["is_playoffs"]
+                if player_data["stat_values"]["is_playoffs"]:
+                    if player_data["stat_values"]["is_playoffs"] == "Only":
+                        has_playoffs = True
+                    else:
+                        has_reg_season = True
+                else:
+                    has_reg_season = True
+            if has_playoffs and has_reg_season:
+                has_award_stats = False
         if has_award_stats:
             if non_rate_headers and "Player" in non_rate_headers:
                 award_headers.update({"Seasons" : non_rate_headers["Seasons"]})
