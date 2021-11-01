@@ -6867,7 +6867,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                             extra_stats.add(m.group(1) + "-" + str(ordinal_to_number(m.group(2))))
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
                         
-                        last_match = re.finditer(r"\bshow(?: |-)?(record|score|goal|year|seasons-leading|season|date|game|adjusted|advanced|missing-game|missing-toi|best-season|worst-season|ng|team|franchise|number|fight|penaltie|penalty|award|toi|shot|star|play)s?\b", time_frame)
+                        last_match = re.finditer(r"\bshow(?: |-)?(record|score|goal|year|seasons-leading|season|date|game|adjusted|advanced|missing-game|missing-toi|best-season|worst-season|ng|team|franchise|number|fight|penaltie|penalty|award|toi|shot|shift|star|play)s?\b", time_frame)
                         for m in last_match:
                             if "penalt" in m.group(1) or m.group(1) == "fight":
                                 extra_stats.add("penalties")
@@ -6881,6 +6881,8 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 if m.group(1) == "play":
                                     extra_stats.add("current-stats")
                                 elif m.group(1) == "advanced":
+                                    extra_stats.add("current-stats")
+                                elif m.group(1) == "shift":
                                     extra_stats.add("current-stats")
                                 elif m.group(1) == "goal":
                                     extra_stats.add("score")
@@ -19955,7 +19957,9 @@ def calculate_toi(row, qualifiers, player_game_info, player_id, saved_row_data, 
                         has_shift_match = True
                         if is_five_toi(player_game_info, shift_event, period, second):
                             row["TOI_5v5"] += 1
-
+            if has_shift_match:
+                row["Shft"] += 1
+                
 def is_five_toi(player_game_info, goal_event, period, second):
     team_skaters, team_goalies, opp_skaters, opp_goalies, has_shift = get_on_ice_info(player_game_info, goal_event, period, second)
     return has_shift and team_skaters == 5 and team_goalies == 1 and opp_skaters == 5 and opp_goalies == 1
@@ -28553,7 +28557,9 @@ def print_player_data(player_datas, player_type, highest_vals, lowest_vals, has_
                         override_show = True
                     if "TSA" in header or header == "SThr%" or header == "TS%" or header == "TOI/GP":
                         override_show = True
-                if "toi" in extra_stats and "TOI" in header:
+                    if "shift" in extra_stats and "Shft" in header:
+                        override_show = True
+                if "toi" in extra_stats and "TOI" in header and not "GP_TOI" in header and not "x" in header and not "Shft" in header:
                     override_show = True
                 if seasons_leading and header in div_id_to_stat[player_type["da_type"]["type"]].values():
                     override_show = True
@@ -28931,7 +28937,9 @@ def get_reddit_player_table(player_datas, player_type, debug_mode, original_comm
                         override_show = True
                     if "TSA" in header or header == "SThr%" or header == "TS%" or header == "TOI/GP":
                         override_show = True
-                if "toi" in extra_stats and "TOI" in header:
+                    if "shift" in extra_stats and "Shft" in header:
+                        override_show = True
+                if "toi" in extra_stats and "TOI" in header and not "GP_TOI" in header and not "x" in header and not "Shft" in header:
                     override_show = True
                 if seasons_leading and header in div_id_to_stat[player_type["da_type"]["type"]].values():
                     override_show = True
@@ -29686,7 +29694,9 @@ def handle_table_data(player_data, player_type, over_header, header, highest_val
             override_show = True
         if "TSA" in header or header == "SThr%" or header == "TS%" or header == "TOI/GP":
             override_show = True
-    if "toi" in extra_stats and "TOI" in header:
+        if "shift" in extra_stats and "Shft" in header:
+            override_show = True
+    if "toi" in extra_stats and "TOI" in header and not "GP_TOI" in header and not "x" in header and not "Shft" in header:
         override_show = True
 
     seasons_leading = 0
@@ -29947,33 +29957,33 @@ def is_against_header(header, extra_stats, player_type, has_toi_stats):
         
 
     if "Shot On" in extra_stats:
-        return header not in ("G", "G_5v5", "OTG", "EVTOI",  "PPTOI",  "SHTOI", "TOI_5v5", "EVTOI/GP",  "PPTOI/GP",  "SHTOI/GP", "TOI/GP_5v5", "GWG", "1stG", "HAT", "EVG", "AdjG", "PPG", "SHG", "S", "S%", "S_5v5", "S%_5v5", "G/GP", "EVG/GP", "PPG/GP", "SHG/GP", "S/GP", "G/60M", "EVG/60M", "PPG/60M", "SHG/60M", "S/60M",  "G/60M_5v5", "S/60M_5v5")
+        return header not in ("G", "G_5v5", "Shft", "Shft/GP", "TOI/Shft", "OTG", "EVTOI",  "PPTOI",  "SHTOI", "TOI_5v5", "EVTOI/GP",  "PPTOI/GP",  "SHTOI/GP", "TOI/GP_5v5", "GWG", "1stG", "HAT", "EVG", "AdjG", "PPG", "SHG", "S", "S%", "S_5v5", "S%_5v5", "G/GP", "EVG/GP", "PPG/GP", "SHG/GP", "S/GP", "G/60M", "EVG/60M", "PPG/60M", "SHG/60M", "S/60M",  "G/60M_5v5", "S/60M_5v5")
         #return header not in ("G", "G_5v5", "OTG", "TOI/GP_5v5", "GWG", "1stG", "HAT", "EVG", "AdjG", "PPG", "SHG", "S", "S%", "S_5v5", "S%_5v5", "G/GP", "EVG/GP", "PPG/GP", "SHG/GP", "S/GP", "G/60M", "S/60M",  "G/60M_5v5", "S/60M_5v5")
     if "Assisted By" in extra_stats:
-        return header not in ("G", "G_5v5", "OTG", "EVTOI",  "PPTOI",  "SHTOI", "TOI_5v5", "EVTOI/GP",  "PPTOI/GP",  "SHTOI/GP", "TOI/GP_5v5", "GWG", "1stG", "HAT", "ENG", "EVG", "AdjG", "PPG", "SHG", "G/GP", "EVG/GP", "PPG/GP", "SHG/GP", "G/GP", "G/60M", "EVG/60M", "PPG/60M", "SHG/60M", "G/60M_5v5")
+        return header not in ("G", "G_5v5",  "Shft", "Shft/GP", "TOI/Shft", "OTG", "EVTOI",  "PPTOI",  "SHTOI", "TOI_5v5", "EVTOI/GP",  "PPTOI/GP",  "SHTOI/GP", "TOI/GP_5v5", "GWG", "1stG", "HAT", "ENG", "EVG", "AdjG", "PPG", "SHG", "G/GP", "EVG/GP", "PPG/GP", "SHG/GP", "G/GP", "G/60M", "EVG/60M", "PPG/60M", "SHG/60M", "G/60M_5v5")
         #return header not in ("G", "G_5v5", "OTG", "TOI/GP_5v5", "GWG", "1stG", "HAT", "ENG", "EVG", "AdjG", "PPG", "SHG", "G/GP", "EVG/GP", "PPG/GP", "SHG/GP", "G/GP", "G/60M", "G/60M_5v5")
     if "Assisted On" in extra_stats:
-        return header not in ("A", "A/GP", "A/60M", "EVTOI",  "PPTOI",  "SHTOI", "TOI_5v5", "EVTOI/GP",  "PPTOI/GP",  "SHTOI/GP", "TOI/GP_5v5", "ENA", "A1", "A1%", "A1/GP", "A1/60M", "A_5v5", "A/60M_5v5", "A1_5v5", "A1%_5v5", "A1/60M_5v5", "AdjA", "EVA", "EVA/GP", "EVA/60M", "EVA1", "EVA1/60M", "EVA1%", "EVA1/GP", "SHA", "SHA/GP", "SHA/60M", "SHA1", "SHA1/60M", "SHA1%", "SHA1/GP", "PPA", "PPA/GP", "PPA/60M", "PPA1", "PPA1/60M", "PPA1%", "PPA1/GP")
+        return header not in ("A", "A/GP", "A/60M", "Shft", "Shft/GP", "TOI/Shft", "EVTOI",  "PPTOI",  "SHTOI", "TOI_5v5", "EVTOI/GP",  "PPTOI/GP",  "SHTOI/GP", "TOI/GP_5v5", "ENA", "A1", "A1%", "A1/GP", "A1/60M", "A_5v5", "A/60M_5v5", "A1_5v5", "A1%_5v5", "A1/60M_5v5", "AdjA", "EVA", "EVA/GP", "EVA/60M", "EVA1", "EVA1/60M", "EVA1%", "EVA1/GP", "SHA", "SHA/GP", "SHA/60M", "SHA1", "SHA1/60M", "SHA1%", "SHA1/GP", "PPA", "PPA/GP", "PPA/60M", "PPA1", "PPA1/60M", "PPA1%", "PPA1/GP")
         #return header not in ("A", "A/GP", "A/60M", "TOI/GP_5v5", "A1", "A1%", "A1/GP", "A1/60M", "A_5v5", "A/60M_5v5", "A1_5v5", "A1%_5v5", "A1/60M_5v5", "AdjA", "EVA", "EVA/GP", "EVA1", "EVA1%", "EVA1/GP", "SHA", "SHA/GP", "SHA1", "SHA1%", "SHA1/GP", "PPA", "PPA/GP", "PPA1", "PPA1%", "PPA1/GP")
     if "Points On" in extra_stats:
         #return header not in ("P", "P/GP", "P/60M", "TOI/GP_5v5", "P_5v5", "P/60M_5v5", "AdjP", "EVP", "EVP/GP", "EVP/60M", "SHP", "SHP/GP", "PPP", "PPP/GP")
-        return header not in ("P", "P/GP", "P/60M", "EVTOI",  "PPTOI",  "SHTOI", "TOI_5v5", "EVTOI/GP",  "PPTOI/GP",  "SHTOI/GP", "TOI/GP_5v5", "P_5v5", "ENP", "P/60M_5v5", "AdjP", "EVP", "EVP/GP", "EVP/60M", "SHP", "SHP/GP", "SHP/60M", "PPP", "PPP/GP", "PPP/60M")
+        return header not in ("P", "P/GP", "P/60M", "Shft", "Shft/GP", "TOI/Shft", "EVTOI",  "PPTOI",  "SHTOI", "TOI_5v5", "EVTOI/GP",  "PPTOI/GP",  "SHTOI/GP", "TOI/GP_5v5", "P_5v5", "ENP", "P/60M_5v5", "AdjP", "EVP", "EVP/GP", "EVP/60M", "SHP", "SHP/GP", "SHP/60M", "PPP", "PPP/GP", "PPP/60M")
     if "scoring-stats" in extra_stats:
         #return header not in ("G", "G_5v5", "OTG", "TOI/GP_5v5","GWG", "EVG", "AdjG", "PPG", "SHG", "G/GP", "EVG/GP", "PPG/GP", "SHG/GP", "G/60M",  "G/60M_5v5", "A", "A/GP", "A/60M", "A1", "A1%", "A1/GP", "A1/60M", "A_5v5", "A/60M_5v5", "A1_5v5", "A1%_5v5", "A1/60M_5v5", "AdjA", "EVA", "EVA/GP", "EVA1", "EVA1%", "EVA1/GP", "SHA", "SHA/GP", "SHA1", "SHA1%", "SHA1/GP", "PPA", "PPA/GP", "PPA1", "PPA1%", "PPA1/GP", "P", "P/GP", "P/60M", "P_5v5", "P/60M_5v5", "AdjP", "EVP", "EVP/GP", "SHP", "SHP/GP", "PPP", "PPP/GP")
-        return header not in ("G", "G_5v5", "OTG", "EVTOI",  "PPTOI",  "SHTOI", "TOI_5v5", "EVTOI/GP",  "PPTOI/GP",  "SHTOI/GP", "TOI/GP_5v5","GWG", "1stG", "HAT", "ENG", "ENA", "ENP", "EVG", "AdjG", "PPG", "SHG", "G/GP", "EVG/GP", "EVG/60M", "PPG/GP", "PPG/60M", "G/60M",  "G/60M_5v5", "A", "A/GP", "A/60M", "A1", "A1%", "A1/GP", "A1/60M", "A_5v5", "A/60M_5v5", "A1_5v5", "A1%_5v5", "A1/60M_5v5", "AdjA", "EVA", "SHA", "PPA", "P", "P/GP", "P/60M", "P1", "P1%", "P1/GP", "P1/60M", "P_5v5", "P/60M_5v5", "P1_5v5", "P1%_5v5", "P1/60M_5v5", "AdjP", "EVP", "EVP/GP", "EVP/60M", "SHP", "PPP", "PPP/GP", "PPP/60M", "EVA1%", "EVP1%", "SHA1%", "SHP1%", "PPA1%", "PPP1%", "EVA1", "EVP1", "SHA1", "SHP1", "PPA1", "PPP1", "SHG/GP", "SHP/GP", "SHP/60M", "SHG/60M")
+        return header not in ("G", "G_5v5", "OTG", "Shft", "Shft/GP", "TOI/Shft", "EVTOI",  "PPTOI",  "SHTOI", "TOI_5v5", "EVTOI/GP",  "PPTOI/GP",  "SHTOI/GP", "TOI/GP_5v5","GWG", "1stG", "HAT", "ENG", "ENA", "ENP", "EVG", "AdjG", "PPG", "SHG", "G/GP", "EVG/GP", "EVG/60M", "PPG/GP", "PPG/60M", "G/60M",  "G/60M_5v5", "A", "A/GP", "A/60M", "A1", "A1%", "A1/GP", "A1/60M", "A_5v5", "A/60M_5v5", "A1_5v5", "A1%_5v5", "A1/60M_5v5", "AdjA", "EVA", "SHA", "PPA", "P", "P/GP", "P/60M", "P1", "P1%", "P1/GP", "P1/60M", "P_5v5", "P/60M_5v5", "P1_5v5", "P1%_5v5", "P1/60M_5v5", "AdjP", "EVP", "EVP/GP", "EVP/60M", "SHP", "PPP", "PPP/GP", "PPP/60M", "EVA1%", "EVP1%", "SHA1%", "SHP1%", "PPA1%", "PPP1%", "EVA1", "EVP1", "SHA1", "SHP1", "PPA1", "PPP1", "SHG/GP", "SHP/GP", "SHP/60M", "SHG/60M")
     if "Hit On" in extra_stats:
-        return header not in ("HIT", "HIT/GP", "HIT/60M")
+        return header not in ("Shft", "Shft/GP", "TOI/Shft", "OTG", "EVTOI",  "PPTOI",  "SHTOI", "TOI_5v5", "EVTOI/GP",  "PPTOI/GP",  "SHTOI/GP", "TOI/GP_5v5", "HIT", "HIT/GP", "HIT/60M")
     if "Block On" in extra_stats:
-        return header not in ("BLK", "BLK/GP", "BLK/60M")
+        return header not in ("Shft", "Shft/GP", "TOI/Shft", "OTG", "EVTOI",  "PPTOI",  "SHTOI", "TOI_5v5", "EVTOI/GP",  "PPTOI/GP",  "SHTOI/GP", "TOI/GP_5v5", "BLK", "BLK/GP", "BLK/60M")
     if "Penalty On" in extra_stats:
-        if header in ("PIM", "PEN", "PIM/GP", "PEN/GP", "PEN/60M"):
+        if header in ("Shft", "Shft/GP", "TOI/Shft", "OTG", "EVTOI",  "PPTOI",  "SHTOI", "TOI_5v5", "EVTOI/GP",  "PPTOI/GP",  "SHTOI/GP", "TOI/GP_5v5", "PIM", "PEN", "PIM/GP", "PEN/GP", "PEN/60M"):
             return False
         else:
             return "type" in headers[player_type["da_type"]["type"]][header] and headers[player_type["da_type"]["type"]][header]["type"] == "Penalty"
     if "Faceoff Against" in extra_stats:
-        return header not in ("FO", "FOW", "FO%", "OZFO", "OZFOW", "OZFO%", "DZFO", "DZFOW", "DZFO%", "FO/GP", "FOW/GP", "FO/60M", "FOW/60M")
+        return header not in ("Shft", "Shft/GP", "TOI/Shft", "OTG", "EVTOI",  "PPTOI",  "SHTOI", "TOI_5v5", "EVTOI/GP",  "PPTOI/GP",  "SHTOI/GP", "TOI/GP_5v5", "FO", "FOW", "FO%", "OZFO", "OZFOW", "OZFO%", "DZFO", "DZFOW", "DZFO%", "FO/GP", "FOW/GP", "FO/60M", "FOW/60M")
     if "Fight Against" in extra_stats:
-        return header not in ("Fight", "Fight/GP", "Fight/60M")
+        return header not in ("Shft", "Shft/GP", "TOI/Shft", "OTG", "EVTOI",  "PPTOI",  "SHTOI", "TOI_5v5", "EVTOI/GP",  "PPTOI/GP",  "SHTOI/GP", "TOI/GP_5v5", "Fight", "Fight/GP", "Fight/60M")
     if "current-stats" in extra_stats or "current-stats-zone" in extra_stats:
         if player_type["da_type"]["type"] == "Skater":
             #if "EVTOI" in header or "PPTOI" in header or "SHTOI" in header:
