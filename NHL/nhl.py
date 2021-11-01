@@ -29977,7 +29977,7 @@ def is_against_header(header, extra_stats, player_type, has_toi_stats):
             if "type" in headers[player_type["da_type"]["type"]][header] and (headers[player_type["da_type"]["type"]][header]["type"] == "Awards/Honors"):
                 return True
             if "type" in headers[player_type["da_type"]["type"]][header] and (headers[player_type["da_type"]["type"]][header]["type"] == "Advanced") and ("S%" in header or "PEN" in header or "PenDrawn" in header or "Post" in header):
-                if "show-stat-" + header.lower() not in extra_stats:
+                if "show-stat-" + header.lower() not in extra_stats and ("penalties" not in extra_stats or not ("PEN" in header or "PenDrawn" in header)):
                     return True
             if "Adj" in header:
                 if "show-stat-" + header.lower() not in extra_stats:
