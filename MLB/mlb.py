@@ -12820,8 +12820,6 @@ def handle_player_data(player_data, time_frame, player_type, player_page, valid_
     playoff_data = None
     if time_frame["playoffs"]:
         playoff_data = parse_table(player_data, None, None, player_type)
-        if not is_game:
-            fix_playoff_data(player_page, player_type, playoff_data)
         if not (time_frame["type"] == "date" and (isinstance(time_frame["time_start"], int) or isinstance(time_frame["time_end"], int))):
             valid_years = add_valid_playoff_years(valid_years, playoff_data, time_frame)
 
@@ -14985,52 +14983,6 @@ def handle_season_only_stats(player_page, player_data, player_type, time_frame, 
         all_rows[len(all_rows) - 1]["WARJAWS"] = all_rows[len(all_rows) - 1]["WAR"]
     
     return handle_season_only_stats
-    
-def fix_playoff_data(player_page, player_type, playoff_data):
-    table_name = "batting_postseason" if player_type["da_type"] != "Batter" else "pitching_postseason"
-
-    comments = None
-    previous_headers = set()
-
-    table = player_page.find("table", id=table_name)
-    if not table:
-        if not comments:
-            comments = player_page.find_all(string=lambda text: isinstance(text, Comment))
-        for c in comments:
-            temp_soup = BeautifulSoup(c, "lxml")
-            temp_table = temp_soup.find("table", id=table_name)
-            if temp_table:
-                table = temp_table
-                break
-
-    if table:
-        header_columns = table.find("thead").find_all("th")
-
-        header_values = []
-        for header in header_columns:
-            contents = header.find(text=True)
-            if contents:
-                header_values.append(str(contents))
-                
-        standard_table_rows = table.find_all("tr")
-        for i in range(len(standard_table_rows)):
-            row = standard_table_rows[i]
-            if not row.get("class") and row.parent.name != "thead" and row.parent.name != "tfoot":
-                row_data = parse_row(row, {"time_start" : 0, "time_end" : float("inf"), "type" : "date", "qualifiers" : {}}, None, False, player_type, header_values, previous_headers, 0, table_name)
-                row_data["is_playoffs"] = True
-                row_data["Round"] = "ws"
-
-                if not row_data:
-                    continue
-
-                has_match = False
-                for playoff_row in playoff_data:
-                    if playoff_row["Year"] == row_data["Year"]:
-                        has_match = True
-                        break
-
-                if not has_match:
-                    playoff_data.append(row_data)
 
 def handle_awards(player_page, player_data, player_type, time_frame, is_full_career, years_to_skip, years_to_skip_champ, years_to_skip_allstar, all_rows):
     count_divs = {
