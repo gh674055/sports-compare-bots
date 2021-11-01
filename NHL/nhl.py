@@ -10311,10 +10311,11 @@ def calculate_best(player_data, player_datas, player_type, extra_stats, is_best)
 
     has_toi_stats = True
     for index, sub_player_datas in enumerate(player_datas):
-        value = handle_table_data(sub_player_datas, player_type, "Per Game/60 Minutes", "TOI/GP", {}, {}, index, has_season_stats, has_playoffs, has_non_playoffs, True, True, extra_stats)
-        if value == "N/A" or value == None:
-            has_toi_stats = False
-            break
+        if "all_rows" in player_data["stat_values"] and len(player_data["stat_values"]["all_rows"]):
+            value = handle_table_data(sub_player_datas, player_type, "Per Game/60 Minutes", "TOI/GP", {}, {}, index, has_season_stats, has_playoffs, has_non_playoffs, True, True, extra_stats)
+            if value == "N/A" or value == None:
+                has_toi_stats = False
+                break
 
     highest_vals, lowest_vals = calculate_highest_lowest_vals(player_datas, player_type, has_non_playoffs, has_playoffs, has_season_stats, has_toi_stats, 0, extra_stats)
     if is_best:
@@ -28651,10 +28652,11 @@ def get_reddit_player_table(player_datas, player_type, debug_mode, original_comm
     has_toi_stats = not has_against_quals(extra_stats) or "current-stats" in extra_stats
     if player_type["da_type"]["type"] == "Skater":
         for index, player_data in enumerate(player_datas):
-            value = handle_table_data(player_data, player_type, "Per Game/60 Minutes", "TOI/GP", {}, {}, index, has_season_stats, has_playoffs, has_non_playoffs, True, True, extra_stats)
-            if value == "N/A" or value == None:
-                has_toi_stats = False
-                break
+            if "all_rows" in player_data["stat_values"] and len(player_data["stat_values"]["all_rows"]):
+                value = handle_table_data(player_data, player_type, "Per Game/60 Minutes", "TOI/GP", {}, {}, index, has_season_stats, has_playoffs, has_non_playoffs, True, True, extra_stats)
+                if value == "N/A" or value == None:
+                    has_toi_stats = False
+                    break
     
     seasons_leading = 0
     for extra_stat in extra_stats:
