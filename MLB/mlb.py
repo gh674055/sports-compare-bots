@@ -6499,7 +6499,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
 
                                 time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
                         
-                        last_match = re.finditer(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?((facing-batting|batting)-(\S+))\b", time_frame)
+                        last_match = re.finditer(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?((facing-batting|batting|leading-by|trailing-by)-(\S+))\b", time_frame)
                         for m in last_match:
                             qualifier_obj = {}
                             
@@ -6516,14 +6516,32 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                             elif qualifier_str == "facing-batting":
                                 qual_type = "Batting Order Position"
                                 player_type["da_type"] = "Pitcher"
+                            elif qualifier_str == "leading-by":
+                                qual_type = "Score Margin"
+                                extra_stats.add("current-stats")
+                            elif qualifier_str == "trailing-by":
+                                qual_type = "Score Margin"
+                                extra_stats.add("current-stats")
 
                             value = ordinal_to_number(m.group(4))
 
                             if isinstance(value, int):
-                                qualifier_obj["values"] = {
-                                    "start_val" : value,
-                                    "end_val" : value
-                                }
+                                if qual_type == "Score Margin":
+                                    if qualifier_str == "leading-by":
+                                        qualifier_obj["values"] = {
+                                            "start_val" : value,
+                                            "end_val" : value
+                                        }
+                                    else:
+                                        qualifier_obj["values"] = {
+                                            "start_val" : -value,
+                                            "end_val" : -value
+                                        }
+                                else:
+                                    qualifier_obj["values"] = {
+                                        "start_val" : value,
+                                        "end_val" : value
+                                    }
 
                                 if not qual_type in qualifiers:
                                     qualifiers[qual_type] = []

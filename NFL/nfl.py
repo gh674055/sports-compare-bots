@@ -1953,7 +1953,7 @@ def handle_player_string(comment, player_type, is_fantasy, last_updated, hide_ta
 
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
                         
-                        last_match = re.finditer(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?((\S+)-(week|score-game)s?)\b", time_frame)
+                        last_match = re.finditer(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?((\S+)-(week|score-game|point-game)s?)\b", time_frame)
                         for m in last_match:
                             qualifier_obj = {}
                             
@@ -1974,10 +1974,16 @@ def handle_player_string(comment, player_type, is_fantasy, last_updated, hide_ta
 
                             if isinstance(value, int):
                                 if qual_type == "Score Margin":
-                                    qualifier_obj["values"] = {
-                                        "start_val" : -value * 7,
-                                        "end_val" : value * 7
-                                    }
+                                    if qualifier_str == "score-game":
+                                        qualifier_obj["values"] = {
+                                            "start_val" : -value * 7,
+                                            "end_val" : value * 7
+                                        }
+                                    else:
+                                        qualifier_obj["values"] = {
+                                            "start_val" : -value,
+                                            "end_val" : value
+                                        }
                                 else:
                                     qualifier_obj["values"] = {
                                         "start_val" : value,
@@ -1990,7 +1996,7 @@ def handle_player_string(comment, player_type, is_fantasy, last_updated, hide_ta
 
                                 time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
                         
-                        last_match = re.finditer(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?((week)-(\S+))\b", time_frame)
+                        last_match = re.finditer(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?((week|leading-by|trailing-by)-(\S+))\b", time_frame)
                         for m in last_match:
                             qualifier_obj = {}
                             
@@ -2003,14 +2009,32 @@ def handle_player_string(comment, player_type, is_fantasy, last_updated, hide_ta
                             qualifier_str = m.group(3)
                             if qualifier_str == "week":
                                 qual_type = "Week"
+                            elif qualifier_str == "leading-by":
+                                qual_type = "Score Margin"
+                                extra_stats.add("current-stats")
+                            elif qualifier_str == "trailing-by":
+                                qual_type = "Score Margin"
+                                extra_stats.add("current-stats")
 
                             value = ordinal_to_number(m.group(4))
 
                             if isinstance(value, int):
-                                qualifier_obj["values"] = {
-                                    "start_val" : value,
-                                    "end_val" : value
-                                }
+                                if qual_type == "Score Margin":
+                                    if qualifier_str == "leading-by":
+                                        qualifier_obj["values"] = {
+                                            "start_val" : value,
+                                            "end_val" : value
+                                        }
+                                    else:
+                                        qualifier_obj["values"] = {
+                                            "start_val" : -value,
+                                            "end_val" : -value
+                                        }
+                                else:
+                                    qualifier_obj["values"] = {
+                                        "start_val" : value,
+                                        "end_val" : value
+                                    }
 
                                 if not qual_type in qualifiers:
                                     qualifiers[qual_type] = []
