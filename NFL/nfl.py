@@ -15033,7 +15033,7 @@ def get_valid_years(player_page):
 
     bottom_nav_container = player_page.find("div", id="bottom_nav_container")
     if bottom_nav_container:
-        element_name = "Gamelogs"
+        element_name = "Game Logs"
         bottom_nav_element = bottom_nav_container.find("p", text=element_name)
         if bottom_nav_element:
             bottom_nav_sibling = bottom_nav_element.find_next_sibling()
