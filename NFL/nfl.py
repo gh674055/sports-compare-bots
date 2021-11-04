@@ -1967,13 +1967,13 @@ def handle_player_string(comment, player_type, is_fantasy, last_updated, hide_ta
                             if qualifier_str == "week":
                                 qual_type = "Week"
                             elif qualifier_str == "score-game":
-                                qual_type = "Score Margin"
+                                qual_type = "Current Score Margin"
                                 extra_stats.add("current-stats")
 
                             value = ordinal_to_number(m.group(3))
 
                             if isinstance(value, int):
-                                if qual_type == "Score Margin":
+                                if qual_type == "Current Score Margin":
                                     if qualifier_str == "score-game":
                                         qualifier_obj["values"] = {
                                             "start_val" : -value * 7,
@@ -2010,16 +2010,16 @@ def handle_player_string(comment, player_type, is_fantasy, last_updated, hide_ta
                             if qualifier_str == "week":
                                 qual_type = "Week"
                             elif qualifier_str == "leading-by":
-                                qual_type = "Score Margin"
+                                qual_type = "Current Score Margin"
                                 extra_stats.add("current-stats")
                             elif qualifier_str == "trailing-by":
-                                qual_type = "Score Margin"
+                                qual_type = "Current Score Margin"
                                 extra_stats.add("current-stats")
 
                             value = ordinal_to_number(m.group(4))
 
                             if isinstance(value, int):
-                                if qual_type == "Score Margin":
+                                if qual_type == "Current Score Margin":
                                     if qualifier_str == "leading-by":
                                         qualifier_obj["values"] = {
                                             "start_val" : value,
@@ -2234,21 +2234,21 @@ def handle_player_string(comment, player_type, is_fantasy, last_updated, hide_ta
                             elif qualifier_str.startswith("division-winner-team"):
                                 qual_type = "Division Winner Team"
                             elif qualifier_str == "leading" or qualifier_str == "leading-in-game":
-                                qual_type = "Score Margin"
+                                qual_type = "Current Score Margin"
                                 qualifier_obj["values"] = {
                                     "start_val" : 1,
                                     "end_val" : float("inf")
                                 }
                                 extra_stats.add("current-stats")
                             elif qualifier_str == "trailing" or qualifier_str == "trailing-in-game":
-                                qual_type = "Score Margin"
+                                qual_type = "Current Score Margin"
                                 qualifier_obj["values"] = {
                                     "start_val" : -float("inf"),
                                     "end_val" : -1
                                 }
                                 extra_stats.add("current-stats")
                             elif qualifier_str == "tied" or qualifier_str == "tied-in-game":
-                                qual_type = "Score Margin"
+                                qual_type = "Current Score Margin"
                                 qualifier_obj["values"] = {
                                     "start_val" : 0,
                                     "end_val" : 0
