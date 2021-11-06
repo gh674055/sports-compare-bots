@@ -2323,6 +2323,22 @@ headers = {
                 "season" : 1988
             }
         },
+        "GamesPit": {
+            "positive" : True,
+            "display" : False,
+            "valid_since" : {
+                "game" : 1988,
+                "season" : 1988
+            }
+        },
+        "StartsPit": {
+            "positive" : True,
+            "display" : False,
+            "valid_since" : {
+                "game" : 1988,
+                "season" : 1988
+            }
+        },
         "Pit/G": {
             "positive" : True,
             "type" : "Per Game/Advanced",
@@ -4374,7 +4390,7 @@ formulas = {
         "Pit%" : "Pit / TtlPit",
         "GSc/GS" : "GSc / GS",
         "IP/GS" : "IPStart / GS",
-        "Pit/GS" : "PitStart / GS",
+        "Pit/GS" : "PitStart / StartsPit",
         "BA" : "H / AB",
         "BAbip" : "(H - HR)/(AB - SO - HR + SF)",
         "OBP" : "(H + BB + HBP) / (AB + BB + HBP + SF)",
@@ -14710,6 +14726,11 @@ def determine_row_data(game_data, player_type, player_data, player_id, current_t
                                 row_data["Prfct"] = 1
         else:
             row_data["Start"] = False
+        
+        if row_data["Pit"]:
+            row_data["GamesPit"] = 1
+            if row_data["Start"]:
+                row_data["StartsPit"] = 1
 
         is_home_team = None
         for player in sub_data["liveData"]["boxscore"]["teams"]["away"]["players"]:
@@ -21831,6 +21852,15 @@ def handle_missing_game_data(all_rows, player_data, player_type, time_frame, val
                         row_data["IPStart"] += year_row.get("IP", 0)
                         row_data["PitStart"] += year_row.get("Pit", 0)
                         row_data["GSc"] += year_row.get("GSc", 0)
+                        
+                    if year_row.get("Pit", 0):
+                        if "GamesPit" not in row_data:
+                            row_data["GamesPit"] = 0
+                        row_data["GamesPit"] += 1
+                        if year_row["Start"]:
+                            if "StartsPit" not in row_data:
+                                row_data["StartsPit"] = 0
+                            row_data["StartsPit"] += 1
                     break
     
 def parse_row(row, time_frame, year, is_playoffs, player_type, header_values, previous_headers, table_index, table_name):
@@ -22008,6 +22038,11 @@ def parse_row(row, time_frame, year, is_playoffs, player_type, header_values, pr
 
                     if is_start and (header_value == "IP" or header_value == "Pit"):
                         row_data.update({header_value + "Start" : column_value})
+
+                        if header_value == "Pit" and column_value:
+                            row_data["GamesPit"] = 1
+                            if is_start:
+                                row_data["StartsPit"] = 1
 
         row_data["Start"] = is_start
         row_data["Finished"] = is_finished
