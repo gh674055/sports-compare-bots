@@ -4466,6 +4466,579 @@ formulas = {
     }
 }
 
+league_data_mapping = {
+    "Batter" : {
+        "RBI" : {
+            "AA" : {
+                "inconsistent" : 1885,
+                "inconsistent-game" : 1885
+            },
+            "UA" : {
+                "season" : 1885,
+                "game" : 1885
+            }
+        },
+        "RBI/162" : {
+            "AA-UA" : {
+                "inconsistent" : 1885,
+                "inconsistent-game" : 1885
+            }
+        },
+        "SH" : {
+            "AA-UA-PL-NA" : {
+                "season" : 1914,
+                "game" : 1914
+            }
+        },
+        "SF" : {
+            "AA-UA-PL-NA-FL-NNL-ECL-ANL-NSL-EWL" : {
+                "season" : 1949,
+                "game" : 1949
+            },
+            "NN2-NAL" : {
+                "game" : 1944,
+                "season" : 1944,
+                "inconsistent" : 1943,
+                "inconsistent-game" : 1943
+            }
+        },
+        "SB" : {
+            "AA-UA" : {
+                "game" : 1886,
+                "season" : 1886
+            }
+        },
+        "SB/162" : {
+            "AA-UA" : {
+                "game" : 1886,
+                "season" : 1886
+            }
+        },
+        "CS" : {
+            "AA-UA-PL-FL-NNL-ANL-NSL-EWL-NN2" : {
+                "game" : 1949,
+                "season" : 1949
+            },
+            "ECL" : {
+                "game" : 1929,
+                "season" : 1929,
+                "inconsistent" : 1926,
+                "inconsistent-game" : 1926
+            },
+            "NAL" : {
+                "game" : 1946,
+                "season" : 1946,
+                "inconsistent" : 1945,
+                "inconsistent-game" : 1945
+            }
+        },
+        "NS" : {
+            "AA-UA-PL-FL-NNL-ANL-NSL-EWL-NN2" : {
+                "game" : 1949,
+                "season" : 1949
+            },
+            "ECL" : {
+                "game" : 1929,
+                "season" : 1929,
+                "inconsistent" : 1926,
+                "inconsistent-game" : 1926
+            },
+            "NAL" : {
+                "game" : 1946,
+                "season" : 1946,
+                "inconsistent" : 1945,
+                "inconsistent-game" : 1945
+            }
+        },
+        "SB%" : {
+            "AA-UA-PL-FL-NNL-ANL-NSL-EWL-NN2" : {
+                "game" : 1949,
+                "season" : 1949
+            },
+            "ECL" : {
+                "game" : 1929,
+                "season" : 1929,
+                "inconsistent" : 1926,
+                "inconsistent-game" : 1926
+            },
+            "NAL" : {
+                "game" : 1946,
+                "season" : 1946,
+                "inconsistent" : 1945,
+                "inconsistent-game" : 1945
+            }
+        },
+        "wSB" : {
+            "AA-UA-PL-FL-NNL-ANL-NSL-EWL-NN2" : {
+                "game" : 1949,
+                "season" : 1949
+            },
+            "ECL" : {
+                "game" : 1929,
+                "season" : 1929,
+                "inconsistent" : 1926,
+                "inconsistent-game" : 1926
+            },
+            "NAL" : {
+                "game" : 1946,
+                "season" : 1946,
+                "inconsistent" : 1945,
+                "inconsistent-game" : 1945
+            }
+        },
+        "IBB" : {
+            "AA-UA-PL-NA-FL-NNL-ECL-ANL-NSL-EWL" : {
+                "game" : 1949,
+                "season" : 1949
+            },
+            "NN2-NAL" : {
+                "game" : 1946,
+                "season" : 1946,
+                "inconsistent" : 1945,
+                "inconsistent-game" : 1945
+            }
+        },
+        "HBP" : {
+            "AA-UA-NA" : {
+                "game" : 1884,
+                "season" : 1884
+            },
+            "NNL" : {
+                "inconsistent" : 1924,
+                "inconsistent-game" : 1924
+            },
+            "NN2-NAL" : {
+                "game" : 1944,
+                "season" : 1944,
+                "inconsistent" : 1943,
+                "inconsistent-game" : 1943
+            }
+        },
+        "SO" : {
+            "AA-UA" : {
+                "game" : 1891,
+                "season" : 1891,
+                "inconsistent" : 1890,
+                "inconsistent-game" : 1890
+            },
+            "NNL-ANL-NSL-EWL-NN2-NAL" : {
+                "game" : 1949,
+                "season" : 1949
+            },
+            "ECL" : {
+                "game" : 1927,
+                "season" : 1927,
+                "inconsistent" : 1926,
+                "inconsistent-game" : 1926
+            }
+        },
+        "SO/162" : {
+            "AA-UA" : {
+                "game" : 1891,
+                "season" : 1891,
+                "inconsistent" : 1890,
+                "inconsistent-game" : 1890
+            },
+            "NNL-ANL-NSL-EWL-NN2-NAL" : {
+                "game" : 1949,
+                "season" : 1949
+            },
+            "ECL" : {
+                "game" : 1927,
+                "season" : 1927,
+                "inconsistent" : 1926,
+                "inconsistent-game" : 1926
+            }
+        },
+        "SO%" : {
+            "AA-UA" : {
+                "game" : 1891,
+                "season" : 1891,
+                "inconsistent" : 1890,
+                "inconsistent-game" : 1890
+            },
+            "NNL-ANL-NSL-EWL-NN2-NAL" : {
+                "game" : 1949,
+                "season" : 1949
+            },
+            "ECL" : {
+                "game" : 1927,
+                "season" : 1927,
+                "inconsistent" : 1926,
+                "inconsistent-game" : 1926
+            }
+        },
+        "BB-SO%" : {
+            "AA" : {
+                "game" : 1891,
+                "season" : 1891,
+                "inconsistent" : 1890,
+                "inconsistent-game" : 1890
+            },
+            "NNL-ANL-NSL-EWL-NN2-NAL" : {
+                "game" : 1949,
+                "season" : 1949
+            },
+            "ECL" : {
+                "game" : 1927,
+                "season" : 1927,
+                "inconsistent" : 1926,
+                "inconsistent-game" : 1926
+            }
+        },
+        "BB/SO" : {
+            "AA-UA" : {
+                "game" : 1891,
+                "season" : 1891,
+                "inconsistent" : 1890,
+                "inconsistent-game" : 1890
+            },
+            "NNL-ANL-NSL-EWL-NN2-NAL" : {
+                "game" : 1949,
+                "season" : 1949
+            },
+            "ECL" : {
+                "game" : 1927,
+                "season" : 1927,
+                "inconsistent" : 1926,
+                "inconsistent-game" : 1926
+            }
+        },
+        "GDP" : {
+            "AA-UA-PL-FL-NNL-ECL-ANL-NSL-EWL-NN2-NAL" : {
+                "game" : 1949,
+                "season" : 1949
+            }
+        },
+        "WPA" : {
+            "AA-UA-PL-FL-NNL-ECL-ANL-NSL-EWL-NN2-NAL" : {
+                "game" : 1949,
+                "season" : 1949
+            }
+        },
+        "cWPA" : {
+            "AA-UA-PL-FL-NNL-ECL-ANL-NSL-EWL-NN2-NAL" : {
+                "game" : 1949,
+                "season" : 1949
+            }
+        },
+        "WPA/162" : {
+            "AA-UA-PL-FL-NNL-ECL-ANL-NSL-EWL-NN2-NAL" : {
+                "game" : 1949,
+                "season" : 1949
+            }
+        },
+        "cWPA/162" : {
+            "AA-UA-PL-FL-NNL-ECL-ANL-NSL-EWL-NN2-NAL" : {
+                "game" : 1949,
+                "season" : 1949
+            }
+        },
+        "REW" : {
+            "AA-UA-PL-FL-NNL-ECL-ANL-NSL-EWL-NN2-NAL" : {
+                "game" : 1949,
+                "season" : 1949
+            }
+        },
+        "RE24" : {
+            "AA-UA-PL-FL-NNL-ECL-ANL-NSL-EWL-NN2-NAL" : {
+                "game" : 1949,
+                "season" : 1949
+            }
+        },
+        "WPA/LI" : {
+            "AA-UA-PL-FL-NNL-ECL-ANL-NSL-EWL-NN2-NAL" : {
+                "game" : 1949,
+                "season" : 1949
+            }
+        }
+    },
+    "Pitcher" : {
+        "SB" : {
+            "AA-UA-PL-FL-NNL-ECL-ANL-NSL-EWL-NN2-NAL" : {
+                "game" : 1949,
+                "season" : 1949
+            }
+        },
+        "SB/162" : {
+           "AA-UA-PL-FL-NNL-ECL-ANL-NSL-EWL-NN2-NAL" : {
+                "game" : 1949,
+                "season" : 1949
+            }
+        },
+        "CS" : {
+            "AA-UA-PL-FL-NNL-ECL-ANL-NSL-EWL-NN2-NAL" : {
+                "game" : 1949,
+                "season" : 1949
+            }
+        },
+        "NS" : {
+            "AA-UA-PL-FL-NNL-ECL-ANL-NSL-EWL-NN2-NAL" : {
+                "game" : 1949,
+                "season" : 1949
+            }
+        },
+        "SB%" : {
+            "AA-UA-PL-FL-NNL-ECL-ANL-NSL-EWL-NN2-NAL" : {
+                "game" : 1949,
+                "season" : 1949
+            }
+        },
+        "wSB" : {
+            "AA-UA-PL-FL-NNL-ECL-ANL-NSL-EWL-NN2-NAL" : {
+                "game" : 1949,
+                "season" : 1949
+            }
+        },
+        "IBB" : {
+            "AA-UA-PL-NA-FL-NNL-ECL-ANL-NSL" : {
+                "game" : 1949,
+                "season" : 1949
+            },
+            "NN2" : {
+                "game" : 1949,
+                "season" : 1949,
+                "inconsistent" : 1937,
+                "inconsistent-game" : 1937
+            },
+            "NAL" : {
+                "game" : 1947,
+                "season" : 1947,
+                "inconsistent" : 1937,
+                "inconsistent-game" : 1937
+            }
+        },
+        "HBP" : {
+            "AA-UA-NA" : {
+                "game" : 1884,
+                "season" : 1884
+            }
+        },
+        "GDP" : {
+            "AA-UA-PL-FL-NNL-ECL-ANL-NSL-EWL-NN2-NAL" : {
+                "game" : 1949,
+                "season" : 1949
+            }
+        },
+        "AB" : {
+            "AA-UA-PL-FL-NNL-ECL-ANL-NSL-EWL-NN2-NAL" : {
+                "game" : 1949,
+                "season" : 1949
+            }
+        },
+        "BF" : {
+            "ECL" : {
+                "game" : 1925,
+                "season" : 1925,
+                "inconsistent" : 1923,
+                "inconsistent-game" : 1923
+            },
+            "NNL" : {
+                "game" : 1931,
+                "season" : 1931,
+                "inconsistent" : 1920,
+                "inconsistent-game" : 1920
+            },
+            "NSL" : {
+                "game" : 1949,
+                "season" : 1949
+            },
+            "NN2-NAL" : {
+                "game" : 1947,
+                "season" : 1947,
+                "inconsistent" : 1933,
+                "inconsistent-game" : 1933
+            }
+        },
+        "1B" : {
+            "AA-UA-PL-FL-NNL-ECL-ANL-NSL-EWL-NN2-NAL" : {
+                "game" : 1949,
+                "season" : 1949
+            }
+        },
+        "2B" : {
+            "AA-UA-PL-FL-NNL-ECL-ANL-NSL-EWL-NN2-NAL" : {
+                "game" : 1949,
+                "season" : 1949
+            }
+        },
+        "3B" : {
+            "AA-UA-PL-FL-NNL-ECL-ANL-NSL-EWL-NN2-NAL" : {
+                "game" : 1949,
+                "season" : 1949
+            }
+        },
+        "HR" : {
+            "NNL" : {
+                "game" : 1931,
+                "season" : 1931,
+                "inconsistent" : 1923,
+                "inconsistent-game" : 1923
+            },
+            "ECL" : {
+                "game" : 1926,
+                "season" : 1926,
+                "inconsistent" : 1923,
+                "inconsistent-game" : 1923
+            },
+            "NSL" : {
+                "game" : 1949,
+                "season" : 1949
+            },
+            "NN2" : {
+                "game" : 1947,
+                "season" : 1947,
+                "inconsistent" : 1933,
+                "inconsistent-game" : 1933
+            },
+            "NAL" : {
+                "game" : 1947,
+                "season" : 1947,
+                "inconsistent" : 1937,
+                "inconsistent-game" : 1937
+            }
+        },
+        "TB" : {
+            "AA-UA-PL-FL-NNL-ECL-ANL-NSL-EWL-NN2-NAL" : {
+                "game" : 1949,
+                "season" : 1949
+            }
+        },
+        "XBH" : {
+            "AA-UA-PL-FL-NNL-ECL-ANL-NSL-EWL-NN2-NAL" : {
+                "game" : 1949,
+                "season" : 1949
+            }
+        },
+        "XBH%" : {
+            "AA-UA-PL-FL-NNL-ECL-ANL-NSL-EWL-NN2-NAL" : {
+                "game" : 1949,
+                "season" : 1949
+            }
+        },
+        "X/H%" : {
+            "AA-UA-PL-FL-NNL-ECL-ANL-NSL-EWL-NN2-NAL" : {
+                "game" : 1949,
+                "season" : 1949
+            }
+        },
+        "PO" : {
+            "AA-UA-PL-FL-NNL-ECL-ANL-NSL-EWL-NN2-NAL" : {
+                "game" : 1949,
+                "season" : 1949
+            }
+        },
+        "BA" : {
+            "AA-UA-PL-FL-NNL-ECL-ANL-NSL-EWL-NN2-NAL" : {
+                "game" : 1949,
+                "season" : 1949
+            }
+        },
+        "OBP" : {
+            "AA-UA-PL-FL-NNL-ECL-ANL-NSL-EWL-NN2-NAL" : {
+                "game" : 1949,
+                "season" : 1949
+            }
+        },
+        "SLG" : {
+            "AA-UA-PL-FL-NNL-ECL-ANL-NSL-EWL-NN2-NAL" : {
+                "game" : 1949,
+                "season" : 1949
+            }
+        },
+        "OPS" : {
+            "AA-UA-PL-FL-NNL-ECL-ANL-NSL-EWL-NN2-NAL" : {
+                "game" : 1949,
+                "season" : 1949
+            }
+        },
+        "wOBA" : {
+            "AA-UA-PL-FL-NNL-ECL-ANL-NSL-EWL-NN2-NAL" : {
+                "game" : 1949,
+                "season" : 1949
+            }
+        },
+        "BAbip" : {
+            "AA-UA-PL-FL-NNL-ECL-ANL-NSL-EWL-NN2-NAL" : {
+                "game" : 1949,
+                "season" : 1949
+            }
+        },
+        "ISO" : {
+            "AA-UA-PL-FL-NNL-ECL-ANL-NSL-EWL-NN2-NAL" : {
+                "game" : 1949,
+                "season" : 1949
+            }
+        },
+        "wRC" : {
+            "AA-UA-PL-FL-NNL-ECL-ANL-NSL-EWL-NN2-NAL" : {
+                "game" : 1949,
+                "season" : 1949
+            }
+        },
+        "wRAA" : {
+            "AA-UA-PL-FL-NNL-ECL-ANL-NSL-EWL-NN2-NAL" : {
+                "game" : 1949,
+                "season" : 1949
+            }
+        },
+        "BRuns" : {
+            "AA-UA-PL-FL-NNL-ECL-ANL-NSL-EWL-NN2-NAL" : {
+                "game" : 1949,
+                "season" : 1949
+            }
+        },
+        "wRC+" : {
+            "AA-UA-PL-FL-NNL-ECL-ANL-NSL-EWL-NN2-NAL" : {
+                "game" : 1949,
+                "season" : 1949
+            }
+        },
+        "WPA" : {
+            "AA-UA-PL-FL-NNL-ECL-ANL-NSL-EWL-NN2-NAL" : {
+                "game" : 1949,
+                "season" : 1949
+            }
+        },
+        "cWPA" : {
+            "AA-UA-PL-FL-NNL-ECL-ANL-NSL-EWL-NN2-NAL" : {
+                "game" : 1949,
+                "season" : 1949
+            }
+        },
+        "WPA/162" : {
+            "AA-UA-PL-FL-NNL-ECL-ANL-NSL-EWL-NN2-NAL" : {
+                "game" : 1949,
+                "season" : 1949
+            }
+        },
+        "cWPA/162" : {
+            "AA-UA-PL-FL-NNL-ECL-ANL-NSL-EWL-NN2-NAL" : {
+                "game" : 1949,
+                "season" : 1949
+            }
+        },
+        "REW" : {
+            "AA-UA-PL-FL-NNL-ECL-ANL-NSL-EWL-NN2-NAL" : {
+                "game" : 1949,
+                "season" : 1949
+            }
+        },
+        "RE24" : {
+            "AA-UA-PL-FL-NNL-ECL-ANL-NSL-EWL-NN2-NAL" : {
+                "game" : 1949,
+                "season" : 1949
+            }
+        },
+        "WPA/LI" : {
+            "AA-UA-PL-FL-NNL-ECL-ANL-NSL-EWL-NN2-NAL" : {
+                "game" : 1949,
+                "season" : 1949
+            }
+        }
+    }
+}
+
 leagues_to_id = {
     "National League" : "NL",
     "American League" : "AL",
@@ -19742,6 +20315,7 @@ def comb_rows(matching_rows, player_type, lower=True, stats=None):
     else:
         comb_row["DateEnd"] = []
     comb_row["is_playoffs"] = is_playoffs
+    comb_row["all_rows"] = matching_rows
 
     if "IP" in comb_row:
         frac, whole = math.modf(comb_row["IP"])
@@ -19776,7 +20350,7 @@ def comb_rows(matching_rows, player_type, lower=True, stats=None):
 
     headers_to_remove = set()
     for header in comb_row:
-        if is_invalid_stat(header, player_type, comb_row, False):
+        if is_invalid_stat(header, player_type, comb_row, False)["all_invalid"]:
             headers_to_remove.add(header)
 
     for key in headers_to_remove:
@@ -20261,7 +20835,8 @@ def fill_row(row, player_type, lower=True, stats=None):
             row["is_playoffs"] = "Only"
         else:
             row["is_playoffs"] = None
-        if is_invalid_stat(header, player_type, row, False):
+        row["all_rows"] = [row]
+        if is_invalid_stat(header, player_type, row, False)["all_invalid"]:
             headers_to_remove.add(header)
         row["is_playoffs"] = prev_is_playofs
     
@@ -32813,19 +33388,18 @@ def calculate_formula(stat, player_type, formula, data, all_rows, safe_eval=Fals
         else:
             return 0
 
-    earliest_invalid_date = None
+    earliest_invalid_data = {}
     formula = formula.lower()
     
     if all_rows:
+        data["all_rows"] = all_rows
         for sub_stat in data:
             if stat == "custom_formula" or (sub_stat != "Tm" and sub_stat != "Result" and sub_stat != "Entered" and sub_stat != "Exited" and sub_stat != "Pos" and sub_stat != "is_playoffs" and (not sub_stat in qualifier_map or sub_stat == "Team Score" or sub_stat == "Opponent Score")):
-                temp_earliest_invalid_date = calculate_earliest_invalid_date(sub_stat, player_type, data, formula, earliest_invalid_date, stat)
-                if temp_earliest_invalid_date:
-                    earliest_invalid_date = temp_earliest_invalid_date
+                calculate_earliest_invalid_data(sub_stat, player_type, data, formula, earliest_invalid_data, stat)
 
     for sub_stat in data:
         if stat == "custom_formula" or (sub_stat != "Tm" and sub_stat != "Result" and sub_stat != "Entered" and sub_stat != "Exited" and sub_stat != "Pos" and sub_stat != "is_playoffs" and (not sub_stat in qualifier_map or sub_stat == "Team Score" or sub_stat == "Opponent Score")):
-            formula = replace_formula(data, sub_stat, formula, all_rows, earliest_invalid_date, player_type, stat)
+            formula = replace_formula(data, sub_stat, formula, all_rows, earliest_invalid_data, player_type, stat)
 
     try:
         if safe_eval:
@@ -32855,29 +33429,33 @@ def calculate_formula(stat, player_type, formula, data, all_rows, safe_eval=Fals
         else:
             raise
 
-def calculate_earliest_invalid_date(stat, player_type, data, formula, earliest_invalid_date, real_stat):
+def calculate_earliest_invalid_data(stat, player_type, data, formula, earliest_invalid_data, real_stat):
     if real_stat in ["OBP", "BAbip"]:
         return
-
+    
     if re.search(r"(?:(?<![\w+])(?=[\w+])|(?<=[\w+])(?![\w+]))" + re.escape(stat.lower()) + r"(?:(?<![\w+])(?=[\w+])|(?<=[\w+])(?![\w+]))", formula):
-        invalid_date = is_invalid_stat(stat, player_type, data, False)
-        if invalid_date:
-            if not earliest_invalid_date or invalid_date > earliest_invalid_date:
-                return invalid_date
+        invalid_data = is_invalid_stat(stat, player_type, data, False)
+        if invalid_data:
+            for league in invalid_data:
+                if league != "all_invalid":
+                    if league not in earliest_invalid_data or invalid_data[league] > earliest_invalid_data[league]:
+                        earliest_invalid_data[league] = invalid_data[league]
     elif real_stat == "custom_formula":
         for header_stat in headers[player_type["da_type"]]:
             if "display-value" in headers[player_type["da_type"]][header_stat] and header_stat.lower() == stat.lower():
                 stat = headers[player_type["da_type"]][header_stat]["display-value"].lower()
         if re.search(r"(?:(?<![\w+])(?=[\w+])|(?<=[\w+])(?![\w+]))" + re.escape(stat.lower()) + r"(?:(?<![\w+])(?=[\w+])|(?<=[\w+])(?![\w+]))", formula):
             invalid_date = is_invalid_stat(stat, player_type, data, False)
-            if invalid_date:
-                if not earliest_invalid_date or invalid_date > earliest_invalid_date:
-                    return invalid_date
+            if invalid_data:
+                for league in invalid_data:
+                    if league != "all_invalid":
+                        if league not in earliest_invalid_data or invalid_data[league] > earliest_invalid_data[league]:
+                            earliest_invalid_data[league] = invalid_data[league]
 
-def replace_formula(data, stat, formula, all_rows, earliest_invalid_date, player_type, real_stat):
+def replace_formula(data, stat, formula, all_rows, earliest_invalid_data, player_type, real_stat):
     value = data[stat]
     if isinstance(value, numbers.Number):
-        value = calculate_valid_value(stat, value, earliest_invalid_date, all_rows)
+        value = calculate_valid_value(stat, value, earliest_invalid_data, all_rows)
     elif real_stat != "custom_formula":
         return formula
         
@@ -32889,15 +33467,17 @@ def replace_formula(data, stat, formula, all_rows, earliest_invalid_date, player
         formula = re.sub(r"(?:(?<![\w+])(?=[\w+])|(?<=[\w+])(?![\w+]))" + re.escape(stat.lower()) + r"(?:(?<![\w+])(?=[\w+])|(?<=[\w+])(?![\w+]))", str(value).lower(), formula)
     return formula
 
-def calculate_valid_value(stat, value, earliest_invalid_date, all_rows):
-    if not earliest_invalid_date:
+def calculate_valid_value(stat, value, earliest_invalid_data, all_rows):
+    if not earliest_invalid_data:
         return value
     else:
         for row_data in all_rows:
             if stat in row_data:
-                date = row_data["Year"]
-
-                if date < earliest_invalid_date:
+                year = str(row_data["Year"])
+                team = row_data["Tm"]
+                sleague = get_team_league(team, year)
+                
+                if sleague in earliest_invalid_data and int(year) < earliest_invalid_data[sleague]:
                     value = value - row_data[stat]
         return value
     
@@ -34367,8 +34947,9 @@ def handle_table_data(over_header, player_data, player_datas, player_type, heade
                         row["is_playoffs"] = "Only"
                     else:
                         row["is_playoffs"] = None
+                    row["all_rows"] = [row]
 
-                    if not is_invalid_stat(header, player_type, row, False):
+                    if not is_invalid_stat(header, player_type, row, False)["all_invalid"]:
                         has_valid_stat = True   
 
                     constant_year = str(row["Year"])
@@ -34448,11 +35029,8 @@ def handle_table_data(over_header, player_data, player_datas, player_type, heade
                     value += "*"
                 elif header in ("$/WAR", "Infl$/WAR") and has_live_stats:
                     value += "*"
-            elif is_invalid_stat(header, player_type, player_data["stat_values"], True):
-                if has_non_live_stats:
-                    value += "*"
-                else:
-                    return "N/A"
+            elif is_invalid_stat(header, player_type, player_data["stat_values"], True)["any_invalid"]:
+                value += "*"
             elif "AllStar" in header and missing_all_star:
                 value += "*"
             elif has_live_stats:
@@ -34506,37 +35084,62 @@ def is_against_header(header, extra_stats, player_type):
         return header in ("WPA", "cWPA", "WPA/162", "cWPA/162", "GS", "W", "L", "W/L%", "QS", "QS%", "CG", "CG%", "SHO", "SHO%", "Hold", "SV", "BSv", "SV%", "HLD", "NoHit", "Prfct", "IP/GS", "Pit/GS", "GSc/GS") or header.startswith("GS/") or header.startswith("GS_") or "162" in header
 
 def is_invalid_stat(stat, player_type, data, count_inconsistent):
-    if "DateStart" in data and stat in headers[player_type["da_type"]] and "valid_since" in headers[player_type["da_type"]][stat] and data["DateStart"]:
-        for date_start in data["DateStart"]:
-            if not isinstance(date_start, int) and not isinstance(date_start, datetime.date):
-                date_start = date_start.date()
+    invalid_data = {}
+    all_leagues = set()
 
+    for row in data["all_rows"]:
+        date_start = row["DateTime"]
+        year = str(row["Year"])
+        team = row["Tm"]
+        sleague = get_team_league(team, year)
+        all_leagues.add(sleague)
+
+        stat_obj_to_use = None
+        if stat in league_data_mapping[player_type["da_type"]]:
+            for league_key in league_data_mapping[player_type["da_type"]][stat]:
+                leagues = league_key.split("-")
+                if sleague in leagues:
+                    stat_obj_to_use = league_data_mapping[player_type["da_type"]][stat][league_key]
+                    break
+        
+        if not stat_obj_to_use and "valid_since" in headers[player_type["da_type"]][stat]:
+            stat_obj_to_use =  headers[player_type["da_type"]][stat]["valid_since"]
+
+        if stat_obj_to_use:
+            date_to_use = None
             if isinstance(date_start, int):
-                if "season" in headers[player_type["da_type"]][stat]["valid_since"] and date_start < headers[player_type["da_type"]][stat]["valid_since"]["season"]:
-                    return headers[player_type["da_type"]][stat]["valid_since"]["season"]
-                elif "season-np" in headers[player_type["da_type"]][stat]["valid_since"] and date_start < headers[player_type["da_type"]][stat]["valid_since"]["season-np"]:
+                if "season" in stat_obj_to_use and date_start < stat_obj_to_use["season"]:
+                    date_to_use = stat_obj_to_use["season"]
+                elif "season-np" in stat_obj_to_use and date_start < stat_obj_to_use["season-np"]:
                     if data["is_playoffs"] == "Include":
                         if count_inconsistent:
-                            return headers[player_type["da_type"]][stat]["valid_since"]["season-np"]
+                            date_to_use = stat_obj_to_use["season-np"]
                     elif data["is_playoffs"] != "Only":
-                        return headers[player_type["da_type"]][stat]["valid_since"]["season-np"]
-                elif count_inconsistent and "inconsistent" in headers[player_type["da_type"]][stat]["valid_since"] and date_start < headers[player_type["da_type"]][stat]["valid_since"]["inconsistent"]:
-                    return headers[player_type["da_type"]][stat]["valid_since"]["inconsistent"]
+                        date_to_use = stat_obj_to_use["season-np"]
+                elif count_inconsistent and "inconsistent" in stat_obj_to_use and date_start < stat_obj_to_use["inconsistent"]:
+                    date_to_use = stat_obj_to_use["inconsistent"]
             else:
-                if "game" in headers[player_type["da_type"]][stat]["valid_since"] and (date_start if isinstance(date_start, int) else date_start.year) < headers[player_type["da_type"]][stat]["valid_since"]["game"] and (not data["is_playoffs"] or data["is_playoffs"] == "No"):
-                    return headers[player_type["da_type"]][stat]["valid_since"]["game"]
-                elif "game-np" in headers[player_type["da_type"]][stat]["valid_since"] and (date_start if isinstance(date_start, int) else date_start.year) < headers[player_type["da_type"]][stat]["valid_since"]["game-np"]:
+                if "game" in stat_obj_to_use and (date_start if isinstance(date_start, int) else date_start.year) < stat_obj_to_use["game"] and (not data["is_playoffs"] or data["is_playoffs"] == "No"):
+                    date_to_use = stat_obj_to_use["game"]
+                elif "game-np" in stat_obj_to_use and (date_start if isinstance(date_start, int) else date_start.year) < stat_obj_to_use["game-np"]:
                     if data["is_playoffs"] == "Include":
                         if count_inconsistent:
-                            return headers[player_type["da_type"]][stat]["valid_since"]["game-np"]
+                            date_to_use = stat_obj_to_use["game-np"]
                     elif data["is_playoffs"] != "Only":
-                        return headers[player_type["da_type"]][stat]["valid_since"]["game-np"]
-                elif "game" in headers[player_type["da_type"]][stat]["valid_since"] and (date_start if isinstance(date_start, int) else date_start.year) < headers[player_type["da_type"]][stat]["valid_since"]["game"] and ("game-np" not in headers[player_type["da_type"]][stat]["valid_since"] or (date_start if isinstance(date_start, int) else date_start.year) < headers[player_type["da_type"]][stat]["valid_since"]["game-np"]):
-                    return headers[player_type["da_type"]][stat]["valid_since"]["game"]
-                elif count_inconsistent and "inconsistent-game" in headers[player_type["da_type"]][stat]["valid_since"] and (date_start if isinstance(date_start, int) else date_start.year) < headers[player_type["da_type"]][stat]["valid_since"]["inconsistent-game"]:
-                    return headers[player_type["da_type"]][stat]["valid_since"]["inconsistent-game"]
+                        date_to_use = stat_obj_to_use["game-np"]
+                elif "game" in stat_obj_to_use and (date_start if isinstance(date_start, int) else date_start.year) < stat_obj_to_use["game"] and ("game-np" not in stat_obj_to_use or (date_start if isinstance(date_start, int) else date_start.year) < stat_obj_to_use["game-np"]):
+                    date_to_use = stat_obj_to_use["game"]
+                elif count_inconsistent and "inconsistent-game" in stat_obj_to_use and (date_start if isinstance(date_start, int) else date_start.year) < stat_obj_to_use["inconsistent-game"]:
+                    date_to_use = stat_obj_to_use["inconsistent-game"]
+            
+            if date_to_use:
+                if sleague not in invalid_data or date_to_use < invalid_data[sleague]:
+                    invalid_data[sleague] = date_to_use
+    
+    invalid_data["all_invalid"] = all_leagues.issubset(invalid_data.keys())
+    invalid_data["any_invalid"] = bool(all_leagues.intersection(invalid_data.keys()))
 
-    return None 
+    return invalid_data
 
 def ordinal_to_number(ordinal):
     if ordinal:
