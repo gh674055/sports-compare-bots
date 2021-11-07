@@ -6275,7 +6275,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 elif qualifier_str.startswith("pitching-against-first-name:"):
                                     qual_str = "pitching-against-first-name:"
                                     qual_type = "Pitching Against First Name"
-                                    player_type["da_type"] = "Batter"
+                                    player_type["da_type"] = "Pitcher"
                                     extra_stats.add("current-stats")
                                 elif qualifier_str.startswith("batting-against-last-name:"):
                                     qual_str = "batting-against-last-name:"
@@ -6285,7 +6285,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 elif qualifier_str.startswith("pitching-against-last-name:"):
                                     qual_str = "pitching-against-last-name:"
                                     qual_type = "Pitching Against Last Name"
-                                    player_type["da_type"] = "Batter"
+                                    player_type["da_type"] = "Pitcher"
                                     extra_stats.add("current-stats")
                                 elif qualifier_str.startswith("driven-in:"):
                                     qual_str = "driven-in:"
