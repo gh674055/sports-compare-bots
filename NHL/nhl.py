@@ -6137,6 +6137,14 @@ manual_info = {
         "Road Goals" : 3,
         "Home Result" : "T",
         "Road Result" : "T",
+        "Home Wins" : 12,
+        "Road Wins" : 16,
+        "Home Losses" : 10,
+        "Road Losses" : 2,
+        "Home Ties" : 0,
+        "Road Ties" : 0,
+        "Home OT Losses" : 0,
+        "Road OT Losses" : 0,
         "Arena" : "Boston Garden",
         "ArenaID" : None,
         "Home TmGm" : 102,
@@ -6152,6 +6160,14 @@ manual_info = {
         "Road Goals" : 3,
         "Home Result" : "W",
         "Road Result" : "L",
+        "Home Wins" : 24,
+        "Road Wins" : 32,
+        "Home Losses" : 26,
+        "Road Losses" : 29,
+        "Home Ties" : 4,
+        "Road Ties" : 4,
+        "Home OT Losses" : 0,
+        "Road OT Losses" : 0,
         "Arena" : "Pacific Coliseum",
         "ArenaID" : None,
         "Home TmGm" : 67,
@@ -26839,6 +26855,14 @@ def handle_schedule_stats(player_data, all_rows, qualifiers, is_playoffs, missin
                                 manual_row["Team Goals"] = manual_info_row["Home Goals"]
                                 manual_row["Opponent Score"] = manual_info_row["Road Score"]
                                 manual_row["Opponent Goals"] = manual_info_row["Road Goals"]
+                                manual_row["CurrTmWins"] = manual_info_row["Home Wins"]
+                                manual_row["CurrTmLosses"] = manual_info_row["Home Losses"]
+                                manual_row["CurrTmOTLosses"] = manual_info_row["Home OT Losses"]
+                                manual_row["CurrTmTies"] = manual_info_row["Home Ties"]
+                                manual_row["CurrOppWins"] = manual_info_row["Road Wins"]
+                                manual_row["CurrOppLosses"] = manual_info_row["Road Losses"]
+                                manual_row["CurrOppOTLosses"] = manual_info_row["Road OT Losses"]
+                                manual_row["CurrOppTies"] = manual_info_row["Road Ties"]
                                 manual_row["Result"] = manual_info_row["Home Result"]
                                 manual_row["TmGm"] = manual_info_row["Home TmGm"]
                             else:
@@ -26846,6 +26870,14 @@ def handle_schedule_stats(player_data, all_rows, qualifiers, is_playoffs, missin
                                 manual_row["Team Goals"] = manual_info_row["Road Goals"]
                                 manual_row["Opponent Score"] = manual_info_row["Home Score"]
                                 manual_row["Opponent Goals"] = manual_info_row["Home Goals"]
+                                manual_row["CurrTmWins"] = manual_info_row["Road Wins"]
+                                manual_row["CurrTmLosses"] = manual_info_row["Road Losses"]
+                                manual_row["CurrTmOTLosses"] = manual_info_row["Road OT Losses"]
+                                manual_row["CurrTmTies"] = manual_info_row["Road Ties"]
+                                manual_row["CurrOppWins"] = manual_info_row["Home Wins"]
+                                manual_row["CurrOppLosses"] = manual_info_row["Home Losses"]
+                                manual_row["CurrOppOTLosses"] = manual_info_row["Home OT Losses"]
+                                manual_row["CurrOppTies"] = manual_info_row["Home Ties"]
                                 manual_row["Result"] = manual_info_row["Road Result"]
                                 manual_row["TmGm"] = manual_info_row["Road TmGm"]
 
