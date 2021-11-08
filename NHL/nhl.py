@@ -30042,7 +30042,7 @@ def is_against_header(header, extra_stats, player_type, has_toi_stats):
     if "current-stats-no-game" in extra_stats and "GP" in header:
         return True
 
-    if "current-stats" in extra_stats and ("/GP" in header or "/82GP" in header) and "TOI" not in header and has_toi_stats:
+    if "current-stats" in extra_stats and ("/GP" in header or "/82GP" in header) and "TOI" not in header:
         if "show-stat-" + header.lower() not in extra_stats:
             return True
 
