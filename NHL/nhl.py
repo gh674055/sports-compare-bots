@@ -415,10 +415,6 @@ headers = {
             "positive" : True,
             "display" : False
         },
-        "TmRORec" : {
-            "positive" : True,
-            "display" : False
-        },
         "TmPTS":{
             "positive" : True,
             "display" : False
@@ -448,6 +444,10 @@ headers = {
                 "season" : 2005,
                 "game" : 2005
             }
+        },
+        "TmRORec" : {
+            "positive" : True,
+            "display" : False
         },
         "TmROW/L%" :{
             "positive" : True,
@@ -4156,10 +4156,6 @@ headers = {
             "positive" : True,
             "display" : False
         },
-        "TmRORec" : {
-            "positive" : True,
-            "display" : False
-        },
         "TmPTS":{
             "positive" : True,
             "display" : False
@@ -4189,6 +4185,10 @@ headers = {
                 "season" : 2005,
                 "game" : 2005
             }
+        },
+        "TmRORec" : {
+            "positive" : True,
+            "display" : False
         },
         "TmROW/L%" :{
             "positive" : True,
@@ -5177,12 +5177,12 @@ formulas = {
         "TmT" : "Special",
         "TmOTL" : "Special",
         "TmRec" : "Special",
-        "TmRORec" : "Special",
         "TmPTS" : "(TmW * 2) + (TmT * 1) + (TmOTL * 1)",
         "TmPTS%" : "TmPTS / ((TmW + TmL + TmT + TmOTL) * 2)",
         "TmW/L%" : "TmW / (TmW + TmL + TmOTL)",
         "TmROW" : "Special",
         "TmROL" : "Special",
+        "TmRORec" : "Special",
         "TmROW/L%" : "TmROW / (TmROW + TmROL)",
         "TmScore" : "Special",
         "OppScore" : "Special",
@@ -5453,12 +5453,12 @@ formulas = {
         "TmT" : "Special",
         "TmOTL" : "Special",
         "TmRec" : "Special",
-        "TmRORec" : "Special",
         "TmPTS" : "(TmW * 2) + (TmT * 1) + (TmOTL * 1)",
         "TmPTS%" : "TmPTS / ((TmW + TmL + TmT + TmOTL) * 2)",
         "TmW/L%" : "TmW / (TmW + TmL + TmOTL)",
         "TmROW" : "Special",
         "TmROL" : "Special",
+        "TmRORec" : "Special",
         "TmROW/L%" : "TmROW / (TmROW + TmROL)",
         "TmScore" : "Special",
         "OppScore" : "Special",
@@ -28607,7 +28607,7 @@ def print_player_data(player_datas, player_type, highest_vals, lowest_vals, has_
                 if "display-value" in all_headers[over_header][header] and all_headers[over_header][header]["display-value"]:
                     if "show-stat-" + all_headers[over_header][header]["display-value"].lower() in extra_stats:
                         override_show = True
-                if header in ("TmRec", "TmRORec", "TmPTS", "TmPTS%", "TmW/L%", "TmROW", "TmROL", "TmROW/L%") and "record" in extra_stats:
+                if header in ("TmRec", "TmRORec", "TmPTS", "TmPTS%", "TmW/L%", "TmROW/L%") and "record" in extra_stats:
                     if header == "TmPTS" or header == "TmPTS%" or header == "TmRORec" or header == "TmROW/L%":
                         if has_non_playoffs and not has_playoffs:
                             override_show = True
@@ -28978,7 +28978,7 @@ def get_reddit_player_table(player_datas, player_type, debug_mode, original_comm
                 if "display-value" in all_headers[over_header][header] and all_headers[over_header][header]["display-value"]:
                     if "show-stat-" + all_headers[over_header][header]["display-value"].lower() in extra_stats:
                         override_show = True
-                if header in ("TmRec", "TmRORec", "TmPTS", "TmPTS%", "TmW/L%", "TmROW", "TmROL", "TmROW/L%") and "record" in extra_stats:
+                if header in ("TmRec", "TmRORec", "TmPTS", "TmPTS%", "TmW/L%", "TmROW/L%") and "record" in extra_stats:
                     if header == "TmPTS" or header == "TmPTS%" or header == "TmRORec" or header == "TmROW/L%":
                         if has_non_playoffs and not has_playoffs:
                             override_show = True
@@ -29726,7 +29726,7 @@ def handle_table_data(player_data, player_type, over_header, header, highest_val
     if "display-value" in headers[player_type["da_type"]["type"]][header] and headers[player_type["da_type"]["type"]][header]["display-value"]:
         if "show-stat-" + headers[player_type["da_type"]["type"]][header]["display-value"].lower() in extra_stats:
             override_show = True
-    if header in ("TmRec", "TmRORec", "TmPTS", "TmPTS%", "TmW/L%", "TmROW", "TmROL", "TmROW/L%") and "record" in extra_stats:
+    if header in ("TmRec", "TmRORec", "TmPTS", "TmPTS%", "TmW/L%", "TmROW/L%") and "record" in extra_stats:
         if header == "TmPTS" or header == "TmPTS%" or header == "TmRORec" or header == "TmROW/L%":
             if has_non_playoffs and not has_playoffs:
                 override_show = True
