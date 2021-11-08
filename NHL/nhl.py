@@ -415,6 +415,10 @@ headers = {
             "positive" : True,
             "display" : False
         },
+        "TmRORec" : {
+            "positive" : True,
+            "display" : False
+        },
         "TmPTS":{
             "positive" : True,
             "display" : False
@@ -4152,6 +4156,10 @@ headers = {
             "positive" : True,
             "display" : False
         },
+        "TmRORec" : {
+            "positive" : True,
+            "display" : False
+        },
         "TmPTS":{
             "positive" : True,
             "display" : False
@@ -5169,6 +5177,7 @@ formulas = {
         "TmT" : "Special",
         "TmOTL" : "Special",
         "TmRec" : "Special",
+        "TmRORec" : "Special",
         "TmPTS" : "(TmW * 2) + (TmT * 1) + (TmOTL * 1)",
         "TmPTS%" : "TmPTS / ((TmW + TmL + TmT + TmOTL) * 2)",
         "TmW/L%" : "TmW / (TmW + TmL + TmOTL)",
@@ -5444,6 +5453,7 @@ formulas = {
         "TmT" : "Special",
         "TmOTL" : "Special",
         "TmRec" : "Special",
+        "TmRORec" : "Special",
         "TmPTS" : "(TmW * 2) + (TmT * 1) + (TmOTL * 1)",
         "TmPTS%" : "TmPTS / ((TmW + TmL + TmT + TmOTL) * 2)",
         "TmW/L%" : "TmW / (TmW + TmL + TmOTL)",
@@ -11762,6 +11772,10 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
                         old_rec_split = player_data["stat_values"][stat].split(":")
                         new_rec_split = calculated_values["stat_values"][stat].split(":")
                         player_data["stat_values"][stat] = str(round_value(float(old_rec_split[0]) - float(new_rec_split[0]))) + ":" + str(round_value(float(old_rec_split[1]) - float(new_rec_split[1]))) + ":" + str(round_value(float(old_rec_split[2]) - float(new_rec_split[2])))
+                    elif stat == "TmRORec":
+                        old_rec_split = player_data["stat_values"][stat].split(":")
+                        new_rec_split = calculated_values["stat_values"][stat].split(":")
+                        player_data["stat_values"][stat] = str(round_value(float(old_rec_split[0]) - float(new_rec_split[0]))) + ":" + str(round_value(float(old_rec_split[1]) - float(new_rec_split[1])))
                     elif stat in string_stats:
                         if not player_data["stat_values"][stat]:
                             player_data["stat_values"][stat] = ""
@@ -12338,7 +12352,7 @@ def calculate_values(all_rows, player_type, og_player_data, extra_stats={}):
         calculate_advanced_stats(player_data["stat_values"], all_rows, player_type["da_type"]["type"], player_type["da_type"]["position"], player_data)
     
     for stat in formulas[player_type["da_type"]["type"]]:
-        if not seasons_leading or stat == "TmRec":
+        if not seasons_leading or stat == "TmRec" or stat == "TmRORec":
             formula = formulas[player_type["da_type"]["type"]][stat]
             value = calculate_formula(stat, player_type, formula, player_data["stat_values"], all_rows, og_player_data)
             player_data["stat_values"][stat] = value
@@ -22713,6 +22727,9 @@ def handle_max_min_data(all_rows, player_data, player_type, qualifiers):
             elif real_stat == "TmRec":
                 rec_split = value.split(":")
                 value = str(round_value(float(rec_split[0]))) + ":" + str(round_value(float(rec_split[1]))) + ":" + str(round_value(float(rec_split[2])))
+            elif real_stat == "TmRORec":
+                rec_split = value.split(":")
+                value = str(round_value(float(rec_split[0]))) + ":" + str(round_value(float(rec_split[1])))
             value = str(value)
             transformed_vals.append(value)
 
@@ -25401,7 +25418,7 @@ def fill_row(row, player_data, player_type, lower=True, stats=None):
     
     if stats == None or set(stats).intersection(formulas[player_type["da_type"]["type"]].keys()):
         for form_stat in formulas[player_type["da_type"]["type"]]:
-            if not form_stat == "TmRec":
+            if not form_stat == "TmRec" and not form_stat == "TmRORec":
                 if not form_stat in row:
                     formula = formulas[player_type["da_type"]["type"]][form_stat]
                     value = calculate_formula(form_stat, player_type, formula, row, None, player_data)
@@ -28252,6 +28269,8 @@ def calculate_formula(stat, player_type, formula, data, all_rows, player_data, s
             return calculate_team_win_losses(data, all_rows, stat)
         elif stat == "TmRec":
             return str(data["TmW"]) + ":" + str(data["TmL"]) + ":" + str(data["TmT"] + data["TmOTL"])
+        elif stat == "TmRORec":
+            return str(data["TmROW"]) + ":" + str(data["TmROL"])
         elif stat == "TmScore":
             return data["Team Score"]
         elif stat == "OppScore":
@@ -28588,20 +28607,11 @@ def print_player_data(player_datas, player_type, highest_vals, lowest_vals, has_
                 if "display-value" in all_headers[over_header][header] and all_headers[over_header][header]["display-value"]:
                     if "show-stat-" + all_headers[over_header][header]["display-value"].lower() in extra_stats:
                         override_show = True
-                if header in ("TmW", "TmL", "TmTtlL", "TmT", "TmOTL", "TmPTS", "TmPTS%", "TmW/L%", "TmROW", "TmROL", "TmROW/L%") and "record" in extra_stats:
-                    if header == "TmPTS" or header == "TmPTS%" or header == "TmROW" or header == "TmROL" or header == "TmROW/L%":
+                if header in ("TmRec", "TmRORec", "TmPTS", "TmPTS%", "TmW/L%", "TmROW", "TmROL", "TmROW/L%") and "record" in extra_stats:
+                    if header == "TmPTS" or header == "TmPTS%" or header == "TmRORec" or header == "TmROW/L%":
                         if has_non_playoffs and not has_playoffs:
                             override_show = True
                     elif header == "TmW/L%":
-                        if has_playoffs:
-                            override_show = True
-                    elif header == "TmOTL":
-                        if not has_playoffs:
-                            override_show = True
-                    elif header == "TmL":
-                        if not has_playoffs:
-                            override_show = True
-                    elif header == "TmTtlL":
                         if has_playoffs:
                             override_show = True
                     else:   
@@ -28968,20 +28978,11 @@ def get_reddit_player_table(player_datas, player_type, debug_mode, original_comm
                 if "display-value" in all_headers[over_header][header] and all_headers[over_header][header]["display-value"]:
                     if "show-stat-" + all_headers[over_header][header]["display-value"].lower() in extra_stats:
                         override_show = True
-                if header in ("TmW", "TmL", "TmTtlL", "TmT", "TmOTL", "TmPTS", "TmPTS%", "TmW/L%", "TmROW", "TmROL", "TmROW/L%") and "record" in extra_stats:
-                    if header == "TmPTS" or header == "TmPTS%" or header == "TmROW" or header == "TmROL" or header == "TmROW/L%":
+                if header in ("TmRec", "TmRORec", "TmPTS", "TmPTS%", "TmW/L%", "TmROW", "TmROL", "TmROW/L%") and "record" in extra_stats:
+                    if header == "TmPTS" or header == "TmPTS%" or header == "TmRORec" or header == "TmROW/L%":
                         if has_non_playoffs and not has_playoffs:
                             override_show = True
                     elif header == "TmW/L%":
-                        if has_playoffs:
-                            override_show = True
-                    elif header == "TmOTL":
-                        if not has_playoffs:
-                            override_show = True
-                    elif header == "TmL":
-                        if not has_playoffs:
-                            override_show = True
-                    elif header == "TmTtlL":
                         if has_playoffs:
                             override_show = True
                     else:   
@@ -29142,7 +29143,7 @@ def calculate_highest_lowest_vals(player_datas, player_type, has_non_playoffs, h
                     value = player_data["stat_values"][header]
                     original_value = value
 
-                    if header == "TmRec":
+                    if header == "TmRec" or header == "TmRORec":
                         rec_split = value.split(":")
                         try:
                             value = float(rec_split[0]) / (float(rec_split[0]) + float(rec_split[1]))
@@ -29210,7 +29211,7 @@ def calculate_highest_lowest_vals(player_datas, player_type, has_non_playoffs, h
                     value = player_data["stat_values"][header]
                     original_value = value
                     
-                    if header == "TmRec":
+                    if header == "TmRec" or header == "TmRORec":
                         rec_split = value.split(":")
                         try:
                             value = float(rec_split[0]) / (float(rec_split[0]) + float(rec_split[1]))
@@ -29725,20 +29726,11 @@ def handle_table_data(player_data, player_type, over_header, header, highest_val
     if "display-value" in headers[player_type["da_type"]["type"]][header] and headers[player_type["da_type"]["type"]][header]["display-value"]:
         if "show-stat-" + headers[player_type["da_type"]["type"]][header]["display-value"].lower() in extra_stats:
             override_show = True
-    if header in ("TmW", "TmL", "TmTtlL", "TmT", "TmOTL", "TmPTS", "TmPTS%", "TmW/L%", "TmROW", "TmROL", "TmROW/L%") and "record" in extra_stats:
-        if header == "TmPTS" or header == "TmPTS%" or header == "TmROW" or header == "TmROL" or header == "TmROW/L%":
+    if header in ("TmRec", "TmRORec", "TmPTS", "TmPTS%", "TmW/L%", "TmROW", "TmROL", "TmROW/L%") and "record" in extra_stats:
+        if header == "TmPTS" or header == "TmPTS%" or header == "TmRORec" or header == "TmROW/L%":
             if has_non_playoffs and not has_playoffs:
                 override_show = True
         elif header == "TmW/L%":
-            if has_playoffs:
-                override_show = True
-        elif header == "TmOTL":
-            if not has_playoffs:
-                override_show = True
-        elif header == "TmL":
-            if not has_playoffs:
-                override_show = True
-        elif header == "TmTtlL":
             if has_playoffs:
                 override_show = True
         else:   
@@ -29959,6 +29951,9 @@ def handle_table_data(player_data, player_type, over_header, header, highest_val
             elif header == "TmRec":
                 rec_split = value.split(":")
                 value = str(round_value(float(rec_split[0]))) + ":" + str(round_value(float(rec_split[1]))) + ":" + str(round_value(float(rec_split[2])))
+            elif header == "TmRORec":
+                rec_split = value.split(":")
+                value = str(round_value(float(rec_split[0]))) + ":" + str(round_value(float(rec_split[1])))
             value = str(value) 
             
             if header.startswith("GP"):
