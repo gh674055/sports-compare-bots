@@ -1428,6 +1428,11 @@ headers = {
                 "season" : 2003
             }
         },
+        "Rbat" : {
+            "positive" : True,
+            "display" : False,
+            "type" : "Defense/Value (Baseball Reference)"
+        },
         "Rbaser" : {
             "positive" : True,
             "type" : "Defense/Value (Baseball Reference)"
@@ -1566,6 +1571,12 @@ headers = {
             "valid_since" : {
                 "season" : 2003
             }
+        },
+        "Rbat/Yr" : {
+            "positive" : True,
+            "display" : False,
+            "round" : 1,
+            "type" : "Defense/Value (Baseball Reference)"
         },
         "Rbaser/Yr" : {
             "positive" : True,
@@ -3633,6 +3644,11 @@ headers = {
                 "season" : 2003
             }
         },
+        "Rbat" : {
+            "positive" : True,
+            "display" : False,
+            "type" : "Defense/Value (Baseball Reference)"
+        },
         "Rbaser" : {
             "positive" : True,
             "display" : False,
@@ -3772,6 +3788,12 @@ headers = {
             "valid_since" : {
                 "season" : 2003
             }
+        },
+        "Rbat/Yr" : {
+            "positive" : True,
+            "round" : 1,
+            "display" : False,
+            "type" : "Defense/Value (Baseball Reference)"
         },
         "Rbaser/Yr" : {
             "positive" : True,
@@ -4313,6 +4335,7 @@ formulas = {
         "Fld%" : "(PutOut + A) / (PutOut + A + E)",
         "Rdrs/yr" : "Special",
         "WAA/Yr" : "WAA / WARSeasons",
+        "Rbat/Yr" : "Rbat / WARSeasons",
         "Rbaser/Yr" : "Rbaser / WARSeasons",
         "Rfield/Yr" : "Rfield / WARSeasons",
         "oWAR/Yr" : "oWAR / WARSeasons",
@@ -4448,6 +4471,7 @@ formulas = {
         "WARPitch/Yr" : "WARPitch / PitchSeasons",
         "WAAPos/Yr" : "WAAPos / WARSeasons",
         "WARPos/Yr" : "WARPos / WARSeasons",
+        "Rbat/Yr" : "Rbat / WARSeasons",
         "Rbaser/Yr" : "Rbaser / WARSeasons",
         "Rfield/Yr" : "Rfield / WARSeasons",
         "WAA/Yr" : "WAA / WARSeasons",
