@@ -4720,6 +4720,24 @@ league_data_mapping = {
                 "inconsistent-game" : 1926
             }
         },
+        "TTO%" : {
+            "AA-UA" : {
+                "game" : 1891,
+                "season" : 1891,
+                "inconsistent" : 1890,
+                "inconsistent-game" : 1890
+            },
+            "NNL-ANL-NSL-EWL-NN2-NAL" : {
+                "game" : 1949,
+                "season" : 1949
+            },
+            "ECL" : {
+                "game" : 1927,
+                "season" : 1927,
+                "inconsistent" : 1926,
+                "inconsistent-game" : 1926
+            }
+        },
         "GDP" : {
             "AA-UA-PL-FL-NNL-ECL-ANL-NSL-EWL-NN2-NAL" : {
                 "game" : 1949,
