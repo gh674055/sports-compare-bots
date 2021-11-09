@@ -10173,10 +10173,12 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                             time_end = datetime.date.today()
                                             if "calendar" in unit:
                                                 if "week" in unit:
-                                                    time_end = time_end + datetime.timedelta(days=6 - time_end.weekday()) - dateutil.relativedelta.relativedelta(years=0, months=0, weeks=1, days=0)
+                                                    time_end = time_end + datetime.timedelta(days=6 - time_end.weekday())
+                                                    if datetime.date.today().weekday() <= 3:
+                                                        time_end -= dateutil.relativedelta.relativedelta(years=0, months=0, weeks=1, days=0)
                                                     time_start = time_end - dateutil.relativedelta.relativedelta(years=years, months=months, weeks=weeks, days=days - 1)
                                                 elif "month" in unit:
-                                                    if time_end.day > 15:
+                                                    if datetime.date.today().day > 15:
                                                         time_end = datetime.datetime(time_end.year, time_end.month, calendar.monthrange(time_end.year, time_end.month)[1]).date()
                                                     else:
                                                         if time_end.month == 1:
@@ -10192,7 +10194,9 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                                         else:
                                                             time_start = time_start.replace(month=(time_start.month + 1))
                                                 elif "year" in unit:
-                                                    time_end = datetime.datetime(time_end.year, 12, calendar.monthrange(time_end.year, 12)[1]).date() - dateutil.relativedelta.relativedelta(years=1, months=0, weeks=0, days=0)
+                                                    time_end = datetime.datetime(time_end.year, 12, calendar.monthrange(time_end.year, 12)[1]).date()
+                                                    if datetime.date.today().month <= 6:
+                                                        time_end -=- dateutil.relativedelta.relativedelta(years=1, months=0, weeks=0, days=0)
                                                     time_start = time_end - dateutil.relativedelta.relativedelta(years=years, months=months, weeks=weeks, days=days - 1)
                                                 else:
                                                     time_start = time_end - dateutil.relativedelta.relativedelta(years=years, months=months, weeks=weeks, days=days - 1)

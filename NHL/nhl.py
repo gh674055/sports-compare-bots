@@ -9472,10 +9472,12 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                             time_end = datetime.date.today()
                                             if "calendar" in unit:
                                                 if "week" in unit:
-                                                    time_end = time_end + datetime.timedelta(days=6 - time_end.weekday()) - dateutil.relativedelta.relativedelta(years=0, months=0, weeks=1, days=0)
+                                                    time_end = time_end + datetime.timedelta(days=6 - time_end.weekday())
+                                                    if datetime.date.today().weekday() <= 3:
+                                                        time_end -= dateutil.relativedelta.relativedelta(years=0, months=0, weeks=1, days=0)
                                                     time_start = time_end - dateutil.relativedelta.relativedelta(years=years, months=months, weeks=weeks, days=days - 1)
                                                 elif "month" in unit:
-                                                    if time_end.day > 15:
+                                                    if datetime.date.today().day > 15:
                                                         time_end = datetime.datetime(time_end.year, time_end.month, calendar.monthrange(time_end.year, time_end.month)[1]).date()
                                                     else:
                                                         if time_end.month == 1:
@@ -9491,7 +9493,9 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                                         else:
                                                             time_start = time_start.replace(month=(time_start.month + 1))
                                                 elif "year" in unit:
-                                                    time_end = datetime.datetime(time_end.year, 12, calendar.monthrange(time_end.year, 12)[1]).date() - dateutil.relativedelta.relativedelta(years=1, months=0, weeks=0, days=0)
+                                                    time_end = datetime.datetime(time_end.year, 12, calendar.monthrange(time_end.year, 12)[1]).date()
+                                                    if datetime.date.today().month <= 6:
+                                                        time_end -=- dateutil.relativedelta.relativedelta(years=1, months=0, weeks=0, days=0)
                                                     time_start = time_end - dateutil.relativedelta.relativedelta(years=years, months=months, weeks=weeks, days=days - 1)
                                                 else:
                                                     time_start = time_end - dateutil.relativedelta.relativedelta(years=years, months=months, weeks=weeks, days=days - 1)
@@ -12373,22 +12377,29 @@ def calculate_values(all_rows, player_type, og_player_data, extra_stats={}):
             value = calculate_formula(stat, player_type, formula, player_data["stat_values"], all_rows, og_player_data)
             player_data["stat_values"][stat] = value
 
-    player_data["stat_values"]["GP/GP"] = player_data["stat_values"]["GP"]
-
     adv_year = 2009 if player_type["da_type"]["type"] == "Skater" else 1917
     if adv_year == 2009 and has_against_quals_no_so(extra_stats):
         adv_year = 2000
 
     total_games = 0
     all_total_games = 0
+    all_against_games = 0
     for row in all_rows:
         if "GP" in row:
             if row["Year"] >= adv_year:
                 total_games += row["GP"]
+            if row["Year"] >= 2010:
+                all_against_games += row["GP"]
             all_total_games += row["GP"]
     player_data["stat_values"]["GP_5v5" if player_type["da_type"]["type"] == "Skater" else "GP_Sit"] = total_games
     player_data["stat_values"]["GP_Penalty"] = all_total_games
-    player_data["stat_values"]["GP_TOI"] = all_total_games
+
+    if has_against_quals_no_so(extra_stats):
+        player_data["stat_values"]["GP/GP"] = all_against_games
+        player_data["stat_values"]["GP_TOI"] = all_against_games
+    else:
+        player_data["stat_values"]["GP/GP"] = all_total_games
+        player_data["stat_values"]["GP_TOI"] = all_total_games
 
     if player_type["da_type"]["type"] == "Skater":
         player_data["stat_values"]["GP_Score"] = all_total_games
@@ -28692,7 +28703,8 @@ def print_player_data(player_datas, player_type, highest_vals, lowest_vals, has_
                                 display_header = header
                             if over_header == "Per Game/60 Minutes":
                                 if display_header.endswith("GP"):
-                                    display_header = display_header[:-2]
+                                    if not has_against_quals_no_so(extra_stats) or display_header == "Player/GP" or display_header == "GP/GP":
+                                        display_header = display_header[:-2]
                                 if display_header.endswith("M"):
                                     display_header = display_header[:-1]
                                 if display_header.endswith("/"):
@@ -28748,6 +28760,9 @@ def print_player_data(player_datas, player_type, highest_vals, lowest_vals, has_
             elif display_over_header == "5v5 (Avail since 2009-2010)":
                 if has_against_quals_no_so(extra_stats):
                     display_over_header = "5v5"
+            elif display_over_header == "Per Game/60 Minutes":
+                if has_against_quals_no_so(extra_stats):
+                    display_over_header = "Per 60 Minutes (Avail since 2010-2011)"
 
             if debug_mode:
                 if len(all_headers) > 1:
@@ -28994,6 +29009,9 @@ def get_reddit_player_table(player_datas, player_type, debug_mode, original_comm
                 elif display_over_header == "5v5 (Avail since 2009-2010)":
                     if has_against_quals_no_so(extra_stats):
                         display_over_header = "5v5"
+                elif display_over_header == "Per Game/60 Minutes":
+                    if has_against_quals_no_so(extra_stats):
+                        display_over_header = "Per 60 Minutes (Avail since 2010-2011)"
 
                 table_str += "**" + display_over_header + "**\n\n"
 
@@ -29063,7 +29081,8 @@ def get_reddit_player_table(player_datas, player_type, debug_mode, original_comm
                                 display_header = header
                             if over_header == "Per Game/60 Minutes":
                                 if display_header.endswith("GP"):
-                                    display_header = display_header[:-2]
+                                    if not has_against_quals_no_so(extra_stats) or display_header == "Player/GP" or display_header == "GP/GP":
+                                        display_header = display_header[:-2]
                                 if display_header.endswith("M"):
                                     display_header = display_header[:-1]
                                 if display_header.endswith("/"):
@@ -30042,7 +30061,7 @@ def is_against_header(header, extra_stats, player_type, has_toi_stats):
     if "current-stats-no-game" in extra_stats and "GP" in header:
         return True
 
-    if "current-stats" in extra_stats and ("/GP" in header or "/82GP" in header) and "TOI" not in header:
+    if "current-stats" in extra_stats and ("/GP" in header or "/82GP" in header) and "TOI" not in header and not header == "GP/GP":
         if "show-stat-" + header.lower() not in extra_stats:
             return True
 
