@@ -30160,7 +30160,7 @@ def is_invalid_stat(stat, player_type, data, count_inconsistent, player_data):
                     if stat in header_indv_shift_stats:
                         return current_season
 
-                if stat in header_shift_stats or "TOI" in stat or "/60M" in stat or "GAA" in stat:
+                if stat in header_shift_stats or "TOI" in stat or "/60M" in stat or "GAA" in stat or stat == "GP/GP":
                     if data["YearStart"][index] < 2010:
                         return 2010
                 if player_data["stat_values"]["is_strength_data"] and stat in strength_stats:
