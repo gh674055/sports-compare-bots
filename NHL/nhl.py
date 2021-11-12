@@ -20068,7 +20068,7 @@ def calculate_toi(row, qualifiers, player_game_info, player_id, saved_row_data, 
                         shift_event["game_shot_reversed"] = game_shots_reversed
                         shift_event["career_shot_reversed"] = career_shots_reversed
 
-                    if perform_metadata_qual(None, shift_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], skip_on_ice=True):
+                    if perform_metadata_qual(None, shift_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], is_toi=True):
                         row["TOI"] += 1
                         strength = determine_strength(player_game_info, period, second, shift_event)
                         if strength:
@@ -20152,8 +20152,8 @@ def is_period_qual(qual_object):
 def has_shift_quals(qualifiers):
     return "On Ice With" in qualifiers or "On Ice Against" in qualifiers or "Strength" in qualifiers or "Career Minute" in qualifiers or "Career Minute Reversed" in qualifiers or "Game Minute" in qualifiers or "Game Minute Reversed" in qualifiers or "Even Skaters" in qualifiers or "More Skaters" in qualifiers or "Less Skaters" in qualifiers or "Team Goalie Pulled" in qualifiers or "Opponent Goalie Pulled" in qualifiers or "Team Skaters" in qualifiers or "Opponent Skaters" in qualifiers or "Team Players" in qualifiers or "Opponent Players" in qualifiers
 
-def perform_metadata_qual(event_name, goal_event, qualifiers, player_game_info, row, is_playoffs, year, is_faceoff=False, skip_on_ice=False):
-    if not skip_on_ice:
+def perform_metadata_qual(event_name, goal_event, qualifiers, player_game_info, row, is_playoffs, year, is_faceoff=False, is_toi=False):
+    if not is_toi:
         if "Shot On" in qualifiers:
             if event_name != "goal" and event_name != "shot":
                 return False
@@ -20524,6 +20524,18 @@ def perform_metadata_qual(event_name, goal_event, qualifiers, player_game_info, 
                 else:
                     if not has_match:
                         return False
+        
+        if "Game Winning" in qualifiers:
+            if not perform_bool_qual(goal_event, "gameWinningGoal", qualifiers["Game Winning"]):
+                return False
+
+        if "Unassisted" in qualifiers:
+            if not perform_sub_metadata_qual(goal_event, "unassisted", qualifiers["Unassisted"], player_game_info, year):
+                return False
+        
+        if "Penalty Type" in qualifiers:
+            if not perform_sub_metadata_qual(goal_event, "penaltType", qualifiers["Unassisted"], player_game_info, year):
+                return False
 
     if "On Ice With" in qualifiers:
         if not perform_sub_on_ice_qual(qualifiers["On Ice With"], player_game_info["shift_data"], goal_event, row, goal_event["period"], goal_event["periodTime"], True, is_faceoff, False):
@@ -20608,10 +20620,6 @@ def perform_metadata_qual(event_name, goal_event, qualifiers, player_game_info, 
     if "Overtime" in qualifiers:
         if not perform_sub_metadata_qual(goal_event, "overtime", qualifiers["Overtime"], player_game_info, year):
             return False
-
-    if "Game Winning" in qualifiers:
-        if not perform_bool_qual(goal_event, "gameWinningGoal", qualifiers["Game Winning"]):
-            return False
     
     if "Coordinates" in qualifiers:
         if not perform_coordinates_qual(goal_event, qualifiers["Coordinates"]):
@@ -20653,14 +20661,6 @@ def perform_metadata_qual(event_name, goal_event, qualifiers, player_game_info, 
             else:
                 if not is_match:
                     return False
-    
-    if "Unassisted" in qualifiers:
-        if not perform_sub_metadata_qual(goal_event, "unassisted", qualifiers["Unassisted"], player_game_info, year):
-            return False
-    
-    if "Penalty Type" in qualifiers:
-        if not perform_sub_metadata_qual(goal_event, "penaltType", qualifiers["Unassisted"], player_game_info, year):
-            return False
     
     if "Strength" in qualifiers:
         if not perform_strength_qual(player_game_info, goal_event, "Strength", qualifiers["Strength"], is_faceoff):
@@ -28671,13 +28671,13 @@ def print_player_data(player_datas, player_type, highest_vals, lowest_vals, has_
                     override_show = True
                 if "Assisted On" in extra_stats and ("A1" in header or "EVA" in header or "PPA" in header or "SHA" in header):
                     override_show = True
+                if "Assisted By" in extra_stats and ("EVG" in header or "PPG" in header or "SHG" in header):
+                    override_show = True
                 if "Faceoff Against" in extra_stats and "FO" in header:
                     override_show = True
                 if "Points On" in extra_stats and ("P1" in header or "EVP" in header or "PPP" in header or "SHP" in header):
                     override_show = True
                 if "scoring-stats" in extra_stats and ("EVG" in header or "PPG" in header or "SHG" in header or "A1" in header or "EVA" in header or "PPA" in header or "SHA" in header or "P1" in header or "EVP" in header or "PPP" in header or "SHP" in header):
-                    override_show = True
-                if "Assisted By" in extra_stats:
                     override_show = True
                 if "Hit On" in extra_stats and header in ("HIT/GP"):
                     override_show = True
@@ -29049,13 +29049,13 @@ def get_reddit_player_table(player_datas, player_type, debug_mode, original_comm
                     override_show = True
                 if "Assisted On" in extra_stats and ("A1" in header or "EVA" in header or "PPA" in header or "SHA" in header):
                     override_show = True
+                if "Assisted By" in extra_stats and ("EVG" in header or "PPG" in header or "SHG" in header):
+                    override_show = True
                 if "Faceoff Against" in extra_stats and "FO" in header:
                     override_show = True
                 if "Points On" in extra_stats and ("P1" in header or "EVP" in header or "PPP" in header or "SHP" in header):
                     override_show = True
                 if "scoring-stats" in extra_stats and ("EVG" in header or "PPG" in header or "SHG" in header or "A1" in header or "EVA" in header or "PPA" in header or "SHA" in header or "P1" in header or "EVP" in header or "PPP" in header or "SHP" in header):
-                    override_show = True
-                if "Assisted By" in extra_stats:
                     override_show = True
                 if "Hit On" in extra_stats and header in ("HIT/GP"):
                     override_show = True
@@ -29798,13 +29798,13 @@ def handle_table_data(player_data, player_type, over_header, header, highest_val
         override_show = True
     if "Assisted On" in extra_stats and ("A1" in header or "EVA" in header or "PPA" in header or "SHA" in header):
         override_show = True
+    if "Assisted By" in extra_stats and ("EVG" in header or "PPG" in header or "SHG" in header):
+        override_show = True
     if "Faceoff Against" in extra_stats and "FO" in header:
         override_show = True
     if "Points On" in extra_stats and ("P1" in header or "EVP" in header or "PPP" in header or "SHP" in header):
         override_show = True
     if "scoring-stats" in extra_stats and ("EVG" in header or "PPG" in header or "SHG" in header or "A1" in header or "EVA" in header or "PPA" in header or "SHA" in header or "P1" in header or "EVP" in header or "PPP" in header or "SHP" in header):
-        override_show = True
-    if "Assisted By" in extra_stats:
         override_show = True
     if "Hit On" in extra_stats and header in ("HIT/GP"):
         override_show = True
