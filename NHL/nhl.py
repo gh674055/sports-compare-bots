@@ -29276,7 +29276,7 @@ def get_reddit_player_table(player_datas, player_type, debug_mode, original_comm
     advance_headers = dict(filter(lambda header: header[1].get("type") == ("5v5" if player_type["da_type"]["type"] == "Skater" else "Advanced"), headers[player_type["da_type"]["type"]].items()))
     award_headers = dict(filter(lambda header: header[1].get("type") == "Awards/Honors", headers[player_type["da_type"]["type"]].items()))
     penalty_headers = dict(filter(lambda header: header[1].get("type") == "Penalty", headers[player_type["da_type"]["type"]].items()))
-    non_rate_headers = dict(filter(lambda header: header[1].get("type") != "Per Game/60 Minutes" and header[1].get("type") != ("5v5" if player_type["da_type"]["type"] == "Skater" else "Advanced") and header[1].get("type") != "Awards/Honors" and header[1].get("type") != "Advanced" and header[1].get("type") != "Advanced" and header[1].get("type") != "Penalty", headers[player_type["da_type"]["type"]].items()))
+    non_rate_headers = dict(filter(lambda header: header[1].get("type") != "Per Game/60 Minutes" and header[1].get("type") != ("5v5" if player_type["da_type"]["type"] == "Skater" else "Advanced") and header[1].get("type") != "Awards/Honors" and header[1].get("type") != "Advanced" and header[1].get("type") != "Relative" and header[1].get("type") != "Penalty", headers[player_type["da_type"]["type"]].items()))
 
     all_headers = {}
     if non_rate_headers:
