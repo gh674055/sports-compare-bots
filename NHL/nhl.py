@@ -30564,7 +30564,7 @@ def is_against_header(header, extra_stats, player_type, has_toi_stats):
             if header == "TOI":
                 return False
 
-    if ("EV" in header or "PP" in header or "SH" in header) and "strength" in extra_stats:
+    if (header.startswith("EV") or header.startswith("PP") or header.startswith("SH")) and "strength" in extra_stats:
         return True
 
     if "Shot On" in extra_stats:
