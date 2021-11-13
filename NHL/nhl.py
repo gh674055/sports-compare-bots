@@ -30140,6 +30140,9 @@ def is_against_header(header, extra_stats, player_type, has_toi_stats):
         if "show-stat-" + header.lower() not in extra_stats and not "per-game" in extra_stats:
             return True
 
+    if header == "CurrentCap$" and "show-stat-" + header.lower() not in extra_stats:
+        return True
+
     if header.startswith("GP") and not header.startswith("GP_TOI"):
         return False
 
