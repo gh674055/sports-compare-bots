@@ -7214,6 +7214,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                             }
 
                             extra_stats.add("current-stats")
+                            extra_stats.add("strength")
                             
                             if not qual_type in qualifiers:
                                 qualifiers[qual_type] = []
@@ -7779,27 +7780,35 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                             elif qualifier_str == "even-skaters":
                                 qual_type = "Even Skaters"
                                 extra_stats.add("current-stats")
+                                extra_stats.add("strength")
                             elif qualifier_str == "team-goalie-pulled":
                                 qual_type = "Team Goalie Pulled"
                                 extra_stats.add("current-stats")
+                                extra_stats.add("strength")
                             elif qualifier_str == "opponent-goalie-pulled":
                                 qual_type = "Opponent Goalie Pulled"
                                 extra_stats.add("current-stats")
+                                extra_stats.add("strength")
                             elif qualifier_str == "more-skaters":
                                 qual_type = "More Skaters"
                                 extra_stats.add("current-stats")
+                                extra_stats.add("strength")
                             elif qualifier_str == "less-skaters":
                                 qual_type = "Less Skaters"
                                 extra_stats.add("current-stats")
+                                extra_stats.add("strength")
                             elif qualifier_str == "power-play":
                                 qual_type = "Power Play"
                                 extra_stats.add("current-stats")
+                                extra_stats.add("strength")
                             elif qualifier_str == "short-handed":
                                 qual_type = "Short Handed"
                                 extra_stats.add("current-stats")
+                                extra_stats.add("strength")
                             elif qualifier_str == "even-strength":
                                 qual_type = "Even Strength"
                                 extra_stats.add("current-stats")
+                                extra_stats.add("strength")
                             elif qualifier_str == "unassisted":
                                 qual_type = "Unassisted"
                                 extra_stats.add("Assisted By")
@@ -8109,18 +8118,22 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                     qual_str = "team-skaters:"
                                     qual_type = "Team Skaters"
                                     extra_stats.add("current-stats")
+                                    extra_stats.add("strength")
                                 elif qualifier_str.startswith("opponent-skaters:"):
                                     qual_str = "opponent-skaters:"
                                     qual_type = "Opponent Skaters"
                                     extra_stats.add("current-stats")
+                                    extra_stats.add("strength")
                                 elif qualifier_str.startswith("team-players:"):
                                     qual_str = "team-players:"
                                     qual_type = "Team Players"
                                     extra_stats.add("current-stats")
+                                    extra_stats.add("strength")
                                 elif qualifier_str.startswith("opponent-players:"):
                                     qual_str = "opponent-players:"
                                     qual_type = "Opponent Players"
                                     extra_stats.add("current-stats")
+                                    extra_stats.add("strength")
                                 elif qualifier_str.startswith("period-time:"):
                                     qual_str = "period-time:"
                                     qual_type = "Period Time"
@@ -30203,6 +30216,8 @@ def is_against_header(header, extra_stats, player_type, has_toi_stats):
             if "Adj" in header:
                 if "show-stat-" + header.lower() not in extra_stats and "adjusted" not in extra_stats:
                     return True
+            if "type" in headers[player_type["da_type"]["type"]][header] and (headers[player_type["da_type"]["type"]][header]["type"] == "5v5") and "strength" in extra_stats:
+                return True
         else:
             if header == "TOI/GP":
                 return False
