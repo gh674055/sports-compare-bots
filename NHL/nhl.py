@@ -12421,7 +12421,7 @@ def calculate_values(all_rows, player_type, og_player_data, extra_stats={}):
     player_data["stat_values"]["GP_5v5" if player_type["da_type"]["type"] == "Skater" else "GP_Sit"] = total_games
     player_data["stat_values"]["GP_Penalty"] = all_total_games
 
-    if has_against_quals_no_so(extra_stats):
+    if has_against_quals_no_so(extra_stats) and not "per-game" in extra_stats:
         player_data["stat_values"]["GP/GP"] = all_against_games
         player_data["stat_values"]["GP_TOI"] = all_against_games
     else:
@@ -28772,7 +28772,7 @@ def print_player_data(player_datas, player_type, highest_vals, lowest_vals, has_
                                 display_header = header
                             if over_header == "Per Game/60 Minutes":
                                 if display_header.endswith("GP"):
-                                    if not has_against_quals_no_so(extra_stats) or display_header == "Player/GP" or display_header == "GP/GP":
+                                    if not has_against_quals_no_so(extra_stats) or display_header == "Player/GP" or display_header == "GP/GP" or "per-game" in extra_stats:
                                         display_header = display_header[:-2]
                                 if display_header.endswith("M"):
                                     display_header = display_header[:-1]
@@ -28830,7 +28830,7 @@ def print_player_data(player_datas, player_type, highest_vals, lowest_vals, has_
                 if has_against_quals_no_so(extra_stats):
                     display_over_header = "5v5"
             elif display_over_header == "Per Game/60 Minutes":
-                if has_against_quals_no_so(extra_stats):
+                if has_against_quals_no_so(extra_stats) and not "per-game" in extra_stats:
                     display_over_header = "Per 60 Minutes (Avail since 2010-2011)"
 
             if debug_mode:
@@ -29079,7 +29079,7 @@ def get_reddit_player_table(player_datas, player_type, debug_mode, original_comm
                     if has_against_quals_no_so(extra_stats):
                         display_over_header = "5v5"
                 elif display_over_header == "Per Game/60 Minutes":
-                    if has_against_quals_no_so(extra_stats):
+                    if has_against_quals_no_so(extra_stats) and not "per-game" in extra_stats:
                         display_over_header = "Per 60 Minutes (Avail since 2010-2011)"
 
                 table_str += "**" + display_over_header + "**\n\n"
@@ -29152,7 +29152,7 @@ def get_reddit_player_table(player_datas, player_type, debug_mode, original_comm
                                 display_header = header
                             if over_header == "Per Game/60 Minutes":
                                 if display_header.endswith("GP"):
-                                    if not has_against_quals_no_so(extra_stats) or display_header == "Player/GP" or display_header == "GP/GP":
+                                    if not has_against_quals_no_so(extra_stats) or display_header == "Player/GP" or display_header == "GP/GP" or "per-game" in extra_stats:
                                         display_header = display_header[:-2]
                                 if display_header.endswith("M"):
                                     display_header = display_header[:-1]
