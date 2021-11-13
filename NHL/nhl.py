@@ -141,6 +141,10 @@ headers = {
             "positive" : True,
             "type" : "Advanced"
         },
+        "Player_Rel" : {
+            "positive" : True,
+            "type" : "Relative"
+        },
         "Player_5v5" : {
             "positive" : True,
             "type" : "5v5"
@@ -292,6 +296,10 @@ headers = {
         "GP_Score": {
             "positive" : True,
             "type" : "Advanced"
+        },
+        "GP_Rel": {
+            "positive" : True,
+            "type" : "Relative"
         },
         "GP_5v5": {
             "positive" : True,
@@ -545,6 +553,16 @@ headers = {
             "valid_since" : {
                 "season" : 1997,
                 "game" : 1997
+            }
+        },
+        "offTOI" : {
+            "positive" : True,
+            "round" : "time",
+            "display" : False,
+            "type" : "Relative",
+            "valid_since" : {
+                "season" : 2009,
+                "game" : 2009
             }
         },
         "Shft" : {
@@ -859,9 +877,10 @@ headers = {
                 "game" : 2009
             }
         },
-        "GF%" : {
+        "GFPer" : {
             "positive" : True,
             "display" : False,
+            "display-value" : "GF%",
             "round" : "percent",
             "type" : "Advanced",
             "valid_since" : {
@@ -1327,28 +1346,19 @@ headers = {
                 "game" : 2009
             }
         },
-        "offIFF" : {
-            "positive" : True,
-            "display" : False,
-            "type" : "Advanced",
-            "valid_since" : {
-                "season" : 2009,
-                "game" : 2009
-            }
-        },
-        "offICA" : {
+        "offIGF" : {
             "positive" : False,
             "display" : False,
-            "type" : "Advanced",
+            "type" : "Relative",
             "valid_since" : {
                 "season" : 2009,
                 "game" : 2009
             }
         },
-        "offIFA" : {
-            "positive" : True,
+        "offIGA" : {
+            "positive" : False,
             "display" : False,
-            "type" : "Advanced",
+            "type" : "Relative",
             "valid_since" : {
                 "season" : 2009,
                 "game" : 2009
@@ -1357,7 +1367,152 @@ headers = {
         "offICF" : {
             "positive" : False,
             "display" : False,
-            "type" : "Advanced",
+            "type" : "Relative",
+            "valid_since" : {
+                "season" : 2009,
+                "game" : 2009
+            }
+        },
+        "offICA" : {
+            "positive" : False,
+            "display" : False,
+            "type" : "Relative",
+            "valid_since" : {
+                "season" : 2009,
+                "game" : 2009
+            }
+        },
+        "offIFF" : {
+            "positive" : True,
+            "display" : False,
+            "type" : "Relative",
+            "valid_since" : {
+                "season" : 2009,
+                "game" : 2009
+            }
+        },
+        "offIFA" : {
+            "positive" : True,
+            "display" : False,
+            "type" : "Relative",
+            "valid_since" : {
+                "season" : 2009,
+                "game" : 2009
+            }
+        },
+        "offISF" : {
+            "positive" : True,
+            "display" : False,
+            "type" : "Relative",
+            "valid_since" : {
+                "season" : 2009,
+                "game" : 2009
+            }
+        },
+        "offISA" : {
+            "positive" : True,
+            "display" : False,
+            "type" : "Relative",
+            "valid_since" : {
+                "season" : 2009,
+                "game" : 2009
+            }
+        },
+        "offIGF/60M" : {
+            "positive" : True,
+            "display" : False,
+            "round" : 2,
+            "type" : "Relative",
+            "valid_since" : {
+                "season" : 2009,
+                "game" : 2009
+            }
+        },
+        "offIGA/60M" : {
+            "positive" : False,
+            "display" : False,
+            "round" : 2,
+            "type" : "Relative",
+            "valid_since" : {
+                "season" : 2009,
+                "game" : 2009
+            }
+        },
+        "offICF/60M" : {
+            "positive" : True,
+            "display" : False,
+            "round" : 2,
+            "type" : "Relative",
+            "valid_since" : {
+                "season" : 2009,
+                "game" : 2009
+            }
+        },
+        "offICA/60M" : {
+            "positive" : False,
+            "display" : False,
+            "round" : 2,
+            "type" : "Relative",
+            "valid_since" : {
+                "season" : 2009,
+                "game" : 2009
+            }
+        },
+        "offIFF/60M" : {
+            "positive" : True,
+            "display" : False,
+            "type" : "Relative",
+            "round" : 2,
+            "valid_since" : {
+                "season" : 2009,
+                "game" : 2009
+            }
+        },
+        "offIFA/60M" : {
+            "positive" : False,
+            "display" : False,
+            "type" : "Relative",
+            "round" : 2,
+            "valid_since" : {
+                "season" : 2009,
+                "game" : 2009
+            }
+        },
+        "offISF/60M" : {
+            "positive" : True,
+            "display" : False,
+            "round" : 2,
+            "type" : "Relative",
+            "valid_since" : {
+                "season" : 2009,
+                "game" : 2009
+            }
+        },
+        "offISA/60M" : {
+            "positive" : False,
+            "display" : False,
+            "round" : 2,
+            "type" : "Relative",
+            "valid_since" : {
+                "season" : 2009,
+                "game" : 2009
+            }
+        },
+        "offIG/60M" : {
+            "positive" : True,
+            "display" : False,
+            "round" : 2,
+            "type" : "Relative",
+            "valid_since" : {
+                "season" : 2009,
+                "game" : 2009
+            }
+        },
+        "offIC/60M" : {
+            "positive" : True,
+            "display" : False,
+            "round" : 2,
+            "type" : "Relative",
             "valid_since" : {
                 "season" : 2009,
                 "game" : 2009
@@ -1366,18 +1521,28 @@ headers = {
         "offIF/60M" : {
             "positive" : True,
             "display" : False,
-            "type" : "Advanced",
+            "type" : "Relative",
             "round" : 2,
             "valid_since" : {
                 "season" : 2009,
                 "game" : 2009
             }
         },
-        "offIC/60M" : {
-            "positive" : False,
+        "offIS/60M" : {
+            "positive" : True,
             "display" : False,
             "round" : 2,
-            "type" : "Advanced",
+            "type" : "Relative",
+            "valid_since" : {
+                "season" : 2009,
+                "game" : 2009
+            }
+        },
+        "offIGFPer" : {
+            "positive" : True,
+            "round" : "percent",
+            "display" : False,
+            "type" : "Relative",
             "valid_since" : {
                 "season" : 2009,
                 "game" : 2009
@@ -1387,15 +1552,35 @@ headers = {
             "positive" : True,
             "round" : "percent",
             "display" : False,
-            "type" : "Advanced",
+            "type" : "Relative",
             "valid_since" : {
                 "season" : 2009,
                 "game" : 2009
             }
         },
-        "CRel/60M" : {
+        "offIFFPer" : {
             "positive" : True,
-            "type" : "Advanced",
+            "round" : "percent",
+            "display" : False,
+            "type" : "Relative",
+            "valid_since" : {
+                "season" : 2009,
+                "game" : 2009
+            }
+        },
+        "offISFPer" : {
+            "positive" : True,
+            "round" : "percent",
+            "display" : False,
+            "type" : "Relative",
+            "valid_since" : {
+                "season" : 2009,
+                "game" : 2009
+            }
+        },
+        "GFRel/60M" : {
+            "positive" : True,
+            "type" : "Relative",
             "display" : False,
             "round" : 2,
             "valid_since" : {
@@ -1403,9 +1588,112 @@ headers = {
                 "game" : 2009
             }
         },
-        "FRel/60M" : {
+        "GARel/60M" : {
+            "positive" : False,
+            "type" : "Relative",
+            "display" : False,
+            "round" : 2,
+            "valid_since" : {
+                "season" : 2009,
+                "game" : 2009
+            }
+        },
+        "GFRelPer" : {
             "positive" : True,
-            "type" : "Advanced",
+            "round" : "percent",
+            "display" : False,
+            "type" : "Relative",
+            "display-value" : "GFRel%",
+            "valid_since" : {
+                "season" : 2009,
+                "game" : 2009
+            }
+        },
+        "oiSRelPer" : {
+            "positive" : True,
+            "display" : False,
+            "round" : "percent",
+            "type" : "Relative",
+            "display-value" : "oiRelS%",
+            "valid_since" : {
+                "season" : 2009,
+                "game" : 2009
+            }
+        },
+        "oiSVRelPer" : {
+            "positive" : True,
+            "display" : False,
+            "round" : "percent",
+            "display-value" : "oiRelSV%",
+            "type" : "Relative",
+            "valid_since" : {
+                "season" : 2009,
+                "game" : 2009
+            }
+        },
+        "PDORel" : {
+            "positive" : True,
+            "display" : False,
+            "round" : "percent",
+            "type" : "Relative",
+            "valid_since" : {
+                "season" : 2009,
+                "game" : 2009
+            }
+        },
+        "CFRel/60M" : {
+            "positive" : True,
+            "type" : "Relative",
+            "display" : False,
+            "round" : 2,
+            "valid_since" : {
+                "season" : 2009,
+                "game" : 2009
+            }
+        },
+        "CARel/60M" : {
+            "positive" : False,
+            "type" : "Relative",
+            "display" : False,
+            "round" : 2,
+            "valid_since" : {
+                "season" : 2009,
+                "game" : 2009
+            }
+        },
+        "FFRel/60M" : {
+            "positive" : True,
+            "type" : "Relative",
+            "display" : False,
+            "round" : 2,
+            "valid_since" : {
+                "season" : 2009,
+                "game" : 2009
+            }
+        },
+        "FARel/60M" : {
+            "positive" : False,
+            "type" : "Relative",
+            "display" : False,
+            "round" : 2,
+            "valid_since" : {
+                "season" : 2009,
+                "game" : 2009
+            }
+        },
+        "SFRel/60M" : {
+            "positive" : True,
+            "type" : "Relative",
+            "display" : False,
+            "round" : 2,
+            "valid_since" : {
+                "season" : 2009,
+                "game" : 2009
+            }
+        },
+        "SARel/60M" : {
+            "positive" : False,
+            "type" : "Relative",
             "display" : False,
             "round" : 2,
             "valid_since" : {
@@ -1417,18 +1705,8 @@ headers = {
             "positive" : True,
             "round" : "percent",
             "display" : False,
-            "type" : "Advanced",
+            "type" : "Relative",
             "display-value" : "CFRel%",
-            "valid_since" : {
-                "season" : 2009,
-                "game" : 2009
-            }
-        },
-        "offIFFPer" : {
-            "positive" : True,
-            "round" : "percent",
-            "display" : False,
-            "type" : "Advanced",
             "valid_since" : {
                 "season" : 2009,
                 "game" : 2009
@@ -1439,7 +1717,18 @@ headers = {
             "round" : "percent",
             "display" : False,
             "display-value" : "FFRel%",
-            "type" : "Advanced",
+            "type" : "Relative",
+            "valid_since" : {
+                "season" : 2009,
+                "game" : 2009
+            }
+        },
+        "SFRelPer" : {
+            "positive" : True,
+            "round" : "percent",
+            "display" : False,
+            "display-value" : "SFRel%",
+            "type" : "Relative",
             "valid_since" : {
                 "season" : 2009,
                 "game" : 2009
@@ -5371,13 +5660,12 @@ formulas = {
         "CFPer" : "CF / (CF + CA)",
         "FFPer" : "FF / (FF + FA)",
         "SFPer" : "oiTmS / (oiTmS + oiOppS)",
-        "offICFPer" : "offICF / (offICF + offICA)",
-        "offIFFPer" : "offIFF / (offIFF + offIFA)",
-        "CFRelPer" : "CFPer - offICFPer",
-        "FFRelPer" : "FFPer - offIFFPer",
         "oiSPer" : "GF / oiTmS",
         "oiSVPer" : "(oiOppS - GA) / (oiOppS)",
         "PDO" : "oiSPer + oiSVPer",
+        "oiSRelPer" : "oiSPer - (offIGF / offISF)",
+        "oiSVRelPer" : "oiSVPer - ((offISA - offIGA) / (offISA))",
+        "PDORel" : "oiSRelPer + oiSVRelPer",
         "CF/60M" : "CF / (TOI / 3600)",
         "FF/60M" : "FF / (TOI / 3600)",
         "SF/60M" : "oiTmS / (TOI / 3600)",
@@ -5387,14 +5675,10 @@ formulas = {
         "C/60M" : "(CF - CA) / (TOI / 3600)",
         "F/60M" : "(FF - FA) / (TOI / 3600)",
         "SS/60M" : "(oiTmS - oiOppS) / (TOI / 3600)",
-        "offIC/60M" : "(offICF - offICA) / (TOI / 3600)",
-        "offIF/60M" : "(offIFF - offIFA) / (TOI / 3600)",
-        "CRel/60M" : "((CF - offICF) - (CA - offICA)) / (TOI / 3600)",
-        "FRel/60M" : "F/60M - offIF/60M",
         "S%_5v5" : "G_5v5 / S_5v5",
         "TS%_5v5" : "G_5v5 / TSA_5v5",
         "SThr%_5v5" : "S_5v5 / TSA_5v5",
-        "GF%" : "GF / (GF + GA)",
+        "GFPer" : "GF / (GF + GA)",
         "EVGF%" : "EVGF / (EVGF + EVGA)",
         "IGP" : "G / GF",
         "IPP" : "P / GF",
@@ -5416,6 +5700,34 @@ formulas = {
         "SHGF/60M" : "SHGF / (SHTOI / 3600)",
         "SHGA/60M" : "SHGA / (SHTOI / 3600)",
         "SHGD/60M" : "SHGD / (SHTOI / 3600)",
+        "offICFPer" : "offICF / (offICF + offICA)",
+        "offIFFPer" : "offIFF / (offIFF + offIFA)",
+        "offISFPer" : "offISF / (offISF + offISA)",
+        "offIGFPer" : "offIGF / (offIGF + offIGA)",
+        "CFRelPer" : "CFPer - offICFPer",
+        "FFRelPer" : "FFPer - offIFFPer",
+        "SFRelPer" : "SFPer - offISFPer",
+        "GFRelPer" : "GFPer - offIGFPer",
+        "offIGF/60M" : "offIGF / (offTOI / 3600)",
+        "offICA/60M" : "offICA / (offTOI / 3600)",
+        "offIFF/60M" : "offIFF / (offTOI / 3600)",
+        "offISA/60M" : "offISA / (offTOI / 3600)",
+        "offIGA/60M" : "offIGA / (offTOI / 3600)",
+        "offICF/60M" : "offICF / (offTOI / 3600)",
+        "offIFA/60M" : "offIFA / (offTOI / 3600)",
+        "offISF/60M" : "offISF / (offTOI / 3600)",
+        "offIG/60M" : "(offIGF - offIGA) / (offTOI / 3600)",
+        "offIC/60M" : "(offICF - offICA) / (offTOI / 3600)",
+        "offIF/60M" : "(offIFF - offIFA) / (offTOI / 3600)",
+        "offIS/60M" : "(offISF - offISA) / (offTOI / 3600)",
+        "GFRel/60M" : "(GF / (TOI / 3600)) - (offIGF / (offTOI / 3600))",
+        "CFRel/60M" : "(CF / (TOI / 3600)) - (offICF / (offTOI / 3600))",
+        "FFRel/60M" : "(FF / (TOI / 3600)) - (offIFF / (offTOI / 3600))",
+        "SFRel/60M" : "(oiTmS / (TOI / 3600)) - (offISF / (offTOI / 3600))",
+        "GARel/60M" : "(GA / (TOI / 3600)) - (offIGA / (offTOI / 3600))",
+        "CARel/60M" : "(CA / (TOI / 3600)) - (offICA / (offTOI / 3600))",
+        "FARel/60M" : "(FA / (TOI / 3600)) - (offIFA / (offTOI / 3600))",
+        "SARel/60M" : "(oiOppS / (TOI / 3600)) - (offISA / (offTOI / 3600))",
         "EVxGD" : "xGF - xGA",
         "EVxGF%" : "xGF / (xGF + xGA)",
         "EVxGF/60M" : "xGF / (xEVTOI / 3600)",
@@ -5867,6 +6179,7 @@ missing_player_data = {
         "Player" : ["No Player Match!"],
         "Player/GP" : ["No Player Match!"],
         "Player_Score" : ["No Player Match!"],
+        "Player_Rel" : ["No Player Match!"],
         "Player_5v5" : ["No Player Match!"],
         "Player_Sit" : ["No Player Match!"],
         "Player_Awards" : ["No Player Match!"],
@@ -10382,6 +10695,7 @@ def handle_name_threads(sub_name, parse_time_frames, index, player_type, remove_
                             "is_playoffs" : subb_player_data["is_playoffs"],
                             "Player" : [subb_player_data["Player"]],
                             "Player_Score" : [subb_player_data["Player"]],
+                            "Player_Rel" : [subb_player_data["Player"]],
                             "Player_5v5"  : [subb_player_data["Player"]],
                             "Player_Sit" : [subb_player_data["Player"]],
                             "Player_Awards" : [subb_player_data["Player"]],
@@ -11809,6 +12123,7 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
 
     player_data["stat_values"]["Player/GP"] = player_data["stat_values"]["Player"]
     player_data["stat_values"]["Player_Score"] = player_data["stat_values"]["Player"]
+    player_data["stat_values"]["Player_Rel"] = player_data["stat_values"]["Player"]
     player_data["stat_values"]["Player_5v5"] = player_data["stat_values"]["Player"]
     player_data["stat_values"]["Player_Sit"] = player_data["stat_values"]["Player"]
     player_data["stat_values"]["Player_Awards"] = player_data["stat_values"]["Player"]
@@ -12443,6 +12758,7 @@ def calculate_values(all_rows, player_type, og_player_data, extra_stats={}):
 
     if player_type["da_type"]["type"] == "Skater":
         player_data["stat_values"]["GP_Score"] = all_total_games
+        player_data["stat_values"]["GP_Rel"] = all_total_games
         player_data["stat_values"]["GP_TOI_5v5"] = total_games
 
     if player_type["da_type"]["type"] != "Skater":
@@ -15908,8 +16224,8 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
     
     if row_data["Year"] >= 2010:
         game_data["shift_data"] = get_html_shift_data(row_data["NHLGameLink"], row_data["Location"], game_data, player_data)
-        if not game_data["shift_data"]:
-            game_data["shift_data"], missing_games = get_shift_data(row_data["NHLGameLink"], game_data["team_id"], missing_games)
+        #if not game_data["shift_data"]:
+        #    game_data["shift_data"], missing_games = get_shift_data(row_data["NHLGameLink"], game_data["team_id"], missing_games)
         if not game_data["shift_data"]:
             game_data["missing_toi"] = True
             if has_shift_quals(time_frame["qualifiers"]):
@@ -16278,98 +16594,82 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                             "firstGoal" : first_goal,
                             "goalMargin" : scoring_play["about"]["goals"][game_data["team_str"]] - (scoring_play["about"]["goals"][game_data["opp_str"]] - 1)
                         })
-            if scoring_play["team"]["id"] == game_data["team_id"]:
-                game_data["of_all_team_goals"].append({
-                    "period" : scoring_play["about"]["period"],
-                    "x_coord" : x_coord,
-                    "y_coord" : y_coord,
-                    "strength" : scoring_play["result"]["strength"]["code"],
-                    "emptyNet" : "emptyNet" in scoring_play["result"] and scoring_play["result"]["emptyNet"],
-                    "periodTime" : period_time,
-                    "periodTimeRemaining" : period_time_rem,
-                    "zone" : zone,
-                    "event_time": event_time,
-                    "team_on_ice" : team_on_ice,
-                    "opp_on_ice" : opp_on_ice,
-                    "strength" : strength,
-                    "teamGoals" : scoring_play["about"]["goals"][game_data["team_str"]] - 1,
-                    "oppGoals" : scoring_play["about"]["goals"][game_data["opp_str"]],
-                    "firstGoal" : first_goal,
-                    "goalMargin" : (scoring_play["about"]["goals"][game_data["team_str"]] - 1) - (scoring_play["about"]["goals"][game_data["opp_str"]])
-                })
-                if row_data["Year"] >= 2007:
-                    game_data["of_all_team_shots"].append({
-                        "period" : scoring_play["about"]["period"],
-                        "x_coord" : x_coord,
-                        "y_coord" : y_coord,
-                        "periodTime" : period_time,
-                        "periodTimeRemaining" : period_time_rem,
-                        "zone" : zone,
-                        "event_time": event_time,
-                        "team_on_ice" : team_on_ice,
-                        "opp_on_ice" : opp_on_ice,
-                        "strength" : strength,
-                        "teamGoals" : scoring_play["about"]["goals"][game_data["team_str"]] - 1,
-                        "oppGoals" : scoring_play["about"]["goals"][game_data["opp_str"]],
-                        "firstGoal" : first_goal,
-                        "goalMargin" : (scoring_play["about"]["goals"][game_data["team_str"]] - 1) - (scoring_play["about"]["goals"][game_data["opp_str"]])
-                    })
-                    game_data["of_all_team_shots_og"].append({
-                        "period" : scoring_play["about"]["period"],
-                        "x_coord" : x_coord,
-                        "y_coord" : y_coord,
-                        "periodTime" : period_time,
-                        "periodTimeRemaining" : period_time_rem,
-                        "zone" : zone,
-                        "event_time": event_time,
-                        "team_on_ice" : team_on_ice,
-                        "opp_on_ice" : opp_on_ice,
-                        "strength" : strength,
-                        "teamGoals" : scoring_play["about"]["goals"][game_data["team_str"]] - 1,
-                        "oppGoals" : scoring_play["about"]["goals"][game_data["opp_str"]],
-                        "firstGoal" : first_goal,
-                        "goalMargin" : (scoring_play["about"]["goals"][game_data["team_str"]] - 1) - (scoring_play["about"]["goals"][game_data["opp_str"]])
-                    })
-                    game_data["of_all_team_unblocked_shots"].append({
-                        "period" : scoring_play["about"]["period"],
-                        "x_coord" : x_coord,
-                        "y_coord" : y_coord,
-                        "periodTime" : period_time,
-                        "periodTimeRemaining" : period_time_rem,
-                        "zone" : zone,
-                        "event_time": event_time,
-                        "team_on_ice" : team_on_ice,
-                        "opp_on_ice" : opp_on_ice,
-                        "strength" : strength,
-                        "teamGoals" : scoring_play["about"]["goals"][game_data["team_str"]] - 1,
-                        "oppGoals" : scoring_play["about"]["goals"][game_data["opp_str"]],
-                        "firstGoal" : first_goal,
-                        "goalMargin" : (scoring_play["about"]["goals"][game_data["team_str"]] - 1) - (scoring_play["about"]["goals"][game_data["opp_str"]])
-                    })
             else:
-                game_data["of_all_opp_goals"].append({
-                    "period" : scoring_play["about"]["period"],
-                    "x_coord" : x_coord,
-                    "y_coord" : y_coord,
-                    "strength" : scoring_play["result"]["strength"]["code"],
-                    "emptyNet" : "emptyNet" in scoring_play["result"] and scoring_play["result"]["emptyNet"],
-                    "periodTime" : period_time,
-                    "periodTimeRemaining" : period_time_rem,
-                    "zone" : zone,
-                    "event_time": event_time,
-                    "team_on_ice" : team_on_ice,
-                    "opp_on_ice" : opp_on_ice,
-                    "strength" : strength,
-                    "teamGoals" : scoring_play["about"]["goals"][game_data["team_str"]],
-                    "oppGoals" : scoring_play["about"]["goals"][game_data["opp_str"]] - 1,
-                    "firstGoal" : first_goal,
-                    "goalMargin" : scoring_play["about"]["goals"][game_data["team_str"]] - (scoring_play["about"]["goals"][game_data["opp_str"]] - 1)
-                })
-                if row_data["Year"] >= 2007:
-                    game_data["of_all_opp_shots"].append({
+                if scoring_play["team"]["id"] == game_data["team_id"]:
+                    game_data["of_all_team_goals"].append({
                         "period" : scoring_play["about"]["period"],
                         "x_coord" : x_coord,
                         "y_coord" : y_coord,
+                        "strength" : scoring_play["result"]["strength"]["code"],
+                        "emptyNet" : "emptyNet" in scoring_play["result"] and scoring_play["result"]["emptyNet"],
+                        "periodTime" : period_time,
+                        "periodTimeRemaining" : period_time_rem,
+                        "zone" : zone,
+                        "event_time": event_time,
+                        "team_on_ice" : team_on_ice,
+                        "opp_on_ice" : opp_on_ice,
+                        "strength" : strength,
+                        "teamGoals" : scoring_play["about"]["goals"][game_data["team_str"]] - 1,
+                        "oppGoals" : scoring_play["about"]["goals"][game_data["opp_str"]],
+                        "firstGoal" : first_goal,
+                        "goalMargin" : (scoring_play["about"]["goals"][game_data["team_str"]] - 1) - (scoring_play["about"]["goals"][game_data["opp_str"]])
+                    })
+                    if row_data["Year"] >= 2007:
+                        game_data["of_all_team_shots"].append({
+                            "period" : scoring_play["about"]["period"],
+                            "x_coord" : x_coord,
+                            "y_coord" : y_coord,
+                            "periodTime" : period_time,
+                            "periodTimeRemaining" : period_time_rem,
+                            "zone" : zone,
+                            "event_time": event_time,
+                            "team_on_ice" : team_on_ice,
+                            "opp_on_ice" : opp_on_ice,
+                            "strength" : strength,
+                            "teamGoals" : scoring_play["about"]["goals"][game_data["team_str"]] - 1,
+                            "oppGoals" : scoring_play["about"]["goals"][game_data["opp_str"]],
+                            "firstGoal" : first_goal,
+                            "goalMargin" : (scoring_play["about"]["goals"][game_data["team_str"]] - 1) - (scoring_play["about"]["goals"][game_data["opp_str"]])
+                        })
+                        game_data["of_all_team_shots_og"].append({
+                            "period" : scoring_play["about"]["period"],
+                            "x_coord" : x_coord,
+                            "y_coord" : y_coord,
+                            "periodTime" : period_time,
+                            "periodTimeRemaining" : period_time_rem,
+                            "zone" : zone,
+                            "event_time": event_time,
+                            "team_on_ice" : team_on_ice,
+                            "opp_on_ice" : opp_on_ice,
+                            "strength" : strength,
+                            "teamGoals" : scoring_play["about"]["goals"][game_data["team_str"]] - 1,
+                            "oppGoals" : scoring_play["about"]["goals"][game_data["opp_str"]],
+                            "firstGoal" : first_goal,
+                            "goalMargin" : (scoring_play["about"]["goals"][game_data["team_str"]] - 1) - (scoring_play["about"]["goals"][game_data["opp_str"]])
+                        })
+                        game_data["of_all_team_unblocked_shots"].append({
+                            "period" : scoring_play["about"]["period"],
+                            "x_coord" : x_coord,
+                            "y_coord" : y_coord,
+                            "periodTime" : period_time,
+                            "periodTimeRemaining" : period_time_rem,
+                            "zone" : zone,
+                            "event_time": event_time,
+                            "team_on_ice" : team_on_ice,
+                            "opp_on_ice" : opp_on_ice,
+                            "strength" : strength,
+                            "teamGoals" : scoring_play["about"]["goals"][game_data["team_str"]] - 1,
+                            "oppGoals" : scoring_play["about"]["goals"][game_data["opp_str"]],
+                            "firstGoal" : first_goal,
+                            "goalMargin" : (scoring_play["about"]["goals"][game_data["team_str"]] - 1) - (scoring_play["about"]["goals"][game_data["opp_str"]])
+                        })
+                else:
+                    game_data["of_all_opp_goals"].append({
+                        "period" : scoring_play["about"]["period"],
+                        "x_coord" : x_coord,
+                        "y_coord" : y_coord,
+                        "strength" : scoring_play["result"]["strength"]["code"],
+                        "emptyNet" : "emptyNet" in scoring_play["result"] and scoring_play["result"]["emptyNet"],
                         "periodTime" : period_time,
                         "periodTimeRemaining" : period_time_rem,
                         "zone" : zone,
@@ -16382,38 +16682,55 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                         "firstGoal" : first_goal,
                         "goalMargin" : scoring_play["about"]["goals"][game_data["team_str"]] - (scoring_play["about"]["goals"][game_data["opp_str"]] - 1)
                     })
-                    game_data["of_all_opp_shots_og"].append({
-                        "period" : scoring_play["about"]["period"],
-                        "x_coord" : x_coord,
-                        "y_coord" : y_coord,
-                        "periodTime" : period_time,
-                        "periodTimeRemaining" : period_time_rem,
-                        "zone" : zone,
-                        "event_time": event_time,
-                        "team_on_ice" : team_on_ice,
-                        "opp_on_ice" : opp_on_ice,
-                        "strength" : strength,
-                        "teamGoals" : scoring_play["about"]["goals"][game_data["team_str"]],
-                        "oppGoals" : scoring_play["about"]["goals"][game_data["opp_str"]] - 1,
-                        "firstGoal" : first_goal,
-                        "goalMargin" : scoring_play["about"]["goals"][game_data["team_str"]] - (scoring_play["about"]["goals"][game_data["opp_str"]] - 1)
-                    })
-                    game_data["of_all_opp_unblocked_shots"].append({
-                        "period" : scoring_play["about"]["period"],
-                        "x_coord" : x_coord,
-                        "y_coord" : y_coord,
-                        "periodTime" : period_time,
-                        "periodTimeRemaining" : period_time_rem,
-                        "zone" : zone,
-                        "event_time": event_time,
-                        "team_on_ice" : team_on_ice,
-                        "opp_on_ice" : opp_on_ice,
-                        "strength" : strength,
-                        "teamGoals" : scoring_play["about"]["goals"][game_data["team_str"]],
-                        "oppGoals" : scoring_play["about"]["goals"][game_data["opp_str"]] - 1,
-                        "firstGoal" : first_goal,
-                        "goalMargin" : scoring_play["about"]["goals"][game_data["team_str"]] - (scoring_play["about"]["goals"][game_data["opp_str"]] - 1)
-                    })
+                    if row_data["Year"] >= 2007:
+                        game_data["of_all_opp_shots"].append({
+                            "period" : scoring_play["about"]["period"],
+                            "x_coord" : x_coord,
+                            "y_coord" : y_coord,
+                            "periodTime" : period_time,
+                            "periodTimeRemaining" : period_time_rem,
+                            "zone" : zone,
+                            "event_time": event_time,
+                            "team_on_ice" : team_on_ice,
+                            "opp_on_ice" : opp_on_ice,
+                            "strength" : strength,
+                            "teamGoals" : scoring_play["about"]["goals"][game_data["team_str"]],
+                            "oppGoals" : scoring_play["about"]["goals"][game_data["opp_str"]] - 1,
+                            "firstGoal" : first_goal,
+                            "goalMargin" : scoring_play["about"]["goals"][game_data["team_str"]] - (scoring_play["about"]["goals"][game_data["opp_str"]] - 1)
+                        })
+                        game_data["of_all_opp_shots_og"].append({
+                            "period" : scoring_play["about"]["period"],
+                            "x_coord" : x_coord,
+                            "y_coord" : y_coord,
+                            "periodTime" : period_time,
+                            "periodTimeRemaining" : period_time_rem,
+                            "zone" : zone,
+                            "event_time": event_time,
+                            "team_on_ice" : team_on_ice,
+                            "opp_on_ice" : opp_on_ice,
+                            "strength" : strength,
+                            "teamGoals" : scoring_play["about"]["goals"][game_data["team_str"]],
+                            "oppGoals" : scoring_play["about"]["goals"][game_data["opp_str"]] - 1,
+                            "firstGoal" : first_goal,
+                            "goalMargin" : scoring_play["about"]["goals"][game_data["team_str"]] - (scoring_play["about"]["goals"][game_data["opp_str"]] - 1)
+                        })
+                        game_data["of_all_opp_unblocked_shots"].append({
+                            "period" : scoring_play["about"]["period"],
+                            "x_coord" : x_coord,
+                            "y_coord" : y_coord,
+                            "periodTime" : period_time,
+                            "periodTimeRemaining" : period_time_rem,
+                            "zone" : zone,
+                            "event_time": event_time,
+                            "team_on_ice" : team_on_ice,
+                            "opp_on_ice" : opp_on_ice,
+                            "strength" : strength,
+                            "teamGoals" : scoring_play["about"]["goals"][game_data["team_str"]],
+                            "oppGoals" : scoring_play["about"]["goals"][game_data["opp_str"]] - 1,
+                            "firstGoal" : first_goal,
+                            "goalMargin" : scoring_play["about"]["goals"][game_data["team_str"]] - (scoring_play["about"]["goals"][game_data["opp_str"]] - 1)
+                        })
 
             next_shot_penalty_shot = False
             first_goal = False
@@ -16571,104 +16888,105 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                         "firstGoal" : first_goal,
                         "goalMargin" : scoring_play["about"]["goals"][game_data["team_str"]] - (scoring_play["about"]["goals"][game_data["opp_str"]])
                     })
-            if scoring_play["team"]["id"] == game_data["team_id"]:
-                game_data["of_all_team_shots"].append({
-                    "period" : scoring_play["about"]["period"],
-                    "x_coord" : x_coord,
-                    "y_coord" : y_coord,
-                    "periodTime" : period_time,
-                    "periodTimeRemaining" : period_time_rem,
-                    "zone" : zone,
-                    "event_time": event_time,
-                    "team_on_ice" : team_on_ice,
-                    "opp_on_ice" : opp_on_ice,
-                    "strength" : strength,
-                    "teamGoals" : scoring_play["about"]["goals"][game_data["team_str"]],
-                    "oppGoals" : scoring_play["about"]["goals"][game_data["opp_str"]],
-                    "firstGoal" : first_goal,
-                    "goalMargin" : scoring_play["about"]["goals"][game_data["team_str"]] - (scoring_play["about"]["goals"][game_data["opp_str"]])
-                })
-                game_data["of_all_team_shots_og"].append({
-                    "period" : scoring_play["about"]["period"],
-                    "x_coord" : x_coord,
-                    "y_coord" : y_coord,
-                    "periodTime" : period_time,
-                    "periodTimeRemaining" : period_time_rem,
-                    "zone" : zone,
-                    "event_time": event_time,
-                    "team_on_ice" : team_on_ice,
-                    "opp_on_ice" : opp_on_ice,
-                    "strength" : strength,
-                    "teamGoals" : scoring_play["about"]["goals"][game_data["team_str"]],
-                    "oppGoals" : scoring_play["about"]["goals"][game_data["opp_str"]],
-                    "firstGoal" : first_goal,
-                    "goalMargin" : scoring_play["about"]["goals"][game_data["team_str"]] - (scoring_play["about"]["goals"][game_data["opp_str"]])
-                })
-                game_data["of_all_team_unblocked_shots"].append({
-                    "period" : scoring_play["about"]["period"],
-                    "x_coord" : x_coord,
-                    "y_coord" : y_coord,
-                    "periodTime" : period_time,
-                    "periodTimeRemaining" : period_time_rem,
-                    "zone" : zone,
-                    "event_time": event_time,
-                    "team_on_ice" : team_on_ice,
-                    "opp_on_ice" : opp_on_ice,
-                    "strength" : strength,
-                    "teamGoals" : scoring_play["about"]["goals"][game_data["team_str"]],
-                    "oppGoals" : scoring_play["about"]["goals"][game_data["opp_str"]],
-                    "firstGoal" : first_goal,
-                    "goalMargin" : scoring_play["about"]["goals"][game_data["team_str"]] - (scoring_play["about"]["goals"][game_data["opp_str"]])
-                })
             else:
-                game_data["of_all_opp_shots"].append({
-                    "period" : scoring_play["about"]["period"],
-                    "x_coord" : x_coord,
-                    "y_coord" : y_coord,
-                    "periodTime" : period_time,
-                    "periodTimeRemaining" : period_time_rem,
-                    "zone" : zone,
-                    "event_time": event_time,
-                    "team_on_ice" : team_on_ice,
-                    "opp_on_ice" : opp_on_ice,
-                    "strength" : strength,
-                    "teamGoals" : scoring_play["about"]["goals"][game_data["team_str"]],
-                    "oppGoals" : scoring_play["about"]["goals"][game_data["opp_str"]],
-                    "firstGoal" : first_goal,
-                    "goalMargin" : scoring_play["about"]["goals"][game_data["team_str"]] - (scoring_play["about"]["goals"][game_data["opp_str"]])
-                })
-                game_data["of_all_opp_shots_og"].append({
-                    "period" : scoring_play["about"]["period"],
-                    "x_coord" : x_coord,
-                    "y_coord" : y_coord,
-                    "periodTime" : period_time,
-                    "periodTimeRemaining" : period_time_rem,
-                    "zone" : zone,
-                    "event_time": event_time,
-                    "team_on_ice" : team_on_ice,
-                    "opp_on_ice" : opp_on_ice,
-                    "strength" : strength,
-                    "teamGoals" : scoring_play["about"]["goals"][game_data["team_str"]],
-                    "oppGoals" : scoring_play["about"]["goals"][game_data["opp_str"]],
-                    "firstGoal" : first_goal,
-                    "goalMargin" : scoring_play["about"]["goals"][game_data["team_str"]] - (scoring_play["about"]["goals"][game_data["opp_str"]])
-                })
-                game_data["of_all_opp_unblocked_shots"].append({
-                    "period" : scoring_play["about"]["period"],
-                    "x_coord" : x_coord,
-                    "y_coord" : y_coord,
-                    "periodTime" : period_time,
-                    "periodTimeRemaining" : period_time_rem,
-                    "zone" : zone,
-                    "event_time": event_time,
-                    "team_on_ice" : team_on_ice,
-                    "opp_on_ice" : opp_on_ice,
-                    "strength" : strength,
-                    "teamGoals" : scoring_play["about"]["goals"][game_data["team_str"]],
-                    "oppGoals" : scoring_play["about"]["goals"][game_data["opp_str"]],
-                    "firstGoal" : first_goal,
-                    "goalMargin" : scoring_play["about"]["goals"][game_data["team_str"]] - (scoring_play["about"]["goals"][game_data["opp_str"]])
-                })
+                if scoring_play["team"]["id"] == game_data["team_id"]:
+                    game_data["of_all_team_shots"].append({
+                        "period" : scoring_play["about"]["period"],
+                        "x_coord" : x_coord,
+                        "y_coord" : y_coord,
+                        "periodTime" : period_time,
+                        "periodTimeRemaining" : period_time_rem,
+                        "zone" : zone,
+                        "event_time": event_time,
+                        "team_on_ice" : team_on_ice,
+                        "opp_on_ice" : opp_on_ice,
+                        "strength" : strength,
+                        "teamGoals" : scoring_play["about"]["goals"][game_data["team_str"]],
+                        "oppGoals" : scoring_play["about"]["goals"][game_data["opp_str"]],
+                        "firstGoal" : first_goal,
+                        "goalMargin" : scoring_play["about"]["goals"][game_data["team_str"]] - (scoring_play["about"]["goals"][game_data["opp_str"]])
+                    })
+                    game_data["of_all_team_shots_og"].append({
+                        "period" : scoring_play["about"]["period"],
+                        "x_coord" : x_coord,
+                        "y_coord" : y_coord,
+                        "periodTime" : period_time,
+                        "periodTimeRemaining" : period_time_rem,
+                        "zone" : zone,
+                        "event_time": event_time,
+                        "team_on_ice" : team_on_ice,
+                        "opp_on_ice" : opp_on_ice,
+                        "strength" : strength,
+                        "teamGoals" : scoring_play["about"]["goals"][game_data["team_str"]],
+                        "oppGoals" : scoring_play["about"]["goals"][game_data["opp_str"]],
+                        "firstGoal" : first_goal,
+                        "goalMargin" : scoring_play["about"]["goals"][game_data["team_str"]] - (scoring_play["about"]["goals"][game_data["opp_str"]])
+                    })
+                    game_data["of_all_team_unblocked_shots"].append({
+                        "period" : scoring_play["about"]["period"],
+                        "x_coord" : x_coord,
+                        "y_coord" : y_coord,
+                        "periodTime" : period_time,
+                        "periodTimeRemaining" : period_time_rem,
+                        "zone" : zone,
+                        "event_time": event_time,
+                        "team_on_ice" : team_on_ice,
+                        "opp_on_ice" : opp_on_ice,
+                        "strength" : strength,
+                        "teamGoals" : scoring_play["about"]["goals"][game_data["team_str"]],
+                        "oppGoals" : scoring_play["about"]["goals"][game_data["opp_str"]],
+                        "firstGoal" : first_goal,
+                        "goalMargin" : scoring_play["about"]["goals"][game_data["team_str"]] - (scoring_play["about"]["goals"][game_data["opp_str"]])
+                    })
+                else:
+                    game_data["of_all_opp_shots"].append({
+                        "period" : scoring_play["about"]["period"],
+                        "x_coord" : x_coord,
+                        "y_coord" : y_coord,
+                        "periodTime" : period_time,
+                        "periodTimeRemaining" : period_time_rem,
+                        "zone" : zone,
+                        "event_time": event_time,
+                        "team_on_ice" : team_on_ice,
+                        "opp_on_ice" : opp_on_ice,
+                        "strength" : strength,
+                        "teamGoals" : scoring_play["about"]["goals"][game_data["team_str"]],
+                        "oppGoals" : scoring_play["about"]["goals"][game_data["opp_str"]],
+                        "firstGoal" : first_goal,
+                        "goalMargin" : scoring_play["about"]["goals"][game_data["team_str"]] - (scoring_play["about"]["goals"][game_data["opp_str"]])
+                    })
+                    game_data["of_all_opp_shots_og"].append({
+                        "period" : scoring_play["about"]["period"],
+                        "x_coord" : x_coord,
+                        "y_coord" : y_coord,
+                        "periodTime" : period_time,
+                        "periodTimeRemaining" : period_time_rem,
+                        "zone" : zone,
+                        "event_time": event_time,
+                        "team_on_ice" : team_on_ice,
+                        "opp_on_ice" : opp_on_ice,
+                        "strength" : strength,
+                        "teamGoals" : scoring_play["about"]["goals"][game_data["team_str"]],
+                        "oppGoals" : scoring_play["about"]["goals"][game_data["opp_str"]],
+                        "firstGoal" : first_goal,
+                        "goalMargin" : scoring_play["about"]["goals"][game_data["team_str"]] - (scoring_play["about"]["goals"][game_data["opp_str"]])
+                    })
+                    game_data["of_all_opp_unblocked_shots"].append({
+                        "period" : scoring_play["about"]["period"],
+                        "x_coord" : x_coord,
+                        "y_coord" : y_coord,
+                        "periodTime" : period_time,
+                        "periodTimeRemaining" : period_time_rem,
+                        "zone" : zone,
+                        "event_time": event_time,
+                        "team_on_ice" : team_on_ice,
+                        "opp_on_ice" : opp_on_ice,
+                        "strength" : strength,
+                        "teamGoals" : scoring_play["about"]["goals"][game_data["team_str"]],
+                        "oppGoals" : scoring_play["about"]["goals"][game_data["opp_str"]],
+                        "firstGoal" : first_goal,
+                        "goalMargin" : scoring_play["about"]["goals"][game_data["team_str"]] - (scoring_play["about"]["goals"][game_data["opp_str"]])
+                    })
 
             next_shot_penalty_shot = False
         elif scoring_play["result"]["event"] == "Missed Shot":
@@ -16764,72 +17082,73 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                         "firstGoal" : first_goal,
                         "goalMargin" : scoring_play["about"]["goals"][game_data["team_str"]] - (scoring_play["about"]["goals"][game_data["opp_str"]])
                     })
-            if scoring_play["team"]["id"] == game_data["team_id"]:
-                game_data["of_all_team_shots"].append({
-                    "period" : scoring_play["about"]["period"],
-                    "x_coord" : x_coord,
-                    "y_coord" : y_coord,
-                    "periodTime" : period_time,
-                    "periodTimeRemaining" : period_time_rem,
-                    "zone" : zone,
-                    "event_time": event_time,
-                    "team_on_ice" : team_on_ice,
-                    "opp_on_ice" : opp_on_ice,
-                    "strength" : strength,
-                    "teamGoals" : scoring_play["about"]["goals"][game_data["team_str"]],
-                    "oppGoals" : scoring_play["about"]["goals"][game_data["opp_str"]],
-                    "firstGoal" : first_goal,
-                    "goalMargin" : scoring_play["about"]["goals"][game_data["team_str"]] - (scoring_play["about"]["goals"][game_data["opp_str"]])
-                })
-                game_data["of_all_team_unblocked_shots"].append({
-                    "period" : scoring_play["about"]["period"],
-                    "x_coord" : x_coord,
-                    "y_coord" : y_coord,
-                    "periodTime" : period_time,
-                    "periodTimeRemaining" : period_time_rem,
-                    "zone" : zone,
-                    "event_time": event_time,
-                    "team_on_ice" : team_on_ice,
-                    "opp_on_ice" : opp_on_ice,
-                    "strength" : strength,
-                    "teamGoals" : scoring_play["about"]["goals"][game_data["team_str"]],
-                    "oppGoals" : scoring_play["about"]["goals"][game_data["opp_str"]],
-                    "firstGoal" : first_goal,
-                    "goalMargin" : scoring_play["about"]["goals"][game_data["team_str"]] - (scoring_play["about"]["goals"][game_data["opp_str"]])
-                })
             else:
-                game_data["of_all_opp_shots"].append({
-                    "period" : scoring_play["about"]["period"],
-                    "x_coord" : x_coord,
-                    "y_coord" : y_coord,
-                    "periodTime" : period_time,
-                    "periodTimeRemaining" : period_time_rem,
-                    "zone" : zone,
-                    "event_time": event_time,
-                    "team_on_ice" : team_on_ice,
-                    "opp_on_ice" : opp_on_ice,
-                    "strength" : strength,
-                    "teamGoals" : scoring_play["about"]["goals"][game_data["team_str"]],
-                    "oppGoals" : scoring_play["about"]["goals"][game_data["opp_str"]],
-                    "firstGoal" : first_goal,
-                    "goalMargin" : scoring_play["about"]["goals"][game_data["team_str"]] - (scoring_play["about"]["goals"][game_data["opp_str"]])
-                })
-                game_data["of_all_opp_unblocked_shots"].append({
-                    "period" : scoring_play["about"]["period"],
-                    "x_coord" : x_coord,
-                    "y_coord" : y_coord,
-                    "periodTime" : period_time,
-                    "periodTimeRemaining" : period_time_rem,
-                    "zone" : zone,
-                    "event_time": event_time,
-                    "team_on_ice" : team_on_ice,
-                    "opp_on_ice" : opp_on_ice,
-                    "strength" : strength,
-                    "teamGoals" : scoring_play["about"]["goals"][game_data["team_str"]],
-                    "oppGoals" : scoring_play["about"]["goals"][game_data["opp_str"]],
-                    "firstGoal" : first_goal,
-                    "goalMargin" : scoring_play["about"]["goals"][game_data["team_str"]] - (scoring_play["about"]["goals"][game_data["opp_str"]])
-                })
+                if scoring_play["team"]["id"] == game_data["team_id"]:
+                    game_data["of_all_team_shots"].append({
+                        "period" : scoring_play["about"]["period"],
+                        "x_coord" : x_coord,
+                        "y_coord" : y_coord,
+                        "periodTime" : period_time,
+                        "periodTimeRemaining" : period_time_rem,
+                        "zone" : zone,
+                        "event_time": event_time,
+                        "team_on_ice" : team_on_ice,
+                        "opp_on_ice" : opp_on_ice,
+                        "strength" : strength,
+                        "teamGoals" : scoring_play["about"]["goals"][game_data["team_str"]],
+                        "oppGoals" : scoring_play["about"]["goals"][game_data["opp_str"]],
+                        "firstGoal" : first_goal,
+                        "goalMargin" : scoring_play["about"]["goals"][game_data["team_str"]] - (scoring_play["about"]["goals"][game_data["opp_str"]])
+                    })
+                    game_data["of_all_team_unblocked_shots"].append({
+                        "period" : scoring_play["about"]["period"],
+                        "x_coord" : x_coord,
+                        "y_coord" : y_coord,
+                        "periodTime" : period_time,
+                        "periodTimeRemaining" : period_time_rem,
+                        "zone" : zone,
+                        "event_time": event_time,
+                        "team_on_ice" : team_on_ice,
+                        "opp_on_ice" : opp_on_ice,
+                        "strength" : strength,
+                        "teamGoals" : scoring_play["about"]["goals"][game_data["team_str"]],
+                        "oppGoals" : scoring_play["about"]["goals"][game_data["opp_str"]],
+                        "firstGoal" : first_goal,
+                        "goalMargin" : scoring_play["about"]["goals"][game_data["team_str"]] - (scoring_play["about"]["goals"][game_data["opp_str"]])
+                    })
+                else:
+                    game_data["of_all_opp_shots"].append({
+                        "period" : scoring_play["about"]["period"],
+                        "x_coord" : x_coord,
+                        "y_coord" : y_coord,
+                        "periodTime" : period_time,
+                        "periodTimeRemaining" : period_time_rem,
+                        "zone" : zone,
+                        "event_time": event_time,
+                        "team_on_ice" : team_on_ice,
+                        "opp_on_ice" : opp_on_ice,
+                        "strength" : strength,
+                        "teamGoals" : scoring_play["about"]["goals"][game_data["team_str"]],
+                        "oppGoals" : scoring_play["about"]["goals"][game_data["opp_str"]],
+                        "firstGoal" : first_goal,
+                        "goalMargin" : scoring_play["about"]["goals"][game_data["team_str"]] - (scoring_play["about"]["goals"][game_data["opp_str"]])
+                    })
+                    game_data["of_all_opp_unblocked_shots"].append({
+                        "period" : scoring_play["about"]["period"],
+                        "x_coord" : x_coord,
+                        "y_coord" : y_coord,
+                        "periodTime" : period_time,
+                        "periodTimeRemaining" : period_time_rem,
+                        "zone" : zone,
+                        "event_time": event_time,
+                        "team_on_ice" : team_on_ice,
+                        "opp_on_ice" : opp_on_ice,
+                        "strength" : strength,
+                        "teamGoals" : scoring_play["about"]["goals"][game_data["team_str"]],
+                        "oppGoals" : scoring_play["about"]["goals"][game_data["opp_str"]],
+                        "firstGoal" : first_goal,
+                        "goalMargin" : scoring_play["about"]["goals"][game_data["team_str"]] - (scoring_play["about"]["goals"][game_data["opp_str"]])
+                    })
 
             next_shot_penalty_shot = False
         elif scoring_play["result"]["event"] == "Penalty":
@@ -17018,40 +17337,41 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                         "firstGoal" : first_goal,
                         "goalMargin" : scoring_play["about"]["goals"][game_data["team_str"]] - (scoring_play["about"]["goals"][game_data["opp_str"]])
                     })
-            if scoring_play["team"]["id"] != game_data["team_id"]:
-                game_data["of_all_team_shots"].append({
-                    "period" : scoring_play["about"]["period"],
-                    "x_coord" : x_coord,
-                    "y_coord" : y_coord,
-                    "periodTime" : period_time,
-                    "periodTimeRemaining" : period_time_rem,
-                    "zone" : zone,
-                    "event_time": event_time,
-                    "team_on_ice" : team_on_ice,
-                    "opp_on_ice" : opp_on_ice,
-                    "strength" : strength,
-                    "teamGoals" : scoring_play["about"]["goals"][game_data["team_str"]],
-                    "oppGoals" : scoring_play["about"]["goals"][game_data["opp_str"]],
-                    "firstGoal" : first_goal,
-                    "goalMargin" : scoring_play["about"]["goals"][game_data["team_str"]] - (scoring_play["about"]["goals"][game_data["opp_str"]])
-                })
             else:
-                game_data["of_all_opp_shots"].append({
-                    "period" : scoring_play["about"]["period"],
-                    "x_coord" : x_coord,
-                    "y_coord" : y_coord,
-                    "periodTime" : period_time,
-                    "periodTimeRemaining" : period_time_rem,
-                    "zone" : zone,
-                    "event_time": event_time,
-                    "team_on_ice" : team_on_ice,
-                    "opp_on_ice" : opp_on_ice,
-                    "strength" : strength,
-                    "teamGoals" : scoring_play["about"]["goals"][game_data["team_str"]],
-                    "oppGoals" : scoring_play["about"]["goals"][game_data["opp_str"]],
-                    "firstGoal" : first_goal,
-                    "goalMargin" : scoring_play["about"]["goals"][game_data["team_str"]] - (scoring_play["about"]["goals"][game_data["opp_str"]])
-                })
+                if scoring_play["team"]["id"] != game_data["team_id"]:
+                    game_data["of_all_team_shots"].append({
+                        "period" : scoring_play["about"]["period"],
+                        "x_coord" : x_coord,
+                        "y_coord" : y_coord,
+                        "periodTime" : period_time,
+                        "periodTimeRemaining" : period_time_rem,
+                        "zone" : zone,
+                        "event_time": event_time,
+                        "team_on_ice" : team_on_ice,
+                        "opp_on_ice" : opp_on_ice,
+                        "strength" : strength,
+                        "teamGoals" : scoring_play["about"]["goals"][game_data["team_str"]],
+                        "oppGoals" : scoring_play["about"]["goals"][game_data["opp_str"]],
+                        "firstGoal" : first_goal,
+                        "goalMargin" : scoring_play["about"]["goals"][game_data["team_str"]] - (scoring_play["about"]["goals"][game_data["opp_str"]])
+                    })
+                else:
+                    game_data["of_all_opp_shots"].append({
+                        "period" : scoring_play["about"]["period"],
+                        "x_coord" : x_coord,
+                        "y_coord" : y_coord,
+                        "periodTime" : period_time,
+                        "periodTimeRemaining" : period_time_rem,
+                        "zone" : zone,
+                        "event_time": event_time,
+                        "team_on_ice" : team_on_ice,
+                        "opp_on_ice" : opp_on_ice,
+                        "strength" : strength,
+                        "teamGoals" : scoring_play["about"]["goals"][game_data["team_str"]],
+                        "oppGoals" : scoring_play["about"]["goals"][game_data["opp_str"]],
+                        "firstGoal" : first_goal,
+                        "goalMargin" : scoring_play["about"]["goals"][game_data["team_str"]] - (scoring_play["about"]["goals"][game_data["opp_str"]])
+                    })
             next_shot_penalty_shot = False
         elif scoring_play["result"]["event"] == "Faceoff":
             player_faceoff_winner = False
@@ -17497,6 +17817,10 @@ def start_time_to_str(time_str):
     else:
         return int(time_split[0]) * 60
 
+def seconds_to_str(value):
+    minutes, seconds = divmod(round_value(value), 60)
+    return ("{:02d}").format(minutes) + ":" + ("{:02d}").format(seconds)
+
 def get_shift_data(game_id, player_team_id, missing_games):
     request = urllib.request.Request(nhl_shifts_report_format.format(game_id), headers=request_headers)
     sub_data = url_request_json(request)
@@ -17567,7 +17891,7 @@ def get_html_shift_data(og_game_id, is_home, game_data, player_data):
         if not player_page_xml.getroot():
             return {}
 
-        period_length_obj = copy.deepcopy(game_data["period_length"])
+        period_length_obj = game_data["period_length"]
             
         game_info_table = player_page_xml.xpath("body//table[@id = 'GameInfo']")
         in_progress_period = None
@@ -20003,6 +20327,12 @@ def perform_metadata_quals(qualifiers, player_type, row, player_game_info, nhl_p
                 row["FA"] += 1
                 if is_five_toi(player_game_info, goal_event, goal_event["period"], goal_event["periodTime"]):
                     row["FA_5v5"] += 1
+        for goal_event in player_game_info["of_all_team_goals"]:
+            if perform_metadata_qual("of_all_team_goals", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"]):
+                row["offIGF"] += 1
+        for goal_event in player_game_info["of_all_opp_goals"]:
+            if perform_metadata_qual("of_all_opp_goals", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"]):
+                row["offIGA"] += 1
         for goal_event in player_game_info["of_all_team_shots"]:
             if perform_metadata_qual("of_all_team_shots", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"]):
                 row["offICF"] += 1
@@ -20015,6 +20345,12 @@ def perform_metadata_quals(qualifiers, player_type, row, player_game_info, nhl_p
         for goal_event in player_game_info["of_all_opp_unblocked_shots"]:
             if perform_metadata_qual("of_all_opp_unblocked_shots", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"]):
                 row["offIFA"] += 1
+        for goal_event in player_game_info["of_all_team_shots_og"]:
+            if perform_metadata_qual("of_all_team_shots_og", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"]):
+                row["offISF"] += 1
+        for goal_event in player_game_info["of_all_opp_shots_og"]:
+            if perform_metadata_qual("of_all_opp_shots_og", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"]):
+                row["offISA"] += 1
     else:
         for goal_event in player_game_info["goal_against"]:
             if perform_metadata_qual("goal_against", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"]):
@@ -20048,6 +20384,7 @@ def perform_metadata_quals(qualifiers, player_type, row, player_game_info, nhl_p
 def calculate_toi(row, qualifiers, player_game_info, player_id, saved_row_data, index):
     shift_data = player_game_info["shift_data"]
     row["TOI"] = 0
+    row["offTOI"] = 0
     row["EVTOI"] = 0
     row["PPTOI"] = 0
     row["SHTOI"] = 0
@@ -20134,6 +20471,28 @@ def calculate_toi(row, qualifiers, player_game_info, player_id, saved_row_data, 
                             row["TOI_5v5"] += 1
             if has_shift_match:
                 row["Shft"] += 1
+    
+    for period in player_game_info["periods"]:
+        for second in range(1, player_game_info["period_length"][period] + 1):
+            if not is_player_on_ice(shift_data, None, None, period, second, player_id, True):
+                if perform_on_ice_quals(qualifiers, shift_data, shift_event, row, period, second):
+                    score_info = get_score_info(player_game_info["scoring_play_data"], period, second)
+                    shift_event["teamGoals"] = score_info[0]
+                    shift_event["oppGoals"] = score_info[1]
+                    shift_event["goalMargin"] = score_info[0] - score_info[1]
+                    shift_event["periodTime"] = second
+
+                    if row["is_playoffs"] or shift_event["period"] <= 3:
+                        time_to_use = 1200
+                    elif row["Year"] <= 1942:
+                        time_to_use = 600
+                    else:
+                        time_to_use = 300
+
+                    shift_event["periodTimeRemaining"] = time_to_use - shift_event["periodTime"]
+
+                    if perform_metadata_qual(None, shift_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], is_toi=True):
+                        row["offTOI"] += 1
                 
 def is_five_toi(player_game_info, goal_event, period, second):
     team_skaters, team_goalies, opp_skaters, opp_goalies, has_shift = get_on_ice_info(player_game_info, goal_event, period, second)
@@ -21153,10 +21512,14 @@ def clear_row_attrs(row, player_type):
         row["GA"] = 0
         row["EVGA"] = 0
 
+        row["offIGF"] = 0
+        row["offIGA"] = 0
         row["offICF"] = 0
-        row["offIFF"] = 0
         row["offICA"] = 0
         row["offIFA"] = 0
+        row["offIFF"] = 0
+        row["offISA"] = 0
+        row["offISF"] = 0
 
         row["G_5v5"] = 0
         row["A_5v5"] = 0
@@ -28435,6 +28798,7 @@ def calculate_formula(stat, player_type, formula, data, all_rows, player_data, s
         else:
             return 0.0
     except Exception:
+        print(stat)
         if stat == "custom_formula":
             raise CustomMessageException("Invalid formula!")
         else:
@@ -28577,10 +28941,11 @@ def print_player_data(player_datas, player_type, highest_vals, lowest_vals, has_
 
     rate_headers = dict(filter(lambda header: header[1].get("type") == "Per Game/60 Minutes", headers[player_type["da_type"]["type"]].items()))
     score_sum_headers = dict(filter(lambda header: header[1].get("type") == "Advanced", headers[player_type["da_type"]["type"]].items()))
+    rel_headers = dict(filter(lambda header: header[1].get("type") == "Relative", headers[player_type["da_type"]["type"]].items()))
     advance_headers = dict(filter(lambda header: header[1].get("type") == ("5v5" if player_type["da_type"]["type"] == "Skater" else "Advanced"), headers[player_type["da_type"]["type"]].items()))
     award_headers = dict(filter(lambda header: header[1].get("type") == "Awards/Honors", headers[player_type["da_type"]["type"]].items()))
     penalty_headers = dict(filter(lambda header: header[1].get("type") == "Penalty", headers[player_type["da_type"]["type"]].items()))
-    non_rate_headers = dict(filter(lambda header: header[1].get("type") != "Per Game/60 Minutes" and header[1].get("type") != ("5v5" if player_type["da_type"]["type"] == "Skater" else "Advanced") and header[1].get("type") != "Awards/Honors" and header[1].get("type") != "Advanced" and header[1].get("type") != "Penalty", headers[player_type["da_type"]["type"]].items()))
+    non_rate_headers = dict(filter(lambda header: header[1].get("type") != "Per Game/60 Minutes" and header[1].get("type") != ("5v5" if player_type["da_type"]["type"] == "Skater" else "Advanced") and header[1].get("type") != "Awards/Honors" and header[1].get("type") != "Advanced" and header[1].get("type") != "Relative" and header[1].get("type") != "Penalty", headers[player_type["da_type"]["type"]].items()))
 
     has_season_stats = True
     for player_data in player_datas:
@@ -28604,6 +28969,8 @@ def print_player_data(player_datas, player_type, highest_vals, lowest_vals, has_
     if score_sum_headers:
         if player_type["da_type"]["type"] == "Skater":
             all_headers["Advanced"] = score_sum_headers
+    if rel_headers:
+        all_headers["Relative"] = rel_headers
     if advance_headers:
         if player_type["da_type"]["type"] == "Skater":
             all_headers["5v5 (Avail since 2009-2010)"] = advance_headers
@@ -28768,13 +29135,15 @@ def print_player_data(player_datas, player_type, highest_vals, lowest_vals, has_
                 if "Block On" in extra_stats and header in ("BLK/GP"):
                     override_show = True
                 if "current-stats" in extra_stats or "current-stats-zone" in extra_stats:
-                    if header in ("1stG", "Post/Bar", "Post/60M", "TK", "GV", "TK/GV", "TK/60M", "GV/60M", "GF/60M", "GA/60M", "GF%", "CF/60M", "CA/60M", "CFPer", "FF/60M", "FA/60M", "FFPer", "SF/60M", "SA/60M", "SFPer", "OZ%", "oiSPer", "oiSVPer", "PDO", "OZFO%", "DZFO%"):
+                    if header in ("1stG", "Post/Bar", "Post/60M", "TK", "GV", "TK/GV", "TK/60M", "GV/60M", "GF/60M", "GA/60M", "GFPer", "CF/60M", "CA/60M", "CFPer", "FF/60M", "FA/60M", "FFPer", "SF/60M", "SA/60M", "SFPer", "OZ%", "oiSPer", "oiSVPer", "PDO", "oiSRelPer", "oiSVRelPer", "PDORel", "OZFO%", "DZFO%"):
+                        override_show = True
+                    if header in ("GFRel/60M", "CFRel/60M", "FFRel/60M", "SFRel/60M", "GARel/60M", "CARel/60M", "FARel/60M", "SARel/60M", "GFRelPer", "CFRelPer", "FFRelPer", "SFRelPer"):
                         override_show = True
                     if "TSA" in header or header == "SThr%" or header == "TS%" or header == "TOI/GP":
                         override_show = True
                     if "shift" in extra_stats and "Shft" in header:
                         override_show = True
-                if "toi" in extra_stats and "TOI" in header and not "GP_TOI" in header and not "x" in header and not "Shft" in header:
+                if "toi" in extra_stats and "TOI" in header and not "GP_TOI" in header and not "offTOI" in header and not "x" in header and not "Shft" in header:
                     override_show = True
                 if seasons_leading and header in div_id_to_stat[player_type["da_type"]["type"]].values():
                     override_show = True
@@ -28800,6 +29169,12 @@ def print_player_data(player_datas, player_type, highest_vals, lowest_vals, has_
                                     display_header = display_header[:-1]
                                 if display_header.endswith("_Sit"):
                                     display_header = display_header[:-4]
+                            elif over_header == "Relative":
+                                if display_header.endswith("M"):
+                                    display_header = display_header[:-1]
+                                if display_header.endswith("_Rel"):
+                                    display_header = display_header[:-4]
+                                display_header = display_header.replace("Rel", "")
                             elif over_header == "5v5 (Avail since 2009-2010)":
                                 if display_header.endswith("_5v5"):
                                     display_header = display_header[:-4]
@@ -28897,10 +29272,11 @@ def get_reddit_player_table(player_datas, player_type, debug_mode, original_comm
     
     rate_headers = dict(filter(lambda header: header[1].get("type") == "Per Game/60 Minutes", headers[player_type["da_type"]["type"]].items()))
     score_sum_headers = dict(filter(lambda header: header[1].get("type") == "Advanced", headers[player_type["da_type"]["type"]].items()))
+    rel_headers = dict(filter(lambda header: header[1].get("type") == "Relative", headers[player_type["da_type"]["type"]].items()))
     advance_headers = dict(filter(lambda header: header[1].get("type") == ("5v5" if player_type["da_type"]["type"] == "Skater" else "Advanced"), headers[player_type["da_type"]["type"]].items()))
     award_headers = dict(filter(lambda header: header[1].get("type") == "Awards/Honors", headers[player_type["da_type"]["type"]].items()))
     penalty_headers = dict(filter(lambda header: header[1].get("type") == "Penalty", headers[player_type["da_type"]["type"]].items()))
-    non_rate_headers = dict(filter(lambda header: header[1].get("type") != "Per Game/60 Minutes" and header[1].get("type") != ("5v5" if player_type["da_type"]["type"] == "Skater" else "Advanced") and header[1].get("type") != "Awards/Honors" and header[1].get("type") != "Advanced" and header[1].get("type") != "Penalty", headers[player_type["da_type"]["type"]].items()))
+    non_rate_headers = dict(filter(lambda header: header[1].get("type") != "Per Game/60 Minutes" and header[1].get("type") != ("5v5" if player_type["da_type"]["type"] == "Skater" else "Advanced") and header[1].get("type") != "Awards/Honors" and header[1].get("type") != "Advanced" and header[1].get("type") != "Advanced" and header[1].get("type") != "Penalty", headers[player_type["da_type"]["type"]].items()))
 
     all_headers = {}
     if non_rate_headers:
@@ -28910,6 +29286,8 @@ def get_reddit_player_table(player_datas, player_type, debug_mode, original_comm
     if score_sum_headers:
         if player_type["da_type"]["type"] == "Skater":
             all_headers["Advanced"] = score_sum_headers
+    if rel_headers:
+        all_headers["Relative"] = rel_headers
     if advance_headers:
         if player_type["da_type"]["type"] == "Skater":
             all_headers["5v5 (Avail since 2009-2010)"] = advance_headers
@@ -29148,13 +29526,15 @@ def get_reddit_player_table(player_datas, player_type, debug_mode, original_comm
                 if "Block On" in extra_stats and header in ("BLK/GP"):
                     override_show = True
                 if "current-stats" in extra_stats or "current-stats-zone" in extra_stats:
-                    if header in ("1stG", "Post/Bar", "Post/60M", "TK", "GV", "TK/GV", "TK/60M", "GV/60M", "GF/60M", "GA/60M", "GF%", "CF/60M", "CA/60M", "CFPer", "FF/60M", "FA/60M", "FFPer", "SF/60M", "SA/60M", "SFPer", "OZ%", "oiSPer", "oiSVPer", "PDO", "OZFO%", "DZFO%"):
+                    if header in ("1stG", "Post/Bar", "Post/60M", "TK", "GV", "TK/GV", "TK/60M", "GV/60M", "GF/60M", "GA/60M", "GFPer", "CF/60M", "CA/60M", "CFPer", "FF/60M", "FA/60M", "FFPer", "SF/60M", "SA/60M", "SFPer", "OZ%", "oiSPer", "oiSVPer", "PDO", "oiSRelPer", "oiSVRelPer", "PDORel", "OZFO%", "DZFO%"):
+                        override_show = True
+                    if header in ("GFRel/60M", "CFRel/60M", "FFRel/60M", "SFRel/60M", "GARel/60M", "CARel/60M", "FARel/60M", "SARel/60M", "GFRelPer", "CFRelPer", "FFRelPer", "SFRelPer"):
                         override_show = True
                     if "TSA" in header or header == "SThr%" or header == "TS%" or header == "TOI/GP":
                         override_show = True
                     if "shift" in extra_stats and "Shft" in header:
                         override_show = True
-                if "toi" in extra_stats and "TOI" in header and not "GP_TOI" in header and not "x" in header and not "Shft" in header:
+                if "toi" in extra_stats and "TOI" in header and not "GP_TOI" in header and not "offTOI" in header and not "x" in header and not "Shft" in header:
                     override_show = True
                 if seasons_leading and header in div_id_to_stat[player_type["da_type"]["type"]].values():
                     override_show = True
@@ -29182,6 +29562,12 @@ def get_reddit_player_table(player_datas, player_type, debug_mode, original_comm
                                     display_header = display_header[:-4]
                                 if display_header.startswith("sc ") or display_header.startswith("HDsc "):
                                      display_header = "[" + display_header + "](https://www.hockey-reference.com/about/advanced_stats.html)"
+                            elif over_header == "Relative":
+                                if display_header.endswith("M"):
+                                    display_header = display_header[:-1]
+                                if display_header.endswith("_Rel"):
+                                    display_header = display_header[:-4]
+                                display_header = display_header.replace("Rel", "")
                             elif over_header == "5v5 (Avail since 2009-2010)":
                                 if display_header.endswith("_5v5"):
                                     display_header = display_header[:-4]
@@ -29266,6 +29652,9 @@ def calculate_highest_lowest_vals(player_datas, player_type, has_non_playoffs, h
                     elif over_header in ("Advanced"):
                         if not ("GP_Sit" in player_data["stat_values"] and player_data["stat_values"]["GP_Sit"]) and player_type["da_type"]["type"] != "Skater":
                             continue
+                    elif over_header in ("Relative"):
+                        if not ("GP_Rel" in player_data["stat_values"] and player_data["stat_values"]["GP_Rel"]):
+                            continue
                     elif over_header in ("Penalty"):
                         if not ("GP_Penalty" in player_data["stat_values"] and player_data["stat_values"]["GP_Penalty"]):
                             continue
@@ -29333,6 +29722,9 @@ def calculate_highest_lowest_vals(player_datas, player_type, has_non_playoffs, h
                             continue
                     elif over_header in ("Advanced"):
                         if not ("GP_Sit" in player_data["stat_values"] and player_data["stat_values"]["GP_Sit"]) and player_type["da_type"]["type"] != "Skater":
+                            continue
+                    elif over_header in ("Relative"):
+                        if not ("GP_Rel" in player_data["stat_values"] and player_data["stat_values"]["GP_Rel"]):
                             continue
                     elif over_header in ("Penalty"):
                         if not ("GP_Penalty" in player_data["stat_values"] and player_data["stat_values"]["GP_Penalty"]):
@@ -29899,13 +30291,15 @@ def handle_table_data(player_data, player_type, over_header, header, highest_val
     if "Block On" in extra_stats and header in ("BLK/GP"):
         override_show = True
     if "current-stats" in extra_stats or "current-stats-zone" in extra_stats:
-        if header in ("1stG", "Post/Bar", "Post/60M", "TK", "GV", "TK/GV", "TK/60M", "GV/60M", "GF/60M", "GA/60M", "GF%", "CF/60M", "CA/60M", "CFPer", "FF/60M", "FA/60M", "FFPer", "SF/60M", "SA/60M", "SFPer", "OZ%", "oiSPer", "oiSVPer", "PDO", "OZFO%", "DZFO%"):
+        if header in ("1stG", "Post/Bar", "Post/60M", "TK", "GV", "TK/GV", "TK/60M", "GV/60M", "GF/60M", "GA/60M", "GFPer", "CF/60M", "CA/60M", "CFPer", "FF/60M", "FA/60M", "FFPer", "SF/60M", "SA/60M", "SFPer", "OZ%", "oiSPer", "oiSVPer", "PDO", "oiSRelPer", "oiSVRelPer", "PDORel", "OZFO%", "DZFO%"):
+            override_show = True
+        if header in ("GFRel/60M", "CFRel/60M", "FFRel/60M", "SFRel/60M", "GARel/60M", "CARel/60M", "FARel/60M", "SARel/60M", "GFRelPer", "CFRelPer", "FFRelPer", "SFRelPer"):
             override_show = True
         if "TSA" in header or header == "SThr%" or header == "TS%" or header == "TOI/GP":
             override_show = True
         if "shift" in extra_stats and "Shft" in header:
             override_show = True
-    if "toi" in extra_stats and "TOI" in header and not "GP_TOI" in header and not "x" in header and not "Shft" in header:
+    if "toi" in extra_stats and "TOI" in header and not "GP_TOI" in header and not "offTOI" in header and not "x" in header and not "Shft" in header:
         override_show = True
 
     seasons_leading = 0
@@ -30208,10 +30602,10 @@ def is_against_header(header, extra_stats, player_type, has_toi_stats):
                 #return True
             #if "/60M" in header and ("EV" in header or "PP" in header or "SH" in header):
                 #return True
-            if "type" in headers[player_type["da_type"]["type"]][header] and (headers[player_type["da_type"]["type"]][header]["type"] == "Awards/Honors"):
+            if "type" in headers[player_type["da_type"]["type"]][header] and (headers[player_type["da_type"]["type"]][header]["type"] == "Awards/Honors" or headers[player_type["da_type"]["type"]][header]["type"] == "5v5"):
                 return True
-            if "type" in headers[player_type["da_type"]["type"]][header] and (headers[player_type["da_type"]["type"]][header]["type"] == "Advanced") and ("S%" in header or "PEN" in header or "PenDrawn" in header or "Post" in header):
-                if "show-stat-" + header.lower() not in extra_stats and ("penalties" not in extra_stats or not ("PEN" in header or "PenDrawn" in header)) and ("shot" not in extra_stats or not ("S%" in header)):
+            if "type" in headers[player_type["da_type"]["type"]][header] and (headers[player_type["da_type"]["type"]][header]["type"] == "Advanced") and ("S%" in header or "EV" in header or "Post" in header):
+                if "show-stat-" + header.lower() not in extra_stats and ("shot" not in extra_stats or not ("S%" in header)):
                     return True
             if "Adj" in header:
                 if "show-stat-" + header.lower() not in extra_stats and "adjusted" not in extra_stats:
@@ -30233,14 +30627,14 @@ def is_invalid_stat(stat, player_type, data, count_inconsistent, player_data):
     if "YearStart" in data and stat in headers[player_type["da_type"]["type"]] and data["YearStart"]:
         if player_type["da_type"]["type"] == "Skater":
             header_shift_stats = ["Shft", "Shft/GP", "TOI/Shft"]
-            report_2_stats = ["PenDrawn", "NetPEN", "Post/Bar", "CF", "CA", "CFPer", "CF/60M", "CA/60M", "FF", "FA", "FFPer", "SF/60M", "SA/60M", "SFPer", "CFRelPer", "FFRelPer", "FF/60M", "FA/60M", "FRel/60M", "CRel/60M", "OZ%", "oiSPer", "oiSVPer", "PDO", "TSA", "TSM", "TSB", "TSA/GP", "TSB/GP", "TSM/GP", "TS%", "SThr%"]
+            report_2_stats = ["PenDrawn", "NetPEN", "Post/Bar", "CF", "CA", "CFPer", "CF/60M", "CA/60M", "FF", "FA", "FFPer", "SF/60M", "SA/60M", "SFPer", "CFRelPer", "FFRelPer", "GFRelPer", "SFRelPer", "FF/60M", "FA/60M", "offIGF", "offIGA", "offICF", "offICA", "offIFF", "offIFA", "offISF", "offISA", "offIGF/60M", "offICA/60M", "offIFF/60M" , "offISA/60M", "offIGA/60M", "offICF/60M", "offIFA/60M", "offISF/60M", "offIG/60M", "offIC/60M", "offIF/60M", "offIS/60M", "GFRel/60M", "CFRel/60M", "FFRel/60M", "SFRel/60M", "GARel/60M", "CARel/60M", "FARel/60M", "SARel/60M", "OZ%", "oiSPer", "oiSVPer", "PDO", "oiSRelPer", "oiSVRelPer", "PDORel", "TSA", "TSM", "TSB", "TSA/GP", "TSB/GP", "TSM/GP", "TS%", "SThr%"]
             report_3_stats = ["TK", "GV", "TK/GV", "HIT", "BLK"]
             strength_stats = ["PEN", "PEN/GP", "PIM", "PIM/GP", "OZFO%", "DZFO%", "FOW/GP", "FO/GP", "FOW", "FO", "FO%"]
             shot_on_stats = ["S", "S%", "S/GP"]
             shot_on_on_stats = ["S", "S%", "S/GP"]
             report_stats = ["OZFO%", "DZFO%", "FOW/GP", "FO/GP", "FOW", "FO", "FO%", "S", "S%", "S/GP"]
             game_report_stats = ["PlusMinus", "GF", "EVGF", "GA", "EVGA", "IGP", "EVIGP", "IPP", "EVIPP", "GF%", "EVGF%", "GF/60M", "GA/60M"]
-            header_indv_shift_stats = ["CF", "CA", "CFPer", "CF/60M", "CA/60M", "FF", "FA", "FFPer", "SF/60M", "SA/60M", "SFPer", "FF/60M", "FA/60M", "FRel/60M", "CRel/60M", "CFRelPer", "FFRelPer", "oiSPer", "oiSVPer", "PDO", "OZ%", "OZFO%", "DZFO%", "TSA", "TSM", "TSB", "TSA/GP", "TSA/60M", "TSB/GP", "TSB/60M", "TSM/GP", "TSM/60M", "TS%", "SThr%"]
+            header_indv_shift_stats = ["CF", "CA", "CFPer", "CF/60M", "CA/60M", "FF", "FA", "FFPer", "SF/60M", "SA/60M", "SFPer", "FF/60M", "FA/60M", "offIGF", "offIGA", "offICF", "offICA", "offIFF", "offIFA", "offISF", "offISA", "offIGF/60M", "offICA/60M", "offIFF/60M" , "offISA/60M", "offIGA/60M", "offICF/60M", "offIFA/60M", "offISF/60M", "offIG/60M", "offIC/60M", "offIF/60M", "offIS/60M", "GFRel/60M", "CFRel/60M", "FFRel/60M", "SFRel/60M", "GARel/60M", "CARel/60M", "FARel/60M", "SARel/60M", "CFRelPer", "FFRelPer", "GFRelPer", "SFRelPer", "oiSPer", "oiSVPer", "PDO", "oiSRelPer", "oiSVRelPer", "PDORel", "OZ%", "OZFO%", "DZFO%", "TSA", "TSM", "TSB", "TSA/GP", "TSA/60M", "TSB/GP", "TSB/60M", "TSM/GP", "TSM/60M", "TS%", "SThr%"]
         else:
             header_shift_stats = []
             report_2_stats = ["SH", "SA", "SV", "EVSH", "PPSH", "SHSH", "SVEvenStrength", "SVPowerPlay", "SVShorthanded", "SV%", "GA%-", "SH/60M", "SV/60M", "SA/60M", "SH/GP", "SV/GP", "SA/GP"]
