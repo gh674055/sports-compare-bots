@@ -15821,6 +15821,8 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
     if game_data["missing_data"]:
         if row_data["Year"] < 2000 and "Game Number" not in time_frame["qualifiers"]:
             game_data, missing_games, sub_data = setup_href_game_data(player_data, row_data, player_id, player_type, time_frame)
+            if game_data["missing_data"]:
+                return game_data, row_data, missing_games
         else:
             return game_data, row_data, missing_games
 
