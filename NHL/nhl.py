@@ -30563,7 +30563,9 @@ def is_against_header(header, extra_stats, player_type, has_toi_stats):
         else:
             if header == "TOI":
                 return False
-        
+
+    if ("EV" in header or "PP" in header or "SH" in header) and "strength" in extra_stats:
+        return True
 
     if "Shot On" in extra_stats:
         return header not in ("G", "G_5v5", "Shft", "Shft/GP", "TOI/Shft", "OTG", "EVTOI",  "PPTOI",  "SHTOI", "TOI_5v5", "EVTOI/GP",  "PPTOI/GP",  "SHTOI/GP", "TOI/GP_5v5", "GWG", "1stG", "HAT", "EVG", "AdjG", "PPG", "SHG", "S", "S%", "S_5v5", "S%_5v5", "G/GP", "EVG/GP", "PPG/GP", "SHG/GP", "S/GP", "G/60M", "EVG/60M", "PPG/60M", "SHG/60M", "S/60M",  "G/60M_5v5", "S/60M_5v5")
