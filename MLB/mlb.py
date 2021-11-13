@@ -6680,7 +6680,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                             extra_stats.add(m.group(1) + "-" + str(ordinal_to_number(m.group(2))))
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
                         
-                        last_match = re.finditer(r"\bshow(?: |-)?(record|score|year|seasons-leading|season|date|per-game|game|play|run-support|run-support-record|exit-record|statcast|advanced-runner|advanced|best-season|worst-season|team|franchise|number|award|live|driven-in)s?\b", time_frame)
+                        last_match = re.finditer(r"\bshow(?: |-)?(record|score|year|seasons-leading|season|date|game|play|run-support|run-support-record|exit-record|statcast|advanced-runner|advanced|best-season|worst-season|team|franchise|number|award|live|driven-in)s?\b", time_frame)
                         for m in last_match:
                             extra_stats.add(m.group(1))
                             if m.group(1) == "play":
@@ -35158,7 +35158,7 @@ def is_against_header(header, extra_stats, player_type):
     if player_type["da_type"] == "Batter":
         if "no-steals" in extra_stats and header in ("R", "SB", "CS", "NS", "R/162", "SB/162", "CS/162", "SB%", "wSB"):
             return True
-        return header in ("WPA", "cWPA", "WPA/162", "cWPA/162") or ("162" in header and not "per-game" in extra_stats)
+        return header in ("WPA", "cWPA", "WPA/162", "cWPA/162") or "162" in header
     else:
         if "no-steals" in extra_stats and header in ("SB", "CS", "NS", "SB%", "wSB", "PO"):
             return True
