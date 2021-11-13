@@ -10737,9 +10737,6 @@ def sub_handle_the_quals(players, qualifier, qual_str, player_str, time_frame, k
         new_search = True
 
     for player_data in player_datas:
-        if player_data["stat_values"]["Player"] == ["No Player Match!"]:
-            continue
-
         player_games = {}
 
         missing_games = player_data["stat_values"]["any_missing_games"]
@@ -10806,6 +10803,7 @@ def sub_handle_the_quals(players, qualifier, qual_str, player_str, time_frame, k
                 "missing_games" : missing_games,
                 "missing_toi" : missing_toi,
                 "query" : player_data["stat_values"]["Raw Quals"],
+                "search_term" : player_data["stat_values"]["Search Term"],
                 "games" : player_games
             })
 
@@ -12132,8 +12130,6 @@ def determine_raw_str(subbb_frame):
                         sub_sub_first = False
                     qual_str += str(not qual_obj["negate"])
                 elif qualifier == "Playing With" or qualifier == "Playing Against" or qualifier == "Playing Same Game" or qualifier == "Previous Playing With" or qualifier == "Previous Playing Against" or qualifier == "Upcoming Playing With" or qualifier == "Upcoming Playing Against" or qualifier == "Playing Same Opponents" or qualifier == "Playing Same Date" or qualifier == "Shot On" or qualifier == "On Ice With" or qualifier == "On Ice Against" or qualifier == "Assisted On" or qualifier == "Assisted With" or qualifier == "Points With" or qualifier == "Assisted By" or qualifier == "Primary Assisted On" or qualifier == "Primary Assisted With" or qualifier == "Primary Points With" or qualifier == "Primary Assisted By" or qualifier == "Hit On" or qualifier == "Block On" or qualifier == "Penalty On" or qualifier == "Faceoff Against" or qualifier == "Fight Against":
-                    if not qual_obj["values"]:
-                        qual_str += "No Player Match!"
                     for player in qual_obj["values"]:
                         if not sub_sub_first:
                             qual_str += " + "
@@ -12141,10 +12137,12 @@ def determine_raw_str(subbb_frame):
                             sub_sub_first = False
                         if qual_obj["negate"]:
                             qual_str += "Not "
-                        qual_str += create_player_url_string(player["name"], player["id"], {}) + ((" (" + player["query"] + ")") if player["query"] != "Query: " else "")
+                        player_url_str = create_player_url_string(player["name"], player["id"], {})
+                        if player_url_str == "No Player Match!":
+                            qual_str += player_url_str + " (Searched Term: \"" + " + ".join(player["search_term"]) + "\")"
+                        else:
+                            qual_str += player_url_str + ((" (" + player["query"] + ")") if player["query"] != "Query: " else "")
                 elif qualifier == "Sub Query" or qualifier == "Day Of Sub Query" or qualifier == "Day After Sub Query" or qualifier == "Day Before Sub Query" or qualifier == "Game After Sub Query" or qualifier == "Game Before Sub Query" or qualifier == "Season Sub Query" or qualifier == "Season After Sub Query" or qualifier == "Season Before Sub Query":
-                    if not qual_obj["values"]:
-                        qual_str += "No Player Match!"
                     for player in qual_obj["values"]:
                         if not sub_sub_first:
                             qual_str += " + "
