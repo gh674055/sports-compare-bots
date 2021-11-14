@@ -6884,9 +6884,9 @@ def handle_multi_player_data(player_id, time_frames, player_type, player_page, i
     for time_frame in time_frames:
         logger.info("#" + str(threading.get_ident()) + "#   " + "Starting player " + player_id)
         if ("Facing Former Team" in time_frame["qualifiers"] or "Facing Former Franchise" in time_frame["qualifiers"] or "With New Team" in time_frame["qualifiers"] or "With New Franchise" in time_frame["qualifiers"]) and not "valid_teams_order" in player_data:
-            get_team_map_info(player_page, player_data, player_type, raw_valid_teams, comment_obj)
+            get_team_map_info(player_data, player_type, raw_valid_teams, comment_obj)
         if ("Game After Sub Query" in time_frame["qualifiers"] or "Game Before Sub Query" in time_frame["qualifiers"]) and not "all_games" in player_data:
-            get_all_games(player_page, player_data, time_frame, player_type, comment_obj)
+            get_all_games(player_data, time_frame, player_type, comment_obj)
         row, missing_games = handle_player_data(player_data, time_frame, player_type, player_page, is_fantasy, ind_player_type, valid_teams, valid_year_teams, extra_stats)
 
         if remove_duplicates:
@@ -7545,7 +7545,7 @@ def handle_player_data(player_data, time_frame, player_type, player_page, is_fan
 
     return all_rows, missing_games
 
-def get_team_map_info(player_page, player_data, player_type, valid_teams, comment_obj):
+def get_team_map_info(player_data, player_type, valid_teams, comment_obj):
     subbb_frames = [{
         "time_start" : 0,
         "time_end" : datetime.date.today().year,
@@ -7558,6 +7558,17 @@ def get_team_map_info(player_page, player_data, player_type, valid_teams, commen
             }]
         }
     }]
+
+    player_url = main_page_url_format.format(player_data["id"][0].upper(), player_data["id"])
+    request = urllib.request.Request(player_url, headers=request_headers)
+    try:
+        player_page = url_request(request)[1]
+    except urllib.error.HTTPError as err:
+        if err.status == 404:
+            return None, None
+        else:
+            raise
+    
     sub_player_data = handle_multi_player_data(player_data["id"], subbb_frames, player_type, player_page, False, False, False, set(), comment_obj)[0]
 
     teams_map = {}
@@ -7643,7 +7654,7 @@ def get_team_map_info(player_page, player_data, player_type, valid_teams, commen
         "franchise" : franc_ranges
     }
 
-def get_all_games(player_page, player_data, time_frame, player_type, comment_obj):
+def get_all_games(player_data, time_frame, player_type, comment_obj):
     subbb_frames = [{
         "time_start" : 0,
         "time_end" : datetime.date.today().year,
@@ -7656,6 +7667,17 @@ def get_all_games(player_page, player_data, time_frame, player_type, comment_obj
             }]
         }
     }]
+
+    player_url = main_page_url_format.format(player_data["id"][0].upper(), player_data["id"])
+    request = urllib.request.Request(player_url, headers=request_headers)
+    try:
+        player_page = url_request(request)[1]
+    except urllib.error.HTTPError as err:
+        if err.status == 404:
+            return None, None
+        else:
+            raise
+
     sub_player_data = handle_multi_player_data(player_data["id"], subbb_frames, player_type, player_page, False, False, False, set(), comment_obj)[0]
 
     player_data["all_games"] = {}
