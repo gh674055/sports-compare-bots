@@ -5060,15 +5060,15 @@ def handle_against_qual(names, time_frames, comment_obj):
                 if "Day Before Sub Query" in time_frame["qualifiers"]:
                     handle_the_quals(time_frame["qualifiers"], "Day Before Sub Query", sub_matching_names, time_frame, "DateBefore", comment_obj, players_map)
                 if "Game After Sub Query" in time_frame["qualifiers"]:
-                    handle_the_quals(time_frame["qualifiers"], "Game After Sub Query", sub_matching_names, time_frame, "Game", comment_obj, players_map, extra_stats)
+                    handle_the_quals(time_frame["qualifiers"], "Game After Sub Query", sub_matching_names, time_frame, "Game", comment_obj, players_map)
                 if "Game Before Sub Query" in time_frame["qualifiers"]:
-                    handle_the_quals(time_frame["qualifiers"], "Game Before Sub Query", sub_matching_names, time_frame, "Game", comment_obj, players_map, extra_stats)
+                    handle_the_quals(time_frame["qualifiers"], "Game Before Sub Query", sub_matching_names, time_frame, "Game", comment_obj, players_map)
                 if "Season Sub Query" in time_frame["qualifiers"]:
-                    handle_the_quals(time_frame["qualifiers"], "Season Sub Query", sub_matching_names, time_frame, "Season", comment_obj, players_map, extra_stats)
+                    handle_the_quals(time_frame["qualifiers"], "Season Sub Query", sub_matching_names, time_frame, "Season", comment_obj, players_map)
                 if "Season After Sub Query" in time_frame["qualifiers"]:
-                    handle_the_quals(time_frame["qualifiers"], "Season After Sub Query", sub_matching_names, time_frame, "Season", comment_obj, players_map, extra_stats)
+                    handle_the_quals(time_frame["qualifiers"], "Season After Sub Query", sub_matching_names, time_frame, "Season", comment_obj, players_map)
                 if "Season Before Sub Query" in time_frame["qualifiers"]:
-                    handle_the_quals(time_frame["qualifiers"], "Season Before Sub Query", sub_matching_names, time_frame, "Season", comment_obj, players_map, extra_stats)
+                    handle_the_quals(time_frame["qualifiers"], "Season Before Sub Query", sub_matching_names, time_frame, "Season", comment_obj, players_map)
                 if "Playing With" in time_frame["qualifiers"]:
                     handle_the_quals(time_frame["qualifiers"], "Playing With", subb_names_with, time_frame, "Tm", comment_obj, players_map)
                 if "Previous Playing With" in time_frame["qualifiers"]:
