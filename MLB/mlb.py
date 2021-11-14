@@ -20921,7 +20921,6 @@ def fill_row(row, player_type, lower=True, stats=None):
             row["is_playoffs"] = "Only"
         else:
             row["is_playoffs"] = None
-        row["all_rows"] = [row]
         if is_invalid_stat(header, player_type, row, False)["all_invalid"]:
             headers_to_remove.add(header)
         row["is_playoffs"] = prev_is_playofs
@@ -35047,7 +35046,6 @@ def handle_table_data(over_header, player_data, player_datas, player_type, heade
                         row["is_playoffs"] = "Only"
                     else:
                         row["is_playoffs"] = None
-                    row["all_rows"] = [row]
 
                     if not is_invalid_stat(header, player_type, row, False)["all_invalid"]:
                         has_valid_stat = True   
@@ -35188,7 +35186,8 @@ def is_invalid_stat(stat, player_type, data, count_inconsistent):
     all_leagues = set()
 
     if stat in headers[player_type["da_type"]]:
-        for row in data["all_rows"]:
+        rows_to_use = data["all_rows"] if "all_rows" in data else [data]
+        for row in rows_to_use:
             date_start = row["DateTime"]
             year = str(row["Year"])
             team = row["Tm"]
