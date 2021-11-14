@@ -35236,8 +35236,12 @@ def is_invalid_stat(stat, player_type, data, count_inconsistent):
                     if sleague not in invalid_data or date_to_use < invalid_data[sleague]:
                         invalid_data[sleague] = date_to_use
     
-    invalid_data["all_invalid"] = all_leagues.issubset(invalid_data.keys())
-    invalid_data["any_invalid"] = bool(all_leagues.intersection(invalid_data.keys()))
+    if invalid_data:
+        invalid_data["all_invalid"] = all_leagues.issubset(invalid_data.keys())
+        invalid_data["any_invalid"] = bool(all_leagues.intersection(invalid_data.keys()))
+    else:
+        invalid_data["all_invalid"] = False
+        invalid_data["any_invalid"] = False
 
     return invalid_data
 
