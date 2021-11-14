@@ -7585,27 +7585,38 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                             date_3_2 = m.group(13)
                             unit_3_2 = m.group(14)
 
+                            has_first_months = False
+                            has_first_days = False
+                            has_second_months = False
+                            has_second_days = False
+
                             if date_1:
                                 if unit_1 == "d":
                                     days = int(date_1)
+                                    has_first_days = True
                                 elif unit_1 == "m":
                                     months = int(date_1)
+                                    has_first_months = True
                                 else:
                                     years = int(date_1)
 
                             if date_2:
                                 if unit_2 == "d":
                                     days = int(date_2)
+                                    has_first_days = True
                                 elif unit_2 == "m":
                                     months = int(date_2)
+                                    has_first_months = True
                                 else:
                                     years = int(date_2)
 
                             if date_3:
                                 if unit_3 == "d":
                                     days = int(date_3)
+                                    has_first_days = True
                                 elif unit_3 == "m":
                                     months = int(date_3)
+                                    has_first_months = True
                                 else:
                                     years = int(date_3)
 
@@ -7615,35 +7626,48 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 if date_1_2:
                                     if unit_1_2 == "d":
                                         days_2 = int(date_1_2)
+                                        has_second_days = True
                                     elif unit_1_2 == "m":
                                         months_2 = int(date_1_2)
+                                        has_second_months = True
                                     else:
                                         years_2 = int(date_1_2)
 
                                 if date_2_2:
                                     if unit_2_2 == "d":
                                         days_2 = int(date_2_2)
+                                        has_second_days = True
                                     elif unit_2 == "m":
                                         months_2 = int(date_2_2)
+                                        has_second_months = True
                                     else:
                                         years_2 = int(date_2_2)
 
                                 if date_3_2:
                                     if unit_3_2 == "d":
                                         days_2 = int(date_3_2)
+                                        has_second_days = True
                                     elif unit_3 == "m":
                                         months_2 = int(date_3_2)
+                                        has_second_months = True
                                     else:
                                         years_2 = int(date_3_2)
-
                             
                             if not compare_type or not compare_type.strip():
                                 if second_match:
                                     qualifier_obj["time_unit_start"] = dateutil.relativedelta.relativedelta(years=years, months=months, days=days)
                                     qualifier_obj["time_unit_end"] = dateutil.relativedelta.relativedelta(years=years_2, months=months_2, days=days_2)
+                                    if not has_second_months:
+                                        qualifier_obj["time_unit_end"].months = 12
+                                    if not has_second_days:
+                                        qualifier_obj["time_unit_end"].days = -1
                                 else:
-                                    qualifier_obj["time_unit_start"] = datetime.date.min
+                                    qualifier_obj["time_unit_start"] = dateutil.relativedelta.relativedelta(years=years, months=months, days=days)
                                     qualifier_obj["time_unit_end"] = dateutil.relativedelta.relativedelta(years=years, months=months, days=days)
+                                    if not has_second_months:
+                                        qualifier_obj["time_unit_end"].months = 12
+                                    if not has_second_days:
+                                        qualifier_obj["time_unit_end"].days = -1
                             elif compare_type.startswith("after"):
                                 qualifier_obj["time_unit_end"] = datetime.date.max
                                 qualifier_obj["time_unit_start"] = dateutil.relativedelta.relativedelta(years=years, months=months, days=days)
@@ -11231,9 +11255,12 @@ def determine_player_str(qualifier, player_str, time_frame, qual_str):
             player_str = player_str[:bracket_index] + " " + playoffs_str + player_str[bracket_index:]
     else:
         player_str += " [" + qualifier["time_frame_str"] + "]"
+
+    if player_str.endswith(" []") and time_frame["type"] == "date":
+        bracket_index = player_str.index("]")
+        player_str = player_str[:bracket_index] + get_time_str(time_frame["time_start"], False) + " to " + get_time_str(time_frame["time_end"], False) + player_str[bracket_index:]
     
     bracket_index = player_str.index("]")
-
     if not qual_str in ["Season Sub Query", "Season After Sub Query", "Season Before Sub Query"]:
         player_str = player_str[:bracket_index] + " force-dates" + player_str[bracket_index:]
 
