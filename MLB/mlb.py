@@ -35187,54 +35187,55 @@ def is_invalid_stat(stat, player_type, data, count_inconsistent):
     invalid_data = {}
     all_leagues = set()
 
-    for row in data["all_rows"]:
-        date_start = row["DateTime"]
-        year = str(row["Year"])
-        team = row["Tm"]
-        sleague = get_team_league(team, year)
-        all_leagues.add(sleague)
+    if stat in headers[player_type["da_type"]]:
+        for row in data["all_rows"]:
+            date_start = row["DateTime"]
+            year = str(row["Year"])
+            team = row["Tm"]
+            sleague = get_team_league(team, year)
+            all_leagues.add(sleague)
 
-        stat_obj_to_use = None
-        if stat in league_data_mapping[player_type["da_type"]]:
-            for league_key in league_data_mapping[player_type["da_type"]][stat]:
-                leagues = league_key.split("-")
-                if sleague in leagues:
-                    stat_obj_to_use = league_data_mapping[player_type["da_type"]][stat][league_key]
-                    break
-        
-        if not stat_obj_to_use and "valid_since" in headers[player_type["da_type"]][stat]:
-            stat_obj_to_use =  headers[player_type["da_type"]][stat]["valid_since"]
-
-        if stat_obj_to_use:
-            date_to_use = None
-            if isinstance(date_start, int):
-                if "season" in stat_obj_to_use and date_start < stat_obj_to_use["season"]:
-                    date_to_use = stat_obj_to_use["season"]
-                elif "season-np" in stat_obj_to_use and date_start < stat_obj_to_use["season-np"]:
-                    if data["is_playoffs"] == "Include":
-                        if count_inconsistent:
-                            date_to_use = stat_obj_to_use["season-np"]
-                    elif data["is_playoffs"] != "Only":
-                        date_to_use = stat_obj_to_use["season-np"]
-                elif count_inconsistent and "inconsistent" in stat_obj_to_use and date_start < stat_obj_to_use["inconsistent"]:
-                    date_to_use = stat_obj_to_use["inconsistent"]
-            else:
-                if "game" in stat_obj_to_use and (date_start if isinstance(date_start, int) else date_start.year) < stat_obj_to_use["game"] and (not data["is_playoffs"] or data["is_playoffs"] == "No"):
-                    date_to_use = stat_obj_to_use["game"]
-                elif "game-np" in stat_obj_to_use and (date_start if isinstance(date_start, int) else date_start.year) < stat_obj_to_use["game-np"]:
-                    if data["is_playoffs"] == "Include":
-                        if count_inconsistent:
-                            date_to_use = stat_obj_to_use["game-np"]
-                    elif data["is_playoffs"] != "Only":
-                        date_to_use = stat_obj_to_use["game-np"]
-                elif "game" in stat_obj_to_use and (date_start if isinstance(date_start, int) else date_start.year) < stat_obj_to_use["game"] and ("game-np" not in stat_obj_to_use or (date_start if isinstance(date_start, int) else date_start.year) < stat_obj_to_use["game-np"]):
-                    date_to_use = stat_obj_to_use["game"]
-                elif count_inconsistent and "inconsistent-game" in stat_obj_to_use and (date_start if isinstance(date_start, int) else date_start.year) < stat_obj_to_use["inconsistent-game"]:
-                    date_to_use = stat_obj_to_use["inconsistent-game"]
+            stat_obj_to_use = None
+            if stat in league_data_mapping[player_type["da_type"]]:
+                for league_key in league_data_mapping[player_type["da_type"]][stat]:
+                    leagues = league_key.split("-")
+                    if sleague in leagues:
+                        stat_obj_to_use = league_data_mapping[player_type["da_type"]][stat][league_key]
+                        break
             
-            if date_to_use:
-                if sleague not in invalid_data or date_to_use < invalid_data[sleague]:
-                    invalid_data[sleague] = date_to_use
+            if not stat_obj_to_use and "valid_since" in headers[player_type["da_type"]][stat]:
+                stat_obj_to_use =  headers[player_type["da_type"]][stat]["valid_since"]
+
+            if stat_obj_to_use:
+                date_to_use = None
+                if isinstance(date_start, int):
+                    if "season" in stat_obj_to_use and date_start < stat_obj_to_use["season"]:
+                        date_to_use = stat_obj_to_use["season"]
+                    elif "season-np" in stat_obj_to_use and date_start < stat_obj_to_use["season-np"]:
+                        if data["is_playoffs"] == "Include":
+                            if count_inconsistent:
+                                date_to_use = stat_obj_to_use["season-np"]
+                        elif data["is_playoffs"] != "Only":
+                            date_to_use = stat_obj_to_use["season-np"]
+                    elif count_inconsistent and "inconsistent" in stat_obj_to_use and date_start < stat_obj_to_use["inconsistent"]:
+                        date_to_use = stat_obj_to_use["inconsistent"]
+                else:
+                    if "game" in stat_obj_to_use and (date_start if isinstance(date_start, int) else date_start.year) < stat_obj_to_use["game"] and (not data["is_playoffs"] or data["is_playoffs"] == "No"):
+                        date_to_use = stat_obj_to_use["game"]
+                    elif "game-np" in stat_obj_to_use and (date_start if isinstance(date_start, int) else date_start.year) < stat_obj_to_use["game-np"]:
+                        if data["is_playoffs"] == "Include":
+                            if count_inconsistent:
+                                date_to_use = stat_obj_to_use["game-np"]
+                        elif data["is_playoffs"] != "Only":
+                            date_to_use = stat_obj_to_use["game-np"]
+                    elif "game" in stat_obj_to_use and (date_start if isinstance(date_start, int) else date_start.year) < stat_obj_to_use["game"] and ("game-np" not in stat_obj_to_use or (date_start if isinstance(date_start, int) else date_start.year) < stat_obj_to_use["game-np"]):
+                        date_to_use = stat_obj_to_use["game"]
+                    elif count_inconsistent and "inconsistent-game" in stat_obj_to_use and (date_start if isinstance(date_start, int) else date_start.year) < stat_obj_to_use["inconsistent-game"]:
+                        date_to_use = stat_obj_to_use["inconsistent-game"]
+                
+                if date_to_use:
+                    if sleague not in invalid_data or date_to_use < invalid_data[sleague]:
+                        invalid_data[sleague] = date_to_use
     
     invalid_data["all_invalid"] = all_leagues.issubset(invalid_data.keys())
     invalid_data["any_invalid"] = bool(all_leagues.intersection(invalid_data.keys()))
