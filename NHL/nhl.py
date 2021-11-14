@@ -7224,7 +7224,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                             extra_stats.add(m.group(1) + "-" + str(ordinal_to_number(m.group(2))))
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
                         
-                        last_match = re.finditer(r"\bshow(?: |-)?(record|score|goal|year|seasons-leading|season|date|per-game|game|adjusted|advanced|missing-game|missing-toi|best-season|worst-season|ng|team|franchise|number|fight|penaltie|penalty|award|toi|shot|shift|star|play)s?\b", time_frame)
+                        last_match = re.finditer(r"\bshow(?: |-)?(record|score|goal|year|seasons-leading|season|date|per-game|game|adjusted|advanced|relative|missing-game|missing-toi|best-season|worst-season|ng|team|franchise|number|fight|penaltie|penalty|award|toi|shot|shift|star|play)s?\b", time_frame)
                         for m in last_match:
                             if "penalt" in m.group(1) or m.group(1) == "fight":
                                 extra_stats.add("penalties")
@@ -7237,7 +7237,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 extra_stats.add(m.group(1))
                                 if m.group(1) == "play":
                                     extra_stats.add("current-stats")
-                                elif m.group(1) == "advanced":
+                                elif m.group(1) == "advanced" or m.group(1) == "relative":
                                     extra_stats.add("current-stats")
                                 elif m.group(1) == "shift":
                                     extra_stats.add("current-stats")
