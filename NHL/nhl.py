@@ -9649,6 +9649,12 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 qual_type = "Career Period"
                                 extra_stats.add("current-stats")
                                 extra_stats.add("show-stat-per")
+                                extra_stats.add("show-stat-toi")
+                                extra_stats.add("show-stat-evtoi")
+                                extra_stats.add("show-stat-pptoi")
+                                extra_stats.add("show-stat-shtoi")
+                                extra_stats.add("show-stat-toi_5v5")
+                                extra_stats.add("current-stats-no-game")
                             else:
                                 qual_type = "Career Shot"
                                 extra_stats.add("current-stats-no-game")
