@@ -20338,45 +20338,53 @@ def perform_sub_nhl_game_qualifiers(row, qualifiers, player_game_info, player_ty
         if not row["TOI"]:
             return False
 
-    periods_to_skip = set()
-    for period in player_game_info["periods"]:
-        has_period_match = True
-        if "Career Period" in qualifiers:
-            has_match = False
-            total_minute_entering = 0
-            for sub_row_data in saved_row_data[:index]:
-                total_minute_entering += sub_row_data["Per"]
-            total_minute_exiting = total_minute_entering + period
+    if not "Period Stat" in qualifiers:
+        periods_to_skip = set()
+        for period in player_game_info["periods"]:
+            has_period_match = True
+            if "Career Period" in qualifiers:
+                has_match = False
+                total_minute_entering = 0
+                for sub_row_data in saved_row_data[:index]:
+                    total_minute_entering += sub_row_data["Per"]
+                total_minute_exiting = total_minute_entering + period
 
-            goal_event = {
-                "career_minute" : total_minute_exiting
-            }
-            if perform_sub_metadata_qual(goal_event, "career_minute", qualifiers["Career Period"], None, None):
-                has_match = True
+                goal_event = {
+                    "career_minute" : total_minute_exiting
+                }
+                if perform_sub_metadata_qual(goal_event, "career_minute", qualifiers["Career Period"], None, None):
+                    has_match = True
 
-            if not has_match:
-                periods_to_skip.add(period)
-        
-    for period in reversed(player_game_info["periods"]):
-        if "Career Period Reversed" in qualifiers:
-            has_match = False
-            total_minute_entering = 0
-            for sub_row_data in reversed(saved_row_data[(index + 1):]):
-                total_minute_entering += sub_row_data["Per"]
-            total_minute_exiting = total_minute_entering + (len(player_game_info["periods"]) - period + 1)
+                if not has_match:
+                    periods_to_skip.add(period)
+                
+            if "Period" in qualifiers:
+                goal_event = {
+                    "period" : period
+                }
+                if not perform_sub_metadata_qual(goal_event, "period", qualifiers["Period"], None, None):
+                    return False
+            
+        for period in reversed(player_game_info["periods"]):
+            if "Career Period Reversed" in qualifiers:
+                has_match = False
+                total_minute_entering = 0
+                for sub_row_data in reversed(saved_row_data[(index + 1):]):
+                    total_minute_entering += sub_row_data["Per"]
+                total_minute_exiting = total_minute_entering + (len(player_game_info["periods"]) - period + 1)
 
-            goal_event = {
-                "career_minute" : total_minute_exiting
-            }
-            if perform_sub_metadata_qual(goal_event, "career_minute", qualifiers["Career Period Reversed"], None, None):
-                has_match = True
+                goal_event = {
+                    "career_minute" : total_minute_exiting
+                }
+                if perform_sub_metadata_qual(goal_event, "career_minute", qualifiers["Career Period Reversed"], None, None):
+                    has_match = True
 
-            if not has_match:
-                periods_to_skip.add(period)
+                if not has_match:
+                    periods_to_skip.add(period)
 
-    for period in reversed(player_game_info["periods"]):
-        if period not in periods_to_skip:
-            row["Per"] += 1
+        for period in reversed(player_game_info["periods"]):
+            if period not in periods_to_skip:
+                row["Per"] += 1
 
     return True
 
