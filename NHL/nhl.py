@@ -11273,10 +11273,9 @@ def sub_handle_the_quals(players, qualifier, qual_str, player_str, time_frame, k
 def determine_player_str(qualifier, player_str, time_frame, qual_str):
     player_str = unescape_string(player_str)
             
-    is_pre_query = False
+    is_pre_query = "time_frame_str" not in qualifier
     if not "<" in player_str:
         player_str = "<" + player_str + ">"
-        is_pre_query = True
     player_str = "!nhlcompare " + player_str
 
     if "values" in qualifier:
@@ -29463,22 +29462,38 @@ def print_player_data(player_datas, player_type, highest_vals, lowest_vals, has_
                     override_show = True
                 if "Shot On" in extra_stats and ("EVG" in header or "PPG" in header or "SHG" in header):
                     override_show = True
+                    if "TOI" in header and not "GP_TOI" in header and not "offITOI" in header and not "x" in header and not "Shft" in header:
+                        override_show = True
                 if "Shot By" in extra_stats and ("EV" in header or "PP" in header or "SH" in header) and not "SH%" in header:
                     override_show = True
+                    if "TOI" in header and not "GP_TOI" in header and not "offITOI" in header and not "x" in header and not "Shft" in header:
+                        override_show = True
                 if "Assisted On" in extra_stats and ("A1" in header or "EVA" in header or "PPA" in header or "SHA" in header):
                     override_show = True
+                    if "TOI" in header and not "GP_TOI" in header and not "offITOI" in header and not "x" in header and not "Shft" in header:
+                        override_show = True
                 if "Assisted By" in extra_stats and ("EVG" in header or "PPG" in header or "SHG" in header):
                     override_show = True
+                    if "TOI" in header and not "GP_TOI" in header and not "offITOI" in header and not "x" in header and not "Shft" in header:
+                        override_show = True
                 if "Faceoff Against" in extra_stats and "FO" in header:
                     override_show = True
+                    if "TOI" in header and not "GP_TOI" in header and not "offITOI" in header and not "x" in header and not "Shft" in header:
+                        override_show = True
                 if "Points On" in extra_stats and ("P1" in header or "EVP" in header or "PPP" in header or "SHP" in header):
                     override_show = True
+                    if "TOI" in header and not "GP_TOI" in header and not "offITOI" in header and not "x" in header and not "Shft" in header:
+                        override_show = True
                 if "scoring-stats" in extra_stats and ("EVG" in header or "PPG" in header or "SHG" in header or "A1" in header or "EVA" in header or "PPA" in header or "SHA" in header or "P1" in header or "EVP" in header or "PPP" in header or "SHP" in header):
                     override_show = True
                 if "Hit On" in extra_stats and header in ("HIT/GP"):
                     override_show = True
+                    if "TOI" in header and not "GP_TOI" in header and not "offITOI" in header and not "x" in header and not "Shft" in header:
+                        override_show = True
                 if "Block On" in extra_stats and header in ("BLK/GP"):
                     override_show = True
+                    if "TOI" in header and not "GP_TOI" in header and not "offITOI" in header and not "x" in header and not "Shft" in header:
+                        override_show = True
                 if "current-stats" in extra_stats or "current-stats-zone" in extra_stats:
                     if header in ("1stG", "Post/Bar", "Post/60M", "TK", "GV", "TK/GV", "TK/60M", "GV/60M", "GF/60M", "GA/60M", "GFPer", "CF/60M", "CA/60M", "CFPer", "FF/60M", "FA/60M", "FFPer", "SF/60M", "SA/60M", "SFPer", "OZ%", "oiSPer", "oiSVPer", "PDO", "oiSRelPer", "oiSVRelPer", "PDORel", "OZFO%", "DZFO%"):
                         override_show = True
@@ -29487,6 +29502,8 @@ def print_player_data(player_datas, player_type, highest_vals, lowest_vals, has_
                     if "TSA" in header or header == "SThr%" or header == "TS%" or header == "TOI/GP":
                         override_show = True
                     if "shift" in extra_stats and "Shft" in header:
+                        override_show = True
+                    if "TOI" in header and not "GP_TOI" in header and not "offITOI" in header and not "x" in header and not "Shft" in header:
                         override_show = True
                 if "toi" in extra_stats and "TOI" in header and not "GP_TOI" in header and not "offITOI" in header and not "x" in header and not "Shft" in header:
                     override_show = True
@@ -29854,22 +29871,38 @@ def get_reddit_player_table(player_datas, player_type, debug_mode, original_comm
                     override_show = True
                 if "Shot On" in extra_stats and ("EVG" in header or "PPG" in header or "SHG" in header):
                     override_show = True
+                    if "TOI" in header and not "GP_TOI" in header and not "offITOI" in header and not "x" in header and not "Shft" in header:
+                        override_show = True
                 if "Shot By" in extra_stats and ("EV" in header or "PP" in header or "SH" in header) and not "SH%" in header:
                     override_show = True
+                    if "TOI" in header and not "GP_TOI" in header and not "offITOI" in header and not "x" in header and not "Shft" in header:
+                        override_show = True
                 if "Assisted On" in extra_stats and ("A1" in header or "EVA" in header or "PPA" in header or "SHA" in header):
                     override_show = True
+                    if "TOI" in header and not "GP_TOI" in header and not "offITOI" in header and not "x" in header and not "Shft" in header:
+                        override_show = True
                 if "Assisted By" in extra_stats and ("EVG" in header or "PPG" in header or "SHG" in header):
                     override_show = True
+                    if "TOI" in header and not "GP_TOI" in header and not "offITOI" in header and not "x" in header and not "Shft" in header:
+                        override_show = True
                 if "Faceoff Against" in extra_stats and "FO" in header:
                     override_show = True
+                    if "TOI" in header and not "GP_TOI" in header and not "offITOI" in header and not "x" in header and not "Shft" in header:
+                        override_show = True
                 if "Points On" in extra_stats and ("P1" in header or "EVP" in header or "PPP" in header or "SHP" in header):
                     override_show = True
+                    if "TOI" in header and not "GP_TOI" in header and not "offITOI" in header and not "x" in header and not "Shft" in header:
+                        override_show = True
                 if "scoring-stats" in extra_stats and ("EVG" in header or "PPG" in header or "SHG" in header or "A1" in header or "EVA" in header or "PPA" in header or "SHA" in header or "P1" in header or "EVP" in header or "PPP" in header or "SHP" in header):
                     override_show = True
                 if "Hit On" in extra_stats and header in ("HIT/GP"):
                     override_show = True
+                    if "TOI" in header and not "GP_TOI" in header and not "offITOI" in header and not "x" in header and not "Shft" in header:
+                        override_show = True
                 if "Block On" in extra_stats and header in ("BLK/GP"):
                     override_show = True
+                    if "TOI" in header and not "GP_TOI" in header and not "offITOI" in header and not "x" in header and not "Shft" in header:
+                        override_show = True
                 if "current-stats" in extra_stats or "current-stats-zone" in extra_stats:
                     if header in ("1stG", "Post/Bar", "Post/60M", "TK", "GV", "TK/GV", "TK/60M", "GV/60M", "GF/60M", "GA/60M", "GFPer", "CF/60M", "CA/60M", "CFPer", "FF/60M", "FA/60M", "FFPer", "SF/60M", "SA/60M", "SFPer", "OZ%", "oiSPer", "oiSVPer", "PDO", "oiSRelPer", "oiSVRelPer", "PDORel", "OZFO%", "DZFO%"):
                         override_show = True
@@ -29878,6 +29911,8 @@ def get_reddit_player_table(player_datas, player_type, debug_mode, original_comm
                     if "TSA" in header or header == "SThr%" or header == "TS%" or header == "TOI/GP":
                         override_show = True
                     if "shift" in extra_stats and "Shft" in header:
+                        override_show = True
+                    if "TOI" in header and not "GP_TOI" in header and not "offITOI" in header and not "x" in header and not "Shft" in header:
                         override_show = True
                 if "toi" in extra_stats and "TOI" in header and not "GP_TOI" in header and not "offITOI" in header and not "x" in header and not "Shft" in header:
                     override_show = True
@@ -30619,22 +30654,38 @@ def handle_table_data(player_data, player_type, over_header, header, highest_val
         override_show = True
     if "Shot On" in extra_stats and ("EVG" in header or "PPG" in header or "SHG" in header):
         override_show = True
+        if "TOI" in header and not "GP_TOI" in header and not "offITOI" in header and not "x" in header and not "Shft" in header:
+            override_show = True
     if "Shot By" in extra_stats and ("EV" in header or "PP" in header or "SH" in header) and not "SH%" in header:
         override_show = True
+        if "TOI" in header and not "GP_TOI" in header and not "offITOI" in header and not "x" in header and not "Shft" in header:
+            override_show = True
     if "Assisted On" in extra_stats and ("A1" in header or "EVA" in header or "PPA" in header or "SHA" in header):
         override_show = True
+        if "TOI" in header and not "GP_TOI" in header and not "offITOI" in header and not "x" in header and not "Shft" in header:
+            override_show = True
     if "Assisted By" in extra_stats and ("EVG" in header or "PPG" in header or "SHG" in header):
         override_show = True
+        if "TOI" in header and not "GP_TOI" in header and not "offITOI" in header and not "x" in header and not "Shft" in header:
+            override_show = True
     if "Faceoff Against" in extra_stats and "FO" in header:
         override_show = True
+        if "TOI" in header and not "GP_TOI" in header and not "offITOI" in header and not "x" in header and not "Shft" in header:
+            override_show = True
     if "Points On" in extra_stats and ("P1" in header or "EVP" in header or "PPP" in header or "SHP" in header):
         override_show = True
+        if "TOI" in header and not "GP_TOI" in header and not "offITOI" in header and not "x" in header and not "Shft" in header:
+            override_show = True
     if "scoring-stats" in extra_stats and ("EVG" in header or "PPG" in header or "SHG" in header or "A1" in header or "EVA" in header or "PPA" in header or "SHA" in header or "P1" in header or "EVP" in header or "PPP" in header or "SHP" in header):
         override_show = True
     if "Hit On" in extra_stats and header in ("HIT/GP"):
         override_show = True
+        if "TOI" in header and not "GP_TOI" in header and not "offITOI" in header and not "x" in header and not "Shft" in header:
+            override_show = True
     if "Block On" in extra_stats and header in ("BLK/GP"):
         override_show = True
+        if "TOI" in header and not "GP_TOI" in header and not "offITOI" in header and not "x" in header and not "Shft" in header:
+            override_show = True
     if "current-stats" in extra_stats or "current-stats-zone" in extra_stats:
         if header in ("1stG", "Post/Bar", "Post/60M", "TK", "GV", "TK/GV", "TK/60M", "GV/60M", "GF/60M", "GA/60M", "GFPer", "CF/60M", "CA/60M", "CFPer", "FF/60M", "FA/60M", "FFPer", "SF/60M", "SA/60M", "SFPer", "OZ%", "oiSPer", "oiSVPer", "PDO", "oiSRelPer", "oiSVRelPer", "PDORel", "OZFO%", "DZFO%"):
             override_show = True
@@ -30643,6 +30694,8 @@ def handle_table_data(player_data, player_type, over_header, header, highest_val
         if "TSA" in header or header == "SThr%" or header == "TS%" or header == "TOI/GP":
             override_show = True
         if "shift" in extra_stats and "Shft" in header:
+            override_show = True
+        if "TOI" in header and not "GP_TOI" in header and not "offITOI" in header and not "x" in header and not "Shft" in header:
             override_show = True
     if "toi" in extra_stats and "TOI" in header and not "GP_TOI" in header and not "offITOI" in header and not "x" in header and not "Shft" in header:
         override_show = True

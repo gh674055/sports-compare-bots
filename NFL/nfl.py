@@ -5310,10 +5310,9 @@ def sub_handle_the_quals(players, qualifier, qual_str, player_str, time_frame, k
 def determine_player_str(qualifier, player_str, time_frame, qual_str):
     player_str = unescape_string(player_str)
             
-    is_pre_query = False
+    is_pre_query = "time_frame_str" not in qualifier
     if not "<" in player_str:
         player_str = "<" + player_str + ">"
-        is_pre_query = True
     player_str = "!nflcompare " + player_str
 
     if "values" in qualifier:

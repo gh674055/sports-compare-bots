@@ -11566,10 +11566,9 @@ def determine_player_str(qualifier, player_type, player_str, time_frame, qual_st
         player_str = player_str["value"]
     player_str = unescape_string(player_str)
     
-    is_pre_query = False
+    is_pre_query = "time_frame_str" not in qualifier
     if not "<" in player_str:
         player_str = "<" + player_str + ">"
-        is_pre_query = True
     player_str = "!mlbcompare " + player_str
 
     if "values" in qualifier:
@@ -11582,10 +11581,8 @@ def determine_player_str(qualifier, player_type, player_str, time_frame, qual_st
             bracket_index = player_str.index("]")
             playoffs_str = "playoffs" if time_frame["playoffs"] == "Only" else "including playoffs"
             player_str = player_str[:bracket_index] + " " + playoffs_str + player_str[bracket_index:]
-    elif "time_frame_str" in qualifier:
-        player_str += " [" + qualifier["time_frame_str"] + "]"
     else:
-        player_str += " []"
+        player_str += " [" + qualifier["time_frame_str"] + "]"
 
     if is_pre_query and time_frame["type"] == "date":
         bracket_index = player_str.index("]")
