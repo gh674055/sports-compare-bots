@@ -10775,14 +10775,11 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
     for subb_frames in parse_time_frames:
         for subbb_frames in subb_frames:
             for time_frame in subbb_frames:
-                for qual_str in time_frame["qualifiers"]:
+                if "Batting Lefty" in time_frame["qualifiers"] or "Batting Righty" in time_frame["qualifiers"] or "Back To Back With" in time_frame["qualifiers"] or "Batting Behind" in time_frame["qualifiers"] or "Batting In Front Of" in time_frame["qualifiers"] or "Batting Next To" in time_frame["qualifiers"] or "Pinch Hitting" in time_frame["qualifiers"] or "Leading Off Game" in time_frame["qualifiers"] or "Leading Off Whole Game" in time_frame["qualifiers"]  or "Leading Off Inning" in time_frame["qualifiers"] or "Swung At First Pitch" in time_frame["qualifiers"] or "Time Facing Opponent" in time_frame["qualifiers"] or "After Swinging On Count" in time_frame["qualifiers"] or "Swinging On Count" in time_frame["qualifiers"]:
                     if player_type["da_type"] == "Batter":
-                        if qual_str in ["Batting Lefty", "Batting Righty", "Back To Back With", "Pinch Hitting", "Leading Off Game", "Leading Off Whole Game", "Leading Off Inning", "Swung At First Pitch", "Time Facing Opponent", "After Swinging On Count", "Swinging On Count"] or qual_str.startswith("Batting Behind") or qual_str.startswith("Batting In Front Of") or qual_str.startswith("Batting Next To"):
-                            extra_stats.add("no-steals")
-                            break
-                    if qual_str in ["Hit Distance", "Exit Velocity", "Launch Angle", "RBIs", "Number Drove In", "Back To Back With"]:
                         extra_stats.add("no-steals")
-                        break
+                if "Hit Distance" in time_frame["qualifiers"] or "Exit Velocity" in time_frame["qualifiers"] or "Launch Angle" in time_frame["qualifiers"] or "RBIs" in time_frame["qualifiers"] or "Number Drove In" in time_frame["qualifiers"] or "Back To Back With" in time_frame["qualifiers"]:
+                    extra_stats.add("no-steals")
 
     if "current-stats" in extra_stats and player_type["da_type"] == "Batter":
         extra_stats.add("walk-off")
