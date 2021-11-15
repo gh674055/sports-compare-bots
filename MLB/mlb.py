@@ -24173,7 +24173,6 @@ def handle_mlb_game_stats(all_rows, qualifiers, player_data, player_type, missin
             for qual_object in qualifiers["Batting Behind NL Stat"]:
                 if "year_map_obj" not in qual_object:
                     games_to_skip.add(row_data["GameLink"])
-
     if "Batting Next To Stat Rank" in qualifiers:
         for row_data in all_rows:
             for qual_object in qualifiers["Batting Next To Stat Rank"]:
@@ -24479,7 +24478,6 @@ def handle_mlb_game_stats_single_thread(all_rows, qualifiers, player_data, playe
             for qual_object in qualifiers["Batting Behind NL Stat"]:
                 if "year_map_obj" not in qual_object:
                     games_to_skip.add(row_data["GameLink"])
-
     if "Batting Next To Stat Rank" in qualifiers:
         for row_data in all_rows:
             for qual_object in qualifiers["Batting Next To Stat Rank"]:
@@ -25297,10 +25295,10 @@ def perform_sub_mlb_game_qualifiers(row, player_data, qualifiers, player_game_in
                 has_match = False
                 for at_bat_event in player_game_info["batting_events"]:
                     match_batter_posses = set()
-                    if at_bat_event["batting_order_pos"] == 9:
+                    if (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 9:
                         match_batter_posses.add(1)
                     else:
-                        match_batter_posses.add(at_bat_event["batting_order_pos"] + 1)
+                        match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) + 1)
 
                     match_batters = set()
                     for match_batter in at_bat_event["team_batting_order_map"]:
@@ -25324,10 +25322,10 @@ def perform_sub_mlb_game_qualifiers(row, player_data, qualifiers, player_game_in
                 has_match = False
                 for at_bat_event in player_game_info["batting_events"]:
                     match_batter_posses = set()
-                    if at_bat_event["batting_order_pos"] == 9:
+                    if (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 9:
                         match_batter_posses.add(1)
                     else:
-                        match_batter_posses.add(at_bat_event["batting_order_pos"] + 1)
+                        match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) + 1)
 
                     match_batters = set()
                     for match_batter in at_bat_event["team_batting_order_map"]:
@@ -25351,10 +25349,10 @@ def perform_sub_mlb_game_qualifiers(row, player_data, qualifiers, player_game_in
                 has_match = False
                 for at_bat_event in player_game_info["batting_events"]:
                     match_batter_posses = set()
-                    if at_bat_event["batting_order_pos"] == 9:
+                    if (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 9:
                         match_batter_posses.add(1)
                     else:
-                        match_batter_posses.add(at_bat_event["batting_order_pos"] + 1)
+                        match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) + 1)
 
                     match_batters = set()
                     for match_batter in at_bat_event["team_batting_order_map"]:
@@ -25378,10 +25376,10 @@ def perform_sub_mlb_game_qualifiers(row, player_data, qualifiers, player_game_in
                 has_match = False
                 for at_bat_event in player_game_info["batting_events"]:
                     match_batter_posses = set()
-                    if at_bat_event["batting_order_pos"] == 9:
+                    if (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 9:
                         match_batter_posses.add(1)
                     else:
-                        match_batter_posses.add(at_bat_event["batting_order_pos"] + 1)
+                        match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) + 1)
 
                     match_batters = set()
                     for match_batter in at_bat_event["team_batting_order_map"]:
@@ -25405,10 +25403,10 @@ def perform_sub_mlb_game_qualifiers(row, player_data, qualifiers, player_game_in
                 has_match = False
                 for at_bat_event in player_game_info["batting_events"]:
                     match_batter_posses = set()
-                    if at_bat_event["batting_order_pos"] == 1:
+                    if (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 1:
                         match_batter_posses.add(9)
                     else:
-                        match_batter_posses.add(at_bat_event["batting_order_pos"] - 1)
+                        match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) - 1)
 
                     match_batters = set()
                     for match_batter in at_bat_event["team_batting_order_map"]:
@@ -25432,10 +25430,10 @@ def perform_sub_mlb_game_qualifiers(row, player_data, qualifiers, player_game_in
                 has_match = False
                 for at_bat_event in player_game_info["batting_events"]:
                     match_batter_posses = set()
-                    if at_bat_event["batting_order_pos"] == 1:
+                    if (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 1:
                         match_batter_posses.add(9)
                     else:
-                        match_batter_posses.add(at_bat_event["batting_order_pos"] - 1)
+                        match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) - 1)
 
                     match_batters = set()
                     for match_batter in at_bat_event["team_batting_order_map"]:
@@ -25459,10 +25457,10 @@ def perform_sub_mlb_game_qualifiers(row, player_data, qualifiers, player_game_in
                 has_match = False
                 for at_bat_event in player_game_info["batting_events"]:
                     match_batter_posses = set()
-                    if at_bat_event["batting_order_pos"] == 1:
+                    if (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 1:
                         match_batter_posses.add(9)
                     else:
-                        match_batter_posses.add(at_bat_event["batting_order_pos"] - 1)
+                        match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) - 1)
 
                     match_batters = set()
                     for match_batter in at_bat_event["team_batting_order_map"]:
@@ -25486,10 +25484,10 @@ def perform_sub_mlb_game_qualifiers(row, player_data, qualifiers, player_game_in
                 has_match = False
                 for at_bat_event in player_game_info["batting_events"]:
                     match_batter_posses = set()
-                    if at_bat_event["batting_order_pos"] == 1:
+                    if (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 1:
                         match_batter_posses.add(9)
                     else:
-                        match_batter_posses.add(at_bat_event["batting_order_pos"] - 1)
+                        match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) - 1)
 
                     match_batters = set()
                     for match_batter in at_bat_event["team_batting_order_map"]:
@@ -25513,15 +25511,15 @@ def perform_sub_mlb_game_qualifiers(row, player_data, qualifiers, player_game_in
                 has_match = False
                 for at_bat_event in player_game_info["batting_events"]:
                     match_batter_posses = set()
-                    if at_bat_event["batting_order_pos"] == 1:
+                    if (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 1:
                         match_batter_posses.add(9)
                         match_batter_posses.add(2)
-                    elif at_bat_event["batting_order_pos"] == 9:
+                    elif (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 9:
                         match_batter_posses.add(1)
                         match_batter_posses.add(8)
                     else:
-                        match_batter_posses.add(at_bat_event["batting_order_pos"] + 1)
-                        match_batter_posses.add(at_bat_event["batting_order_pos"] - 1)
+                        match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) + 1)
+                        match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) - 1)
 
                     match_batters = set()
                     for match_batter in at_bat_event["team_batting_order_map"]:
@@ -25545,15 +25543,15 @@ def perform_sub_mlb_game_qualifiers(row, player_data, qualifiers, player_game_in
                 has_match = False
                 for at_bat_event in player_game_info["batting_events"]:
                     match_batter_posses = set()
-                    if at_bat_event["batting_order_pos"] == 1:
+                    if (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 1:
                         match_batter_posses.add(9)
                         match_batter_posses.add(2)
-                    elif at_bat_event["batting_order_pos"] == 9:
+                    elif (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 9:
                         match_batter_posses.add(1)
                         match_batter_posses.add(8)
                     else:
-                        match_batter_posses.add(at_bat_event["batting_order_pos"] + 1)
-                        match_batter_posses.add(at_bat_event["batting_order_pos"] - 1)
+                        match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) + 1)
+                        match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) - 1)
 
                     match_batters = set()
                     for match_batter in at_bat_event["team_batting_order_map"]:
@@ -25577,15 +25575,15 @@ def perform_sub_mlb_game_qualifiers(row, player_data, qualifiers, player_game_in
                 has_match = False
                 for at_bat_event in player_game_info["batting_events"]:
                     match_batter_posses = set()
-                    if at_bat_event["batting_order_pos"] == 1:
+                    if (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 1:
                         match_batter_posses.add(9)
                         match_batter_posses.add(2)
-                    elif at_bat_event["batting_order_pos"] == 9:
+                    elif (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 9:
                         match_batter_posses.add(1)
                         match_batter_posses.add(8)
                     else:
-                        match_batter_posses.add(at_bat_event["batting_order_pos"] + 1)
-                        match_batter_posses.add(at_bat_event["batting_order_pos"] - 1)
+                        match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) + 1)
+                        match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) - 1)
 
                     match_batters = set()
                     for match_batter in at_bat_event["team_batting_order_map"]:
@@ -25609,15 +25607,15 @@ def perform_sub_mlb_game_qualifiers(row, player_data, qualifiers, player_game_in
                 has_match = False
                 for at_bat_event in player_game_info["batting_events"]:
                     match_batter_posses = set()
-                    if at_bat_event["batting_order_pos"] == 1:
+                    if (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 1:
                         match_batter_posses.add(9)
                         match_batter_posses.add(2)
-                    elif at_bat_event["batting_order_pos"] == 9:
+                    elif (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 9:
                         match_batter_posses.add(1)
                         match_batter_posses.add(8)
                     else:
-                        match_batter_posses.add(at_bat_event["batting_order_pos"] + 1)
-                        match_batter_posses.add(at_bat_event["batting_order_pos"] - 1)
+                        match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) + 1)
+                        match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) - 1)
 
                     match_batters = set()
                     for match_batter in at_bat_event["team_batting_order_map"]:
@@ -25641,10 +25639,10 @@ def perform_sub_mlb_game_qualifiers(row, player_data, qualifiers, player_game_in
                 has_match = False
                 for at_bat_event in player_game_info["batting_events"]:
                     match_batter_posses = set()
-                    if at_bat_event["batting_order_pos"] == 9:
+                    if (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 9:
                         match_batter_posses.add(1)
                     else:
-                        match_batter_posses.add(at_bat_event["batting_order_pos"] + 1)
+                        match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) + 1)
 
                     match_batters = set()
                     for match_batter in at_bat_event["team_batting_order_map"]:
@@ -25668,10 +25666,10 @@ def perform_sub_mlb_game_qualifiers(row, player_data, qualifiers, player_game_in
                 has_match = False
                 for at_bat_event in player_game_info["batting_events"]:
                     match_batter_posses = set()
-                    if at_bat_event["batting_order_pos"] == 9:
+                    if (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 9:
                         match_batter_posses.add(1)
                     else:
-                        match_batter_posses.add(at_bat_event["batting_order_pos"] + 1)
+                        match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) + 1)
 
                     match_batters = set()
                     for match_batter in at_bat_event["team_batting_order_map"]:
@@ -25695,10 +25693,10 @@ def perform_sub_mlb_game_qualifiers(row, player_data, qualifiers, player_game_in
                 has_match = False
                 for at_bat_event in player_game_info["batting_events"]:
                     match_batter_posses = set()
-                    if at_bat_event["batting_order_pos"] == 9:
+                    if (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 9:
                         match_batter_posses.add(1)
                     else:
-                        match_batter_posses.add(at_bat_event["batting_order_pos"] + 1)
+                        match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) + 1)
 
                     match_batters = set()
                     for match_batter in at_bat_event["team_batting_order_map"]:
@@ -25722,10 +25720,10 @@ def perform_sub_mlb_game_qualifiers(row, player_data, qualifiers, player_game_in
                 has_match = False
                 for at_bat_event in player_game_info["batting_events"]:
                     match_batter_posses = set()
-                    if at_bat_event["batting_order_pos"] == 9:
+                    if (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 9:
                         match_batter_posses.add(1)
                     else:
-                        match_batter_posses.add(at_bat_event["batting_order_pos"] + 1)
+                        match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) + 1)
 
                     match_batters = set()
                     for match_batter in at_bat_event["team_batting_order_map"]:
@@ -25749,10 +25747,10 @@ def perform_sub_mlb_game_qualifiers(row, player_data, qualifiers, player_game_in
                 has_match = False
                 for at_bat_event in player_game_info["batting_events"]:
                     match_batter_posses = set()
-                    if at_bat_event["batting_order_pos"] == 1:
+                    if (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 1:
                         match_batter_posses.add(9)
                     else:
-                        match_batter_posses.add(at_bat_event["batting_order_pos"] - 1)
+                        match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) - 1)
 
                     match_batters = set()
                     for match_batter in at_bat_event["team_batting_order_map"]:
@@ -25776,10 +25774,10 @@ def perform_sub_mlb_game_qualifiers(row, player_data, qualifiers, player_game_in
                 has_match = False
                 for at_bat_event in player_game_info["batting_events"]:
                     match_batter_posses = set()
-                    if at_bat_event["batting_order_pos"] == 1:
+                    if (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 1:
                         match_batter_posses.add(9)
                     else:
-                        match_batter_posses.add(at_bat_event["batting_order_pos"] - 1)
+                        match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) - 1)
 
                     match_batters = set()
                     for match_batter in at_bat_event["team_batting_order_map"]:
@@ -25803,10 +25801,10 @@ def perform_sub_mlb_game_qualifiers(row, player_data, qualifiers, player_game_in
                 has_match = False
                 for at_bat_event in player_game_info["batting_events"]:
                     match_batter_posses = set()
-                    if at_bat_event["batting_order_pos"] == 1:
+                    if (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 1:
                         match_batter_posses.add(9)
                     else:
-                        match_batter_posses.add(at_bat_event["batting_order_pos"] - 1)
+                        match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) - 1)
 
                     match_batters = set()
                     for match_batter in at_bat_event["team_batting_order_map"]:
@@ -25830,10 +25828,10 @@ def perform_sub_mlb_game_qualifiers(row, player_data, qualifiers, player_game_in
                 has_match = False
                 for at_bat_event in player_game_info["batting_events"]:
                     match_batter_posses = set()
-                    if at_bat_event["batting_order_pos"] == 1:
+                    if (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 1:
                         match_batter_posses.add(9)
                     else:
-                        match_batter_posses.add(at_bat_event["batting_order_pos"] - 1)
+                        match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) - 1)
 
                     match_batters = set()
                     for match_batter in at_bat_event["team_batting_order_map"]:
@@ -25857,15 +25855,15 @@ def perform_sub_mlb_game_qualifiers(row, player_data, qualifiers, player_game_in
                 has_match = False
                 for at_bat_event in player_game_info["batting_events"]:
                     match_batter_posses = set()
-                    if at_bat_event["batting_order_pos"] == 1:
+                    if (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 1:
                         match_batter_posses.add(9)
                         match_batter_posses.add(2)
-                    elif at_bat_event["batting_order_pos"] == 9:
+                    elif (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 9:
                         match_batter_posses.add(1)
                         match_batter_posses.add(8)
                     else:
-                        match_batter_posses.add(at_bat_event["batting_order_pos"] + 1)
-                        match_batter_posses.add(at_bat_event["batting_order_pos"] - 1)
+                        match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) + 1)
+                        match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) - 1)
 
                     match_batters = set()
                     for match_batter in at_bat_event["team_batting_order_map"]:
@@ -25889,15 +25887,15 @@ def perform_sub_mlb_game_qualifiers(row, player_data, qualifiers, player_game_in
                 has_match = False
                 for at_bat_event in player_game_info["batting_events"]:
                     match_batter_posses = set()
-                    if at_bat_event["batting_order_pos"] == 1:
+                    if (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 1:
                         match_batter_posses.add(9)
                         match_batter_posses.add(2)
-                    elif at_bat_event["batting_order_pos"] == 9:
+                    elif (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 9:
                         match_batter_posses.add(1)
                         match_batter_posses.add(8)
                     else:
-                        match_batter_posses.add(at_bat_event["batting_order_pos"] + 1)
-                        match_batter_posses.add(at_bat_event["batting_order_pos"] - 1)
+                        match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) + 1)
+                        match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) - 1)
 
                     match_batters = set()
                     for match_batter in at_bat_event["team_batting_order_map"]:
@@ -25921,15 +25919,15 @@ def perform_sub_mlb_game_qualifiers(row, player_data, qualifiers, player_game_in
                 has_match = False
                 for at_bat_event in player_game_info["batting_events"]:
                     match_batter_posses = set()
-                    if at_bat_event["batting_order_pos"] == 1:
+                    if (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 1:
                         match_batter_posses.add(9)
                         match_batter_posses.add(2)
-                    elif at_bat_event["batting_order_pos"] == 9:
+                    elif (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 9:
                         match_batter_posses.add(1)
                         match_batter_posses.add(8)
                     else:
-                        match_batter_posses.add(at_bat_event["batting_order_pos"] + 1)
-                        match_batter_posses.add(at_bat_event["batting_order_pos"] - 1)
+                        match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) + 1)
+                        match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) - 1)
 
                     match_batters = set()
                     for match_batter in at_bat_event["team_batting_order_map"]:
@@ -25953,15 +25951,15 @@ def perform_sub_mlb_game_qualifiers(row, player_data, qualifiers, player_game_in
                 has_match = False
                 for at_bat_event in player_game_info["batting_events"]:
                     match_batter_posses = set()
-                    if at_bat_event["batting_order_pos"] == 1:
+                    if (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 1:
                         match_batter_posses.add(9)
                         match_batter_posses.add(2)
-                    elif at_bat_event["batting_order_pos"] == 9:
+                    elif (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 9:
                         match_batter_posses.add(1)
                         match_batter_posses.add(8)
                     else:
-                        match_batter_posses.add(at_bat_event["batting_order_pos"] + 1)
-                        match_batter_posses.add(at_bat_event["batting_order_pos"] - 1)
+                        match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) + 1)
+                        match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) - 1)
 
                     match_batters = set()
                     for match_batter in at_bat_event["team_batting_order_map"]:
@@ -25985,10 +25983,10 @@ def perform_sub_mlb_game_qualifiers(row, player_data, qualifiers, player_game_in
                 has_match = False
                 for at_bat_event in player_game_info["batting_events"]:
                     match_batter_posses = set()
-                    if at_bat_event["batting_order_pos"] == 9:
+                    if (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 9:
                         match_batter_posses.add(1)
                     else:
-                        match_batter_posses.add(at_bat_event["batting_order_pos"] + 1)
+                        match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) + 1)
 
                     match_batters = set()
                     for match_batter in at_bat_event["team_batting_order_map"]:
@@ -26012,10 +26010,10 @@ def perform_sub_mlb_game_qualifiers(row, player_data, qualifiers, player_game_in
                 has_match = False
                 for at_bat_event in player_game_info["batting_events"]:
                     match_batter_posses = set()
-                    if at_bat_event["batting_order_pos"] == 9:
+                    if (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 9:
                         match_batter_posses.add(1)
                     else:
-                        match_batter_posses.add(at_bat_event["batting_order_pos"] + 1)
+                        match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) + 1)
 
                     match_batters = set()
                     for match_batter in at_bat_event["team_batting_order_map"]:
@@ -26039,10 +26037,10 @@ def perform_sub_mlb_game_qualifiers(row, player_data, qualifiers, player_game_in
                 has_match = False
                 for at_bat_event in player_game_info["batting_events"]:
                     match_batter_posses = set()
-                    if at_bat_event["batting_order_pos"] == 9:
+                    if (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 9:
                         match_batter_posses.add(1)
                     else:
-                        match_batter_posses.add(at_bat_event["batting_order_pos"] + 1)
+                        match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) + 1)
 
                     match_batters = set()
                     for match_batter in at_bat_event["team_batting_order_map"]:
@@ -26066,10 +26064,10 @@ def perform_sub_mlb_game_qualifiers(row, player_data, qualifiers, player_game_in
                 has_match = False
                 for at_bat_event in player_game_info["batting_events"]:
                     match_batter_posses = set()
-                    if at_bat_event["batting_order_pos"] == 1:
+                    if (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 1:
                         match_batter_posses.add(9)
                     else:
-                        match_batter_posses.add(at_bat_event["batting_order_pos"] - 1)
+                        match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) - 1)
 
                     match_batters = set()
                     for match_batter in at_bat_event["team_batting_order_map"]:
@@ -26093,10 +26091,10 @@ def perform_sub_mlb_game_qualifiers(row, player_data, qualifiers, player_game_in
                 has_match = False
                 for at_bat_event in player_game_info["batting_events"]:
                     match_batter_posses = set()
-                    if at_bat_event["batting_order_pos"] == 1:
+                    if (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 1:
                         match_batter_posses.add(9)
                     else:
-                        match_batter_posses.add(at_bat_event["batting_order_pos"] - 1)
+                        match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) - 1)
 
                     match_batters = set()
                     for match_batter in at_bat_event["team_batting_order_map"]:
@@ -26120,10 +26118,10 @@ def perform_sub_mlb_game_qualifiers(row, player_data, qualifiers, player_game_in
                 has_match = False
                 for at_bat_event in player_game_info["batting_events"]:
                     match_batter_posses = set()
-                    if at_bat_event["batting_order_pos"] == 1:
+                    if (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 1:
                         match_batter_posses.add(9)
                     else:
-                        match_batter_posses.add(at_bat_event["batting_order_pos"] - 1)
+                        match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) - 1)
 
                     match_batters = set()
                     for match_batter in at_bat_event["team_batting_order_map"]:
@@ -26147,15 +26145,15 @@ def perform_sub_mlb_game_qualifiers(row, player_data, qualifiers, player_game_in
                 has_match = False
                 for at_bat_event in player_game_info["batting_events"]:
                     match_batter_posses = set()
-                    if at_bat_event["batting_order_pos"] == 1:
+                    if (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 1:
                         match_batter_posses.add(9)
                         match_batter_posses.add(2)
-                    elif at_bat_event["batting_order_pos"] == 9:
+                    elif (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 9:
                         match_batter_posses.add(1)
                         match_batter_posses.add(8)
                     else:
-                        match_batter_posses.add(at_bat_event["batting_order_pos"] + 1)
-                        match_batter_posses.add(at_bat_event["batting_order_pos"] - 1)
+                        match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) + 1)
+                        match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) - 1)
 
                     match_batters = set()
                     for match_batter in at_bat_event["team_batting_order_map"]:
@@ -26179,15 +26177,15 @@ def perform_sub_mlb_game_qualifiers(row, player_data, qualifiers, player_game_in
                 has_match = False
                 for at_bat_event in player_game_info["batting_events"]:
                     match_batter_posses = set()
-                    if at_bat_event["batting_order_pos"] == 1:
+                    if (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 1:
                         match_batter_posses.add(9)
                         match_batter_posses.add(2)
-                    elif at_bat_event["batting_order_pos"] == 9:
+                    elif (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 9:
                         match_batter_posses.add(1)
                         match_batter_posses.add(8)
                     else:
-                        match_batter_posses.add(at_bat_event["batting_order_pos"] + 1)
-                        match_batter_posses.add(at_bat_event["batting_order_pos"] - 1)
+                        match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) + 1)
+                        match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) - 1)
 
                     match_batters = set()
                     for match_batter in at_bat_event["team_batting_order_map"]:
@@ -26211,15 +26209,15 @@ def perform_sub_mlb_game_qualifiers(row, player_data, qualifiers, player_game_in
                 has_match = False
                 for at_bat_event in player_game_info["batting_events"]:
                     match_batter_posses = set()
-                    if at_bat_event["batting_order_pos"] == 1:
+                    if (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 1:
                         match_batter_posses.add(9)
                         match_batter_posses.add(2)
-                    elif at_bat_event["batting_order_pos"] == 9:
+                    elif (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 9:
                         match_batter_posses.add(1)
                         match_batter_posses.add(8)
                     else:
-                        match_batter_posses.add(at_bat_event["batting_order_pos"] + 1)
-                        match_batter_posses.add(at_bat_event["batting_order_pos"] - 1)
+                        match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) + 1)
+                        match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) - 1)
 
                     match_batters = set()
                     for match_batter in at_bat_event["team_batting_order_map"]:
@@ -26295,11 +26293,11 @@ def perform_sub_mlb_game_qualifiers(row, player_data, qualifiers, player_game_in
                 has_match = False
                 for at_bat_event in player_game_info["batting_events"]:
                     for player in qual_object["values"]:
-                        if at_bat_event["batting_order_pos"] == 1:
+                        if (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 1:
                             if player["mlb_id"] in at_bat_event["team_batting_order_map"] and at_bat_event["team_batting_order_map"][player["mlb_id"]] == 9:
                                 has_match = True
                         else:
-                            if player["mlb_id"] in at_bat_event["team_batting_order_map"] and at_bat_event["team_batting_order_map"][player["mlb_id"]] == at_bat_event["batting_order_pos"] - 1:
+                            if player["mlb_id"] in at_bat_event["team_batting_order_map"] and at_bat_event["team_batting_order_map"][player["mlb_id"]] == (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) - 1:
                                 has_match = True
 
                 if not has_match:
@@ -26314,11 +26312,11 @@ def perform_sub_mlb_game_qualifiers(row, player_data, qualifiers, player_game_in
                 has_match = False
                 for at_bat_event in player_game_info["batting_events"]:
                     for player in qual_object["values"]:
-                        if at_bat_event["batting_order_pos"] == 9:
+                        if (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 9:
                             if player["mlb_id"] in at_bat_event["team_batting_order_map"] and at_bat_event["team_batting_order_map"][player["mlb_id"]] == 1:
                                 has_match = True
                         else:
-                            if player["mlb_id"] in at_bat_event["team_batting_order_map"] and at_bat_event["team_batting_order_map"][player["mlb_id"]] == at_bat_event["batting_order_pos"] + 1:
+                            if player["mlb_id"] in at_bat_event["team_batting_order_map"] and at_bat_event["team_batting_order_map"][player["mlb_id"]] == (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) + 1:
                                 has_match = True
 
                 if not has_match:
@@ -26333,20 +26331,20 @@ def perform_sub_mlb_game_qualifiers(row, player_data, qualifiers, player_game_in
                 has_match = False
                 for at_bat_event in player_game_info["batting_events"]:
                     for player in qual_object["values"]:
-                        if at_bat_event["batting_order_pos"] == 1:
+                        if (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 1:
                             if player["mlb_id"] in at_bat_event["team_batting_order_map"] and at_bat_event["team_batting_order_map"][player["mlb_id"]] == 9:
                                 has_match = True
-                            elif player["mlb_id"] in at_bat_event["team_batting_order_map"] and at_bat_event["team_batting_order_map"][player["mlb_id"]] == at_bat_event["batting_order_pos"] + 1:
+                            elif player["mlb_id"] in at_bat_event["team_batting_order_map"] and at_bat_event["team_batting_order_map"][player["mlb_id"]] == (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) + 1:
                                 has_match = True
-                        elif at_bat_event["batting_order_pos"] == 9:
+                        elif (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 9:
                             if player["mlb_id"] in at_bat_event["team_batting_order_map"] and at_bat_event["team_batting_order_map"][player["mlb_id"]] == 1:
                                 has_match = True
-                            elif player["mlb_id"] in at_bat_event["team_batting_order_map"] and at_bat_event["team_batting_order_map"][player["mlb_id"]] == at_bat_event["batting_order_pos"] - 1:
+                            elif player["mlb_id"] in at_bat_event["team_batting_order_map"] and at_bat_event["team_batting_order_map"][player["mlb_id"]] == (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) - 1:
                                 has_match = True
                         else:
-                            if player["mlb_id"] in at_bat_event["team_batting_order_map"] and at_bat_event["team_batting_order_map"][player["mlb_id"]] == at_bat_event["batting_order_pos"] - 1:
+                            if player["mlb_id"] in at_bat_event["team_batting_order_map"] and at_bat_event["team_batting_order_map"][player["mlb_id"]] == (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) - 1:
                                 has_match = True
-                            elif player["mlb_id"] in at_bat_event["team_batting_order_map"] and at_bat_event["team_batting_order_map"][player["mlb_id"]] == at_bat_event["batting_order_pos"] + 1:
+                            elif player["mlb_id"] in at_bat_event["team_batting_order_map"] and at_bat_event["team_batting_order_map"][player["mlb_id"]] == (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) + 1:
                                 has_match = True
 
                 if not has_match:
@@ -27402,10 +27400,10 @@ def handle_da_mlb_quals(row, event_name, at_bat_event, qualifiers, player_data, 
                 return False
 
             match_batter_posses = set()
-            if at_bat_event["batting_order_pos"] == 9:
+            if (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 9:
                 match_batter_posses.add(1)
             else:
-                match_batter_posses.add(at_bat_event["batting_order_pos"] + 1)
+                match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) + 1)
 
             match_batters = set()
             for match_batter in at_bat_event["team_batting_order_map"]:
@@ -27428,10 +27426,10 @@ def handle_da_mlb_quals(row, event_name, at_bat_event, qualifiers, player_data, 
                 return False
 
             match_batter_posses = set()
-            if at_bat_event["batting_order_pos"] == 9:
+            if (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 9:
                 match_batter_posses.add(1)
             else:
-                match_batter_posses.add(at_bat_event["batting_order_pos"] + 1)
+                match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) + 1)
 
             match_batters = set()
             for match_batter in at_bat_event["team_batting_order_map"]:
@@ -27454,10 +27452,10 @@ def handle_da_mlb_quals(row, event_name, at_bat_event, qualifiers, player_data, 
                 return False
 
             match_batter_posses = set()
-            if at_bat_event["batting_order_pos"] == 9:
+            if (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 9:
                 match_batter_posses.add(1)
             else:
-                match_batter_posses.add(at_bat_event["batting_order_pos"] + 1)
+                match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) + 1)
 
             match_batters = set()
             for match_batter in at_bat_event["team_batting_order_map"]:
@@ -27480,10 +27478,10 @@ def handle_da_mlb_quals(row, event_name, at_bat_event, qualifiers, player_data, 
                 return False
 
             match_batter_posses = set()
-            if at_bat_event["batting_order_pos"] == 9:
+            if (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 9:
                 match_batter_posses.add(1)
             else:
-                match_batter_posses.add(at_bat_event["batting_order_pos"] + 1)
+                match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) + 1)
 
             match_batters = set()
             for match_batter in at_bat_event["team_batting_order_map"]:
@@ -27506,10 +27504,10 @@ def handle_da_mlb_quals(row, event_name, at_bat_event, qualifiers, player_data, 
                 return False
 
             match_batter_posses = set()
-            if at_bat_event["batting_order_pos"] == 1:
+            if (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 1:
                 match_batter_posses.add(9)
             else:
-                match_batter_posses.add(at_bat_event["batting_order_pos"] - 1)
+                match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) - 1)
 
             match_batters = set()
             for match_batter in at_bat_event["team_batting_order_map"]:
@@ -27532,10 +27530,10 @@ def handle_da_mlb_quals(row, event_name, at_bat_event, qualifiers, player_data, 
                 return False
 
             match_batter_posses = set()
-            if at_bat_event["batting_order_pos"] == 1:
+            if (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 1:
                 match_batter_posses.add(9)
             else:
-                match_batter_posses.add(at_bat_event["batting_order_pos"] - 1)
+                match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) - 1)
 
             match_batters = set()
             for match_batter in at_bat_event["team_batting_order_map"]:
@@ -27558,10 +27556,10 @@ def handle_da_mlb_quals(row, event_name, at_bat_event, qualifiers, player_data, 
                 return False
 
             match_batter_posses = set()
-            if at_bat_event["batting_order_pos"] == 1:
+            if (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 1:
                 match_batter_posses.add(9)
             else:
-                match_batter_posses.add(at_bat_event["batting_order_pos"] - 1)
+                match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) - 1)
 
             match_batters = set()
             for match_batter in at_bat_event["team_batting_order_map"]:
@@ -27584,10 +27582,10 @@ def handle_da_mlb_quals(row, event_name, at_bat_event, qualifiers, player_data, 
                 return False
 
             match_batter_posses = set()
-            if at_bat_event["batting_order_pos"] == 1:
+            if (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 1:
                 match_batter_posses.add(9)
             else:
-                match_batter_posses.add(at_bat_event["batting_order_pos"] - 1)
+                match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) - 1)
 
             match_batters = set()
             for match_batter in at_bat_event["team_batting_order_map"]:
@@ -27610,15 +27608,15 @@ def handle_da_mlb_quals(row, event_name, at_bat_event, qualifiers, player_data, 
                 return False
 
             match_batter_posses = set()
-            if at_bat_event["batting_order_pos"] == 1:
+            if (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 1:
                 match_batter_posses.add(9)
                 match_batter_posses.add(2)
-            elif at_bat_event["batting_order_pos"] == 9:
+            elif (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 9:
                 match_batter_posses.add(1)
                 match_batter_posses.add(8)
             else:
-                match_batter_posses.add(at_bat_event["batting_order_pos"] + 1)
-                match_batter_posses.add(at_bat_event["batting_order_pos"] - 1)
+                match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) + 1)
+                match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) - 1)
 
             match_batters = set()
             for match_batter in at_bat_event["team_batting_order_map"]:
@@ -27641,15 +27639,15 @@ def handle_da_mlb_quals(row, event_name, at_bat_event, qualifiers, player_data, 
                 return False
 
             match_batter_posses = set()
-            if at_bat_event["batting_order_pos"] == 1:
+            if (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 1:
                 match_batter_posses.add(9)
                 match_batter_posses.add(2)
-            elif at_bat_event["batting_order_pos"] == 9:
+            elif (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 9:
                 match_batter_posses.add(1)
                 match_batter_posses.add(8)
             else:
-                match_batter_posses.add(at_bat_event["batting_order_pos"] + 1)
-                match_batter_posses.add(at_bat_event["batting_order_pos"] - 1)
+                match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) + 1)
+                match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) - 1)
 
             match_batters = set()
             for match_batter in at_bat_event["team_batting_order_map"]:
@@ -27672,15 +27670,15 @@ def handle_da_mlb_quals(row, event_name, at_bat_event, qualifiers, player_data, 
                 return False
 
             match_batter_posses = set()
-            if at_bat_event["batting_order_pos"] == 1:
+            if (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 1:
                 match_batter_posses.add(9)
                 match_batter_posses.add(2)
-            elif at_bat_event["batting_order_pos"] == 9:
+            elif (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 9:
                 match_batter_posses.add(1)
                 match_batter_posses.add(8)
             else:
-                match_batter_posses.add(at_bat_event["batting_order_pos"] + 1)
-                match_batter_posses.add(at_bat_event["batting_order_pos"] - 1)
+                match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) + 1)
+                match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) - 1)
 
             match_batters = set()
             for match_batter in at_bat_event["team_batting_order_map"]:
@@ -27703,15 +27701,15 @@ def handle_da_mlb_quals(row, event_name, at_bat_event, qualifiers, player_data, 
                 return False
 
             match_batter_posses = set()
-            if at_bat_event["batting_order_pos"] == 1:
+            if (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 1:
                 match_batter_posses.add(9)
                 match_batter_posses.add(2)
-            elif at_bat_event["batting_order_pos"] == 9:
+            elif (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 9:
                 match_batter_posses.add(1)
                 match_batter_posses.add(8)
             else:
-                match_batter_posses.add(at_bat_event["batting_order_pos"] + 1)
-                match_batter_posses.add(at_bat_event["batting_order_pos"] - 1)
+                match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) + 1)
+                match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) - 1)
 
             match_batters = set()
             for match_batter in at_bat_event["team_batting_order_map"]:
@@ -27734,10 +27732,10 @@ def handle_da_mlb_quals(row, event_name, at_bat_event, qualifiers, player_data, 
                 return False
 
             match_batter_posses = set()
-            if at_bat_event["batting_order_pos"] == 9:
+            if (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 9:
                 match_batter_posses.add(1)
             else:
-                match_batter_posses.add(at_bat_event["batting_order_pos"] + 1)
+                match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) + 1)
 
             match_batters = set()
             for match_batter in at_bat_event["team_batting_order_map"]:
@@ -27760,10 +27758,10 @@ def handle_da_mlb_quals(row, event_name, at_bat_event, qualifiers, player_data, 
                 return False
 
             match_batter_posses = set()
-            if at_bat_event["batting_order_pos"] == 9:
+            if (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 9:
                 match_batter_posses.add(1)
             else:
-                match_batter_posses.add(at_bat_event["batting_order_pos"] + 1)
+                match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) + 1)
 
             match_batters = set()
             for match_batter in at_bat_event["team_batting_order_map"]:
@@ -27786,10 +27784,10 @@ def handle_da_mlb_quals(row, event_name, at_bat_event, qualifiers, player_data, 
                 return False
 
             match_batter_posses = set()
-            if at_bat_event["batting_order_pos"] == 9:
+            if (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 9:
                 match_batter_posses.add(1)
             else:
-                match_batter_posses.add(at_bat_event["batting_order_pos"] + 1)
+                match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) + 1)
 
             match_batters = set()
             for match_batter in at_bat_event["team_batting_order_map"]:
@@ -27812,10 +27810,10 @@ def handle_da_mlb_quals(row, event_name, at_bat_event, qualifiers, player_data, 
                 return False
 
             match_batter_posses = set()
-            if at_bat_event["batting_order_pos"] == 9:
+            if (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 9:
                 match_batter_posses.add(1)
             else:
-                match_batter_posses.add(at_bat_event["batting_order_pos"] + 1)
+                match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) + 1)
 
             match_batters = set()
             for match_batter in at_bat_event["team_batting_order_map"]:
@@ -27838,10 +27836,10 @@ def handle_da_mlb_quals(row, event_name, at_bat_event, qualifiers, player_data, 
                 return False
 
             match_batter_posses = set()
-            if at_bat_event["batting_order_pos"] == 1:
+            if (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 1:
                 match_batter_posses.add(9)
             else:
-                match_batter_posses.add(at_bat_event["batting_order_pos"] - 1)
+                match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) - 1)
 
             match_batters = set()
             for match_batter in at_bat_event["team_batting_order_map"]:
@@ -27864,10 +27862,10 @@ def handle_da_mlb_quals(row, event_name, at_bat_event, qualifiers, player_data, 
                 return False
 
             match_batter_posses = set()
-            if at_bat_event["batting_order_pos"] == 1:
+            if (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 1:
                 match_batter_posses.add(9)
             else:
-                match_batter_posses.add(at_bat_event["batting_order_pos"] - 1)
+                match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) - 1)
 
             match_batters = set()
             for match_batter in at_bat_event["team_batting_order_map"]:
@@ -27890,10 +27888,10 @@ def handle_da_mlb_quals(row, event_name, at_bat_event, qualifiers, player_data, 
                 return False
 
             match_batter_posses = set()
-            if at_bat_event["batting_order_pos"] == 1:
+            if (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 1:
                 match_batter_posses.add(9)
             else:
-                match_batter_posses.add(at_bat_event["batting_order_pos"] - 1)
+                match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) - 1)
 
             match_batters = set()
             for match_batter in at_bat_event["team_batting_order_map"]:
@@ -27916,10 +27914,10 @@ def handle_da_mlb_quals(row, event_name, at_bat_event, qualifiers, player_data, 
                 return False
 
             match_batter_posses = set()
-            if at_bat_event["batting_order_pos"] == 1:
+            if (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 1:
                 match_batter_posses.add(9)
             else:
-                match_batter_posses.add(at_bat_event["batting_order_pos"] - 1)
+                match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) - 1)
 
             match_batters = set()
             for match_batter in at_bat_event["team_batting_order_map"]:
@@ -27942,15 +27940,15 @@ def handle_da_mlb_quals(row, event_name, at_bat_event, qualifiers, player_data, 
                 return False
 
             match_batter_posses = set()
-            if at_bat_event["batting_order_pos"] == 1:
+            if (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 1:
                 match_batter_posses.add(9)
                 match_batter_posses.add(2)
-            elif at_bat_event["batting_order_pos"] == 9:
+            elif (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 9:
                 match_batter_posses.add(1)
                 match_batter_posses.add(8)
             else:
-                match_batter_posses.add(at_bat_event["batting_order_pos"] + 1)
-                match_batter_posses.add(at_bat_event["batting_order_pos"] - 1)
+                match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) + 1)
+                match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) - 1)
 
             match_batters = set()
             for match_batter in at_bat_event["team_batting_order_map"]:
@@ -27973,15 +27971,15 @@ def handle_da_mlb_quals(row, event_name, at_bat_event, qualifiers, player_data, 
                 return False
 
             match_batter_posses = set()
-            if at_bat_event["batting_order_pos"] == 1:
+            if (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 1:
                 match_batter_posses.add(9)
                 match_batter_posses.add(2)
-            elif at_bat_event["batting_order_pos"] == 9:
+            elif (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 9:
                 match_batter_posses.add(1)
                 match_batter_posses.add(8)
             else:
-                match_batter_posses.add(at_bat_event["batting_order_pos"] + 1)
-                match_batter_posses.add(at_bat_event["batting_order_pos"] - 1)
+                match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) + 1)
+                match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) - 1)
 
             match_batters = set()
             for match_batter in at_bat_event["team_batting_order_map"]:
@@ -28004,15 +28002,15 @@ def handle_da_mlb_quals(row, event_name, at_bat_event, qualifiers, player_data, 
                 return False
 
             match_batter_posses = set()
-            if at_bat_event["batting_order_pos"] == 1:
+            if (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 1:
                 match_batter_posses.add(9)
                 match_batter_posses.add(2)
-            elif at_bat_event["batting_order_pos"] == 9:
+            elif (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 9:
                 match_batter_posses.add(1)
                 match_batter_posses.add(8)
             else:
-                match_batter_posses.add(at_bat_event["batting_order_pos"] + 1)
-                match_batter_posses.add(at_bat_event["batting_order_pos"] - 1)
+                match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) + 1)
+                match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) - 1)
 
             match_batters = set()
             for match_batter in at_bat_event["team_batting_order_map"]:
@@ -28035,15 +28033,15 @@ def handle_da_mlb_quals(row, event_name, at_bat_event, qualifiers, player_data, 
                 return False
 
             match_batter_posses = set()
-            if at_bat_event["batting_order_pos"] == 1:
+            if (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 1:
                 match_batter_posses.add(9)
                 match_batter_posses.add(2)
-            elif at_bat_event["batting_order_pos"] == 9:
+            elif (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 9:
                 match_batter_posses.add(1)
                 match_batter_posses.add(8)
             else:
-                match_batter_posses.add(at_bat_event["batting_order_pos"] + 1)
-                match_batter_posses.add(at_bat_event["batting_order_pos"] - 1)
+                match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) + 1)
+                match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) - 1)
 
             match_batters = set()
             for match_batter in at_bat_event["team_batting_order_map"]:
@@ -28066,10 +28064,10 @@ def handle_da_mlb_quals(row, event_name, at_bat_event, qualifiers, player_data, 
                 return False
 
             match_batter_posses = set()
-            if at_bat_event["batting_order_pos"] == 9:
+            if (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 9:
                 match_batter_posses.add(1)
             else:
-                match_batter_posses.add(at_bat_event["batting_order_pos"] + 1)
+                match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) + 1)
 
             match_batters = set()
             for match_batter in at_bat_event["team_batting_order_map"]:
@@ -28092,10 +28090,10 @@ def handle_da_mlb_quals(row, event_name, at_bat_event, qualifiers, player_data, 
                 return False
 
             match_batter_posses = set()
-            if at_bat_event["batting_order_pos"] == 9:
+            if (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 9:
                 match_batter_posses.add(1)
             else:
-                match_batter_posses.add(at_bat_event["batting_order_pos"] + 1)
+                match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) + 1)
 
             match_batters = set()
             for match_batter in at_bat_event["team_batting_order_map"]:
@@ -28118,10 +28116,10 @@ def handle_da_mlb_quals(row, event_name, at_bat_event, qualifiers, player_data, 
                 return False
 
             match_batter_posses = set()
-            if at_bat_event["batting_order_pos"] == 9:
+            if (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 9:
                 match_batter_posses.add(1)
             else:
-                match_batter_posses.add(at_bat_event["batting_order_pos"] + 1)
+                match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) + 1)
 
             match_batters = set()
             for match_batter in at_bat_event["team_batting_order_map"]:
@@ -28144,10 +28142,10 @@ def handle_da_mlb_quals(row, event_name, at_bat_event, qualifiers, player_data, 
                 return False
 
             match_batter_posses = set()
-            if at_bat_event["batting_order_pos"] == 1:
+            if (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 1:
                 match_batter_posses.add(9)
             else:
-                match_batter_posses.add(at_bat_event["batting_order_pos"] - 1)
+                match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) - 1)
 
             match_batters = set()
             for match_batter in at_bat_event["team_batting_order_map"]:
@@ -28170,10 +28168,10 @@ def handle_da_mlb_quals(row, event_name, at_bat_event, qualifiers, player_data, 
                 return False
 
             match_batter_posses = set()
-            if at_bat_event["batting_order_pos"] == 1:
+            if (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 1:
                 match_batter_posses.add(9)
             else:
-                match_batter_posses.add(at_bat_event["batting_order_pos"] - 1)
+                match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) - 1)
 
             match_batters = set()
             for match_batter in at_bat_event["team_batting_order_map"]:
@@ -28196,10 +28194,10 @@ def handle_da_mlb_quals(row, event_name, at_bat_event, qualifiers, player_data, 
                 return False
 
             match_batter_posses = set()
-            if at_bat_event["batting_order_pos"] == 1:
+            if (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 1:
                 match_batter_posses.add(9)
             else:
-                match_batter_posses.add(at_bat_event["batting_order_pos"] - 1)
+                match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) - 1)
 
             match_batters = set()
             for match_batter in at_bat_event["team_batting_order_map"]:
@@ -28222,15 +28220,15 @@ def handle_da_mlb_quals(row, event_name, at_bat_event, qualifiers, player_data, 
                 return False
 
             match_batter_posses = set()
-            if at_bat_event["batting_order_pos"] == 1:
+            if (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 1:
                 match_batter_posses.add(9)
                 match_batter_posses.add(2)
-            elif at_bat_event["batting_order_pos"] == 9:
+            elif (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 9:
                 match_batter_posses.add(1)
                 match_batter_posses.add(8)
             else:
-                match_batter_posses.add(at_bat_event["batting_order_pos"] + 1)
-                match_batter_posses.add(at_bat_event["batting_order_pos"] - 1)
+                match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) + 1)
+                match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) - 1)
 
             match_batters = set()
             for match_batter in at_bat_event["team_batting_order_map"]:
@@ -28253,15 +28251,15 @@ def handle_da_mlb_quals(row, event_name, at_bat_event, qualifiers, player_data, 
                 return False
 
             match_batter_posses = set()
-            if at_bat_event["batting_order_pos"] == 1:
+            if (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 1:
                 match_batter_posses.add(9)
                 match_batter_posses.add(2)
-            elif at_bat_event["batting_order_pos"] == 9:
+            elif (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 9:
                 match_batter_posses.add(1)
                 match_batter_posses.add(8)
             else:
-                match_batter_posses.add(at_bat_event["batting_order_pos"] + 1)
-                match_batter_posses.add(at_bat_event["batting_order_pos"] - 1)
+                match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) + 1)
+                match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) - 1)
 
             match_batters = set()
             for match_batter in at_bat_event["team_batting_order_map"]:
@@ -28284,15 +28282,15 @@ def handle_da_mlb_quals(row, event_name, at_bat_event, qualifiers, player_data, 
                 return False
 
             match_batter_posses = set()
-            if at_bat_event["batting_order_pos"] == 1:
+            if (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 1:
                 match_batter_posses.add(9)
                 match_batter_posses.add(2)
-            elif at_bat_event["batting_order_pos"] == 9:
+            elif (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 9:
                 match_batter_posses.add(1)
                 match_batter_posses.add(8)
             else:
-                match_batter_posses.add(at_bat_event["batting_order_pos"] + 1)
-                match_batter_posses.add(at_bat_event["batting_order_pos"] - 1)
+                match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) + 1)
+                match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) - 1)
 
             match_batters = set()
             for match_batter in at_bat_event["team_batting_order_map"]:
@@ -28405,11 +28403,11 @@ def handle_da_mlb_quals(row, event_name, at_bat_event, qualifiers, player_data, 
         for index, qual_object in enumerate(qualifiers["Batting Behind"]):
             has_match = False
             for player in qual_object["values"]:
-                if at_bat_event["batting_order_pos"] == 1:
+                if (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 1:
                     if player["mlb_id"] in at_bat_event["team_batting_order_map"] and at_bat_event["team_batting_order_map"][player["mlb_id"]] == 9:
                         has_match = True
                 else:
-                    if player["mlb_id"] in at_bat_event["team_batting_order_map"] and at_bat_event["team_batting_order_map"][player["mlb_id"]] == at_bat_event["batting_order_pos"] - 1:
+                    if player["mlb_id"] in at_bat_event["team_batting_order_map"] and at_bat_event["team_batting_order_map"][player["mlb_id"]] == (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) - 1:
                         has_match = True
 
             if qual_object["negate"]:
@@ -28424,11 +28422,11 @@ def handle_da_mlb_quals(row, event_name, at_bat_event, qualifiers, player_data, 
         for index, qual_object in enumerate(qualifiers["Batting In Front Of"]):
             has_match = False
             for player in qual_object["values"]:
-                if at_bat_event["batting_order_pos"] == 9:
+                if (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 9:
                     if player["mlb_id"] in at_bat_event["team_batting_order_map"] and at_bat_event["team_batting_order_map"][player["mlb_id"]] == 1:
                         has_match = True
                 else:
-                    if player["mlb_id"] in at_bat_event["team_batting_order_map"] and at_bat_event["team_batting_order_map"][player["mlb_id"]] == at_bat_event["batting_order_pos"] + 1:
+                    if player["mlb_id"] in at_bat_event["team_batting_order_map"] and at_bat_event["team_batting_order_map"][player["mlb_id"]] == (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) + 1:
                         has_match = True
 
             if qual_object["negate"]:
@@ -28443,20 +28441,20 @@ def handle_da_mlb_quals(row, event_name, at_bat_event, qualifiers, player_data, 
         for index, qual_object in enumerate(qualifiers["Batting Next To"]):
             has_match = False
             for player in qual_object["values"]:
-                if at_bat_event["batting_order_pos"] == 1:
+                if (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 1:
                     if player["mlb_id"] in at_bat_event["team_batting_order_map"] and at_bat_event["team_batting_order_map"][player["mlb_id"]] == 9:
                         has_match = True
-                    elif player["mlb_id"] in at_bat_event["team_batting_order_map"] and at_bat_event["team_batting_order_map"][player["mlb_id"]] == at_bat_event["batting_order_pos"] + 1:
+                    elif player["mlb_id"] in at_bat_event["team_batting_order_map"] and at_bat_event["team_batting_order_map"][player["mlb_id"]] == (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) + 1:
                         has_match = True
-                elif at_bat_event["batting_order_pos"] == 9:
+                elif (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 9:
                     if player["mlb_id"] in at_bat_event["team_batting_order_map"] and at_bat_event["team_batting_order_map"][player["mlb_id"]] == 1:
                         has_match = True
-                    elif player["mlb_id"] in at_bat_event["team_batting_order_map"] and at_bat_event["team_batting_order_map"][player["mlb_id"]] == at_bat_event["batting_order_pos"] - 1:
+                    elif player["mlb_id"] in at_bat_event["team_batting_order_map"] and at_bat_event["team_batting_order_map"][player["mlb_id"]] == (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) - 1:
                         has_match = True
                 else:
-                    if player["mlb_id"] in at_bat_event["team_batting_order_map"] and at_bat_event["team_batting_order_map"][player["mlb_id"]] == at_bat_event["batting_order_pos"] - 1:
+                    if player["mlb_id"] in at_bat_event["team_batting_order_map"] and at_bat_event["team_batting_order_map"][player["mlb_id"]] == (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) - 1:
                         has_match = True
-                    elif player["mlb_id"] in at_bat_event["team_batting_order_map"] and at_bat_event["team_batting_order_map"][player["mlb_id"]] == at_bat_event["batting_order_pos"] + 1:
+                    elif player["mlb_id"] in at_bat_event["team_batting_order_map"] and at_bat_event["team_batting_order_map"][player["mlb_id"]] == (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) + 1:
                         has_match = True
 
             if qual_object["negate"]:
