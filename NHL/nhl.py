@@ -20776,6 +20776,32 @@ def calculate_toi(row, qualifiers, player_game_info, player_id, saved_row_data, 
 
                     shift_event["periodTimeRemaining"] = time_to_use - shift_event["periodTime"]
 
+                    if "Career Minute" in qualifiers or "Career Minute Reversed" in qualifiers or "Game Minute" in qualifiers or "Game Minute Reversed" in qualifiers or "Career Shot" in qualifiers or "Career Shot Reversed" in qualifiers or "Career Period" in qualifiers or "Career Period Reversed" in qualifiers or "Game Shot" in qualifiers or "Game Shot Reversed" in qualifiers:
+                        game_minutes, game_minutes_reversed = determine_toi(player_game_info["shift_data"], shift_event["period"], second, player_id, True)
+                        career_minutes = sub_minutes + game_minutes
+                        career_minutes_reversed = sub_minutes_reversed + game_minutes_reversed
+
+                        shift_event["game_minute"] = game_minutes
+                        shift_event["career_minute"] = career_minutes
+                        shift_event["game_minute_reversed"] = game_minutes_reversed
+                        shift_event["career_minute_reversed"] = career_minutes_reversed
+
+                        game_shots, game_shots_reversed = determine_shots(player_game_info, shift_event["period"], second, qualifiers)
+                        career_shots = sub_shots + game_shots
+                        career_shots_reversed = sub_shots_reversed + game_shots_reversed
+
+                        shift_event["game_shot"] = game_shots
+                        shift_event["career_shot"] = career_shots
+                        shift_event["game_shot_reversed"] = game_shots_reversed
+                        shift_event["career_shot_reversed"] = career_shots_reversed
+
+                        game_periods, game_periods_reversed = determine_periods(player_game_info, shift_event["period"])
+                        career_periods = sub_periods + game_periods
+                        career_periods_reversed = sub_periods_reversed + game_periods_reversed
+
+                        shift_event["career_period"] = career_periods
+                        shift_event["career_period_reversed"] = career_periods_reversed
+
                     if perform_metadata_qual(None, shift_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], is_toi=True, is_off_ice=True):
                         row["offITOI"] += 1
                 
