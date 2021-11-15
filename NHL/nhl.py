@@ -11273,8 +11273,10 @@ def sub_handle_the_quals(players, qualifier, qual_str, player_str, time_frame, k
 def determine_player_str(qualifier, player_str, time_frame, qual_str):
     player_str = unescape_string(player_str)
             
+    is_pre_query = False
     if not "<" in player_str:
         player_str = "<" + player_str + ">"
+        is_pre_query = True
     player_str = "!nhlcompare " + player_str
 
     if "values" in qualifier:
@@ -11290,9 +11292,9 @@ def determine_player_str(qualifier, player_str, time_frame, qual_str):
     else:
         player_str += " [" + qualifier["time_frame_str"] + "]"
 
-    if player_str.endswith(" []") and time_frame["type"] == "date":
+    if is_pre_query and time_frame["type"] == "date":
         bracket_index = player_str.index("]")
-        player_str = player_str[:bracket_index] + get_time_str(time_frame["time_start"], False) + " to " + get_time_str(time_frame["time_end"], False) + player_str[bracket_index:]
+        player_str = player_str[:bracket_index] + " " + get_time_str(time_frame["time_start"], False) + " to " + get_time_str(time_frame["time_end"], False) + player_str[bracket_index:]
     
     bracket_index = player_str.index("]")
     if not qual_str in ["Season Sub Query", "Season After Sub Query", "Season Before Sub Query"]:
