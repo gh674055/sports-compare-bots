@@ -5416,6 +5416,39 @@ qualifier_map = {
     "Facing Stat" : {},
     "Facing AL Stat" : {},
     "Facing NL Stat" : {},
+    "Batting Behind Stat Rank" : {},
+    "Batting Behind League Stat Rank" : {},
+    "Batting Behind AL Stat Rank" : {},
+    "Batting Behind NL Stat Rank" : {},
+    "Batting Behind Stat Percent" : {},
+    "Batting Behind League Stat Percent" : {},
+    "Batting Behind AL Stat Percent" : {},
+    "Batting Behind NL Stat Percent" : {},
+    "Batting Behind Stat" : {},
+    "Batting Behind AL Stat" : {},
+    "Batting Behind NL Stat" : {},
+    "Batting In Front Of Stat Rank" : {},
+    "Batting In Front Of League Stat Rank" : {},
+    "Batting In Front Of AL Stat Rank" : {},
+    "Batting In Front Of NL Stat Rank" : {},
+    "Batting In Front Of Stat Percent" : {},
+    "Batting In Front Of League Stat Percent" : {},
+    "Batting In Front Of AL Stat Percent" : {},
+    "Batting In Front Of NL Stat Percent" : {},
+    "Batting In Front Of Stat" : {},
+    "Batting In Front Of AL Stat" : {},
+    "Batting In Front Of NL Stat" : {},
+    "Batting Next To Stat Rank" : {},
+    "Batting Next To League Stat Rank" : {},
+    "Batting Next To AL Stat Rank" : {},
+    "Batting Next To NL Stat Rank" : {},
+    "Batting Next To Stat Percent" : {},
+    "Batting Next To League Stat Percent" : {},
+    "Batting Next To AL Stat Percent" : {},
+    "Batting Next To NL Stat Percent" : {},
+    "Batting Next To Stat" : {},
+    "Batting Next To AL Stat" : {},
+    "Batting Next To NL Stat" : {},
     "Driven In" : {},
     "Batted In" : {},
     "Back To Back With" : {},
@@ -6744,6 +6777,152 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 else:
                                     playoffs = "Only"
                                 time_frame = re.sub(r"\s+", " ", time_frame.replace(last_match.group(0), "", 1)).strip()
+
+                        last_match = re.finditer(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?((?:facing|batting-in-front-of|batting-in-front|batting-ahead|batting-ahead-of|batting-behind|batting-behind-of|batting-next-to)(?:-nl|-al|-league)?-stat(?:-rank|-percent(?:age)?)?(?:-reversed?)?:[\S-]+)\b", time_frame)
+                        for m in last_match:
+                            qualifier_obj = {}
+                            
+                            negate_str = m.group(1)
+                            if negate_str:
+                                qualifier_obj["negate"] = True
+                            else:
+                                qualifier_obj["negate"] = False
+                            
+                            qualifier_str = m.group(2)
+                            qual_str = qualifier_str.split(":")[0]
+                            qual_type = ""
+
+                            if "-league" in qual_str:
+                                qual_str = "League " + qual_type
+                            elif "-al" in qual_str:
+                                qual_str = "AL " + qual_type
+                            elif "-nl" in qual_str:
+                                qual_str = "NL " + qual_type
+
+                            if qual_str.startswith("facing"):
+                                qual_type = "Facing " + qual_type
+                            elif qual_str.startswith("batting-in-front") or qual_str.startswith("batting-ahead"):
+                                qual_type += "Batting In Front Of " + qual_type
+                                player_type["da_type"] = "Batter"
+                            elif qual_str.startswith("batting-behind"):
+                                qual_type += "Batting Behind " + qual_type
+                                player_type["da_type"] = "Batter"
+                            elif qual_str.startswith("batting-next-to"):
+                                qual_type += "Batting Next To " + qual_type
+                                player_type["da_type"] = "Batter"
+
+                            if "-stat-rank" in qual_str:
+                                qual_type += "Stat Rank"
+                                extra_stats.add("current-stats")
+                            elif  "-stat-percent" in qual_str:
+                                qual_type += "Stat Percent"
+                                extra_stats.add("current-stats")
+                            elif "-stat" in qual_str:
+                                qual_type += "Stat"
+                                extra_stats.add("current-stats")
+
+                            if "Stat Rank" in qual_type or "Stat Percent" in qual_type:
+                                reverse = "-reverse" in qual_str
+                                qualifier_obj["values"] = []
+
+                                split_vals = re.split(r"(?<!\\)\:", qualifier_str)
+                                qualifier_obj["include_all_players"] = False
+                                if len(split_vals) > 2:
+                                    qualifier_obj["include_all_players"] = True
+                                qualifier_obj["reverse"] = reverse
+                                
+                                all_vals = re.split(r"(?<!\\)\;", split_vals[1])
+                                
+                                for val in all_vals:
+                                    split_vals = re.split(r"(?<!\\)\=", val)
+                                    stat = unescape_string(split_vals[0])
+
+                                    split_vals = re.split(r"(?<!\\)\-", split_vals[1])
+                                    if qual_type.endswith("Percent"):
+                                        if not split_vals[0].endswith("%"):
+                                            split_vals[0] += "%"
+                                        if len(split_vals) == 1:
+                                            qualifier_obj["values"].append({
+                                                "stat" : stat,
+                                                "start_val" : 0,
+                                                "end_val" : ordinal_to_number(split_vals[0])
+                                            })
+                                        else:
+                                            if not split_vals[1].endswith("%"):
+                                                split_vals[1] += "%"
+                                            qualifier_obj["values"].append({
+                                                "stat" : stat,
+                                                "start_val" : ordinal_to_number(split_vals[0]),
+                                                "end_val" : ordinal_to_number(split_vals[1])
+                                            })
+
+                                    else:
+                                        if len(split_vals) == 1:
+                                            qualifier_obj["values"].append({
+                                                "stat" : stat,
+                                                "start_val" : 1,
+                                                "end_val" : ordinal_to_number(split_vals[0])
+                                            })
+                                        else:
+                                            qualifier_obj["values"].append({
+                                                "stat" : stat,
+                                                "start_val" : ordinal_to_number(split_vals[0]),
+                                                "end_val" : ordinal_to_number(split_vals[1])
+                                            })
+                            elif "Stat" in qual_type:
+                                qualifier_obj["values"] = []
+
+                                split_vals = re.split(r"(?<!\\)\:", qualifier_str)
+                                qualifier_obj["include_all_players"] = False
+                                if len(split_vals) > 2:
+                                    qualifier_obj["include_all_players"] = True
+                                
+                                all_vals = re.split(r"(?<!\\)\;", split_vals[1])
+                                
+                                for val in all_vals:
+                                    split_vals = re.split(r"(?<!\\)\=", val)
+                                    stat = unescape_string(split_vals[0])
+
+                                    if len(split_vals) == 1:
+                                        qualifier_obj["values"].append({
+                                            "stat" : stat,
+                                            "start_val" : 1,
+                                            "end_val" : float("inf")
+                                        })
+                                    else:
+                                        split_vals = re.split(r"(?<!\\)\-", split_vals[1])
+                                        if len(split_vals) == 1:
+                                            the_val = ordinal_to_number(split_vals[0])
+                                            if the_val > 0:
+                                                qualifier_obj["values"].append({
+                                                    "stat" : stat,
+                                                    "start_val" : the_val,
+                                                    "end_val" : float("inf")
+                                                })
+                                            elif the_val < 0:
+                                                qualifier_obj["values"].append({
+                                                    "stat" : stat,
+                                                    "start_val" : -float("inf"),
+                                                    "end_val" : the_val
+                                                })
+                                            else:
+                                                qualifier_obj["values"].append({
+                                                    "stat" : stat,
+                                                    "start_val" : the_val,
+                                                    "end_val" : the_val
+                                                })
+                                        else:
+                                            qualifier_obj["values"].append({
+                                                "stat" : stat,
+                                                "start_val" : ordinal_to_number(split_vals[0]),
+                                                "end_val" : ordinal_to_number(split_vals[1])
+                                            })
+                            
+                            if not qual_type in qualifiers:
+                                qualifiers[qual_type] = []
+                            qualifiers[qual_type].append(qualifier_obj)
+
+                            time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
                         
                         last_match = re.finditer(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?((?:(?:playing|starting)-with|(?:playing|starting)-against|(?:playing|starting)-same-game|prv-w|previous-playing-with|prv-a|previous-playing-against|upc-w|upcoming-playing-with|upc-a|upcoming-playing-against|(?:playing|starting)-same-opponents?|(?:playing|starting)-same-dates?|batting-against|pitching-against|driven-in|batted-in|back-to-back-with|back-to-back|batting-in-front-of|batting-in-front|batting-ahead|batting-ahead-of|batting-behind|batting-behind-of|batting-next-to|caught-by|stealing-on|on-field-with|on-field-against))\b", time_frame)
                         for m in last_match:
@@ -7215,7 +7394,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
 
                                 time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
 
-                        last_match = re.finditer(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?(current-season-age|first-games?|current-games?|first-seasons?|current-seasons?|last-games?|last-seasons?|first-starts?|last-starts?|first-innings|last-innings|current-innings?|first-plate-appearances?|last-plate-appearances?|current-plate-appearances?|first-batters?-faced|last-batters?-faced|current-batters?-faced|first-pitches|last-pitch(?:es)|current-pitch(?:es)?|first-at-bats?|last-at-bats?|current-at-bats?|current-age|rook|rookie|facing-former-franchise|facing-former-team|decision|interleague|intraleague|interdivision|intradivision|current-winning-opponents?|current-losing-opponents?|current-tied-opponents?|current-winning-or-tied-opponents?|current-losing-or-tied-opponents?|winning-opponents?|losing-opponents?|tied-opponents?|winning-or-tied-opponents?|losing-or-tied-opponents?|playoff-opponents?|ws-winner-opponent|pennant-winner-opponent|division-winner-opponent|current-winning-teams?|current-losing-teams?|current-tied-teams?|current-winning-or-tied-teams?|current-losing-or-tied-teams?|winning-teams?|losing-teams?|tied-teams?|winning-or-tied-teams?|losing-or-tied-teams?|playoff-teams?|ws-winner-team|pennant-winner-team|division-winner-team|elimination-or-clinching|clinching-or-elimination|elimination(?:-games?)?|eliminating(?:-games?)?|clinching(?:-games?)?|clinch(?:-games?)?|winner-take-all|behind-in-series|ahead-in-series|even-in-series|leading(:?-in-game)?|trailing(:?-in-game)?|tied(:?-in-game)?|force-dates|first-half|second-half|pre-all-star|post-all-star|series-games?:[\w-]+|t:[\w-]+|o:[\w-]+|m:[\w-]+|d:[\w-]+|dt:[\w-]+|team-franchise:[\w-]+|opponent-franchise:[\w-]+|franchise:[\w-]+|tf:[\w-]+|of:[\w-]+|f:[\w-]+|tv-network:[\w-]+|radio-network:[\w-]+|raw-tv-network:[\w-]+|raw-radio-network:[\w-]+|national-tv-network:[\w-]+|national-raw-tv-network:[\w-]+|any-national-tv-network:[\w-]+|any-national-raw-tv-network:[\w-]+|local-event-time:[\S-]+|local-start-time:[\S-]+|previous-event(?:-type)?:[\w-]+|previous-exact-event(?:-type)?:[\w-]+|upcoming-player-event(?:-type)?:[\w-]+|upcoming-exact-player-event(?:-type)?:[\w-]+|previous-player-event(?:-type)?:[\w-]+|previous-exact-player-event(?:-type)?:[\w-]+|upcoming-event(?:-type)?:[\w-]+|upcoming-exact-event(?:-type)?:[\w-]+|event(?:-type)?:[\w-]+|exact-event(?:-type)?:[\w-]+|team:[\w-]+|opponent:[\w-]+|time-zone:[\w-]+|exact-time-zone:[\w-]+|state:[\w-]+|exact-state:[\w-]+|month:[\w-]+|day:[\w-]+|date:[\w-]+|gm:[\w-]+|game:[\w-]+|season-gm:[\w-]+|season-game:[\w-]+|season:[\w-]+|season-reversed:[\w-]+|tmgm:[\w-]+|team-game:[\w-]+|crgm:[\w-]+|career-game-reversed:[\w-]+|team-game-reversed:[\w-]+|season-game-reversed:[\w-]+|game-reversed:[\w-]+|career-game:[\w-]+|dr:[\w-]+|starts-days-rest:[\w-]+|days-rest:[\w-]+|prv-dr:[\w-]+|previous-days-rest:[\w-]+|batter-plate-appearance:[\w-]+|pitcher-batters-faced:[\w-]+|batter-plate-appearance-reversed:[\w-]+|pitcher-batters-faced-reversed:[\w-]+|pitch-count:[\w-]+|starting-pitch-count:[\w-]+|innings-pitched:[\S-]+|ending-innings-pitched:[\S-]+|team-pitch-count:[\w-]+|game-pitch-count:[\w-]+|at-bat-pitch-count:[\w-]+|upc-dr:[\w-]+|upcoming-starts-days-rest:[\w-]+|upcoming-days-rest:[\w-]+|gr:[\w-]+|game-days-rest:[\w-]+|start-days-rest:[\w-]+|games-rest:[\w-]+|starts-rest:[\w-]+|prv-gr:[\w-]+|previous-games-rest:[\w-]+|start-days-in-a-row:[\w-]+|game-days-in-a-row:[\w-]+|days-in-a-row:[\w-]+|games-in-a-row:[\w-]+|starts-in-a-row:[\w-]+|game-number:[\w-]+|season-number:[\w-]+|number:[\w-]+|upc-gr:[\w-]+|upcoming-games-rest:[\w-]+|prv-t:[\w-]+|prv-o:[\w-]+|upc-t:[\w-]+|upc-o:[\w-]+|upcoming-same-opponent|previous-same-opponent|previous-franchise:[\w-]+|previous-team-franchise:[\w-]+|previous-opponent-franchise:[\w-]+|upcoming-franchise:[\w-]+|upcoming-team-franchise:[\w-]+|upcoming-opponent-franchise:[\w-]+|previous-team:[\w-]+|previous-opponent:[\w-]+|upcoming-team:[\w-]+|upcoming-opponent:[\w-]+|lg:[\w-]+|team-league:[\w-]+|opp-lg:[\w-]+|opponent-league:[\w-]+|previous-team-league:[\w-]+|previous-opponent-league:[\w-]+|upcoming-team-league:[\w-]+|upcoming-team-league:[\w-]+|team-division:[\S-]+|opponent-division:[\S-]+|primary-season-position:[\S-]+|season-position:[\S-]+|position:[\S-]+|hit-location:[\S-]+|exact-hit-location:[\S-]+|facing-primary-position:[\S-]+|facing-main-position:[\S-]+|facing-position:[\S-]+|primary-game-position:[\S-]+|game-position:[\S-]+|season-st:[\S-]+|season-stat:[\S-]+|event-stat:[\S-]+|event-stat-reversed:[\S-]+|event-stats:[\S-]+|event-stats-reversed:[\S-]+|inning-stat:[\S-]+|season-prv-st:[\S-]+|season-previous-stat:[\S-]+|season-upc-st:[\S-]+|season-upcoming-stat:[\S-]+|st:[\S-]+|facing-stat:[\S-]+|facing-nl-stat:[\S-]+|facing-al-stat:[\S-]+|stat:[\S-]+|prv-st:[\S-]+|previous-stat:[\S-]+|upc-st:[\S-]+|upcoming-stat:[\S-]+|min-st:[\S-]+|min-stat:[\S-]+|max-st:[\S-]+|max-stat:[\S-]+|totalgames-st:[\S-]+|totalgames-stat:[\S-]+|max-str:[\S-]+|max-streak:[\S-]+|max-stretch:[\S-]+|ctn-str:[\S-]+|count-streak:[\S-]+|q:[\S-]+|quickest:[\S-]+|s:[\S-]+|slowest:[\S-]+|dh(?::[((?:f|s|b|e)-]+)?|double-header(?::[((?:first|second|both|either)-]+)?|world(?:(?: |-)series|(?: |-)finals?|(?: |-)championship|(?: |-)round)?|ws|(?:(?:(?:american|al|national|nl)(?:(?: |-)league)?)(?: |-)?)?(?:championship|league)(?:(?: |-)series|(?: |-)finals?|(?: |-)championship|(?: |-)round)?|(?:(?:(?:american|al|national|nl)(?:(?: |-)league)?)(?: |-)?)?cs|(?:(?:(?:american|al|national|nl)(?:(?: |-)league)?)(?: |-)?)?division(?:(?: |-)series|(?: |-)finals?|(?: |-)championship|(?: |-)round)?|(?:(?:(?:american|al|national|nl)(?:(?: |-)league)?)(?: |-)?)?ds|(?:(?:(?:american|al|national|nl)(?:(?: |-)league)?)(?: |-)?)?wild card(?:(?: |-)series|(?: |-)finals?|(?: |-)championship|(?: |-)round)?|(?:(?:(?:american|al|national|nl)(?:(?: |-)league)?)(?: |-)?)?wc|summer|spring|winter|fall|autumn|away|home|road|bunt(?:ing)?|previous-away|previous-home|previous-road|upcoming-away|upcoming-home|upcoming-road|-?starts?|-?started|-?starting|-?ignore-starts?|-?ignore-started?|-?ignore-starting|finished|win(?:s)?|loss(?:es)?|tie(?:s)?|w|l|tprv-w|prv-l|prv-t|upc-w|upc-l|upc-t|previous-win(?:s)?|previous-loss(?:es)?|previous-tie(?:s)?|upcoming-win(?:s)?|upcoming-loss(?:es)?|upcoming-tie(?:s)?|prv-t-w|prv-t-l|prv-t-t|upc-t-w|upc-t-l|upc-t-t|previous-team-win(?:s)?|previous-team-loss(?:es)?|previous-team-tie(?:s)?|upcoming-team-win(?:s)?|upcoming-team-loss(?:es)?|upcoming-team-tie(?:s)?|save(?: |-)situations?|run-support:[\w-]+|final-team-score:[\w-]+|men-on-base:[\w-]+|time-through-lineup:[\w-]+|time-facing-opponent:[\w-]+|men-in-scoring-number:[\w-]+|men-on-base-number:[\w-]+|final-opponent-score:[\w-]+|final-score-margin:[\S-]+|final-score-difference:[\S-]+|ending-team-score:[\w-]+|ending-opponent-score:[\w-]+|ending-score-margin:[\S-]+|ending-score-difference:[\S-]+|team-score:[\w-]+|entered-score:[\w-]+|opponent-score:[\w-]+|score-margin-entered:[\S-]+|score-margin:[\S-]+|score-difference-entered:[\S-]+|score-difference:[\S-]+|wind:[\w-]+|inning-entered:[\w-]+|men-on-base-entered:[\w-]+|men-in-scoring-entered:[\w-]+|outs-entered:[\w-]+|bases-empty|men-on-base|risp|any-national-game|national-game|pitcher-first-batter-faced|batter-first-plate-appearance|pitcher-last-batter-faced|batter-last-plate-appearance|day-after-pitching|day-after-hitting|day-before-pitching|day-before-hitting|with-new-team|with-new-franchise|changing-team|changing-franchise|even-year|odd-year|activated-from-(?:il|dl)|activated|two-seam-fastball|4-seam-fastball|2-seam-fastball|four-seam-fastball|4-seam|2-seam|four-seam|two-seam|cutter|intentional-ball|sinker|slider|curveball|splitter|knuckle-curve|pitchout|knuckle-ball|changeup|screwball|eephus|automatic-ball|slow-curve|forkball|facing-position-player|facing-pitcher|stealing-second|stealing-third|stealing-home|fastball|out-of-zone|in-zone|breaking|offspeed|facing-lefty|facing-righty|batting-lefty|batting-righty|pitching-lefty|pitching-righty|pinch-hitting|facing-starter|facing-reliever|leading-off-inning|leading-off-whole-game|leading-off-game|leading-off|inning-started|swung-at-first-pitch|first-pitch|batter-ahead|pitcher-ahead|even-count|after-batter-ahead|after-pitcher-ahead|after-even-count|go-ahead-or-game-tying-opp|go-ahead-or-game-tying|game-tying-or-go-ahead-opp|game-tying-or-go-ahead|game-tying-opp|close|late|game-tying|go-ahead-opp|go-ahead|game-winning|last-inning-entered|last-inning|last-out|last-batter|extra-innings|inside-the-park-hr|walk-off-opp|walk-off|tying-on-deck|tying-at-bat|tying-in-scoring|tying-on-base|winning-on-deck|winning-at-bat|winning-in-scoring|winning-on-base|bottom-inning-entered|top-inning-entered|bottom-inning|top-inning|full-count|man-on-first|man-on-second|man-on-third|bases-loaded|after-swinging-on-strikes:[\w-]+|after-swinging-on-balls:[\w-]+|swinging-on-strikes:[\w-]+|swinging-on-balls:[\w-]+|after-strikes:[\w-]+|after-balls:[\w-]+|strikes:[\w-]+|balls:[\w-]+|ending-outs:[\w-]+|play-outs:[\w-]+|outs-remaining-entered:[\w-]+|outs-remaining:[\w-]+|outs:[\w-]+|runs:[\w-]+|rbis:[\w-]+|number-drove-in:[\w-]+|pitch-speed:[\S-]+|pitch-zone:[\w-]+|pitch-spin:[\S-]+|exit-velocity:[\S-]+|hit-distance:[\S-]+|launch-angle:[\S-]+|inning:[\S-]+|inning-reversed:[\S-]+|scheduled-inning-reversed:[\S-]+|pitching-against-batting-order:[\w-]+|count:[\S-]+|final-score:[\S-]+|previous-score:[\S-]+|upcoming-score:[\S-]+|ending-score:[\S-]+|score:[\S-]+|after-count:[\S-]+|after-swinging-on-count:[\S-]+|swinging-on-count:[\S-]+|temperature:[\w-]+|grass|artificial|rain|cloudy|partly-cloudy|overcast|drizzle|sunny|dome|roof-closed|clear|previous-team-score:[\w-]+|previous-opponent-score:[\w-]+|previous-score-margin:[\S-]+|previous-score-difference:[\S-]+|upcoming-team-score:[\w-]+|upcoming-opponent-score:[\w-]+|upcoming-score-margin:[\S-]+|upcoming-score-difference:[\S-]+|series-team-wins:[\w-]+|series-opponent-wins:[\w-]+|series-score-margin:[\w-]+|series-score-difference:[\w-]+|series-score:[\w-]+|years?:[\w-]+|batting-order(?:-pos(?:ition)?|-spot)?:[\w-]+|opponent-runs?-rank:[\S-]+|current-team-wins:[\w-]+|current-team-losses:[\w-]+|current-team-games-over-500:[\S-]+|current-opponent-wins:[\w-]+|current-opponent-losses:[\w-]+|current-opponent-games-over-500:[\S-]+|team-wins:[\w-]+|team-losses:[\w-]+|team-games-over-500:[\S-]+|opponent-wins:[\w-]+|opponent-losses:[\w-]+|opponent-games-over-500:[\S-]+|opponent-standings-rank:[\S-]+|opponent-runs?-allowed-rank:[\S-]+|opponent-wrc\\\+-rank:[\S-]+|opponent-avg-rank:[\S-]+|opponent-slg-rank:[\S-]+|opponent-obp-rank:[\S-]+|opponent-ops-rank:[\S-]+|opponent-era--rank:[\S-]+|opponent-era-rank:[\S-]+|current-opponent-win(?:ning)?-percent:[\S-]+|opponent-win(?:ning)?-percent:[\S-]+|team-runs?-rank:[\S-]+|team-standings-rank:[\S-]+|team-runs?-allowed-rank:[\S-]+|team-wrc\\\+-rank:[\S-]+|team-avg-rank:[\S-]+|team-slg-rank:[\S-]+|team-obp-rank:[\S-]+|team-ops-rank:[\S-]+|team-era--rank:[\S-]+|team-era-rank:[\S-]+|facing-stat-rank:[\S-]+|facing-stat-rank-reversed?:[\S-]+|facing-league-stat-rank:[\S-]+|facing-league-stat-rank-reversed?:[\S-]+|facing-al-stat-rank:[\S-]+|facing-al-stat-rank-reversed?:[\S-]+|facing-nl-stat-rank:[\S-]+|facing-nl-stat-percent-reversed?:[\S-]+|facing-stat-percent:[\S-]+|facing-stat-rank-reversed?:[\S-]+|facing-league-stat-percent:[\S-]+|facing-league-stat-percent-reversed?:[\S-]+|facing-al-stat-percent:[\S-]+|facing-al-stat-percent-reversed?:[\S-]+|facing-nl-stat-percent:[\S-]+|facing-nl-stat-percent-reversed?:[\S-]+|current-team-win(?:ning)?-percent:[\S-]+|team-win(?:ning)?-percent:[\S-]+|birthda(?:y|te)|day|night|pitching|batting|hitting|" + all_months_re + r"|" + all_days_re + r")\b", time_frame)
+                        last_match = re.finditer(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?(current-season-age|first-games?|current-games?|first-seasons?|current-seasons?|last-games?|last-seasons?|first-starts?|last-starts?|first-innings|last-innings|current-innings?|first-plate-appearances?|last-plate-appearances?|current-plate-appearances?|first-batters?-faced|last-batters?-faced|current-batters?-faced|first-pitches|last-pitch(?:es)|current-pitch(?:es)?|first-at-bats?|last-at-bats?|current-at-bats?|current-age|rook|rookie|facing-former-franchise|facing-former-team|decision|interleague|intraleague|interdivision|intradivision|current-winning-opponents?|current-losing-opponents?|current-tied-opponents?|current-winning-or-tied-opponents?|current-losing-or-tied-opponents?|winning-opponents?|losing-opponents?|tied-opponents?|winning-or-tied-opponents?|losing-or-tied-opponents?|playoff-opponents?|ws-winner-opponent|pennant-winner-opponent|division-winner-opponent|current-winning-teams?|current-losing-teams?|current-tied-teams?|current-winning-or-tied-teams?|current-losing-or-tied-teams?|winning-teams?|losing-teams?|tied-teams?|winning-or-tied-teams?|losing-or-tied-teams?|playoff-teams?|ws-winner-team|pennant-winner-team|division-winner-team|elimination-or-clinching|clinching-or-elimination|elimination(?:-games?)?|eliminating(?:-games?)?|clinching(?:-games?)?|clinch(?:-games?)?|winner-take-all|behind-in-series|ahead-in-series|even-in-series|leading(:?-in-game)?|trailing(:?-in-game)?|tied(:?-in-game)?|force-dates|first-half|second-half|pre-all-star|post-all-star|series-games?:[\w-]+|t:[\w-]+|o:[\w-]+|m:[\w-]+|d:[\w-]+|dt:[\w-]+|team-franchise:[\w-]+|opponent-franchise:[\w-]+|franchise:[\w-]+|tf:[\w-]+|of:[\w-]+|f:[\w-]+|tv-network:[\w-]+|radio-network:[\w-]+|raw-tv-network:[\w-]+|raw-radio-network:[\w-]+|national-tv-network:[\w-]+|national-raw-tv-network:[\w-]+|any-national-tv-network:[\w-]+|any-national-raw-tv-network:[\w-]+|local-event-time:[\S-]+|local-start-time:[\S-]+|previous-event(?:-type)?:[\w-]+|previous-exact-event(?:-type)?:[\w-]+|upcoming-player-event(?:-type)?:[\w-]+|upcoming-exact-player-event(?:-type)?:[\w-]+|previous-player-event(?:-type)?:[\w-]+|previous-exact-player-event(?:-type)?:[\w-]+|upcoming-event(?:-type)?:[\w-]+|upcoming-exact-event(?:-type)?:[\w-]+|event(?:-type)?:[\w-]+|exact-event(?:-type)?:[\w-]+|team:[\w-]+|opponent:[\w-]+|time-zone:[\w-]+|exact-time-zone:[\w-]+|state:[\w-]+|exact-state:[\w-]+|month:[\w-]+|day:[\w-]+|date:[\w-]+|gm:[\w-]+|game:[\w-]+|season-gm:[\w-]+|season-game:[\w-]+|season:[\w-]+|season-reversed:[\w-]+|tmgm:[\w-]+|team-game:[\w-]+|crgm:[\w-]+|career-game-reversed:[\w-]+|team-game-reversed:[\w-]+|season-game-reversed:[\w-]+|game-reversed:[\w-]+|career-game:[\w-]+|dr:[\w-]+|starts-days-rest:[\w-]+|days-rest:[\w-]+|prv-dr:[\w-]+|previous-days-rest:[\w-]+|batter-plate-appearance:[\w-]+|pitcher-batters-faced:[\w-]+|batter-plate-appearance-reversed:[\w-]+|pitcher-batters-faced-reversed:[\w-]+|pitch-count:[\w-]+|starting-pitch-count:[\w-]+|innings-pitched:[\S-]+|ending-innings-pitched:[\S-]+|team-pitch-count:[\w-]+|game-pitch-count:[\w-]+|at-bat-pitch-count:[\w-]+|upc-dr:[\w-]+|upcoming-starts-days-rest:[\w-]+|upcoming-days-rest:[\w-]+|gr:[\w-]+|game-days-rest:[\w-]+|start-days-rest:[\w-]+|games-rest:[\w-]+|starts-rest:[\w-]+|prv-gr:[\w-]+|previous-games-rest:[\w-]+|start-days-in-a-row:[\w-]+|game-days-in-a-row:[\w-]+|days-in-a-row:[\w-]+|games-in-a-row:[\w-]+|starts-in-a-row:[\w-]+|game-number:[\w-]+|season-number:[\w-]+|number:[\w-]+|upc-gr:[\w-]+|upcoming-games-rest:[\w-]+|prv-t:[\w-]+|prv-o:[\w-]+|upc-t:[\w-]+|upc-o:[\w-]+|upcoming-same-opponent|previous-same-opponent|previous-franchise:[\w-]+|previous-team-franchise:[\w-]+|previous-opponent-franchise:[\w-]+|upcoming-franchise:[\w-]+|upcoming-team-franchise:[\w-]+|upcoming-opponent-franchise:[\w-]+|previous-team:[\w-]+|previous-opponent:[\w-]+|upcoming-team:[\w-]+|upcoming-opponent:[\w-]+|lg:[\w-]+|team-league:[\w-]+|opp-lg:[\w-]+|opponent-league:[\w-]+|previous-team-league:[\w-]+|previous-opponent-league:[\w-]+|upcoming-team-league:[\w-]+|upcoming-team-league:[\w-]+|team-division:[\S-]+|opponent-division:[\S-]+|primary-season-position:[\S-]+|season-position:[\S-]+|position:[\S-]+|hit-location:[\S-]+|exact-hit-location:[\S-]+|facing-primary-position:[\S-]+|facing-main-position:[\S-]+|facing-position:[\S-]+|primary-game-position:[\S-]+|game-position:[\S-]+|season-st:[\S-]+|season-stat:[\S-]+|event-stat:[\S-]+|event-stat-reversed:[\S-]+|event-stats:[\S-]+|event-stats-reversed:[\S-]+|inning-stat:[\S-]+|season-prv-st:[\S-]+|season-previous-stat:[\S-]+|season-upc-st:[\S-]+|season-upcoming-stat:[\S-]+|st:[\S-]+|stat:[\S-]+|prv-st:[\S-]+|previous-stat:[\S-]+|upc-st:[\S-]+|upcoming-stat:[\S-]+|min-st:[\S-]+|min-stat:[\S-]+|max-st:[\S-]+|max-stat:[\S-]+|totalgames-st:[\S-]+|totalgames-stat:[\S-]+|max-str:[\S-]+|max-streak:[\S-]+|max-stretch:[\S-]+|ctn-str:[\S-]+|count-streak:[\S-]+|q:[\S-]+|quickest:[\S-]+|s:[\S-]+|slowest:[\S-]+|dh(?::[((?:f|s|b|e)-]+)?|double-header(?::[((?:first|second|both|either)-]+)?|world(?:(?: |-)series|(?: |-)finals?|(?: |-)championship|(?: |-)round)?|ws|(?:(?:(?:american|al|national|nl)(?:(?: |-)league)?)(?: |-)?)?(?:championship|league)(?:(?: |-)series|(?: |-)finals?|(?: |-)championship|(?: |-)round)?|(?:(?:(?:american|al|national|nl)(?:(?: |-)league)?)(?: |-)?)?cs|(?:(?:(?:american|al|national|nl)(?:(?: |-)league)?)(?: |-)?)?division(?:(?: |-)series|(?: |-)finals?|(?: |-)championship|(?: |-)round)?|(?:(?:(?:american|al|national|nl)(?:(?: |-)league)?)(?: |-)?)?ds|(?:(?:(?:american|al|national|nl)(?:(?: |-)league)?)(?: |-)?)?wild card(?:(?: |-)series|(?: |-)finals?|(?: |-)championship|(?: |-)round)?|(?:(?:(?:american|al|national|nl)(?:(?: |-)league)?)(?: |-)?)?wc|summer|spring|winter|fall|autumn|away|home|road|bunt(?:ing)?|previous-away|previous-home|previous-road|upcoming-away|upcoming-home|upcoming-road|-?starts?|-?started|-?starting|-?ignore-starts?|-?ignore-started?|-?ignore-starting|finished|win(?:s)?|loss(?:es)?|tie(?:s)?|w|l|tprv-w|prv-l|prv-t|upc-w|upc-l|upc-t|previous-win(?:s)?|previous-loss(?:es)?|previous-tie(?:s)?|upcoming-win(?:s)?|upcoming-loss(?:es)?|upcoming-tie(?:s)?|prv-t-w|prv-t-l|prv-t-t|upc-t-w|upc-t-l|upc-t-t|previous-team-win(?:s)?|previous-team-loss(?:es)?|previous-team-tie(?:s)?|upcoming-team-win(?:s)?|upcoming-team-loss(?:es)?|upcoming-team-tie(?:s)?|save(?: |-)situations?|run-support:[\w-]+|final-team-score:[\w-]+|men-on-base:[\w-]+|time-through-lineup:[\w-]+|time-facing-opponent:[\w-]+|men-in-scoring-number:[\w-]+|men-on-base-number:[\w-]+|final-opponent-score:[\w-]+|final-score-margin:[\S-]+|final-score-difference:[\S-]+|ending-team-score:[\w-]+|ending-opponent-score:[\w-]+|ending-score-margin:[\S-]+|ending-score-difference:[\S-]+|team-score:[\w-]+|entered-score:[\w-]+|opponent-score:[\w-]+|score-margin-entered:[\S-]+|score-margin:[\S-]+|score-difference-entered:[\S-]+|score-difference:[\S-]+|wind:[\w-]+|inning-entered:[\w-]+|men-on-base-entered:[\w-]+|men-in-scoring-entered:[\w-]+|outs-entered:[\w-]+|bases-empty|men-on-base|risp|any-national-game|national-game|pitcher-first-batter-faced|batter-first-plate-appearance|pitcher-last-batter-faced|batter-last-plate-appearance|day-after-pitching|day-after-hitting|day-before-pitching|day-before-hitting|with-new-team|with-new-franchise|changing-team|changing-franchise|even-year|odd-year|activated-from-(?:il|dl)|activated|two-seam-fastball|4-seam-fastball|2-seam-fastball|four-seam-fastball|4-seam|2-seam|four-seam|two-seam|cutter|intentional-ball|sinker|slider|curveball|splitter|knuckle-curve|pitchout|knuckle-ball|changeup|screwball|eephus|automatic-ball|slow-curve|forkball|facing-position-player|facing-pitcher|stealing-second|stealing-third|stealing-home|fastball|out-of-zone|in-zone|breaking|offspeed|facing-lefty|facing-righty|batting-lefty|batting-righty|pitching-lefty|pitching-righty|pinch-hitting|facing-starter|facing-reliever|leading-off-inning|leading-off-whole-game|leading-off-game|leading-off|inning-started|swung-at-first-pitch|first-pitch|batter-ahead|pitcher-ahead|even-count|after-batter-ahead|after-pitcher-ahead|after-even-count|go-ahead-or-game-tying-opp|go-ahead-or-game-tying|game-tying-or-go-ahead-opp|game-tying-or-go-ahead|game-tying-opp|close|late|game-tying|go-ahead-opp|go-ahead|game-winning|last-inning-entered|last-inning|last-out|last-batter|extra-innings|inside-the-park-hr|walk-off-opp|walk-off|tying-on-deck|tying-at-bat|tying-in-scoring|tying-on-base|winning-on-deck|winning-at-bat|winning-in-scoring|winning-on-base|bottom-inning-entered|top-inning-entered|bottom-inning|top-inning|full-count|man-on-first|man-on-second|man-on-third|bases-loaded|after-swinging-on-strikes:[\w-]+|after-swinging-on-balls:[\w-]+|swinging-on-strikes:[\w-]+|swinging-on-balls:[\w-]+|after-strikes:[\w-]+|after-balls:[\w-]+|strikes:[\w-]+|balls:[\w-]+|ending-outs:[\w-]+|play-outs:[\w-]+|outs-remaining-entered:[\w-]+|outs-remaining:[\w-]+|outs:[\w-]+|runs:[\w-]+|rbis:[\w-]+|number-drove-in:[\w-]+|pitch-speed:[\S-]+|pitch-zone:[\w-]+|pitch-spin:[\S-]+|exit-velocity:[\S-]+|hit-distance:[\S-]+|launch-angle:[\S-]+|inning:[\S-]+|inning-reversed:[\S-]+|scheduled-inning-reversed:[\S-]+|pitching-against-batting-order:[\w-]+|count:[\S-]+|final-score:[\S-]+|previous-score:[\S-]+|upcoming-score:[\S-]+|ending-score:[\S-]+|score:[\S-]+|after-count:[\S-]+|after-swinging-on-count:[\S-]+|swinging-on-count:[\S-]+|temperature:[\w-]+|grass|artificial|rain|cloudy|partly-cloudy|overcast|drizzle|sunny|dome|roof-closed|clear|previous-team-score:[\w-]+|previous-opponent-score:[\w-]+|previous-score-margin:[\S-]+|previous-score-difference:[\S-]+|upcoming-team-score:[\w-]+|upcoming-opponent-score:[\w-]+|upcoming-score-margin:[\S-]+|upcoming-score-difference:[\S-]+|series-team-wins:[\w-]+|series-opponent-wins:[\w-]+|series-score-margin:[\w-]+|series-score-difference:[\w-]+|series-score:[\w-]+|years?:[\w-]+|batting-order(?:-pos(?:ition)?|-spot)?:[\w-]+|opponent-runs?-rank:[\S-]+|current-team-wins:[\w-]+|current-team-losses:[\w-]+|current-team-games-over-500:[\S-]+|current-opponent-wins:[\w-]+|current-opponent-losses:[\w-]+|current-opponent-games-over-500:[\S-]+|team-wins:[\w-]+|team-losses:[\w-]+|team-games-over-500:[\S-]+|opponent-wins:[\w-]+|opponent-losses:[\w-]+|opponent-games-over-500:[\S-]+|opponent-standings-rank:[\S-]+|opponent-runs?-allowed-rank:[\S-]+|opponent-wrc\\\+-rank:[\S-]+|opponent-avg-rank:[\S-]+|opponent-slg-rank:[\S-]+|opponent-obp-rank:[\S-]+|opponent-ops-rank:[\S-]+|opponent-era--rank:[\S-]+|opponent-era-rank:[\S-]+|current-opponent-win(?:ning)?-percent:[\S-]+|opponent-win(?:ning)?-percent:[\S-]+|team-runs?-rank:[\S-]+|team-standings-rank:[\S-]+|team-runs?-allowed-rank:[\S-]+|team-wrc\\\+-rank:[\S-]+|team-avg-rank:[\S-]+|team-slg-rank:[\S-]+|team-obp-rank:[\S-]+|team-ops-rank:[\S-]+|team-era--rank:[\S-]+|team-era-rank:[\S-]+|current-team-win(?:ning)?-percent:[\S-]+|team-win(?:ning)?-percent:[\S-]+|birthda(?:y|te)|day|night|pitching|batting|hitting|" + all_months_re + r"|" + all_days_re + r")\b", time_frame)
                         for m in last_match:
                             qualifier_obj = {}
                             
@@ -9160,168 +9339,6 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                         qualifier_obj["values"]["start_val"] = qualifier_obj["values"]["start_val"] / 100
                                     if qualifier_obj["values"]["end_val"] > 1:
                                         qualifier_obj["values"]["end_val"] = qualifier_obj["values"]["end_val"] / 100
-                            elif qualifier_str.startswith("facing-stat-rank") or qualifier_str.startswith("facing-league-stat-rank") or qualifier_str.startswith("facing-al-stat-rank") or qualifier_str.startswith("facing-nl-stat-rank") or qualifier_str.startswith("facing-stat-percent") or qualifier_str.startswith("facing-league-stat-percent") or qualifier_str.startswith("facing-al-stat-percent") or qualifier_str.startswith("facing-nl-stat-percent"):
-                                reverse = False
-                                if qualifier_str.startswith("facing-stat-rank:"):
-                                    qual_str = "facing-stat-rank:"
-                                    qual_type = "Facing Stat Rank"
-                                    extra_stats.add("current-stats")
-                                elif qualifier_str.startswith("facing-stat-rank-reversed:"):
-                                    qual_str = "facing-stat-rank-reversed:"
-                                    qual_type = "Facing Stat Rank"
-                                    extra_stats.add("current-stats")
-                                    reverse = True
-                                elif qualifier_str.startswith("facing-stat-rank-reverse:"):
-                                    qual_str = "facing-stat-rank-reverse:"
-                                    qual_type = "Facing Stat Rank"
-                                    extra_stats.add("current-stats")
-                                    reverse = True
-                                elif qualifier_str.startswith("facing-league-stat-rank:"):
-                                    qual_str = "facing-league-stat-rank:"
-                                    qual_type = "Facing League Stat Rank"
-                                    extra_stats.add("current-stats")
-                                elif qualifier_str.startswith("facing-league-stat-rank-reversed:"):
-                                    qual_str = "facing-league-stat-rank-reversed:"
-                                    qual_type = "Facing League Stat Rank"
-                                    extra_stats.add("current-stats")
-                                    reverse = True
-                                elif qualifier_str.startswith("facing-league-stat-rank-reverse:"):
-                                    qual_str = "facing-league-stat-rank-reverse:"
-                                    qual_type = "Facing League Stat Rank"
-                                    extra_stats.add("current-stats")
-                                    reverse = True
-                                elif qualifier_str.startswith("facing-al-stat-rank:"):
-                                    qual_str = "facing-al-stat-rank:"
-                                    qual_type = "Facing AL Stat Rank"
-                                    extra_stats.add("current-stats")
-                                elif qualifier_str.startswith("facing-al-stat-rank-reversed:"):
-                                    qual_str = "facing-al-stat-rank-reversed:"
-                                    qual_type = "Facing AL Stat Rank"
-                                    extra_stats.add("current-stats")
-                                    reverse = True
-                                elif qualifier_str.startswith("facing-al-stat-rank-reverse:"):
-                                    qual_str = "facing-al-stat-rank-reverse:"
-                                    qual_type = "Facing AL Stat Rank"
-                                    extra_stats.add("current-stats")
-                                    reverse = True
-                                elif qualifier_str.startswith("facing-nl-stat-rank:"):
-                                    qual_str = "facing-nl-stat-rank:"
-                                    qual_type = "Facing NL Stat Rank"
-                                    extra_stats.add("current-stats")
-                                elif qualifier_str.startswith("facing-nl-stat-rank-reversed:"):
-                                    qual_str = "facing-nl-stat-rank-reversed:"
-                                    qual_type = "Facing NL Stat Rank"
-                                    extra_stats.add("current-stats")
-                                    reverse = True
-                                elif qualifier_str.startswith("facing-nl-stat-rank-reverse:"):
-                                    qual_str = "facing-nl-stat-rank-reverse:"
-                                    qual_type = "Facing NL Stat Rank"
-                                    extra_stats.add("current-stats")
-                                    reverse = True
-                                elif qualifier_str.startswith("facing-stat-percent:"):
-                                    qual_str = "facing-stat-percent:"
-                                    qual_type = "Facing Stat Percent"
-                                    extra_stats.add("current-stats")
-                                elif qualifier_str.startswith("facing-stat-percent-reversed:"):
-                                    qual_str = "facing-stat-percent-reversed:"
-                                    qual_type = "Facing Stat Percent"
-                                    extra_stats.add("current-stats")
-                                    reverse = True
-                                elif qualifier_str.startswith("facing-stat-percent-reverse:"):
-                                    qual_str = "facing-stat-percent-reverse:"
-                                    qual_type = "Facing Stat Percent"
-                                    extra_stats.add("current-stats")
-                                    reverse = True
-                                elif qualifier_str.startswith("facing-league-stat-percent:"):
-                                    qual_str = "facing-league-stat-percent:"
-                                    qual_type = "Facing League Stat Percent"
-                                    extra_stats.add("current-stats")
-                                elif qualifier_str.startswith("facing-league-stat-percent-reversed:"):
-                                    qual_str = "facing-league-stat-percent-reversed:"
-                                    qual_type = "Facing League Stat Percent"
-                                    extra_stats.add("current-stats")
-                                    reverse = True
-                                elif qualifier_str.startswith("facing-league-stat-percent-reverse:"):
-                                    qual_str = "facing-league-stat-percent-reverse:"
-                                    qual_type = "Facing League Stat Percent"
-                                    extra_stats.add("current-stats")
-                                    reverse = True
-                                elif qualifier_str.startswith("facing-al-stat-percent:"):
-                                    qual_str = "facing-al-stat-percent:"
-                                    qual_type = "Facing AL Stat Percent"
-                                    extra_stats.add("current-stats")
-                                elif qualifier_str.startswith("facing-al-stat-percent-reversed:"):
-                                    qual_str = "facing-al-stat-percent-reversed:"
-                                    qual_type = "Facing AL Stat Percent"
-                                    extra_stats.add("current-stats")
-                                    reverse = True
-                                elif qualifier_str.startswith("facing-al-stat-percent-reverse:"):
-                                    qual_str = "facing-al-stat-percent-reverse:"
-                                    qual_type = "Facing AL Stat Percent"
-                                    extra_stats.add("current-stats")
-                                    reverse = True
-                                elif qualifier_str.startswith("facing-nl-stat-percent:"):
-                                    qual_str = "facing-nl-stat-percent:"
-                                    qual_type = "Facing NL Stat Percent"
-                                    extra_stats.add("current-stats")
-                                elif qualifier_str.startswith("facing-nl-stat-percent-reversed:"):
-                                    qual_str = "facing-nl-stat-percent-reversed:"
-                                    qual_type = "Facing NL Stat Percent"
-                                    extra_stats.add("current-stats")
-                                    reverse = True
-                                elif qualifier_str.startswith("facing-nl-stat-percent-reverse:"):
-                                    qual_str = "facing-nl-stat-percent-reverse:"
-                                    qual_type = "Facing NL Stat Percent"
-                                    extra_stats.add("current-stats")
-                                    reverse = True
-
-                                qualifier_obj["values"] = []
-
-                                split_vals = re.split(r"(?<!\\)\:", qualifier_str)
-                                qualifier_obj["include_all_players"] = False
-                                if len(split_vals) > 2:
-                                    qualifier_obj["include_all_players"] = True
-                                qualifier_obj["reverse"] = reverse
-                                
-                                all_vals = re.split(r"(?<!\\)\;", split_vals[1])
-                                
-                                for val in all_vals:
-                                    split_vals = re.split(r"(?<!\\)\=", val)
-                                    stat = unescape_string(split_vals[0])
-
-                                    split_vals = re.split(r"(?<!\\)\-", split_vals[1])
-                                    if qual_type.endswith("Percent"):
-                                        if not split_vals[0].endswith("%"):
-                                            split_vals[0] += "%"
-                                        if len(split_vals) == 1:
-                                            qualifier_obj["values"].append({
-                                                "stat" : stat,
-                                                "start_val" : 0,
-                                                "end_val" : ordinal_to_number(split_vals[0])
-                                            })
-                                        else:
-                                            if not split_vals[1].endswith("%"):
-                                                split_vals[1] += "%"
-                                            qualifier_obj["values"].append({
-                                                "stat" : stat,
-                                                "start_val" : ordinal_to_number(split_vals[0]),
-                                                "end_val" : ordinal_to_number(split_vals[1])
-                                            })
-
-                                    else:
-                                        if len(split_vals) == 1:
-                                            qualifier_obj["values"].append({
-                                                "stat" : stat,
-                                                "start_val" : 1,
-                                                "end_val" : ordinal_to_number(split_vals[0])
-                                            })
-                                        else:
-                                            qualifier_obj["values"].append({
-                                                "stat" : stat,
-                                                "start_val" : ordinal_to_number(split_vals[0]),
-                                                "end_val" : ordinal_to_number(split_vals[1])
-                                            })
-
                             elif qualifier_str.startswith("team-runs-rank:") or qualifier_str.startswith("team-standings-rank:") or qualifier_str.startswith("team-runs-allowed-rank:") or qualifier_str.startswith("team-run-rank:") or qualifier_str.startswith("team-run-allowed-rank:") or qualifier_str.startswith("team-wrc\+-rank:") or qualifier_str.startswith("team-avg-rank:") or qualifier_str.startswith("team-obp-rank:") or qualifier_str.startswith("team-slg-rank:") or qualifier_str.startswith("team-ops-rank:") or qualifier_str.startswith("team-era--rank:") or qualifier_str.startswith("team-era-rank:") or qualifier_str.startswith("team-wins:") or qualifier_str.startswith("team-losses:") or qualifier_str.startswith("current-team-wins:") or qualifier_str.startswith("current-team-losses:") or qualifier_str.startswith("team-win-percent:") or qualifier_str.startswith("team-winning-percent:") or qualifier_str.startswith("current-team-winning-percent:") or qualifier_str.startswith("current-team-win-percent:"):
                                 if qualifier_str.startswith("team-wins:"):
                                     qual_str = "team-wins:"
@@ -9616,67 +9633,6 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                     "end_val" : time_end
                                 }
                                 qualifier_obj["stat"] = stat
-                            elif qualifier.startswith("facing-stat:") or qualifier.startswith("facing-nl-stat:") or qualifier.startswith("facing-al-stat:"):
-                                if qualifier_str.startswith("facing-stat:"):
-                                    qual_str = "facing-stat:"
-                                    qual_type = "Facing Stat"
-                                    extra_stats.add("current-stats")
-                                elif qualifier_str.startswith("facing-al-stat:"):
-                                    qual_str = "facing-al-stat:"
-                                    qual_type = "Facing AL Stat"
-                                    extra_stats.add("current-stats")
-                                elif qualifier_str.startswith("facing-nl-stat:"):
-                                    qual_str = "facing-nl-stat:"
-                                    qual_type = "Facing NL Stat"
-                                    extra_stats.add("current-stats")
-
-                                qualifier_obj["values"] = []
-
-                                split_vals = re.split(r"(?<!\\)\:", qualifier_str)
-                                qualifier_obj["include_all_players"] = False
-                                if len(split_vals) > 2:
-                                    qualifier_obj["include_all_players"] = True
-                                
-                                all_vals = re.split(r"(?<!\\)\;", split_vals[1])
-                                
-                                for val in all_vals:
-                                    split_vals = re.split(r"(?<!\\)\=", val)
-                                    stat = unescape_string(split_vals[0])
-
-                                    if len(split_vals) == 1:
-                                        qualifier_obj["values"].append({
-                                            "stat" : stat,
-                                            "start_val" : 1,
-                                            "end_val" : float("inf")
-                                        })
-                                    else:
-                                        split_vals = re.split(r"(?<!\\)\-", split_vals[1])
-                                        if len(split_vals) == 1:
-                                            the_val = ordinal_to_number(split_vals[0])
-                                            if the_val > 0:
-                                                qualifier_obj["values"].append({
-                                                    "stat" : stat,
-                                                    "start_val" : the_val,
-                                                    "end_val" : float("inf")
-                                                })
-                                            elif the_val < 0:
-                                                qualifier_obj["values"].append({
-                                                    "stat" : stat,
-                                                    "start_val" : -float("inf"),
-                                                    "end_val" : the_val
-                                                })
-                                            else:
-                                                qualifier_obj["values"].append({
-                                                    "stat" : stat,
-                                                    "start_val" : the_val,
-                                                    "end_val" : the_val
-                                                })
-                                        else:
-                                            qualifier_obj["values"].append({
-                                                "stat" : stat,
-                                                "start_val" : ordinal_to_number(split_vals[0]),
-                                                "end_val" : ordinal_to_number(split_vals[1])
-                                            })
                             elif qualifier_str.startswith("min-st:") or qualifier_str.startswith("min-stat:") or qualifier_str.startswith("max-st:") or qualifier_str.startswith("max-stat:") or qualifier_str.startswith("max-str:") or qualifier_str.startswith("max-streak:") or qualifier_str.startswith("max-stretch:") or qualifier_str.startswith("ctn-str:") or qualifier_str.startswith("count-streak:") or qualifier_str.startswith("q:") or qualifier_str.startswith("quickest:") or qualifier_str.startswith("s:") or qualifier_str.startswith("slowest:"):
                                 if qualifier_str.startswith("min-st:"):
                                     qual_str = "min-st:"
@@ -13412,7 +13368,7 @@ def determine_raw_str(subbb_frame):
                                     qual_str += get_time_str(sub_qualifier["start_val"], False)
                                 else:
                                     qual_str += (get_time_str(sub_qualifier["start_val"], False)) + "-" + (get_time_str(sub_qualifier["end_val"], False))
-                        elif qualifier == "Facing Stat Rank" or qualifier == "Facing League Stat Rank" or qualifier == "Facing AL Stat Rank" or qualifier == "Facing NL Stat Rank":
+                        elif qualifier == "Facing Stat Rank" or qualifier == "Facing League Stat Rank" or qualifier == "Facing AL Stat Rank" or qualifier == "Facing NL Stat Rank" or qualifier == "Batting In Front Of Stat Rank" or qualifier == "Batting In Front Of League Stat Rank" or qualifier == "Batting In Front Of AL Stat Rank" or qualifier == "Batting In Front Of NL Stat Rank" or qualifier == "Batting Behind Stat Rank" or qualifier == "Batting Behind League Stat Rank" or qualifier == "Batting Behind AL Stat Rank" or qualifier == "Batting Behind NL Stat Rank" or qualifier == "Batting Next To Stat Rank" or qualifier == "Batting Next To League Stat Rank" or qualifier == "Batting Next To AL Stat Rank" or qualifier == "Batting Next To NL Stat Rank":
                             qual_str += sub_qualifier["stat"].upper() + "="
                             if sub_qualifier["start_val"] == sub_qualifier["end_val"]:
                                 qual_str += get_time_str(sub_qualifier["start_val"], True)
@@ -13424,7 +13380,7 @@ def determine_raw_str(subbb_frame):
                                 qual_str += " [All Players]"
                             else:
                                 qual_str += " [Qualified Players]"
-                        elif qualifier == "Facing Stat Percent" or qualifier == "Facing League Stat Percent" or qualifier == "Facing AL Stat Percent" or qualifier == "Facing NL Stat Percent":
+                        elif qualifier == "Facing Stat Percent" or qualifier == "Facing League Stat Percent" or qualifier == "Facing AL Stat Percent" or qualifier == "Facing NL Stat Percent" or qualifier == "Batting In Front Stat Percent" or qualifier == "Batting In Front League Stat Percent" or qualifier == "Batting In Front AL Stat Percent" or qualifier == "Batting In Front NL Stat Percent" or qualifier == "Batting Behind Stat Percent" or qualifier == "Batting Behind League Stat Percent" or qualifier == "Batting Behind AL Stat Percent" or qualifier == "Batting Behind NL Stat Percent" or qualifier == "Batting Next To Stat Percent" or qualifier == "Batting Next To League Stat Percent" or qualifier == "Batting Next To AL Stat Percent" or qualifier == "Batting Next To NL Stat Percent":
                             qual_str += sub_qualifier["stat"].upper() + "="
                             if sub_qualifier["start_val"] == sub_qualifier["end_val"]:
                                 qual_str += get_time_str(sub_qualifier["start_val"], False, True)
@@ -13436,7 +13392,7 @@ def determine_raw_str(subbb_frame):
                                 qual_str += " [All Players]"
                             else:
                                 qual_str += " [Qualified Players]"
-                        elif qualifier == "Facing Stat" or qualifier == "Facing NL Stat" or qualifier == "Facing AL Stat":
+                        elif qualifier == "Facing Stat" or qualifier == "Facing NL Stat" or qualifier == "Facing AL Stat" or qualifier == "Batting In Front Stat" or qualifier == "Batting In Front NL Stat" or qualifier == "Batting In Front AL Stat" or qualifier == "Batting Behind Stat" or qualifier == "Batting Behind NL Stat" or qualifier == "Batting Behind AL Stat" or qualifier == "Batting Next To Stat" or qualifier == "Batting Next To NL Stat" or qualifier == "Batting Next To AL Stat":
                             qual_str += sub_qualifier["stat"].upper() + "="
                             if sub_qualifier["start_val"] == sub_qualifier["end_val"]:
                                 qual_str += get_time_str(sub_qualifier["start_val"], False)
@@ -13777,12 +13733,12 @@ def handle_player_data(player_data, time_frame, player_type, player_page, valid_
     if "National Game" in time_frame["qualifiers"] or "Any National Game" in time_frame["qualifiers"] or "TV Network" in time_frame["qualifiers"] or "Radio Network" in time_frame["qualifiers"] or "Raw TV Network" in time_frame["qualifiers"] or "Raw Radio Network" in time_frame["qualifiers"] or "National TV Network" in time_frame["qualifiers"] or "National Raw TV Network" in time_frame["qualifiers"] or "Any National TV Network" in time_frame["qualifiers"] or "Any National Raw TV Network" in time_frame["qualifiers"] or "Current Winning Opponent" in time_frame["qualifiers"] or "Current Losing Opponent" in time_frame["qualifiers"] or "Current Tied Opponent" in time_frame["qualifiers"] or "Current Winning Or Tied Opponent" in time_frame["qualifiers"] or "Current Losing Or Tied Opponent" in time_frame["qualifiers"] or "Current Winning Team" in time_frame["qualifiers"] or "Current Losing Team" in time_frame["qualifiers"] or "Current Tied Team" in time_frame["qualifiers"] or "Current Winning Or Tied Team" in time_frame["qualifiers"] or "Current Losing Or Tied Team" in time_frame["qualifiers"] or "Current Team Win Percentage" in time_frame["qualifiers"] or "Current Opponent Win Percentage" in time_frame["qualifiers"] or "Current Team Wins" in time_frame["qualifiers"] or "Current Team Losses" in time_frame["qualifiers"] or "Current Opponent Wins" in time_frame["qualifiers"] or "Current Opponent Losses" in time_frame["qualifiers"] or "Current Team Games Over 500" in time_frame["qualifiers"] or "Current Opponent Games Over 500" in time_frame["qualifiers"]:
         all_rows, missing_games = handle_mlb_schedule_stats(all_rows, time_frame["qualifiers"], player_data, player_type, missing_games, extra_stats)
 
-    if "Facing Stat Rank" in time_frame["qualifiers"] or "Facing League Stat Rank" in time_frame["qualifiers"] or "Facing AL Stat Rank" in time_frame["qualifiers"] or "Facing NL Stat Rank" in time_frame["qualifiers"] or "Facing Stat Percent" in time_frame["qualifiers"] or "Facing League Stat Percent" in time_frame["qualifiers"] or "Facing AL Stat Percent" in time_frame["qualifiers"] or "Facing NL Stat Percent" in time_frame["qualifiers"] or "Facing Stat" in time_frame["qualifiers"] or "Facing AL Stat" in time_frame["qualifiers"] or "Facing NL Stat" in time_frame["qualifiers"]:
+    if "Facing Stat Rank" in time_frame["qualifiers"] or "Facing League Stat Rank" in time_frame["qualifiers"] or "Facing AL Stat Rank" in time_frame["qualifiers"] or "Facing NL Stat Rank" in time_frame["qualifiers"] or "Facing Stat Percent" in time_frame["qualifiers"] or "Facing League Stat Percent" in time_frame["qualifiers"] or "Facing AL Stat Percent" in time_frame["qualifiers"] or "Facing NL Stat Percent" in time_frame["qualifiers"] or "Facing Stat" in time_frame["qualifiers"] or "Facing AL Stat" in time_frame["qualifiers"] or "Facing NL Stat" in time_frame["qualifiers"] or "Batting In Front Of Stat Rank" in time_frame["qualifiers"] or "Batting In Front League Stat Rank" in time_frame["qualifiers"] or "Batting In Front AL Stat Rank" in time_frame["qualifiers"] or "Batting In Front NL Stat Rank" in time_frame["qualifiers"] or "Batting In Front Stat Percent" in time_frame["qualifiers"] or "Batting In Front League Stat Percent" in time_frame["qualifiers"] or "Batting In Front AL Stat Percent" in time_frame["qualifiers"] or "Batting In Front NL Stat Percent" in time_frame["qualifiers"] or "Batting In Front Stat" in time_frame["qualifiers"] or "Batting In Front AL Stat" in time_frame["qualifiers"] or "Batting In Front NL Stat" in time_frame["qualifiers"] or "Batting Behind Stat Rank" in time_frame["qualifiers"] or "Batting Behind League Stat Rank" in time_frame["qualifiers"] or "Batting Behind AL Stat Rank" in time_frame["qualifiers"] or "Batting Behind NL Stat Rank" in time_frame["qualifiers"] or "Batting Behind Stat Percent" in time_frame["qualifiers"] or "Batting Behind League Stat Percent" in time_frame["qualifiers"] or "Batting Behind AL Stat Percent" in time_frame["qualifiers"] or "Batting Behind NL Stat Percent" in time_frame["qualifiers"] or "Batting Behind Stat" in time_frame["qualifiers"] or "Batting Behind AL Stat" in time_frame["qualifiers"] or "Batting Behind NL Stat" in time_frame["qualifiers"] or "Batting Next To Stat Rank" in time_frame["qualifiers"] or "Batting Next League Stat Rank" in time_frame["qualifiers"] or "Batting Next AL Stat Rank" in time_frame["qualifiers"] or "Batting Next NL Stat Rank" in time_frame["qualifiers"] or "Batting Next Stat Percent" in time_frame["qualifiers"] or "Batting Next League Stat Percent" in time_frame["qualifiers"] or "Batting Next AL Stat Percent" in time_frame["qualifiers"] or "Batting Next NL Stat Percent" in time_frame["qualifiers"] or "Batting Next Stat" in time_frame["qualifiers"] or "Batting Next AL Stat" in time_frame["qualifiers"] or "Batting Next NL Stat" in time_frame["qualifiers"]:
         handle_stat_rank_stats(all_rows, time_frame["qualifiers"], player_type)
 
     if ("Event Stat" in time_frame["qualifiers"] or "Event Stat Reversed" in time_frame["qualifiers"] or "Event Stats" in time_frame["qualifiers"] or "Event Stats Reversed" in time_frame["qualifiers"]):
         all_rows, missing_games = handle_mlb_game_stats_single_thread(all_rows, time_frame["qualifiers"], player_data, player_type, missing_games, extra_stats)
-    elif has_result_stat_qual or "Facing Lefty" in time_frame["qualifiers"] or "Facing Righty" in time_frame["qualifiers"] or "Batting Lefty" in time_frame["qualifiers"] or "Batting Righty" in time_frame["qualifiers"] or "Pitching Lefty" in time_frame["qualifiers"] or "Pitching Righty" in time_frame["qualifiers"] or "Stadium" in time_frame["qualifiers"] or "Start Time" in time_frame["qualifiers"] or "Local Start Time" in time_frame["qualifiers"] or "Game Number" in time_frame["qualifiers"] or "Event Formula" in time_frame["qualifiers"] or "Exact Pitch Type" in time_frame["qualifiers"] or "Pitch Type" in time_frame["qualifiers"] or "Exact Event Type" in time_frame["qualifiers"] or "Local Event Time" in time_frame["qualifiers"] or "Event Time" in time_frame["qualifiers"] or "Event Type" in time_frame["qualifiers"] or "Previous Exact Event Type" in time_frame["qualifiers"] or "Previous Event Type" in time_frame["qualifiers"] or "Upcoming Exact Player Event Type" in time_frame["qualifiers"] or "Upcoming Player Event Type" in time_frame["qualifiers"] or "Previous Exact Player Event Type" in time_frame["qualifiers"] or "Previous Player Event Type" in time_frame["qualifiers"] or "Upcoming Exact Event Type" in time_frame["qualifiers"] or "Upcoming Event Type" in time_frame["qualifiers"] or "Exact City" in time_frame["qualifiers"] or "City" in time_frame["qualifiers"] or "Exact State" in time_frame["qualifiers"] or "State" in time_frame["qualifiers"] or "Exact Time Zone" in time_frame["qualifiers"] or "Time Zone" in time_frame["qualifiers"] or "Exact Country" in time_frame["qualifiers"] or "Country" in time_frame["qualifiers"] or "Exact Event Description" in time_frame["qualifiers"] or "Event Description" in time_frame["qualifiers"] or "Hit Trajectory" in time_frame["qualifiers"] or "Hit Hardness" in time_frame["qualifiers"] or "Exact Stadium" in time_frame["qualifiers"] or "Facing Stat Rank" in time_frame["qualifiers"] or "Facing League Stat Rank" in time_frame["qualifiers"] or "Facing AL Stat Rank" in time_frame["qualifiers"] or "Facing NL Stat Rank" in time_frame["qualifiers"] or "Facing Stat Percent" in time_frame["qualifiers"] or "Facing League Stat Percent" in time_frame["qualifiers"] or "Facing AL Stat Percent" in time_frame["qualifiers"] or "Facing NL Stat Percent" in time_frame["qualifiers"] or "Facing Stat" in time_frame["qualifiers"] or "Facing NL Stat" in time_frame["qualifiers"] or "Facing AL Stat" in time_frame["qualifiers"] or "Inning Stat" in time_frame["qualifiers"] or "Batting Against" in time_frame["qualifiers"] or "Pitching Against" in time_frame["qualifiers"] or "Batting Against First Name" in time_frame["qualifiers"] or "Pitching Against First Name" in time_frame["qualifiers"] or "Batting Against Last Name" in time_frame["qualifiers"] or "Pitching Against Last Name" in time_frame["qualifiers"] or "Driven In" in time_frame["qualifiers"] or "Batted In" in time_frame["qualifiers"] or "Back To Back With" in time_frame["qualifiers"] or "Batting In Front Of" in time_frame["qualifiers"] or "Batting Behind" in time_frame["qualifiers"] or "Batting Next To" in time_frame["qualifiers"] or "Caught By" in time_frame["qualifiers"] or "Stealing On" in time_frame["qualifiers"] or "On Field With" in time_frame["qualifiers"] or "On Field Against" in time_frame["qualifiers"] or "Position" in time_frame["qualifiers"] or "Hit Location" in time_frame["qualifiers"] or "Exact Hit Location" in time_frame["qualifiers"] or "Facing Position" in time_frame["qualifiers"] or "Facing Primary Position" in time_frame["qualifiers"] or "Facing Main Position" in time_frame["qualifiers"] or "Bases Empty" in time_frame["qualifiers"] or "Men On Base" in time_frame["qualifiers"] or "Walk Off" in time_frame["qualifiers"] or "Inside The Park HR" in time_frame["qualifiers"] or "Walk Off Opportunity" in time_frame["qualifiers"] or "Game Tying" in time_frame["qualifiers"] or "Late" in time_frame["qualifiers"] or "Close" in time_frame["qualifiers"] or "Game Tying Opportunity" in time_frame["qualifiers"] or "Go Ahead" in time_frame["qualifiers"] or "Go Ahead Opportunity" in time_frame["qualifiers"] or "Go Ahead Or Game Tying" in time_frame["qualifiers"] or "Go Ahead Or Game Tying Opportunity" in time_frame["qualifiers"] or "Game Winning" in time_frame["qualifiers"] or "Tying On Deck" in time_frame["qualifiers"] or "Winning On Deck" in time_frame["qualifiers"] or "Tying At Bat" in time_frame["qualifiers"] or "Winning At Bat" in time_frame["qualifiers"] or "Tying In Scoring" in time_frame["qualifiers"] or "Winning In Scoring" in time_frame["qualifiers"] or "Tying On Base" in time_frame["qualifiers"] or "Winning On Base" in time_frame["qualifiers"] or "Last Inning" in time_frame["qualifiers"] or "Last Out" in time_frame["qualifiers"] or "Last Batter" in time_frame["qualifiers"] or "Extra Innings" in time_frame["qualifiers"] or "RISP" in time_frame["qualifiers"] or "Pitcher First Batter Faced" in time_frame["qualifiers"] or "Batter First Plate Appearance" in time_frame["qualifiers"]  or "Pitcher Last Batter Faced" in time_frame["qualifiers"] or "Batter Last Plate Appearance" in time_frame["qualifiers"] or "Facing Pitcher" in time_frame["qualifiers"] or "Facing Position Player" in time_frame["qualifiers"] or "Stealing Second" in time_frame["qualifiers"] or "Stealing Third" in time_frame["qualifiers"] or "Stealing Home" in time_frame["qualifiers"] or "Bunting" in time_frame["qualifiers"] or "Fastball" in time_frame["qualifiers"] or "Out Of Zone" in time_frame["qualifiers"] or "In Zone" in time_frame["qualifiers"] or "Breaking" in time_frame["qualifiers"] or "Offspeed" in time_frame["qualifiers"] or "Pinch Hitting" in time_frame["qualifiers"] or "Facing Starter" in time_frame["qualifiers"] or "Facing Reliever" in time_frame["qualifiers"] or "Leading Off Inning" in time_frame["qualifiers"] or "Inning Started" in time_frame["qualifiers"] or "Leading Off Game" in time_frame["qualifiers"] or "Leading Off Whole Game" in time_frame["qualifiers"] or "Swung At First Pitch" in time_frame["qualifiers"] or "First Pitch" in time_frame["qualifiers"] or "Batter Ahead" in time_frame["qualifiers"] or "Even Count" in time_frame["qualifiers"] or "Pitcher Ahead" in time_frame["qualifiers"] or "After Batter Ahead" in time_frame["qualifiers"] or "After Even Count" in time_frame["qualifiers"] or "After Pitcher Ahead" in time_frame["qualifiers"] or "Bottom Inning" in time_frame["qualifiers"] or "Top Inning" in time_frame["qualifiers"] or "Full Count" in time_frame["qualifiers"] or "Man On First" in time_frame["qualifiers"] or "Man On Second" in time_frame["qualifiers"] or "Man On Third" in time_frame["qualifiers"] or "Bases Loaded" in time_frame["qualifiers"] or "Ending Outs" in time_frame["qualifiers"] or "Outs" in time_frame["qualifiers"] or "Outs Remaining" in time_frame["qualifiers"] or "Swinging On Strikes" in time_frame["qualifiers"] or "Swinging On Balls" in time_frame["qualifiers"] or "After Swinging On Strikes" in time_frame["qualifiers"] or "After Swinging On Balls" in time_frame["qualifiers"] or "After Strikes" in time_frame["qualifiers"] or "After Balls" in time_frame["qualifiers"] or "Strikes" in time_frame["qualifiers"] or "Balls" in time_frame["qualifiers"] or "Runs" in time_frame["qualifiers"] or "Play Outs" in time_frame["qualifiers"] or "RBIs" in time_frame["qualifiers"] or "Number Drove In" in time_frame["qualifiers"] or "Pitch Speed" in time_frame["qualifiers"] or "Pitch Zone" in time_frame["qualifiers"] or "Pitch Spin" in time_frame["qualifiers"] or "Exit Velocity" in time_frame["qualifiers"] or "Hit Distance" in time_frame["qualifiers"] or "Launch Angle" in time_frame["qualifiers"] or "Inning" in time_frame["qualifiers"] or "Inning Reversed" in time_frame["qualifiers"] or "Scheduled Inning Reversed" in time_frame["qualifiers"] or "Pitching Against Batting Order" in time_frame["qualifiers"] or "Count" in time_frame["qualifiers"] or "After Count" in time_frame["qualifiers"] or "After Swinging On Count" in time_frame["qualifiers"] or "Swinging On Count" in time_frame["qualifiers"] or "Surface" in time_frame["qualifiers"] or "Condition" in time_frame["qualifiers"] or "Temperature" in time_frame["qualifiers"] or "Wind" in time_frame["qualifiers"] or "Umpire" in time_frame["qualifiers"] or "Home Plate Umpire" in time_frame["qualifiers"] or "Team Score" in time_frame["qualifiers"] or "Ending Team Score" in time_frame["qualifiers"] or "Game Pitch Count" in time_frame["qualifiers"] or "Team Pitch Count" in time_frame["qualifiers"] or "Pitch Count" in time_frame["qualifiers"] or "Pitcher Batters Faced" in time_frame["qualifiers"] or "Batter Plate Appearance" in time_frame["qualifiers"] or "Pitcher Batters Faced Reversed" in time_frame["qualifiers"] or "Batter Plate Appearance Reversed" in time_frame["qualifiers"] or "Starting Pitch Count" in time_frame["qualifiers"] or "At Bat Pitch Count" in time_frame["qualifiers"] or "Ending Innings Pitched" in time_frame["qualifiers"] or "Innings Pitched" in time_frame["qualifiers"] or "Men On Base" in time_frame["qualifiers"] or "Time Facing Opponent" in time_frame["qualifiers"] or "Time Through Lineup" in time_frame["qualifiers"] or "Number Of Men On Base" in time_frame["qualifiers"] or "Number Of Men In Scoring" in time_frame["qualifiers"] or "Run Support" in time_frame["qualifiers"] or "Opponent Score" in time_frame["qualifiers"] or "Score Margin" in time_frame["qualifiers"] or "Score Difference" in time_frame["qualifiers"] or "Ending Opponent Score" in time_frame["qualifiers"] or "Ending Score Margin" in time_frame["qualifiers"] or "Ending Score Difference" in time_frame["qualifiers"] or "current-stats" in extra_stats or "run-support-record" in extra_stats or "run-support" in extra_stats or "advanced-runner" in extra_stats or "exit-record" in extra_stats:
+    elif has_result_stat_qual or "Facing Lefty" in time_frame["qualifiers"] or "Facing Righty" in time_frame["qualifiers"] or "Batting Lefty" in time_frame["qualifiers"] or "Batting Righty" in time_frame["qualifiers"] or "Pitching Lefty" in time_frame["qualifiers"] or "Pitching Righty" in time_frame["qualifiers"] or "Stadium" in time_frame["qualifiers"] or "Start Time" in time_frame["qualifiers"] or "Local Start Time" in time_frame["qualifiers"] or "Game Number" in time_frame["qualifiers"] or "Event Formula" in time_frame["qualifiers"] or "Exact Pitch Type" in time_frame["qualifiers"] or "Pitch Type" in time_frame["qualifiers"] or "Exact Event Type" in time_frame["qualifiers"] or "Local Event Time" in time_frame["qualifiers"] or "Event Time" in time_frame["qualifiers"] or "Event Type" in time_frame["qualifiers"] or "Previous Exact Event Type" in time_frame["qualifiers"] or "Previous Event Type" in time_frame["qualifiers"] or "Upcoming Exact Player Event Type" in time_frame["qualifiers"] or "Upcoming Player Event Type" in time_frame["qualifiers"] or "Previous Exact Player Event Type" in time_frame["qualifiers"] or "Previous Player Event Type" in time_frame["qualifiers"] or "Upcoming Exact Event Type" in time_frame["qualifiers"] or "Upcoming Event Type" in time_frame["qualifiers"] or "Exact City" in time_frame["qualifiers"] or "City" in time_frame["qualifiers"] or "Exact State" in time_frame["qualifiers"] or "State" in time_frame["qualifiers"] or "Exact Time Zone" in time_frame["qualifiers"] or "Time Zone" in time_frame["qualifiers"] or "Exact Country" in time_frame["qualifiers"] or "Country" in time_frame["qualifiers"] or "Exact Event Description" in time_frame["qualifiers"] or "Event Description" in time_frame["qualifiers"] or "Hit Trajectory" in time_frame["qualifiers"] or "Hit Hardness" in time_frame["qualifiers"] or "Exact Stadium" in time_frame["qualifiers"] or "Facing Stat Rank" in time_frame["qualifiers"] or "Facing League Stat Rank" in time_frame["qualifiers"] or "Facing AL Stat Rank" in time_frame["qualifiers"] or "Facing NL Stat Rank" in time_frame["qualifiers"] or "Facing Stat Percent" in time_frame["qualifiers"] or "Facing League Stat Percent" in time_frame["qualifiers"] or "Facing AL Stat Percent" in time_frame["qualifiers"] or "Facing NL Stat Percent" in time_frame["qualifiers"] or "Facing Stat" in time_frame["qualifiers"] or "Facing AL Stat" in time_frame["qualifiers"] or "Facing NL Stat" in time_frame["qualifiers"] or "Batting In Front Of Stat Rank" in time_frame["qualifiers"] or "Batting In Front League Stat Rank" in time_frame["qualifiers"] or "Batting In Front AL Stat Rank" in time_frame["qualifiers"] or "Batting In Front NL Stat Rank" in time_frame["qualifiers"] or "Batting In Front Stat Percent" in time_frame["qualifiers"] or "Batting In Front League Stat Percent" in time_frame["qualifiers"] or "Batting In Front AL Stat Percent" in time_frame["qualifiers"] or "Batting In Front NL Stat Percent" in time_frame["qualifiers"] or "Batting In Front Stat" in time_frame["qualifiers"] or "Batting In Front AL Stat" in time_frame["qualifiers"] or "Batting In Front NL Stat" in time_frame["qualifiers"] or "Batting Behind Stat Rank" in time_frame["qualifiers"] or "Batting Behind League Stat Rank" in time_frame["qualifiers"] or "Batting Behind AL Stat Rank" in time_frame["qualifiers"] or "Batting Behind NL Stat Rank" in time_frame["qualifiers"] or "Batting Behind Stat Percent" in time_frame["qualifiers"] or "Batting Behind League Stat Percent" in time_frame["qualifiers"] or "Batting Behind AL Stat Percent" in time_frame["qualifiers"] or "Batting Behind NL Stat Percent" in time_frame["qualifiers"] or "Batting Behind Stat" in time_frame["qualifiers"] or "Batting Behind AL Stat" in time_frame["qualifiers"] or "Batting Behind NL Stat" in time_frame["qualifiers"] or "Batting Next To Stat Rank" in time_frame["qualifiers"] or "Batting Next League Stat Rank" in time_frame["qualifiers"] or "Batting Next AL Stat Rank" in time_frame["qualifiers"] or "Batting Next NL Stat Rank" in time_frame["qualifiers"] or "Batting Next Stat Percent" in time_frame["qualifiers"] or "Batting Next League Stat Percent" in time_frame["qualifiers"] or "Batting Next AL Stat Percent" in time_frame["qualifiers"] or "Batting Next NL Stat Percent" in time_frame["qualifiers"] or "Batting Next Stat" in time_frame["qualifiers"] or "Batting Next AL Stat" in time_frame["qualifiers"] or "Batting Next NL Stat" in time_frame["qualifiers"] or "Inning Stat" in time_frame["qualifiers"] or "Batting Against" in time_frame["qualifiers"] or "Pitching Against" in time_frame["qualifiers"] or "Batting Against First Name" in time_frame["qualifiers"] or "Pitching Against First Name" in time_frame["qualifiers"] or "Batting Against Last Name" in time_frame["qualifiers"] or "Pitching Against Last Name" in time_frame["qualifiers"] or "Driven In" in time_frame["qualifiers"] or "Batted In" in time_frame["qualifiers"] or "Back To Back With" in time_frame["qualifiers"] or "Batting In Front Of" in time_frame["qualifiers"] or "Batting Behind" in time_frame["qualifiers"] or "Batting Next To" in time_frame["qualifiers"] or "Caught By" in time_frame["qualifiers"] or "Stealing On" in time_frame["qualifiers"] or "On Field With" in time_frame["qualifiers"] or "On Field Against" in time_frame["qualifiers"] or "Position" in time_frame["qualifiers"] or "Hit Location" in time_frame["qualifiers"] or "Exact Hit Location" in time_frame["qualifiers"] or "Facing Position" in time_frame["qualifiers"] or "Facing Primary Position" in time_frame["qualifiers"] or "Facing Main Position" in time_frame["qualifiers"] or "Bases Empty" in time_frame["qualifiers"] or "Men On Base" in time_frame["qualifiers"] or "Walk Off" in time_frame["qualifiers"] or "Inside The Park HR" in time_frame["qualifiers"] or "Walk Off Opportunity" in time_frame["qualifiers"] or "Game Tying" in time_frame["qualifiers"] or "Late" in time_frame["qualifiers"] or "Close" in time_frame["qualifiers"] or "Game Tying Opportunity" in time_frame["qualifiers"] or "Go Ahead" in time_frame["qualifiers"] or "Go Ahead Opportunity" in time_frame["qualifiers"] or "Go Ahead Or Game Tying" in time_frame["qualifiers"] or "Go Ahead Or Game Tying Opportunity" in time_frame["qualifiers"] or "Game Winning" in time_frame["qualifiers"] or "Tying On Deck" in time_frame["qualifiers"] or "Winning On Deck" in time_frame["qualifiers"] or "Tying At Bat" in time_frame["qualifiers"] or "Winning At Bat" in time_frame["qualifiers"] or "Tying In Scoring" in time_frame["qualifiers"] or "Winning In Scoring" in time_frame["qualifiers"] or "Tying On Base" in time_frame["qualifiers"] or "Winning On Base" in time_frame["qualifiers"] or "Last Inning" in time_frame["qualifiers"] or "Last Out" in time_frame["qualifiers"] or "Last Batter" in time_frame["qualifiers"] or "Extra Innings" in time_frame["qualifiers"] or "RISP" in time_frame["qualifiers"] or "Pitcher First Batter Faced" in time_frame["qualifiers"] or "Batter First Plate Appearance" in time_frame["qualifiers"]  or "Pitcher Last Batter Faced" in time_frame["qualifiers"] or "Batter Last Plate Appearance" in time_frame["qualifiers"] or "Facing Pitcher" in time_frame["qualifiers"] or "Facing Position Player" in time_frame["qualifiers"] or "Stealing Second" in time_frame["qualifiers"] or "Stealing Third" in time_frame["qualifiers"] or "Stealing Home" in time_frame["qualifiers"] or "Bunting" in time_frame["qualifiers"] or "Fastball" in time_frame["qualifiers"] or "Out Of Zone" in time_frame["qualifiers"] or "In Zone" in time_frame["qualifiers"] or "Breaking" in time_frame["qualifiers"] or "Offspeed" in time_frame["qualifiers"] or "Pinch Hitting" in time_frame["qualifiers"] or "Facing Starter" in time_frame["qualifiers"] or "Facing Reliever" in time_frame["qualifiers"] or "Leading Off Inning" in time_frame["qualifiers"] or "Inning Started" in time_frame["qualifiers"] or "Leading Off Game" in time_frame["qualifiers"] or "Leading Off Whole Game" in time_frame["qualifiers"] or "Swung At First Pitch" in time_frame["qualifiers"] or "First Pitch" in time_frame["qualifiers"] or "Batter Ahead" in time_frame["qualifiers"] or "Even Count" in time_frame["qualifiers"] or "Pitcher Ahead" in time_frame["qualifiers"] or "After Batter Ahead" in time_frame["qualifiers"] or "After Even Count" in time_frame["qualifiers"] or "After Pitcher Ahead" in time_frame["qualifiers"] or "Bottom Inning" in time_frame["qualifiers"] or "Top Inning" in time_frame["qualifiers"] or "Full Count" in time_frame["qualifiers"] or "Man On First" in time_frame["qualifiers"] or "Man On Second" in time_frame["qualifiers"] or "Man On Third" in time_frame["qualifiers"] or "Bases Loaded" in time_frame["qualifiers"] or "Ending Outs" in time_frame["qualifiers"] or "Outs" in time_frame["qualifiers"] or "Outs Remaining" in time_frame["qualifiers"] or "Swinging On Strikes" in time_frame["qualifiers"] or "Swinging On Balls" in time_frame["qualifiers"] or "After Swinging On Strikes" in time_frame["qualifiers"] or "After Swinging On Balls" in time_frame["qualifiers"] or "After Strikes" in time_frame["qualifiers"] or "After Balls" in time_frame["qualifiers"] or "Strikes" in time_frame["qualifiers"] or "Balls" in time_frame["qualifiers"] or "Runs" in time_frame["qualifiers"] or "Play Outs" in time_frame["qualifiers"] or "RBIs" in time_frame["qualifiers"] or "Number Drove In" in time_frame["qualifiers"] or "Pitch Speed" in time_frame["qualifiers"] or "Pitch Zone" in time_frame["qualifiers"] or "Pitch Spin" in time_frame["qualifiers"] or "Exit Velocity" in time_frame["qualifiers"] or "Hit Distance" in time_frame["qualifiers"] or "Launch Angle" in time_frame["qualifiers"] or "Inning" in time_frame["qualifiers"] or "Inning Reversed" in time_frame["qualifiers"] or "Scheduled Inning Reversed" in time_frame["qualifiers"] or "Pitching Against Batting Order" in time_frame["qualifiers"] or "Count" in time_frame["qualifiers"] or "After Count" in time_frame["qualifiers"] or "After Swinging On Count" in time_frame["qualifiers"] or "Swinging On Count" in time_frame["qualifiers"] or "Surface" in time_frame["qualifiers"] or "Condition" in time_frame["qualifiers"] or "Temperature" in time_frame["qualifiers"] or "Wind" in time_frame["qualifiers"] or "Umpire" in time_frame["qualifiers"] or "Home Plate Umpire" in time_frame["qualifiers"] or "Team Score" in time_frame["qualifiers"] or "Ending Team Score" in time_frame["qualifiers"] or "Game Pitch Count" in time_frame["qualifiers"] or "Team Pitch Count" in time_frame["qualifiers"] or "Pitch Count" in time_frame["qualifiers"] or "Pitcher Batters Faced" in time_frame["qualifiers"] or "Batter Plate Appearance" in time_frame["qualifiers"] or "Pitcher Batters Faced Reversed" in time_frame["qualifiers"] or "Batter Plate Appearance Reversed" in time_frame["qualifiers"] or "Starting Pitch Count" in time_frame["qualifiers"] or "At Bat Pitch Count" in time_frame["qualifiers"] or "Ending Innings Pitched" in time_frame["qualifiers"] or "Innings Pitched" in time_frame["qualifiers"] or "Men On Base" in time_frame["qualifiers"] or "Time Facing Opponent" in time_frame["qualifiers"] or "Time Through Lineup" in time_frame["qualifiers"] or "Number Of Men On Base" in time_frame["qualifiers"] or "Number Of Men In Scoring" in time_frame["qualifiers"] or "Run Support" in time_frame["qualifiers"] or "Opponent Score" in time_frame["qualifiers"] or "Score Margin" in time_frame["qualifiers"] or "Score Difference" in time_frame["qualifiers"] or "Ending Opponent Score" in time_frame["qualifiers"] or "Ending Score Margin" in time_frame["qualifiers"] or "Ending Score Difference" in time_frame["qualifiers"] or "current-stats" in extra_stats or "run-support-record" in extra_stats or "run-support" in extra_stats or "advanced-runner" in extra_stats or "exit-record" in extra_stats:
         all_rows, missing_games = handle_mlb_game_stats(all_rows, time_frame["qualifiers"], player_data, player_type, missing_games, extra_stats)
 
     if time_frame["qualifiers"]:
@@ -22961,238 +22917,191 @@ def handle_stat_rank_stats(all_rows, qualifiers, player_type):
                 "Year" : row_data["Year"]
             })
 
-    if player_type["da_type"] == "Batter":
-        stat_mapping = {
-            "runsScoredPer9": "RS9",
-            "battersFaced": "BF",
-            "babip": "BABIP",
-            "obp": "OBP",
-            "slg": "SLG",
-            "ops": "OPS",
-            "strikeoutsPer9": "K9",
-            "baseOnBallsPer9": "BB9",
-            "homeRunsPer9": "HR9",
-            "hitsPer9": "H9",
-            "strikesoutsToWalks": "K/BB",
-            "inheritedRunners": "IR",
-            "inheritedRunnersScored": "IRS",
-            "bequeathedRunners": "BQR",
-            "bequeathedRunnersScored": "BQRS",
-            "stolenBases": "SB",
-            "caughtStealing":"CS",
-            "qualityStarts": "QS",
-            "gamesFinished": "GF",
-            "doubles": "2B",
-            "triples": "3B",
-            "gidp": "GDP",
-            "gidpOpp": "GDPO",
-            "wildPitches": "WP",
-            "balks": "BK",
-            "pickoffs": "PO",
-            "totalSwings": "Swg",
-            "swingAndMisses": "SwgStr",
-            "ballsInPlay": "InPly",
-            "runSupport": "RS",
-            "pitchesPerInning": "P/IP",
-            "pitchesPerPlateAppearance": "P/PA",
-            "walksPerPlateAppearance": "BB%",
-            "strikeoutsPerPlateAppearance": "K%",
-            "homeRunsPerPlateAppearance": "HR%",
-            "walksPerStrikeout": "BB/K",
-            "iso": "IS",
-            "flyOuts": "FO",
-            "popOuts": "PO",
-            "lineOuts": "LO",
-            "groundOuts": "GO",
-            "flyHits": "FH",
-            "popHits": "PH",
-            "lineHits": "LH",
-            "groundHits": "GH",
-            "gamesPlayed": "GP",
-            "gamesStarted": "GS",
-            "airOuts": "AO",
-            "runs": "R",
-            "homeRuns": "HR",
-            "strikeOuts": "K",
-            "baseOnBalls": "BB",
-            "intentionalWalks": "IBB",
-            "hits": "H",
-            "hitByPitch": "HBP",
-            "avg": "AVG",
-            "atBats": "AB",
-            "stolenBasePercentage": "SB%",
-            "groundIntoDoublePlay": "GDP",
-            "numberOfPitches": "PIT",
-            "era": "ERA",
-            "inningsPitched": "IP",
-            "wins": "W",
-            "losses": "L",
-            "saves": "SV",
-            "saveOpportunities": "SVO",
-            "holds": "HLD",
-            "blownSaves": "BSV",
-            "earnedRuns": "ER",
-            "whip": "WHIP",
-            "outs": "OUTS",
-            "gamesPitched": "GPit",
-            "completeGames": "CG",
-            "shutouts": "SO",
-            "strikes": "Str",
-            "hitBatsmen": "HPB",
-            "totalBases": "TB",
-            "groundOutsToAirouts": "GB/FB",
-            "winPercentage": "W/L%",
-            "strikeoutWalkRatio": "K/BB",
-            "catchersInterference": "CI",
-            "sacBunts": "SH",
-            "sacFlies": "SF"
-        }
-    else:
-        stat_mapping = {
-            "plateAppearances": "PA",
-            "totalBases": "TB",
-            "leftOnBase": "LOB",
-            "sacBunts": "SH",
-            "sacFlies": "SF",
-            "babip": "BABIP",
-            "extraBaseHits": "XBH",
-            "hitByPitch": "HBP",
-            "gidp": "GDP",
-            "gidpOpp": "GDPO",
-            "numberOfPitches": "Pit",
-            "pitchesPerPlateAppearance": "P/PA",
-            "walksPerPlateAppearance": "BB%",
-            "strikeoutsPerPlateAppearance": "K%",
-            "homeRunsPerPlateAppearance": "HR%",
-            "walksPerStrikeout": "BB/K",
-            "iso": "ISO",
-            "reachedOnError": "ROE",
-            "walkOffs": "WO",
-            "flyOuts": "FO",
-            "totalSwings": "Swg",
-            "swingAndMisses": "SwgStr",
-            "ballsInPlay": "InPly",
-            "popOuts": "PO",
-            "lineOuts": "LO",
-            "groundOuts": "GO",
-            "flyHits": "FH",
-            "popHits": "PH",
-            "lineHits": "LH",
-            "groundHits": "GAH",
-            "gamesPlayed": "GP",
-            "airOuts": "AO",
-            "runs": "R",
-            "doubles": "2B",
-            "triples": "3B",
-            "homeRuns": "HR",
-            "strikeOuts": "K",
-            "baseOnBalls": "BB",
-            "intentionalWalks": "IBB",
-            "hits": "H",
-            "avg": "AVG",
-            "atBats": "AB",
-            "obp": "OBP",
-            "slg": "SLG",
-            "ops": "OPS",
-            "caughtStealing": "CS%",
-            "stolenBases": "SB",
-            "stolenBasePercentage": "SB%",
-            "rbi": "RBI",
-            "groundOutsToAirouts": "GB/FB",
-            "catchersInterference": "CI",
-            "atBatsPerHomeRun": "AB/HR"
-        }
+    for qual_str in qualifiers:
+        call_type = "Batter" if player_type["da_type"] == "Batter" else "Pitcher"
+        if qual_str.startswith("Batting"):
+            call_type = "Pitcher"
 
-    stat_mapping = {v: k for k, v in stat_mapping.items()}
+        if call_type == "Batter":
+            stat_mapping = {
+                "runsScoredPer9": "RS9",
+                "battersFaced": "BF",
+                "babip": "BABIP",
+                "obp": "OBP",
+                "slg": "SLG",
+                "ops": "OPS",
+                "strikeoutsPer9": "K9",
+                "baseOnBallsPer9": "BB9",
+                "homeRunsPer9": "HR9",
+                "hitsPer9": "H9",
+                "strikesoutsToWalks": "K/BB",
+                "inheritedRunners": "IR",
+                "inheritedRunnersScored": "IRS",
+                "bequeathedRunners": "BQR",
+                "bequeathedRunnersScored": "BQRS",
+                "stolenBases": "SB",
+                "caughtStealing":"CS",
+                "qualityStarts": "QS",
+                "gamesFinished": "GF",
+                "doubles": "2B",
+                "triples": "3B",
+                "gidp": "GDP",
+                "gidpOpp": "GDPO",
+                "wildPitches": "WP",
+                "balks": "BK",
+                "pickoffs": "PO",
+                "totalSwings": "Swg",
+                "swingAndMisses": "SwgStr",
+                "ballsInPlay": "InPly",
+                "runSupport": "RS",
+                "pitchesPerInning": "P/IP",
+                "pitchesPerPlateAppearance": "P/PA",
+                "walksPerPlateAppearance": "BB%",
+                "strikeoutsPerPlateAppearance": "K%",
+                "homeRunsPerPlateAppearance": "HR%",
+                "walksPerStrikeout": "BB/K",
+                "iso": "IS",
+                "flyOuts": "FO",
+                "popOuts": "PO",
+                "lineOuts": "LO",
+                "groundOuts": "GO",
+                "flyHits": "FH",
+                "popHits": "PH",
+                "lineHits": "LH",
+                "groundHits": "GH",
+                "gamesPlayed": "GP",
+                "gamesStarted": "GS",
+                "airOuts": "AO",
+                "runs": "R",
+                "homeRuns": "HR",
+                "strikeOuts": "K",
+                "baseOnBalls": "BB",
+                "intentionalWalks": "IBB",
+                "hits": "H",
+                "hitByPitch": "HBP",
+                "avg": "AVG",
+                "atBats": "AB",
+                "stolenBasePercentage": "SB%",
+                "groundIntoDoublePlay": "GDP",
+                "numberOfPitches": "PIT",
+                "era": "ERA",
+                "inningsPitched": "IP",
+                "wins": "W",
+                "losses": "L",
+                "saves": "SV",
+                "saveOpportunities": "SVO",
+                "holds": "HLD",
+                "blownSaves": "BSV",
+                "earnedRuns": "ER",
+                "whip": "WHIP",
+                "outs": "OUTS",
+                "gamesPitched": "GPit",
+                "completeGames": "CG",
+                "shutouts": "SO",
+                "strikes": "Str",
+                "hitBatsmen": "HPB",
+                "totalBases": "TB",
+                "groundOutsToAirouts": "GB/FB",
+                "winPercentage": "W/L%",
+                "strikeoutWalkRatio": "K/BB",
+                "catchersInterference": "CI",
+                "sacBunts": "SH",
+                "sacFlies": "SF"
+            }
+        else:
+            stat_mapping = {
+                "plateAppearances": "PA",
+                "totalBases": "TB",
+                "leftOnBase": "LOB",
+                "sacBunts": "SH",
+                "sacFlies": "SF",
+                "babip": "BABIP",
+                "extraBaseHits": "XBH",
+                "hitByPitch": "HBP",
+                "gidp": "GDP",
+                "gidpOpp": "GDPO",
+                "numberOfPitches": "Pit",
+                "pitchesPerPlateAppearance": "P/PA",
+                "walksPerPlateAppearance": "BB%",
+                "strikeoutsPerPlateAppearance": "K%",
+                "homeRunsPerPlateAppearance": "HR%",
+                "walksPerStrikeout": "BB/K",
+                "iso": "ISO",
+                "reachedOnError": "ROE",
+                "walkOffs": "WO",
+                "flyOuts": "FO",
+                "totalSwings": "Swg",
+                "swingAndMisses": "SwgStr",
+                "ballsInPlay": "InPly",
+                "popOuts": "PO",
+                "lineOuts": "LO",
+                "groundOuts": "GO",
+                "flyHits": "FH",
+                "popHits": "PH",
+                "lineHits": "LH",
+                "groundHits": "GAH",
+                "gamesPlayed": "GP",
+                "airOuts": "AO",
+                "runs": "R",
+                "doubles": "2B",
+                "triples": "3B",
+                "homeRuns": "HR",
+                "strikeOuts": "K",
+                "baseOnBalls": "BB",
+                "intentionalWalks": "IBB",
+                "hits": "H",
+                "avg": "AVG",
+                "atBats": "AB",
+                "obp": "OBP",
+                "slg": "SLG",
+                "ops": "OPS",
+                "caughtStealing": "CS%",
+                "stolenBases": "SB",
+                "stolenBasePercentage": "SB%",
+                "rbi": "RBI",
+                "groundOutsToAirouts": "GB/FB",
+                "catchersInterference": "CI",
+                "atBatsPerHomeRun": "AB/HR"
+            }
 
-    if "Facing Stat Rank" in qualifiers:
-        for qual_obj in qualifiers["Facing Stat Rank"]:
-            year_map_obj = handle_facing_stat_rank_qual(qual_obj, stat_mapping, player_type, seasons, None)
-            if year_map_obj != None:
-                qual_obj["year_map_obj"] = year_map_obj
-    
-    if "Facing AL Stat Rank" in qualifiers:
-        for qual_obj in qualifiers["Facing AL Stat Rank"]:
-            year_map_obj = handle_facing_stat_rank_qual(qual_obj, stat_mapping, player_type, seasons, 103)
-            if year_map_obj != None:
-                qual_obj["year_map_obj"] = year_map_obj
+        stat_mapping = {v: k for k, v in stat_mapping.items()}
 
-    if "Facing NL Stat Rank" in qualifiers:
-        for qual_obj in qualifiers["Facing NL Stat Rank"]:
-            year_map_obj = handle_facing_stat_rank_qual(qual_obj, stat_mapping, player_type, seasons, 104)
-            if year_map_obj != None:
-                qual_obj["year_map_obj"] = year_map_obj
-    
-    if "Facing League Stat Rank" in qualifiers:
-        for qual_obj in qualifiers["Facing League Stat Rank"]:
-            al_year_map_obj = handle_facing_stat_rank_qual(qual_obj, stat_mapping, player_type, seasons, 103)
-            nl_year_map_obj = handle_facing_stat_rank_qual(qual_obj, stat_mapping, player_type, seasons, 104)
-            if al_year_map_obj != None and nl_year_map_obj != None:
-                year_map_obj = {}
-                for year in al_year_map_obj:
-                    if year not in year_map_obj:
-                        year_map_obj[year] = set()
-                    year_map_obj[year].update(al_year_map_obj[year])
-                for year in nl_year_map_obj:
-                    if year not in year_map_obj:
-                        year_map_obj[year] = set()
-                    year_map_obj[year].update(nl_year_map_obj[year])
-                qual_obj["year_map_obj"] = year_map_obj
-        
-    
-    if "Facing Stat Percent" in qualifiers:
-        for qual_obj in qualifiers["Facing Stat Percent"]:
-            year_map_obj = handle_facing_stat_percent_qual(qual_obj, stat_mapping, player_type, seasons, None)
-            if year_map_obj != None:
-                qual_obj["year_map_obj"] = year_map_obj
-    
-    if "Facing AL Stat Percent" in qualifiers:
-        for qual_obj in qualifiers["Facing AL Stat Percent"]:
-            year_map_obj = handle_facing_stat_percent_qual(qual_obj, stat_mapping, player_type, seasons, 103)
-            if year_map_obj != None:
-                qual_obj["year_map_obj"] = year_map_obj
+        func_to_call = None
+        if qual_str in ["Facing Stat Rank", "Facing League Stat Rank", "Facing AL Stat Rank", "Facing NL Stat Rank", "Batting In Front Of Stat Rank", "Batting In Front League Stat Rank", "Batting In Front AL Stat Rank", "Batting In Front NL Stat Rank", "Batting Behind Stat Rank", "Batting Behind League Stat Rank", "Batting Behind AL Stat Rank", "Batting Behind NL Stat Rank", "Batting Next To Stat Rank", "Batting Next League Stat Rank", "Batting Next AL Stat Rank", "Batting Next NL Stat Rank"]:
+            func_to_call = "handle_facing_stat_rank_qual"
+        elif qual_str in ["Facing Stat Percent", "Facing League Stat Percent", "Facing AL Stat Percent", "Facing NL Stat Percent", "Batting In Front Stat Percent", "Batting In Front League Stat Percent", "Batting In Front AL Stat Percent", "Batting In Front NL Stat Percent", "Batting Behind Stat Percent", "Batting Behind League Stat Percent", "Batting Behind AL Stat Percent", "Batting Behind NL Stat Percent", "Batting Next Stat Percent", "Batting Next League Stat Percent", "Batting Next AL Stat Percent", "Batting Next NL Stat Percent"]:
+            func_to_call = "handle_facing_stat_percent_qual"
+        elif qual_str in ["Facing Stat", "Facing AL Stat", "Facing NL Stat", "Batting In Front Stat", "Batting In Front AL Stat", "Batting In Front NL Stat", "Batting Behind Stat", "Batting Behind AL Stat", "Batting Behind NL Stat", "Batting Next Stat", "Batting Next AL Stat", "Batting Next NL Stat"]:
+            func_to_call = "handle_facing_stat_qual"
 
-    if "Facing NL Stat Percent" in qualifiers:
-        for qual_obj in qualifiers["Facing NL Stat Percent"]:
-            year_map_obj = handle_facing_stat_percent_qual(qual_obj, stat_mapping, player_type, seasons, 104)
-            if year_map_obj != None:
-                qual_obj["year_map_obj"] = year_map_obj
-    
-    if "Facing League Stat Percent" in qualifiers:
-        for qual_obj in qualifiers["Facing League Stat Percent"]:
-            al_year_map_obj = handle_facing_stat_percent_qual(qual_obj, stat_mapping, player_type, seasons, 103)
-            nl_year_map_obj = handle_facing_stat_percent_qual(qual_obj, stat_mapping, player_type, seasons, 104)
-            if al_year_map_obj != None and nl_year_map_obj != None:
-                year_map_obj = {}
-                for year in al_year_map_obj:
-                    if year not in year_map_obj:
-                        year_map_obj[year] = set()
-                    year_map_obj[year].update(al_year_map_obj[year])
-                for year in nl_year_map_obj:
-                    if year not in year_map_obj:
-                        year_map_obj[year] = set()
-                    year_map_obj[year].update(nl_year_map_obj[year])
-                qual_obj["year_map_obj"] = year_map_obj
+        if func_to_call:
+            func = globals().get(func_to_call)
+            for qual_obj in qualifiers[qual_str]:
+                if "League" in qual_str:
+                    al_year_map_obj = func(qual_obj, stat_mapping, call_type, seasons, 103)
+                    nl_year_map_obj = func(qual_obj, stat_mapping, call_type, seasons, 104)
+                    if al_year_map_obj != None and nl_year_map_obj != None:
+                        year_map_obj = {}
+                        for year in al_year_map_obj:
+                            if year not in year_map_obj:
+                                year_map_obj[year] = set()
+                            year_map_obj[year].update(al_year_map_obj[year])
+                        for year in nl_year_map_obj:
+                            if year not in year_map_obj:
+                                year_map_obj[year] = set()
+                            year_map_obj[year].update(nl_year_map_obj[year])
+                        qual_obj["year_map_obj"] = year_map_obj
+                else:
+                    league_id = None
+                    if "AL" in qual_str:
+                        league_id = 103
+                    elif "NL" in qual_str:
+                        league_id = 104
+                    year_map_obj = func(qual_obj, stat_mapping, call_type, seasons, None)
+                    if year_map_obj != None:
+                        qual_obj["year_map_obj"] = year_map_obj
 
-    if "Facing Stat" in qualifiers:  
-        for qual_obj in qualifiers["Facing Stat"]:
-            year_map_obj = handle_facing_stat_qual(qual_obj, stat_mapping, player_type, seasons, None)
-            if year_map_obj != None:
-                qual_obj["year_map_obj"] = year_map_obj
-    
-    if "Facing AL Stat" in qualifiers:  
-        for qual_obj in qualifiers["Facing AL Stat"]:
-            year_map_obj = handle_facing_stat_qual(qual_obj, stat_mapping, player_type, seasons, 103)
-            if year_map_obj != None:
-                qual_obj["year_map_obj"] = year_map_obj
-    
-    if "Facing NL Stat" in qualifiers:  
-        for qual_obj in qualifiers["Facing NL Stat"]:
-            year_map_obj = handle_facing_stat_qual(qual_obj, stat_mapping, player_type, seasons, 104)
-            if year_map_obj != None:
-                qual_obj["year_map_obj"] = year_map_obj
-
-def handle_facing_stat_rank_qual(qual_obj, stat_mapping, player_type, seasons, league):
+def handle_facing_stat_rank_qual(qual_obj, stat_mapping, call_type, seasons, league):
     if "reverse" in qual_obj and qual_obj["reverse"]:
         sort_str = "desc" if sort_str == "asc" else "asc"
 
@@ -23207,9 +23116,9 @@ def handle_facing_stat_rank_qual(qual_obj, stat_mapping, player_type, seasons, l
             stat_name = stat_mapping[raw_stat]
             
             sort_str = "desc"
-            for header in headers["Pitcher" if player_type["da_type"] == "Batter" else "Batter"].keys():
-                if header.upper() == raw_stat or ("display-value" in headers["Pitcher" if player_type["da_type"] == "Batter" else "Batter"][header] and header.upper() == raw_stat):
-                    if not headers["Pitcher" if player_type["da_type"] == "Batter" else "Batter"][header]["positive"]:
+            for header in headers["Pitcher" if call_type == "Batter" else "Batter"].keys():
+                if header.upper() == raw_stat or ("display-value" in headers["Pitcher" if call_type == "Batter" else "Batter"][header] and header.upper() == raw_stat):
+                    if not headers["Pitcher" if call_type == "Batter" else "Batter"][header]["positive"]:
                         sort_str = "asc"
                     break
 
@@ -23220,7 +23129,7 @@ def handle_facing_stat_rank_qual(qual_obj, stat_mapping, player_type, seasons, l
             if limit == float("inf"):
                 limit = 1000000
                 
-            url_to_use = mlb_leaderboard_query.format(season_obj["Year"], "ALL" if "include_all_players" in qual_obj and qual_obj["include_all_players"] else "QUALIFIED", "pitching" if player_type["da_type"] == "Batter" else "hitting", limit, offset, stat_name, sort_str, league)
+            url_to_use = mlb_leaderboard_query.format(season_obj["Year"], "ALL" if "include_all_players" in qual_obj and qual_obj["include_all_players"] else "QUALIFIED", "pitching" if call_type == "Batter" else "hitting", limit, offset, stat_name, sort_str, league)
             if league:
                 url_to_use += "&leagueIds=" + str(league)
 
@@ -23238,7 +23147,7 @@ def handle_facing_stat_rank_qual(qual_obj, stat_mapping, player_type, seasons, l
     else:
         return None
 
-def handle_facing_stat_percent_qual(qual_obj, stat_mapping, player_type, seasons, league):
+def handle_facing_stat_percent_qual(qual_obj, stat_mapping, call_type, seasons, league):
     if "reverse" in qual_obj and qual_obj["reverse"]:
         sort_str = "desc" if sort_str == "asc" else "asc"
 
@@ -23253,16 +23162,16 @@ def handle_facing_stat_percent_qual(qual_obj, stat_mapping, player_type, seasons
             stat_name = stat_mapping[raw_stat]
             
             sort_str = "desc"
-            for header in headers["Pitcher" if player_type["da_type"] == "Batter" else "Batter"].keys():
-                if header.upper() == raw_stat or ("display-value" in headers["Pitcher" if player_type["da_type"] == "Batter" else "Batter"][header] and header.upper() == raw_stat):
-                    if not headers["Pitcher" if player_type["da_type"] == "Batter" else "Batter"][header]["positive"]:
+            for header in headers["Pitcher" if call_type == "Batter" else "Batter"].keys():
+                if header.upper() == raw_stat or ("display-value" in headers["Pitcher" if call_type == "Batter" else "Batter"][header] and header.upper() == raw_stat):
+                    if not headers["Pitcher" if call_type == "Batter" else "Batter"][header]["positive"]:
                         sort_str = "asc"
                     break
 
             offset = 0
             limit = 1000000
                 
-            url_to_use = mlb_leaderboard_query.format(season_obj["Year"], "ALL" if "include_all_players" in qual_obj and qual_obj["include_all_players"] else "QUALIFIED", "pitching" if player_type["da_type"] == "Batter" else "hitting", limit, offset, stat_name, sort_str, league)
+            url_to_use = mlb_leaderboard_query.format(season_obj["Year"], "ALL" if "include_all_players" in qual_obj and qual_obj["include_all_players"] else "QUALIFIED", "pitching" if call_type == "Batter" else "hitting", limit, offset, stat_name, sort_str, league)
             if league:
                 url_to_use += "&leagueIds=" + str(league)
 
@@ -23283,11 +23192,11 @@ def handle_facing_stat_percent_qual(qual_obj, stat_mapping, player_type, seasons
     else:
         return None
 
-def handle_facing_stat_qual(qual_obj, stat_mapping, player_type, seasons, league):
+def handle_facing_stat_qual(qual_obj, stat_mapping, call_type, seasons, league):
     year_map_obj = {}
     has_one_stat_match = False
     for season_obj in seasons:
-        url_to_use = mlb_leaderboard_query_no_sort.format(season_obj["Year"], "ALL" if "include_all_players" in qual_obj and qual_obj["include_all_players"] else "QUALIFIED", "pitching" if player_type["da_type"] == "Batter" else "hitting", 1000000, 0)
+        url_to_use = mlb_leaderboard_query_no_sort.format(season_obj["Year"], "ALL" if "include_all_players" in qual_obj and qual_obj["include_all_players"] else "QUALIFIED", "pitching" if call_type == "Batter" else "hitting", 1000000, 0)
         if league:
             url_to_use += "&leagueIds=" + str(league)
 
@@ -24154,6 +24063,172 @@ def handle_mlb_game_stats(all_rows, qualifiers, player_data, player_type, missin
             for qual_object in qualifiers["Facing NL Stat"]:
                 if "year_map_obj" not in qual_object:
                     games_to_skip.add(row_data["GameLink"])
+    if "Batting In Front Of Stat Rank" in qualifiers:
+        for row_data in all_rows:
+            for qual_object in qualifiers["Batting In Front Of Stat Rank"]:
+                if "year_map_obj" not in qual_object:
+                    games_to_skip.add(row_data["GameLink"])
+    if "Batting In Front Of League Stat Rank" in qualifiers:
+        for row_data in all_rows:
+            for qual_object in qualifiers["Batting In Front Of League Stat Rank"]:
+                if "year_map_obj" not in qual_object:
+                    games_to_skip.add(row_data["GameLink"])
+    if "Batting In Front Of AL Stat Rank" in qualifiers:
+        for row_data in all_rows:
+            for qual_object in qualifiers["Batting In Front Of AL Stat Rank"]:
+                if "year_map_obj" not in qual_object:
+                    games_to_skip.add(row_data["GameLink"])
+    if "Batting In Front Of NL Stat Rank" in qualifiers:
+        for row_data in all_rows:
+            for qual_object in qualifiers["Batting In Front Of NL Stat Rank"]:
+                if "year_map_obj" not in qual_object:
+                    games_to_skip.add(row_data["GameLink"])
+    if "Batting In Front Of Stat Percent" in qualifiers:
+        for row_data in all_rows:
+            for qual_object in qualifiers["Batting In Front Of Stat Percent"]:
+                if "year_map_obj" not in qual_object:
+                    games_to_skip.add(row_data["GameLink"])
+    if "Batting In Front Of League Stat Percent" in qualifiers:
+        for row_data in all_rows:
+            for qual_object in qualifiers["Batting In Front Of League Stat Percent"]:
+                if "year_map_obj" not in qual_object:
+                    games_to_skip.add(row_data["GameLink"])
+    if "Batting In Front Of AL Stat Percent" in qualifiers:
+        for row_data in all_rows:
+            for qual_object in qualifiers["Batting In Front Of AL Stat Percent"]:
+                if "year_map_obj" not in qual_object:
+                    games_to_skip.add(row_data["GameLink"])
+    if "Batting In Front Of NL Stat Percent" in qualifiers:
+        for row_data in all_rows:
+            for qual_object in qualifiers["Batting In Front Of NL Stat Percent"]:
+                if "year_map_obj" not in qual_object:
+                    games_to_skip.add(row_data["GameLink"])
+    if "Batting In Front Of Stat" in qualifiers:
+        for row_data in all_rows:
+            for qual_object in qualifiers["Batting In Front Of Stat"]:
+                if "year_map_obj" not in qual_object:
+                    games_to_skip.add(row_data["GameLink"])
+    if "Batting In Front Of AL Stat" in qualifiers:
+        for row_data in all_rows:
+            for qual_object in qualifiers["Batting In Front Of AL Stat"]:
+                if "year_map_obj" not in qual_object:
+                    games_to_skip.add(row_data["GameLink"])
+    if "Batting In Front Of NL Stat" in qualifiers:
+        for row_data in all_rows:
+            for qual_object in qualifiers["Batting In Front Of NL Stat"]:
+                if "year_map_obj" not in qual_object:
+                    games_to_skip.add(row_data["GameLink"])
+    if "Batting Behind Stat Rank" in qualifiers:
+        for row_data in all_rows:
+            for qual_object in qualifiers["Batting Behind Stat Rank"]:
+                if "year_map_obj" not in qual_object:
+                    games_to_skip.add(row_data["GameLink"])
+    if "Batting Behind League Stat Rank" in qualifiers:
+        for row_data in all_rows:
+            for qual_object in qualifiers["Batting Behind League Stat Rank"]:
+                if "year_map_obj" not in qual_object:
+                    games_to_skip.add(row_data["GameLink"])
+    if "Batting Behind AL Stat Rank" in qualifiers:
+        for row_data in all_rows:
+            for qual_object in qualifiers["Batting Behind AL Stat Rank"]:
+                if "year_map_obj" not in qual_object:
+                    games_to_skip.add(row_data["GameLink"])
+    if "Batting Behind NL Stat Rank" in qualifiers:
+        for row_data in all_rows:
+            for qual_object in qualifiers["Batting Behind NL Stat Rank"]:
+                if "year_map_obj" not in qual_object:
+                    games_to_skip.add(row_data["GameLink"])
+    if "Batting Behind Stat Percent" in qualifiers:
+        for row_data in all_rows:
+            for qual_object in qualifiers["Batting Behind Stat Percent"]:
+                if "year_map_obj" not in qual_object:
+                    games_to_skip.add(row_data["GameLink"])
+    if "Batting Behind League Stat Percent" in qualifiers:
+        for row_data in all_rows:
+            for qual_object in qualifiers["Batting Behind League Stat Percent"]:
+                if "year_map_obj" not in qual_object:
+                    games_to_skip.add(row_data["GameLink"])
+    if "Batting Behind AL Stat Percent" in qualifiers:
+        for row_data in all_rows:
+            for qual_object in qualifiers["Batting Behind AL Stat Percent"]:
+                if "year_map_obj" not in qual_object:
+                    games_to_skip.add(row_data["GameLink"])
+    if "Batting Behind NL Stat Percent" in qualifiers:
+        for row_data in all_rows:
+            for qual_object in qualifiers["Batting Behind NL Stat Percent"]:
+                if "year_map_obj" not in qual_object:
+                    games_to_skip.add(row_data["GameLink"])
+    if "Batting Behind Stat" in qualifiers:
+        for row_data in all_rows:
+            for qual_object in qualifiers["Batting Behind Stat"]:
+                if "year_map_obj" not in qual_object:
+                    games_to_skip.add(row_data["GameLink"])
+    if "Batting Behind AL Stat" in qualifiers:
+        for row_data in all_rows:
+            for qual_object in qualifiers["Batting Behind AL Stat"]:
+                if "year_map_obj" not in qual_object:
+                    games_to_skip.add(row_data["GameLink"])
+    if "Batting Behind NL Stat" in qualifiers:
+        for row_data in all_rows:
+            for qual_object in qualifiers["Batting Behind NL Stat"]:
+                if "year_map_obj" not in qual_object:
+                    games_to_skip.add(row_data["GameLink"])
+
+    if "Batting Next To Stat Rank" in qualifiers:
+        for row_data in all_rows:
+            for qual_object in qualifiers["Batting Next To Stat Rank"]:
+                if "year_map_obj" not in qual_object:
+                    games_to_skip.add(row_data["GameLink"])
+    if "Batting Next To League Stat Rank" in qualifiers:
+        for row_data in all_rows:
+            for qual_object in qualifiers["Batting Next To League Stat Rank"]:
+                if "year_map_obj" not in qual_object:
+                    games_to_skip.add(row_data["GameLink"])
+    if "Batting Next To AL Stat Rank" in qualifiers:
+        for row_data in all_rows:
+            for qual_object in qualifiers["Batting Next To AL Stat Rank"]:
+                if "year_map_obj" not in qual_object:
+                    games_to_skip.add(row_data["GameLink"])
+    if "Batting Next To NL Stat Rank" in qualifiers:
+        for row_data in all_rows:
+            for qual_object in qualifiers["Batting Next To NL Stat Rank"]:
+                if "year_map_obj" not in qual_object:
+                    games_to_skip.add(row_data["GameLink"])
+    if "Batting Next To Stat Percent" in qualifiers:
+        for row_data in all_rows:
+            for qual_object in qualifiers["Batting Next To Stat Percent"]:
+                if "year_map_obj" not in qual_object:
+                    games_to_skip.add(row_data["GameLink"])
+    if "Batting Next To League Stat Percent" in qualifiers:
+        for row_data in all_rows:
+            for qual_object in qualifiers["Batting Next To League Stat Percent"]:
+                if "year_map_obj" not in qual_object:
+                    games_to_skip.add(row_data["GameLink"])
+    if "Batting Next To AL Stat Percent" in qualifiers:
+        for row_data in all_rows:
+            for qual_object in qualifiers["Batting Next To AL Stat Percent"]:
+                if "year_map_obj" not in qual_object:
+                    games_to_skip.add(row_data["GameLink"])
+    if "Batting Next To NL Stat Percent" in qualifiers:
+        for row_data in all_rows:
+            for qual_object in qualifiers["Batting Next To NL Stat Percent"]:
+                if "year_map_obj" not in qual_object:
+                    games_to_skip.add(row_data["GameLink"])
+    if "Batting Next To Stat" in qualifiers:
+        for row_data in all_rows:
+            for qual_object in qualifiers["Batting Next To Stat"]:
+                if "year_map_obj" not in qual_object:
+                    games_to_skip.add(row_data["GameLink"])
+    if "Batting Next To AL Stat" in qualifiers:
+        for row_data in all_rows:
+            for qual_object in qualifiers["Batting Next To AL Stat"]:
+                if "year_map_obj" not in qual_object:
+                    games_to_skip.add(row_data["GameLink"])
+    if "Batting Next To NL Stat" in qualifiers:
+        for row_data in all_rows:
+            for qual_object in qualifiers["Batting Next To NL Stat"]:
+                if "year_map_obj" not in qual_object:
+                    games_to_skip.add(row_data["GameLink"])
     if "Driven In" in qualifiers:
         for row_data in all_rows:
             for qual_object in qualifiers["Driven In"]:
@@ -24294,59 +24369,170 @@ def handle_mlb_game_stats_single_thread(all_rows, qualifiers, player_data, playe
                 
                     if not has_match:
                         games_to_skip.add(row_data["GameLink"])
-    if "Facing Stat Rank" in qualifiers:
+    if "Batting In Front Of Stat Rank" in qualifiers:
         for row_data in all_rows:
-            for qual_object in qualifiers["Facing Stat Rank"]:
+            for qual_object in qualifiers["Batting In Front Of Stat Rank"]:
                 if "year_map_obj" not in qual_object:
                     games_to_skip.add(row_data["GameLink"])
-    if "Facing League Stat Rank" in qualifiers:
+    if "Batting In Front Of League Stat Rank" in qualifiers:
         for row_data in all_rows:
-            for qual_object in qualifiers["Facing League Stat Rank"]:
+            for qual_object in qualifiers["Batting In Front Of League Stat Rank"]:
                 if "year_map_obj" not in qual_object:
                     games_to_skip.add(row_data["GameLink"])
-    if "Facing AL Stat Rank" in qualifiers:
+    if "Batting In Front Of AL Stat Rank" in qualifiers:
         for row_data in all_rows:
-            for qual_object in qualifiers["Facing AL Stat Rank"]:
+            for qual_object in qualifiers["Batting In Front Of AL Stat Rank"]:
                 if "year_map_obj" not in qual_object:
                     games_to_skip.add(row_data["GameLink"])
-    if "Facing NL Stat Rank" in qualifiers:
+    if "Batting In Front Of NL Stat Rank" in qualifiers:
         for row_data in all_rows:
-            for qual_object in qualifiers["Facing NL Stat Rank"]:
+            for qual_object in qualifiers["Batting In Front Of NL Stat Rank"]:
                 if "year_map_obj" not in qual_object:
                     games_to_skip.add(row_data["GameLink"])
-    if "Facing Stat Percent" in qualifiers:
+    if "Batting In Front Of Stat Percent" in qualifiers:
         for row_data in all_rows:
-            for qual_object in qualifiers["Facing Stat Percent"]:
+            for qual_object in qualifiers["Batting In Front Of Stat Percent"]:
                 if "year_map_obj" not in qual_object:
                     games_to_skip.add(row_data["GameLink"])
-    if "Facing League Stat Percent" in qualifiers:
+    if "Batting In Front Of League Stat Percent" in qualifiers:
         for row_data in all_rows:
-            for qual_object in qualifiers["Facing League Stat Percent"]:
+            for qual_object in qualifiers["Batting In Front Of League Stat Percent"]:
                 if "year_map_obj" not in qual_object:
                     games_to_skip.add(row_data["GameLink"])
-    if "Facing AL Stat Percent" in qualifiers:
+    if "Batting In Front Of AL Stat Percent" in qualifiers:
         for row_data in all_rows:
-            for qual_object in qualifiers["Facing AL Stat Percent"]:
+            for qual_object in qualifiers["Batting In Front Of AL Stat Percent"]:
                 if "year_map_obj" not in qual_object:
                     games_to_skip.add(row_data["GameLink"])
-    if "Facing NL Stat Percent" in qualifiers:
+    if "Batting In Front Of NL Stat Percent" in qualifiers:
         for row_data in all_rows:
-            for qual_object in qualifiers["Facing NL Stat Percent"]:
+            for qual_object in qualifiers["Batting In Front Of NL Stat Percent"]:
                 if "year_map_obj" not in qual_object:
                     games_to_skip.add(row_data["GameLink"])
-    if "Facing Stat" in qualifiers:
+    if "Batting In Front Of Stat" in qualifiers:
         for row_data in all_rows:
-            for qual_object in qualifiers["Facing Stat"]:
+            for qual_object in qualifiers["Batting In Front Of Stat"]:
                 if "year_map_obj" not in qual_object:
                     games_to_skip.add(row_data["GameLink"])
-    if "Facing AL Stat" in qualifiers:
+    if "Batting In Front Of AL Stat" in qualifiers:
         for row_data in all_rows:
-            for qual_object in qualifiers["Facing AL Stat"]:
+            for qual_object in qualifiers["Batting In Front Of AL Stat"]:
                 if "year_map_obj" not in qual_object:
                     games_to_skip.add(row_data["GameLink"])
-    if "Facing NL Stat" in qualifiers:
+    if "Batting In Front Of NL Stat" in qualifiers:
         for row_data in all_rows:
-            for qual_object in qualifiers["Facing NL Stat"]:
+            for qual_object in qualifiers["Batting In Front Of NL Stat"]:
+                if "year_map_obj" not in qual_object:
+                    games_to_skip.add(row_data["GameLink"])
+    if "Batting Behind Stat Rank" in qualifiers:
+        for row_data in all_rows:
+            for qual_object in qualifiers["Batting Behind Stat Rank"]:
+                if "year_map_obj" not in qual_object:
+                    games_to_skip.add(row_data["GameLink"])
+    if "Batting Behind League Stat Rank" in qualifiers:
+        for row_data in all_rows:
+            for qual_object in qualifiers["Batting Behind League Stat Rank"]:
+                if "year_map_obj" not in qual_object:
+                    games_to_skip.add(row_data["GameLink"])
+    if "Batting Behind AL Stat Rank" in qualifiers:
+        for row_data in all_rows:
+            for qual_object in qualifiers["Batting Behind AL Stat Rank"]:
+                if "year_map_obj" not in qual_object:
+                    games_to_skip.add(row_data["GameLink"])
+    if "Batting Behind NL Stat Rank" in qualifiers:
+        for row_data in all_rows:
+            for qual_object in qualifiers["Batting Behind NL Stat Rank"]:
+                if "year_map_obj" not in qual_object:
+                    games_to_skip.add(row_data["GameLink"])
+    if "Batting Behind Stat Percent" in qualifiers:
+        for row_data in all_rows:
+            for qual_object in qualifiers["Batting Behind Stat Percent"]:
+                if "year_map_obj" not in qual_object:
+                    games_to_skip.add(row_data["GameLink"])
+    if "Batting Behind League Stat Percent" in qualifiers:
+        for row_data in all_rows:
+            for qual_object in qualifiers["Batting Behind League Stat Percent"]:
+                if "year_map_obj" not in qual_object:
+                    games_to_skip.add(row_data["GameLink"])
+    if "Batting Behind AL Stat Percent" in qualifiers:
+        for row_data in all_rows:
+            for qual_object in qualifiers["Batting Behind AL Stat Percent"]:
+                if "year_map_obj" not in qual_object:
+                    games_to_skip.add(row_data["GameLink"])
+    if "Batting Behind NL Stat Percent" in qualifiers:
+        for row_data in all_rows:
+            for qual_object in qualifiers["Batting Behind NL Stat Percent"]:
+                if "year_map_obj" not in qual_object:
+                    games_to_skip.add(row_data["GameLink"])
+    if "Batting Behind Stat" in qualifiers:
+        for row_data in all_rows:
+            for qual_object in qualifiers["Batting Behind Stat"]:
+                if "year_map_obj" not in qual_object:
+                    games_to_skip.add(row_data["GameLink"])
+    if "Batting Behind AL Stat" in qualifiers:
+        for row_data in all_rows:
+            for qual_object in qualifiers["Batting Behind AL Stat"]:
+                if "year_map_obj" not in qual_object:
+                    games_to_skip.add(row_data["GameLink"])
+    if "Batting Behind NL Stat" in qualifiers:
+        for row_data in all_rows:
+            for qual_object in qualifiers["Batting Behind NL Stat"]:
+                if "year_map_obj" not in qual_object:
+                    games_to_skip.add(row_data["GameLink"])
+
+    if "Batting Next To Stat Rank" in qualifiers:
+        for row_data in all_rows:
+            for qual_object in qualifiers["Batting Next To Stat Rank"]:
+                if "year_map_obj" not in qual_object:
+                    games_to_skip.add(row_data["GameLink"])
+    if "Batting Next To League Stat Rank" in qualifiers:
+        for row_data in all_rows:
+            for qual_object in qualifiers["Batting Next To League Stat Rank"]:
+                if "year_map_obj" not in qual_object:
+                    games_to_skip.add(row_data["GameLink"])
+    if "Batting Next To AL Stat Rank" in qualifiers:
+        for row_data in all_rows:
+            for qual_object in qualifiers["Batting Next To AL Stat Rank"]:
+                if "year_map_obj" not in qual_object:
+                    games_to_skip.add(row_data["GameLink"])
+    if "Batting Next To NL Stat Rank" in qualifiers:
+        for row_data in all_rows:
+            for qual_object in qualifiers["Batting Next To NL Stat Rank"]:
+                if "year_map_obj" not in qual_object:
+                    games_to_skip.add(row_data["GameLink"])
+    if "Batting Next To Stat Percent" in qualifiers:
+        for row_data in all_rows:
+            for qual_object in qualifiers["Batting Next To Stat Percent"]:
+                if "year_map_obj" not in qual_object:
+                    games_to_skip.add(row_data["GameLink"])
+    if "Batting Next To League Stat Percent" in qualifiers:
+        for row_data in all_rows:
+            for qual_object in qualifiers["Batting Next To League Stat Percent"]:
+                if "year_map_obj" not in qual_object:
+                    games_to_skip.add(row_data["GameLink"])
+    if "Batting Next To AL Stat Percent" in qualifiers:
+        for row_data in all_rows:
+            for qual_object in qualifiers["Batting Next To AL Stat Percent"]:
+                if "year_map_obj" not in qual_object:
+                    games_to_skip.add(row_data["GameLink"])
+    if "Batting Next To NL Stat Percent" in qualifiers:
+        for row_data in all_rows:
+            for qual_object in qualifiers["Batting Next To NL Stat Percent"]:
+                if "year_map_obj" not in qual_object:
+                    games_to_skip.add(row_data["GameLink"])
+    if "Batting Next To Stat" in qualifiers:
+        for row_data in all_rows:
+            for qual_object in qualifiers["Batting Next To Stat"]:
+                if "year_map_obj" not in qual_object:
+                    games_to_skip.add(row_data["GameLink"])
+    if "Batting Next To AL Stat" in qualifiers:
+        for row_data in all_rows:
+            for qual_object in qualifiers["Batting Next To AL Stat"]:
+                if "year_map_obj" not in qual_object:
+                    games_to_skip.add(row_data["GameLink"])
+    if "Batting Next To NL Stat" in qualifiers:
+        for row_data in all_rows:
+            for qual_object in qualifiers["Batting Next To NL Stat"]:
                 if "year_map_obj" not in qual_object:
                     games_to_skip.add(row_data["GameLink"])
     if "Driven In" in qualifiers:
@@ -25095,6 +25281,952 @@ def perform_sub_mlb_game_qualifiers(row, player_data, qualifiers, player_game_in
                 has_match = False
                 for at_bat_event in (player_game_info["batting_events"] if player_type["da_type"] == "Batter" else player_game_info["pitching_events"] + player_game_info["pitching_run_events"]):
                     if at_bat_event["pitcher" if player_type["da_type"] == "Batter" else "batter"] in qual_object["year_map_obj"][row["Year"]]:
+                        has_match = True
+    
+                if not has_match:
+                    has_row_match = False
+        if not has_row_match:
+            return False, row
+
+    if "Batting In Front Of Stat Rank" in qualifiers:
+        has_row_match = True                        
+        for qual_object in qualifiers["Batting In Front Of Stat Rank"]:
+            if row["Year"] not in qual_object["year_map_obj"]:
+                return False, row
+            if not qual_object["negate"]:
+                has_match = False
+                for at_bat_event in player_game_info["batting_events"]:
+                    match_batter_posses = set()
+                    if at_bat_event["batting_order_pos"] == 9:
+                        match_batter_posses.add(1)
+                    else:
+                        match_batter_posses.add(at_bat_event["batting_order_pos"] + 1)
+
+                    match_batters = set()
+                    for match_batter in at_bat_event["team_batting_order_map"]:
+                        if at_bat_event["team_batting_order_map"][match_batter] in match_batter_posses:
+                            match_batters.add(match_batter)
+
+                    if match_batters.intersection(qual_object["year_map_obj"][row["Year"]]):
+                        has_match = True
+    
+                if not has_match:
+                    has_row_match = False
+        if not has_row_match:
+            return False, row
+
+    if "Batting In Front Of League Stat Rank" in qualifiers:
+        has_row_match = True                        
+        for qual_object in qualifiers["Batting In Front Of League Stat Rank"]:
+            if row["Year"] not in qual_object["year_map_obj"]:
+                return False, row
+            if not qual_object["negate"]:
+                has_match = False
+                for at_bat_event in player_game_info["batting_events"]:
+                    match_batter_posses = set()
+                    if at_bat_event["batting_order_pos"] == 9:
+                        match_batter_posses.add(1)
+                    else:
+                        match_batter_posses.add(at_bat_event["batting_order_pos"] + 1)
+
+                    match_batters = set()
+                    for match_batter in at_bat_event["team_batting_order_map"]:
+                        if at_bat_event["team_batting_order_map"][match_batter] in match_batter_posses:
+                            match_batters.add(match_batter)
+
+                    if match_batters.intersection(qual_object["year_map_obj"][row["Year"]]):
+                        has_match = True
+    
+                if not has_match:
+                    has_row_match = False
+        if not has_row_match:
+            return False, row
+    
+    if "Batting In Front Of AL Stat Rank" in qualifiers:
+        has_row_match = True                        
+        for qual_object in qualifiers["Batting In Front Of AL Stat Rank"]:
+            if row["Year"] not in qual_object["year_map_obj"]:
+                return False, row
+            if not qual_object["negate"]:
+                has_match = False
+                for at_bat_event in player_game_info["batting_events"]:
+                    match_batter_posses = set()
+                    if at_bat_event["batting_order_pos"] == 9:
+                        match_batter_posses.add(1)
+                    else:
+                        match_batter_posses.add(at_bat_event["batting_order_pos"] + 1)
+
+                    match_batters = set()
+                    for match_batter in at_bat_event["team_batting_order_map"]:
+                        if at_bat_event["team_batting_order_map"][match_batter] in match_batter_posses:
+                            match_batters.add(match_batter)
+
+                    if match_batters.intersection(qual_object["year_map_obj"][row["Year"]]):
+                        has_match = True
+    
+                if not has_match:
+                    has_row_match = False
+        if not has_row_match:
+            return False, row
+    
+    if "Batting In Front Of NL Stat Rank" in qualifiers:
+        has_row_match = True                        
+        for qual_object in qualifiers["Batting In Front Of NL Stat Rank"]:
+            if row["Year"] not in qual_object["year_map_obj"]:
+                return False, row
+            if not qual_object["negate"]:
+                has_match = False
+                for at_bat_event in player_game_info["batting_events"]:
+                    match_batter_posses = set()
+                    if at_bat_event["batting_order_pos"] == 9:
+                        match_batter_posses.add(1)
+                    else:
+                        match_batter_posses.add(at_bat_event["batting_order_pos"] + 1)
+
+                    match_batters = set()
+                    for match_batter in at_bat_event["team_batting_order_map"]:
+                        if at_bat_event["team_batting_order_map"][match_batter] in match_batter_posses:
+                            match_batters.add(match_batter)
+
+                    if match_batters.intersection(qual_object["year_map_obj"][row["Year"]]):
+                        has_match = True
+    
+                if not has_match:
+                    has_row_match = False
+        if not has_row_match:
+            return False, row
+
+    if "Batting Behind Stat Rank" in qualifiers:
+        has_row_match = True                        
+        for qual_object in qualifiers["Batting Behind Stat Rank"]:
+            if row["Year"] not in qual_object["year_map_obj"]:
+                return False, row
+            if not qual_object["negate"]:
+                has_match = False
+                for at_bat_event in player_game_info["batting_events"]:
+                    match_batter_posses = set()
+                    if at_bat_event["batting_order_pos"] == 1:
+                        match_batter_posses.add(9)
+                    else:
+                        match_batter_posses.add(at_bat_event["batting_order_pos"] - 1)
+
+                    match_batters = set()
+                    for match_batter in at_bat_event["team_batting_order_map"]:
+                        if at_bat_event["team_batting_order_map"][match_batter] in match_batter_posses:
+                            match_batters.add(match_batter)
+
+                    if match_batters.intersection(qual_object["year_map_obj"][row["Year"]]):
+                        has_match = True
+    
+                if not has_match:
+                    has_row_match = False
+        if not has_row_match:
+            return False, row
+
+    if "Batting Behind League Stat Rank" in qualifiers:
+        has_row_match = True                        
+        for qual_object in qualifiers["Batting Behind League Stat Rank"]:
+            if row["Year"] not in qual_object["year_map_obj"]:
+                return False, row
+            if not qual_object["negate"]:
+                has_match = False
+                for at_bat_event in player_game_info["batting_events"]:
+                    match_batter_posses = set()
+                    if at_bat_event["batting_order_pos"] == 1:
+                        match_batter_posses.add(9)
+                    else:
+                        match_batter_posses.add(at_bat_event["batting_order_pos"] - 1)
+
+                    match_batters = set()
+                    for match_batter in at_bat_event["team_batting_order_map"]:
+                        if at_bat_event["team_batting_order_map"][match_batter] in match_batter_posses:
+                            match_batters.add(match_batter)
+
+                    if match_batters.intersection(qual_object["year_map_obj"][row["Year"]]):
+                        has_match = True
+    
+                if not has_match:
+                    has_row_match = False
+        if not has_row_match:
+            return False, row
+    
+    if "Batting Behind AL Stat Rank" in qualifiers:
+        has_row_match = True                        
+        for qual_object in qualifiers["Batting Behind AL Stat Rank"]:
+            if row["Year"] not in qual_object["year_map_obj"]:
+                return False, row
+            if not qual_object["negate"]:
+                has_match = False
+                for at_bat_event in player_game_info["batting_events"]:
+                    match_batter_posses = set()
+                    if at_bat_event["batting_order_pos"] == 1:
+                        match_batter_posses.add(9)
+                    else:
+                        match_batter_posses.add(at_bat_event["batting_order_pos"] - 1)
+
+                    match_batters = set()
+                    for match_batter in at_bat_event["team_batting_order_map"]:
+                        if at_bat_event["team_batting_order_map"][match_batter] in match_batter_posses:
+                            match_batters.add(match_batter)
+
+                    if match_batters.intersection(qual_object["year_map_obj"][row["Year"]]):
+                        has_match = True
+    
+                if not has_match:
+                    has_row_match = False
+        if not has_row_match:
+            return False, row
+    
+    if "Batting Behind NL Stat Rank" in qualifiers:
+        has_row_match = True                        
+        for qual_object in qualifiers["Batting Behind NL Stat Rank"]:
+            if row["Year"] not in qual_object["year_map_obj"]:
+                return False, row
+            if not qual_object["negate"]:
+                has_match = False
+                for at_bat_event in player_game_info["batting_events"]:
+                    match_batter_posses = set()
+                    if at_bat_event["batting_order_pos"] == 1:
+                        match_batter_posses.add(9)
+                    else:
+                        match_batter_posses.add(at_bat_event["batting_order_pos"] - 1)
+
+                    match_batters = set()
+                    for match_batter in at_bat_event["team_batting_order_map"]:
+                        if at_bat_event["team_batting_order_map"][match_batter] in match_batter_posses:
+                            match_batters.add(match_batter)
+
+                    if match_batters.intersection(qual_object["year_map_obj"][row["Year"]]):
+                        has_match = True
+    
+                if not has_match:
+                    has_row_match = False
+        if not has_row_match:
+            return False, row
+        
+    if "Batting Next To Stat Rank" in qualifiers:
+        has_row_match = True                        
+        for qual_object in qualifiers["Batting Next To Stat Rank"]:
+            if row["Year"] not in qual_object["year_map_obj"]:
+                return False, row
+            if not qual_object["negate"]:
+                has_match = False
+                for at_bat_event in player_game_info["batting_events"]:
+                    match_batter_posses = set()
+                    if at_bat_event["batting_order_pos"] == 1:
+                        match_batter_posses.add(9)
+                        match_batter_posses.add(2)
+                    elif at_bat_event["batting_order_pos"] == 9:
+                        match_batter_posses.add(1)
+                        match_batter_posses.add(8)
+                    else:
+                        match_batter_posses.add(at_bat_event["batting_order_pos"] + 1)
+                        match_batter_posses.add(at_bat_event["batting_order_pos"] - 1)
+
+                    match_batters = set()
+                    for match_batter in at_bat_event["team_batting_order_map"]:
+                        if at_bat_event["team_batting_order_map"][match_batter] in match_batter_posses:
+                            match_batters.add(match_batter)
+
+                    if match_batters.intersection(qual_object["year_map_obj"][row["Year"]]):
+                        has_match = True
+    
+                if not has_match:
+                    has_row_match = False
+        if not has_row_match:
+            return False, row
+
+    if "Batting Next To League Stat Rank" in qualifiers:
+        has_row_match = True                        
+        for qual_object in qualifiers["Batting Next To League Stat Rank"]:
+            if row["Year"] not in qual_object["year_map_obj"]:
+                return False, row
+            if not qual_object["negate"]:
+                has_match = False
+                for at_bat_event in player_game_info["batting_events"]:
+                    match_batter_posses = set()
+                    if at_bat_event["batting_order_pos"] == 1:
+                        match_batter_posses.add(9)
+                        match_batter_posses.add(2)
+                    elif at_bat_event["batting_order_pos"] == 9:
+                        match_batter_posses.add(1)
+                        match_batter_posses.add(8)
+                    else:
+                        match_batter_posses.add(at_bat_event["batting_order_pos"] + 1)
+                        match_batter_posses.add(at_bat_event["batting_order_pos"] - 1)
+
+                    match_batters = set()
+                    for match_batter in at_bat_event["team_batting_order_map"]:
+                        if at_bat_event["team_batting_order_map"][match_batter] in match_batter_posses:
+                            match_batters.add(match_batter)
+
+                    if match_batters.intersection(qual_object["year_map_obj"][row["Year"]]):
+                        has_match = True
+    
+                if not has_match:
+                    has_row_match = False
+        if not has_row_match:
+            return False, row
+    
+    if "Batting Next To AL Stat Rank" in qualifiers:
+        has_row_match = True                        
+        for qual_object in qualifiers["Batting Next To AL Stat Rank"]:
+            if row["Year"] not in qual_object["year_map_obj"]:
+                return False, row
+            if not qual_object["negate"]:
+                has_match = False
+                for at_bat_event in player_game_info["batting_events"]:
+                    match_batter_posses = set()
+                    if at_bat_event["batting_order_pos"] == 1:
+                        match_batter_posses.add(9)
+                        match_batter_posses.add(2)
+                    elif at_bat_event["batting_order_pos"] == 9:
+                        match_batter_posses.add(1)
+                        match_batter_posses.add(8)
+                    else:
+                        match_batter_posses.add(at_bat_event["batting_order_pos"] + 1)
+                        match_batter_posses.add(at_bat_event["batting_order_pos"] - 1)
+
+                    match_batters = set()
+                    for match_batter in at_bat_event["team_batting_order_map"]:
+                        if at_bat_event["team_batting_order_map"][match_batter] in match_batter_posses:
+                            match_batters.add(match_batter)
+
+                    if match_batters.intersection(qual_object["year_map_obj"][row["Year"]]):
+                        has_match = True
+    
+                if not has_match:
+                    has_row_match = False
+        if not has_row_match:
+            return False, row
+    
+    if "Batting Next To NL Stat Rank" in qualifiers:
+        has_row_match = True                        
+        for qual_object in qualifiers["Batting Next To NL Stat Rank"]:
+            if row["Year"] not in qual_object["year_map_obj"]:
+                return False, row
+            if not qual_object["negate"]:
+                has_match = False
+                for at_bat_event in player_game_info["batting_events"]:
+                    match_batter_posses = set()
+                    if at_bat_event["batting_order_pos"] == 1:
+                        match_batter_posses.add(9)
+                        match_batter_posses.add(2)
+                    elif at_bat_event["batting_order_pos"] == 9:
+                        match_batter_posses.add(1)
+                        match_batter_posses.add(8)
+                    else:
+                        match_batter_posses.add(at_bat_event["batting_order_pos"] + 1)
+                        match_batter_posses.add(at_bat_event["batting_order_pos"] - 1)
+
+                    match_batters = set()
+                    for match_batter in at_bat_event["team_batting_order_map"]:
+                        if at_bat_event["team_batting_order_map"][match_batter] in match_batter_posses:
+                            match_batters.add(match_batter)
+
+                    if match_batters.intersection(qual_object["year_map_obj"][row["Year"]]):
+                        has_match = True
+    
+                if not has_match:
+                    has_row_match = False
+        if not has_row_match:
+            return False, row
+    
+    if "Batting In Front Of Stat Percent" in qualifiers:
+        has_row_match = True                        
+        for qual_object in qualifiers["Batting In Front Of Stat Percent"]:
+            if row["Year"] not in qual_object["year_map_obj"]:
+                return False, row
+            if not qual_object["negate"]:
+                has_match = False
+                for at_bat_event in player_game_info["batting_events"]:
+                    match_batter_posses = set()
+                    if at_bat_event["batting_order_pos"] == 9:
+                        match_batter_posses.add(1)
+                    else:
+                        match_batter_posses.add(at_bat_event["batting_order_pos"] + 1)
+
+                    match_batters = set()
+                    for match_batter in at_bat_event["team_batting_order_map"]:
+                        if at_bat_event["team_batting_order_map"][match_batter] in match_batter_posses:
+                            match_batters.add(match_batter)
+
+                    if match_batters.intersection(qual_object["year_map_obj"][row["Year"]]):
+                        has_match = True
+    
+                if not has_match:
+                    has_row_match = False
+        if not has_row_match:
+            return False, row
+
+    if "Batting In Front Of League Stat Percent" in qualifiers:
+        has_row_match = True                        
+        for qual_object in qualifiers["Batting In Front Of League Stat Percent"]:
+            if row["Year"] not in qual_object["year_map_obj"]:
+                return False, row
+            if not qual_object["negate"]:
+                has_match = False
+                for at_bat_event in player_game_info["batting_events"]:
+                    match_batter_posses = set()
+                    if at_bat_event["batting_order_pos"] == 9:
+                        match_batter_posses.add(1)
+                    else:
+                        match_batter_posses.add(at_bat_event["batting_order_pos"] + 1)
+
+                    match_batters = set()
+                    for match_batter in at_bat_event["team_batting_order_map"]:
+                        if at_bat_event["team_batting_order_map"][match_batter] in match_batter_posses:
+                            match_batters.add(match_batter)
+
+                    if match_batters.intersection(qual_object["year_map_obj"][row["Year"]]):
+                        has_match = True
+    
+                if not has_match:
+                    has_row_match = False
+        if not has_row_match:
+            return False, row
+    
+    if "Batting In Front Of AL Stat Percent" in qualifiers:
+        has_row_match = True                        
+        for qual_object in qualifiers["Batting In Front Of AL Stat Percent"]:
+            if row["Year"] not in qual_object["year_map_obj"]:
+                return False, row
+            if not qual_object["negate"]:
+                has_match = False
+                for at_bat_event in player_game_info["batting_events"]:
+                    match_batter_posses = set()
+                    if at_bat_event["batting_order_pos"] == 9:
+                        match_batter_posses.add(1)
+                    else:
+                        match_batter_posses.add(at_bat_event["batting_order_pos"] + 1)
+
+                    match_batters = set()
+                    for match_batter in at_bat_event["team_batting_order_map"]:
+                        if at_bat_event["team_batting_order_map"][match_batter] in match_batter_posses:
+                            match_batters.add(match_batter)
+
+                    if match_batters.intersection(qual_object["year_map_obj"][row["Year"]]):
+                        has_match = True
+    
+                if not has_match:
+                    has_row_match = False
+        if not has_row_match:
+            return False, row
+    
+    if "Batting In Front Of NL Stat Percent" in qualifiers:
+        has_row_match = True                        
+        for qual_object in qualifiers["Batting In Front Of NL Stat Percent"]:
+            if row["Year"] not in qual_object["year_map_obj"]:
+                return False, row
+            if not qual_object["negate"]:
+                has_match = False
+                for at_bat_event in player_game_info["batting_events"]:
+                    match_batter_posses = set()
+                    if at_bat_event["batting_order_pos"] == 9:
+                        match_batter_posses.add(1)
+                    else:
+                        match_batter_posses.add(at_bat_event["batting_order_pos"] + 1)
+
+                    match_batters = set()
+                    for match_batter in at_bat_event["team_batting_order_map"]:
+                        if at_bat_event["team_batting_order_map"][match_batter] in match_batter_posses:
+                            match_batters.add(match_batter)
+
+                    if match_batters.intersection(qual_object["year_map_obj"][row["Year"]]):
+                        has_match = True
+    
+                if not has_match:
+                    has_row_match = False
+        if not has_row_match:
+            return False, row
+
+    if "Batting Behind Stat Percent" in qualifiers:
+        has_row_match = True                        
+        for qual_object in qualifiers["Batting Behind Stat Percent"]:
+            if row["Year"] not in qual_object["year_map_obj"]:
+                return False, row
+            if not qual_object["negate"]:
+                has_match = False
+                for at_bat_event in player_game_info["batting_events"]:
+                    match_batter_posses = set()
+                    if at_bat_event["batting_order_pos"] == 1:
+                        match_batter_posses.add(9)
+                    else:
+                        match_batter_posses.add(at_bat_event["batting_order_pos"] - 1)
+
+                    match_batters = set()
+                    for match_batter in at_bat_event["team_batting_order_map"]:
+                        if at_bat_event["team_batting_order_map"][match_batter] in match_batter_posses:
+                            match_batters.add(match_batter)
+
+                    if match_batters.intersection(qual_object["year_map_obj"][row["Year"]]):
+                        has_match = True
+    
+                if not has_match:
+                    has_row_match = False
+        if not has_row_match:
+            return False, row
+
+    if "Batting Behind League Stat Percent" in qualifiers:
+        has_row_match = True                        
+        for qual_object in qualifiers["Batting Behind League Stat Percent"]:
+            if row["Year"] not in qual_object["year_map_obj"]:
+                return False, row
+            if not qual_object["negate"]:
+                has_match = False
+                for at_bat_event in player_game_info["batting_events"]:
+                    match_batter_posses = set()
+                    if at_bat_event["batting_order_pos"] == 1:
+                        match_batter_posses.add(9)
+                    else:
+                        match_batter_posses.add(at_bat_event["batting_order_pos"] - 1)
+
+                    match_batters = set()
+                    for match_batter in at_bat_event["team_batting_order_map"]:
+                        if at_bat_event["team_batting_order_map"][match_batter] in match_batter_posses:
+                            match_batters.add(match_batter)
+
+                    if match_batters.intersection(qual_object["year_map_obj"][row["Year"]]):
+                        has_match = True
+    
+                if not has_match:
+                    has_row_match = False
+        if not has_row_match:
+            return False, row
+    
+    if "Batting Behind AL Stat Percent" in qualifiers:
+        has_row_match = True                        
+        for qual_object in qualifiers["Batting Behind AL Stat Percent"]:
+            if row["Year"] not in qual_object["year_map_obj"]:
+                return False, row
+            if not qual_object["negate"]:
+                has_match = False
+                for at_bat_event in player_game_info["batting_events"]:
+                    match_batter_posses = set()
+                    if at_bat_event["batting_order_pos"] == 1:
+                        match_batter_posses.add(9)
+                    else:
+                        match_batter_posses.add(at_bat_event["batting_order_pos"] - 1)
+
+                    match_batters = set()
+                    for match_batter in at_bat_event["team_batting_order_map"]:
+                        if at_bat_event["team_batting_order_map"][match_batter] in match_batter_posses:
+                            match_batters.add(match_batter)
+
+                    if match_batters.intersection(qual_object["year_map_obj"][row["Year"]]):
+                        has_match = True
+    
+                if not has_match:
+                    has_row_match = False
+        if not has_row_match:
+            return False, row
+    
+    if "Batting Behind NL Stat Percent" in qualifiers:
+        has_row_match = True                        
+        for qual_object in qualifiers["Batting Behind NL Stat Percent"]:
+            if row["Year"] not in qual_object["year_map_obj"]:
+                return False, row
+            if not qual_object["negate"]:
+                has_match = False
+                for at_bat_event in player_game_info["batting_events"]:
+                    match_batter_posses = set()
+                    if at_bat_event["batting_order_pos"] == 1:
+                        match_batter_posses.add(9)
+                    else:
+                        match_batter_posses.add(at_bat_event["batting_order_pos"] - 1)
+
+                    match_batters = set()
+                    for match_batter in at_bat_event["team_batting_order_map"]:
+                        if at_bat_event["team_batting_order_map"][match_batter] in match_batter_posses:
+                            match_batters.add(match_batter)
+
+                    if match_batters.intersection(qual_object["year_map_obj"][row["Year"]]):
+                        has_match = True
+    
+                if not has_match:
+                    has_row_match = False
+        if not has_row_match:
+            return False, row
+        
+    if "Batting Next To Stat Percent" in qualifiers:
+        has_row_match = True                        
+        for qual_object in qualifiers["Batting Next To Stat Percent"]:
+            if row["Year"] not in qual_object["year_map_obj"]:
+                return False, row
+            if not qual_object["negate"]:
+                has_match = False
+                for at_bat_event in player_game_info["batting_events"]:
+                    match_batter_posses = set()
+                    if at_bat_event["batting_order_pos"] == 1:
+                        match_batter_posses.add(9)
+                        match_batter_posses.add(2)
+                    elif at_bat_event["batting_order_pos"] == 9:
+                        match_batter_posses.add(1)
+                        match_batter_posses.add(8)
+                    else:
+                        match_batter_posses.add(at_bat_event["batting_order_pos"] + 1)
+                        match_batter_posses.add(at_bat_event["batting_order_pos"] - 1)
+
+                    match_batters = set()
+                    for match_batter in at_bat_event["team_batting_order_map"]:
+                        if at_bat_event["team_batting_order_map"][match_batter] in match_batter_posses:
+                            match_batters.add(match_batter)
+
+                    if match_batters.intersection(qual_object["year_map_obj"][row["Year"]]):
+                        has_match = True
+    
+                if not has_match:
+                    has_row_match = False
+        if not has_row_match:
+            return False, row
+
+    if "Batting Next To League Stat Percent" in qualifiers:
+        has_row_match = True                        
+        for qual_object in qualifiers["Batting Next To League Stat Percent"]:
+            if row["Year"] not in qual_object["year_map_obj"]:
+                return False, row
+            if not qual_object["negate"]:
+                has_match = False
+                for at_bat_event in player_game_info["batting_events"]:
+                    match_batter_posses = set()
+                    if at_bat_event["batting_order_pos"] == 1:
+                        match_batter_posses.add(9)
+                        match_batter_posses.add(2)
+                    elif at_bat_event["batting_order_pos"] == 9:
+                        match_batter_posses.add(1)
+                        match_batter_posses.add(8)
+                    else:
+                        match_batter_posses.add(at_bat_event["batting_order_pos"] + 1)
+                        match_batter_posses.add(at_bat_event["batting_order_pos"] - 1)
+
+                    match_batters = set()
+                    for match_batter in at_bat_event["team_batting_order_map"]:
+                        if at_bat_event["team_batting_order_map"][match_batter] in match_batter_posses:
+                            match_batters.add(match_batter)
+
+                    if match_batters.intersection(qual_object["year_map_obj"][row["Year"]]):
+                        has_match = True
+    
+                if not has_match:
+                    has_row_match = False
+        if not has_row_match:
+            return False, row
+    
+    if "Batting Next To AL Stat Percent" in qualifiers:
+        has_row_match = True                        
+        for qual_object in qualifiers["Batting Next To AL Stat Percent"]:
+            if row["Year"] not in qual_object["year_map_obj"]:
+                return False, row
+            if not qual_object["negate"]:
+                has_match = False
+                for at_bat_event in player_game_info["batting_events"]:
+                    match_batter_posses = set()
+                    if at_bat_event["batting_order_pos"] == 1:
+                        match_batter_posses.add(9)
+                        match_batter_posses.add(2)
+                    elif at_bat_event["batting_order_pos"] == 9:
+                        match_batter_posses.add(1)
+                        match_batter_posses.add(8)
+                    else:
+                        match_batter_posses.add(at_bat_event["batting_order_pos"] + 1)
+                        match_batter_posses.add(at_bat_event["batting_order_pos"] - 1)
+
+                    match_batters = set()
+                    for match_batter in at_bat_event["team_batting_order_map"]:
+                        if at_bat_event["team_batting_order_map"][match_batter] in match_batter_posses:
+                            match_batters.add(match_batter)
+
+                    if match_batters.intersection(qual_object["year_map_obj"][row["Year"]]):
+                        has_match = True
+    
+                if not has_match:
+                    has_row_match = False
+        if not has_row_match:
+            return False, row
+    
+    if "Batting Next To NL Stat Percent" in qualifiers:
+        has_row_match = True                        
+        for qual_object in qualifiers["Batting Next To NL Stat Percent"]:
+            if row["Year"] not in qual_object["year_map_obj"]:
+                return False, row
+            if not qual_object["negate"]:
+                has_match = False
+                for at_bat_event in player_game_info["batting_events"]:
+                    match_batter_posses = set()
+                    if at_bat_event["batting_order_pos"] == 1:
+                        match_batter_posses.add(9)
+                        match_batter_posses.add(2)
+                    elif at_bat_event["batting_order_pos"] == 9:
+                        match_batter_posses.add(1)
+                        match_batter_posses.add(8)
+                    else:
+                        match_batter_posses.add(at_bat_event["batting_order_pos"] + 1)
+                        match_batter_posses.add(at_bat_event["batting_order_pos"] - 1)
+
+                    match_batters = set()
+                    for match_batter in at_bat_event["team_batting_order_map"]:
+                        if at_bat_event["team_batting_order_map"][match_batter] in match_batter_posses:
+                            match_batters.add(match_batter)
+
+                    if match_batters.intersection(qual_object["year_map_obj"][row["Year"]]):
+                        has_match = True
+    
+                if not has_match:
+                    has_row_match = False
+        if not has_row_match:
+            return False, row
+    
+    if "Batting In Front Of Stat" in qualifiers:
+        has_row_match = True                        
+        for qual_object in qualifiers["Batting In Front Of Stat"]:
+            if row["Year"] not in qual_object["year_map_obj"]:
+                return False, row
+            if not qual_object["negate"]:
+                has_match = False
+                for at_bat_event in player_game_info["batting_events"]:
+                    match_batter_posses = set()
+                    if at_bat_event["batting_order_pos"] == 9:
+                        match_batter_posses.add(1)
+                    else:
+                        match_batter_posses.add(at_bat_event["batting_order_pos"] + 1)
+
+                    match_batters = set()
+                    for match_batter in at_bat_event["team_batting_order_map"]:
+                        if at_bat_event["team_batting_order_map"][match_batter] in match_batter_posses:
+                            match_batters.add(match_batter)
+
+                    if match_batters.intersection(qual_object["year_map_obj"][row["Year"]]):
+                        has_match = True
+    
+                if not has_match:
+                    has_row_match = False
+        if not has_row_match:
+            return False, row
+
+    if "Batting In Front Of AL Stat" in qualifiers:
+        has_row_match = True                        
+        for qual_object in qualifiers["Batting In Front Of AL Stat"]:
+            if row["Year"] not in qual_object["year_map_obj"]:
+                return False, row
+            if not qual_object["negate"]:
+                has_match = False
+                for at_bat_event in player_game_info["batting_events"]:
+                    match_batter_posses = set()
+                    if at_bat_event["batting_order_pos"] == 9:
+                        match_batter_posses.add(1)
+                    else:
+                        match_batter_posses.add(at_bat_event["batting_order_pos"] + 1)
+
+                    match_batters = set()
+                    for match_batter in at_bat_event["team_batting_order_map"]:
+                        if at_bat_event["team_batting_order_map"][match_batter] in match_batter_posses:
+                            match_batters.add(match_batter)
+
+                    if match_batters.intersection(qual_object["year_map_obj"][row["Year"]]):
+                        has_match = True
+    
+                if not has_match:
+                    has_row_match = False
+        if not has_row_match:
+            return False, row
+    
+    if "Batting In Front Of NL Stat" in qualifiers:
+        has_row_match = True                        
+        for qual_object in qualifiers["Batting In Front Of NL Stat"]:
+            if row["Year"] not in qual_object["year_map_obj"]:
+                return False, row
+            if not qual_object["negate"]:
+                has_match = False
+                for at_bat_event in player_game_info["batting_events"]:
+                    match_batter_posses = set()
+                    if at_bat_event["batting_order_pos"] == 9:
+                        match_batter_posses.add(1)
+                    else:
+                        match_batter_posses.add(at_bat_event["batting_order_pos"] + 1)
+
+                    match_batters = set()
+                    for match_batter in at_bat_event["team_batting_order_map"]:
+                        if at_bat_event["team_batting_order_map"][match_batter] in match_batter_posses:
+                            match_batters.add(match_batter)
+
+                    if match_batters.intersection(qual_object["year_map_obj"][row["Year"]]):
+                        has_match = True
+    
+                if not has_match:
+                    has_row_match = False
+        if not has_row_match:
+            return False, row
+
+    if "Batting Behind Stat" in qualifiers:
+        has_row_match = True                        
+        for qual_object in qualifiers["Batting Behind Stat"]:
+            if row["Year"] not in qual_object["year_map_obj"]:
+                return False, row
+            if not qual_object["negate"]:
+                has_match = False
+                for at_bat_event in player_game_info["batting_events"]:
+                    match_batter_posses = set()
+                    if at_bat_event["batting_order_pos"] == 1:
+                        match_batter_posses.add(9)
+                    else:
+                        match_batter_posses.add(at_bat_event["batting_order_pos"] - 1)
+
+                    match_batters = set()
+                    for match_batter in at_bat_event["team_batting_order_map"]:
+                        if at_bat_event["team_batting_order_map"][match_batter] in match_batter_posses:
+                            match_batters.add(match_batter)
+
+                    if match_batters.intersection(qual_object["year_map_obj"][row["Year"]]):
+                        has_match = True
+    
+                if not has_match:
+                    has_row_match = False
+        if not has_row_match:
+            return False, row
+    
+    if "Batting Behind AL Stat" in qualifiers:
+        has_row_match = True                        
+        for qual_object in qualifiers["Batting Behind AL Stat"]:
+            if row["Year"] not in qual_object["year_map_obj"]:
+                return False, row
+            if not qual_object["negate"]:
+                has_match = False
+                for at_bat_event in player_game_info["batting_events"]:
+                    match_batter_posses = set()
+                    if at_bat_event["batting_order_pos"] == 1:
+                        match_batter_posses.add(9)
+                    else:
+                        match_batter_posses.add(at_bat_event["batting_order_pos"] - 1)
+
+                    match_batters = set()
+                    for match_batter in at_bat_event["team_batting_order_map"]:
+                        if at_bat_event["team_batting_order_map"][match_batter] in match_batter_posses:
+                            match_batters.add(match_batter)
+
+                    if match_batters.intersection(qual_object["year_map_obj"][row["Year"]]):
+                        has_match = True
+    
+                if not has_match:
+                    has_row_match = False
+        if not has_row_match:
+            return False, row
+    
+    if "Batting Behind NL Stat" in qualifiers:
+        has_row_match = True                        
+        for qual_object in qualifiers["Batting Behind NL Stat"]:
+            if row["Year"] not in qual_object["year_map_obj"]:
+                return False, row
+            if not qual_object["negate"]:
+                has_match = False
+                for at_bat_event in player_game_info["batting_events"]:
+                    match_batter_posses = set()
+                    if at_bat_event["batting_order_pos"] == 1:
+                        match_batter_posses.add(9)
+                    else:
+                        match_batter_posses.add(at_bat_event["batting_order_pos"] - 1)
+
+                    match_batters = set()
+                    for match_batter in at_bat_event["team_batting_order_map"]:
+                        if at_bat_event["team_batting_order_map"][match_batter] in match_batter_posses:
+                            match_batters.add(match_batter)
+
+                    if match_batters.intersection(qual_object["year_map_obj"][row["Year"]]):
+                        has_match = True
+    
+                if not has_match:
+                    has_row_match = False
+        if not has_row_match:
+            return False, row
+        
+    if "Batting Next To Stat" in qualifiers:
+        has_row_match = True                        
+        for qual_object in qualifiers["Batting Next To Stat"]:
+            if row["Year"] not in qual_object["year_map_obj"]:
+                return False, row
+            if not qual_object["negate"]:
+                has_match = False
+                for at_bat_event in player_game_info["batting_events"]:
+                    match_batter_posses = set()
+                    if at_bat_event["batting_order_pos"] == 1:
+                        match_batter_posses.add(9)
+                        match_batter_posses.add(2)
+                    elif at_bat_event["batting_order_pos"] == 9:
+                        match_batter_posses.add(1)
+                        match_batter_posses.add(8)
+                    else:
+                        match_batter_posses.add(at_bat_event["batting_order_pos"] + 1)
+                        match_batter_posses.add(at_bat_event["batting_order_pos"] - 1)
+
+                    match_batters = set()
+                    for match_batter in at_bat_event["team_batting_order_map"]:
+                        if at_bat_event["team_batting_order_map"][match_batter] in match_batter_posses:
+                            match_batters.add(match_batter)
+
+                    if match_batters.intersection(qual_object["year_map_obj"][row["Year"]]):
+                        has_match = True
+    
+                if not has_match:
+                    has_row_match = False
+        if not has_row_match:
+            return False, row
+    
+    if "Batting Next To AL Stat" in qualifiers:
+        has_row_match = True                        
+        for qual_object in qualifiers["Batting Next To AL Stat"]:
+            if row["Year"] not in qual_object["year_map_obj"]:
+                return False, row
+            if not qual_object["negate"]:
+                has_match = False
+                for at_bat_event in player_game_info["batting_events"]:
+                    match_batter_posses = set()
+                    if at_bat_event["batting_order_pos"] == 1:
+                        match_batter_posses.add(9)
+                        match_batter_posses.add(2)
+                    elif at_bat_event["batting_order_pos"] == 9:
+                        match_batter_posses.add(1)
+                        match_batter_posses.add(8)
+                    else:
+                        match_batter_posses.add(at_bat_event["batting_order_pos"] + 1)
+                        match_batter_posses.add(at_bat_event["batting_order_pos"] - 1)
+
+                    match_batters = set()
+                    for match_batter in at_bat_event["team_batting_order_map"]:
+                        if at_bat_event["team_batting_order_map"][match_batter] in match_batter_posses:
+                            match_batters.add(match_batter)
+
+                    if match_batters.intersection(qual_object["year_map_obj"][row["Year"]]):
+                        has_match = True
+    
+                if not has_match:
+                    has_row_match = False
+        if not has_row_match:
+            return False, row
+    
+    if "Batting Next To NL Stat" in qualifiers:
+        has_row_match = True                        
+        for qual_object in qualifiers["Batting Next To NL Stat"]:
+            if row["Year"] not in qual_object["year_map_obj"]:
+                return False, row
+            if not qual_object["negate"]:
+                has_match = False
+                for at_bat_event in player_game_info["batting_events"]:
+                    match_batter_posses = set()
+                    if at_bat_event["batting_order_pos"] == 1:
+                        match_batter_posses.add(9)
+                        match_batter_posses.add(2)
+                    elif at_bat_event["batting_order_pos"] == 9:
+                        match_batter_posses.add(1)
+                        match_batter_posses.add(8)
+                    else:
+                        match_batter_posses.add(at_bat_event["batting_order_pos"] + 1)
+                        match_batter_posses.add(at_bat_event["batting_order_pos"] - 1)
+
+                    match_batters = set()
+                    for match_batter in at_bat_event["team_batting_order_map"]:
+                        if at_bat_event["team_batting_order_map"][match_batter] in match_batter_posses:
+                            match_batters.add(match_batter)
+
+                    if match_batters.intersection(qual_object["year_map_obj"][row["Year"]]):
                         has_match = True
     
                 if not has_match:
@@ -26256,6 +27388,919 @@ def handle_da_mlb_quals(row, event_name, at_bat_event, qualifiers, player_data, 
             if row["Year"] not in qual_object["year_map_obj"]:
                 return False
             has_match = at_bat_event["pitcher" if player_type["da_type"] == "Batter" else "batter"] in qual_object["year_map_obj"][row["Year"]]
+            if qual_object["negate"]:
+                if has_match:
+                    return False
+            else:
+                if not has_match:
+                    return False
+    
+    if "Batting In Front Of Stat Rank" in qualifiers:
+        has_row_match = True                        
+        for qual_object in qualifiers["Batting In Front Of Stat Rank"]:
+            if row["Year"] not in qual_object["year_map_obj"]:
+                return False
+
+            match_batter_posses = set()
+            if at_bat_event["batting_order_pos"] == 9:
+                match_batter_posses.add(1)
+            else:
+                match_batter_posses.add(at_bat_event["batting_order_pos"] + 1)
+
+            match_batters = set()
+            for match_batter in at_bat_event["team_batting_order_map"]:
+                if at_bat_event["team_batting_order_map"][match_batter] in match_batter_posses:
+                    match_batters.add(match_batter)
+
+            has_match = match_batters.intersection(qual_object["year_map_obj"][row["Year"]])
+
+            if qual_object["negate"]:
+                if has_match:
+                    return False
+            else:
+                if not has_match:
+                    return False
+
+    if "Batting In Front Of League Stat Rank" in qualifiers:
+        has_row_match = True                        
+        for qual_object in qualifiers["Batting In Front Of League Stat Rank"]:
+            if row["Year"] not in qual_object["year_map_obj"]:
+                return False
+
+            match_batter_posses = set()
+            if at_bat_event["batting_order_pos"] == 9:
+                match_batter_posses.add(1)
+            else:
+                match_batter_posses.add(at_bat_event["batting_order_pos"] + 1)
+
+            match_batters = set()
+            for match_batter in at_bat_event["team_batting_order_map"]:
+                if at_bat_event["team_batting_order_map"][match_batter] in match_batter_posses:
+                    match_batters.add(match_batter)
+
+            has_match = match_batters.intersection(qual_object["year_map_obj"][row["Year"]])
+
+            if qual_object["negate"]:
+                if has_match:
+                    return False
+            else:
+                if not has_match:
+                    return False
+    
+    if "Batting In Front Of AL Stat Rank" in qualifiers:
+        has_row_match = True                        
+        for qual_object in qualifiers["Batting In Front Of AL Stat Rank"]:
+            if row["Year"] not in qual_object["year_map_obj"]:
+                return False
+
+            match_batter_posses = set()
+            if at_bat_event["batting_order_pos"] == 9:
+                match_batter_posses.add(1)
+            else:
+                match_batter_posses.add(at_bat_event["batting_order_pos"] + 1)
+
+            match_batters = set()
+            for match_batter in at_bat_event["team_batting_order_map"]:
+                if at_bat_event["team_batting_order_map"][match_batter] in match_batter_posses:
+                    match_batters.add(match_batter)
+
+            has_match = match_batters.intersection(qual_object["year_map_obj"][row["Year"]])
+
+            if qual_object["negate"]:
+                if has_match:
+                    return False
+            else:
+                if not has_match:
+                    return False
+    
+    if "Batting In Front Of NL Stat Rank" in qualifiers:
+        has_row_match = True                        
+        for qual_object in qualifiers["Batting In Front Of NL Stat Rank"]:
+            if row["Year"] not in qual_object["year_map_obj"]:
+                return False
+
+            match_batter_posses = set()
+            if at_bat_event["batting_order_pos"] == 9:
+                match_batter_posses.add(1)
+            else:
+                match_batter_posses.add(at_bat_event["batting_order_pos"] + 1)
+
+            match_batters = set()
+            for match_batter in at_bat_event["team_batting_order_map"]:
+                if at_bat_event["team_batting_order_map"][match_batter] in match_batter_posses:
+                    match_batters.add(match_batter)
+
+            has_match = match_batters.intersection(qual_object["year_map_obj"][row["Year"]])
+
+            if qual_object["negate"]:
+                if has_match:
+                    return False
+            else:
+                if not has_match:
+                    return False
+
+    if "Batting Behind Stat Rank" in qualifiers:
+        has_row_match = True                        
+        for qual_object in qualifiers["Batting Behind Stat Rank"]:
+            if row["Year"] not in qual_object["year_map_obj"]:
+                return False
+
+            match_batter_posses = set()
+            if at_bat_event["batting_order_pos"] == 1:
+                match_batter_posses.add(9)
+            else:
+                match_batter_posses.add(at_bat_event["batting_order_pos"] - 1)
+
+            match_batters = set()
+            for match_batter in at_bat_event["team_batting_order_map"]:
+                if at_bat_event["team_batting_order_map"][match_batter] in match_batter_posses:
+                    match_batters.add(match_batter)
+
+            has_match = match_batters.intersection(qual_object["year_map_obj"][row["Year"]])
+
+            if qual_object["negate"]:
+                if has_match:
+                    return False
+            else:
+                if not has_match:
+                    return False
+
+    if "Batting Behind League Stat Rank" in qualifiers:
+        has_row_match = True                        
+        for qual_object in qualifiers["Batting Behind League Stat Rank"]:
+            if row["Year"] not in qual_object["year_map_obj"]:
+                return False
+
+            match_batter_posses = set()
+            if at_bat_event["batting_order_pos"] == 1:
+                match_batter_posses.add(9)
+            else:
+                match_batter_posses.add(at_bat_event["batting_order_pos"] - 1)
+
+            match_batters = set()
+            for match_batter in at_bat_event["team_batting_order_map"]:
+                if at_bat_event["team_batting_order_map"][match_batter] in match_batter_posses:
+                    match_batters.add(match_batter)
+
+            has_match = match_batters.intersection(qual_object["year_map_obj"][row["Year"]])
+
+            if qual_object["negate"]:
+                if has_match:
+                    return False
+            else:
+                if not has_match:
+                    return False
+    
+    if "Batting Behind AL Stat Rank" in qualifiers:
+        has_row_match = True                        
+        for qual_object in qualifiers["Batting Behind AL Stat Rank"]:
+            if row["Year"] not in qual_object["year_map_obj"]:
+                return False
+
+            match_batter_posses = set()
+            if at_bat_event["batting_order_pos"] == 1:
+                match_batter_posses.add(9)
+            else:
+                match_batter_posses.add(at_bat_event["batting_order_pos"] - 1)
+
+            match_batters = set()
+            for match_batter in at_bat_event["team_batting_order_map"]:
+                if at_bat_event["team_batting_order_map"][match_batter] in match_batter_posses:
+                    match_batters.add(match_batter)
+
+            has_match = match_batters.intersection(qual_object["year_map_obj"][row["Year"]])
+
+            if qual_object["negate"]:
+                if has_match:
+                    return False
+            else:
+                if not has_match:
+                    return False
+    
+    if "Batting Behind NL Stat Rank" in qualifiers:
+        has_row_match = True                        
+        for qual_object in qualifiers["Batting Behind NL Stat Rank"]:
+            if row["Year"] not in qual_object["year_map_obj"]:
+                return False
+
+            match_batter_posses = set()
+            if at_bat_event["batting_order_pos"] == 1:
+                match_batter_posses.add(9)
+            else:
+                match_batter_posses.add(at_bat_event["batting_order_pos"] - 1)
+
+            match_batters = set()
+            for match_batter in at_bat_event["team_batting_order_map"]:
+                if at_bat_event["team_batting_order_map"][match_batter] in match_batter_posses:
+                    match_batters.add(match_batter)
+
+            has_match = match_batters.intersection(qual_object["year_map_obj"][row["Year"]])
+
+            if qual_object["negate"]:
+                if has_match:
+                    return False
+            else:
+                if not has_match:
+                    return False
+        
+    if "Batting Next To Stat Rank" in qualifiers:
+        has_row_match = True                        
+        for qual_object in qualifiers["Batting Next To Stat Rank"]:
+            if row["Year"] not in qual_object["year_map_obj"]:
+                return False
+
+            match_batter_posses = set()
+            if at_bat_event["batting_order_pos"] == 1:
+                match_batter_posses.add(9)
+                match_batter_posses.add(2)
+            elif at_bat_event["batting_order_pos"] == 9:
+                match_batter_posses.add(1)
+                match_batter_posses.add(8)
+            else:
+                match_batter_posses.add(at_bat_event["batting_order_pos"] + 1)
+                match_batter_posses.add(at_bat_event["batting_order_pos"] - 1)
+
+            match_batters = set()
+            for match_batter in at_bat_event["team_batting_order_map"]:
+                if at_bat_event["team_batting_order_map"][match_batter] in match_batter_posses:
+                    match_batters.add(match_batter)
+
+            has_match = match_batters.intersection(qual_object["year_map_obj"][row["Year"]])
+
+            if qual_object["negate"]:
+                if has_match:
+                    return False
+            else:
+                if not has_match:
+                    return False
+
+    if "Batting Next To League Stat Rank" in qualifiers:
+        has_row_match = True                        
+        for qual_object in qualifiers["Batting Next To League Stat Rank"]:
+            if row["Year"] not in qual_object["year_map_obj"]:
+                return False
+
+            match_batter_posses = set()
+            if at_bat_event["batting_order_pos"] == 1:
+                match_batter_posses.add(9)
+                match_batter_posses.add(2)
+            elif at_bat_event["batting_order_pos"] == 9:
+                match_batter_posses.add(1)
+                match_batter_posses.add(8)
+            else:
+                match_batter_posses.add(at_bat_event["batting_order_pos"] + 1)
+                match_batter_posses.add(at_bat_event["batting_order_pos"] - 1)
+
+            match_batters = set()
+            for match_batter in at_bat_event["team_batting_order_map"]:
+                if at_bat_event["team_batting_order_map"][match_batter] in match_batter_posses:
+                    match_batters.add(match_batter)
+
+            has_match = match_batters.intersection(qual_object["year_map_obj"][row["Year"]])
+
+            if qual_object["negate"]:
+                if has_match:
+                    return False
+            else:
+                if not has_match:
+                    return False
+    
+    if "Batting Next To AL Stat Rank" in qualifiers:
+        has_row_match = True                        
+        for qual_object in qualifiers["Batting Next To AL Stat Rank"]:
+            if row["Year"] not in qual_object["year_map_obj"]:
+                return False
+
+            match_batter_posses = set()
+            if at_bat_event["batting_order_pos"] == 1:
+                match_batter_posses.add(9)
+                match_batter_posses.add(2)
+            elif at_bat_event["batting_order_pos"] == 9:
+                match_batter_posses.add(1)
+                match_batter_posses.add(8)
+            else:
+                match_batter_posses.add(at_bat_event["batting_order_pos"] + 1)
+                match_batter_posses.add(at_bat_event["batting_order_pos"] - 1)
+
+            match_batters = set()
+            for match_batter in at_bat_event["team_batting_order_map"]:
+                if at_bat_event["team_batting_order_map"][match_batter] in match_batter_posses:
+                    match_batters.add(match_batter)
+
+            has_match = match_batters.intersection(qual_object["year_map_obj"][row["Year"]])
+
+            if qual_object["negate"]:
+                if has_match:
+                    return False
+            else:
+                if not has_match:
+                    return False
+    
+    if "Batting Next To NL Stat Rank" in qualifiers:
+        has_row_match = True                        
+        for qual_object in qualifiers["Batting Next To NL Stat Rank"]:
+            if row["Year"] not in qual_object["year_map_obj"]:
+                return False
+
+            match_batter_posses = set()
+            if at_bat_event["batting_order_pos"] == 1:
+                match_batter_posses.add(9)
+                match_batter_posses.add(2)
+            elif at_bat_event["batting_order_pos"] == 9:
+                match_batter_posses.add(1)
+                match_batter_posses.add(8)
+            else:
+                match_batter_posses.add(at_bat_event["batting_order_pos"] + 1)
+                match_batter_posses.add(at_bat_event["batting_order_pos"] - 1)
+
+            match_batters = set()
+            for match_batter in at_bat_event["team_batting_order_map"]:
+                if at_bat_event["team_batting_order_map"][match_batter] in match_batter_posses:
+                    match_batters.add(match_batter)
+
+            has_match = match_batters.intersection(qual_object["year_map_obj"][row["Year"]])
+
+            if qual_object["negate"]:
+                if has_match:
+                    return False
+            else:
+                if not has_match:
+                    return False
+
+    if "Batting In Front Of Stat Percent" in qualifiers:
+        has_row_match = True                        
+        for qual_object in qualifiers["Batting In Front Of Stat Percent"]:
+            if row["Year"] not in qual_object["year_map_obj"]:
+                return False
+
+            match_batter_posses = set()
+            if at_bat_event["batting_order_pos"] == 9:
+                match_batter_posses.add(1)
+            else:
+                match_batter_posses.add(at_bat_event["batting_order_pos"] + 1)
+
+            match_batters = set()
+            for match_batter in at_bat_event["team_batting_order_map"]:
+                if at_bat_event["team_batting_order_map"][match_batter] in match_batter_posses:
+                    match_batters.add(match_batter)
+
+            has_match = match_batters.intersection(qual_object["year_map_obj"][row["Year"]])
+
+            if qual_object["negate"]:
+                if has_match:
+                    return False
+            else:
+                if not has_match:
+                    return False
+
+    if "Batting In Front Of League Stat Percent" in qualifiers:
+        has_row_match = True                        
+        for qual_object in qualifiers["Batting In Front Of League Stat Percent"]:
+            if row["Year"] not in qual_object["year_map_obj"]:
+                return False
+
+            match_batter_posses = set()
+            if at_bat_event["batting_order_pos"] == 9:
+                match_batter_posses.add(1)
+            else:
+                match_batter_posses.add(at_bat_event["batting_order_pos"] + 1)
+
+            match_batters = set()
+            for match_batter in at_bat_event["team_batting_order_map"]:
+                if at_bat_event["team_batting_order_map"][match_batter] in match_batter_posses:
+                    match_batters.add(match_batter)
+
+            has_match = match_batters.intersection(qual_object["year_map_obj"][row["Year"]])
+
+            if qual_object["negate"]:
+                if has_match:
+                    return False
+            else:
+                if not has_match:
+                    return False
+    
+    if "Batting In Front Of AL Stat Percent" in qualifiers:
+        has_row_match = True                        
+        for qual_object in qualifiers["Batting In Front Of AL Stat Percent"]:
+            if row["Year"] not in qual_object["year_map_obj"]:
+                return False
+
+            match_batter_posses = set()
+            if at_bat_event["batting_order_pos"] == 9:
+                match_batter_posses.add(1)
+            else:
+                match_batter_posses.add(at_bat_event["batting_order_pos"] + 1)
+
+            match_batters = set()
+            for match_batter in at_bat_event["team_batting_order_map"]:
+                if at_bat_event["team_batting_order_map"][match_batter] in match_batter_posses:
+                    match_batters.add(match_batter)
+
+            has_match = match_batters.intersection(qual_object["year_map_obj"][row["Year"]])
+
+            if qual_object["negate"]:
+                if has_match:
+                    return False
+            else:
+                if not has_match:
+                    return False
+    
+    if "Batting In Front Of NL Stat Percent" in qualifiers:
+        has_row_match = True                        
+        for qual_object in qualifiers["Batting In Front Of NL Stat Percent"]:
+            if row["Year"] not in qual_object["year_map_obj"]:
+                return False
+
+            match_batter_posses = set()
+            if at_bat_event["batting_order_pos"] == 9:
+                match_batter_posses.add(1)
+            else:
+                match_batter_posses.add(at_bat_event["batting_order_pos"] + 1)
+
+            match_batters = set()
+            for match_batter in at_bat_event["team_batting_order_map"]:
+                if at_bat_event["team_batting_order_map"][match_batter] in match_batter_posses:
+                    match_batters.add(match_batter)
+
+            has_match = match_batters.intersection(qual_object["year_map_obj"][row["Year"]])
+
+            if qual_object["negate"]:
+                if has_match:
+                    return False
+            else:
+                if not has_match:
+                    return False
+
+    if "Batting Behind Stat Percent" in qualifiers:
+        has_row_match = True                        
+        for qual_object in qualifiers["Batting Behind Stat Percent"]:
+            if row["Year"] not in qual_object["year_map_obj"]:
+                return False
+
+            match_batter_posses = set()
+            if at_bat_event["batting_order_pos"] == 1:
+                match_batter_posses.add(9)
+            else:
+                match_batter_posses.add(at_bat_event["batting_order_pos"] - 1)
+
+            match_batters = set()
+            for match_batter in at_bat_event["team_batting_order_map"]:
+                if at_bat_event["team_batting_order_map"][match_batter] in match_batter_posses:
+                    match_batters.add(match_batter)
+
+            has_match = match_batters.intersection(qual_object["year_map_obj"][row["Year"]])
+
+            if qual_object["negate"]:
+                if has_match:
+                    return False
+            else:
+                if not has_match:
+                    return False
+
+    if "Batting Behind League Stat Percent" in qualifiers:
+        has_row_match = True                        
+        for qual_object in qualifiers["Batting Behind League Stat Percent"]:
+            if row["Year"] not in qual_object["year_map_obj"]:
+                return False
+
+            match_batter_posses = set()
+            if at_bat_event["batting_order_pos"] == 1:
+                match_batter_posses.add(9)
+            else:
+                match_batter_posses.add(at_bat_event["batting_order_pos"] - 1)
+
+            match_batters = set()
+            for match_batter in at_bat_event["team_batting_order_map"]:
+                if at_bat_event["team_batting_order_map"][match_batter] in match_batter_posses:
+                    match_batters.add(match_batter)
+
+            has_match = match_batters.intersection(qual_object["year_map_obj"][row["Year"]])
+
+            if qual_object["negate"]:
+                if has_match:
+                    return False
+            else:
+                if not has_match:
+                    return False
+    
+    if "Batting Behind AL Stat Percent" in qualifiers:
+        has_row_match = True                        
+        for qual_object in qualifiers["Batting Behind AL Stat Percent"]:
+            if row["Year"] not in qual_object["year_map_obj"]:
+                return False
+
+            match_batter_posses = set()
+            if at_bat_event["batting_order_pos"] == 1:
+                match_batter_posses.add(9)
+            else:
+                match_batter_posses.add(at_bat_event["batting_order_pos"] - 1)
+
+            match_batters = set()
+            for match_batter in at_bat_event["team_batting_order_map"]:
+                if at_bat_event["team_batting_order_map"][match_batter] in match_batter_posses:
+                    match_batters.add(match_batter)
+
+            has_match = match_batters.intersection(qual_object["year_map_obj"][row["Year"]])
+
+            if qual_object["negate"]:
+                if has_match:
+                    return False
+            else:
+                if not has_match:
+                    return False
+    
+    if "Batting Behind NL Stat Percent" in qualifiers:
+        has_row_match = True                        
+        for qual_object in qualifiers["Batting Behind NL Stat Percent"]:
+            if row["Year"] not in qual_object["year_map_obj"]:
+                return False
+
+            match_batter_posses = set()
+            if at_bat_event["batting_order_pos"] == 1:
+                match_batter_posses.add(9)
+            else:
+                match_batter_posses.add(at_bat_event["batting_order_pos"] - 1)
+
+            match_batters = set()
+            for match_batter in at_bat_event["team_batting_order_map"]:
+                if at_bat_event["team_batting_order_map"][match_batter] in match_batter_posses:
+                    match_batters.add(match_batter)
+
+            has_match = match_batters.intersection(qual_object["year_map_obj"][row["Year"]])
+
+            if qual_object["negate"]:
+                if has_match:
+                    return False
+            else:
+                if not has_match:
+                    return False
+        
+    if "Batting Next To Stat Percent" in qualifiers:
+        has_row_match = True                        
+        for qual_object in qualifiers["Batting Next To Stat Percent"]:
+            if row["Year"] not in qual_object["year_map_obj"]:
+                return False
+
+            match_batter_posses = set()
+            if at_bat_event["batting_order_pos"] == 1:
+                match_batter_posses.add(9)
+                match_batter_posses.add(2)
+            elif at_bat_event["batting_order_pos"] == 9:
+                match_batter_posses.add(1)
+                match_batter_posses.add(8)
+            else:
+                match_batter_posses.add(at_bat_event["batting_order_pos"] + 1)
+                match_batter_posses.add(at_bat_event["batting_order_pos"] - 1)
+
+            match_batters = set()
+            for match_batter in at_bat_event["team_batting_order_map"]:
+                if at_bat_event["team_batting_order_map"][match_batter] in match_batter_posses:
+                    match_batters.add(match_batter)
+
+            has_match = match_batters.intersection(qual_object["year_map_obj"][row["Year"]])
+
+            if qual_object["negate"]:
+                if has_match:
+                    return False
+            else:
+                if not has_match:
+                    return False
+
+    if "Batting Next To League Stat Percent" in qualifiers:
+        has_row_match = True                        
+        for qual_object in qualifiers["Batting Next To League Stat Percent"]:
+            if row["Year"] not in qual_object["year_map_obj"]:
+                return False
+
+            match_batter_posses = set()
+            if at_bat_event["batting_order_pos"] == 1:
+                match_batter_posses.add(9)
+                match_batter_posses.add(2)
+            elif at_bat_event["batting_order_pos"] == 9:
+                match_batter_posses.add(1)
+                match_batter_posses.add(8)
+            else:
+                match_batter_posses.add(at_bat_event["batting_order_pos"] + 1)
+                match_batter_posses.add(at_bat_event["batting_order_pos"] - 1)
+
+            match_batters = set()
+            for match_batter in at_bat_event["team_batting_order_map"]:
+                if at_bat_event["team_batting_order_map"][match_batter] in match_batter_posses:
+                    match_batters.add(match_batter)
+
+            has_match = match_batters.intersection(qual_object["year_map_obj"][row["Year"]])
+
+            if qual_object["negate"]:
+                if has_match:
+                    return False
+            else:
+                if not has_match:
+                    return False
+    
+    if "Batting Next To AL Stat Percent" in qualifiers:
+        has_row_match = True                        
+        for qual_object in qualifiers["Batting Next To AL Stat Percent"]:
+            if row["Year"] not in qual_object["year_map_obj"]:
+                return False
+
+            match_batter_posses = set()
+            if at_bat_event["batting_order_pos"] == 1:
+                match_batter_posses.add(9)
+                match_batter_posses.add(2)
+            elif at_bat_event["batting_order_pos"] == 9:
+                match_batter_posses.add(1)
+                match_batter_posses.add(8)
+            else:
+                match_batter_posses.add(at_bat_event["batting_order_pos"] + 1)
+                match_batter_posses.add(at_bat_event["batting_order_pos"] - 1)
+
+            match_batters = set()
+            for match_batter in at_bat_event["team_batting_order_map"]:
+                if at_bat_event["team_batting_order_map"][match_batter] in match_batter_posses:
+                    match_batters.add(match_batter)
+
+            has_match = match_batters.intersection(qual_object["year_map_obj"][row["Year"]])
+
+            if qual_object["negate"]:
+                if has_match:
+                    return False
+            else:
+                if not has_match:
+                    return False
+    
+    if "Batting Next To NL Stat Percent" in qualifiers:
+        has_row_match = True                        
+        for qual_object in qualifiers["Batting Next To NL Stat Percent"]:
+            if row["Year"] not in qual_object["year_map_obj"]:
+                return False
+
+            match_batter_posses = set()
+            if at_bat_event["batting_order_pos"] == 1:
+                match_batter_posses.add(9)
+                match_batter_posses.add(2)
+            elif at_bat_event["batting_order_pos"] == 9:
+                match_batter_posses.add(1)
+                match_batter_posses.add(8)
+            else:
+                match_batter_posses.add(at_bat_event["batting_order_pos"] + 1)
+                match_batter_posses.add(at_bat_event["batting_order_pos"] - 1)
+
+            match_batters = set()
+            for match_batter in at_bat_event["team_batting_order_map"]:
+                if at_bat_event["team_batting_order_map"][match_batter] in match_batter_posses:
+                    match_batters.add(match_batter)
+
+            has_match = match_batters.intersection(qual_object["year_map_obj"][row["Year"]])
+
+            if qual_object["negate"]:
+                if has_match:
+                    return False
+            else:
+                if not has_match:
+                    return False
+
+    if "Batting In Front Of Stat" in qualifiers:
+        has_row_match = True                        
+        for qual_object in qualifiers["Batting In Front Of Stat"]:
+            if row["Year"] not in qual_object["year_map_obj"]:
+                return False
+
+            match_batter_posses = set()
+            if at_bat_event["batting_order_pos"] == 9:
+                match_batter_posses.add(1)
+            else:
+                match_batter_posses.add(at_bat_event["batting_order_pos"] + 1)
+
+            match_batters = set()
+            for match_batter in at_bat_event["team_batting_order_map"]:
+                if at_bat_event["team_batting_order_map"][match_batter] in match_batter_posses:
+                    match_batters.add(match_batter)
+
+            has_match = match_batters.intersection(qual_object["year_map_obj"][row["Year"]])
+
+            if qual_object["negate"]:
+                if has_match:
+                    return False
+            else:
+                if not has_match:
+                    return False
+    
+    if "Batting In Front Of AL Stat" in qualifiers:
+        has_row_match = True                        
+        for qual_object in qualifiers["Batting In Front Of AL Stat"]:
+            if row["Year"] not in qual_object["year_map_obj"]:
+                return False
+
+            match_batter_posses = set()
+            if at_bat_event["batting_order_pos"] == 9:
+                match_batter_posses.add(1)
+            else:
+                match_batter_posses.add(at_bat_event["batting_order_pos"] + 1)
+
+            match_batters = set()
+            for match_batter in at_bat_event["team_batting_order_map"]:
+                if at_bat_event["team_batting_order_map"][match_batter] in match_batter_posses:
+                    match_batters.add(match_batter)
+
+            has_match = match_batters.intersection(qual_object["year_map_obj"][row["Year"]])
+
+            if qual_object["negate"]:
+                if has_match:
+                    return False
+            else:
+                if not has_match:
+                    return False
+    
+    if "Batting In Front Of NL Stat" in qualifiers:
+        has_row_match = True                        
+        for qual_object in qualifiers["Batting In Front Of NL Stat"]:
+            if row["Year"] not in qual_object["year_map_obj"]:
+                return False
+
+            match_batter_posses = set()
+            if at_bat_event["batting_order_pos"] == 9:
+                match_batter_posses.add(1)
+            else:
+                match_batter_posses.add(at_bat_event["batting_order_pos"] + 1)
+
+            match_batters = set()
+            for match_batter in at_bat_event["team_batting_order_map"]:
+                if at_bat_event["team_batting_order_map"][match_batter] in match_batter_posses:
+                    match_batters.add(match_batter)
+
+            has_match = match_batters.intersection(qual_object["year_map_obj"][row["Year"]])
+
+            if qual_object["negate"]:
+                if has_match:
+                    return False
+            else:
+                if not has_match:
+                    return False
+
+    if "Batting Behind Stat" in qualifiers:
+        has_row_match = True                        
+        for qual_object in qualifiers["Batting Behind Stat"]:
+            if row["Year"] not in qual_object["year_map_obj"]:
+                return False
+
+            match_batter_posses = set()
+            if at_bat_event["batting_order_pos"] == 1:
+                match_batter_posses.add(9)
+            else:
+                match_batter_posses.add(at_bat_event["batting_order_pos"] - 1)
+
+            match_batters = set()
+            for match_batter in at_bat_event["team_batting_order_map"]:
+                if at_bat_event["team_batting_order_map"][match_batter] in match_batter_posses:
+                    match_batters.add(match_batter)
+
+            has_match = match_batters.intersection(qual_object["year_map_obj"][row["Year"]])
+
+            if qual_object["negate"]:
+                if has_match:
+                    return False
+            else:
+                if not has_match:
+                    return False
+    
+    if "Batting Behind AL Stat" in qualifiers:
+        has_row_match = True                        
+        for qual_object in qualifiers["Batting Behind AL Stat"]:
+            if row["Year"] not in qual_object["year_map_obj"]:
+                return False
+
+            match_batter_posses = set()
+            if at_bat_event["batting_order_pos"] == 1:
+                match_batter_posses.add(9)
+            else:
+                match_batter_posses.add(at_bat_event["batting_order_pos"] - 1)
+
+            match_batters = set()
+            for match_batter in at_bat_event["team_batting_order_map"]:
+                if at_bat_event["team_batting_order_map"][match_batter] in match_batter_posses:
+                    match_batters.add(match_batter)
+
+            has_match = match_batters.intersection(qual_object["year_map_obj"][row["Year"]])
+
+            if qual_object["negate"]:
+                if has_match:
+                    return False
+            else:
+                if not has_match:
+                    return False
+    
+    if "Batting Behind NL Stat" in qualifiers:
+        has_row_match = True                        
+        for qual_object in qualifiers["Batting Behind NL Stat"]:
+            if row["Year"] not in qual_object["year_map_obj"]:
+                return False
+
+            match_batter_posses = set()
+            if at_bat_event["batting_order_pos"] == 1:
+                match_batter_posses.add(9)
+            else:
+                match_batter_posses.add(at_bat_event["batting_order_pos"] - 1)
+
+            match_batters = set()
+            for match_batter in at_bat_event["team_batting_order_map"]:
+                if at_bat_event["team_batting_order_map"][match_batter] in match_batter_posses:
+                    match_batters.add(match_batter)
+
+            has_match = match_batters.intersection(qual_object["year_map_obj"][row["Year"]])
+
+            if qual_object["negate"]:
+                if has_match:
+                    return False
+            else:
+                if not has_match:
+                    return False
+        
+    if "Batting Next To Stat" in qualifiers:
+        has_row_match = True                        
+        for qual_object in qualifiers["Batting Next To Stat"]:
+            if row["Year"] not in qual_object["year_map_obj"]:
+                return False
+
+            match_batter_posses = set()
+            if at_bat_event["batting_order_pos"] == 1:
+                match_batter_posses.add(9)
+                match_batter_posses.add(2)
+            elif at_bat_event["batting_order_pos"] == 9:
+                match_batter_posses.add(1)
+                match_batter_posses.add(8)
+            else:
+                match_batter_posses.add(at_bat_event["batting_order_pos"] + 1)
+                match_batter_posses.add(at_bat_event["batting_order_pos"] - 1)
+
+            match_batters = set()
+            for match_batter in at_bat_event["team_batting_order_map"]:
+                if at_bat_event["team_batting_order_map"][match_batter] in match_batter_posses:
+                    match_batters.add(match_batter)
+
+            has_match = match_batters.intersection(qual_object["year_map_obj"][row["Year"]])
+
+            if qual_object["negate"]:
+                if has_match:
+                    return False
+            else:
+                if not has_match:
+                    return False
+    
+    if "Batting Next To AL Stat" in qualifiers:
+        has_row_match = True                        
+        for qual_object in qualifiers["Batting Next To AL Stat"]:
+            if row["Year"] not in qual_object["year_map_obj"]:
+                return False
+
+            match_batter_posses = set()
+            if at_bat_event["batting_order_pos"] == 1:
+                match_batter_posses.add(9)
+                match_batter_posses.add(2)
+            elif at_bat_event["batting_order_pos"] == 9:
+                match_batter_posses.add(1)
+                match_batter_posses.add(8)
+            else:
+                match_batter_posses.add(at_bat_event["batting_order_pos"] + 1)
+                match_batter_posses.add(at_bat_event["batting_order_pos"] - 1)
+
+            match_batters = set()
+            for match_batter in at_bat_event["team_batting_order_map"]:
+                if at_bat_event["team_batting_order_map"][match_batter] in match_batter_posses:
+                    match_batters.add(match_batter)
+
+            has_match = match_batters.intersection(qual_object["year_map_obj"][row["Year"]])
+
+            if qual_object["negate"]:
+                if has_match:
+                    return False
+            else:
+                if not has_match:
+                    return False
+    
+    if "Batting Next To NL Stat" in qualifiers:
+        has_row_match = True                        
+        for qual_object in qualifiers["Batting Next To NL Stat"]:
+            if row["Year"] not in qual_object["year_map_obj"]:
+                return False
+
+            match_batter_posses = set()
+            if at_bat_event["batting_order_pos"] == 1:
+                match_batter_posses.add(9)
+                match_batter_posses.add(2)
+            elif at_bat_event["batting_order_pos"] == 9:
+                match_batter_posses.add(1)
+                match_batter_posses.add(8)
+            else:
+                match_batter_posses.add(at_bat_event["batting_order_pos"] + 1)
+                match_batter_posses.add(at_bat_event["batting_order_pos"] - 1)
+
+            match_batters = set()
+            for match_batter in at_bat_event["team_batting_order_map"]:
+                if at_bat_event["team_batting_order_map"][match_batter] in match_batter_posses:
+                    match_batters.add(match_batter)
+
+            has_match = match_batters.intersection(qual_object["year_map_obj"][row["Year"]])
+
             if qual_object["negate"]:
                 if has_match:
                     return False
@@ -29945,7 +31990,7 @@ def handle_result_qualifiers(game_data, index, row_data, sub_missing_games, play
         if not perform_mlb_game_qualifiers(row_data, qualifiers):
             return False, raw_row_data
     
-    if "Late" in qualifiers or "Close" in qualifiers or "Batting Against" in qualifiers or "Pitching Against" in qualifiers or "Batting Against First Name" in qualifiers or "Pitching Against First Name" in qualifiers or "Batting Against Last Name" in qualifiers or "Pitching Against Last Name" in qualifiers or "Facing Stat Rank" in qualifiers or "Facing AL Stat Rank" in qualifiers or "Facing NL Stat Rank" in qualifiers or "Facing League Stat Rank" in qualifiers or "Facing Stat Percent" in qualifiers or "Facing AL Stat Percent" in qualifiers or "Facing NL Stat Percent" in qualifiers or "Facing League Stat Percent" in qualifiers or "Facing Stat" in qualifiers or "Facing AL Stat" in qualifiers  or "Facing NL Stat" in qualifiers or "Driven In" in qualifiers or "Batted In" in qualifiers or "Back To Back With" in qualifiers or "Batting Behind" in qualifiers or "Batting In Front Of" in qualifiers or "Batting Next To" in qualifiers or "Event Formula" in qualifiers or "Caught By" in qualifiers or "Stealing On" in qualifiers or "On Field With" in qualifiers or "On Field Against" in qualifiers or "Position" in qualifiers or "Hit Location" in qualifiers or "Exact Hit Location" in qualifiers or "Facing Primary Position" in qualifiers or "Facing Main Position" in qualifiers or "Facing Position" in qualifiers or "Bases Empty" in qualifiers or "Men On Base" in qualifiers or "Walk Off" in qualifiers or "Inside The Park HR" in qualifiers or "Walk Off Opportunity" in qualifiers or "Game Tying" in qualifiers or "Game Tying Opportunity" in qualifiers or "Go Ahead" in qualifiers or "Go Ahead Opportunity" in qualifiers or "Go Ahead Or Game Tying" in qualifiers or "Go Ahead Or Game Tying Opportunity" in qualifiers or "Game Winning" in qualifiers or "Tying On Deck" in qualifiers or "Winning On Deck" in qualifiers or "Tying At Bat" in qualifiers or "Winning At Bat" in qualifiers or "Tying In Scoring" in qualifiers or "Winning In Scoring" in qualifiers or "Tying On Base" in qualifiers or "Winning On Base" in qualifiers or "Last Inning" in qualifiers or "Last Out" in qualifiers or "Last Batter" in qualifiers or "Extra Innings" in qualifiers or "RISP" in qualifiers or "Batter First Plate Appearance" in qualifiers or "Pitcher First Batter Faced" in qualifiers or "Batter Last Plate Appearance" in qualifiers or "Pitcher Last Batter Faced" in qualifiers or "Facing Pitcher" in qualifiers or "Facing Position Player" in qualifiers or "Stealing Second" in qualifiers or "Stealing Third" in qualifiers or "Stealing Home" in qualifiers or "Bunting" in qualifiers or "Fastball" in qualifiers or "Out Of Zone" in qualifiers or "In Zone" in qualifiers or "Breaking" in qualifiers or "Offspeed" in qualifiers or "Pinch Hitting" in qualifiers or "Facing Starter" in qualifiers or "Facing Reliever" in qualifiers or "Leading Off Inning" in qualifiers or "Inning Started" in qualifiers or "Leading Off Game" in qualifiers or "Leading Off Whole Game" in qualifiers or "Swung At First Pitch" in qualifiers or "First Pitch" in qualifiers or "Batter Ahead" in qualifiers or "Even Count" in qualifiers or "Pitcher Ahead" in qualifiers or "After Batter Ahead" in qualifiers or "After Even Count" in qualifiers or "After Pitcher Ahead" in qualifiers or "Top Inning" in qualifiers or "Bottom Inning" in qualifiers or "Full Count" in qualifiers or "Man On First" in qualifiers or "Man On Second" in qualifiers or "Man On Third" in qualifiers or "Bases Loaded" in qualifiers or "Ending Outs" in qualifiers or "Outs" in qualifiers or "Outs Remaining" in qualifiers or "Swinging On Strikes" in qualifiers or "Swinging On Balls" in qualifiers or "After Swinging On Strikes" in qualifiers or "After Swinging On Balls" in qualifiers or "After Strikes" in qualifiers or "After Balls" in qualifiers or "Strikes" in qualifiers or "Balls" in qualifiers or "Runs" in qualifiers or "Play Outs" in qualifiers or "RBIs" in qualifiers or "Number Drove In" in qualifiers or "Pitch Speed" in qualifiers or "Pitch Zone" in qualifiers or "Pitch Spin" in qualifiers or "Exit Velocity" in qualifiers or "Hit Distance" in qualifiers or "Launch Angle" in qualifiers or "Inning" in qualifiers or "Inning Reversed" in qualifiers or "Scheduled Inning Reversed" in qualifiers or "Pitching Against Batting Order" in qualifiers or "Count" in qualifiers or "After Count" in qualifiers or "After Swinging On Count" in qualifiers or "Swinging On Count" in qualifiers or "Team Score" in qualifiers or "Ending Team Score" in qualifiers or "Game Pitch Count" in qualifiers or "Team Pitch Count" in qualifiers or "Pitch Count" in qualifiers or "Pitcher Batters Faced" in qualifiers or "Batter Plate Appearance"  in qualifiers or "Pitcher Batters Faced Reversed" in qualifiers or "Batter Plate Appearance Reversed" in qualifiers or "Starting Pitch Count" in qualifiers or "Innings Pitched" in qualifiers or "Ending Innings Pitched" in qualifiers or "At Bat Pitch Count" in qualifiers or "Time Facing Opponent" in qualifiers or "Number Of Men On Base" in qualifiers or "Number Of Men In Scoring" in qualifiers or "Men On Base" in qualifiers or "Time Through Lineup" in qualifiers or "Opponent Score" in qualifiers or "Score Margin" in qualifiers or "Score Difference" in qualifiers or  "Ending Opponent Score" in qualifiers or "Ending Score Margin" in qualifiers or "Ending Score Difference" in qualifiers or "Event Stat" in qualifiers or "Event Stat Reversed" in qualifiers or "Event Stats" in qualifiers or "Event Stats Reversed" in qualifiers or "Facing Lefty" in qualifiers or "Facing Righty" in qualifiers or "Batting Lefty" in qualifiers or "Batting Righty" in qualifiers or "Pitching Lefty" in qualifiers or "Pitching Righty" in qualifiers or "Pitch Type" in qualifiers or "Exact Pitch Type" in qualifiers or "Hit Trajectory" in qualifiers or "Hit Hardness" in qualifiers or "Event Type" in qualifiers or "Local Event Time" in qualifiers or "Event Time" in qualifiers or "Exact Event Type" in qualifiers or "Event Description" in qualifiers or "Previous Event Type" in qualifiers or "Previous Exact Event Type" in qualifiers or "Previous Event Description" in qualifiers or "Upcoming Event Type" in qualifiers or "Upcoming Exact Event Type" in qualifiers or "Upcoming Event Description" in qualifiers or "Exact Event Description" in qualifiers or "current-stats" in extra_stats:
+    if "Late" in qualifiers or "Close" in qualifiers or "Batting Against" in qualifiers or "Pitching Against" in qualifiers or "Batting Against First Name" in qualifiers or "Pitching Against First Name" in qualifiers or "Batting Against Last Name" in qualifiers or "Pitching Against Last Name" in qualifiers or "Facing Stat Rank" in qualifiers or "Facing League Stat Rank" in qualifiers or "Facing AL Stat Rank" in qualifiers or "Facing NL Stat Rank" in qualifiers or "Facing Stat Percent" in qualifiers or "Facing League Stat Percent" in qualifiers or "Facing AL Stat Percent" in qualifiers or "Facing NL Stat Percent" in qualifiers or "Facing Stat" in qualifiers or "Facing AL Stat" in qualifiers or "Facing NL Stat" in qualifiers or "Batting In Front Of Stat Rank" in qualifiers or "Batting In Front League Stat Rank" in qualifiers or "Batting In Front AL Stat Rank" in qualifiers or "Batting In Front NL Stat Rank" in qualifiers or "Batting In Front Stat Percent" in qualifiers or "Batting In Front League Stat Percent" in qualifiers or "Batting In Front AL Stat Percent" in qualifiers or "Batting In Front NL Stat Percent" in qualifiers or "Batting In Front Stat" in qualifiers or "Batting In Front AL Stat" in qualifiers or "Batting In Front NL Stat" in qualifiers or "Batting Behind Stat Rank" in qualifiers or "Batting Behind League Stat Rank" in qualifiers or "Batting Behind AL Stat Rank" in qualifiers or "Batting Behind NL Stat Rank" in qualifiers or "Batting Behind Stat Percent" in qualifiers or "Batting Behind League Stat Percent" in qualifiers or "Batting Behind AL Stat Percent" in qualifiers or "Batting Behind NL Stat Percent" in qualifiers or "Batting Behind Stat" in qualifiers or "Batting Behind AL Stat" in qualifiers or "Batting Behind NL Stat" in qualifiers or "Batting Next To Stat Rank" in qualifiers or "Batting Next League Stat Rank" in qualifiers or "Batting Next AL Stat Rank" in qualifiers or "Batting Next NL Stat Rank" in qualifiers or "Batting Next Stat Percent" in qualifiers or "Batting Next League Stat Percent" in qualifiers or "Batting Next AL Stat Percent" in qualifiers or "Batting Next NL Stat Percent" in qualifiers or "Batting Next Stat" in qualifiers or "Batting Next AL Stat" in qualifiers or "Batting Next NL Stat" in qualifiers or "Driven In" in qualifiers or "Batted In" in qualifiers or "Back To Back With" in qualifiers or "Batting Behind" in qualifiers or "Batting In Front Of" in qualifiers or "Batting Next To" in qualifiers or "Event Formula" in qualifiers or "Caught By" in qualifiers or "Stealing On" in qualifiers or "On Field With" in qualifiers or "On Field Against" in qualifiers or "Position" in qualifiers or "Hit Location" in qualifiers or "Exact Hit Location" in qualifiers or "Facing Primary Position" in qualifiers or "Facing Main Position" in qualifiers or "Facing Position" in qualifiers or "Bases Empty" in qualifiers or "Men On Base" in qualifiers or "Walk Off" in qualifiers or "Inside The Park HR" in qualifiers or "Walk Off Opportunity" in qualifiers or "Game Tying" in qualifiers or "Game Tying Opportunity" in qualifiers or "Go Ahead" in qualifiers or "Go Ahead Opportunity" in qualifiers or "Go Ahead Or Game Tying" in qualifiers or "Go Ahead Or Game Tying Opportunity" in qualifiers or "Game Winning" in qualifiers or "Tying On Deck" in qualifiers or "Winning On Deck" in qualifiers or "Tying At Bat" in qualifiers or "Winning At Bat" in qualifiers or "Tying In Scoring" in qualifiers or "Winning In Scoring" in qualifiers or "Tying On Base" in qualifiers or "Winning On Base" in qualifiers or "Last Inning" in qualifiers or "Last Out" in qualifiers or "Last Batter" in qualifiers or "Extra Innings" in qualifiers or "RISP" in qualifiers or "Batter First Plate Appearance" in qualifiers or "Pitcher First Batter Faced" in qualifiers or "Batter Last Plate Appearance" in qualifiers or "Pitcher Last Batter Faced" in qualifiers or "Facing Pitcher" in qualifiers or "Facing Position Player" in qualifiers or "Stealing Second" in qualifiers or "Stealing Third" in qualifiers or "Stealing Home" in qualifiers or "Bunting" in qualifiers or "Fastball" in qualifiers or "Out Of Zone" in qualifiers or "In Zone" in qualifiers or "Breaking" in qualifiers or "Offspeed" in qualifiers or "Pinch Hitting" in qualifiers or "Facing Starter" in qualifiers or "Facing Reliever" in qualifiers or "Leading Off Inning" in qualifiers or "Inning Started" in qualifiers or "Leading Off Game" in qualifiers or "Leading Off Whole Game" in qualifiers or "Swung At First Pitch" in qualifiers or "First Pitch" in qualifiers or "Batter Ahead" in qualifiers or "Even Count" in qualifiers or "Pitcher Ahead" in qualifiers or "After Batter Ahead" in qualifiers or "After Even Count" in qualifiers or "After Pitcher Ahead" in qualifiers or "Top Inning" in qualifiers or "Bottom Inning" in qualifiers or "Full Count" in qualifiers or "Man On First" in qualifiers or "Man On Second" in qualifiers or "Man On Third" in qualifiers or "Bases Loaded" in qualifiers or "Ending Outs" in qualifiers or "Outs" in qualifiers or "Outs Remaining" in qualifiers or "Swinging On Strikes" in qualifiers or "Swinging On Balls" in qualifiers or "After Swinging On Strikes" in qualifiers or "After Swinging On Balls" in qualifiers or "After Strikes" in qualifiers or "After Balls" in qualifiers or "Strikes" in qualifiers or "Balls" in qualifiers or "Runs" in qualifiers or "Play Outs" in qualifiers or "RBIs" in qualifiers or "Number Drove In" in qualifiers or "Pitch Speed" in qualifiers or "Pitch Zone" in qualifiers or "Pitch Spin" in qualifiers or "Exit Velocity" in qualifiers or "Hit Distance" in qualifiers or "Launch Angle" in qualifiers or "Inning" in qualifiers or "Inning Reversed" in qualifiers or "Scheduled Inning Reversed" in qualifiers or "Pitching Against Batting Order" in qualifiers or "Count" in qualifiers or "After Count" in qualifiers or "After Swinging On Count" in qualifiers or "Swinging On Count" in qualifiers or "Team Score" in qualifiers or "Ending Team Score" in qualifiers or "Game Pitch Count" in qualifiers or "Team Pitch Count" in qualifiers or "Pitch Count" in qualifiers or "Pitcher Batters Faced" in qualifiers or "Batter Plate Appearance"  in qualifiers or "Pitcher Batters Faced Reversed" in qualifiers or "Batter Plate Appearance Reversed" in qualifiers or "Starting Pitch Count" in qualifiers or "Innings Pitched" in qualifiers or "Ending Innings Pitched" in qualifiers or "At Bat Pitch Count" in qualifiers or "Time Facing Opponent" in qualifiers or "Number Of Men On Base" in qualifiers or "Number Of Men In Scoring" in qualifiers or "Men On Base" in qualifiers or "Time Through Lineup" in qualifiers or "Opponent Score" in qualifiers or "Score Margin" in qualifiers or "Score Difference" in qualifiers or  "Ending Opponent Score" in qualifiers or "Ending Score Margin" in qualifiers or "Ending Score Difference" in qualifiers or "Event Stat" in qualifiers or "Event Stat Reversed" in qualifiers or "Event Stats" in qualifiers or "Event Stats Reversed" in qualifiers or "Facing Lefty" in qualifiers or "Facing Righty" in qualifiers or "Batting Lefty" in qualifiers or "Batting Righty" in qualifiers or "Pitching Lefty" in qualifiers or "Pitching Righty" in qualifiers or "Pitch Type" in qualifiers or "Exact Pitch Type" in qualifiers or "Hit Trajectory" in qualifiers or "Hit Hardness" in qualifiers or "Event Type" in qualifiers or "Local Event Time" in qualifiers or "Event Time" in qualifiers or "Exact Event Type" in qualifiers or "Event Description" in qualifiers or "Previous Event Type" in qualifiers or "Previous Exact Event Type" in qualifiers or "Previous Event Description" in qualifiers or "Upcoming Event Type" in qualifiers or "Upcoming Exact Event Type" in qualifiers or "Upcoming Event Description" in qualifiers or "Exact Event Description" in qualifiers or "current-stats" in extra_stats:
         if sub_missing_games:
             count_info["missing_games"] = True
         has_match, raw_row_data = perform_sub_mlb_game_qualifiers(row_data, player_data, qualifiers, game_data, player_type, True)
@@ -29965,7 +32010,7 @@ def has_other_game_quals(qualifiers):
     if "Game Number" in qualifiers or "Stadium" in qualifiers or "Exact Stadium" in qualifiers or "Start Time" in qualifiers or "Local Start Time" in qualifiers or "Surface" in qualifiers or "Condition" in qualifiers or "Temperature" in qualifiers or "City" in qualifiers or "Exact City" in qualifiers or "State" in qualifiers or "Exact State" in qualifiers or "Time Zone" in qualifiers or "Exact Time Zone" in qualifiers or "Country" in qualifiers or "Exact Country" in qualifiers or "Wind" in qualifiers or "Umpire" in qualifiers or "Home Plate Umpire" in qualifiers or "Run Support" in qualifiers:
         return True
 
-    if "Event Stats" in qualifiers or "Event Stats Reversed" in qualifiers or "Late" in qualifiers or "Close" in qualifiers or "Batting Against" in qualifiers or "Pitching Against" in qualifiers or "Batting Against First Name" in qualifiers or "Pitching Against First Name" in qualifiers or "Batting Against Last Name" in qualifiers or "Pitching Against Last Name" in qualifiers or "Facing Stat Rank" in qualifiers or "Facing AL Stat Rank" in qualifiers or "Facing NL Stat Rank" in qualifiers or "Facing League Stat Rank" in qualifiers or "Facing Stat Percent" in qualifiers or "Facing AL Stat Percent" in qualifiers or "Facing NL Stat Percent" in qualifiers or "Facing League Stat Percent" in qualifiers or "Facing Stat" in qualifiers or "Facing AL Stat" in qualifiers or "Facing NL Stat" in qualifiers or "Inning Stat" in qualifiers or "Driven In" in qualifiers or "Batted In" in qualifiers or "Back To Back With" in qualifiers or "Batting Behind" in qualifiers or "Batting In Front Of" in qualifiers or "Batting Next To" in qualifiers or "Event Formula" in qualifiers or "Caught By" in qualifiers or "Stealing On" in qualifiers or "On Field With" in qualifiers or "On Field Against" in qualifiers or "Position" in qualifiers or "Hit Location" in qualifiers or "Exact Hit Location" in qualifiers or "Facing Primary Position" in qualifiers or "Facing Main Position" in qualifiers or "Facing Position" in qualifiers or "Bases Empty" in qualifiers or "Men On Base" in qualifiers or "Walk Off" in qualifiers or "Inside The Park HR" in qualifiers or "Walk Off Opportunity" in qualifiers or "Game Tying" in qualifiers or "Game Tying Opportunity" in qualifiers or "Go Ahead" in qualifiers or "Go Ahead Opportunity" in qualifiers or "Go Ahead Or Game Tying" in qualifiers or "Go Ahead Or Game Tying Opportunity" in qualifiers or "Game Winning" in qualifiers or "Tying On Deck" in qualifiers or "Winning On Deck" in qualifiers or "Tying At Bat" in qualifiers or "Winning At Bat" in qualifiers or "Tying In Scoring" in qualifiers or "Winning In Scoring" in qualifiers or "Tying On Base" in qualifiers or "Winning On Base" in qualifiers or "Last Inning" in qualifiers or "Last Out" in qualifiers or "Last Batter" in qualifiers or "Extra Innings" in qualifiers or "RISP" in qualifiers or "Batter First Plate Appearance" in qualifiers or "Pitcher First Batter Faced" in qualifiers or "Batter Last Plate Appearance" in qualifiers or "Pitcher Last Batter Faced" in qualifiers or "Facing Position Player" in qualifiers or "Facing Pitcher" in qualifiers or "Stealing Second" in qualifiers or "Stealing Third" in qualifiers or "Stealing Home" in qualifiers or "Bunting" in qualifiers or "Fastball" in qualifiers or "Out Of Zone" in qualifiers or "In Zone" in qualifiers or "Breaking" in qualifiers or "Offspeed" in qualifiers or "Pinch Hitting" in qualifiers or "Facing Starter" in qualifiers or "Facing Reliever" in qualifiers or "Leading Off Inning" in qualifiers or "Inning Started" in qualifiers or "Leading Off Game" in qualifiers or "Leading Off Whole Game" in qualifiers or "Swung At First Pitch" in qualifiers or "First Pitch" in qualifiers or "Batter Ahead" in qualifiers or "Even Count" in qualifiers or "Pitcher Ahead" in qualifiers or "After Batter Ahead" in qualifiers or "After Even Count" in qualifiers or "After Pitcher Ahead" in qualifiers or "Top Inning" in qualifiers or "Bottom Inning" in qualifiers or "Full Count" in qualifiers or "Man On First" in qualifiers or "Man On Second" in qualifiers or "Man On Third" in qualifiers or "Bases Loaded" in qualifiers or "Ending Outs" in qualifiers or "Outs" in qualifiers or "Outs Remaining" in qualifiers or "Swinging On Strikes" in qualifiers or "Swinging On Balls" in qualifiers or "After Swinging On Strikes" in qualifiers or "After Swinging On Balls" in qualifiers or "After Strikes" in qualifiers or "After Balls" in qualifiers or "Strikes" in qualifiers or "Balls" in qualifiers or "Runs" in qualifiers or "Play Outs" in qualifiers or "RBIs" in qualifiers or "Number Drove In" in qualifiers or "Pitch Speed" in qualifiers or "Pitch Zone" in qualifiers or "Pitch Spin" in qualifiers or "Exit Velocity" in qualifiers or "Hit Distance" in qualifiers or "Launch Angle" in qualifiers or "Inning" in qualifiers or "Inning Reversed" in qualifiers or "Scheduled Inning Reversed" in qualifiers or "Pitching Against Batting Order" in qualifiers or "Count" in qualifiers or "After Count" in qualifiers or "After Swinging On Count" in qualifiers or "Swinging On Count" in qualifiers or "Team Score" in qualifiers or "Ending Team Score" in qualifiers or "Game Pitch Count" in qualifiers or "Team Pitch Count" in qualifiers or "Pitch Count" in qualifiers or "Pitcher Batters Faced" in qualifiers or "Batter Plate Appearance" in qualifiers or "Pitcher Batters Faced Reversed" in qualifiers or "Batter Plate Appearance Reversed" in qualifiers or "Starting Pitch Count" in qualifiers or "Innings Pitched" in qualifiers or "Ending Innings Pitched" in qualifiers or "At Bat Pitch Count" in qualifiers or "Time Facing Opponent" in qualifiers or "Number Of Men On Base" in qualifiers or "Number Of Men In Scoring" in qualifiers or "Men On Base" in qualifiers or "Time Through Lineup" in qualifiers or "Opponent Score" in qualifiers or "Score Margin" in qualifiers or "Score Difference" in qualifiers or  "Ending Opponent Score" in qualifiers or "Ending Score Margin" in qualifiers or "Ending Score Difference" in qualifiers or "Facing Lefty" in qualifiers or "Facing Righty" in qualifiers or "Batting Lefty" in qualifiers or "Batting Righty" in qualifiers or "Pitching Lefty" in qualifiers or "Pitching Righty" in qualifiers or "Pitch Type" in qualifiers or "Exact Pitch Type" in qualifiers or "Hit Trajectory" in qualifiers or "Hit Hardness" in qualifiers or "Local Event Time" in qualifiers or "Event Time" in qualifiers or "Event Type" in qualifiers or "Exact Event Type" in qualifiers or "Event Description" in qualifiers or "Upcoming Player Event Type" in qualifiers or "Upcoming Exact Player Event Type" in qualifiers or "Previous Player Event Type" in qualifiers or "Previous Exact Player Event Type" in qualifiers or "Previous Event Type" in qualifiers or "Previous Exact Event Type" in qualifiers or "Previous Event Description" in qualifiers or "Upcoming Event Type" in qualifiers or "Upcoming Exact Event Type" in qualifiers or "Upcoming Event Description" in qualifiers or "Exact Event Description" in qualifiers:
+    if "Event Stats" in qualifiers or "Event Stats Reversed" in qualifiers or "Late" in qualifiers or "Close" in qualifiers or "Batting Against" in qualifiers or "Pitching Against" in qualifiers or "Batting Against First Name" in qualifiers or "Pitching Against First Name" in qualifiers or "Batting Against Last Name" in qualifiers or "Pitching Against Last Name" in qualifiers or "Facing Stat Rank" in qualifiers or "Facing League Stat Rank" in qualifiers or "Facing AL Stat Rank" in qualifiers or "Facing NL Stat Rank" in qualifiers or "Facing Stat Percent" in qualifiers or "Facing League Stat Percent" in qualifiers or "Facing AL Stat Percent" in qualifiers or "Facing NL Stat Percent" in qualifiers or "Facing Stat" in qualifiers or "Facing AL Stat" in qualifiers or "Facing NL Stat" in qualifiers or "Batting In Front Of Stat Rank" in qualifiers or "Batting In Front League Stat Rank" in qualifiers or "Batting In Front AL Stat Rank" in qualifiers or "Batting In Front NL Stat Rank" in qualifiers or "Batting In Front Stat Percent" in qualifiers or "Batting In Front League Stat Percent" in qualifiers or "Batting In Front AL Stat Percent" in qualifiers or "Batting In Front NL Stat Percent" in qualifiers or "Batting In Front Stat" in qualifiers or "Batting In Front AL Stat" in qualifiers or "Batting In Front NL Stat" in qualifiers or "Batting Behind Stat Rank" in qualifiers or "Batting Behind League Stat Rank" in qualifiers or "Batting Behind AL Stat Rank" in qualifiers or "Batting Behind NL Stat Rank" in qualifiers or "Batting Behind Stat Percent" in qualifiers or "Batting Behind League Stat Percent" in qualifiers or "Batting Behind AL Stat Percent" in qualifiers or "Batting Behind NL Stat Percent" in qualifiers or "Batting Behind Stat" in qualifiers or "Batting Behind AL Stat" in qualifiers or "Batting Behind NL Stat" in qualifiers or "Batting Next To Stat Rank" in qualifiers or "Batting Next League Stat Rank" in qualifiers or "Batting Next AL Stat Rank" in qualifiers or "Batting Next NL Stat Rank" in qualifiers or "Batting Next Stat Percent" in qualifiers or "Batting Next League Stat Percent" in qualifiers or "Batting Next AL Stat Percent" in qualifiers or "Batting Next NL Stat Percent" in qualifiers or "Batting Next Stat" in qualifiers or "Batting Next AL Stat" in qualifiers or "Batting Next NL Stat" in qualifiers or "Inning Stat" in qualifiers or "Driven In" in qualifiers or "Batted In" in qualifiers or "Back To Back With" in qualifiers or "Batting Behind" in qualifiers or "Batting In Front Of" in qualifiers or "Batting Next To" in qualifiers or "Event Formula" in qualifiers or "Caught By" in qualifiers or "Stealing On" in qualifiers or "On Field With" in qualifiers or "On Field Against" in qualifiers or "Position" in qualifiers or "Hit Location" in qualifiers or "Exact Hit Location" in qualifiers or "Facing Primary Position" in qualifiers or "Facing Main Position" in qualifiers or "Facing Position" in qualifiers or "Bases Empty" in qualifiers or "Men On Base" in qualifiers or "Walk Off" in qualifiers or "Inside The Park HR" in qualifiers or "Walk Off Opportunity" in qualifiers or "Game Tying" in qualifiers or "Game Tying Opportunity" in qualifiers or "Go Ahead" in qualifiers or "Go Ahead Opportunity" in qualifiers or "Go Ahead Or Game Tying" in qualifiers or "Go Ahead Or Game Tying Opportunity" in qualifiers or "Game Winning" in qualifiers or "Tying On Deck" in qualifiers or "Winning On Deck" in qualifiers or "Tying At Bat" in qualifiers or "Winning At Bat" in qualifiers or "Tying In Scoring" in qualifiers or "Winning In Scoring" in qualifiers or "Tying On Base" in qualifiers or "Winning On Base" in qualifiers or "Last Inning" in qualifiers or "Last Out" in qualifiers or "Last Batter" in qualifiers or "Extra Innings" in qualifiers or "RISP" in qualifiers or "Batter First Plate Appearance" in qualifiers or "Pitcher First Batter Faced" in qualifiers or "Batter Last Plate Appearance" in qualifiers or "Pitcher Last Batter Faced" in qualifiers or "Facing Position Player" in qualifiers or "Facing Pitcher" in qualifiers or "Stealing Second" in qualifiers or "Stealing Third" in qualifiers or "Stealing Home" in qualifiers or "Bunting" in qualifiers or "Fastball" in qualifiers or "Out Of Zone" in qualifiers or "In Zone" in qualifiers or "Breaking" in qualifiers or "Offspeed" in qualifiers or "Pinch Hitting" in qualifiers or "Facing Starter" in qualifiers or "Facing Reliever" in qualifiers or "Leading Off Inning" in qualifiers or "Inning Started" in qualifiers or "Leading Off Game" in qualifiers or "Leading Off Whole Game" in qualifiers or "Swung At First Pitch" in qualifiers or "First Pitch" in qualifiers or "Batter Ahead" in qualifiers or "Even Count" in qualifiers or "Pitcher Ahead" in qualifiers or "After Batter Ahead" in qualifiers or "After Even Count" in qualifiers or "After Pitcher Ahead" in qualifiers or "Top Inning" in qualifiers or "Bottom Inning" in qualifiers or "Full Count" in qualifiers or "Man On First" in qualifiers or "Man On Second" in qualifiers or "Man On Third" in qualifiers or "Bases Loaded" in qualifiers or "Ending Outs" in qualifiers or "Outs" in qualifiers or "Outs Remaining" in qualifiers or "Swinging On Strikes" in qualifiers or "Swinging On Balls" in qualifiers or "After Swinging On Strikes" in qualifiers or "After Swinging On Balls" in qualifiers or "After Strikes" in qualifiers or "After Balls" in qualifiers or "Strikes" in qualifiers or "Balls" in qualifiers or "Runs" in qualifiers or "Play Outs" in qualifiers or "RBIs" in qualifiers or "Number Drove In" in qualifiers or "Pitch Speed" in qualifiers or "Pitch Zone" in qualifiers or "Pitch Spin" in qualifiers or "Exit Velocity" in qualifiers or "Hit Distance" in qualifiers or "Launch Angle" in qualifiers or "Inning" in qualifiers or "Inning Reversed" in qualifiers or "Scheduled Inning Reversed" in qualifiers or "Pitching Against Batting Order" in qualifiers or "Count" in qualifiers or "After Count" in qualifiers or "After Swinging On Count" in qualifiers or "Swinging On Count" in qualifiers or "Team Score" in qualifiers or "Ending Team Score" in qualifiers or "Game Pitch Count" in qualifiers or "Team Pitch Count" in qualifiers or "Pitch Count" in qualifiers or "Pitcher Batters Faced" in qualifiers or "Batter Plate Appearance" in qualifiers or "Pitcher Batters Faced Reversed" in qualifiers or "Batter Plate Appearance Reversed" in qualifiers or "Starting Pitch Count" in qualifiers or "Innings Pitched" in qualifiers or "Ending Innings Pitched" in qualifiers or "At Bat Pitch Count" in qualifiers or "Time Facing Opponent" in qualifiers or "Number Of Men On Base" in qualifiers or "Number Of Men In Scoring" in qualifiers or "Men On Base" in qualifiers or "Time Through Lineup" in qualifiers or "Opponent Score" in qualifiers or "Score Margin" in qualifiers or "Score Difference" in qualifiers or  "Ending Opponent Score" in qualifiers or "Ending Score Margin" in qualifiers or "Ending Score Difference" in qualifiers or "Facing Lefty" in qualifiers or "Facing Righty" in qualifiers or "Batting Lefty" in qualifiers or "Batting Righty" in qualifiers or "Pitching Lefty" in qualifiers or "Pitching Righty" in qualifiers or "Pitch Type" in qualifiers or "Exact Pitch Type" in qualifiers or "Hit Trajectory" in qualifiers or "Hit Hardness" in qualifiers or "Local Event Time" in qualifiers or "Event Time" in qualifiers or "Event Type" in qualifiers or "Exact Event Type" in qualifiers or "Event Description" in qualifiers or "Upcoming Player Event Type" in qualifiers or "Upcoming Exact Player Event Type" in qualifiers or "Previous Player Event Type" in qualifiers or "Previous Exact Player Event Type" in qualifiers or "Previous Event Type" in qualifiers or "Previous Exact Event Type" in qualifiers or "Previous Event Description" in qualifiers or "Upcoming Event Type" in qualifiers or "Upcoming Exact Event Type" in qualifiers or "Upcoming Event Description" in qualifiers or "Exact Event Description" in qualifiers:
         return True
 
     return False
