@@ -20363,7 +20363,7 @@ def perform_sub_nhl_game_qualifiers(row, qualifiers, player_game_info, player_ty
                     "period" : period
                 }
                 if not perform_sub_metadata_qual(goal_event, "period", qualifiers["Period"], None, None):
-                    return False
+                    periods_to_skip.add(period)
             
         for period in reversed(player_game_info["periods"]):
             if "Career Period Reversed" in qualifiers:
@@ -30883,12 +30883,10 @@ def is_against_header(header, extra_stats, player_type, has_toi_stats):
     if "current-stats-zone" in extra_stats and ("/60M" in header or "TOI" in header):
         return True
 
-    if "current-stats-no-game" in extra_stats and "GP" in header:
-        return True
-
-    if ("/GP" in header or "/82GP" in header) and "TOI" not in header and not header == "GP/GP":
+    if ("/GP" in header or "/82GP" in header) and not header == "GP/GP":
         if "show-stat-" + header.lower() not in extra_stats and not "per-game" in extra_stats:
-            return True
+            if "TOI" not in header or "current-stats-no-game" in extra_stats:
+                return True
 
     if header == "CurrentCap$" and "show-stat-" + header.lower() not in extra_stats:
         return True
