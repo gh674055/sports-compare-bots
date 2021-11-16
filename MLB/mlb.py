@@ -13497,7 +13497,11 @@ def handle_player_data(player_data, time_frame, player_type, player_page, valid_
 
     live_game = None
     player_link = None
-    player_link = get_mlb_player_link(player_data)
+    try:
+        player_link = get_mlb_player_link(player_data)
+    except Exception:
+        pass
+    
     if not player_link:
         logger.warn("#" + str(threading.get_ident()) + "#   " + "Unable to get MLB player link for BRef ID : " + player_data["id"] + ". Cannot retrieve MLB API data")
     else:
@@ -21595,13 +21599,13 @@ def get_mlb_player_link(player_data):
                         logger.info("#" + str(threading.get_ident()) + "#   " + "Found MLB Player " + matching_players[0]["fullName"] + " (" + str(matching_players[0]["id"]) + ") by birthdate")
                         return matching_players[0]["link"]
                 except urllib.error.HTTPError:
-                    continue
+                    raise
             else:
                 request = urllib.request.Request(team_roster_url_format.format(team_id, year_str), headers=request_headers)
                 try:
                     data = url_request_json(request)
                 except urllib.error.HTTPError:
-                    continue
+                    raise
 
                 if "roster" not in data:
                     continue
@@ -21759,13 +21763,13 @@ def get_mlb_player_link(player_data):
                             logger.info("#" + str(threading.get_ident()) + "#   " + "Found MLB Player " + player["person"]["fullName"] + " (" + str(player["person"]["id"]) + ") by name")
                             return player["person"]["link"]
                 except urllib.error.HTTPError:
-                    continue
+                    raise
             else:
                 request = urllib.request.Request(team_roster_url_format.format(team_id, year_str), headers=request_headers)
                 try:
                     data = url_request_json(request)
                 except urllib.error.HTTPError:
-                    continue
+                    raise
 
                 if "roster" not in data:
                     continue

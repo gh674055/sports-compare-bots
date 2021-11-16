@@ -27235,13 +27235,13 @@ def get_nhl_player_link(player_data):
                         logger.info("#" + str(threading.get_ident()) + "#   " + "Found NHL Player " + matching_players[0]["fullName"] + " (" + str(matching_players[0]["id"]) + ") by birthdate")
                         return matching_players[0]["link"], matching_players[0]["fullName"], matching_players[0]["primaryPosition"]["abbreviation"], matching_players[0]["shootsCatches"]
                 except urllib.error.HTTPError:
-                    continue
+                    raise
             else:
                 request = urllib.request.Request(team_roster_url_format.format(team_id, year_str), headers=request_headers)
                 try:
                     data = url_request_json(request)
                 except urllib.error.HTTPError:
-                    continue
+                    raise
 
                 if "roster" not in data:
                     continue
@@ -27375,13 +27375,13 @@ def get_nhl_player_link(player_data):
                             logger.info("#" + str(threading.get_ident()) + "#   " + "Found NHL Player " + player["person"]["fullName"] + " (" + str(player["person"]["id"]) + ") by name")
                             return player["person"]["link"], player["person"]["fullName"], player["person"]["primaryPosition"]["abbreviation"], player["person"]["shootsCatches"]
                 except urllib.error.HTTPError:
-                    continue
+                    raise
             else:
                 request = urllib.request.Request(team_roster_url_format.format(team_id, year_str), headers=request_headers)
                 try:
                     data = url_request_json(request)
                 except urllib.error.HTTPError:
-                    continue
+                    raise
 
                 if "roster" not in data:
                     continue
