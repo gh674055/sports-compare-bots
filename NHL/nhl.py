@@ -6821,6 +6821,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                     for time_frame in time_frames:
                         time_start = None
                         time_end = None
+                        playoffs = None
 
                         og_time_str = time_frame
                         qualifiers = {}
@@ -7276,7 +7277,6 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 extra_stats.add("hide-stat-" + stat.strip())
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
 
-                        playoffs = None
                         last_match = re.search(r"\b(no(?:t|n)? ?)?-?(?:includes?|including|and|with)(?: |-)?(?:playoffs?|post-?seasons?)(?!-)\b", time_frame)
                         if last_match:
                             playoff_match_str = last_match.group(1)
