@@ -32077,9 +32077,6 @@ def set_row_data(player_game_info, row_data, player_type):
             row_data["ExitND"] = 1
 
 def get_mlb_game_links(player_data, player_type, player_link, all_rows):
-    if "mlb_id" not in  player_data:
-        return
-
     seasons = list(set([row["Year"] for row in all_rows]))
     for season in seasons:
         scheudle_url = mlb_player_schedule_url_format.format(player_data["mlb_id"], season)
@@ -32231,9 +32228,6 @@ def get_mlb_game_links(player_data, player_type, player_link, all_rows):
                                             row_data["MLBGameLink"] = game["gamePk"]
 
 def get_mlb_game_links_schedule_links(player_data, player_type, player_link, all_rows, qualifiers):
-    if "mlb_id" not in  player_data:
-        return
-
     seasons = list(set([row["Year"] for row in all_rows]))
     for season in seasons:
         sub_year = season
