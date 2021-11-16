@@ -29509,7 +29509,7 @@ def print_player_data(player_datas, player_type, highest_vals, lowest_vals, has_
                         override_show = True
                     if header in ("GFRel/60M", "CFRel/60M", "FFRel/60M", "SFRel/60M", "GARel/60M", "CARel/60M", "FARel/60M", "SARel/60M", "GFRelPer", "CFRelPer", "FFRelPer", "SFRelPer"):
                         override_show = True
-                    if "TSA" in header or header == "SThr%" or header == "TS%" or header == "TOI/GP":
+                    if "TSA" in header or header == "SThr%" or header == "TS%" or header == "TOI/GP" or header == "TK/60M" or header == "GV/60M" or header == "FO/60M" or header == "FOW/60M":
                         override_show = True
                     if "shift" in extra_stats and "Shft" in header:
                         override_show = True
@@ -29918,7 +29918,7 @@ def get_reddit_player_table(player_datas, player_type, debug_mode, original_comm
                         override_show = True
                     if header in ("GFRel/60M", "CFRel/60M", "FFRel/60M", "SFRel/60M", "GARel/60M", "CARel/60M", "FARel/60M", "SARel/60M", "GFRelPer", "CFRelPer", "FFRelPer", "SFRelPer"):
                         override_show = True
-                    if "TSA" in header or header == "SThr%" or header == "TS%" or header == "TOI/GP":
+                    if "TSA" in header or header == "SThr%" or header == "TS%" or header == "TOI/GP" or header == "TK/60M" or header == "GV/60M" or header == "FO/60M" or header == "FOW/60M":
                         override_show = True
                     if "shift" in extra_stats and "Shft" in header:
                         override_show = True
@@ -30701,7 +30701,7 @@ def handle_table_data(player_data, player_type, over_header, header, highest_val
             override_show = True
         if header in ("GFRel/60M", "CFRel/60M", "FFRel/60M", "SFRel/60M", "GARel/60M", "CARel/60M", "FARel/60M", "SARel/60M", "GFRelPer", "CFRelPer", "FFRelPer", "SFRelPer"):
             override_show = True
-        if "TSA" in header or header == "SThr%" or header == "TS%" or header == "TOI/GP":
+        if "TSA" in header or header == "SThr%" or header == "TS%" or header == "TOI/GP" or header == "TK/60M" or header == "GV/60M" or header == "FO/60M" or header == "FOW/60M":
             override_show = True
         if "shift" in extra_stats and "Shft" in header:
             override_show = True
