@@ -6825,7 +6825,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                         og_time_str = time_frame
                         qualifiers = {}
 
-                        last_match = re.finditer(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?((?:sub-query|day-after-sub-query|day-before-sub-query|day-of-sub-query|game-after-sub-query|game-before-sub-query|season-sub-query|season-after-sub-query|season-before-sub-query|w|(?:playing|starting)-with|a|(?:playing|starting)-against|(?:playing|starting)-same-game|prv-w|previous-playing-with|prv-a|previous-playing-against|upc-w|upcoming-playing-with|upc-a|upcoming-playing-against|(?:playing|starting)-same-opponents?|(?:playing|starting)-same-dates?|holidays?|dts|dates|arena|exact-arena|stadiun|exact-stadium|penalty-type|shot-on|shot-by|on-ice-with|on-ice-against|on-line-with|on-line-against|assisted-on|assisted-with|points-with|assisted-by|primary-assisted-on|primary-assisted-with|primary-points-with|primary-assisted-by|hit-on|penalty-on|faceoff-against|fight-against|event-time|start-time):(?<!\\)\(.*?(?<!\\)\))", time_frame)
+                        last_match = re.finditer(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?((?:sub-query|day-after-sub-query|day-before-sub-query|day-of-sub-query|game-after-sub-query|game-before-sub-query|season-sub-query|season-after-sub-query|season-before-sub-query|w|(?:playing|starting)-with|a|(?:playing|starting)-against|(?:playing|starting)-same-game|prv-w|previous-playing-with|prv-a|previous-playing-against|upc-w|upcoming-playing-with|upc-a|upcoming-playing-against|(?:playing|starting)-same-opponents?|(?:playing|starting)-same-dates?|holidays?|dts|dates|arena|exact-arena|stadiun|exact-stadium|penalty-type|shot-on|shot-by|on-ice-with|on-ice-against|on-line-with|on-line-against|assisted-on|assisted-with|points-with|assisted-by|primary-assisted-on|primary-assisted-with|primary-points-with|primary-assisted-by|hit-on|penalty-on|faceoff-against|fight-against|fighting-against|event-time|start-time):(?<!\\)\(.*?(?<!\\)\))", time_frame)
                         for m in last_match:
                             qualifier_obj = {}
                             negate_str = m.group(1)
@@ -7027,6 +7027,11 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 extra_stats.add("Faceoff Against")
                             elif qualifier_str.startswith("fight-against:"):
                                 qual_str = "fight-against:"
+                                qual_type = "Fight Against"
+                                extra_stats.add("Fight Against")
+                                extra_stats.add("penalties")
+                            elif qualifier_str.startswith("fighting-against:"):
+                                qual_str = "fighting-against:"
                                 qual_type = "Fight Against"
                                 extra_stats.add("Fight Against")
                                 extra_stats.add("penalties")
@@ -7290,7 +7295,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                     playoffs = "Only"
                                 time_frame = re.sub(r"\s+", " ", time_frame.replace(last_match.group(0), "", 1)).strip()
                         
-                        last_match = re.finditer(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?((?:(?:playing|starting)-with|(?:playing|starting)-against|(?:playing|starting)-same-game|prv-w|previous-playing-with|prv-a|previous-playing-against|upc-w|upcoming-playing-with|upc-a|upcoming-playing-against|(?:playing|starting)-same-opponents?|(?:playing|starting)-same-dates?|shot-on|shot-by|on-ice-with|on-ice-against|on-line-with|on-line-against|assisted-on|assisted-with|points-with|assisted-by|primary-assisted-on|primary-assisted-with|primary-points-with|primary-assisted-by|hit-on|block-on|penalty-on|faceoff-against|fight-against))\b", time_frame)
+                        last_match = re.finditer(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?((?:(?:playing|starting)-with|(?:playing|starting)-against|(?:playing|starting)-same-game|prv-w|previous-playing-with|prv-a|previous-playing-against|upc-w|upcoming-playing-with|upc-a|upcoming-playing-against|(?:playing|starting)-same-opponents?|(?:playing|starting)-same-dates?|shot-on|shot-by|on-ice-with|on-ice-against|on-line-with|on-line-against|assisted-on|assisted-with|points-with|assisted-by|primary-assisted-on|primary-assisted-with|primary-points-with|primary-assisted-by|hit-on|block-on|penalty-on|faceoff-against|fight-against|fighting-against))\b", time_frame)
                         for m in last_match:
                             qualifier_obj = {}
                             negate_str = m.group(1)
@@ -7469,11 +7474,16 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 qual_type = "Fight Against"
                                 extra_stats.add("Fight Against")
                                 extra_stats.add("penalties")
+                            elif qualifier_str.startswith("fighting-against"):
+                                qual_str = "fighting-against"
+                                qual_type = "Fight Against"
+                                extra_stats.add("Fight Against")
+                                extra_stats.add("penalties")
                             elif qualifier_str.startswith("playing-same-game"):
                                 qual_str = "playing-same-game:"
                                 qual_type = "Playing Same Game"
                             
-                            qualifier_obj["time_frame_str"] = re.sub(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?((?:(?:playing|starting)-with|(?:playing|starting)-against|(?:playing|starting)-same-game|prv-w|previous-playing-with|prv-a|previous-playing-against|upc-w|upcoming-playing-with|upc-a|upcoming-playing-against|(?:playing|starting)-same-opponents?|(?:playing|starting)-same-dates?|shot-on|shot-by|on-ice-with|on-ice-against|on-line-with|on-line-against|assisted-on|assisted-with|points-with|assisted-by|primary-assisted-on|primary-assisted-with|primary-points-with|primary-assisted-by|hit-on|block-on|penalty-on|faceoff-against|fight-against|-?starts?|-?started|-?starting|-?ignore-starts?|-?ignore-started?|-?ignore-starting|start-if-goalie))\b", "", og_time_str)
+                            qualifier_obj["time_frame_str"] = re.sub(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?((?:(?:playing|starting)-with|(?:playing|starting)-against|(?:playing|starting)-same-game|prv-w|previous-playing-with|prv-a|previous-playing-against|upc-w|upcoming-playing-with|upc-a|upcoming-playing-against|(?:playing|starting)-same-opponents?|(?:playing|starting)-same-dates?|shot-on|shot-by|on-ice-with|on-ice-against|on-line-with|on-line-against|assisted-on|assisted-with|points-with|assisted-by|primary-assisted-on|primary-assisted-with|primary-points-with|primary-assisted-by|hit-on|block-on|penalty-on|faceoff-against|fight-against|fighting-against|-?starts?|-?started|-?starting|-?ignore-starts?|-?ignore-started?|-?ignore-starting|start-if-goalie))\b", "", og_time_str)
 
                             if not qual_type in qualifiers:
                                 qualifiers[qual_type] = []
@@ -21276,7 +21286,7 @@ def perform_metadata_qual(event_name, goal_event, qualifiers, player_game_info, 
                         
                 has_match = False
                 for player in qual_object["values"]:
-                    if goal_event["fight_against"] == player["nhl_id"] or goal_event["fight_against"] == player["id"]:
+                    if goal_event["penalty_against"] == player["nhl_id"] or goal_event["penalty_against"] == player["id"]:
                         has_match = True
             
                 if qual_object["negate"]:
