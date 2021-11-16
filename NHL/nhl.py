@@ -30993,14 +30993,17 @@ def is_against_header(header, extra_stats, player_type, has_toi_stats):
     if "Block On" in extra_stats:
         return header not in ("Shft", "Shft/GP", "TOI/Shft", "OTG", "EVTOI",  "PPTOI",  "SHTOI", "TOI_5v5", "EVTOI/GP",  "PPTOI/GP",  "SHTOI/GP", "TOI/GP_5v5", "BLK", "BLK/GP", "BLK/60M")
     if "Penalty On" in extra_stats:
-        if header in ("Shft", "Shft/GP", "TOI/Shft", "OTG", "EVTOI",  "PPTOI",  "SHTOI", "TOI_5v5", "EVTOI/GP",  "PPTOI/GP",  "SHTOI/GP", "TOI/GP_5v5", "PIM", "PEN", "PIM/GP", "PEN/GP", "PEN/60M"):
+        if header in ("Shft", "Shft/GP", "TOI/Shft", "EVTOI",  "PPTOI",  "SHTOI", "TOI_5v5", "EVTOI/GP",  "PPTOI/GP",  "SHTOI/GP", "TOI/GP_5v5", "PIM", "PEN", "PIM/GP", "PEN/GP", "PEN/60M"):
             return False
         else:
             return "type" in headers[player_type["da_type"]["type"]][header] and headers[player_type["da_type"]["type"]][header]["type"] == "Penalty"
     if "Faceoff Against" in extra_stats:
         return header not in ("Shft", "Shft/GP", "TOI/Shft", "OTG", "EVTOI",  "PPTOI",  "SHTOI", "TOI_5v5", "EVTOI/GP",  "PPTOI/GP",  "SHTOI/GP", "TOI/GP_5v5", "FO", "FOW", "FO%", "OZFO", "OZFOW", "OZFO%", "DZFO", "DZFOW", "DZFO%", "FO/GP", "FOW/GP", "FO/60M", "FOW/60M")
     if "Fight Against" in extra_stats:
-        return header not in ("Shft", "Shft/GP", "TOI/Shft", "OTG", "EVTOI",  "PPTOI",  "SHTOI", "TOI_5v5", "EVTOI/GP",  "PPTOI/GP",  "SHTOI/GP", "TOI/GP_5v5", "Fight", "Fight/GP", "Fight/60M")
+        if header in ("Shft", "Shft/GP", "TOI/Shft", "EVTOI",  "PPTOI",  "SHTOI", "TOI_5v5", "EVTOI/GP",  "PPTOI/GP",  "SHTOI/GP", "TOI/GP_5v5", "PIM", "PEN", "PIM/GP", "PEN/GP", "PEN/60M"):
+            return False
+        else:
+            return "type" in headers[player_type["da_type"]["type"]][header] and headers[player_type["da_type"]["type"]][header]["type"] == "Penalty"
     if "Shot By" in extra_stats:
         if header in ("GF", "GFA"):
             return True
