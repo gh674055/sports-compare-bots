@@ -11289,9 +11289,7 @@ def determine_player_str(qualifier, player_str, time_frame, qual_str):
     player_str = "!nhlcompare " + player_str
 
     if "values" in qualifier:
-        try:
-            bracket_index = re.search(r"(?<!\\)]", player_str).start()
-        except ValueError:
+        if not re.search(r"(?<!\\)]", player_str):
             player_str += " []"
 
         if time_frame["playoffs"] and time_frame["playoffs"] != "No" and not re.search(r"\b(no(?:t|n)? ?)?-?(?:includes?|including|and|with)(?: |-)?(?:playoffs?|post-?seasons?)(?!-)\b", player_str) and not re.search(r"\b(no(?:t|n)? ?)?-?(?:playoffs?|post-?seasons?)(?!-)\b", player_str):
