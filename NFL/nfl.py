@@ -1654,7 +1654,7 @@ def handle_player_string(comment, player_type, is_fantasy, last_updated, hide_ta
                                 extra_stats.add("year")
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
                         
-                        last_match = re.finditer(r"\bhide(?: |-)?(name|year|season|date|query|queries)s?\b", time_frame)
+                        last_match = re.finditer(r"\bhide(?: |-)?(name|year|season|date|query|queries|advanced)s?\b", time_frame)
                         for m in last_match:
                             if m.group(1) == "date" or m.group(1) == "season":
                                 extra_stats.add("hide-year")
@@ -5317,48 +5317,50 @@ def determine_player_str(qualifier, player_str, time_frame, qual_str):
 
     if "values" in qualifier:
         try:
-            bracket_index = player_str.index("]")
+            bracket_index = re.search(r"(?<!\\)]", player_str).start()
         except ValueError:
             player_str += " []"
 
         if time_frame["playoffs"] and time_frame["playoffs"] != "No" and not re.search(r"\b(no(?:t|n)? ?)?-?(?:includes?|including|and|with)(?: |-)?(?:playoffs?|post-?seasons?)(?!-)\b", player_str) and not re.search(r"\b(no(?:t|n)? ?)?-?(?:playoffs?|post-?seasons?)(?!-)\b", player_str):
-            bracket_index = player_str.index("]")
+            bracket_index = re.search(r"(?<!\\)]", player_str).start()
             playoffs_str = "playoffs" if time_frame["playoffs"] == "Only" else "including playoffs"
             player_str = player_str[:bracket_index] + " " + playoffs_str + player_str[bracket_index:]
     else:
         player_str += " [" + qualifier["time_frame_str"] + "]"
+        bracket_index = re.search(r"(?<!\\)]", player_str).start()
+        player_str = player_str[:bracket_index] + " hide-advanced" + player_str[bracket_index:]
 
     if is_pre_query and time_frame["type"] == "date":
-        bracket_index = player_str.index("]")
+        bracket_index = re.search(r"(?<!\\)]", player_str).start()
         player_str = player_str[:bracket_index] + " " + get_time_str(time_frame["time_start"], False) + " to " + get_time_str(time_frame["time_end"], False) + player_str[bracket_index:]
 
-    bracket_index = player_str.index("]")
+    bracket_index = re.search(r"(?<!\\)]", player_str).start()
     if not qual_str in ["Season Sub Query", "Season After Sub Query", "Season Before Sub Query"]:
         player_str = player_str[:bracket_index] + " force-dates" + player_str[bracket_index:]
     
     if "Ignore Start" not in time_frame["qualifiers"]:
         if "Start If QB" in time_frame["qualifiers"]:
             if time_frame["qualifiers"]["Start If QB"][0]["negate"]:
-                bracket_index = player_str.index("]")
+                bracket_index = re.search(r"(?<!\\)]", player_str).start()
                 playoffs_str = "not start-if-qb"
                 player_str = player_str[:bracket_index] + " " + playoffs_str + player_str[bracket_index:]
             else:
-                bracket_index = player_str.index("]")
+                bracket_index = re.search(r"(?<!\\)]", player_str).start()
                 playoffs_str = "start-if-qb"
                 player_str = player_str[:bracket_index] + " " + playoffs_str + player_str[bracket_index:]
         else:
             if "Start" in time_frame["qualifiers"]:
                 if time_frame["qualifiers"]["Start"][0]["negate"]:
-                    bracket_index = player_str.index("]")
+                    bracket_index = re.search(r"(?<!\\)]", player_str).start()
                     playoffs_str = "not starts"
                     player_str = player_str[:bracket_index] + " " + playoffs_str + player_str[bracket_index:]
                 else:
-                    bracket_index = player_str.index("]")
+                    bracket_index = re.search(r"(?<!\\)]", player_str).start()
                     playoffs_str = "starts"
                     player_str = player_str[:bracket_index] + " " + playoffs_str + player_str[bracket_index:]
 
     if qual_str == "Thrown To":
-        bracket_index = player_str.index("]")
+        bracket_index = re.search(r"(?<!\\)]", player_str).start()
         player_str = player_str[:bracket_index] + " WR" + player_str[bracket_index:]
 
     return player_str
@@ -7274,8 +7276,9 @@ def handle_player_data(player_data, time_frame, player_type, player_page, is_fan
                 new_rows.append(row_data)
         all_rows = new_rows
     
-    if "Stadium" in time_frame["qualifiers"] or "Exact Stadium" in time_frame["qualifiers"] or "Surface" in time_frame["qualifiers"] or "Roof" in time_frame["qualifiers"] or "Temperature" in time_frame["qualifiers"] or "Wind" in time_frame["qualifiers"] or "Wind Chill" in time_frame["qualifiers"] or "Humidity" in time_frame["qualifiers"] or "Current Winning Opponent" in time_frame["qualifiers"] or "Current Losing Opponent" in time_frame["qualifiers"] or "Current Tied Opponent" in time_frame["qualifiers"] or "Current Winning Or Tied Opponent" in time_frame["qualifiers"] or "Current Losing Or Tied Opponent" in time_frame["qualifiers"] or "Current Winning Team" in time_frame["qualifiers"] or "Current Losing Team" in time_frame["qualifiers"] or "Current Tied Team" in time_frame["qualifiers"] or "Current Winning Or Tied Team" in time_frame["qualifiers"] or "Current Losing Or Tied Team" in time_frame["qualifiers"] or "Current Team Win Percentage" in time_frame["qualifiers"] or "Current Opponent Win Percentage" in time_frame["qualifiers"] or "Current Team Wins" in time_frame["qualifiers"] or "Current Team Losses" in time_frame["qualifiers"] or "Current Team Ties" in time_frame["qualifiers"] or "Current Opponent Wins" in time_frame["qualifiers"] or "Current Opponent Losses" in time_frame["qualifiers"] or "Current Opponent Ties" in time_frame["qualifiers"] or "Quarter" in time_frame["qualifiers"] or "Down" in time_frame["qualifiers"] or "Down Distance" in time_frame["qualifiers"] or "Field Position" in time_frame["qualifiers"] or "Quarter Time" in time_frame["qualifiers"] or "Quarter Time Remaining" in time_frame["qualifiers"] or "Pass Distance" in time_frame["qualifiers"] or "Pass Direction" in time_frame["qualifiers"] or "Current Team Score" in time_frame["qualifiers"] or "Current Opponent Score" in time_frame["qualifiers"] or "Current Score Margin" in time_frame["qualifiers"] or "Current Score Difference" in time_frame["qualifiers"] or "Thrown To" in time_frame["qualifiers"] or "Overtime" in time_frame["qualifiers"] or "RedZone" in time_frame["qualifiers"] or "Current Team Games Over 500" in time_frame["qualifiers"] or "Current Opponent Games Over 500" in time_frame["qualifiers"] or "current-stats" in extra_stats:
-        all_rows, missing_games = handle_nfl_game_stats(player_data, all_rows, time_frame["qualifiers"], extra_stats, missing_games, player_type)
+    if not "hide-advanced" in extra_stats or ("Stadium" in time_frame["qualifiers"] or "Exact Stadium" in time_frame["qualifiers"] or "Surface" in time_frame["qualifiers"] or "Roof" in time_frame["qualifiers"] or "Temperature" in time_frame["qualifiers"] or "Wind" in time_frame["qualifiers"] or "Wind Chill" in time_frame["qualifiers"] or "Humidity" in time_frame["qualifiers"] or "Current Winning Opponent" in time_frame["qualifiers"] or "Current Losing Opponent" in time_frame["qualifiers"] or "Current Tied Opponent" in time_frame["qualifiers"] or "Current Winning Or Tied Opponent" in time_frame["qualifiers"] or "Current Losing Or Tied Opponent" in time_frame["qualifiers"] or "Current Winning Team" in time_frame["qualifiers"] or "Current Losing Team" in time_frame["qualifiers"] or "Current Tied Team" in time_frame["qualifiers"] or "Current Winning Or Tied Team" in time_frame["qualifiers"] or "Current Losing Or Tied Team" in time_frame["qualifiers"] or "Current Team Win Percentage" in time_frame["qualifiers"] or "Current Opponent Win Percentage" in time_frame["qualifiers"] or "Current Team Wins" in time_frame["qualifiers"] or "Current Team Losses" in time_frame["qualifiers"] or "Current Team Ties" in time_frame["qualifiers"] or "Current Opponent Wins" in time_frame["qualifiers"] or "Current Opponent Losses" in time_frame["qualifiers"] or "Current Opponent Ties" in time_frame["qualifiers"] or "Current Team Games Over 500" in time_frame["qualifiers"] or "Current Opponent Games Over 500" in time_frame["qualifiers"]):
+        if "Stadium" in time_frame["qualifiers"] or "Exact Stadium" in time_frame["qualifiers"] or "Surface" in time_frame["qualifiers"] or "Roof" in time_frame["qualifiers"] or "Temperature" in time_frame["qualifiers"] or "Wind" in time_frame["qualifiers"] or "Wind Chill" in time_frame["qualifiers"] or "Humidity" in time_frame["qualifiers"] or "Current Winning Opponent" in time_frame["qualifiers"] or "Current Losing Opponent" in time_frame["qualifiers"] or "Current Tied Opponent" in time_frame["qualifiers"] or "Current Winning Or Tied Opponent" in time_frame["qualifiers"] or "Current Losing Or Tied Opponent" in time_frame["qualifiers"] or "Current Winning Team" in time_frame["qualifiers"] or "Current Losing Team" in time_frame["qualifiers"] or "Current Tied Team" in time_frame["qualifiers"] or "Current Winning Or Tied Team" in time_frame["qualifiers"] or "Current Losing Or Tied Team" in time_frame["qualifiers"] or "Current Team Win Percentage" in time_frame["qualifiers"] or "Current Opponent Win Percentage" in time_frame["qualifiers"] or "Current Team Wins" in time_frame["qualifiers"] or "Current Team Losses" in time_frame["qualifiers"] or "Current Team Ties" in time_frame["qualifiers"] or "Current Opponent Wins" in time_frame["qualifiers"] or "Current Opponent Losses" in time_frame["qualifiers"] or "Current Opponent Ties" in time_frame["qualifiers"] or "Quarter" in time_frame["qualifiers"] or "Down" in time_frame["qualifiers"] or "Down Distance" in time_frame["qualifiers"] or "Field Position" in time_frame["qualifiers"] or "Quarter Time" in time_frame["qualifiers"] or "Quarter Time Remaining" in time_frame["qualifiers"] or "Pass Distance" in time_frame["qualifiers"] or "Pass Direction" in time_frame["qualifiers"] or "Current Team Score" in time_frame["qualifiers"] or "Current Opponent Score" in time_frame["qualifiers"] or "Current Score Margin" in time_frame["qualifiers"] or "Current Score Difference" in time_frame["qualifiers"] or "Thrown To" in time_frame["qualifiers"] or "Overtime" in time_frame["qualifiers"] or "RedZone" in time_frame["qualifiers"] or "Current Team Games Over 500" in time_frame["qualifiers"] or "Current Opponent Games Over 500" in time_frame["qualifiers"] or "current-stats" in extra_stats:
+            all_rows, missing_games = handle_nfl_game_stats(player_data, all_rows, time_frame["qualifiers"], extra_stats, missing_games, player_type)
 
     if time_frame["qualifiers"]:
         new_rows = []
@@ -8034,7 +8037,7 @@ def get_game_data(index, player_data, row_data, qualifiers, extra_stats):
         play_by_play = play_by_play[0].xpath(".//tr")
 
     if not play_by_play:
-        if "Quarter" in qualifiers or "Down" in qualifiers or "Down Distance" in qualifiers or "Field Position" in qualifiers or "Quarter Time" in qualifiers or "Quarter Time Remaining" in qualifiers or "Pass Distance" in qualifiers or "Pass Direction" in qualifiers or "Overtime" in qualifiers or "RedZone" in qualifiers or "Current Team Score" in qualifiers or "Current Opponent Score" in qualifiers or "Current Score Margin" in qualifiers or "Current Score Difference" in qualifiers or "Thrown To" in qualifiers or "current-statsget_pla" in extra_stats:
+        if "Quarter" in qualifiers or "Down" in qualifiers or "Down Distance" in qualifiers or "Field Position" in qualifiers or "Quarter Time" in qualifiers or "Quarter Time Remaining" in qualifiers or "Pass Distance" in qualifiers or "Pass Direction" in qualifiers or "Overtime" in qualifiers or "RedZone" in qualifiers or "Current Team Score" in qualifiers or "Current Opponent Score" in qualifiers or "Current Score Margin" in qualifiers or "Current Score Difference" in qualifiers or "Thrown To" in qualifiers or "current-stats" in extra_stats:
             missing_games = True
         game_data["missing_data"] = True
     else:

@@ -7255,7 +7255,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                     extra_stats.add("score")
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
                                                 
-                        last_match = re.finditer(r"\bhide(?: |-)?(name|year|season|date|query|queries)s?\b", time_frame)
+                        last_match = re.finditer(r"\bhide(?: |-)?(name|year|season|date|query|queries|advanced)s?\b", time_frame)
                         for m in last_match:
                             if m.group(1) == "date" or m.group(1) == "season":
                                 extra_stats.add("hide-year")
@@ -11290,22 +11290,24 @@ def determine_player_str(qualifier, player_str, time_frame, qual_str):
 
     if "values" in qualifier:
         try:
-            bracket_index = player_str.index("]")
+            bracket_index = re.search(r"(?<!\\)]", player_str).start()
         except ValueError:
             player_str += " []"
 
         if time_frame["playoffs"] and time_frame["playoffs"] != "No" and not re.search(r"\b(no(?:t|n)? ?)?-?(?:includes?|including|and|with)(?: |-)?(?:playoffs?|post-?seasons?)(?!-)\b", player_str) and not re.search(r"\b(no(?:t|n)? ?)?-?(?:playoffs?|post-?seasons?)(?!-)\b", player_str):
-            bracket_index = player_str.index("]")
+            bracket_index = re.search(r"(?<!\\)]", player_str).start()
             playoffs_str = "playoffs" if time_frame["playoffs"] == "Only" else "including playoffs"
             player_str = player_str[:bracket_index] + " " + playoffs_str + player_str[bracket_index:]
     else:
         player_str += " [" + qualifier["time_frame_str"] + "]"
+        bracket_index = re.search(r"(?<!\\)]", player_str).start()
+        player_str = player_str[:bracket_index] + " hide-advanced" + player_str[bracket_index:]
 
     if is_pre_query and time_frame["type"] == "date":
-        bracket_index = player_str.index("]")
+        bracket_index = re.search(r"(?<!\\)]", player_str).start()
         player_str = player_str[:bracket_index] + " " + get_time_str(time_frame["time_start"], False) + " to " + get_time_str(time_frame["time_end"], False) + player_str[bracket_index:]
     
-    bracket_index = player_str.index("]")
+    bracket_index = re.search(r"(?<!\\)]", player_str).start()
     if not qual_str in ["Season Sub Query", "Season After Sub Query", "Season Before Sub Query"]:
         player_str = player_str[:bracket_index] + " force-dates" + player_str[bracket_index:]
 
@@ -11317,21 +11319,21 @@ def determine_player_str(qualifier, player_str, time_frame, qual_str):
     if "Ignore Start" not in time_frame["qualifiers"]:
         if "Start If Goalie" in time_frame["qualifiers"]:
             if time_frame["qualifiers"]["Start If Goalie"][0]["negate"]:
-                bracket_index = player_str.index("]")
+                bracket_index = re.search(r"(?<!\\)]", player_str).start()
                 playoffs_str = "not start-if-goalie"
                 player_str = player_str[:bracket_index] + " " + playoffs_str + player_str[bracket_index:]
             else:
-                bracket_index = player_str.index("]")
+                bracket_index = re.search(r"(?<!\\)]", player_str).start()
                 playoffs_str = "start-if-goalie"
                 player_str = player_str[:bracket_index] + " " + playoffs_str + player_str[bracket_index:]
         else:
             if "Start" in time_frame["qualifiers"]:
                 if time_frame["qualifiers"]["Start"][0]["negate"]:
-                    bracket_index = player_str.index("]")
+                    bracket_index = re.search(r"(?<!\\)]", player_str).start()
                     playoffs_str = "not starts"
                     player_str = player_str[:bracket_index] + " " + playoffs_str + player_str[bracket_index:]
                 else:
-                    bracket_index = player_str.index("]")
+                    bracket_index = re.search(r"(?<!\\)]", player_str).start()
                     playoffs_str = "starts"
                     player_str = player_str[:bracket_index] + " " + playoffs_str + player_str[bracket_index:]
 
@@ -13287,9 +13289,11 @@ def handle_player_data(player_data, time_frame, player_type, player_page, valid_
                 new_rows.append(row_data)
         all_rows = new_rows
     
-    if "Game Number" in time_frame["qualifiers"] or "Shot On" in time_frame["qualifiers"] or "Shot By" in time_frame["qualifiers"] or "Event Formula" in time_frame["qualifiers"] or "On Ice With" in time_frame["qualifiers"] or "On Ice Against" in time_frame["qualifiers"] or "On Line With" in time_frame["qualifiers"] or "On Line Against" in time_frame["qualifiers"] or "Assisted On" in time_frame["qualifiers"] or "Assisted With" in time_frame["qualifiers"] or "Points With" in time_frame["qualifiers"] or "Assisted By" in time_frame["qualifiers"] or "Primary Assisted On" in time_frame["qualifiers"] or "Primary Assisted With" in time_frame["qualifiers"] or "Primary Points With" in time_frame["qualifiers"] or "Primary Assisted By" in time_frame["qualifiers"] or "Hit On" in time_frame["qualifiers"] or "Block On" in time_frame["qualifiers"] or "Penalty On" in time_frame["qualifiers"] or "Faceoff Against" in time_frame["qualifiers"] or "Fight Against" in time_frame["qualifiers"] or "Penalty Type" in time_frame["qualifiers"] or "Team Score" in time_frame["qualifiers"] or "Opponent Score" in time_frame["qualifiers"] or "Score Margin" in time_frame["qualifiers"] or "Score Difference" in time_frame["qualifiers"] or "Period" in time_frame["qualifiers"] or "Period Stat" in time_frame["qualifiers"] or "Coordinates" in time_frame["qualifiers"] or "Period Time" in time_frame["qualifiers"] or "Period Time Remaining" in time_frame["qualifiers"] or "Unassisted" in time_frame["qualifiers"] or "Career Minute" in time_frame["qualifiers"] or "Career Minute Reversed" in time_frame["qualifiers"] or "Game Minute" in time_frame["qualifiers"] or "Game Minute Reversed" in time_frame["qualifiers"] or "Career Shot" in time_frame["qualifiers"] or "Career Shot Reversed" in time_frame["qualifiers"] or "Career Period" in time_frame["qualifiers"] or "Career Period Reversed" in time_frame["qualifiers"] or "Game Shot" in time_frame["qualifiers"] or "Game Shot Reversed" in time_frame["qualifiers"] or "Strength" in time_frame["qualifiers"] or "Even Skaters" in time_frame["qualifiers"] or "Even Goalies" in time_frame["qualifiers"] or "More Skaters" in time_frame["qualifiers"] or "Less Skaters" in time_frame["qualifiers"] or "Team Goalie Pulled" in time_frame["qualifiers"] or "Opponent Goalie Pulled" in time_frame["qualifiers"] or "Power Play" in time_frame["qualifiers"] or "Short Handed" in time_frame["qualifiers"] or "Even Strength" in time_frame["qualifiers"] or "Team Skaters" in time_frame["qualifiers"] or "Opponent Skaters" in time_frame["qualifiers"] or "Team Players" in time_frame["qualifiers"] or "Opponent Players" in time_frame["qualifiers"] or "Overtime" in time_frame["qualifiers"] or "Game Winning" in time_frame["qualifiers"] or "Offensive Zone" in time_frame["qualifiers"] or "Defensive Zone" in time_frame["qualifiers"] or "Neutral Zone" in time_frame["qualifiers"] or "Event Time" in time_frame["qualifiers"] or "penalties" in extra_stats or "star" in extra_stats or "current-stats" in extra_stats:
-        all_rows, missing_games, missing_toi = handle_nhl_game_stats(player_data, all_rows, time_frame, player_link, player_type, missing_games, missing_toi, extra_stats)
-        player_data["stat_values"]["is_indv_shift_data"] = True
+    print(extra_stats)
+    if not "hide-advanced" in extra_stats or ("Game Number" in time_frame["qualifiers"] or "penalties" in extra_stats or "star" in extra_stats):
+        if "Game Number" in time_frame["qualifiers"] or "Shot On" in time_frame["qualifiers"] or "Shot By" in time_frame["qualifiers"] or "Event Formula" in time_frame["qualifiers"] or "On Ice With" in time_frame["qualifiers"] or "On Ice Against" in time_frame["qualifiers"] or "On Line With" in time_frame["qualifiers"] or "On Line Against" in time_frame["qualifiers"] or "Assisted On" in time_frame["qualifiers"] or "Assisted With" in time_frame["qualifiers"] or "Points With" in time_frame["qualifiers"] or "Assisted By" in time_frame["qualifiers"] or "Primary Assisted On" in time_frame["qualifiers"] or "Primary Assisted With" in time_frame["qualifiers"] or "Primary Points With" in time_frame["qualifiers"] or "Primary Assisted By" in time_frame["qualifiers"] or "Hit On" in time_frame["qualifiers"] or "Block On" in time_frame["qualifiers"] or "Penalty On" in time_frame["qualifiers"] or "Faceoff Against" in time_frame["qualifiers"] or "Fight Against" in time_frame["qualifiers"] or "Penalty Type" in time_frame["qualifiers"] or "Team Score" in time_frame["qualifiers"] or "Opponent Score" in time_frame["qualifiers"] or "Score Margin" in time_frame["qualifiers"] or "Score Difference" in time_frame["qualifiers"] or "Period" in time_frame["qualifiers"] or "Period Stat" in time_frame["qualifiers"] or "Coordinates" in time_frame["qualifiers"] or "Period Time" in time_frame["qualifiers"] or "Period Time Remaining" in time_frame["qualifiers"] or "Unassisted" in time_frame["qualifiers"] or "Career Minute" in time_frame["qualifiers"] or "Career Minute Reversed" in time_frame["qualifiers"] or "Game Minute" in time_frame["qualifiers"] or "Game Minute Reversed" in time_frame["qualifiers"] or "Career Shot" in time_frame["qualifiers"] or "Career Shot Reversed" in time_frame["qualifiers"] or "Career Period" in time_frame["qualifiers"] or "Career Period Reversed" in time_frame["qualifiers"] or "Game Shot" in time_frame["qualifiers"] or "Game Shot Reversed" in time_frame["qualifiers"] or "Strength" in time_frame["qualifiers"] or "Even Skaters" in time_frame["qualifiers"] or "Even Goalies" in time_frame["qualifiers"] or "More Skaters" in time_frame["qualifiers"] or "Less Skaters" in time_frame["qualifiers"] or "Team Goalie Pulled" in time_frame["qualifiers"] or "Opponent Goalie Pulled" in time_frame["qualifiers"] or "Power Play" in time_frame["qualifiers"] or "Short Handed" in time_frame["qualifiers"] or "Even Strength" in time_frame["qualifiers"] or "Team Skaters" in time_frame["qualifiers"] or "Opponent Skaters" in time_frame["qualifiers"] or "Team Players" in time_frame["qualifiers"] or "Opponent Players" in time_frame["qualifiers"] or "Overtime" in time_frame["qualifiers"] or "Game Winning" in time_frame["qualifiers"] or "Offensive Zone" in time_frame["qualifiers"] or "Defensive Zone" in time_frame["qualifiers"] or "Neutral Zone" in time_frame["qualifiers"] or "Event Time" in time_frame["qualifiers"] or "penalties" in extra_stats or "star" in extra_stats or "current-stats" in extra_stats:
+            all_rows, missing_games, missing_toi = handle_nhl_game_stats(player_data, all_rows, time_frame, player_link, player_type, missing_games, missing_toi, extra_stats)
+            player_data["stat_values"]["is_indv_shift_data"] = True
 
     if time_frame["qualifiers"]:
         new_rows = []
