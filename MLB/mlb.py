@@ -6458,16 +6458,14 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                     qual_str = "pitch-type:"
                                     qual_type = "Pitch Type"
                                     extra_stats.add("current-stats")
-                                    if "statcast" in extra_stats:
-                                        extra_stats.add("show-stat-pit")
-                                        extra_stats.add("show-stat-pit%")
+                                    extra_stats.add("show-stat-pit")
+                                    extra_stats.add("show-stat-pit%")
                                 elif qualifier_str.startswith("exact-pitch-type:"):
                                     qual_str = "exact-pitch-type:"
                                     qual_type = "Exact Pitch Type"
                                     extra_stats.add("current-stats")
-                                    if "statcast" in extra_stats:
-                                        extra_stats.add("show-stat-pit")
-                                        extra_stats.add("show-stat-pit%")
+                                    extra_stats.add("show-stat-pit")
+                                    extra_stats.add("show-stat-pit%")
                                 elif qualifier_str.startswith("city:"):
                                     qual_str = "city:"
                                     qual_type = "City"
@@ -7595,9 +7593,8 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 else:
                                     qualifier_obj["values"] = [qualifier_str.replace("-", " ")]
                                 extra_stats.add("current-stats")
-                                if "statcast" in extra_stats:
-                                    extra_stats.add("show-stat-pit")
-                                    extra_stats.add("show-stat-pit%")
+                                extra_stats.add("show-stat-pit")
+                                extra_stats.add("show-stat-pit%")
                             elif qualifier_str == "facing-pitcher":
                                 qual_type = "Facing Pitcher"
                                 extra_stats.add("current-stats")
@@ -7619,9 +7616,8 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                             elif qualifier_str == "fastball":
                                 qual_type = "Fastball"
                                 extra_stats.add("current-stats")
-                                if "statcast" in extra_stats:
-                                    extra_stats.add("show-stat-pit")
-                                    extra_stats.add("show-stat-pit%")
+                                extra_stats.add("show-stat-pit")
+                                extra_stats.add("show-stat-pit%")
                             elif qualifier_str == "out-of-zone":
                                 qual_type = "Out Of Zone"
                                 extra_stats.add("current-stats")
@@ -7631,15 +7627,13 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                             elif qualifier_str == "breaking":
                                 qual_type = "Breaking"
                                 extra_stats.add("current-stats")
-                                if "statcast" in extra_stats:
-                                    extra_stats.add("show-stat-pit")
-                                    extra_stats.add("show-stat-pit%")
+                                extra_stats.add("show-stat-pit")
+                                extra_stats.add("show-stat-pit%")
                             elif qualifier_str == "offspeed":
                                 qual_type = "Offspeed"
                                 extra_stats.add("current-stats")
-                                if "statcast" in extra_stats:
-                                    extra_stats.add("show-stat-pit")
-                                    extra_stats.add("show-stat-pit%")
+                                extra_stats.add("show-stat-pit")
+                                extra_stats.add("show-stat-pit%")
                             elif qualifier_str == "facing-lefty":
                                 qual_type = "Facing Lefty"
                                 extra_stats.add("current-stats")
@@ -8264,22 +8258,19 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                     qual_str = "pitch-speed:"
                                     qual_type = "Pitch Speed"
                                     extra_stats.add("current-stats")
-                                    if "statcast" in extra_stats:
-                                        extra_stats.add("show-stat-pit")
-                                        extra_stats.add("show-stat-pit%")
+                                    extra_stats.add("show-stat-pit")
+                                    extra_stats.add("show-stat-pit%")
                                 elif qualifier.startswith("pitch-zone:"):
                                     qual_str = "pitch-zone:"
                                     qual_type = "Pitch Zone"
-                                    if "statcast" in extra_stats:
-                                        extra_stats.add("current-stats")
-                                        extra_stats.add("show-stat-pit")
+                                    extra_stats.add("show-stat-pit")
+                                    extra_stats.add("show-stat-pit%")
                                 elif qualifier.startswith("pitch-spin:"):
                                     qual_str = "pitch-spin:"
                                     qual_type = "Pitch Spin"
                                     extra_stats.add("current-stats")
-                                    if "statcast" in extra_stats:
-                                        extra_stats.add("show-stat-pit")
-                                        extra_stats.add("show-stat-pit%")
+                                    extra_stats.add("show-stat-pit")
+                                    extra_stats.add("show-stat-pit%")
                                 elif qualifier.startswith("hit-distance:"):
                                     qual_str = "hit-distance:"
                                     qual_type = "Hit Distance"
