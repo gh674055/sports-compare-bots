@@ -6189,6 +6189,7 @@ missing_player_data = {
         "Player_Awards" : ["No Player Match!"],
         "Player_Penalty" : ["No Player Match!"],
         "is_indv_shift_data" : False,
+        "is_api_data" : False,
         "any_missing_games" : [],
         "any_missing_toi" : [],
         "is_playoffs" : False,
@@ -7087,6 +7088,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                     qual_str = "event-time:"
                                     qual_type = "Event Time"
                                     extra_stats.add("current-stats-zone")
+                                    extra_stats.add("current-stats")
                                 elif qualifier_str.startswith("start-time:"):
                                     qual_str = "start-time:"
                                     qual_type = "Start Time"
@@ -8128,12 +8130,15 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                             elif qualifier_str == "offensive-zone":
                                 qual_type = "Offensive Zone"
                                 extra_stats.add("current-stats-zone")
+                                extra_stats.add("current-stats")
                             elif qualifier_str == "defensive-zone":
                                 qual_type = "Defensive Zone"
                                 extra_stats.add("current-stats-zone")
+                                extra_stats.add("current-stats")
                             elif qualifier_str == "neutral-zone":
                                 qual_type = "Neutral Zone"
                                 extra_stats.add("current-stats-zone")
+                                extra_stats.add("current-stats")
                             elif qualifier_str.endswith("period"):
                                 qual_type = "Period"
                                 if qualifier_str.startswith("first"):
@@ -8659,6 +8664,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                     qual_str = "coordinates:"
                                     qual_type = "Coordinates"
                                     extra_stats.add("current-stats-zone")
+                                    extra_stats.add("current-stats")
                                 
                                 qual_obj = {}
                                 split_vals = re.split(r"(?<!\\)(?<!^)\,", re.split(r"(?<!\\)" + qual_str, qualifier_str, 1)[1], 1)
@@ -10741,7 +10747,7 @@ def handle_name_threads(sub_name, parse_time_frames, index, player_type, remove_
                 for row in subb_player_data["rows"]:
                     rows_count += 1
             
-            if rows_count > 20:
+            if rows_count > 200:
                 raise CustomMessageException("Cannot show more than 20 games!")
             
             if rows_count > 1:
@@ -10802,6 +10808,7 @@ def handle_name_threads(sub_name, parse_time_frames, index, player_type, remove_
                             "is_strength_data" : False,
                             "is_on_ice_data" : False,
                             "is_indv_shift_data" : False,
+                            "is_api_data" : False,
                             "any_missing_games" : [],
                             "any_missing_toi" : [],
                             "all_rows" : row
@@ -11366,6 +11373,7 @@ def handle_the_same_games_quals(sub_name, qual_str, subbb_frames, time_frame, pl
             player_data["stat_values"]["is_strength_data"] = False
             player_data["stat_values"]["is_on_ice_data"] = False
             player_data["stat_values"]["is_indv_shift_data"] = False
+            player_data["stat_values"]["is_api_data"] = False
 
             calculated_values = calculate_values(player_data["stat_values"]["all_rows"], player_type, player_data)
 
@@ -11962,6 +11970,7 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
     player_hofs = []
     has_one_player = False
     is_indv_shift_data = True
+    is_api_data = True
     for sub_player_data in player_datas:
         sub_range = ""
         raw_sub_range = ""
@@ -11974,6 +11983,8 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
 
         if not sub_player_data["stat_values"]["is_indv_shift_data"]:
             is_indv_shift_data = False
+        if not sub_player_data["stat_values"]["is_api_data"]:
+            is_api_data = False
 
         for index, date_start in enumerate(sub_player_data["DateStart"]):
             if len(player_data["stat_values"]["DateStart"]) - 1 < index:
@@ -12201,6 +12212,7 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
         player_data["stat_values"]["Search Term"].append(sub_player_data["Search Term"])
         player_data["stat_values"]["LastUpdated"] = sub_player_data["LastUpdated"]
         player_data["stat_values"]["is_indv_shift_data"] = is_indv_shift_data
+        player_data["stat_values"]["is_api_data"] = is_api_data
     
         if not sub_player_data["has_season_stats"]:
             has_season_stats = False
@@ -12804,7 +12816,8 @@ def calculate_values(all_rows, player_type, og_player_data, extra_stats={}):
             "is_shot_on_data" : og_player_data["stat_values"]["is_shot_on_data"],
             "is_strength_data" : og_player_data["stat_values"]["is_strength_data"],
             "is_on_ice_data" : og_player_data["stat_values"]["is_on_ice_data"],
-            "is_indv_shift_data" : og_player_data["stat_values"]["is_indv_shift_data"]
+            "is_indv_shift_data" : og_player_data["stat_values"]["is_indv_shift_data"],
+            "is_api_data" : og_player_data["stat_values"]["is_api_data"]
         }
     }
 
@@ -12915,7 +12928,8 @@ def handle_multi_player_data(player_id, time_frames, player_type, player_page, r
             "is_indv_shift_data" : False,
             "is_shot_on_data" : False,
             "is_strength_data" : False,
-            "is_on_ice_data" : False
+            "is_on_ice_data" : False,
+            "is_api_data" : False
         }
     }
 
@@ -12926,6 +12940,8 @@ def handle_multi_player_data(player_id, time_frames, player_type, player_page, r
             player_data["stat_values"]["is_strength_data"] = True
         if has_shift_quals(time_frame["qualifiers"]):
             player_data["stat_values"]["is_on_ice_data"] = True
+        if has_api_quals(time_frame["qualifiers"]):
+            player_data["stat_values"]["is_api_data"] = True
     
     ind_player_type = get_player_type(player_page)
     player_type["da_type"]["position"] = ind_player_type["position"]
@@ -16395,13 +16411,16 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
         else:
             return game_data, row_data, missing_games
 
+    if has_api_quals(time_frame["qualifiers"]) and row_data["Year"] < 2010:
+        return game_data, row_data, missing_games
+
     if not ("Shot On" in time_frame["qualifiers"] or "Shot By" in time_frame["qualifiers"] or "Event Formula" in time_frame["qualifiers"] or "On Ice With" in time_frame["qualifiers"] or "On Ice Against" in time_frame["qualifiers"] or "On Line With" in time_frame["qualifiers"] or "On Line Against" in time_frame["qualifiers"] or "Assisted On" in time_frame["qualifiers"] or "Assisted With" in time_frame["qualifiers"] or "Points With" in time_frame["qualifiers"] or "Assisted By" in time_frame["qualifiers"] or "Primary Assisted On" in time_frame["qualifiers"] or "Primary Assisted With" in time_frame["qualifiers"] or "Primary Points With" in time_frame["qualifiers"] or "Primary Assisted By" in time_frame["qualifiers"] or "Hit On" in time_frame["qualifiers"] or "Block On" in time_frame["qualifiers"] or "Penalty On" in time_frame["qualifiers"] or "Faceoff Against" in time_frame["qualifiers"] or "Fight Against" in time_frame["qualifiers"] or "Penalty Type" in time_frame["qualifiers"] or "Team Score" in time_frame["qualifiers"] or "Opponent Score" in time_frame["qualifiers"] or "Score Margin" in time_frame["qualifiers"] or "Score Difference" in time_frame["qualifiers"] or "Period" in time_frame["qualifiers"] or "Period Stat" in time_frame["qualifiers"] or "Coordinates" in time_frame["qualifiers"] or "Period Time" in time_frame["qualifiers"] or "Period Time Remaining" in time_frame["qualifiers"] or "Unassisted" in time_frame["qualifiers"] or "Career Minute" in time_frame["qualifiers"] or "Career Minute Reversed" in time_frame["qualifiers"] or "Game Minute" in time_frame["qualifiers"] or "Game Minute Reversed" in time_frame["qualifiers"] or "Career Shot" in time_frame["qualifiers"] or "Career Shot Reversed" in time_frame["qualifiers"] or "Career Period" in time_frame["qualifiers"] or "Career Period Reversed" in time_frame["qualifiers"] or "Game Shot" in time_frame["qualifiers"] or "Game Shot Reversed" in time_frame["qualifiers"] or "Strength" in time_frame["qualifiers"] or "Even Skaters" in time_frame["qualifiers"] or "Even Goalies" in time_frame["qualifiers"] or "More Skaters" in time_frame["qualifiers"] or "Less Skaters" in time_frame["qualifiers"] or "Team Goalie Pulled" in time_frame["qualifiers"] or "Opponent Goalie Pulled" in time_frame["qualifiers"] or "Power Play" in time_frame["qualifiers"] or "Short Handed" in time_frame["qualifiers"] or "Even Strength" in time_frame["qualifiers"] or "Team Skaters" in time_frame["qualifiers"] or "Opponent Skaters" in time_frame["qualifiers"] or "Team Players" in time_frame["qualifiers"] or "Opponent Players" in time_frame["qualifiers"] or "Overtime" in time_frame["qualifiers"] or "Game Winning" in time_frame["qualifiers"] or "Offensive Zone" in time_frame["qualifiers"] or "Defensive Zone" in time_frame["qualifiers"] or "Neutral Zone" in time_frame["qualifiers"] or "Event Time" in time_frame["qualifiers"] or "penalties" in extra_stats or "current-stats" in extra_stats):
         return game_data, row_data, missing_games
 
     scoring_plays = []
-    if row_data["Year"] < 2000 and sub_data:
+    if (row_data["Year"] < 2000 and sub_data) or has_api_quals(time_frame["qualifiers"]):
         scoring_plays = sub_data["liveData"]["plays"]["allPlays"]
-    if ((not scoring_plays and row_data["Year"] >= 1979) or (row_data["Year"] >= 2000)):
+    if ((not scoring_plays and row_data["Year"] >= 1979) or (row_data["Year"] >= 2000)) and not has_api_quals(time_frame["qualifiers"]):
         if row_data["Year"] >= 2007:
             get_html_play_data(scoring_plays, player_data, row_data["NHLGameLink"], row_data["Location"], game_data, sub_data["gameData"]["status"]["abstractGameState"] == "Final", row_data["Year"])
         elif row_data["Year"] >= 2003:
@@ -16517,19 +16536,19 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
     next_shot_penalty_shot = False
     first_goal = True
     team_shootout_goal = 1
-    # first_period_side = None
-    # for period in sub_data["liveData"]["linescore"]["periods"]:
-    #     if "rinkSide" in period[game_data["team_str"]]:
-    #         rink_side = period[game_data["team_str"]]["rinkSide"]
-    #         if rink_side == "left" or rink_side == "right":
-    #             if period["num"] % 2 == 1:
-    #                 first_period_side = rink_side
-    #             else:
-    #                 if rink_side == "left":
-    #                     first_period_side = "right"
-    #                 else:
-    #                     first_period_side = "left"
-    #             break
+    first_period_side = None
+    for period in sub_data["liveData"]["linescore"]["periods"]:
+        if "rinkSide" in period[game_data["team_str"]]:
+            rink_side = period[game_data["team_str"]]["rinkSide"]
+            if rink_side == "left" or rink_side == "right":
+                if period["num"] % 2 == 1:
+                    first_period_side = rink_side
+                else:
+                    if rink_side == "left":
+                        first_period_side = "right"
+                    else:
+                        first_period_side = "left"
+                break
 
     for scoring_play in scoring_plays:
         if "players" not in scoring_play or not scoring_play["players"]:
@@ -16554,6 +16573,14 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
 
         period_time_rem = time_to_use - period_time
         zone = None
+        if "zone" in scoring_play and scoring_play["zone"]:
+            zone = scoring_play["zone"]
+            if scoring_play["team"]["id"] != game_data["team_id"]:
+                if zone == "OZ":
+                    zone = "DZ"
+                elif zone == "DZ":
+                    zone = "OZ"
+
         strength = None
         x_coord = None
         y_coord = None
@@ -16568,24 +16595,17 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                         rink_side = "right"
                     else:
                         rink_side = "left"
-                if x_coord >= -50 and x_coord <= 50:
-                    zone = "NZ"
-                elif x_coord > 50:
-                    zone = "OZ" if rink_side == "left" else "DZ"
-                else:
-                    zone = "DZ" if rink_side == "left" else "OZ"
+                if not zone:
+                    if x_coord >= -50 and x_coord <= 50:
+                        zone = "NZ"
+                    elif x_coord > 50:
+                        zone = "OZ" if rink_side == "left" else "DZ"
+                    else:
+                        zone = "DZ" if rink_side == "left" else "OZ"
             
         event_time = None
         if "dateTime" in scoring_play["about"] and scoring_play["about"]["dateTime"]:
             event_time = dateutil.parser.parse(scoring_play["about"]["dateTime"])
-        
-        if not zone and "zone" in scoring_play and scoring_play["zone"]:
-            zone = scoring_play["zone"]
-            if scoring_play["team"]["id"] != game_data["team_id"]:
-                if zone == "OZ":
-                    zone = "DZ"
-                elif zone == "DZ":
-                    zone = "OZ"
 
         if "strength" in scoring_play["result"] and "code" in scoring_play["result"]["strength"] and scoring_play["result"]["strength"]["code"]:
             strength = scoring_play["result"]["strength"]["code"]
@@ -21430,7 +21450,6 @@ def perform_metadata_qual(event_name, goal_event, qualifiers, player_game_info, 
         event_time = goal_event["event_time"]
         if not event_time:
             return False
-        event_time = event_time.time().replace(microsecond=0)
 
         for qual_object in qualifiers["Event Time"]:
             stat_val = qual_object["values"]["start_val"]
@@ -28714,7 +28733,6 @@ def perform_schedule_qualifiers(row, qualifiers):
     if "Start Time" in qualifiers:
         if "StartTime" not in row or row["StartTime"] == None:
             return False
-        event_time = row["StartTime"].time().replace(microsecond=0)
 
         for qual_object in qualifiers["Start Time"]:
             stat_val = qual_object["values"]["start_val"]
@@ -30924,6 +30942,9 @@ def has_against_quals(extra_stats):
 
 def has_against_quals_no_so(extra_stats):
     return "Shot On" in extra_stats or "Shot By" in extra_stats or "Assisted On" in extra_stats or "Points On" in extra_stats or "Assisted By" in extra_stats or "Hit On" in extra_stats or "Block On" in extra_stats or "Penalty On" in extra_stats or "Faceoff Against" in extra_stats or "Fight Against" in extra_stats or "current-stats" in extra_stats or "current-stats-zone" in extra_stats or "scoring-stats" in extra_stats
+
+def has_api_quals(qualifiers):
+    return "Event Time" in qualifiers
 
 def is_against_header(header, extra_stats, player_type, has_toi_stats):
     if not has_against_quals(extra_stats):
