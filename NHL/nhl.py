@@ -12014,9 +12014,9 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
                     original_start_year = date_start
                     original_end_year = date_end
 
-                if display_start_year >= 1979:# in sub_player_data["game_valid_years"]:
+                if True:# in sub_player_data["game_valid_years"]:
                     date_start = "[" + str(date_start) + "](" + game_splits_url_format.format(sub_player_data["id"][0], sub_player_data["id"], str(display_start_year + 1)) + ")"
-                if display_end_year >= 1979:# in sub_player_data["game_valid_years"]:
+                if True:# in sub_player_data["game_valid_years"]:
                     date_end = "[" + str(date_end) + "](" + game_splits_url_format.format(sub_player_data["id"][0], sub_player_data["id"], str(display_end_year + 1)) + ")"
 
                 if "date" not in extra_stats or len(sorted(list(set([row["Date"] for row in sub_player_data["rows"]])))) > 20:
@@ -12056,13 +12056,13 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
                 date_end_link = None
                 for row in sub_player_data["rows"]:
                     if row["Date"] == date_start:
-                        if row["GameLink"] and row["Year"] >= 1979:
+                        if row["GameLink"] and True:
                             date_start_link = "https://www.hockey-reference.com" + row["GameLink"]
                         else:
                             date_start_link = "https://www.nhl.com/gamecenter/" + str(row["NHLGameLink"])
                         start_season = inflect_engine.ordinal(sub_player_data["year_valid_years"].index(row["Year"]) + 1)
                     if row["Date"] == date_end:
-                        if row["GameLink"] and row["Year"] >= 1979:
+                        if row["GameLink"] and True:
                             date_end_link = "https://www.hockey-reference.com" + row["GameLink"]
                         else:
                             date_end_link = "https://www.nhl.com/gamecenter/" + str(row["NHLGameLink"])
@@ -12136,14 +12136,14 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
                             display_start_year -= 1
                         else:
                             date_start = str(date_start) + "-" + str(date_start + 1)
-                        if display_start_year >= 1979:# in sub_player_data["game_valid_years"]:
+                        if True:# in sub_player_data["game_valid_years"]:
                             date_start = "[" + str(date_start) + "](" + game_splits_url_format.format(sub_player_data["id"][0], sub_player_data["id"], str(display_start_year + 1)) + ")"
                         raw_sub_range += str(date_start) + " + "
                     else:
                         date_start_link = None
                         for row in sub_player_data["rows"]:
                             if row["Date"] == date_start:
-                                if row["GameLink"] and row["Year"] >= 1979:
+                                if row["GameLink"] and True:
                                     date_start_link = "https://www.hockey-reference.com" + row["GameLink"]
                                 else:
                                     date_start_link = "https://www.nhl.com/gamecenter/" + str(row["NHLGameLink"])
@@ -16420,7 +16420,7 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
     scoring_plays = []
     if (row_data["Year"] < 2000 and sub_data) or has_api_quals(time_frame["qualifiers"]):
         scoring_plays = sub_data["liveData"]["plays"]["allPlays"]
-    if ((not scoring_plays and row_data["Year"] >= 1979) or (row_data["Year"] >= 2000)) and not has_api_quals(time_frame["qualifiers"]):
+    if ((not scoring_plays and True) or (row_data["Year"] >= 2000)) and not has_api_quals(time_frame["qualifiers"]):
         if row_data["Year"] >= 2007:
             get_html_play_data(scoring_plays, player_data, row_data["NHLGameLink"], row_data["Location"], game_data, sub_data["gameData"]["status"]["abstractGameState"] == "Final", row_data["Year"])
         elif row_data["Year"] >= 2003:
@@ -24193,12 +24193,12 @@ def handle_min_max_final(stat_val, current_explain_strs, player_data, player_typ
                                 date_end_link = None
                                 for row in all_rows:
                                     if row["Date"] == start_date:
-                                        if row["GameLink"] and row["Year"] >= 1979:
+                                        if row["GameLink"] and True:
                                             date_start_link = "https://www.hockey-reference.com" + row["GameLink"]
                                         else:
                                             date_start_link = "https://www.nhl.com/gamecenter/" + str(row["NHLGameLink"])
                                     if row["Date"] == end_date:
-                                        if row["GameLink"] and row["Year"] >= 1979:
+                                        if row["GameLink"] and True:
                                             date_end_link = "https://www.hockey-reference.com" + row["GameLink"]
                                         else:
                                             date_end_link = "https://www.nhl.com/gamecenter/" + str(row["NHLGameLink"])
@@ -24243,12 +24243,12 @@ def handle_min_max_final(stat_val, current_explain_strs, player_data, player_typ
                                 date_end_link = None
                                 for row in all_rows:
                                     if row["Date"] == start_date:
-                                        if row["GameLink"] and row["Year"] >= 1979:
+                                        if row["GameLink"] and True:
                                             date_start_link = "https://www.hockey-reference.com" + row["GameLink"]
                                         else:
                                             date_start_link = "https://www.nhl.com/gamecenter/" + str(row["NHLGameLink"])
                                     if row["Date"] == end_date:
-                                        if row["GameLink"] and row["Year"] >= 1979:
+                                        if row["GameLink"] and True:
                                             date_end_link = "https://www.hockey-reference.com" + row["GameLink"]
                                         else:
                                             date_end_link = "https://www.nhl.com/gamecenter/" + str(row["NHLGameLink"])
@@ -24337,14 +24337,14 @@ def handle_min_max_final(stat_val, current_explain_strs, player_data, player_typ
                                 else:
                                     range_str += qual_type + ":" + qual_num_str + "|"
 
-                                if season_int >= 1979:# in player_data["game_valid_years"]:
+                                if True:# in player_data["game_valid_years"]:
                                     if all_playoffs:
                                         start_date = "[" + str(season) + "](" + game_splits_url_format.format(player_data["id"][0], player_data["id"], str(season_int)) + ")"
                                     else:
                                         start_date = "[" + str(season) + "](" + game_splits_url_format.format(player_data["id"][0], player_data["id"], str(season_int + 1)) + ")"
                                 else:
                                     start_date = season
-                                if current_end_season_int >= 1979:# in player_data["game_valid_years"]:
+                                if True:# in player_data["game_valid_years"]:
                                     if all_playoffs:
                                         end_date = "[" + str(current_end_season) + "](" + game_splits_url_format.format(player_data["id"][0], player_data["id"], str(current_end_season_int)) + ")"
                                     else:
@@ -24364,14 +24364,14 @@ def handle_min_max_final(stat_val, current_explain_strs, player_data, player_typ
                             else:
                                 range_str += qual_type + ":" + qual_num_str + "|"
 
-                            if season_int >= 1979:# in player_data["game_valid_years"]:
+                            if True:# in player_data["game_valid_years"]:
                                 if all_playoffs:
                                     start_date = "[" + str(season) + "](" + game_splits_url_format.format(player_data["id"][0], player_data["id"], str(season_int)) + ")"
                                 else:
                                     start_date = "[" + str(season) + "](" + game_splits_url_format.format(player_data["id"][0], player_data["id"], str(season_int + 1)) + ")"
                             else:
                                 start_date = season
-                            if current_end_season_int >= 1979:# in player_data["game_valid_years"]:
+                            if True:# in player_data["game_valid_years"]:
                                 if all_playoffs:
                                     end_date = "[" + str(current_end_season) + "](" + game_splits_url_format.format(player_data["id"][0], player_data["id"], str(current_end_season_int)) + ")"
                                 else:
@@ -25064,12 +25064,12 @@ def handle_max_streak_calc(new_rows, stat_objs, player_data, player_type, all_ro
                 date_end_link = None
                 for row in all_rows:
                     if row["Date"] == start_date:
-                        if row["GameLink"] and row["Year"] >= 1979:
+                        if row["GameLink"] and True:
                             date_start_link = "https://www.hockey-reference.com" + row["GameLink"]
                         else:
                             date_start_link = "https://www.nhl.com/gamecenter/" + str(row["NHLGameLink"])
                     if row["Date"] == end_date:
-                        if row["GameLink"] and row["Year"] >= 1979:
+                        if row["GameLink"] and True:
                             date_end_link = "https://www.hockey-reference.com" + row["GameLink"]
                         else:
                             date_end_link = "https://www.nhl.com/gamecenter/" + str(row["NHLGameLink"])
@@ -25112,9 +25112,9 @@ def handle_max_streak_calc(new_rows, stat_objs, player_data, player_type, all_ro
                     start_date = str(start_date) + "-" + str(start_date + 1)
                     end_date = str(end_date) + "-" + str(end_date + 1)
 
-                if start_date_int >= 1979:# in player_data["game_valid_years"]:
+                if True:# in player_data["game_valid_years"]:
                     start_date = "[" + str(start_date) + "](" + game_splits_url_format.format(player_data["id"][0], player_data["id"], str(start_date_int + 1)) + ")"
-                if end_date_int >= 1979:# in player_data["game_valid_years"]:
+                if True:# in player_data["game_valid_years"]:
                     end_date = "[" + str(end_date) + "](" + game_splits_url_format.format(player_data["id"][0], player_data["id"], str(end_date_int + 1)) + ")"
                 
             all_streaks.append({
@@ -25351,12 +25351,12 @@ def handle_max_stretch_calc(new_rows, stat_objs, player_data, player_type, all_r
                 date_end_link = None
                 for row in all_rows:
                     if row["Date"] == start_date:
-                        if row["GameLink"] and row["Year"] >= 1979:
+                        if row["GameLink"] and True:
                             date_start_link = "https://www.hockey-reference.com" + row["GameLink"]
                         else:
                             date_start_link = "https://www.nhl.com/gamecenter/" + str(row["NHLGameLink"])
                     if row["Date"] == end_date:
-                        if row["GameLink"] and row["Year"] >= 1979:
+                        if row["GameLink"] and True:
                             date_end_link = "https://www.hockey-reference.com" + row["GameLink"]
                         else:
                             date_end_link = "https://www.nhl.com/gamecenter/" + str(row["NHLGameLink"])
@@ -25394,9 +25394,9 @@ def handle_max_stretch_calc(new_rows, stat_objs, player_data, player_type, all_r
                     start_date = str(start_date) + "-" + str(start_date + 1)
                     end_date = str(end_date) + "-" + str(end_date + 1)
 
-                if start_date_int >= 1979:# in player_data["game_valid_years"]:
+                if True:# in player_data["game_valid_years"]:
                     start_date = "[" + str(start_date) + "](" + game_splits_url_format.format(player_data["id"][0], player_data["id"], str(start_date_int + 1)) + ")"
-                if end_date_int >= 1979:# in player_data["game_valid_years"]:
+                if True:# in player_data["game_valid_years"]:
                     end_date = "[" + str(end_date) + "](" + game_splits_url_format.format(player_data["id"][0], player_data["id"], str(end_date_int + 1)) + ")"
                 
             all_streaks.append({
@@ -25608,9 +25608,9 @@ def handle_quick_long_calc(new_rows, stat_objs, player_data, player_type, all_ro
                     start_date = str(start_date) + "-" + str(start_date + 1)
                     end_date = str(end_date) + "-" + str(end_date + 1)
 
-                if start_date_int >= 1979:# in player_data["game_valid_years"]:
+                if True:# in player_data["game_valid_years"]:
                     start_date = "[" + str(start_date) + "](" + game_splits_url_format.format(player_data["id"][0], player_data["id"], str(start_date_int + 1)) + ")"
-                if end_date_int >= 1979:#in player_data["game_valid_years"]:
+                if True:#in player_data["game_valid_years"]:
                     end_date = "[" + str(end_date) + "](" + game_splits_url_format.format(player_data["id"][0], player_data["id"], str(end_date_int + 1)) + ")"
 
                 all_streaks.append({
