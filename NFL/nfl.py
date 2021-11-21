@@ -7794,7 +7794,7 @@ def handle_nfl_game_stats(player_data, all_rows, qualifiers, extra_stats, missin
             if row_data["Shared"]["GameLink"]:
                 if row_data["Shared"]["GameLink"] not in games_to_skip:
                     future = sub_executor.submit(get_game_data, index, player_data, row_data, qualifiers, extra_stats)
-                    future.add_done_callback(functools.partial(result_call_back, qualifiers, count_info, new_rows, player_type, player_data, extra_stats))
+                    future.add_done_callback(functools.partial(result_call_back, qualifiers, count_info, new_rows, player_type, player_data, row_data, extra_stats))
             else:
                 count_info["missing_games"] = True
 
@@ -7803,9 +7803,10 @@ def handle_nfl_game_stats(player_data, all_rows, qualifiers, extra_stats, missin
 
     return sorted(new_rows, key=lambda row: row["Shared"]["Date"]), count_info["missing_games"]
 
-def result_call_back(qualifiers, count_info, new_rows, player_type, player_data, extra_stats, result):
+def result_call_back(qualifiers, count_info, new_rows, player_type, player_data, old_row_data, extra_stats, result):
     try:
         if result.exception():
+            logger.info("Error parsing date " + str(old_row_data["Date"]))
             if not count_info["exception"]:
                 count_info["exception"] = result.exception()
             percent_complete = 100 * (count_info["count"] / count_info["total_count"])

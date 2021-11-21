@@ -6730,7 +6730,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                             extra_stats.add(m.group(1) + "-" + str(ordinal_to_number(m.group(2))))
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
                         
-                        last_match = re.finditer(r"\bshow(?: |-)?(record|score|year|seasons-leading|season|date|per-game|game|play|run-support|run-support-record|exit-record|statcast|advanced-runner|advanced|best-season|worst-season|team|franchise|number|award|live|driven-in)s?\b", time_frame)
+                        last_match = re.finditer(r"\bshow(?: |-)?(record|score|year|seasons-leading|season|date|per-game|game|play|run-support|run-support-record|exit-record|statcast|advanced-runner|advanced|best-season|worst-season|team|franchise|number|award|live|driven-in|mlb-link)s?\b", time_frame)
                         for m in last_match:
                             extra_stats.add(m.group(1))
                             if m.group(1) == "play":
@@ -12422,13 +12422,13 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
                 end_season = None
                 for row in sub_player_data["rows"]:
                     if row["DateTime"] == date_start:
-                        if row["GameLink"]:
+                        if row["GameLink"] and (not "mlb-link" in extra_stats or "MLBGameLink" not in row):
                             date_start_link = "https://www.baseball-reference.com" + row["GameLink"]
                         else:
                             date_start_link = "https://www.mlb.com/gameday/" + str(row["MLBGameLink"])
                         start_season = inflect_engine.ordinal(sub_player_data["year_valid_years"].index(row["Year"]) + 1)
                     if row["DateTime"] == date_end:
-                        if row["GameLink"]:
+                        if row["GameLink"] and (not "mlb-link" in extra_stats or "MLBGameLink" not in row):
                             date_end_link = "https://www.baseball-reference.com" + row["GameLink"]
                         else:
                             date_end_link = "https://www.mlb.com/gameday/" + str(row["MLBGameLink"])
@@ -12496,7 +12496,7 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
                         date_start_link = None
                         for row in sub_player_data["rows"]:
                             if row["DateTime"] == date_start:
-                                if row["GameLink"]:
+                                if row["GameLink"] and (not "mlb-link" in extra_stats or "MLBGameLink" not in row):
                                     date_start_link = "https://www.baseball-reference.com" + row["GameLink"]
                                 else:
                                     date_start_link = "https://www.mlb.com/gameday/" + str(row["MLBGameLink"])
@@ -13970,23 +13970,23 @@ def handle_player_data(player_data, time_frame, player_type, player_page, valid_
     
     if "Max Streak" in time_frame["qualifiers"]:
         all_rows = sorted(all_rows, key=lambda row: row["DateTime"])
-        all_rows = handle_max_streak(all_rows, player_data, player_type, time_frame["qualifiers"], True, False)
+        all_rows = handle_max_streak(all_rows, player_data, player_type, time_frame["qualifiers"], True, False, extra_stats)
 
     if "Count Streak" in time_frame["qualifiers"]:
         all_rows = sorted(all_rows, key=lambda row: row["DateTime"])
-        all_rows = handle_max_streak(all_rows, player_data, player_type, time_frame["qualifiers"], False, False)
+        all_rows = handle_max_streak(all_rows, player_data, player_type, time_frame["qualifiers"], False, False, extra_stats)
     
     if "Max Streak Formula" in time_frame["qualifiers"]:
         all_rows = sorted(all_rows, key=lambda row: row["DateTime"])
-        all_rows = handle_max_streak(all_rows, player_data, player_type, time_frame["qualifiers"], True, True)
+        all_rows = handle_max_streak(all_rows, player_data, player_type, time_frame["qualifiers"], True, True, extra_stats)
 
     if "Count Streak Formula" in time_frame["qualifiers"]:
         all_rows = sorted(all_rows, key=lambda row: row["DateTime"])
-        all_rows = handle_max_streak(all_rows, player_data, player_type, time_frame["qualifiers"], False, True)
+        all_rows = handle_max_streak(all_rows, player_data, player_type, time_frame["qualifiers"], False, True, extra_stats)
 
     if "Max Stretch" in time_frame["qualifiers"]:
         all_rows = sorted(all_rows, key=lambda row: row["DateTime"])
-        all_rows = handle_max_stretch(all_rows, player_data, player_type, time_frame["qualifiers"])
+        all_rows = handle_max_stretch(all_rows, player_data, player_type, time_frame["qualifiers"], extra_stats)
 
     if "Quickest" in time_frame["qualifiers"] or "Slowest" in time_frame["qualifiers"]:
         all_rows = sorted(all_rows, key=lambda row: row["DateTime"])
@@ -13994,7 +13994,7 @@ def handle_player_data(player_data, time_frame, player_type, player_page, valid_
 
     if "Max Stat" in time_frame["qualifiers"] or "Min Stat" in time_frame["qualifiers"]:
         all_rows = sorted(all_rows, key=lambda row: row["DateTime"])
-        all_rows = handle_max_min_data(all_rows, player_data, player_type, time_frame["qualifiers"])
+        all_rows = handle_max_min_data(all_rows, player_data, player_type, time_frame["qualifiers"], extra_stats)
     
     if "Season" in time_frame["qualifiers"]:
         seasons = sorted(list(set([row["Year"] for row in all_rows])))
@@ -18184,7 +18184,7 @@ def parse_entered_str(row):
 
     return is_save_situation, inning, num_out, num_occupied, num_in_scoring, run_diff, is_top_inning, outs_remaining
 
-def handle_max_min_data(all_rows, player_data, player_type, qualifiers):
+def handle_max_min_data(all_rows, player_data, player_type, qualifiers, extra_stats):
     new_rows = []
     stat_vals = []
 
@@ -18376,7 +18376,7 @@ def handle_max_min_data(all_rows, player_data, player_type, qualifiers):
                         new_rows.append(row)
             stat_val["stat_obj"]["explain_str"] = current_explain_strs + [stat_val["stat_obj"]["explain_str"]]
         else:
-            matching_rows = handle_min_max_final(stat_val, current_explain_strs, player_data, player_type, stat, qualifiers, all_rows, transformed_vals)
+            matching_rows = handle_min_max_final(stat_val, current_explain_strs, player_data, player_type, stat, qualifiers, all_rows, transformed_vals, extra_stats)
             if matching_rows:
                 new_rows.extend(matching_rows)
     
@@ -18660,7 +18660,7 @@ def handle_min_max_calc(the_stats, stat_quals, player_type, stat, time_frame, al
                             "counter" : 0
                         })
         
-def handle_min_max_final(stat_val, current_explain_strs, player_data, player_type, stat, qualifiers, all_rows, transformed_vals):
+def handle_min_max_final(stat_val, current_explain_strs, player_data, player_type, stat, qualifiers, all_rows, transformed_vals, extra_stats):
     if not all_rows:
         stat_val["stat_obj"]["explain_str"] = current_explain_strs
         return []
@@ -18965,12 +18965,12 @@ def handle_min_max_final(stat_val, current_explain_strs, player_data, player_typ
                                     date_end_link = None
                                     for row in all_rows:
                                         if row["DateTime"] == start_date:
-                                            if row["GameLink"]:
+                                            if row["GameLink"] and (not "mlb-link" in extra_stats or "MLBGameLink" not in row):
                                                 date_start_link = "https://www.baseball-reference.com" + row["GameLink"]
                                             else:
                                                 date_start_link = "https://www.mlb.com/gameday/" + str(row["MLBGameLink"])
                                         if row["DateTime"] == end_date:
-                                            if row["GameLink"]:
+                                            if row["GameLink"] and (not "mlb-link" in extra_stats or "MLBGameLink" not in row):
                                                 date_end_link = "https://www.baseball-reference.com" + row["GameLink"]
                                             else:
                                                 date_end_link = "https://www.mlb.com/gameday/" + str(row["MLBGameLink"])
@@ -19007,12 +19007,12 @@ def handle_min_max_final(stat_val, current_explain_strs, player_data, player_typ
                                 date_end_link = None
                                 for row in all_rows:
                                     if row["DateTime"] == start_date:
-                                        if row["GameLink"]:
+                                        if row["GameLink"] and (not "mlb-link" in extra_stats or "MLBGameLink" not in row):
                                             date_start_link = "https://www.baseball-reference.com" + row["GameLink"]
                                         else:
                                             date_start_link = "https://www.mlb.com/gameday/" + str(row["MLBGameLink"])
                                     if row["DateTime"] == end_date:
-                                        if row["GameLink"]:
+                                        if row["GameLink"] and (not "mlb-link" in extra_stats or "MLBGameLink" not in row):
                                             date_end_link = "https://www.baseball-reference.com" + row["GameLink"]
                                         else:
                                             date_end_link = "https://www.mlb.com/gameday/" + str(row["MLBGameLink"])
@@ -19555,37 +19555,37 @@ def handle_career_stats(all_rows, player_type, qualifiers):
 
     return new_rows
 
-def handle_max_streak(all_rows, player_data, player_type, qualifiers, max_streak, is_formula):
+def handle_max_streak(all_rows, player_data, player_type, qualifiers, max_streak, is_formula, extra_stats):
     new_rows = []
 
     if "Max Streak" in qualifiers and max_streak and not is_formula:
         for qual_object in qualifiers["Max Streak"]:
-            handle_max_streak_calc(new_rows, qual_object["values"], player_data, player_type, all_rows, max_streak, is_formula)
+            handle_max_streak_calc(new_rows, qual_object["values"], player_data, player_type, all_rows, max_streak, is_formula, extra_stats)
     
     if "Count Streak" in qualifiers and not max_streak and not is_formula:
         for qual_object in qualifiers["Count Streak"]:
-            handle_max_streak_calc(new_rows, qual_object["values"], player_data, player_type, all_rows, max_streak, is_formula)
+            handle_max_streak_calc(new_rows, qual_object["values"], player_data, player_type, all_rows, max_streak, is_formula, extra_stats)
     
     if "Max Streak Formula" in qualifiers and max_streak and is_formula:
         for qual_object in qualifiers["Max Streak Formula"]:
-            handle_max_streak_calc(new_rows, qual_object["values"], player_data, player_type, all_rows, max_streak, is_formula)
+            handle_max_streak_calc(new_rows, qual_object["values"], player_data, player_type, all_rows, max_streak, is_formula, extra_stats)
     
     if "Count Streak Formula" in qualifiers and not max_streak and is_formula:
         for qual_object in qualifiers["Count Streak Formula"]:
-            handle_max_streak_calc(new_rows, qual_object["values"], player_data, player_type, all_rows, max_streak, is_formula)
+            handle_max_streak_calc(new_rows, qual_object["values"], player_data, player_type, all_rows, max_streak, is_formula, extra_stats)
     
     return [row for n, row in enumerate(new_rows) if row not in new_rows[:n]]
 
-def handle_max_stretch(all_rows, player_data, player_type, qualifiers):
+def handle_max_stretch(all_rows, player_data, player_type, qualifiers, extra_stats):
     new_rows = []
 
     if "Max Stretch" in qualifiers:
         for qual_object in qualifiers["Max Stretch"]:
-            handle_max_stretch_calc(new_rows, qual_object["values"], player_data, player_type, all_rows)
+            handle_max_stretch_calc(new_rows, qual_object["values"], player_data, player_type, all_rows, extra_stats)
     
     return [row for n, row in enumerate(new_rows) if row not in new_rows[:n]]
 
-def handle_max_streak_calc(new_rows, stat_objs, player_data, player_type, all_rows, max_streak, is_formula):
+def handle_max_streak_calc(new_rows, stat_objs, player_data, player_type, all_rows, max_streak, is_formula, extra_stats):
     if not all_rows:
         return
 
@@ -19794,12 +19794,12 @@ def handle_max_streak_calc(new_rows, stat_objs, player_data, player_type, all_ro
                 date_end_link = None
                 for row in all_rows:
                     if row["DateTime"] == start_date:
-                        if row["GameLink"]:
+                        if row["GameLink"] and (not "mlb-link" in extra_stats or "MLBGameLink" not in row):
                             date_start_link = "https://www.baseball-reference.com" + row["GameLink"]
                         else:
                             date_start_link = "https://www.mlb.com/gameday/" + str(row["MLBGameLink"])
                     if row["DateTime"] == end_date:
-                        if row["GameLink"]:
+                        if row["GameLink"] and (not "mlb-link" in extra_stats or "MLBGameLink" not in row):
                             date_end_link = "https://www.baseball-reference.com" + row["GameLink"]
                         else:
                             date_end_link = "https://www.mlb.com/gameday/" + str(row["MLBGameLink"])
@@ -19904,7 +19904,7 @@ def handle_max_streak_calc(new_rows, stat_objs, player_data, player_type, all_ro
     
     stat_objs[0]["explain_str"] = current_explain_strs + [stat_objs[0]["explain_str"]]
 
-def handle_max_stretch_calc(new_rows, stat_objs, player_data, player_type, all_rows):
+def handle_max_stretch_calc(new_rows, stat_objs, player_data, player_type, all_rows, extra_stats):
     if not all_rows:
         return
 
@@ -20061,12 +20061,12 @@ def handle_max_stretch_calc(new_rows, stat_objs, player_data, player_type, all_r
                 date_end_link = None
                 for row in all_rows:
                     if row["DateTime"] == start_date:
-                        if row["GameLink"]:
+                        if row["GameLink"] and (not "mlb-link" in extra_stats or "MLBGameLink" not in row):
                             date_start_link = "https://www.baseball-reference.com" + row["GameLink"]
                         else:
                             date_start_link = "https://www.mlb.com/gameday/" + str(row["MLBGameLink"])
                     if row["DateTime"] == end_date:
-                        if row["GameLink"]:
+                        if row["GameLink"] and (not "mlb-link" in extra_stats or "MLBGameLink" not in row):
                             date_end_link = "https://www.baseball-reference.com" + row["GameLink"]
                         else:
                             date_end_link = "https://www.mlb.com/gameday/" + str(row["MLBGameLink"])
@@ -31470,7 +31470,7 @@ def get_mlb_game_stats(all_rows, qualifiers, games_to_skip, player_data, missing
         for index, row_data in enumerate(sorted(all_rows, key=lambda row: row["DateTime"])):
             if row_data["GameLink"] not in games_to_skip:
                 future = sub_executor.submit(get_live_game_data, index, player_data, row_data, player_type, qualifiers, needs_plays)
-                future.add_done_callback(functools.partial(result_call_back, qualifiers, count_info, new_rows, player_type, player_data, needs_plays, extra_stats))
+                future.add_done_callback(functools.partial(result_call_back, qualifiers, count_info, new_rows, player_type, player_data, needs_plays, row_data, extra_stats))
     
     if count_info["exception"]:
         raise count_info["exception"]
@@ -31524,36 +31524,40 @@ def get_mlb_game_stats_single_thread(all_rows, qualifiers, games_to_skip, player
             continue
 
         if row_data["GameLink"] not in games_to_skip:
-            game_data, row_data, index, sub_missing_games = get_live_game_data(index, player_data, row_data, player_type, qualifiers, True)
-            has_match, raw_row_data = handle_result_qualifiers(game_data, index, row_data, sub_missing_games, player_type, player_data, qualifiers, saved_row_data, count_info, extra_stats)
-            
-            if has_match:
-                new_rows.append(row_data)
+            try:
+                game_data, row_data, index, sub_missing_games = get_live_game_data(index, player_data, row_data, player_type, qualifiers, True)
+                has_match, raw_row_data = handle_result_qualifiers(game_data, index, row_data, sub_missing_games, player_type, player_data, qualifiers, saved_row_data, count_info, extra_stats)
+                
+                if has_match:
+                    new_rows.append(row_data)
 
-            for stat in stats_needed:
-                saved_row_data[stat] += raw_row_data.get(stat, 0)
-            
-                if stat in event_stats_needed:
-                    saved_row_data["career_stat_" + stat] = saved_row_data[stat]
-                    if saved_row_data[stat] >= event_stats_needed[stat]:
-                        hit_end = True
-                if stat in event_reversed_stats_needed:
-                    saved_row_data["career_stat_reversed_" + stat] = saved_row_data[stat]
-                    if saved_row_data[stat] >= event_reversed_stats_needed[stat]:
-                        hit_end = True
+                for stat in stats_needed:
+                    saved_row_data[stat] += raw_row_data.get(stat, 0)
+                
+                    if stat in event_stats_needed:
+                        saved_row_data["career_stat_" + stat] = saved_row_data[stat]
+                        if saved_row_data[stat] >= event_stats_needed[stat]:
+                            hit_end = True
+                    if stat in event_reversed_stats_needed:
+                        saved_row_data["career_stat_reversed_" + stat] = saved_row_data[stat]
+                        if saved_row_data[stat] >= event_reversed_stats_needed[stat]:
+                            hit_end = True
 
-            if "Event Stat" in qualifiers:
-                if not handle_stat_num_qual(saved_row_data, qualifiers["Event Stat"], False):
-                    break
-            if "Event Stat Reversed" in qualifiers:
-                if not handle_stat_num_qual(saved_row_data, qualifiers["Event Stat Reversed"], True):
-                    break
+                if "Event Stat" in qualifiers:
+                    if not handle_stat_num_qual(saved_row_data, qualifiers["Event Stat"], False):
+                        break
+                if "Event Stat Reversed" in qualifiers:
+                    if not handle_stat_num_qual(saved_row_data, qualifiers["Event Stat Reversed"], True):
+                        break
 
-            percent_complete = 100 * (count_info["count"] / count_info["total_count"])
-            if count_info["total_count"] >= 10 and percent_complete >= count_info["current_percent"]:
-                logger.info("#" + str(threading.get_ident()) + "#   " + player_data["id"] + " game data " + str(count_info["current_percent"]) + "% complete")
-                count_info["current_percent"] += 10
-            count_info["count"] += 1
+                percent_complete = 100 * (count_info["count"] / count_info["total_count"])
+                if count_info["total_count"] >= 10 and percent_complete >= count_info["current_percent"]:
+                    logger.info("#" + str(threading.get_ident()) + "#   " + player_data["id"] + " game data " + str(count_info["current_percent"]) + "% complete")
+                    count_info["current_percent"] += 10
+                count_info["count"] += 1
+            except Exception:
+                logger.info("Error parsing date " + str(row_data["Date"]))
+                raise
 
     logger.info("#" + str(threading.get_ident()) + "#   " + player_data["id"] + " completed game data")
 
@@ -31970,9 +31974,10 @@ def perform_mlb_schedule_qualifiers(row, qualifiers):
     
     return True
 
-def result_call_back(qualifiers, count_info, new_rows, player_type, player_data, needs_plays, extra_stats, result):
+def result_call_back(qualifiers, count_info, new_rows, player_type, player_data, needs_plays, old_row_data, extra_stats, result):
     try:
         if result.exception():
+            logger.info("Error parsing date " + str(old_row_data["Date"]))
             if not count_info["exception"]:
                 count_info["exception"] = result.exception()
             percent_complete = 100 * (count_info["count"] / count_info["total_count"])

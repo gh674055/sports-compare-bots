@@ -5970,6 +5970,11 @@ qualifier_map = {
     "Final Score Difference" : {},
     "Period" : {},
     "Coordinates" : {},
+    "X Coordinate" : {},
+    "Y Coordinate" : {},
+    "Raw Coordinates" : {},
+    "Raw X Coordinate" : {},
+    "Raw Y Coordinate" : {},
     "Exact Coordinates" : {},
     "Period Time" : {},
     "Period Time Remaining" : {},
@@ -5992,6 +5997,8 @@ qualifier_map = {
     "Offensive Zone" : {},
     "Defensive Zone" : {},
     "Neutral Zone" : {},
+    "Left Side" : {},
+    "Right Side" : {},
     "Unassisted" : {},
     "Series Team Wins" : {},
     "Series Opponent Wins" : {},
@@ -7236,7 +7243,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                             extra_stats.add(m.group(1) + "-" + str(ordinal_to_number(m.group(2))))
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
                         
-                        last_match = re.finditer(r"\bshow(?: |-)?(record|score|goal|year|seasons-leading|season|date|per-game|game|adjusted|advanced|relative|missing-game|missing-toi|best-season|worst-season|ng|team|franchise|number|fight|penaltie|penalty|award|toi|shot|shift|star|play)s?\b", time_frame)
+                        last_match = re.finditer(r"\bshow(?: |-)?(record|score|goal|year|seasons-leading|season|date|per-game|game|adjusted|advanced|relative|missing-game|missing-toi|best-season|worst-season|ng|team|franchise|number|fight|penaltie|penalty|award|toi|shot|shift|star|play|nhl-link)s?\b", time_frame)
                         for m in last_match:
                             if "penalt" in m.group(1) or m.group(1) == "fight":
                                 extra_stats.add("penalties")
@@ -7807,7 +7814,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
 
                                 time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
                         
-                        last_match = re.finditer(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?(current-season-age|first-minutes?|current-minutes?|first-shots?|current-shots?|first-periods?|current-shots?|first-games?|current-games?|first-seasons?|current-seasons?|last-minutes?|last-shots?|last-periods?|last-games?|last-seasons?|first-starts?|last-starts?|start-if-goalie|decision|current-age|rook|rookie|facing-former-franchise|facing-former-team|even-year|odd-year|interconference|intraconference|interdivision|intradivision|complete-games?|current-winning-opponents?|current-losing-opponents?|current-tied-opponents?|current-winning-or-tied-opponents?|current-losing-or-tied-opponents?|winning-opponents?|losing-opponents?|winning-or-tied-opponents?|losing-or-tied-opponents?|tied-opponents?|playoff-opponents?|cup-winner-opponent|conf-winner-opponent|current-winning-teams?|current-losing-teams?|current-tied-teams?|current-winning-or-tied-teams?|current-losing-or-tied-teams?|winning-teams?|losing-teams?|tied-teams?|winning-or-tied-teams?|losing-or-tied-teams?|playoff-teams?|cup-winner-team|conf-winner-team|penalty-shot|shootout|overtime|game-winning|offensive-zone|defensive-zone|neutral-zone|unassisted|even-skaters|team-goalie-pulled|opponent-goalie-pulled|more-skaters|less-skaters|power-play|short-handed|even-strength|elimination-or-clinching|clinching-or-elimination|elimination(?:-games?)?|eliminating(?:-games?)?|clinching(?:-games?)?|clinch(?:-games?)?|winner-take-all|behind-in-series|ahead-in-series|even-in-series|(?:nhl(?: |-))?(?:finals?|championship)|stanley(?: |-)cup|stanley|cup|sc|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?(?:league|conference)(?:(?: |-)finals?|(?: |-)championship)|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?cf|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?second(?: |-)round|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?sr|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?(?:league|conference) semi-?finals?|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?cs|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?first round|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?fr|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?(?:league|conference) quarter-?finals?|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?cq|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?qr|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?qualify(?:ing|er)?(?:(?: |-)round)?|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?pr|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?play(?:-| )?in(?:(?: |-)round)?|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?rr|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?(?:round )?robin|leading(:?-in-game)?|trailing(:?-in-game)?|tied(:?(?:-in)?-game)?|force-dates|first-half|second-half|pre-all-star|post-all-star|t:[\w-]+|o:[\w-]+|m:[\w-]+|d:[\w-]+|dt:[\w-]+|team-franchise:[\w-]+|opponent-franchise:[\w-]+|franchise:[\w-]+|tf:[\w-]+|of:[\w-]+|f:[\w-]+|team:[\w-]+|opponent:[\w-]+|tv-network:[\w-]+|raw-tv-network:[\w-]+|national-tv-network:[\w-]+|national-raw-tv-network:[\w-]+|any-national-tv-network:[\w-]+|any-national-raw-tv-network:[\w-]+|any-us-national-game|us-national-game|any-ca-national-game|ca-national-game|any-national-game|national-game|month:[\w-]+|day:[\w-]+|date:[\w-]+|series-game:[\w-]+|gm:[\w-]+|game:[\w-]+|season-gm:[\w-]+|season-game:[\w-]+|season:[\w-]+|season-reversed:[\w-]+|crgm:[\w-]+|career-game-reversed:[\w-]+|team-game-reversed:[\w-]+|season-game-reversed:[\w-]+|game-reversed:[\w-]+|career-game:[\w-]+|tmgm:[\w-]+|team-game:[\w-]+|game-number:[\w-]+|season-number:[\w-]+|number:[\w-]+|dr:[\w-]+|starts-days-rest:[\w-]+|days-rest:[\w-]+|prv-dr:[\w-]+|previous-days-rest:[\w-]+|upc-dr:[\w-]+|upcoming-starts-days-rest:[\w-]+|upcoming-days-rest:[\w-]+|gr:[\w-]+|games-rest:[\w-]+|starts-rest:[\w-]+|prv-gr:[\w-]+|-?starts?|-?started|-?starting|-?ignore-starts?|-?ignore-started?|-?ignore-starting|previous-games-rest:[\w-]+|upc-gr:[\w-]+|upcoming-games-rest:[\w-]+|days-in-a-row:[\w-]+|games-in-a-row:[\w-]+|starts-in-a-row:[\w-]+|prv-t:[\w-]+|prv-o:[\w-]+|upc-t:[\w-]+|upc-o:[\w-]+|upcoming-same-opponent|previous-same-opponent|previous-franchise:[\w-]+|previous-team-franchise:[\w-]+|previous-opponent-franchise:[\w-]+|upcoming-franchise:[\w-]+|upcoming-team-franchise:[\w-]+|upcoming-opponent-franchise:[\w-]+|previous-team:[\w-]+|previous-opponent:[\w-]+|upcoming-team:[\w-]+|upcoming-opponent:[\w-]+|score:[\S-]+|final-score:[\S-]+|previous-score:[\S-]+|upcoming-score:[\S-]+|final-team-score:[\w-]+|final-opponent-score:[\w-]+|final-score-margin:[\S-]+|final-score-difference:[\S-]+|team-score:[\w-]+|opponent-score:[\w-]+|score-margin:[\S-]+|score-difference:[\S-]+|period:[\w-]+|coordinates:[\S-]+|exact-coordinates:[\S-]+|team-skaters:[\w-]+|opponent-skaters:[\w-]+|team-players:[\w-]+|opponent-players:[\w-]+|period-time-remaining:[\S-]+|period-time:[\S-]+|season-st:[\S-]+|period-stat:[\S-]+|season-stat:[\S-]+|season-prv-st:[\S-]+|season-previous-stat:[\S-]+|season-upc-st:[\S-]+|season-upcoming-stat:[\S-]+|st:[\S-]+|stat:[\S-]+|prv-st:[\S-]+|previous-stat:[\S-]+|upc-st:[\S-]+|upcoming-stat:[\S-]+|min-st:[\S-]+|min-stat:[\S-]+|max-st:[\S-]+|max-stat:[\S-]+|totalgames-st:[\S-]+|totalgames-stat:[\S-]+|max-str:[\S-]+|max-streak:[\S-]+|max-stretch:[\S-]+|ctn-str:[\S-]+|count-streak:[\S-]+|q:[\S-]+|quickest:[\S-]+|s:[\S-]+|slowest:[\S-]+|with-new-team|with-new-franchise|summer|spring|winter|fall|autumn|away|home|road|previous-away|previous-home|previous-road|upcoming-away|upcoming-home|upcoming-road|win(?:s)?|loss(?:es)?|tie(?:es)?|w-ot|w-so|l-ot|l-so|so|ot|w|l|t|prv-w|prv-l|prv-t|prv-w-ot|prv-w-so|prv-l-ot|prv-l-so|prv-so|prv-ot|upc-w|upc-l|upc-t|upc-w-ot|upc-w-so|upc-l-ot|upc-l-so|upc-so|upc-ot|previous-win(?:s)?|previous-loss(?:es)?|previous-tie(?:es)|upcoming-win(?:s)?|upcoming-loss(?:es)?|upcoming-tie(?:es)|prv-t-w|prv-t-l|prv-t-t|prv-t-w-ot|prv-t-w-so|prv-t-l-ot|prv-t-l-so|prv-t-so|prv-t-ot|upc-t-w|upc-t-l|upc-t-t|upc-t-w-ot|upc-t-w-so|upc-t-l-ot|upc-t-l-so|upc-t-so|upc-t-ot|previous-team-win(?:s)?|previous-team-loss(?:es)?|previous-team-tie(?:es)|upcoming-team-win(?:s)?|upcoming-team-loss(?:es)?|upcoming-team-tie(?:es)|series-team-wins:[\w-]+|series-opponent-wins:[\w-]+|series-score-margin:[\S-]+|series-score-difference:[\S-]+|series-score:[\w-]+|current-team-wins:[\w-]+|current-team-losses:[\w-]+|current-team-ties:[\w-]+|current-team-points:[\w-]+|current-team-games-over-500:[\S-]+|current-opponent-wins:[\w-]+|current-opponent-losses:[\w-]+|current-opponent-ties:[\w-]+|current-opponent-points:[\w-]+|current-opponent-games-over-500:[\S-]+|team-wins:[\w-]+|team-losses:[\w-]+|team-ties:[\w-]+|team-points:[\w-]+|team-games-over-500:[\S-]+|opponent-wins:[\w-]+|opponent-losses:[\w-]+|opponent-ties:[\w-]+|opponent-points:[\w-]+|opponent-games-over-500:[\S-]+|opponent-goals?-rank:[\S-]+|opponent-standings-rank:[\S-]+|opponent-goals?-allowed-rank:[\S-]+|current-opponent-win(?:ning)?-percent:[\S-]+|opponent-win(?:ning)?-percent:[\S-]+|current-opponent-points-percent:[\S-]+|opponent-points-percent:[\S-]+|team-goals?-rank:[\S-]+|team-standings-rank:[\S-]+|team-goals?-allowed-rank:[\S-]+|years?:[\w-]+|current-team-win(?:ning)?-percent:[\S-]+|team-win(?:ning)?-percent:[\S-]+|current-team-points-percent:[\S-]+|team-points-percent:[\S-]+|early-?afternoon|late-?afternoon|morning|early|afternoon|day|night(?:time)?|late|team-conference:[\S-]+|opponent-conference:[\S-]+|team-division:[\S-]+|opponent-division:[\S-]+|birthda(?:y|te)|skat(?:(?:er)|(?:ing))|goalie|skater|" + all_months_re + r"|" + all_days_re + r")\b", time_frame)
+                        last_match = re.finditer(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?(current-season-age|first-minutes?|current-minutes?|first-shots?|current-shots?|first-periods?|current-shots?|first-games?|current-games?|first-seasons?|current-seasons?|last-minutes?|last-shots?|last-periods?|last-games?|last-seasons?|first-starts?|last-starts?|start-if-goalie|decision|current-age|rook|rookie|facing-former-franchise|facing-former-team|even-year|odd-year|interconference|intraconference|interdivision|intradivision|complete-games?|current-winning-opponents?|current-losing-opponents?|current-tied-opponents?|current-winning-or-tied-opponents?|current-losing-or-tied-opponents?|winning-opponents?|losing-opponents?|winning-or-tied-opponents?|losing-or-tied-opponents?|tied-opponents?|playoff-opponents?|cup-winner-opponent|conf-winner-opponent|current-winning-teams?|current-losing-teams?|current-tied-teams?|current-winning-or-tied-teams?|current-losing-or-tied-teams?|winning-teams?|losing-teams?|tied-teams?|winning-or-tied-teams?|losing-or-tied-teams?|playoff-teams?|cup-winner-team|conf-winner-team|penalty-shot|shootout|overtime|game-winning|offensive-zone|defensive-zone|neutral-zone|left-side|right-side|unassisted|even-skaters|team-goalie-pulled|opponent-goalie-pulled|more-skaters|less-skaters|power-play|short-handed|even-strength|elimination-or-clinching|clinching-or-elimination|elimination(?:-games?)?|eliminating(?:-games?)?|clinching(?:-games?)?|clinch(?:-games?)?|winner-take-all|behind-in-series|ahead-in-series|even-in-series|(?:nhl(?: |-))?(?:finals?|championship)|stanley(?: |-)cup|stanley|cup|sc|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?(?:league|conference)(?:(?: |-)finals?|(?: |-)championship)|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?cf|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?second(?: |-)round|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?sr|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?(?:league|conference) semi-?finals?|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?cs|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?first round|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?fr|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?(?:league|conference) quarter-?finals?|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?cq|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?qr|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?qualify(?:ing|er)?(?:(?: |-)round)?|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?pr|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?play(?:-| )?in(?:(?: |-)round)?|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?rr|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?(?:round )?robin|leading(:?-in-game)?|trailing(:?-in-game)?|tied(:?(?:-in)?-game)?|force-dates|first-half|second-half|pre-all-star|post-all-star|t:[\w-]+|o:[\w-]+|m:[\w-]+|d:[\w-]+|dt:[\w-]+|team-franchise:[\w-]+|opponent-franchise:[\w-]+|franchise:[\w-]+|tf:[\w-]+|of:[\w-]+|f:[\w-]+|team:[\w-]+|opponent:[\w-]+|tv-network:[\w-]+|raw-tv-network:[\w-]+|national-tv-network:[\w-]+|national-raw-tv-network:[\w-]+|any-national-tv-network:[\w-]+|any-national-raw-tv-network:[\w-]+|any-us-national-game|us-national-game|any-ca-national-game|ca-national-game|any-national-game|national-game|month:[\w-]+|day:[\w-]+|date:[\w-]+|series-game:[\w-]+|gm:[\w-]+|game:[\w-]+|season-gm:[\w-]+|season-game:[\w-]+|season:[\w-]+|season-reversed:[\w-]+|crgm:[\w-]+|career-game-reversed:[\w-]+|team-game-reversed:[\w-]+|season-game-reversed:[\w-]+|game-reversed:[\w-]+|career-game:[\w-]+|tmgm:[\w-]+|team-game:[\w-]+|game-number:[\w-]+|season-number:[\w-]+|number:[\w-]+|dr:[\w-]+|starts-days-rest:[\w-]+|days-rest:[\w-]+|prv-dr:[\w-]+|previous-days-rest:[\w-]+|upc-dr:[\w-]+|upcoming-starts-days-rest:[\w-]+|upcoming-days-rest:[\w-]+|gr:[\w-]+|games-rest:[\w-]+|starts-rest:[\w-]+|prv-gr:[\w-]+|-?starts?|-?started|-?starting|-?ignore-starts?|-?ignore-started?|-?ignore-starting|previous-games-rest:[\w-]+|upc-gr:[\w-]+|upcoming-games-rest:[\w-]+|days-in-a-row:[\w-]+|games-in-a-row:[\w-]+|starts-in-a-row:[\w-]+|prv-t:[\w-]+|prv-o:[\w-]+|upc-t:[\w-]+|upc-o:[\w-]+|upcoming-same-opponent|previous-same-opponent|previous-franchise:[\w-]+|previous-team-franchise:[\w-]+|previous-opponent-franchise:[\w-]+|upcoming-franchise:[\w-]+|upcoming-team-franchise:[\w-]+|upcoming-opponent-franchise:[\w-]+|previous-team:[\w-]+|previous-opponent:[\w-]+|upcoming-team:[\w-]+|upcoming-opponent:[\w-]+|score:[\S-]+|final-score:[\S-]+|previous-score:[\S-]+|upcoming-score:[\S-]+|final-team-score:[\w-]+|final-opponent-score:[\w-]+|final-score-margin:[\S-]+|final-score-difference:[\S-]+|team-score:[\w-]+|opponent-score:[\w-]+|score-margin:[\S-]+|score-difference:[\S-]+|period:[\w-]+|raw-x-coordinate:[\S-]+|raw-y-coordinats:[\S-]+|raw-coordinates:[\S-]+|x-coordinate:[\S-]+|y-coordinats:[\S-]+|coordinates:[\S-]+|team-skaters:[\w-]+|opponent-skaters:[\w-]+|team-players:[\w-]+|opponent-players:[\w-]+|period-time-remaining:[\S-]+|period-time:[\S-]+|season-st:[\S-]+|period-stat:[\S-]+|season-stat:[\S-]+|season-prv-st:[\S-]+|season-previous-stat:[\S-]+|season-upc-st:[\S-]+|season-upcoming-stat:[\S-]+|st:[\S-]+|stat:[\S-]+|prv-st:[\S-]+|previous-stat:[\S-]+|upc-st:[\S-]+|upcoming-stat:[\S-]+|min-st:[\S-]+|min-stat:[\S-]+|max-st:[\S-]+|max-stat:[\S-]+|totalgames-st:[\S-]+|totalgames-stat:[\S-]+|max-str:[\S-]+|max-streak:[\S-]+|max-stretch:[\S-]+|ctn-str:[\S-]+|count-streak:[\S-]+|q:[\S-]+|quickest:[\S-]+|s:[\S-]+|slowest:[\S-]+|with-new-team|with-new-franchise|summer|spring|winter|fall|autumn|away|home|road|previous-away|previous-home|previous-road|upcoming-away|upcoming-home|upcoming-road|win(?:s)?|loss(?:es)?|tie(?:es)?|w-ot|w-so|l-ot|l-so|so|ot|w|l|t|prv-w|prv-l|prv-t|prv-w-ot|prv-w-so|prv-l-ot|prv-l-so|prv-so|prv-ot|upc-w|upc-l|upc-t|upc-w-ot|upc-w-so|upc-l-ot|upc-l-so|upc-so|upc-ot|previous-win(?:s)?|previous-loss(?:es)?|previous-tie(?:es)|upcoming-win(?:s)?|upcoming-loss(?:es)?|upcoming-tie(?:es)|prv-t-w|prv-t-l|prv-t-t|prv-t-w-ot|prv-t-w-so|prv-t-l-ot|prv-t-l-so|prv-t-so|prv-t-ot|upc-t-w|upc-t-l|upc-t-t|upc-t-w-ot|upc-t-w-so|upc-t-l-ot|upc-t-l-so|upc-t-so|upc-t-ot|previous-team-win(?:s)?|previous-team-loss(?:es)?|previous-team-tie(?:es)|upcoming-team-win(?:s)?|upcoming-team-loss(?:es)?|upcoming-team-tie(?:es)|series-team-wins:[\w-]+|series-opponent-wins:[\w-]+|series-score-margin:[\S-]+|series-score-difference:[\S-]+|series-score:[\w-]+|current-team-wins:[\w-]+|current-team-losses:[\w-]+|current-team-ties:[\w-]+|current-team-points:[\w-]+|current-team-games-over-500:[\S-]+|current-opponent-wins:[\w-]+|current-opponent-losses:[\w-]+|current-opponent-ties:[\w-]+|current-opponent-points:[\w-]+|current-opponent-games-over-500:[\S-]+|team-wins:[\w-]+|team-losses:[\w-]+|team-ties:[\w-]+|team-points:[\w-]+|team-games-over-500:[\S-]+|opponent-wins:[\w-]+|opponent-losses:[\w-]+|opponent-ties:[\w-]+|opponent-points:[\w-]+|opponent-games-over-500:[\S-]+|opponent-goals?-rank:[\S-]+|opponent-standings-rank:[\S-]+|opponent-goals?-allowed-rank:[\S-]+|current-opponent-win(?:ning)?-percent:[\S-]+|opponent-win(?:ning)?-percent:[\S-]+|current-opponent-points-percent:[\S-]+|opponent-points-percent:[\S-]+|team-goals?-rank:[\S-]+|team-standings-rank:[\S-]+|team-goals?-allowed-rank:[\S-]+|years?:[\w-]+|current-team-win(?:ning)?-percent:[\S-]+|team-win(?:ning)?-percent:[\S-]+|current-team-points-percent:[\S-]+|team-points-percent:[\S-]+|early-?afternoon|late-?afternoon|morning|early|afternoon|day|night(?:time)?|late|team-conference:[\S-]+|opponent-conference:[\S-]+|team-division:[\S-]+|opponent-division:[\S-]+|birthda(?:y|te)|skat(?:(?:er)|(?:ing))|goalie|skater|" + all_months_re + r"|" + all_days_re + r")\b", time_frame)
                         for m in last_match:
                             qualifier_obj = {}
                             
@@ -8137,6 +8144,14 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 extra_stats.add("current-stats")
                             elif qualifier_str == "neutral-zone":
                                 qual_type = "Neutral Zone"
+                                extra_stats.add("current-stats-zone")
+                                extra_stats.add("current-stats")
+                            elif qualifier_str == "left-side":
+                                qual_type = "Left Side"
+                                extra_stats.add("current-stats-zone")
+                                extra_stats.add("current-stats")
+                            elif qualifier_str == "right-side":
+                                qual_type = "Right Side"
                                 extra_stats.add("current-stats-zone")
                                 extra_stats.add("current-stats")
                             elif qualifier_str.endswith("period"):
@@ -8659,46 +8674,84 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                     }
 
                                 qualifiers[opp_sub_qual] = [qual_obj]
-                            elif qualifier_str.startswith("coordinates:"):
+                            elif qualifier_str.startswith("coordinates:") or qualifier_str.startswith("raw-coordinates:"):
                                 if qualifier_str.startswith("coordinates:"):
                                     qual_str = "coordinates:"
                                     qual_type = "Coordinates"
+                                    extra_stats.add("current-stats-zone")
+                                    extra_stats.add("current-stats")
+                                elif qualifier_str.startswith("raw-coordinates:"):
+                                    qual_str = "raw-coordinates:"
+                                    qual_type = "Raw Coordinates"
                                     extra_stats.add("current-stats-zone")
                                     extra_stats.add("current-stats")
                                 
                                 qual_obj = {}
                                 split_vals = re.split(r"(?<!\\)(?<!^)\,", re.split(r"(?<!\\)" + qual_str, qualifier_str, 1)[1], 1)
 
-                                x_coords = split_vals[0]
-                                y_coords = split_vals[1]
-                                if x_coords == "all":
-                                    x_coords = "0-100"
-                                if y_coords == "all":
-                                    y_coords = "-42.5-42.5"
+                                x_coord = split_vals[0]
+                                y_coord = split_vals[1]
+                                if x_coord == "all":
+                                    x_coord = "0-100"
+                                if y_coord == "all":
+                                    y_coord = "-42.5-42.5"
 
-                                x_coords_split =  re.split(r"(?<!\\)(?<!^)\-", x_coords)
-                                if len(x_coords_split) == 1:
-                                    qual_obj["x_coords"] = {
-                                        "start_val" : ordinal_to_number(x_coords_split[0]),
-                                        "end_val" : ordinal_to_number(x_coords_split[0])
+                                x_coord_split =  re.split(r"(?<!\\)(?<!^)\-", x_coord)
+                                if len(x_coord_split) == 1:
+                                    qual_obj["x_coord"] = {
+                                        "start_val" : ordinal_to_number(x_coord_split[0]),
+                                        "end_val" : ordinal_to_number(x_coord_split[0])
                                     }
                                 else:
-                                    qual_obj["x_coords"] = {
-                                        "start_val" : ordinal_to_number(x_coords_split[0]),
-                                        "end_val" : ordinal_to_number(x_coords_split[1])
+                                    qual_obj["x_coord"] = {
+                                        "start_val" : ordinal_to_number(x_coord_split[0]),
+                                        "end_val" : ordinal_to_number(x_coord_split[1])
                                     }
-                                y_coords_split =  re.split(r"(?<!\\)(?<!^)\-", y_coords)
-                                if len(y_coords_split) == 1:
-                                    qual_obj["y_coords"] = {
-                                        "start_val" : ordinal_to_number(y_coords_split[0]),
-                                        "end_val" : ordinal_to_number(y_coords_split[0])
+                                y_coord_split =  re.split(r"(?<!\\)(?<!^)\-", y_coord)
+                                if len(y_coord_split) == 1:
+                                    qual_obj["y_coord"] = {
+                                        "start_val" : ordinal_to_number(y_coord_split[0]),
+                                        "end_val" : ordinal_to_number(y_coord_split[0])
                                     }
                                 else:
-                                    qual_obj["y_coords"] = {
-                                        "start_val" : ordinal_to_number(y_coords_split[0]),
-                                        "end_val" : ordinal_to_number(y_coords_split[1])
+                                    qual_obj["y_coord"] = {
+                                        "start_val" : ordinal_to_number(y_coord_split[0]),
+                                        "end_val" : ordinal_to_number(y_coord_split[1])
                                     }
                                 qualifier_obj["values"] = qual_obj
+                            elif qualifier_str.startswith("x-coordinate:") or qualifier_str.startswith("y-coordinate:") or qualifier_str.startswith("raw-x-coordinate:") or qualifier_str.startswith("raw-y-coordinate:"):
+                                if qualifier_str.startswith("x-coordinate:"):
+                                    qual_str = "x-coordinate:"
+                                    qual_type = "X Coordinate"
+                                    extra_stats.add("current-stats-zone")
+                                    extra_stats.add("current-stats")
+                                elif qualifier_str.startswith("y-coordinate:"):
+                                    qual_str = "y-coordinate:"
+                                    qual_type = "Y Coordinate"
+                                    extra_stats.add("current-stats-zone")
+                                    extra_stats.add("current-stats")
+                                elif qualifier_str.startswith("raw-x-coordinate:"):
+                                    qual_str = "raw-x-coordinate:"
+                                    qual_type = "Raw X Coordinate"
+                                    extra_stats.add("current-stats-zone")
+                                    extra_stats.add("current-stats")
+                                elif qualifier_str.startswith("raw-y-coordinate:"):
+                                    qual_str = "raw-y-coordinate:"
+                                    qual_type = "Raw Y Coordinate"
+                                    extra_stats.add("current-stats-zone")
+                                    extra_stats.add("current-stats")
+                                
+                                coords_split = re.split(r"(?<!\\)(?<!^)\-", re.split(r"(?<!\\)" + qual_str, qualifier_str, 1)[1], 1)
+                                if len(coords_split) == 1:
+                                    qualifier_obj["values"] = {
+                                        "start_val" : ordinal_to_number(coords_split[0]),
+                                        "end_val" : ordinal_to_number(coords_split[0])
+                                    }
+                                else:
+                                    qualifier_obj["values"] = {
+                                        "start_val" : ordinal_to_number(coords_split[0]),
+                                        "end_val" : ordinal_to_number(coords_split[1])
+                                    }
                             elif "start-if-goalie" in qualifier_str:
                                 qual_type = "Start If Goalie"
                             elif "start" in qualifier_str and not qualifier_str.startswith("starts-rest:") and not qualifier_str.startswith("starts-in-a-row:") and not qualifier_str.startswith("starts-days-rest:") and not qualifier_str.startswith("upcoming-starts-days-rest:") and not qualifier_str.startswith("start-time:"):
@@ -12056,13 +12109,13 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
                 date_end_link = None
                 for row in sub_player_data["rows"]:
                     if row["Date"] == date_start:
-                        if row["GameLink"] and True:
+                        if row["GameLink"] and (not "nhl-link" in extra_stats or "NHLGameLink" not in row):
                             date_start_link = "https://www.hockey-reference.com" + row["GameLink"]
                         else:
                             date_start_link = "https://www.nhl.com/gamecenter/" + str(row["NHLGameLink"])
                         start_season = inflect_engine.ordinal(sub_player_data["year_valid_years"].index(row["Year"]) + 1)
                     if row["Date"] == date_end:
-                        if row["GameLink"] and True:
+                        if row["GameLink"] and (not "nhl-link" in extra_stats or "NHLGameLink" not in row):
                             date_end_link = "https://www.hockey-reference.com" + row["GameLink"]
                         else:
                             date_end_link = "https://www.nhl.com/gamecenter/" + str(row["NHLGameLink"])
@@ -12143,7 +12196,7 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
                         date_start_link = None
                         for row in sub_player_data["rows"]:
                             if row["Date"] == date_start:
-                                if row["GameLink"] and True:
+                                if row["GameLink"] and (not "nhl-link" in extra_stats or "NHLGameLink" not in row):
                                     date_start_link = "https://www.hockey-reference.com" + row["GameLink"]
                                 else:
                                     date_start_link = "https://www.nhl.com/gamecenter/" + str(row["NHLGameLink"])
@@ -12612,7 +12665,7 @@ def determine_raw_str(subbb_frame):
                     else:
                         sub_sub_first = False
                     qual_str += qualifier_map[qualifier][not qual_obj["negate"]]
-                elif qualifier == "Rookie" or qualifier == "Facing Former Franchise" or qualifier == "Facing Former Team" or qualifier == "Previous Same Opponent" or qualifier == "Upcoming Same Opponent" or qualifier == "With New Team" or qualifier == "With New Franchise" or qualifier == "Even Year" or qualifier == "Odd Year" or qualifier == "Decision" or qualifier == "Interconference" or qualifier == "Intraconference" or qualifier == "Interdivision" or qualifier == "Intradivision" or qualifier == "First Half" or qualifier == "Second Half" or qualifier == "Post All-Star" or qualifier == "Pre All-Star" or qualifier == "Complete Game" or qualifier == "Penalty Shot" or qualifier == "Shootout" or qualifier == "Overtime" or qualifier == "Game Winning" or qualifier == "Offensive Zone" or qualifier == "Defensive Zone" or qualifier == "Neutral Zone" or qualifier == "Unassisted" or qualifier == "Even Skaters" or qualifier == "More Skaters" or qualifier == "Less Skaters" or qualifier == "Team Goalie Pulled" or qualifier == "Opponent Goalie Pulled" or qualifier == "Power Play" or qualifier == "Short Handed" or qualifier == "Even Strength" or qualifier == "Elimination" or qualifier == "Clinching" or qualifier == "Elimination Or Clinching" or qualifier == "Winner Take All" or qualifier == "Ahead In Series" or qualifier == "Behind In Series" or qualifier == "Even In Series" or qualifier == "Winning Opponent" or qualifier == "Losing Opponent" or qualifier == "Tied Opponent" or qualifier == "Winning Or Tied Opponent" or qualifier == "Losing Or Tied Opponent" or qualifier == "Current Winning Opponent" or qualifier == "Current Losing Opponent" or qualifier == "Current Tied Opponent" or qualifier == "Current Winning Or Tied Opponent" or qualifier == "Current Losing Or Tied Opponent" or qualifier == "Playoff Opponent"  or qualifier == "Cup Winner Opponent" or qualifier == "Conference Winner Opponent" or qualifier == "Winning Team" or qualifier == "Losing Team" or qualifier == "Tied Team" or qualifier == "Winning Or Tied Team" or qualifier == "Losing Or Tied Team" or qualifier == "Current Winning Team" or qualifier == "Current Losing Team" or qualifier == "Current Tied Team" or qualifier == "Current Winning Or Tied Team" or qualifier == "Current Losing Or Tied Team" or qualifier == "Playoff Team" or qualifier == "Cup Winner Team" or qualifier == "Conference Winner Team" or qualifier == "National Game" or qualifier == "Any National Game" or qualifier == "US National Game" or qualifier == "Any US National Game" or qualifier == "CA National Game" or qualifier == "Any CA National Game":
+                elif qualifier == "Rookie" or qualifier == "Facing Former Franchise" or qualifier == "Facing Former Team" or qualifier == "Previous Same Opponent" or qualifier == "Upcoming Same Opponent" or qualifier == "With New Team" or qualifier == "With New Franchise" or qualifier == "Even Year" or qualifier == "Odd Year" or qualifier == "Decision" or qualifier == "Interconference" or qualifier == "Intraconference" or qualifier == "Interdivision" or qualifier == "Intradivision" or qualifier == "First Half" or qualifier == "Second Half" or qualifier == "Post All-Star" or qualifier == "Pre All-Star" or qualifier == "Complete Game" or qualifier == "Penalty Shot" or qualifier == "Shootout" or qualifier == "Overtime" or qualifier == "Game Winning" or qualifier == "Offensive Zone" or qualifier == "Defensive Zone" or qualifier == "Neutral Zone" or qualifier == "Left Side" or qualifier == "Right Side" or qualifier == "Unassisted" or qualifier == "Even Skaters" or qualifier == "More Skaters" or qualifier == "Less Skaters" or qualifier == "Team Goalie Pulled" or qualifier == "Opponent Goalie Pulled" or qualifier == "Power Play" or qualifier == "Short Handed" or qualifier == "Even Strength" or qualifier == "Elimination" or qualifier == "Clinching" or qualifier == "Elimination Or Clinching" or qualifier == "Winner Take All" or qualifier == "Ahead In Series" or qualifier == "Behind In Series" or qualifier == "Even In Series" or qualifier == "Winning Opponent" or qualifier == "Losing Opponent" or qualifier == "Tied Opponent" or qualifier == "Winning Or Tied Opponent" or qualifier == "Losing Or Tied Opponent" or qualifier == "Current Winning Opponent" or qualifier == "Current Losing Opponent" or qualifier == "Current Tied Opponent" or qualifier == "Current Winning Or Tied Opponent" or qualifier == "Current Losing Or Tied Opponent" or qualifier == "Playoff Opponent"  or qualifier == "Cup Winner Opponent" or qualifier == "Conference Winner Opponent" or qualifier == "Winning Team" or qualifier == "Losing Team" or qualifier == "Tied Team" or qualifier == "Winning Or Tied Team" or qualifier == "Losing Or Tied Team" or qualifier == "Current Winning Team" or qualifier == "Current Losing Team" or qualifier == "Current Tied Team" or qualifier == "Current Winning Or Tied Team" or qualifier == "Current Losing Or Tied Team" or qualifier == "Playoff Team" or qualifier == "Cup Winner Team" or qualifier == "Conference Winner Team" or qualifier == "National Game" or qualifier == "Any National Game" or qualifier == "US National Game" or qualifier == "Any US National Game" or qualifier == "CA National Game" or qualifier == "Any CA National Game":
                     if not sub_sub_first:
                         qual_str += " + "
                     else:
@@ -12640,7 +12693,7 @@ def determine_raw_str(subbb_frame):
                         if qual_obj["negate"]:
                             qual_str += "Not "
                         qual_str += "(" + player["query"].replace("Query: ", "", 1) + ")"
-                elif qualifier == "Days Rest" or qualifier == "Career Shot" or qualifier == "Career Shot Reversed" or qualifier == "Career Period" or qualifier == "Career Period Reversed" or qualifier == "Game Shot" or qualifier == "Game Shot Reversed" or qualifier == "Upcoming Days Rest" or qualifier == "Starts Days Rest" or qualifier == "Upcoming Starts Days Rest" or qualifier == "Days In A Row" or qualifier == "Games In A Row" or qualifier == "Starts In A Row" or qualifier == "Games Rest" or qualifier == "Starts Rest" or qualifier == "Team Score" or qualifier == "Opponent Score" or qualifier == "Series Team Wins" or qualifier == "Series Opponent Wins" or qualifier == "Series Score Margin" or qualifier == "Series Score Difference" or qualifier == "Game Number" or qualifier == "Season Number" or qualifier == "Final Team Score" or qualifier == "Final Opponent Score" or qualifier == "Team Skaters" or qualifier == "Opponent Skaters" or qualifier == "Team Players" or qualifier == "Opponent Players" or qualifier == "Team Wins" or qualifier == "Team Losses" or qualifier == "Team Ties" or qualifier == "Team Points" or qualifier == "Opponent Wins" or qualifier == "Opponent Losses" or qualifier == "Opponent Ties" or qualifier == "Opponent Points" or qualifier == "Current Team Wins" or qualifier == "Current Team Losses" or qualifier == "Current Team Ties" or qualifier == "Current Team Points" or qualifier == "Current Opponent Wins" or qualifier == "Current Opponent Losses" or qualifier == "Current Opponent Ties" or qualifier == "Current Opponent Points" or qualifier == "Team Games Over 500" or qualifier == "Opponent Games Over 500" or qualifier == "Current Team Games Over 500" or qualifier == "Current Opponent Games Over 500":
+                elif qualifier == "Days Rest" or qualifier == "Career Shot" or qualifier == "Career Shot Reversed" or qualifier == "Career Period" or qualifier == "Career Period Reversed" or qualifier == "Game Shot" or qualifier == "Game Shot Reversed" or qualifier == "Upcoming Days Rest" or qualifier == "Starts Days Rest" or qualifier == "Upcoming Starts Days Rest" or qualifier == "Days In A Row" or qualifier == "Games In A Row" or qualifier == "Starts In A Row" or qualifier == "Games Rest" or qualifier == "Starts Rest" or qualifier == "Team Score" or qualifier == "Opponent Score" or qualifier == "Series Team Wins" or qualifier == "Series Opponent Wins" or qualifier == "Series Score Margin" or qualifier == "Series Score Difference" or qualifier == "Game Number" or qualifier == "Season Number" or qualifier == "Final Team Score" or qualifier == "Final Opponent Score" or qualifier == "Team Skaters" or qualifier == "Opponent Skaters" or qualifier == "Team Players" or qualifier == "Opponent Players" or qualifier == "Team Wins" or qualifier == "Team Losses" or qualifier == "Team Ties" or qualifier == "Team Points" or qualifier == "Opponent Wins" or qualifier == "Opponent Losses" or qualifier == "Opponent Ties" or qualifier == "Opponent Points" or qualifier == "Current Team Wins" or qualifier == "Current Team Losses" or qualifier == "Current Team Ties" or qualifier == "Current Team Points" or qualifier == "Current Opponent Wins" or qualifier == "Current Opponent Losses" or qualifier == "Current Opponent Ties" or qualifier == "Current Opponent Points" or qualifier == "Team Games Over 500" or qualifier == "Opponent Games Over 500" or qualifier == "Current Team Games Over 500" or qualifier == "Current Opponent Games Over 500" or qualifier == "X Coordinate" or qualifier == "Y Coordinate" or qualifier == "Raw X Coordinate" or qualifier == "Raw Y Coordinate":
                     if qual_obj["negate"]:
                         qual_str += "Not "
                     if qual_obj["values"]["start_val"] == qual_obj["values"]["end_val"]:
@@ -12659,19 +12712,19 @@ def determine_raw_str(subbb_frame):
                         qual_str += get_time_str(qual_obj["values"]["start_val"], False)
                     else:
                         qual_str += (get_time_str(qual_obj["values"]["start_val"], False)) + "-" + (get_time_str(qual_obj["values"]["end_val"], False))
-                elif qualifier == "Coordinates":
+                elif qualifier == "Coordinates" or qualifier == "Raw Coordinates":
                     if qual_obj["negate"]:
                         qual_str += "Not "
-                    if qual_obj["values"]["x_coords"]["start_val"] == qual_obj["values"]["x_coords"]["end_val"]:
-                        qual_str += get_time_str(qual_obj["values"]["x_coords"]["start_val"], False)
+                    if qual_obj["values"]["x_coord"]["start_val"] == qual_obj["values"]["x_coord"]["end_val"]:
+                        qual_str += get_time_str(qual_obj["values"]["x_coord"]["start_val"], False)
                     else:
-                        qual_str += (get_time_str(qual_obj["values"]["x_coords"]["start_val"], False)) + "-" + (get_time_str(qual_obj["values"]["x_coords"]["end_val"], False))
+                        qual_str += (get_time_str(qual_obj["values"]["x_coord"]["start_val"], False)) + "-" + (get_time_str(qual_obj["values"]["x_coord"]["end_val"], False))
 
                     qual_str += ","
-                    if qual_obj["values"]["y_coords"]["start_val"] == qual_obj["values"]["y_coords"]["end_val"]:
-                        qual_str += get_time_str(qual_obj["values"]["y_coords"]["start_val"], False)
+                    if qual_obj["values"]["y_coord"]["start_val"] == qual_obj["values"]["y_coord"]["end_val"]:
+                        qual_str += get_time_str(qual_obj["values"]["y_coord"]["start_val"], False)
                     else:
-                        qual_str += (get_time_str(qual_obj["values"]["y_coords"]["start_val"], False)) + "-" + (get_time_str(qual_obj["values"]["y_coords"]["end_val"], False))
+                        qual_str += (get_time_str(qual_obj["values"]["y_coord"]["start_val"], False)) + "-" + (get_time_str(qual_obj["values"]["y_coord"]["end_val"], False))
                 elif qualifier == "Strength":
                     if qual_obj["negate"]:
                         qual_str += "Not "
@@ -13304,7 +13357,7 @@ def handle_player_data(player_data, time_frame, player_type, player_page, valid_
         all_rows = new_rows
     
     if not "hide-advanced" in extra_stats or ("Game Number" in time_frame["qualifiers"] or "penalties" in extra_stats or "star" in extra_stats):
-        if "Game Number" in time_frame["qualifiers"] or "Shot On" in time_frame["qualifiers"] or "Shot By" in time_frame["qualifiers"] or "Event Formula" in time_frame["qualifiers"] or "On Ice With" in time_frame["qualifiers"] or "On Ice Against" in time_frame["qualifiers"] or "On Line With" in time_frame["qualifiers"] or "On Line Against" in time_frame["qualifiers"] or "Assisted On" in time_frame["qualifiers"] or "Assisted With" in time_frame["qualifiers"] or "Points With" in time_frame["qualifiers"] or "Assisted By" in time_frame["qualifiers"] or "Primary Assisted On" in time_frame["qualifiers"] or "Primary Assisted With" in time_frame["qualifiers"] or "Primary Points With" in time_frame["qualifiers"] or "Primary Assisted By" in time_frame["qualifiers"] or "Hit On" in time_frame["qualifiers"] or "Block On" in time_frame["qualifiers"] or "Penalty On" in time_frame["qualifiers"] or "Faceoff Against" in time_frame["qualifiers"] or "Fight Against" in time_frame["qualifiers"] or "Penalty Type" in time_frame["qualifiers"] or "Team Score" in time_frame["qualifiers"] or "Opponent Score" in time_frame["qualifiers"] or "Score Margin" in time_frame["qualifiers"] or "Score Difference" in time_frame["qualifiers"] or "Period" in time_frame["qualifiers"] or "Period Stat" in time_frame["qualifiers"] or "Coordinates" in time_frame["qualifiers"] or "Period Time" in time_frame["qualifiers"] or "Period Time Remaining" in time_frame["qualifiers"] or "Unassisted" in time_frame["qualifiers"] or "Career Minute" in time_frame["qualifiers"] or "Career Minute Reversed" in time_frame["qualifiers"] or "Game Minute" in time_frame["qualifiers"] or "Game Minute Reversed" in time_frame["qualifiers"] or "Career Shot" in time_frame["qualifiers"] or "Career Shot Reversed" in time_frame["qualifiers"] or "Career Period" in time_frame["qualifiers"] or "Career Period Reversed" in time_frame["qualifiers"] or "Game Shot" in time_frame["qualifiers"] or "Game Shot Reversed" in time_frame["qualifiers"] or "Strength" in time_frame["qualifiers"] or "Even Skaters" in time_frame["qualifiers"] or "Even Goalies" in time_frame["qualifiers"] or "More Skaters" in time_frame["qualifiers"] or "Less Skaters" in time_frame["qualifiers"] or "Team Goalie Pulled" in time_frame["qualifiers"] or "Opponent Goalie Pulled" in time_frame["qualifiers"] or "Power Play" in time_frame["qualifiers"] or "Short Handed" in time_frame["qualifiers"] or "Even Strength" in time_frame["qualifiers"] or "Team Skaters" in time_frame["qualifiers"] or "Opponent Skaters" in time_frame["qualifiers"] or "Team Players" in time_frame["qualifiers"] or "Opponent Players" in time_frame["qualifiers"] or "Overtime" in time_frame["qualifiers"] or "Game Winning" in time_frame["qualifiers"] or "Offensive Zone" in time_frame["qualifiers"] or "Defensive Zone" in time_frame["qualifiers"] or "Neutral Zone" in time_frame["qualifiers"] or "Event Time" in time_frame["qualifiers"] or "penalties" in extra_stats or "star" in extra_stats or "current-stats" in extra_stats:
+        if "Game Number" in time_frame["qualifiers"] or "Shot On" in time_frame["qualifiers"] or "Shot By" in time_frame["qualifiers"] or "Event Formula" in time_frame["qualifiers"] or "On Ice With" in time_frame["qualifiers"] or "On Ice Against" in time_frame["qualifiers"] or "On Line With" in time_frame["qualifiers"] or "On Line Against" in time_frame["qualifiers"] or "Assisted On" in time_frame["qualifiers"] or "Assisted With" in time_frame["qualifiers"] or "Points With" in time_frame["qualifiers"] or "Assisted By" in time_frame["qualifiers"] or "Primary Assisted On" in time_frame["qualifiers"] or "Primary Assisted With" in time_frame["qualifiers"] or "Primary Points With" in time_frame["qualifiers"] or "Primary Assisted By" in time_frame["qualifiers"] or "Hit On" in time_frame["qualifiers"] or "Block On" in time_frame["qualifiers"] or "Penalty On" in time_frame["qualifiers"] or "Faceoff Against" in time_frame["qualifiers"] or "Fight Against" in time_frame["qualifiers"] or "Penalty Type" in time_frame["qualifiers"] or "Team Score" in time_frame["qualifiers"] or "Opponent Score" in time_frame["qualifiers"] or "Score Margin" in time_frame["qualifiers"] or "Score Difference" in time_frame["qualifiers"] or "Period" in time_frame["qualifiers"] or "Period Stat" in time_frame["qualifiers"] or "Coordinates" in time_frame["qualifiers"] or "X Coordinate" in time_frame["qualifiers"] or "Y Coordinate" in time_frame["qualifiers"] or "Raw Coordinates" in time_frame["qualifiers"] or "Raw X Coordinate" in time_frame["qualifiers"] or "Raw Y Coordinate" in time_frame["qualifiers"] or "Left Side" in time_frame["qualifiers"] or "Right Side" in time_frame["qualifiers"] or "Period Time" in time_frame["qualifiers"] or "Period Time Remaining" in time_frame["qualifiers"] or "Unassisted" in time_frame["qualifiers"] or "Career Minute" in time_frame["qualifiers"] or "Career Minute Reversed" in time_frame["qualifiers"] or "Game Minute" in time_frame["qualifiers"] or "Game Minute Reversed" in time_frame["qualifiers"] or "Career Shot" in time_frame["qualifiers"] or "Career Shot Reversed" in time_frame["qualifiers"] or "Career Period" in time_frame["qualifiers"] or "Career Period Reversed" in time_frame["qualifiers"] or "Game Shot" in time_frame["qualifiers"] or "Game Shot Reversed" in time_frame["qualifiers"] or "Strength" in time_frame["qualifiers"] or "Even Skaters" in time_frame["qualifiers"] or "Even Goalies" in time_frame["qualifiers"] or "More Skaters" in time_frame["qualifiers"] or "Less Skaters" in time_frame["qualifiers"] or "Team Goalie Pulled" in time_frame["qualifiers"] or "Opponent Goalie Pulled" in time_frame["qualifiers"] or "Power Play" in time_frame["qualifiers"] or "Short Handed" in time_frame["qualifiers"] or "Even Strength" in time_frame["qualifiers"] or "Team Skaters" in time_frame["qualifiers"] or "Opponent Skaters" in time_frame["qualifiers"] or "Team Players" in time_frame["qualifiers"] or "Opponent Players" in time_frame["qualifiers"] or "Overtime" in time_frame["qualifiers"] or "Game Winning" in time_frame["qualifiers"] or "Offensive Zone" in time_frame["qualifiers"] or "Defensive Zone" in time_frame["qualifiers"] or "Neutral Zone" in time_frame["qualifiers"] or "Event Time" in time_frame["qualifiers"] or "penalties" in extra_stats or "star" in extra_stats or "current-stats" in extra_stats:
             all_rows, missing_games, missing_toi = handle_nhl_game_stats(player_data, all_rows, time_frame, player_link, player_type, missing_games, missing_toi, extra_stats)
             player_data["stat_values"]["is_indv_shift_data"] = True
 
@@ -13398,23 +13451,23 @@ def handle_player_data(player_data, time_frame, player_type, player_page, valid_
 
     if "Max Streak" in time_frame["qualifiers"]:
         all_rows = sorted(all_rows, key=lambda row: row["Date"])
-        all_rows = handle_max_streak(all_rows, player_data, player_type, time_frame["qualifiers"], True, False)
+        all_rows = handle_max_streak(all_rows, player_data, player_type, time_frame["qualifiers"], True, False, extra_stats)
 
     if "Count Streak" in time_frame["qualifiers"]:
         all_rows = sorted(all_rows, key=lambda row: row["Date"])
-        all_rows = handle_max_streak(all_rows, player_data, player_type, time_frame["qualifiers"], False, False)
+        all_rows = handle_max_streak(all_rows, player_data, player_type, time_frame["qualifiers"], False, False, extra_stats)
     
     if "Max Streak Formula" in time_frame["qualifiers"]:
         all_rows = sorted(all_rows, key=lambda row: row["Date"])
-        all_rows = handle_max_streak(all_rows, player_data, player_type, time_frame["qualifiers"], True, True)
+        all_rows = handle_max_streak(all_rows, player_data, player_type, time_frame["qualifiers"], True, True, extra_stats)
 
     if "Count Streak Formula" in time_frame["qualifiers"]:
         all_rows = sorted(all_rows, key=lambda row: row["Date"])
-        all_rows = handle_max_streak(all_rows, player_data, player_type, time_frame["qualifiers"], False, True)
+        all_rows = handle_max_streak(all_rows, player_data, player_type, time_frame["qualifiers"], False, True, extra_stats)
     
     if "Max Stretch" in time_frame["qualifiers"]:
         all_rows = sorted(all_rows, key=lambda row: row["Date"])
-        all_rows = handle_max_stretch(all_rows, player_data, player_type, time_frame["qualifiers"])
+        all_rows = handle_max_stretch(all_rows, player_data, player_type, time_frame["qualifiers"], extra_stats)
     
     if "Quickest" in time_frame["qualifiers"] or "Slowest" in time_frame["qualifiers"]:
         all_rows = sorted(all_rows, key=lambda row: row["Date"])
@@ -16006,18 +16059,19 @@ def get_nhl_game_schedule(player_data, all_rows, games_to_skip, player_link, pla
             if row_data["NHLGameLink"]:
                 if row_data["NHLGameLink"] not in games_to_skip:
                     future = sub_executor.submit(get_game_data, index, player_data, row_data, player_id, player_type, time_frame, extra_stats)
-                    future.add_done_callback(functools.partial(result_call_back, saved_row_data, index, time_frame, count_info, new_rows, player_type, player_data, player_link, extra_stats))
+                    future.add_done_callback(functools.partial(result_call_back, saved_row_data, index, time_frame, count_info, new_rows, player_type, player_data, player_link, row_data, extra_stats))
             else:
                 count_info["missing_games"].append("[" + str(row_data["Date"]) + "](" + "https://www.nhl.com/gamecenter/" + str(row_data["NHLGameLink"]) + ")")
-    
+        
     if count_info["exception"]:
         raise count_info["exception"]
 
     return sorted(new_rows, key=lambda row: row["Date"]), missing_games, missing_toi
 
-def result_call_back(saved_row_data, index, time_frame, count_info, new_rows, player_type, player_data, player_link, extra_stats, result):
+def result_call_back(saved_row_data, index, time_frame, count_info, new_rows, player_type, player_data, player_link, old_row_data, extra_stats, result):
     try:
         if result.exception():
+            logger.info("Error parsing date " + str(old_row_data["Date"]))
             if not count_info["exception"]:
                 count_info["exception"] = result.exception()
             percent_complete = 100 * (count_info["count"] / count_info["total_count"])
@@ -16048,7 +16102,7 @@ def result_call_back(saved_row_data, index, time_frame, count_info, new_rows, pl
                 count_info["count"] += 1
                 return
 
-        if "Shot On" in time_frame["qualifiers"] or "Shot By" in time_frame["qualifiers"]  or "Event Formula" in time_frame["qualifiers"] or "On Ice With" in time_frame["qualifiers"] or "On Ice Against" in time_frame["qualifiers"] or "On Line With" in time_frame["qualifiers"] or "On Line Against" in time_frame["qualifiers"] or "Assisted On" in time_frame["qualifiers"] or "Assisted With" in time_frame["qualifiers"] or "Points With" in time_frame["qualifiers"] or "Assisted By" in time_frame["qualifiers"] or "Primary Assisted On" in time_frame["qualifiers"] or "Primary Assisted With" in time_frame["qualifiers"] or "Primary Points With" in time_frame["qualifiers"] or "Primary Assisted By" in time_frame["qualifiers"] or "Hit On" in time_frame["qualifiers"] or "Block On" in time_frame["qualifiers"] or "Penalty On" in time_frame["qualifiers"] or "Faceoff Against" in time_frame["qualifiers"] or "Fight Against" in time_frame["qualifiers"] or "Penalty Type" in time_frame["qualifiers"] or "Team Score" in time_frame["qualifiers"] or "Opponent Score" in time_frame["qualifiers"] or "Score Margin" in time_frame["qualifiers"] or "Score Difference" in time_frame["qualifiers"] or "Period" in time_frame["qualifiers"] or "Coordinates" in time_frame["qualifiers"] or "Period Time" in time_frame["qualifiers"] or "Period Time Remaining" in time_frame["qualifiers"] or "Unassisted" in time_frame["qualifiers"] or "Strength" in time_frame["qualifiers"] or "Career Minute" in time_frame["qualifiers"] or "Career Minute Reversed" in time_frame["qualifiers"] or "Game Minute" in time_frame["qualifiers"] or "Game Minute Reversed" in time_frame["qualifiers"] or "Career Shot" in time_frame["qualifiers"] or "Career Shot Reversed" in time_frame["qualifiers"] or "Career Period" in time_frame["qualifiers"] or "Career Period Reversed" in time_frame["qualifiers"] or "Game Shot" in time_frame["qualifiers"] or "Game Shot Reversed" in time_frame["qualifiers"] or "Even Skaters" in time_frame["qualifiers"] or "Even Goalies" in time_frame["qualifiers"] or "More Skaters" in time_frame["qualifiers"] or "Less Skaters" in time_frame["qualifiers"] or "Team Goalie Pulled" in time_frame["qualifiers"] or "Opponent Goalie Pulled" in time_frame["qualifiers"] or "Power Play" in time_frame["qualifiers"] or "Short Handed" in time_frame["qualifiers"] or "Even Strength" in time_frame["qualifiers"] or "Team Skaters" in time_frame["qualifiers"] or "Opponent Skaters" in time_frame["qualifiers"] or "Team Players" in time_frame["qualifiers"] or "Opponent Players" in time_frame["qualifiers"] or "Overtime" in time_frame["qualifiers"] or "Game Winning" in time_frame["qualifiers"] or "Offensive Zone" in time_frame["qualifiers"] or "Defensive Zone" in time_frame["qualifiers"] or "Neutral Zone" in time_frame["qualifiers"] or "Event Time" in time_frame["qualifiers"] or "current-stats" in extra_stats:
+        if "Shot On" in time_frame["qualifiers"] or "Shot By" in time_frame["qualifiers"]  or "Event Formula" in time_frame["qualifiers"] or "On Ice With" in time_frame["qualifiers"] or "On Ice Against" in time_frame["qualifiers"] or "On Line With" in time_frame["qualifiers"] or "On Line Against" in time_frame["qualifiers"] or "Assisted On" in time_frame["qualifiers"] or "Assisted With" in time_frame["qualifiers"] or "Points With" in time_frame["qualifiers"] or "Assisted By" in time_frame["qualifiers"] or "Primary Assisted On" in time_frame["qualifiers"] or "Primary Assisted With" in time_frame["qualifiers"] or "Primary Points With" in time_frame["qualifiers"] or "Primary Assisted By" in time_frame["qualifiers"] or "Hit On" in time_frame["qualifiers"] or "Block On" in time_frame["qualifiers"] or "Penalty On" in time_frame["qualifiers"] or "Faceoff Against" in time_frame["qualifiers"] or "Fight Against" in time_frame["qualifiers"] or "Penalty Type" in time_frame["qualifiers"] or "Team Score" in time_frame["qualifiers"] or "Opponent Score" in time_frame["qualifiers"] or "Score Margin" in time_frame["qualifiers"] or "Score Difference" in time_frame["qualifiers"] or "Period" in time_frame["qualifiers"] or "Coordinates" in time_frame["qualifiers"] or "X Coordinate" in time_frame["qualifiers"] or "Y Coordinate" in time_frame["qualifiers"] or "Raw Coordinates" in time_frame["qualifiers"] or "Raw X Coordinate" in time_frame["qualifiers"] or "Raw Y Coordinate" in time_frame["qualifiers"] or "Left Side" in time_frame["qualifiers"] or "Right Side" in time_frame["qualifiers"] or "Period Time" in time_frame["qualifiers"] or "Period Time Remaining" in time_frame["qualifiers"] or "Unassisted" in time_frame["qualifiers"] or "Strength" in time_frame["qualifiers"] or "Career Minute" in time_frame["qualifiers"] or "Career Minute Reversed" in time_frame["qualifiers"] or "Game Minute" in time_frame["qualifiers"] or "Game Minute Reversed" in time_frame["qualifiers"] or "Career Shot" in time_frame["qualifiers"] or "Career Shot Reversed" in time_frame["qualifiers"] or "Career Period" in time_frame["qualifiers"] or "Career Period Reversed" in time_frame["qualifiers"] or "Game Shot" in time_frame["qualifiers"] or "Game Shot Reversed" in time_frame["qualifiers"] or "Even Skaters" in time_frame["qualifiers"] or "Even Goalies" in time_frame["qualifiers"] or "More Skaters" in time_frame["qualifiers"] or "Less Skaters" in time_frame["qualifiers"] or "Team Goalie Pulled" in time_frame["qualifiers"] or "Opponent Goalie Pulled" in time_frame["qualifiers"] or "Power Play" in time_frame["qualifiers"] or "Short Handed" in time_frame["qualifiers"] or "Even Strength" in time_frame["qualifiers"] or "Team Skaters" in time_frame["qualifiers"] or "Opponent Skaters" in time_frame["qualifiers"] or "Team Players" in time_frame["qualifiers"] or "Opponent Players" in time_frame["qualifiers"] or "Overtime" in time_frame["qualifiers"] or "Game Winning" in time_frame["qualifiers"] or "Offensive Zone" in time_frame["qualifiers"] or "Defensive Zone" in time_frame["qualifiers"] or "Neutral Zone" in time_frame["qualifiers"] or "Event Time" in time_frame["qualifiers"] or "current-stats" in extra_stats:
             if sub_missing_games:
                 if sub_missing_games:
                     count_info["missing_games"].append("[" + str(row_data["Date"]) + "](" + "https://www.nhl.com/gamecenter/" + str(row_data["NHLGameLink"]) + ")")
@@ -16411,14 +16465,11 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
         else:
             return game_data, row_data, missing_games
 
-    if has_api_quals(time_frame["qualifiers"]) and row_data["Year"] < 2010:
-        return game_data, row_data, missing_games
-
-    if not ("Shot On" in time_frame["qualifiers"] or "Shot By" in time_frame["qualifiers"] or "Event Formula" in time_frame["qualifiers"] or "On Ice With" in time_frame["qualifiers"] or "On Ice Against" in time_frame["qualifiers"] or "On Line With" in time_frame["qualifiers"] or "On Line Against" in time_frame["qualifiers"] or "Assisted On" in time_frame["qualifiers"] or "Assisted With" in time_frame["qualifiers"] or "Points With" in time_frame["qualifiers"] or "Assisted By" in time_frame["qualifiers"] or "Primary Assisted On" in time_frame["qualifiers"] or "Primary Assisted With" in time_frame["qualifiers"] or "Primary Points With" in time_frame["qualifiers"] or "Primary Assisted By" in time_frame["qualifiers"] or "Hit On" in time_frame["qualifiers"] or "Block On" in time_frame["qualifiers"] or "Penalty On" in time_frame["qualifiers"] or "Faceoff Against" in time_frame["qualifiers"] or "Fight Against" in time_frame["qualifiers"] or "Penalty Type" in time_frame["qualifiers"] or "Team Score" in time_frame["qualifiers"] or "Opponent Score" in time_frame["qualifiers"] or "Score Margin" in time_frame["qualifiers"] or "Score Difference" in time_frame["qualifiers"] or "Period" in time_frame["qualifiers"] or "Period Stat" in time_frame["qualifiers"] or "Coordinates" in time_frame["qualifiers"] or "Period Time" in time_frame["qualifiers"] or "Period Time Remaining" in time_frame["qualifiers"] or "Unassisted" in time_frame["qualifiers"] or "Career Minute" in time_frame["qualifiers"] or "Career Minute Reversed" in time_frame["qualifiers"] or "Game Minute" in time_frame["qualifiers"] or "Game Minute Reversed" in time_frame["qualifiers"] or "Career Shot" in time_frame["qualifiers"] or "Career Shot Reversed" in time_frame["qualifiers"] or "Career Period" in time_frame["qualifiers"] or "Career Period Reversed" in time_frame["qualifiers"] or "Game Shot" in time_frame["qualifiers"] or "Game Shot Reversed" in time_frame["qualifiers"] or "Strength" in time_frame["qualifiers"] or "Even Skaters" in time_frame["qualifiers"] or "Even Goalies" in time_frame["qualifiers"] or "More Skaters" in time_frame["qualifiers"] or "Less Skaters" in time_frame["qualifiers"] or "Team Goalie Pulled" in time_frame["qualifiers"] or "Opponent Goalie Pulled" in time_frame["qualifiers"] or "Power Play" in time_frame["qualifiers"] or "Short Handed" in time_frame["qualifiers"] or "Even Strength" in time_frame["qualifiers"] or "Team Skaters" in time_frame["qualifiers"] or "Opponent Skaters" in time_frame["qualifiers"] or "Team Players" in time_frame["qualifiers"] or "Opponent Players" in time_frame["qualifiers"] or "Overtime" in time_frame["qualifiers"] or "Game Winning" in time_frame["qualifiers"] or "Offensive Zone" in time_frame["qualifiers"] or "Defensive Zone" in time_frame["qualifiers"] or "Neutral Zone" in time_frame["qualifiers"] or "Event Time" in time_frame["qualifiers"] or "penalties" in extra_stats or "current-stats" in extra_stats):
+    if not ("Shot On" in time_frame["qualifiers"] or "Shot By" in time_frame["qualifiers"] or "Event Formula" in time_frame["qualifiers"] or "On Ice With" in time_frame["qualifiers"] or "On Ice Against" in time_frame["qualifiers"] or "On Line With" in time_frame["qualifiers"] or "On Line Against" in time_frame["qualifiers"] or "Assisted On" in time_frame["qualifiers"] or "Assisted With" in time_frame["qualifiers"] or "Points With" in time_frame["qualifiers"] or "Assisted By" in time_frame["qualifiers"] or "Primary Assisted On" in time_frame["qualifiers"] or "Primary Assisted With" in time_frame["qualifiers"] or "Primary Points With" in time_frame["qualifiers"] or "Primary Assisted By" in time_frame["qualifiers"] or "Hit On" in time_frame["qualifiers"] or "Block On" in time_frame["qualifiers"] or "Penalty On" in time_frame["qualifiers"] or "Faceoff Against" in time_frame["qualifiers"] or "Fight Against" in time_frame["qualifiers"] or "Penalty Type" in time_frame["qualifiers"] or "Team Score" in time_frame["qualifiers"] or "Opponent Score" in time_frame["qualifiers"] or "Score Margin" in time_frame["qualifiers"] or "Score Difference" in time_frame["qualifiers"] or "Period" in time_frame["qualifiers"] or "Period Stat" in time_frame["qualifiers"] or "Coordinates" in time_frame["qualifiers"] or "X Coordinate" in time_frame["qualifiers"] or "Y Coordinate" in time_frame["qualifiers"] or "Raw Coordinates" in time_frame["qualifiers"] or "Raw X Coordinate" in time_frame["qualifiers"] or "Raw Y Coordinate" in time_frame["qualifiers"] or "Left Side" in time_frame["qualifiers"] or "Right Side" in time_frame["qualifiers"] or "Period Time" in time_frame["qualifiers"] or "Period Time Remaining" in time_frame["qualifiers"] or "Unassisted" in time_frame["qualifiers"] or "Career Minute" in time_frame["qualifiers"] or "Career Minute Reversed" in time_frame["qualifiers"] or "Game Minute" in time_frame["qualifiers"] or "Game Minute Reversed" in time_frame["qualifiers"] or "Career Shot" in time_frame["qualifiers"] or "Career Shot Reversed" in time_frame["qualifiers"] or "Career Period" in time_frame["qualifiers"] or "Career Period Reversed" in time_frame["qualifiers"] or "Game Shot" in time_frame["qualifiers"] or "Game Shot Reversed" in time_frame["qualifiers"] or "Strength" in time_frame["qualifiers"] or "Even Skaters" in time_frame["qualifiers"] or "Even Goalies" in time_frame["qualifiers"] or "More Skaters" in time_frame["qualifiers"] or "Less Skaters" in time_frame["qualifiers"] or "Team Goalie Pulled" in time_frame["qualifiers"] or "Opponent Goalie Pulled" in time_frame["qualifiers"] or "Power Play" in time_frame["qualifiers"] or "Short Handed" in time_frame["qualifiers"] or "Even Strength" in time_frame["qualifiers"] or "Team Skaters" in time_frame["qualifiers"] or "Opponent Skaters" in time_frame["qualifiers"] or "Team Players" in time_frame["qualifiers"] or "Opponent Players" in time_frame["qualifiers"] or "Overtime" in time_frame["qualifiers"] or "Game Winning" in time_frame["qualifiers"] or "Offensive Zone" in time_frame["qualifiers"] or "Defensive Zone" in time_frame["qualifiers"] or "Neutral Zone" in time_frame["qualifiers"] or "Event Time" in time_frame["qualifiers"] or "penalties" in extra_stats or "current-stats" in extra_stats):
         return game_data, row_data, missing_games
 
     scoring_plays = []
-    if (row_data["Year"] < 2000 and sub_data) or has_api_quals(time_frame["qualifiers"]):
+    if (row_data["Year"] < 2000 and sub_data):
         scoring_plays = sub_data["liveData"]["plays"]["allPlays"]
     if ((not scoring_plays and True) or (row_data["Year"] >= 2000)) and not has_api_quals(time_frame["qualifiers"]):
         if row_data["Year"] >= 2007:
@@ -16436,7 +16487,7 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
     scoring_plays = sorted(scoring_plays, key = lambda scoring_play: (scoring_play["about"]["period"], start_time_to_str(scoring_play["about"]["periodTime"])))
 
     if not scoring_plays:
-        if "Shot On" in time_frame["qualifiers"] or "Shot By" in time_frame["qualifiers"] or "Event Formula" in time_frame["qualifiers"] or "On Ice With" in time_frame["qualifiers"] or "On Ice Against" in time_frame["qualifiers"] or "On Line With" in time_frame["qualifiers"] or "On Line Against" in time_frame["qualifiers"] or "Assisted On" in time_frame["qualifiers"] or "Assisted With" in time_frame["qualifiers"] or "Points With" in time_frame["qualifiers"] or "Assisted By" in time_frame["qualifiers"] or "Primary Assisted On" in time_frame["qualifiers"] or "Primary Assisted With" in time_frame["qualifiers"] or "Primary Points With" in time_frame["qualifiers"] or "Primary Assisted By" in time_frame["qualifiers"] or "Hit On" in time_frame["qualifiers"] or "Block On" in time_frame["qualifiers"] or "Penalty On" in time_frame["qualifiers"] or "Faceoff Against" in time_frame["qualifiers"] or "Fight Against" in time_frame["qualifiers"] or "Penalty Type" in time_frame["qualifiers"] or "Team Score" in time_frame["qualifiers"] or "Opponent Score" in time_frame["qualifiers"] or "Score Margin" in time_frame["qualifiers"] or "Score Difference" in time_frame["qualifiers"] or "Period" in time_frame["qualifiers"] or "Period Stat" in time_frame["qualifiers"] or "Coordinates" in time_frame["qualifiers"] or "Period Time" in time_frame["qualifiers"] or "Period Time Remaining" in time_frame["qualifiers"] or "Unassisted" in time_frame["qualifiers"] or "Strength" in time_frame["qualifiers"] or "Career Minute" in time_frame["qualifiers"] or "Career Minute Reversed" in time_frame["qualifiers"] or "Game Minute" in time_frame["qualifiers"] or "Game Minute Reversed" in time_frame["qualifiers"] or "Career Shot" in time_frame["qualifiers"] or "Career Shot Reversed" in time_frame["qualifiers"] or "Career Period" in time_frame["qualifiers"] or "Career Period Reversed" in time_frame["qualifiers"] or "Game Shot" in time_frame["qualifiers"] or "Game Shot Reversed" in time_frame["qualifiers"] or "Even Skaters" in time_frame["qualifiers"] or "More Skaters" in time_frame["qualifiers"] or "Less Skaters" in time_frame["qualifiers"] or "Team Skaters" in time_frame["qualifiers"] or "Opponent Skaters" in time_frame["qualifiers"] or "Team Players" in time_frame["qualifiers"] or "Opponent Players" in time_frame["qualifiers"] or "Team Goalie Pulled" in time_frame["qualifiers"] or "Opponent Goalie Pulled" in time_frame["qualifiers"] or "Power Play" in time_frame["qualifiers"] or "Short Handed" in time_frame["qualifiers"] or "Even Strength" in time_frame["qualifiers"] or "Shootout" in time_frame["qualifiers"] or "Overtime" in time_frame["qualifiers"] or "Game Winning" in time_frame["qualifiers"] or "Offensive Zone" in time_frame["qualifiers"] or "Defensive Zone" in time_frame["qualifiers"] or "Neutral Zone" in time_frame["qualifiers"] or "Event Time" in time_frame["qualifiers"] or "Penaltly Shot" in time_frame["qualifiers"] or "penalties" in extra_stats:
+        if "Shot On" in time_frame["qualifiers"] or "Shot By" in time_frame["qualifiers"] or "Event Formula" in time_frame["qualifiers"] or "On Ice With" in time_frame["qualifiers"] or "On Ice Against" in time_frame["qualifiers"] or "On Line With" in time_frame["qualifiers"] or "On Line Against" in time_frame["qualifiers"] or "Assisted On" in time_frame["qualifiers"] or "Assisted With" in time_frame["qualifiers"] or "Points With" in time_frame["qualifiers"] or "Assisted By" in time_frame["qualifiers"] or "Primary Assisted On" in time_frame["qualifiers"] or "Primary Assisted With" in time_frame["qualifiers"] or "Primary Points With" in time_frame["qualifiers"] or "Primary Assisted By" in time_frame["qualifiers"] or "Hit On" in time_frame["qualifiers"] or "Block On" in time_frame["qualifiers"] or "Penalty On" in time_frame["qualifiers"] or "Faceoff Against" in time_frame["qualifiers"] or "Fight Against" in time_frame["qualifiers"] or "Penalty Type" in time_frame["qualifiers"] or "Team Score" in time_frame["qualifiers"] or "Opponent Score" in time_frame["qualifiers"] or "Score Margin" in time_frame["qualifiers"] or "Score Difference" in time_frame["qualifiers"] or "Period" in time_frame["qualifiers"] or "Period Stat" in time_frame["qualifiers"] or "Coordinates" in time_frame["qualifiers"] or "X Coordinate" in time_frame["qualifiers"] or "Y Coordinate" in time_frame["qualifiers"] or "Raw Coordinates" in time_frame["qualifiers"] or "Raw X Coordinate" in time_frame["qualifiers"] or "Raw Y Coordinate" in time_frame["qualifiers"] or "Left Side" in time_frame["qualifiers"] or "Right Side" in time_frame["qualifiers"] or "Period Time" in time_frame["qualifiers"] or "Period Time Remaining" in time_frame["qualifiers"] or "Unassisted" in time_frame["qualifiers"] or "Strength" in time_frame["qualifiers"] or "Career Minute" in time_frame["qualifiers"] or "Career Minute Reversed" in time_frame["qualifiers"] or "Game Minute" in time_frame["qualifiers"] or "Game Minute Reversed" in time_frame["qualifiers"] or "Career Shot" in time_frame["qualifiers"] or "Career Shot Reversed" in time_frame["qualifiers"] or "Career Period" in time_frame["qualifiers"] or "Career Period Reversed" in time_frame["qualifiers"] or "Game Shot" in time_frame["qualifiers"] or "Game Shot Reversed" in time_frame["qualifiers"] or "Even Skaters" in time_frame["qualifiers"] or "More Skaters" in time_frame["qualifiers"] or "Less Skaters" in time_frame["qualifiers"] or "Team Skaters" in time_frame["qualifiers"] or "Opponent Skaters" in time_frame["qualifiers"] or "Team Players" in time_frame["qualifiers"] or "Opponent Players" in time_frame["qualifiers"] or "Team Goalie Pulled" in time_frame["qualifiers"] or "Opponent Goalie Pulled" in time_frame["qualifiers"] or "Power Play" in time_frame["qualifiers"] or "Short Handed" in time_frame["qualifiers"] or "Even Strength" in time_frame["qualifiers"] or "Shootout" in time_frame["qualifiers"] or "Overtime" in time_frame["qualifiers"] or "Game Winning" in time_frame["qualifiers"] or "Offensive Zone" in time_frame["qualifiers"] or "Defensive Zone" in time_frame["qualifiers"] or "Neutral Zone" in time_frame["qualifiers"] or "Event Time" in time_frame["qualifiers"] or "Penaltly Shot" in time_frame["qualifiers"] or "penalties" in extra_stats:
             missing_games = True
             game_data["missing_data"] = True
 
@@ -16478,7 +16529,6 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
             if not row_data["Location"]:
                 shootout_game_winner = home_score + 1
 
-        
     game_data["scoring_play_data"] = scoring_play_data
     
     if row_data["Year"] >= 2010:
@@ -16536,19 +16586,60 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
     next_shot_penalty_shot = False
     first_goal = True
     team_shootout_goal = 1
-    first_period_side = None
-    for period in sub_data["liveData"]["linescore"]["periods"]:
-        if "rinkSide" in period[game_data["team_str"]]:
-            rink_side = period[game_data["team_str"]]["rinkSide"]
-            if rink_side == "left" or rink_side == "right":
-                if period["num"] % 2 == 1:
-                    first_period_side = rink_side
-                else:
-                    if rink_side == "left":
-                        first_period_side = "right"
-                    else:
-                        first_period_side = "left"
-                break
+    period_side_map = {}
+    if sub_data:
+    #    for period in sub_data["liveData"]["linescore"]["periods"]:
+    #        if "rinkSide" in period["home"]:
+    #            if row_data["Location"]:
+    #                period_side_map[period["num"]] = {
+    #                    game_data["team_id"] : period["home"]["rinkSide"],
+    #                    game_data["opp_id"] : period["away"]["rinkSide"]
+    #                }
+    #            else:
+    #                period_side_map[period["num"]] = {
+    #                    game_data["team_id"] : period["away"]["rinkSide"],
+    #                    game_data["opp_id"] : period["home"]["rinkSide"]
+    #                }
+    
+        if not period_side_map:
+            periods = set()
+            for scoring_play in scoring_plays:
+                periods.add(scoring_play["about"]["period"])
+
+            for period in periods:
+                left_side = 0
+                right_side = 0
+                for scoring_play in scoring_plays:
+                    if scoring_play["about"]["period"] == period:
+                        if scoring_play["result"]["event"] in ["Goal", "Shot", "Missed Shot"]:
+                            if "coordinates" in scoring_play and scoring_play["coordinates"] and "x" in scoring_play["coordinates"] and "y" in scoring_play["coordinates"]:
+                                if scoring_play["coordinates"]["x"] > 0:
+                                    if scoring_play["team"]["id"] == game_data["team_id"]:
+                                        left_side += 1
+                                    else:
+                                        right_side += 1
+                                else:
+                                    if scoring_play["team"]["id"] == game_data["team_id"]:
+                                        right_side += 1
+                                    else:
+                                        left_side += 1
+                        elif scoring_play["result"]["event"] in ["Blocked Shot"]:
+                            if "coordinates" in scoring_play and scoring_play["coordinates"] and "x" in scoring_play["coordinates"] and "y" in scoring_play["coordinates"]:
+                                if scoring_play["coordinates"]["x"] > 0:
+                                    if scoring_play["team"]["id"] == game_data["team_id"]:
+                                        right_side += 1
+                                    else:
+                                        left_side += 1
+                                else:
+                                    if scoring_play["team"]["id"] == game_data["team_id"]:
+                                        left_side += 1
+                                    else:
+                                        right_side += 1
+
+                period_side_map[period] = {
+                    game_data["team_id"] : "left" if left_side > right_side else "right",
+                    game_data["opp_id"] : "right" if left_side > right_side else "left"
+                }
 
     for scoring_play in scoring_plays:
         if "players" not in scoring_play or not scoring_play["players"]:
@@ -16584,25 +16675,32 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
         strength = None
         x_coord = None
         y_coord = None
+        raw_x_coord = None
+        raw_y_coord = None
         if "coordinates" in scoring_play and scoring_play["coordinates"] and "x" in scoring_play["coordinates"] and "y" in scoring_play["coordinates"]:
             x_coord = scoring_play["coordinates"]["x"]
             y_coord = scoring_play["coordinates"]["y"]
-            if first_period_side:
-                if scoring_play["about"]["period"] % 2 == 1:
-                    rink_side = first_period_side
+            raw_x_coord = x_coord
+            raw_y_coord = y_coord
+
+            rink_side = period_side_map[scoring_play["about"]["period"]][scoring_play["team"]["id"]]
+
+            if scoring_play["about"]["period"] == 5 and game_data["is_shootout"] and x_coord < 0:
+                rink_side = "right"
+
+            if not zone:
+                if x_coord >= -50 and x_coord <= 50:
+                    zone = "NZ"
+                elif x_coord > 50:
+                    zone = "OZ" if rink_side == "left" else "DZ"
                 else:
-                    if first_period_side == "left":
-                        rink_side = "right"
-                    else:
-                        rink_side = "left"
-                if not zone:
-                    if x_coord >= -50 and x_coord <= 50:
-                        zone = "NZ"
-                    elif x_coord > 50:
-                        zone = "OZ" if rink_side == "left" else "DZ"
-                    else:
-                        zone = "DZ" if rink_side == "left" else "OZ"
+                    zone = "DZ" if rink_side == "left" else "OZ"
             
+            if rink_side == "right":
+                x_coord *= -1
+            else:
+                y_coord *= -1
+
         event_time = None
         if "dateTime" in scoring_play["about"] and scoring_play["about"]["dateTime"]:
             event_time = dateutil.parser.parse(scoring_play["about"]["dateTime"])
@@ -16661,6 +16759,8 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                     "period" : scoring_play["about"]["period"],
                     "x_coord" : x_coord,
                     "y_coord" : y_coord,
+                    "raw_x_coord" : raw_x_coord,
+                    "raw_y_coord" : raw_y_coord,
                     "periodTime" : period_time,
                     "periodTimeRemaining" : period_time_rem,
                     "zone" : zone,
@@ -16685,6 +16785,8 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                     "period" : scoring_play["about"]["period"],
                     "x_coord" : x_coord,
                     "y_coord" : y_coord,
+                    "raw_x_coord" : raw_x_coord,
+                    "raw_y_coord" : raw_y_coord,
                     "periodTime" : period_time,
                     "periodTimeRemaining" : period_time_rem,
                     "zone" : zone,
@@ -16706,6 +16808,8 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                     "period" : scoring_play["about"]["period"],
                     "x_coord" : x_coord,
                     "y_coord" : y_coord,
+                    "raw_x_coord" : raw_x_coord,
+                    "raw_y_coord" : raw_y_coord,
                     "periodTime" : period_time,
                     "periodTimeRemaining" : period_time_rem,
                     "zone" : zone,
@@ -16724,6 +16828,8 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                         "period" : scoring_play["about"]["period"],
                         "x_coord" : x_coord,
                         "y_coord" : y_coord,
+                        "raw_x_coord" : raw_x_coord,
+                        "raw_y_coord" : raw_y_coord,
                         "strength" : strength,
                         "emptyNet" : "emptyNet" in scoring_play["result"] and scoring_play["result"]["emptyNet"],
                         "periodTime" : period_time,
@@ -16742,6 +16848,8 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                             "period" : scoring_play["about"]["period"],
                             "x_coord" : x_coord,
                             "y_coord" : y_coord,
+                            "raw_x_coord" : raw_x_coord,
+                            "raw_y_coord" : raw_y_coord,
                             "periodTime" : period_time,
                             "periodTimeRemaining" : period_time_rem,
                             "zone" : zone,
@@ -16758,6 +16866,8 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                             "period" : scoring_play["about"]["period"],
                             "x_coord" : x_coord,
                             "y_coord" : y_coord,
+                            "raw_x_coord" : raw_x_coord,
+                            "raw_y_coord" : raw_y_coord,
                             "periodTime" : period_time,
                             "periodTimeRemaining" : period_time_rem,
                             "zone" : zone,
@@ -16774,6 +16884,8 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                             "period" : scoring_play["about"]["period"],
                             "x_coord" : x_coord,
                             "y_coord" : y_coord,
+                            "raw_x_coord" : raw_x_coord,
+                            "raw_y_coord" : raw_y_coord,
                             "periodTime" : period_time,
                             "periodTimeRemaining" : period_time_rem,
                             "zone" : zone,
@@ -16791,6 +16903,8 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                         "period" : scoring_play["about"]["period"],
                         "x_coord" : x_coord,
                         "y_coord" : y_coord,
+                        "raw_x_coord" : raw_x_coord,
+                        "raw_y_coord" : raw_y_coord,
                         "strength" : scoring_play["result"]["strength"]["code"],
                         "emptyNet" : "emptyNet" in scoring_play["result"] and scoring_play["result"]["emptyNet"],
                         "periodTime" : period_time,
@@ -16810,6 +16924,8 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                             "period" : scoring_play["about"]["period"],
                             "x_coord" : x_coord,
                             "y_coord" : y_coord,
+                            "raw_x_coord" : raw_x_coord,
+                            "raw_y_coord" : raw_y_coord,
                             "periodTime" : period_time,
                             "periodTimeRemaining" : period_time_rem,
                             "zone" : zone,
@@ -16826,6 +16942,8 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                             "period" : scoring_play["about"]["period"],
                             "x_coord" : x_coord,
                             "y_coord" : y_coord,
+                            "raw_x_coord" : raw_x_coord,
+                            "raw_y_coord" : raw_y_coord,
                             "periodTime" : period_time,
                             "periodTimeRemaining" : period_time_rem,
                             "zone" : zone,
@@ -16842,6 +16960,8 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                             "period" : scoring_play["about"]["period"],
                             "x_coord" : x_coord,
                             "y_coord" : y_coord,
+                            "raw_x_coord" : raw_x_coord,
+                            "raw_y_coord" : raw_y_coord,
                             "periodTime" : period_time,
                             "periodTimeRemaining" : period_time_rem,
                             "zone" : zone,
@@ -16860,6 +16980,8 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                         "period" : scoring_play["about"]["period"],
                         "x_coord" : x_coord,
                         "y_coord" : y_coord,
+                        "raw_x_coord" : raw_x_coord,
+                        "raw_y_coord" : raw_y_coord,
                         "strength" : scoring_play["result"]["strength"]["code"],
                         "emptyNet" : "emptyNet" in scoring_play["result"] and scoring_play["result"]["emptyNet"],
                         "periodTime" : period_time,
@@ -16879,6 +17001,8 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                             "period" : scoring_play["about"]["period"],
                             "x_coord" : x_coord,
                             "y_coord" : y_coord,
+                            "raw_x_coord" : raw_x_coord,
+                            "raw_y_coord" : raw_y_coord,
                             "periodTime" : period_time,
                             "periodTimeRemaining" : period_time_rem,
                             "zone" : zone,
@@ -16895,6 +17019,8 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                             "period" : scoring_play["about"]["period"],
                             "x_coord" : x_coord,
                             "y_coord" : y_coord,
+                            "raw_x_coord" : raw_x_coord,
+                            "raw_y_coord" : raw_y_coord,
                             "periodTime" : period_time,
                             "periodTimeRemaining" : period_time_rem,
                             "zone" : zone,
@@ -16911,6 +17037,8 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                             "period" : scoring_play["about"]["period"],
                             "x_coord" : x_coord,
                             "y_coord" : y_coord,
+                            "raw_x_coord" : raw_x_coord,
+                            "raw_y_coord" : raw_y_coord,
                             "periodTime" : period_time,
                             "periodTimeRemaining" : period_time_rem,
                             "zone" : zone,
@@ -16928,6 +17056,8 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                         "period" : scoring_play["about"]["period"],
                         "x_coord" : x_coord,
                         "y_coord" : y_coord,
+                        "raw_x_coord" : raw_x_coord,
+                        "raw_y_coord" : raw_y_coord,
                         "strength" : scoring_play["result"]["strength"]["code"],
                         "emptyNet" : "emptyNet" in scoring_play["result"] and scoring_play["result"]["emptyNet"],
                         "periodTime" : period_time,
@@ -16947,6 +17077,8 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                             "period" : scoring_play["about"]["period"],
                             "x_coord" : x_coord,
                             "y_coord" : y_coord,
+                            "raw_x_coord" : raw_x_coord,
+                            "raw_y_coord" : raw_y_coord,
                             "periodTime" : period_time,
                             "periodTimeRemaining" : period_time_rem,
                             "zone" : zone,
@@ -16963,6 +17095,8 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                             "period" : scoring_play["about"]["period"],
                             "x_coord" : x_coord,
                             "y_coord" : y_coord,
+                            "raw_x_coord" : raw_x_coord,
+                            "raw_y_coord" : raw_y_coord,
                             "periodTime" : period_time,
                             "periodTimeRemaining" : period_time_rem,
                             "zone" : zone,
@@ -16979,6 +17113,8 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                             "period" : scoring_play["about"]["period"],
                             "x_coord" : x_coord,
                             "y_coord" : y_coord,
+                            "raw_x_coord" : raw_x_coord,
+                            "raw_y_coord" : raw_y_coord,
                             "periodTime" : period_time,
                             "periodTimeRemaining" : period_time_rem,
                             "zone" : zone,
@@ -17017,6 +17153,8 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                     "period" : scoring_play["about"]["period"],
                     "x_coord" : x_coord,
                     "y_coord" : y_coord,
+                    "raw_x_coord" : raw_x_coord,
+                    "raw_y_coord" : raw_y_coord,
                     "periodTime" : period_time,
                     "periodTimeRemaining" : period_time_rem,
                     "zone" : zone,
@@ -17036,6 +17174,8 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                     "period" : scoring_play["about"]["period"],
                     "x_coord" : x_coord,
                     "y_coord" : y_coord,
+                    "raw_x_coord" : raw_x_coord,
+                    "raw_y_coord" : raw_y_coord,
                     "periodTime" : period_time,
                     "periodTimeRemaining" : period_time_rem,
                     "zone" : zone,
@@ -17055,6 +17195,8 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                         "period" : scoring_play["about"]["period"],
                         "x_coord" : x_coord,
                         "y_coord" : y_coord,
+                        "raw_x_coord" : raw_x_coord,
+                        "raw_y_coord" : raw_y_coord,
                         "periodTime" : period_time,
                         "periodTimeRemaining" : period_time_rem,
                         "zone" : zone,
@@ -17071,6 +17213,8 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                         "period" : scoring_play["about"]["period"],
                         "x_coord" : x_coord,
                         "y_coord" : y_coord,
+                        "raw_x_coord" : raw_x_coord,
+                        "raw_y_coord" : raw_y_coord,
                         "periodTime" : period_time,
                         "periodTimeRemaining" : period_time_rem,
                         "zone" : zone,
@@ -17087,6 +17231,8 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                         "period" : scoring_play["about"]["period"],
                         "x_coord" : x_coord,
                         "y_coord" : y_coord,
+                        "raw_x_coord" : raw_x_coord,
+                        "raw_y_coord" : raw_y_coord,
                         "periodTime" : period_time,
                         "periodTimeRemaining" : period_time_rem,
                         "zone" : zone,
@@ -17104,6 +17250,8 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                         "period" : scoring_play["about"]["period"],
                         "x_coord" : x_coord,
                         "y_coord" : y_coord,
+                        "raw_x_coord" : raw_x_coord,
+                        "raw_y_coord" : raw_y_coord,
                         "periodTime" : period_time,
                         "periodTimeRemaining" : period_time_rem,
                         "zone" : zone,
@@ -17120,6 +17268,8 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                         "period" : scoring_play["about"]["period"],
                         "x_coord" : x_coord,
                         "y_coord" : y_coord,
+                        "raw_x_coord" : raw_x_coord,
+                        "raw_y_coord" : raw_y_coord,
                         "periodTime" : period_time,
                         "periodTimeRemaining" : period_time_rem,
                         "zone" : zone,
@@ -17136,6 +17286,8 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                         "period" : scoring_play["about"]["period"],
                         "x_coord" : x_coord,
                         "y_coord" : y_coord,
+                        "raw_x_coord" : raw_x_coord,
+                        "raw_y_coord" : raw_y_coord,
                         "periodTime" : period_time,
                         "periodTimeRemaining" : period_time_rem,
                         "zone" : zone,
@@ -17154,6 +17306,8 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                         "period" : scoring_play["about"]["period"],
                         "x_coord" : x_coord,
                         "y_coord" : y_coord,
+                        "raw_x_coord" : raw_x_coord,
+                        "raw_y_coord" : raw_y_coord,
                         "periodTime" : period_time,
                         "periodTimeRemaining" : period_time_rem,
                         "zone" : zone,
@@ -17170,6 +17324,8 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                         "period" : scoring_play["about"]["period"],
                         "x_coord" : x_coord,
                         "y_coord" : y_coord,
+                        "raw_x_coord" : raw_x_coord,
+                        "raw_y_coord" : raw_y_coord,
                         "periodTime" : period_time,
                         "periodTimeRemaining" : period_time_rem,
                         "zone" : zone,
@@ -17186,6 +17342,8 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                         "period" : scoring_play["about"]["period"],
                         "x_coord" : x_coord,
                         "y_coord" : y_coord,
+                        "raw_x_coord" : raw_x_coord,
+                        "raw_y_coord" : raw_y_coord,
                         "periodTime" : period_time,
                         "periodTimeRemaining" : period_time_rem,
                         "zone" : zone,
@@ -17203,6 +17361,8 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                         "period" : scoring_play["about"]["period"],
                         "x_coord" : x_coord,
                         "y_coord" : y_coord,
+                        "raw_x_coord" : raw_x_coord,
+                        "raw_y_coord" : raw_y_coord,
                         "periodTime" : period_time,
                         "periodTimeRemaining" : period_time_rem,
                         "zone" : zone,
@@ -17219,6 +17379,8 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                         "period" : scoring_play["about"]["period"],
                         "x_coord" : x_coord,
                         "y_coord" : y_coord,
+                        "raw_x_coord" : raw_x_coord,
+                        "raw_y_coord" : raw_y_coord,
                         "periodTime" : period_time,
                         "periodTimeRemaining" : period_time_rem,
                         "zone" : zone,
@@ -17235,6 +17397,8 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                         "period" : scoring_play["about"]["period"],
                         "x_coord" : x_coord,
                         "y_coord" : y_coord,
+                        "raw_x_coord" : raw_x_coord,
+                        "raw_y_coord" : raw_y_coord,
                         "periodTime" : period_time,
                         "periodTimeRemaining" : period_time_rem,
                         "zone" : zone,
@@ -17261,6 +17425,8 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                     "period" : scoring_play["about"]["period"],
                     "x_coord" : x_coord,
                     "y_coord" : y_coord,
+                    "raw_x_coord" : raw_x_coord,
+                    "raw_y_coord" : raw_y_coord,
                     "periodTime" : period_time,
                     "periodTimeRemaining" : period_time_rem,
                     "zone" : zone,
@@ -17281,6 +17447,8 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                         "period" : scoring_play["about"]["period"],
                         "x_coord" : x_coord,
                         "y_coord" : y_coord,
+                        "raw_x_coord" : raw_x_coord,
+                        "raw_y_coord" : raw_y_coord,
                         "periodTime" : period_time,
                         "periodTimeRemaining" : period_time_rem,
                         "zone" : zone,
@@ -17297,6 +17465,8 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                         "period" : scoring_play["about"]["period"],
                         "x_coord" : x_coord,
                         "y_coord" : y_coord,
+                        "raw_x_coord" : raw_x_coord,
+                        "raw_y_coord" : raw_y_coord,
                         "periodTime" : period_time,
                         "periodTimeRemaining" : period_time_rem,
                         "zone" : zone,
@@ -17314,6 +17484,8 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                         "period" : scoring_play["about"]["period"],
                         "x_coord" : x_coord,
                         "y_coord" : y_coord,
+                        "raw_x_coord" : raw_x_coord,
+                        "raw_y_coord" : raw_y_coord,
                         "periodTime" : period_time,
                         "periodTimeRemaining" : period_time_rem,
                         "zone" : zone,
@@ -17330,6 +17502,8 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                         "period" : scoring_play["about"]["period"],
                         "x_coord" : x_coord,
                         "y_coord" : y_coord,
+                        "raw_x_coord" : raw_x_coord,
+                        "raw_y_coord" : raw_y_coord,
                         "periodTime" : period_time,
                         "periodTimeRemaining" : period_time_rem,
                         "zone" : zone,
@@ -17348,6 +17522,8 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                         "period" : scoring_play["about"]["period"],
                         "x_coord" : x_coord,
                         "y_coord" : y_coord,
+                        "raw_x_coord" : raw_x_coord,
+                        "raw_y_coord" : raw_y_coord,
                         "periodTime" : period_time,
                         "periodTimeRemaining" : period_time_rem,
                         "zone" : zone,
@@ -17364,6 +17540,8 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                         "period" : scoring_play["about"]["period"],
                         "x_coord" : x_coord,
                         "y_coord" : y_coord,
+                        "raw_x_coord" : raw_x_coord,
+                        "raw_y_coord" : raw_y_coord,
                         "periodTime" : period_time,
                         "periodTimeRemaining" : period_time_rem,
                         "zone" : zone,
@@ -17381,6 +17559,8 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                         "period" : scoring_play["about"]["period"],
                         "x_coord" : x_coord,
                         "y_coord" : y_coord,
+                        "raw_x_coord" : raw_x_coord,
+                        "raw_y_coord" : raw_y_coord,
                         "periodTime" : period_time,
                         "periodTimeRemaining" : period_time_rem,
                         "zone" : zone,
@@ -17397,6 +17577,8 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                         "period" : scoring_play["about"]["period"],
                         "x_coord" : x_coord,
                         "y_coord" : y_coord,
+                        "raw_x_coord" : raw_x_coord,
+                        "raw_y_coord" : raw_y_coord,
                         "periodTime" : period_time,
                         "periodTimeRemaining" : period_time_rem,
                         "zone" : zone,
@@ -17417,9 +17599,11 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                 "penalty_minutes_to_use" : scoring_play["result"]["penaltyMinutes"],
                 "period" : scoring_play["about"]["period"],
                 "x_coord" : x_coord,
+                "y_coord" : y_coord,
+                "raw_x_coord" : raw_x_coord,
+                "raw_y_coord" : raw_y_coord,
                 "period" : scoring_play["about"]["period"],
                 "periodToUse" : scoring_play["about"]["period"],
-                "y_coord" : y_coord,
                 "periodTime" : period_time,
                 "periodTimeToUse" : period_time,
                 "periodTimeRemaining" : period_time_rem,
@@ -17502,6 +17686,8 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                     "period" : scoring_play["about"]["period"],
                     "x_coord" : x_coord,
                     "y_coord" : y_coord,
+                    "raw_x_coord" : raw_x_coord,
+                    "raw_y_coord" : raw_y_coord,
                     "periodTime" : period_time,
                     "periodTimeRemaining" : period_time_rem,
                     "zone" : zone,
@@ -17532,6 +17718,8 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                     "period" : scoring_play["about"]["period"],
                     "x_coord" : x_coord,
                     "y_coord" : y_coord,
+                    "raw_x_coord" : raw_x_coord,
+                    "raw_y_coord" : raw_y_coord,
                     "periodTime" : period_time,
                     "periodTimeRemaining" : period_time_rem,
                     "zone" : zone,
@@ -17548,6 +17736,8 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                     "period" : scoring_play["about"]["period"],
                     "x_coord" : x_coord,
                     "y_coord" : y_coord,
+                    "raw_x_coord" : raw_x_coord,
+                    "raw_y_coord" : raw_y_coord,
                     "periodTime" : period_time,
                     "periodTimeRemaining" : period_time_rem,
                     "zone" : zone,
@@ -17568,6 +17758,8 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                         "period" : scoring_play["about"]["period"],
                         "x_coord" : x_coord,
                         "y_coord" : y_coord,
+                        "raw_x_coord" : raw_x_coord,
+                        "raw_y_coord" : raw_y_coord,
                         "periodTime" : period_time,
                         "periodTimeRemaining" : period_time_rem,
                         "zone" : zone,
@@ -17585,6 +17777,8 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                         "period" : scoring_play["about"]["period"],
                         "x_coord" : x_coord,
                         "y_coord" : y_coord,
+                        "raw_x_coord" : raw_x_coord,
+                        "raw_y_coord" : raw_y_coord,
                         "periodTime" : period_time,
                         "periodTimeRemaining" : period_time_rem,
                         "zone" : zone,
@@ -17603,6 +17797,8 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                         "period" : scoring_play["about"]["period"],
                         "x_coord" : x_coord,
                         "y_coord" : y_coord,
+                        "raw_x_coord" : raw_x_coord,
+                        "raw_y_coord" : raw_y_coord,
                         "periodTime" : period_time,
                         "periodTimeRemaining" : period_time_rem,
                         "zone" : zone,
@@ -17620,6 +17816,8 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                         "period" : scoring_play["about"]["period"],
                         "x_coord" : x_coord,
                         "y_coord" : y_coord,
+                        "raw_x_coord" : raw_x_coord,
+                        "raw_y_coord" : raw_y_coord,
                         "periodTime" : period_time,
                         "periodTimeRemaining" : period_time_rem,
                         "zone" : zone,
@@ -17656,6 +17854,8 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                     "period" : scoring_play["about"]["period"],
                     "x_coord" : x_coord,
                     "y_coord" : y_coord,
+                    "raw_x_coord" : raw_x_coord,
+                    "raw_y_coord" : raw_y_coord,
                     "periodTime" : period_time,
                     "periodTimeRemaining" : period_time_rem,
                     "zone" : zone,
@@ -17674,6 +17874,8 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                     "period" : scoring_play["about"]["period"],
                     "x_coord" : x_coord,
                     "y_coord" : y_coord,
+                    "raw_x_coord" : raw_x_coord,
+                    "raw_y_coord" : raw_y_coord,
                     "periodTime" : period_time,
                     "periodTimeRemaining" : period_time_rem,
                     "zone" : zone,
@@ -17693,6 +17895,8 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                     "period" : scoring_play["about"]["period"],
                     "x_coord" : x_coord,
                     "y_coord" : y_coord,
+                    "raw_x_coord" : raw_x_coord,
+                    "raw_y_coord" : raw_y_coord,
                     "periodTime" : period_time,
                     "periodTimeRemaining" : period_time_rem,
                     "zone" : zone,
@@ -17711,6 +17915,8 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                     "period" : scoring_play["about"]["period"],
                     "x_coord" : x_coord,
                     "y_coord" : y_coord,
+                    "raw_x_coord" : raw_x_coord,
+                    "raw_y_coord" : raw_y_coord,
                     "periodTime" : period_time,
                     "periodTimeRemaining" : period_time_rem,
                     "zone" : zone,
@@ -18042,6 +18248,12 @@ def setup_href_game_data(player_data, row_data, player_id, player_type, time_fra
 
             if period > last_period:
                 last_period = period
+    
+    if game_data["is_shootout"]:
+        if game_data["team_goals"] > game_data["opp_goals"]:
+            game_data["team_goals"] -= 1
+        elif game_data["opp_goals"] > game_data["team_goals"]:
+            game_data["opp_goals"] -= 1
     
     for period in range(1, last_period + 1):
         game_data["periods"].append(period)
@@ -21428,7 +21640,35 @@ def perform_metadata_qual(event_name, goal_event, qualifiers, player_game_info, 
             return False
     
     if "Coordinates" in qualifiers:
-        if not perform_coordinates_qual(goal_event, qualifiers["Coordinates"]):
+        if not perform_coordinates_qual(goal_event, qualifiers["Coordinates"], False):
+            return False
+    
+    if "X Coordinate" in qualifiers:
+        if not perform_side_coordinates_qual(goal_event, qualifiers["X Coordinate"], True, False):
+            return False
+    
+    if "Y Coordinate" in qualifiers:
+        if not perform_side_coordinates_qual(goal_event, qualifiers["Y Coordinate"], False, False):
+            return False
+    
+    if "Raw Coordinates" in qualifiers:
+        if not perform_coordinates_qual(goal_event, qualifiers["Raw Coordinates"], True):
+            return False
+    
+    if "Raw X Coordinate" in qualifiers:
+        if not perform_side_coordinates_qual(goal_event, qualifiers["Raw X Coordinate"], True, True):
+            return False
+    
+    if "Raw Y Coordinate" in qualifiers:
+        if not perform_side_coordinates_qual(goal_event, qualifiers["Raw Y Coordinate"], False, True):
+            return False
+    
+    if "Left Side" in qualifiers:
+        if not perform_side_qual(goal_event, qualifiers["Left Side"], True):
+            return False
+    
+    if "Right Side" in qualifiers:
+        if not perform_side_qual(goal_event, qualifiers["Right Side"], False):
             return False
 
     if "Offensive Zone" in qualifiers:
@@ -21747,35 +21987,78 @@ def perform_sub_metadata_qual(event, attr_str, qualifiers, player_game_info, yea
                     return False
     return True
 
-def perform_coordinates_qual(event, qualifiers):
-    if "x_coords" not in event or event["x_coords"] == None or "y_coords" not in event or event["y_coords"] == None:
+def perform_coordinates_qual(event, qualifiers, is_raw):
+    if "x_coord" not in event or event["x_coord"] == None:
         return False
         
-    has_row_match = True
     for qual_object in qualifiers:
-        stat_val_x = qual_object["values"]["x_coords"]["start_val"]
-        stat_val_y = qual_object["values"]["y_coords"]["start_val"]
-        end_val_x = qual_object["values"]["x_coords"]["end_val"]
-        end_val_y = qual_object["values"]["y_coords"]["end_val"]
+        stat_val_x = qual_object["values"]["x_coord"]["start_val"]
+        stat_val_y = qual_object["values"]["y_coord"]["start_val"]
+        end_val_x = qual_object["values"]["x_coord"]["end_val"]
+        end_val_y = qual_object["values"]["y_coord"]["end_val"]
 
-        x_val = event["x_coords"]
-        y_val = event["y_coords"]
+        if is_raw:
+            x_val = event["raw_x_coord"]
+            y_val = event["raw_y_coord"]
+        else:
+            x_val = event["x_coord"]
+            y_val = event["y_coord"]
 
         if qual_object["negate"]:
-            if not ((x_val >= stat_val_x and x_val <= end_val_x) and (y_val >= stat_val_y and y_val <= end_val_y)):
-                has_count_match = True
-                break
+            if ((x_val >= stat_val_x and x_val <= end_val_x) and (y_val >= stat_val_y and y_val <= end_val_y)):
+                return False
         else:
-            if (x_val >= stat_val_x and x_val <= end_val_x) and (y_val >= stat_val_y and y_val <= end_val_y):
-                has_count_match = True
-                break
-        if not has_count_match:
-            has_row_match = False
+            if not (x_val >= stat_val_x and x_val <= end_val_x) and (y_val >= stat_val_y and y_val <= end_val_y):
+                return False
     
-    if has_row_match:
-        has_any_match = True
+    return True
+
+def perform_side_coordinates_qual(event, qualifiers, is_x, is_raw):
+    if "x_coord" not in event or event["x_coord"] == None:
+        return False
+        
+    for qual_object in qualifiers:
+        start_val = qual_object["values"]["start_val"]
+        end_val = qual_object["values"]["end_val"]
+
+        if is_raw:
+            if is_x:
+                val_to_use = event["raw_x_coord"]
+            else:
+                val_to_use = event["raw_y_coord"]
+        else:
+            if is_x:
+                val_to_use = event["x_coord"]
+            else:
+                val_to_use = event["y_coord"]
+
+        if qual_object["negate"]:
+            if (val_to_use >= start_val and val_to_use <= end_val):
+                return False
+        else:
+            if not (val_to_use >= start_val and val_to_use <= end_val):
+                return False
     
-    return has_any_match
+    return True
+
+def perform_side_qual(event, qualifiers, is_left):
+    if "x_coord" not in event or event["x_coord"] == None:
+        return False
+        
+    if is_left:
+        has_match = event["y_coord"] < 0
+    else:
+        has_match = event["y_coord"] > 0
+
+    for qual_object in qualifiers:
+        if qual_object["negate"]:
+            if has_match:
+                return False
+        else:
+            if not has_match:
+                return False
+
+    return True
 
 def clear_row_attrs(row, player_type):
     row["Per"] = 0
@@ -23419,7 +23702,7 @@ def get_starts_days_rest(row, row_str, row_date):
         else:
             return get_starts_days_rest(row[row_str], row_str, row_date)
 
-def handle_max_min_data(all_rows, player_data, player_type, qualifiers):
+def handle_max_min_data(all_rows, player_data, player_type, qualifiers, extra_stats):
     new_rows = []
     stat_vals = []
 
@@ -23603,7 +23886,7 @@ def handle_max_min_data(all_rows, player_data, player_type, qualifiers):
                         new_rows.append(row)
             stat_val["stat_obj"]["explain_str"] = current_explain_strs + [stat_val["stat_obj"]["explain_str"]]
         else:
-            matching_rows = handle_min_max_final(stat_val, current_explain_strs, player_data, player_type, stat, qualifiers, all_rows, transformed_vals)
+            matching_rows = handle_min_max_final(stat_val, current_explain_strs, player_data, player_type, stat, qualifiers, all_rows, transformed_vals, extra_stats)
             if matching_rows:
                 new_rows.extend(matching_rows)
     
@@ -23890,7 +24173,7 @@ def handle_min_max_calc(the_stats, stat_quals, player_data, player_type, stat, t
                             "counter" : 0
                         })
 
-def handle_min_max_final(stat_val, current_explain_strs, player_data, player_type, stat, qualifiers, all_rows, transformed_vals):
+def handle_min_max_final(stat_val, current_explain_strs, player_data, player_type, stat, qualifiers, all_rows, transformed_vals, extra_stats):
     if not all_rows:
         stat_val["stat_obj"]["explain_str"] = current_explain_strs
         return []
@@ -24193,12 +24476,12 @@ def handle_min_max_final(stat_val, current_explain_strs, player_data, player_typ
                                 date_end_link = None
                                 for row in all_rows:
                                     if row["Date"] == start_date:
-                                        if row["GameLink"] and True:
+                                        if row["GameLink"] and (not "nhl-link" in extra_stats or "NHLGameLink" not in row):
                                             date_start_link = "https://www.hockey-reference.com" + row["GameLink"]
                                         else:
                                             date_start_link = "https://www.nhl.com/gamecenter/" + str(row["NHLGameLink"])
                                     if row["Date"] == end_date:
-                                        if row["GameLink"] and True:
+                                        if row["GameLink"] and (not "nhl-link" in extra_stats or "NHLGameLink" not in row):
                                             date_end_link = "https://www.hockey-reference.com" + row["GameLink"]
                                         else:
                                             date_end_link = "https://www.nhl.com/gamecenter/" + str(row["NHLGameLink"])
@@ -24243,12 +24526,12 @@ def handle_min_max_final(stat_val, current_explain_strs, player_data, player_typ
                                 date_end_link = None
                                 for row in all_rows:
                                     if row["Date"] == start_date:
-                                        if row["GameLink"] and True:
+                                        if row["GameLink"] and (not "nhl-link" in extra_stats or "NHLGameLink" not in row):
                                             date_start_link = "https://www.hockey-reference.com" + row["GameLink"]
                                         else:
                                             date_start_link = "https://www.nhl.com/gamecenter/" + str(row["NHLGameLink"])
                                     if row["Date"] == end_date:
-                                        if row["GameLink"] and True:
+                                        if row["GameLink"] and (not "nhl-link" in extra_stats or "NHLGameLink" not in row):
                                             date_end_link = "https://www.hockey-reference.com" + row["GameLink"]
                                         else:
                                             date_end_link = "https://www.nhl.com/gamecenter/" + str(row["NHLGameLink"])
@@ -24827,37 +25110,37 @@ def handle_career_stats(all_rows, player_data, player_type, qualifiers):
 
     return new_rows
 
-def handle_max_streak(all_rows, player_data, player_type, qualifiers, max_streak, is_formula):
+def handle_max_streak(all_rows, player_data, player_type, qualifiers, max_streak, is_formula, extra_stats):
     new_rows = []
 
     if "Max Streak" in qualifiers and max_streak and not is_formula:
         for qual_object in qualifiers["Max Streak"]:
-            handle_max_streak_calc(new_rows, qual_object["values"], player_data, player_type, all_rows, max_streak, is_formula)
+            handle_max_streak_calc(new_rows, qual_object["values"], player_data, player_type, all_rows, max_streak, is_formula, extra_stats)
     
     if "Count Streak" in qualifiers and not max_streak and not is_formula:
         for qual_object in qualifiers["Count Streak"]:
-            handle_max_streak_calc(new_rows, qual_object["values"], player_data, player_type, all_rows, max_streak, is_formula)
+            handle_max_streak_calc(new_rows, qual_object["values"], player_data, player_type, all_rows, max_streak, is_formula, extra_stats)
         
     if "Max Streak Formula" in qualifiers and max_streak and is_formula:
         for qual_object in qualifiers["Max Streak Formula"]:
-            handle_max_streak_calc(new_rows, qual_object["values"], player_data, player_type, all_rows, max_streak, is_formula)
+            handle_max_streak_calc(new_rows, qual_object["values"], player_data, player_type, all_rows, max_streak, is_formula, extra_stats)
     
     if "Count Streak Formula" in qualifiers and not max_streak and is_formula:
         for qual_object in qualifiers["Count Streak Formula"]:
-            handle_max_streak_calc(new_rows, qual_object["values"], player_data, player_type, all_rows, max_streak, is_formula)
+            handle_max_streak_calc(new_rows, qual_object["values"], player_data, player_type, all_rows, max_streak, is_formula, extra_stats)
     
     return [row for n, row in enumerate(new_rows) if row not in new_rows[:n]]
 
-def handle_max_stretch(all_rows, player_data, player_type, qualifiers):
+def handle_max_stretch(all_rows, player_data, player_type, qualifiers, extra_stats):
     new_rows = []
 
     if "Max Stretch" in qualifiers:
         for qual_object in qualifiers["Max Stretch"]:
-            handle_max_stretch_calc(new_rows, qual_object["values"], player_data, player_type, all_rows)
+            handle_max_stretch_calc(new_rows, qual_object["values"], player_data, player_type, all_rows, extra_stats)
     
     return [row for n, row in enumerate(new_rows) if row not in new_rows[:n]]
 
-def handle_max_streak_calc(new_rows, stat_objs, player_data, player_type, all_rows, max_streak, is_formula):
+def handle_max_streak_calc(new_rows, stat_objs, player_data, player_type, all_rows, max_streak, is_formula, extra_stats):
     if not all_rows:
         return
 
@@ -25064,12 +25347,12 @@ def handle_max_streak_calc(new_rows, stat_objs, player_data, player_type, all_ro
                 date_end_link = None
                 for row in all_rows:
                     if row["Date"] == start_date:
-                        if row["GameLink"] and True:
+                        if row["GameLink"] and (not "nhl-link" in extra_stats or "NHLGameLink" not in row):
                             date_start_link = "https://www.hockey-reference.com" + row["GameLink"]
                         else:
                             date_start_link = "https://www.nhl.com/gamecenter/" + str(row["NHLGameLink"])
                     if row["Date"] == end_date:
-                        if row["GameLink"] and True:
+                        if row["GameLink"] and (not "nhl-link" in extra_stats or "NHLGameLink" not in row):
                             date_end_link = "https://www.hockey-reference.com" + row["GameLink"]
                         else:
                             date_end_link = "https://www.nhl.com/gamecenter/" + str(row["NHLGameLink"])
@@ -25196,7 +25479,7 @@ def handle_max_streak_calc(new_rows, stat_objs, player_data, player_type, all_ro
 
     stat_objs[0]["explain_str"] = current_explain_strs + [stat_objs[0]["explain_str"]]
 
-def handle_max_stretch_calc(new_rows, stat_objs, player_data, player_type, all_rows):
+def handle_max_stretch_calc(new_rows, stat_objs, player_data, player_type, all_rows, extra_stats):
     if not all_rows:
         return
 
@@ -25351,12 +25634,12 @@ def handle_max_stretch_calc(new_rows, stat_objs, player_data, player_type, all_r
                 date_end_link = None
                 for row in all_rows:
                     if row["Date"] == start_date:
-                        if row["GameLink"] and True:
+                        if row["GameLink"] and (not "nhl-link" in extra_stats or "NHLGameLink" not in row):
                             date_start_link = "https://www.hockey-reference.com" + row["GameLink"]
                         else:
                             date_start_link = "https://www.nhl.com/gamecenter/" + str(row["NHLGameLink"])
                     if row["Date"] == end_date:
-                        if row["GameLink"] and True:
+                        if row["GameLink"] and (not "nhl-link" in extra_stats or "NHLGameLink" not in row):
                             date_end_link = "https://www.hockey-reference.com" + row["GameLink"]
                         else:
                             date_end_link = "https://www.nhl.com/gamecenter/" + str(row["NHLGameLink"])
@@ -30944,7 +31227,7 @@ def has_against_quals_no_so(extra_stats):
     return "Shot On" in extra_stats or "Shot By" in extra_stats or "Assisted On" in extra_stats or "Points On" in extra_stats or "Assisted By" in extra_stats or "Hit On" in extra_stats or "Block On" in extra_stats or "Penalty On" in extra_stats or "Faceoff Against" in extra_stats or "Fight Against" in extra_stats or "current-stats" in extra_stats or "current-stats-zone" in extra_stats or "scoring-stats" in extra_stats
 
 def has_api_quals(qualifiers):
-    return "Event Time" in qualifiers
+    return "Event Time" in qualifiers or "Coordinates" in qualifiers or "Left Side" in qualifiers or "Right Side" in qualifiers or "X Coordinate" in qualifiers or "Y Coordinate" in qualifiers or "Raw Coordinates" in qualifiers or "Raw X Coordinate" in qualifiers or "Raw Y Coordinate" in qualifiers
 
 def is_against_header(header, extra_stats, player_type, has_toi_stats):
     if not has_against_quals(extra_stats):
