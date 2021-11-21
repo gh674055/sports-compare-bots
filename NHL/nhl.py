@@ -6455,6 +6455,10 @@ manual_id_maps = None
 with open ("manual_id_maps.json", "r") as file:
     manual_id_maps = json.load(file)
 
+manual_period_map = None
+with open ("manual_periods.json", "r") as file:
+    manual_period_map = json.load(file)
+    
 manual_info = {
     1987030999 : {
         "Date" : dateutil.parser.parse("1988-05-24").date(),
@@ -16605,6 +16609,7 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
     first_goal = True
     team_shootout_goal = 1
     period_side_map = {}
+    
     if sub_data:
     #    for period in sub_data["liveData"]["linescore"]["periods"]:
     #        if "rinkSide" in period["home"]:
@@ -16618,8 +16623,28 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
     #                    game_data["team_id"] : period["away"]["rinkSide"],
     #                    game_data["opp_id"] : period["home"]["rinkSide"]
     #                }
+
+        # print(game_data["team_id"])
+        # print(game_data["opp_id"])
+        # for scoring_play in scoring_plays:
+        #     if scoring_play["result"]["event"] in ["Goal", "Shot", "Missed Shot"]:
+        #         if "coordinates" in scoring_play and scoring_play["coordinates"] and "x" in scoring_play["coordinates"] and "y" in scoring_play["coordinates"]:
+        #             if scoring_play["coordinates"]["x"] > 25:
+        #                 if scoring_play["team"]["id"] == game_data["team_id"]:
+        #                     print(str(scoring_play["about"]["period"]) + " " + str(scoring_play["about"]["periodTime"]) + " left")
+        #             elif scoring_play["coordinates"]["x"] < -25:
+        #                 if scoring_play["team"]["id"] == game_data["team_id"]:
+        #                     print(str(scoring_play["about"]["period"]) + " " + str(scoring_play["about"]["periodTime"]) + " right")
+        #     elif scoring_play["result"]["event"] in ["Blocked Shot"]:
+        #         if "coordinates" in scoring_play and scoring_play["coordinates"] and "x" in scoring_play["coordinates"] and "y" in scoring_play["coordinates"]:
+        #             if scoring_play["coordinates"]["x"] > 25:
+        #                 if scoring_play["team"]["id"] == game_data["team_id"]:
+        #                     print(str(scoring_play["about"]["period"]) + " " + str(scoring_play["about"]["periodTime"]) + " right")
+        #             elif scoring_play["coordinates"]["x"] < -25:
+        #                 if scoring_play["team"]["id"] == game_data["team_id"]:
+        #                     print(str(scoring_play["about"]["period"]) + " " + str(scoring_play["about"]["periodTime"]) + " left")
     
-        if not period_side_map:
+        if not period_side_map and not str(row_data["NHLGameLink"]) in manual_period_map:
             periods = set()
             for scoring_play in scoring_plays:
                 periods.add(scoring_play["about"]["period"])
@@ -16631,24 +16656,24 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                     if scoring_play["about"]["period"] == period:
                         if scoring_play["result"]["event"] in ["Goal", "Shot", "Missed Shot"]:
                             if "coordinates" in scoring_play and scoring_play["coordinates"] and "x" in scoring_play["coordinates"] and "y" in scoring_play["coordinates"]:
-                                if scoring_play["coordinates"]["x"] > 0:
+                                if scoring_play["coordinates"]["x"] > 25:
                                     if scoring_play["team"]["id"] == game_data["team_id"]:
                                         left_side += 1
                                     else:
                                         right_side += 1
-                                else:
+                                elif scoring_play["coordinates"]["x"] < -25:
                                     if scoring_play["team"]["id"] == game_data["team_id"]:
                                         right_side += 1
                                     else:
                                         left_side += 1
                         elif scoring_play["result"]["event"] in ["Blocked Shot"]:
                             if "coordinates" in scoring_play and scoring_play["coordinates"] and "x" in scoring_play["coordinates"] and "y" in scoring_play["coordinates"]:
-                                if scoring_play["coordinates"]["x"] > 0:
+                                if scoring_play["coordinates"]["x"] > 25:
                                     if scoring_play["team"]["id"] == game_data["team_id"]:
                                         right_side += 1
                                     else:
                                         left_side += 1
-                                else:
+                                elif scoring_play["coordinates"]["x"] < -25:
                                     if scoring_play["team"]["id"] == game_data["team_id"]:
                                         left_side += 1
                                     else:
@@ -16701,8 +16726,13 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
             raw_x_coord = x_coord
             raw_y_coord = y_coord
 
-            rink_side = period_side_map[scoring_play["about"]["period"]][scoring_play["team"]["id"]]
-
+            if str(row_data["NHLGameLink"]) in manual_period_map:
+                for period_map_info in manual_period_map[str(row_data["NHLGameLink"])][str(scoring_play["about"]["period"])]:
+                    if period_time >= period_map_info["start"] and period_time <= period_map_info["end"]:
+                        rink_side = period_map_info["sides"][str(scoring_play["team"]["id"])]
+            else:
+                rink_side = period_side_map[scoring_play["about"]["period"]][scoring_play["team"]["id"]]
+        
             if scoring_play["about"]["period"] == 5 and game_data["is_shootout"] and x_coord < 0:
                 rink_side = "right"
 
