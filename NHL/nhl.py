@@ -8692,7 +8692,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 x_coord = split_vals[0]
                                 y_coord = split_vals[1]
                                 if x_coord == "all":
-                                    x_coord = "0-100"
+                                    x_coord = "-100-100"
                                 if y_coord == "all":
                                     y_coord = "-42.5-42.5"
 
@@ -16689,9 +16689,9 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                 rink_side = "right"
 
             if not zone:
-                if x_coord >= -50 and x_coord <= 50:
+                if x_coord >= -25 and x_coord <= 25:
                     zone = "NZ"
-                elif x_coord > 50:
+                elif x_coord > 25:
                     zone = "OZ" if rink_side == "left" else "DZ"
                 else:
                     zone = "DZ" if rink_side == "left" else "OZ"
