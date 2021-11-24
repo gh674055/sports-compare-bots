@@ -5198,6 +5198,7 @@ qualifier_map = {
     "Pre All-Star" : {},
     "Post All-Star" : {},
     "Sub Query" : {},
+    "Event Sub Query" : {},
     "Day Of Sub Query" : {},
     "Day After Sub Query" : {},
     "Day Before Sub Query" : {},
@@ -6270,7 +6271,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                         og_time_str = time_frame
                         qualifiers = {}
 
-                        last_match = re.finditer(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?((?:sub-query|day-after-sub-query|day-before-sub-query|day-of-sub-query|game-after-sub-query|game-before-sub-query|season-sub-query|season-after-sub-query|season-before-sub-query|w|(?:playing|starting)-with|a|(?:playing|starting)-against|(?:playing|starting)-same-game|prv-w|previous-playing-with|prv-a|previous-playing-against|upc-w|upcoming-playing-with|upc-a|upcoming-playing-against|(?:playing|starting)-same-opponents?|(?:playing|starting)-same-dates?|holidays?|dts|dates|stadium|exact-stadium|arena|exact-arena|pitch-type|exact-pitch-type|hit-trajectory|hit-hardness|city|exact-city|country|exact-country|event-description|exact-event-description|surface|condition|home-plate-umpire|umpire|batting-against|pitching-against|batting-against-first-name|pitching-against-first-name|batting-against-last-name|pitching-against-last-name|facing|facing-first-name|facing-last-name|driven-in|batted-in|back-to-back-with|back-to-back|batting-in-front-of|batting-in-front|batting-ahead|batting-ahead-of|batting-behind|batting-behind-of|batting-next-to|caught-by|stealing-on|on-field-with|on-field-against|event-time|start-time):(?<!\\)\(.*?(?<!\\)\))", time_frame)
+                        last_match = re.finditer(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?((?:sub-query|event-sub-query|day-after-sub-query|day-before-sub-query|day-of-sub-query|game-after-sub-query|game-before-sub-query|season-sub-query|season-after-sub-query|season-before-sub-query|w|(?:playing|starting)-with|a|(?:playing|starting)-against|(?:playing|starting)-same-game|prv-w|previous-playing-with|prv-a|previous-playing-against|upc-w|upcoming-playing-with|upc-a|upcoming-playing-against|(?:playing|starting)-same-opponents?|(?:playing|starting)-same-dates?|holidays?|dts|dates|stadium|exact-stadium|arena|exact-arena|pitch-type|exact-pitch-type|hit-trajectory|hit-hardness|city|exact-city|country|exact-country|event-description|exact-event-description|surface|condition|home-plate-umpire|umpire|batting-against|pitching-against|batting-against-first-name|pitching-against-first-name|batting-against-last-name|pitching-against-last-name|facing|facing-first-name|facing-last-name|driven-in|batted-in|back-to-back-with|back-to-back|batting-in-front-of|batting-in-front|batting-ahead|batting-ahead-of|batting-behind|batting-behind-of|batting-next-to|caught-by|stealing-on|on-field-with|on-field-against|event-time|start-time):(?<!\\)\(.*?(?<!\\)\))", time_frame)
                         for m in last_match:
                             qualifier_obj = {}
                             negate_str = m.group(1)
@@ -6287,7 +6288,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                     "negate" : False
                                 })
 
-                            if qualifier_str.startswith("sub-query:") or qualifier_str.startswith("day-after-sub-query:") or qualifier_str.startswith("day-before-sub-query:") or qualifier_str.startswith("day-of-sub-query:") or qualifier_str.startswith("season-sub-query:") or qualifier_str.startswith("season-after-sub-query:") or qualifier_str.startswith("season-before-sub-query:") or qualifier_str.startswith("w:") or qualifier_str.startswith("playing-with:") or qualifier_str.startswith("a:") or qualifier_str.startswith("game-after-sub-query:") or qualifier_str.startswith("game-before-sub-query:") or qualifier_str.startswith("playing-against:") or qualifier_str.startswith("prv-w:") or qualifier_str.startswith("previous-playing-with:") or qualifier_str.startswith("prv-a:") or qualifier_str.startswith("previous-playing-against:") or qualifier_str.startswith("upc-w:") or qualifier_str.startswith("upcoming-playing-with:") or qualifier_str.startswith("upc-a:") or qualifier_str.startswith("upcoming-playing-against:") or qualifier_str.startswith("playing-same-opponent:") or qualifier_str.startswith("playing-same-opponents:") or qualifier_str.startswith("playing-same-date:") or qualifier_str.startswith("playing-same-dates:") or qualifier_str.startswith("playing-same-game:") or qualifier_str.startswith("starting-same-game:") or qualifier_str.startswith("holiday:") or qualifier_str.startswith("holidays:") or qualifier_str.startswith("dts:") or qualifier_str.startswith("dates:") or qualifier_str.startswith("stadium:") or qualifier_str.startswith("exact-stadium:") or qualifier_str.startswith("arena:") or qualifier_str.startswith("exact-arena:") or qualifier_str.startswith("pitch-type:") or qualifier_str.startswith("exact-pitch-type:") or qualifier_str.startswith("hit-trajectory:") or qualifier_str.startswith("hit-hardness:") or qualifier_str.startswith("city:") or qualifier_str.startswith("exact-city:") or qualifier_str.startswith("country:") or qualifier_str.startswith("exact-country:") or qualifier_str.startswith("event-description:") or qualifier_str.startswith("exact-event-description:") or qualifier_str.startswith("surface:") or qualifier_str.startswith("condition:") or qualifier_str.startswith("home-plate-umpire:") or qualifier_str.startswith("umpire:") or qualifier_str.startswith("batting-against:") or qualifier_str.startswith("pitching-against:") or qualifier_str.startswith("batting-against-first-name:") or qualifier_str.startswith("pitching-against-first-name:") or qualifier_str.startswith("batting-against-last-name:") or qualifier_str.startswith("pitching-against-last-name:") or qualifier_str.startswith("facing:") or qualifier_str.startswith("facing-first-name:") or qualifier_str.startswith("facing-last-name:") or qualifier_str.startswith("driven-in:") or qualifier_str.startswith("batted-in:") or qualifier_str.startswith("back-to-back:") or qualifier_str.startswith("back-to-back-with:") or qualifier_str.startswith("batting-ahead:") or qualifier_str.startswith("batting-ahead-of:") or qualifier_str.startswith("batting-in-front-of:") or qualifier_str.startswith("batting-in-front:") or qualifier_str.startswith("batting-behind:") or qualifier_str.startswith("batting-behind-of:") or qualifier_str.startswith("batting-next-to:") or qualifier_str.startswith("caught-by:") or qualifier_str.startswith("stealing-on:") or qualifier_str.startswith("on-field-with:") or qualifier_str.startswith("on-field-against:"):
+                            if qualifier_str.startswith("sub-query:") or qualifier_str.startswith("event-sub-query:") or qualifier_str.startswith("day-after-sub-query:") or qualifier_str.startswith("day-before-sub-query:") or qualifier_str.startswith("day-of-sub-query:") or qualifier_str.startswith("season-sub-query:") or qualifier_str.startswith("season-after-sub-query:") or qualifier_str.startswith("season-before-sub-query:") or qualifier_str.startswith("w:") or qualifier_str.startswith("playing-with:") or qualifier_str.startswith("a:") or qualifier_str.startswith("game-after-sub-query:") or qualifier_str.startswith("game-before-sub-query:") or qualifier_str.startswith("playing-against:") or qualifier_str.startswith("prv-w:") or qualifier_str.startswith("previous-playing-with:") or qualifier_str.startswith("prv-a:") or qualifier_str.startswith("previous-playing-against:") or qualifier_str.startswith("upc-w:") or qualifier_str.startswith("upcoming-playing-with:") or qualifier_str.startswith("upc-a:") or qualifier_str.startswith("upcoming-playing-against:") or qualifier_str.startswith("playing-same-opponent:") or qualifier_str.startswith("playing-same-opponents:") or qualifier_str.startswith("playing-same-date:") or qualifier_str.startswith("playing-same-dates:") or qualifier_str.startswith("playing-same-game:") or qualifier_str.startswith("starting-same-game:") or qualifier_str.startswith("holiday:") or qualifier_str.startswith("holidays:") or qualifier_str.startswith("dts:") or qualifier_str.startswith("dates:") or qualifier_str.startswith("stadium:") or qualifier_str.startswith("exact-stadium:") or qualifier_str.startswith("arena:") or qualifier_str.startswith("exact-arena:") or qualifier_str.startswith("pitch-type:") or qualifier_str.startswith("exact-pitch-type:") or qualifier_str.startswith("hit-trajectory:") or qualifier_str.startswith("hit-hardness:") or qualifier_str.startswith("city:") or qualifier_str.startswith("exact-city:") or qualifier_str.startswith("country:") or qualifier_str.startswith("exact-country:") or qualifier_str.startswith("event-description:") or qualifier_str.startswith("exact-event-description:") or qualifier_str.startswith("surface:") or qualifier_str.startswith("condition:") or qualifier_str.startswith("home-plate-umpire:") or qualifier_str.startswith("umpire:") or qualifier_str.startswith("batting-against:") or qualifier_str.startswith("pitching-against:") or qualifier_str.startswith("batting-against-first-name:") or qualifier_str.startswith("pitching-against-first-name:") or qualifier_str.startswith("batting-against-last-name:") or qualifier_str.startswith("pitching-against-last-name:") or qualifier_str.startswith("facing:") or qualifier_str.startswith("facing-first-name:") or qualifier_str.startswith("facing-last-name:") or qualifier_str.startswith("driven-in:") or qualifier_str.startswith("batted-in:") or qualifier_str.startswith("back-to-back:") or qualifier_str.startswith("back-to-back-with:") or qualifier_str.startswith("batting-ahead:") or qualifier_str.startswith("batting-ahead-of:") or qualifier_str.startswith("batting-in-front-of:") or qualifier_str.startswith("batting-in-front:") or qualifier_str.startswith("batting-behind:") or qualifier_str.startswith("batting-behind-of:") or qualifier_str.startswith("batting-next-to:") or qualifier_str.startswith("caught-by:") or qualifier_str.startswith("stealing-on:") or qualifier_str.startswith("on-field-with:") or qualifier_str.startswith("on-field-against:"):
                                 if qualifier_str.startswith("w:"):
                                     qual_str = "w:"
                                     qual_type = "Playing With"
@@ -6542,6 +6543,9 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 elif qualifier_str.startswith("sub-query:"):
                                     qual_str = "sub-query:"
                                     qual_type = "Sub Query"
+                                elif qualifier_str.startswith("event-sub-query:"):
+                                    qual_str = "event-sub-query:"
+                                    qual_type = "Event Sub Query"
                                 elif qualifier_str.startswith("day-of-sub-query:"):
                                     qual_str = "day-of-sub-query:"
                                     qual_type = "Day Of Sub Query"
@@ -6934,179 +6938,6 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                                 "end_val" : ordinal_to_number(split_vals[1])
                                             })
                             
-                            if not qual_type in qualifiers:
-                                qualifiers[qual_type] = []
-                            qualifiers[qual_type].append(qualifier_obj)
-
-                            time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
-                        
-                        last_match = re.finditer(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?((?:(?:playing|starting)-with|(?:playing|starting)-against|(?:playing|starting)-same-game|prv-w|previous-playing-with|prv-a|previous-playing-against|upc-w|upcoming-playing-with|upc-a|upcoming-playing-against|(?:playing|starting)-same-opponents?|(?:playing|starting)-same-dates?|batting-against|pitching-against|facing|driven-in|batted-in|back-to-back-with|back-to-back|batting-in-front-of|batting-in-front|batting-ahead|batting-ahead-of|batting-behind|batting-behind-of|batting-next-to|caught-by|stealing-on|on-field-with|on-field-against))\b", time_frame)
-                        for m in last_match:
-                            qualifier_obj = {}
-                            negate_str = m.group(1)
-                            if negate_str:
-                                qualifier_obj["negate"] = True
-                            else:
-                                qualifier_obj["negate"] = False
-
-                            qualifier_str = m.group(2)
-                            if qualifier_str.startswith("starting-"):
-                                qualifier_str = qualifier_str.replace("starting-", "playing-", 1)
-                                qualifiers["Start"] = []
-                                qualifiers["Start"].append({
-                                    "negate" : False
-                                })
-
-                            if qualifier_str.startswith("playing-with") or qualifier_str.startswith("playing-against") or qualifier_str.startswith("playing-same-game") or qualifier_str.startswith("starting-same-game:") or qualifier_str.startswith("prv-w") or qualifier_str.startswith("previous-playing-with") or qualifier_str.startswith("prv-a") or qualifier_str.startswith("previous-playing-against") or qualifier_str.startswith("upc-w") or qualifier_str.startswith("upcoming-playing-with") or qualifier_str.startswith("upc-a") or qualifier_str.startswith("upcoming-playing-against") or qualifier_str.startswith("playing-same-opponent")  or qualifier_str.startswith("playing-same-opponents") or qualifier_str.startswith("playing-same-date") or qualifier_str.startswith("playing-same-dates") or qualifier_str.startswith("batting-against") or qualifier_str.startswith("pitching-against") or qualifier_str.startswith("facing") or qualifier_str.startswith("driven-in") or qualifier_str.startswith("batted-in") or qualifier_str.startswith("back-to-back") or qualifier_str.startswith("back-to-back-with") or qualifier_str.startswith("batting-ahead") or qualifier_str.startswith("batting-ahead-of") or qualifier_str.startswith("batting-in-front-of") or qualifier_str.startswith("batting-in-front") or qualifier_str.startswith("batting-behind") or qualifier_str.startswith("batting-behind-of") or qualifier_str.startswith("batting-next-to") or qualifier_str.startswith("caught-by") or qualifier_str.startswith("stealing-on") or qualifier_str.startswith("on-field-with") or qualifier_str.startswith("on-field-against"):
-                                if qualifier_str.startswith("playing-with"):
-                                    qual_str = "playing-with"
-                                    qual_type = "Playing With"
-                                elif qualifier_str.startswith("playing-against"):
-                                    qual_str = "playing-against"
-                                    qual_type = "Playing Against"
-                                elif qualifier_str.startswith("prv-w"):
-                                    qual_str = "prv-w"
-                                    qual_type = "Previous Playing With"
-                                elif qualifier_str.startswith("previous-playing-with"):
-                                    qual_str = "previous-playing-with"
-                                    qual_type = "Previous Playing With"
-                                elif qualifier_str.startswith("prv-a"):
-                                    qual_str = "playing-against"
-                                    qual_type = "Previous Playing Against"
-                                elif qualifier_str.startswith("previous-playing-against"):
-                                    qual_str = "previous-playing-against"
-                                    qual_type = "Previous Playing Against"
-                                elif qualifier_str.startswith("upc-w"):
-                                    qual_str = "playing-against"
-                                    qual_type = "Upcoming Playing With"
-                                elif qualifier_str.startswith("upcoming-playing-with"):
-                                    qual_str = "upcoming-playing-with"
-                                    qual_type = "Upcoming Playing With"
-                                elif qualifier_str.startswith("upc-a"):
-                                    qual_str = "upc-a"
-                                    qual_type = "Upcoming Playing Against"
-                                elif qualifier_str.startswith("upcoming-playing-against"):
-                                    qual_str = "upcoming-playing-against"
-                                    qual_type = "Upcoming Playing Against"
-                                elif qualifier_str.startswith("playing-same-opponent"):
-                                    qual_str = "playing-same-opponent"
-                                    qual_type = "Playing Same Opponents"
-                                elif qualifier_str.startswith("playing-same-opponents"):
-                                    qual_str = "playing-same-opponents"
-                                    qual_type = "Playing Same Opponents"
-                                elif qualifier_str.startswith("playing-same-date"):
-                                    qual_str = "playing-same-date"
-                                    qual_type = "Playing Same Date"
-                                elif qualifier_str.startswith("playing-same-dates"):
-                                    qual_str = "playing-same-dates"
-                                    qual_type = "Playing Same Date"
-                                elif qualifier_str.startswith("batting-against"):
-                                    qual_str = "batting-against"
-                                    qual_type = "Batting Against"
-                                    player_type["da_type"] = "Batter"
-                                    extra_stats.add("current-stats")
-                                elif qualifier_str.startswith("pitching-against"):
-                                    qual_str = "pitching-against"
-                                    qual_type = "Pitching Against"
-                                    player_type["da_type"] = "Pitcher"
-                                    extra_stats.add("current-stats")
-                                elif qualifier_str.startswith("facing"):
-                                    qual_str = "facing"
-                                    qual_type = "Facing"
-                                    extra_stats.add("current-stats")
-                                elif qualifier_str.startswith("driven-in"):
-                                    qual_str = "driven-in"
-                                    qual_type = "Driven In"
-                                    player_type["da_type"] = "Batter"
-                                    extra_stats.add("current-stats")
-                                    extra_stats.add("no-steals")
-                                    extra_stats.add("show-stat-drivenin")
-                                    extra_stats.add("show-stat-gwdrivenin")
-                                elif qualifier_str.startswith("batted-in"):
-                                    qual_str = "batted-in"
-                                    qual_type = "Batted In"
-                                    player_type["da_type"] = "Batter"
-                                    extra_stats.add("current-stats")
-                                    extra_stats.add("no-steals")
-                                elif qualifier_str.startswith("back-to-back-with"):
-                                    qual_str = "back-to-back-with"
-                                    qual_type = "Back To Back With"
-                                    player_type["da_type"] = "Batter"
-                                    extra_stats.add("current-stats")
-                                elif qualifier_str.startswith("back-to-back"):
-                                    qual_str = "back-to-back"
-                                    qual_type = "Back To Back With"
-                                    player_type["da_type"] = "Batter"
-                                    extra_stats.add("current-stats")
-                                elif qualifier_str.startswith("batting-behind"):
-                                    qual_str = "batting-behind:"
-                                    qual_type = "Batting Behind"
-                                    player_type["da_type"] = "Batter"
-                                    extra_stats.add("current-stats")
-                                elif qualifier_str.startswith("batting-behind-of"):
-                                    qual_str = "batting-behind-of"
-                                    qual_type = "Batting Behind"
-                                    player_type["da_type"] = "Batter"
-                                    extra_stats.add("current-stats")
-                                elif qualifier_str.startswith("batting-in-front-of"):
-                                    qual_str = "batting-in-front-of"
-                                    qual_type = "Batting In Front Of"
-                                    player_type["da_type"] = "Batter"
-                                    extra_stats.add("current-stats")
-                                elif qualifier_str.startswith("batting-in-front"):
-                                    qual_str = "batting-in-front"
-                                    qual_type = "Batting In Front Of"
-                                    player_type["da_type"] = "Batter"
-                                    extra_stats.add("current-stats")
-                                elif qualifier_str.startswith("batting-ahead"):
-                                    qual_str = "batting-ahead"
-                                    qual_type = "Batting In Front Of"
-                                    player_type["da_type"] = "Batter"
-                                    extra_stats.add("current-stats")
-                                elif qualifier_str.startswith("batting-ahead-of"):
-                                    qual_str = "batting-ahead-of"
-                                    qual_type = "Batting In Front Of"
-                                    player_type["da_type"] = "Batter"
-                                    extra_stats.add("current-stats")
-                                elif qualifier_str.startswith("batting-next-to"):
-                                    qual_str = "batting-next-to"
-                                    qual_type = "Batting Next To"
-                                    player_type["da_type"] = "Batter"
-                                    extra_stats.add("current-stats")
-                                elif qualifier_str.startswith("caught-by"):
-                                    qual_str = "caught-by"
-                                    qual_type = "Caught By"
-                                    player_type["da_type"] = "Pitcher"
-                                    extra_stats.add("current-stats")
-                                elif qualifier_str.startswith("stealing-on"):
-                                    qual_str = "stealing-on"
-                                    qual_type = "Stealing On"
-                                    player_type["da_type"] = "Batter"
-                                    extra_stats.add("current-stats")
-                                    extra_stats.add("stolen-base")
-                                elif qualifier_str.startswith("on-field-with"):
-                                    qual_str = "on-field-with"
-                                    qual_type = "On Field With"
-                                    extra_stats.add("current-stats")
-                                elif qualifier_str.startswith("on-field-against"):
-                                    qual_str = "on-field-against"
-                                    qual_type = "On Field Against"
-                                    extra_stats.add("current-stats")
-                                elif qualifier_str.startswith("playing-same-game"):
-                                    qual_str = "playing-same-game:"
-                                    qual_type = "Playing Same Game"
-
-                            if "On Field" in qual_type:
-                                new_values = []
-                                for value in qualifier_obj["values"]:
-                                    new_values.append({
-                                        "pos" : ["ANY"],
-                                        "value" : value
-                                    })
-                                qualifier_obj["values"] = new_values
-                            
-                            qualifier_obj["time_frame_str"] = re.sub(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?((?:(?:playing|starting)-with|(?:playing|starting)-against|(?:playing|starting)-same-game|prv-w|previous-playing-with|prv-a|previous-playing-against|upc-w|upcoming-playing-with|upc-a|upcoming-playing-against|(?:playing|starting)-same-opponents?|(?:playing|starting)-same-dates?|batting-against|pitching-against|facing|driven-in|batted-in|back-to-back-with|back-to-back|batting-in-front-of|batting-in-front|batting-ahead|batting-ahead-of|batting-behind|batting-behind-of|batting-next-to|caught-by|stealing-on|on-field-with|on-field-against|-?starts?|-?started|-?starting|-?ignore-starts?|-?ignore-started?|-?ignore-starting))\b", "", og_time_str)
-
                             if not qual_type in qualifiers:
                                 qualifiers[qual_type] = []
                             qualifiers[qual_type].append(qualifier_obj)
@@ -9906,6 +9737,179 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 qualifiers[qual_type].append(qualifier_obj)
 
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
+                        
+                        last_match = re.finditer(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?((?:(?:playing|starting)-with|(?:playing|starting)-against|(?:playing|starting)-same-game|prv-w|previous-playing-with|prv-a|previous-playing-against|upc-w|upcoming-playing-with|upc-a|upcoming-playing-against|(?:playing|starting)-same-opponents?|(?:playing|starting)-same-dates?|batting-against|pitching-against|facing|driven-in|batted-in|back-to-back-with|back-to-back|batting-in-front-of|batting-in-front|batting-ahead|batting-ahead-of|batting-behind|batting-behind-of|batting-next-to|caught-by|stealing-on|on-field-with|on-field-against))\b", time_frame)
+                        for m in last_match:
+                            qualifier_obj = {}
+                            negate_str = m.group(1)
+                            if negate_str:
+                                qualifier_obj["negate"] = True
+                            else:
+                                qualifier_obj["negate"] = False
+
+                            qualifier_str = m.group(2)
+                            if qualifier_str.startswith("starting-"):
+                                qualifier_str = qualifier_str.replace("starting-", "playing-", 1)
+                                qualifiers["Start"] = []
+                                qualifiers["Start"].append({
+                                    "negate" : False
+                                })
+
+                            if qualifier_str.startswith("playing-with") or qualifier_str.startswith("playing-against") or qualifier_str.startswith("playing-same-game") or qualifier_str.startswith("starting-same-game:") or qualifier_str.startswith("prv-w") or qualifier_str.startswith("previous-playing-with") or qualifier_str.startswith("prv-a") or qualifier_str.startswith("previous-playing-against") or qualifier_str.startswith("upc-w") or qualifier_str.startswith("upcoming-playing-with") or qualifier_str.startswith("upc-a") or qualifier_str.startswith("upcoming-playing-against") or qualifier_str.startswith("playing-same-opponent")  or qualifier_str.startswith("playing-same-opponents") or qualifier_str.startswith("playing-same-date") or qualifier_str.startswith("playing-same-dates") or qualifier_str.startswith("batting-against") or qualifier_str.startswith("pitching-against") or qualifier_str.startswith("facing") or qualifier_str.startswith("driven-in") or qualifier_str.startswith("batted-in") or qualifier_str.startswith("back-to-back") or qualifier_str.startswith("back-to-back-with") or qualifier_str.startswith("batting-ahead") or qualifier_str.startswith("batting-ahead-of") or qualifier_str.startswith("batting-in-front-of") or qualifier_str.startswith("batting-in-front") or qualifier_str.startswith("batting-behind") or qualifier_str.startswith("batting-behind-of") or qualifier_str.startswith("batting-next-to") or qualifier_str.startswith("caught-by") or qualifier_str.startswith("stealing-on") or qualifier_str.startswith("on-field-with") or qualifier_str.startswith("on-field-against"):
+                                if qualifier_str.startswith("playing-with"):
+                                    qual_str = "playing-with"
+                                    qual_type = "Playing With"
+                                elif qualifier_str.startswith("playing-against"):
+                                    qual_str = "playing-against"
+                                    qual_type = "Playing Against"
+                                elif qualifier_str.startswith("prv-w"):
+                                    qual_str = "prv-w"
+                                    qual_type = "Previous Playing With"
+                                elif qualifier_str.startswith("previous-playing-with"):
+                                    qual_str = "previous-playing-with"
+                                    qual_type = "Previous Playing With"
+                                elif qualifier_str.startswith("prv-a"):
+                                    qual_str = "playing-against"
+                                    qual_type = "Previous Playing Against"
+                                elif qualifier_str.startswith("previous-playing-against"):
+                                    qual_str = "previous-playing-against"
+                                    qual_type = "Previous Playing Against"
+                                elif qualifier_str.startswith("upc-w"):
+                                    qual_str = "playing-against"
+                                    qual_type = "Upcoming Playing With"
+                                elif qualifier_str.startswith("upcoming-playing-with"):
+                                    qual_str = "upcoming-playing-with"
+                                    qual_type = "Upcoming Playing With"
+                                elif qualifier_str.startswith("upc-a"):
+                                    qual_str = "upc-a"
+                                    qual_type = "Upcoming Playing Against"
+                                elif qualifier_str.startswith("upcoming-playing-against"):
+                                    qual_str = "upcoming-playing-against"
+                                    qual_type = "Upcoming Playing Against"
+                                elif qualifier_str.startswith("playing-same-opponent"):
+                                    qual_str = "playing-same-opponent"
+                                    qual_type = "Playing Same Opponents"
+                                elif qualifier_str.startswith("playing-same-opponents"):
+                                    qual_str = "playing-same-opponents"
+                                    qual_type = "Playing Same Opponents"
+                                elif qualifier_str.startswith("playing-same-date"):
+                                    qual_str = "playing-same-date"
+                                    qual_type = "Playing Same Date"
+                                elif qualifier_str.startswith("playing-same-dates"):
+                                    qual_str = "playing-same-dates"
+                                    qual_type = "Playing Same Date"
+                                elif qualifier_str.startswith("batting-against"):
+                                    qual_str = "batting-against"
+                                    qual_type = "Batting Against"
+                                    player_type["da_type"] = "Batter"
+                                    extra_stats.add("current-stats")
+                                elif qualifier_str.startswith("pitching-against"):
+                                    qual_str = "pitching-against"
+                                    qual_type = "Pitching Against"
+                                    player_type["da_type"] = "Pitcher"
+                                    extra_stats.add("current-stats")
+                                elif qualifier_str.startswith("facing"):
+                                    qual_str = "facing"
+                                    qual_type = "Facing"
+                                    extra_stats.add("current-stats")
+                                elif qualifier_str.startswith("driven-in"):
+                                    qual_str = "driven-in"
+                                    qual_type = "Driven In"
+                                    player_type["da_type"] = "Batter"
+                                    extra_stats.add("current-stats")
+                                    extra_stats.add("no-steals")
+                                    extra_stats.add("show-stat-drivenin")
+                                    extra_stats.add("show-stat-gwdrivenin")
+                                elif qualifier_str.startswith("batted-in"):
+                                    qual_str = "batted-in"
+                                    qual_type = "Batted In"
+                                    player_type["da_type"] = "Batter"
+                                    extra_stats.add("current-stats")
+                                    extra_stats.add("no-steals")
+                                elif qualifier_str.startswith("back-to-back-with"):
+                                    qual_str = "back-to-back-with"
+                                    qual_type = "Back To Back With"
+                                    player_type["da_type"] = "Batter"
+                                    extra_stats.add("current-stats")
+                                elif qualifier_str.startswith("back-to-back"):
+                                    qual_str = "back-to-back"
+                                    qual_type = "Back To Back With"
+                                    player_type["da_type"] = "Batter"
+                                    extra_stats.add("current-stats")
+                                elif qualifier_str.startswith("batting-behind"):
+                                    qual_str = "batting-behind:"
+                                    qual_type = "Batting Behind"
+                                    player_type["da_type"] = "Batter"
+                                    extra_stats.add("current-stats")
+                                elif qualifier_str.startswith("batting-behind-of"):
+                                    qual_str = "batting-behind-of"
+                                    qual_type = "Batting Behind"
+                                    player_type["da_type"] = "Batter"
+                                    extra_stats.add("current-stats")
+                                elif qualifier_str.startswith("batting-in-front-of"):
+                                    qual_str = "batting-in-front-of"
+                                    qual_type = "Batting In Front Of"
+                                    player_type["da_type"] = "Batter"
+                                    extra_stats.add("current-stats")
+                                elif qualifier_str.startswith("batting-in-front"):
+                                    qual_str = "batting-in-front"
+                                    qual_type = "Batting In Front Of"
+                                    player_type["da_type"] = "Batter"
+                                    extra_stats.add("current-stats")
+                                elif qualifier_str.startswith("batting-ahead"):
+                                    qual_str = "batting-ahead"
+                                    qual_type = "Batting In Front Of"
+                                    player_type["da_type"] = "Batter"
+                                    extra_stats.add("current-stats")
+                                elif qualifier_str.startswith("batting-ahead-of"):
+                                    qual_str = "batting-ahead-of"
+                                    qual_type = "Batting In Front Of"
+                                    player_type["da_type"] = "Batter"
+                                    extra_stats.add("current-stats")
+                                elif qualifier_str.startswith("batting-next-to"):
+                                    qual_str = "batting-next-to"
+                                    qual_type = "Batting Next To"
+                                    player_type["da_type"] = "Batter"
+                                    extra_stats.add("current-stats")
+                                elif qualifier_str.startswith("caught-by"):
+                                    qual_str = "caught-by"
+                                    qual_type = "Caught By"
+                                    player_type["da_type"] = "Pitcher"
+                                    extra_stats.add("current-stats")
+                                elif qualifier_str.startswith("stealing-on"):
+                                    qual_str = "stealing-on"
+                                    qual_type = "Stealing On"
+                                    player_type["da_type"] = "Batter"
+                                    extra_stats.add("current-stats")
+                                    extra_stats.add("stolen-base")
+                                elif qualifier_str.startswith("on-field-with"):
+                                    qual_str = "on-field-with"
+                                    qual_type = "On Field With"
+                                    extra_stats.add("current-stats")
+                                elif qualifier_str.startswith("on-field-against"):
+                                    qual_str = "on-field-against"
+                                    qual_type = "On Field Against"
+                                    extra_stats.add("current-stats")
+                                elif qualifier_str.startswith("playing-same-game"):
+                                    qual_str = "playing-same-game:"
+                                    qual_type = "Playing Same Game"
+
+                            if "On Field" in qual_type:
+                                new_values = []
+                                for value in qualifier_obj["values"]:
+                                    new_values.append({
+                                        "pos" : ["ANY"],
+                                        "value" : value
+                                    })
+                                qualifier_obj["values"] = new_values
+                            
+                            qualifier_obj["time_frame_str"] = re.sub(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?((?:(?:playing|starting)-with|(?:playing|starting)-against|(?:playing|starting)-same-game|prv-w|previous-playing-with|prv-a|previous-playing-against|upc-w|upcoming-playing-with|upc-a|upcoming-playing-against|(?:playing|starting)-same-opponents?|(?:playing|starting)-same-dates?|batting-against|pitching-against|facing|driven-in|batted-in|back-to-back-with|back-to-back|batting-in-front-of|batting-in-front|batting-ahead|batting-ahead-of|batting-behind|batting-behind-of|batting-next-to|caught-by|stealing-on|on-field-with|on-field-against|-?starts?|-?started|-?starting|-?ignore-starts?|-?ignore-started?|-?ignore-starting))\b", "", og_time_str)
+
+                            if not qual_type in qualifiers:
+                                qualifiers[qual_type] = []
+                            qualifiers[qual_type].append(qualifier_obj)
+
+                            time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
 
                         last_match = re.search(r"\b(no(?:t|n)?(?: |-))?(first|1st|last|this|past)?(?: ?(\S*) (innings?-pitched|inning|ip|plate-appearance|pa|batters?-faced|bf|at-bat|ab|pitche?|pit|h|1b|2b|3b|hr|tb|xbh|tob|sb|cs|k|so|po|bb|ibb|hbp|sh|sf|gdp|r|er|rbi)s?)\b", time_frame)
                         if last_match:
@@ -10461,6 +10465,14 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                         for player_str in qual["values"]:
                             for match_name in sub_matching_names:
                                 player_str = determine_player_str(qual, player_type,  "<" + match_name + "> [" + player_str + "]", subbbb_date, "Sub Query")
+                                if player_str not in player_str_set:
+                                    name_count += 1
+                                    player_str_set.add(player_str)
+                if "Event Sub Query" in subbbb_date["qualifiers"]:
+                    for qual in subbbb_date["qualifiers"]["Event Sub Query"]:
+                        for player_str in qual["values"]:
+                            for match_name in sub_matching_names:
+                                player_str = determine_player_str(qual, player_type,  "<" + match_name + "> [" + player_str + "]", subbbb_date, "Event Sub Query")
                                 if player_str not in player_str_set:
                                     name_count += 1
                                     player_str_set.add(player_str)
@@ -11291,6 +11303,8 @@ def handle_against_qual(names, time_frames, player_type, comment_obj, extra_stat
             for time_frame in subbb_frames:
                 if "Sub Query" in time_frame["qualifiers"]:
                     handle_the_quals(time_frame["qualifiers"], player_type, "Sub Query", sub_matching_names, time_frame, "Game", comment_obj, players_map, extra_stats)
+                if "Event Sub Query" in time_frame["qualifiers"]:
+                    handle_the_quals(time_frame["qualifiers"], player_type, "Event Sub Query", sub_matching_names, time_frame, "Event", comment_obj, players_map, extra_stats)
                 if "Day Of Sub Query" in time_frame["qualifiers"]:
                     handle_the_quals(time_frame["qualifiers"], player_type, "Day Of Sub Query", sub_matching_names, time_frame, "Date", comment_obj, players_map, extra_stats)
                 if "Day After Sub Query" in time_frame["qualifiers"]:
@@ -11499,7 +11513,7 @@ def sub_handle_the_quals(players, qualifier, real_player_type, qual_str, player_
         player_datas = handle_player_string(player_str, player_type, None, False, None)[0]
         players_map[player_str] = player_datas
         new_search = True
-
+    
     for player_data in player_datas:
         player_games = {}
         missing_games = False
@@ -11522,6 +11536,8 @@ def sub_handle_the_quals(players, qualifier, real_player_type, qual_str, player_
                     player_games[row["GameLink"]] = True
                 elif key == "Season":
                     player_games[row["Year"]] = True
+                elif key == "Event":
+                    player_games[row["GameLink"]] = row["event_mapping"]
                 elif key == "Date":
                     date = row["Date"]
                     opponent = row["Tm"]
@@ -11562,7 +11578,7 @@ def sub_handle_the_quals(players, qualifier, real_player_type, qual_str, player_
                     if not opponent in player_games:
                         player_games[opponent] = []
                     player_games[opponent].append(date)
-                
+
         for index, player_name in enumerate(player_data["stat_values"]["Player"]):
             players.append({
                 "id" : player_data["ids"][index],
@@ -11601,7 +11617,7 @@ def determine_player_str(qualifier, player_type, player_str, time_frame, qual_st
         player_str = player_str["value"]
     player_str = unescape_string(player_str)
     
-    is_pre_query = "time_frame_str" not in qualifier
+    is_pre_query = "time_frame_str" not in qualifier and not "Sub Query" in qual_str and not re.search(r"(?<!\\)]", player_str)
     if not "<" in player_str:
         player_str = "<" + player_str + ">"
     player_str = "!mlbcompare " + player_str
@@ -11623,14 +11639,21 @@ def determine_player_str(qualifier, player_type, player_str, time_frame, qual_st
         bracket_index = re.search(r"(?<!\\)]", player_str).start()
         player_str = player_str[:bracket_index] + " " + get_time_str(time_frame["time_start"], False) + " to " + get_time_str(time_frame["time_end"], False) + player_str[bracket_index:]
 
-    bracket_index = re.search(r"(?<!\\)]", player_str).start()
     if not qual_str in ["Season Sub Query", "Season After Sub Query", "Season Before Sub Query"]:
+        bracket_index = re.search(r"(?<!\\)]", player_str).start()
         player_str = player_str[:bracket_index] + " force-dates" + player_str[bracket_index:]
 
     if qual_str in ["Driven In", "Batted In", "Back To Back With", "Batting In Front Of", "Batting Behind", "Batting Next To", "Caught By", "Stealing On", "Pitching Against", "Day After Hitting", "Day Before Hitting"]:
+        bracket_index = re.search(r"(?<!\\)]", player_str).start()
         player_str = player_str[:bracket_index] + " batting" + player_str[bracket_index:]
     elif qual_str in ["Batting Against", "Day After Pitching", "Day Before Pitching"]:
+        bracket_index = re.search(r"(?<!\\)]", player_str).start()
         player_str = player_str[:bracket_index] + " pitching" + player_str[bracket_index:]
+
+    if qual_str == "Event Sub Query":
+        bracket_index = re.search(r"(?<!\\)]", player_str).start()
+        player_str = player_str[:bracket_index] + " show-advanced" + player_str[bracket_index:]
+        
     
     if "Ignore Start" not in time_frame["qualifiers"]:
         if "Start" in time_frame["qualifiers"]:
@@ -12007,6 +12030,15 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
 
             if "Sub Query" in time_frame["qualifiers"]:
                 for qualifier in time_frame["qualifiers"]["Sub Query"]:
+                    for player in qualifier["values"]:
+                        if player["missing_games"]:
+                            any_missing_games = True
+                        if player["missing_salary"]:
+                            any_missing_salary = True
+                        if player["missing_inf"]:
+                            any_missing_inf = True
+            if "Event Sub Query" in time_frame["qualifiers"]:
+                for qualifier in time_frame["qualifiers"]["Event Sub Query"]:
                     for player in qualifier["values"]:
                         if player["missing_games"]:
                             any_missing_games = True
@@ -13189,7 +13221,7 @@ def determine_raw_str(subbb_frame):
                         if qual_obj["negate"]:
                             qual_str += "Not "
                         qual_str += player.title()
-                elif qualifier == "Sub Query" or qualifier == "Day Of Sub Query" or qualifier == "Day After Sub Query" or qualifier == "Day Before Sub Query" or qualifier == "Game After Sub Query" or qualifier == "Game Before Sub Query" or qualifier == "Season Sub Query" or qualifier == "Season After Sub Query" or qualifier == "Season Before Sub Query":
+                elif qualifier == "Sub Query" or qualifier == "Event Sub Query" or qualifier == "Day Of Sub Query" or qualifier == "Day After Sub Query" or qualifier == "Day Before Sub Query" or qualifier == "Game After Sub Query" or qualifier == "Game Before Sub Query" or qualifier == "Season Sub Query" or qualifier == "Season After Sub Query" or qualifier == "Season Before Sub Query":
                     for player in qual_obj["values"]:
                         if not sub_sub_first:
                             qual_str += " + "
@@ -13775,7 +13807,7 @@ def handle_player_data(player_data, time_frame, player_type, player_page, valid_
     if not "hide-advanced" in extra_stats or (has_result_stat_qual or "Stadium" in time_frame["qualifiers"] or "Exact Stadium" in time_frame["qualifiers"] or "Start Time" in time_frame["qualifiers"] or "Local Start Time" in time_frame["qualifiers"] or "Game Number" in time_frame["qualifiers"] or "Exact City" in time_frame["qualifiers"] or "City" in time_frame["qualifiers"] or "Exact State" in time_frame["qualifiers"] or "State" in time_frame["qualifiers"] or "Exact Time Zone" in time_frame["qualifiers"] or "Time Zone" in time_frame["qualifiers"] or "Exact Country" in time_frame["qualifiers"] or "Country" in time_frame["qualifiers"] or "Surface" in time_frame["qualifiers"] or "Condition" in time_frame["qualifiers"] or "Temperature" in time_frame["qualifiers"] or "Wind" in time_frame["qualifiers"] or "Umpire" in time_frame["qualifiers"] or "Home Plate Umpire" in time_frame["qualifiers"] or "run-support-record" in extra_stats or "run-support" in extra_stats or "advanced-runner" in extra_stats or "exit-record" in extra_stats):
         if ("Event Stat" in time_frame["qualifiers"] or "Event Stat Reversed" in time_frame["qualifiers"] or "Event Stats" in time_frame["qualifiers"] or "Event Stats Reversed" in time_frame["qualifiers"]):
             all_rows, missing_games = handle_mlb_game_stats_single_thread(all_rows, time_frame["qualifiers"], player_data, player_type, missing_games, extra_stats)
-        elif has_result_stat_qual or "Facing Lefty" in time_frame["qualifiers"] or "Facing Righty" in time_frame["qualifiers"] or "Batting Lefty" in time_frame["qualifiers"] or "Batting Righty" in time_frame["qualifiers"] or "Pitching Lefty" in time_frame["qualifiers"] or "Pitching Righty" in time_frame["qualifiers"] or "Stadium" in time_frame["qualifiers"] or "Start Time" in time_frame["qualifiers"] or "Local Start Time" in time_frame["qualifiers"] or "Game Number" in time_frame["qualifiers"] or "Event Formula" in time_frame["qualifiers"] or "Exact Pitch Type" in time_frame["qualifiers"] or "Pitch Type" in time_frame["qualifiers"] or "Exact Event Type" in time_frame["qualifiers"] or "Local Event Time" in time_frame["qualifiers"] or "Event Time" in time_frame["qualifiers"] or "Event Type" in time_frame["qualifiers"] or "Previous Exact Event Type" in time_frame["qualifiers"] or "Previous Event Type" in time_frame["qualifiers"] or "Upcoming Exact Player Event Type" in time_frame["qualifiers"] or "Upcoming Player Event Type" in time_frame["qualifiers"] or "Previous Exact Player Event Type" in time_frame["qualifiers"] or "Previous Player Event Type" in time_frame["qualifiers"] or "Upcoming Exact Event Type" in time_frame["qualifiers"] or "Upcoming Event Type" in time_frame["qualifiers"] or "Exact City" in time_frame["qualifiers"] or "City" in time_frame["qualifiers"] or "Exact State" in time_frame["qualifiers"] or "State" in time_frame["qualifiers"] or "Exact Time Zone" in time_frame["qualifiers"] or "Time Zone" in time_frame["qualifiers"] or "Exact Country" in time_frame["qualifiers"] or "Country" in time_frame["qualifiers"] or "Exact Event Description" in time_frame["qualifiers"] or "Event Description" in time_frame["qualifiers"] or "Hit Trajectory" in time_frame["qualifiers"] or "Hit Hardness" in time_frame["qualifiers"] or "Exact Stadium" in time_frame["qualifiers"] or "Facing Stat Rank" in time_frame["qualifiers"] or "Facing League Stat Rank" in time_frame["qualifiers"] or "Facing AL Stat Rank" in time_frame["qualifiers"] or "Facing NL Stat Rank" in time_frame["qualifiers"] or "Facing Stat Percent" in time_frame["qualifiers"] or "Facing League Stat Percent" in time_frame["qualifiers"] or "Facing AL Stat Percent" in time_frame["qualifiers"] or "Facing NL Stat Percent" in time_frame["qualifiers"] or "Facing Stat" in time_frame["qualifiers"] or "Facing AL Stat" in time_frame["qualifiers"] or "Facing NL Stat" in time_frame["qualifiers"] or "Batting In Front Of Stat Rank" in time_frame["qualifiers"] or "Batting In Front Of League Stat Rank" in time_frame["qualifiers"] or "Batting In Front Of AL Stat Rank" in time_frame["qualifiers"] or "Batting In Front Of NL Stat Rank" in time_frame["qualifiers"] or "Batting In Front Of Stat Percent" in time_frame["qualifiers"] or "Batting In Front Of League Stat Percent" in time_frame["qualifiers"] or "Batting In Front Of AL Stat Percent" in time_frame["qualifiers"] or "Batting In Front Of NL Stat Percent" in time_frame["qualifiers"] or "Batting In Front Of Stat" in time_frame["qualifiers"] or "Batting In Front Of AL Stat" in time_frame["qualifiers"] or "Batting In Front Of NL Stat" in time_frame["qualifiers"] or "Batting Behind Stat Rank" in time_frame["qualifiers"] or "Batting Behind League Stat Rank" in time_frame["qualifiers"] or "Batting Behind AL Stat Rank" in time_frame["qualifiers"] or "Batting Behind NL Stat Rank" in time_frame["qualifiers"] or "Batting Behind Stat Percent" in time_frame["qualifiers"] or "Batting Behind League Stat Percent" in time_frame["qualifiers"] or "Batting Behind AL Stat Percent" in time_frame["qualifiers"] or "Batting Behind NL Stat Percent" in time_frame["qualifiers"] or "Batting Behind Stat" in time_frame["qualifiers"] or "Batting Behind AL Stat" in time_frame["qualifiers"] or "Batting Behind NL Stat" in time_frame["qualifiers"] or "Batting Next To Stat Rank" in time_frame["qualifiers"] or "Batting Next To League Stat Rank" in time_frame["qualifiers"] or "Batting Next To AL Stat Rank" in time_frame["qualifiers"] or "Batting Next To NL Stat Rank" in time_frame["qualifiers"] or "Batting Next To Stat Percent" in time_frame["qualifiers"] or "Batting Next To League Stat Percent" in time_frame["qualifiers"] or "Batting Next To AL Stat Percent" in time_frame["qualifiers"] or "Batting Next To NL Stat Percent" in time_frame["qualifiers"] or "Batting Next To Stat" in time_frame["qualifiers"] or "Batting Next To AL Stat" in time_frame["qualifiers"] or "Batting Next To NL Stat" in time_frame["qualifiers"] or "Inning Stat" in time_frame["qualifiers"] or "Batting Against" in time_frame["qualifiers"] or "Pitching Against" in time_frame["qualifiers"] or "Batting Against First Name" in time_frame["qualifiers"] or "Pitching Against First Name" in time_frame["qualifiers"] or "Batting Against Last Name" in time_frame["qualifiers"] or "Pitching Against Last Name" in time_frame["qualifiers"] or "Driven In" in time_frame["qualifiers"] or "Batted In" in time_frame["qualifiers"] or "Back To Back With" in time_frame["qualifiers"] or "Batting In Front Of" in time_frame["qualifiers"] or "Batting Behind" in time_frame["qualifiers"] or "Batting Next To" in time_frame["qualifiers"] or "Caught By" in time_frame["qualifiers"] or "Stealing On" in time_frame["qualifiers"] or "On Field With" in time_frame["qualifiers"] or "On Field Against" in time_frame["qualifiers"] or "Position" in time_frame["qualifiers"] or "Hit Location" in time_frame["qualifiers"] or "Exact Hit Location" in time_frame["qualifiers"] or "Facing Position" in time_frame["qualifiers"] or "Facing Primary Position" in time_frame["qualifiers"] or "Facing Main Position" in time_frame["qualifiers"] or "Bases Empty" in time_frame["qualifiers"] or "Men On Base" in time_frame["qualifiers"] or "Walk Off" in time_frame["qualifiers"] or "Inside The Park HR" in time_frame["qualifiers"] or "Walk Off Opportunity" in time_frame["qualifiers"] or "Game Tying" in time_frame["qualifiers"] or "Late" in time_frame["qualifiers"] or "Close" in time_frame["qualifiers"] or "Game Tying Opportunity" in time_frame["qualifiers"] or "Go Ahead" in time_frame["qualifiers"] or "Go Ahead Opportunity" in time_frame["qualifiers"] or "Go Ahead Or Game Tying" in time_frame["qualifiers"] or "Go Ahead Or Game Tying Opportunity" in time_frame["qualifiers"] or "Game Winning" in time_frame["qualifiers"] or "Tying On Deck" in time_frame["qualifiers"] or "Winning On Deck" in time_frame["qualifiers"] or "Tying At Bat" in time_frame["qualifiers"] or "Winning At Bat" in time_frame["qualifiers"] or "Tying In Scoring" in time_frame["qualifiers"] or "Winning In Scoring" in time_frame["qualifiers"] or "Tying On Base" in time_frame["qualifiers"] or "Winning On Base" in time_frame["qualifiers"] or "Last Inning" in time_frame["qualifiers"] or "Last Out" in time_frame["qualifiers"] or "Last Batter" in time_frame["qualifiers"] or "Extra Innings" in time_frame["qualifiers"] or "RISP" in time_frame["qualifiers"] or "Pitcher First Batter Faced" in time_frame["qualifiers"] or "Batter First Plate Appearance" in time_frame["qualifiers"]  or "Pitcher Last Batter Faced" in time_frame["qualifiers"] or "Batter Last Plate Appearance" in time_frame["qualifiers"] or "Facing Pitcher" in time_frame["qualifiers"] or "Facing Position Player" in time_frame["qualifiers"] or "Stealing Second" in time_frame["qualifiers"] or "Stealing Third" in time_frame["qualifiers"] or "Stealing Home" in time_frame["qualifiers"] or "Bunting" in time_frame["qualifiers"] or "Fastball" in time_frame["qualifiers"] or "Out Of Zone" in time_frame["qualifiers"] or "In Zone" in time_frame["qualifiers"] or "Breaking" in time_frame["qualifiers"] or "Offspeed" in time_frame["qualifiers"] or "Pinch Hitting" in time_frame["qualifiers"] or "Facing Starter" in time_frame["qualifiers"] or "Facing Reliever" in time_frame["qualifiers"] or "Leading Off Inning" in time_frame["qualifiers"] or "Inning Started" in time_frame["qualifiers"] or "Leading Off Game" in time_frame["qualifiers"] or "Leading Off Whole Game" in time_frame["qualifiers"] or "Swung At First Pitch" in time_frame["qualifiers"] or "First Pitch" in time_frame["qualifiers"] or "Batter Ahead" in time_frame["qualifiers"] or "Even Count" in time_frame["qualifiers"] or "Pitcher Ahead" in time_frame["qualifiers"] or "After Batter Ahead" in time_frame["qualifiers"] or "After Even Count" in time_frame["qualifiers"] or "After Pitcher Ahead" in time_frame["qualifiers"] or "Bottom Inning" in time_frame["qualifiers"] or "Top Inning" in time_frame["qualifiers"] or "Full Count" in time_frame["qualifiers"] or "Man On First" in time_frame["qualifiers"] or "Man On Second" in time_frame["qualifiers"] or "Man On Third" in time_frame["qualifiers"] or "Bases Loaded" in time_frame["qualifiers"] or "Ending Outs" in time_frame["qualifiers"] or "Outs" in time_frame["qualifiers"] or "Outs Remaining" in time_frame["qualifiers"] or "Swinging On Strikes" in time_frame["qualifiers"] or "Swinging On Balls" in time_frame["qualifiers"] or "After Swinging On Strikes" in time_frame["qualifiers"] or "After Swinging On Balls" in time_frame["qualifiers"] or "After Strikes" in time_frame["qualifiers"] or "After Balls" in time_frame["qualifiers"] or "Strikes" in time_frame["qualifiers"] or "Balls" in time_frame["qualifiers"] or "Runs" in time_frame["qualifiers"] or "Play Outs" in time_frame["qualifiers"] or "RBIs" in time_frame["qualifiers"] or "Number Drove In" in time_frame["qualifiers"] or "Pitch Speed" in time_frame["qualifiers"] or "Pitch Zone" in time_frame["qualifiers"] or "Pitch Spin" in time_frame["qualifiers"] or "Exit Velocity" in time_frame["qualifiers"] or "Hit Distance" in time_frame["qualifiers"] or "Launch Angle" in time_frame["qualifiers"] or "Inning" in time_frame["qualifiers"] or "Inning Reversed" in time_frame["qualifiers"] or "Scheduled Inning Reversed" in time_frame["qualifiers"] or "Pitching Against Batting Order" in time_frame["qualifiers"] or "Count" in time_frame["qualifiers"] or "After Count" in time_frame["qualifiers"] or "After Swinging On Count" in time_frame["qualifiers"] or "Swinging On Count" in time_frame["qualifiers"] or "Surface" in time_frame["qualifiers"] or "Condition" in time_frame["qualifiers"] or "Temperature" in time_frame["qualifiers"] or "Wind" in time_frame["qualifiers"] or "Umpire" in time_frame["qualifiers"] or "Home Plate Umpire" in time_frame["qualifiers"] or "Team Score" in time_frame["qualifiers"] or "Ending Team Score" in time_frame["qualifiers"] or "Game Pitch Count" in time_frame["qualifiers"] or "Team Pitch Count" in time_frame["qualifiers"] or "Pitch Count" in time_frame["qualifiers"] or "Pitcher Batters Faced" in time_frame["qualifiers"] or "Batter Plate Appearance" in time_frame["qualifiers"] or "Pitcher Batters Faced Reversed" in time_frame["qualifiers"] or "Batter Plate Appearance Reversed" in time_frame["qualifiers"] or "Starting Pitch Count" in time_frame["qualifiers"] or "At Bat Pitch Count" in time_frame["qualifiers"] or "Ending Innings Pitched" in time_frame["qualifiers"] or "Innings Pitched" in time_frame["qualifiers"] or "Men On Base" in time_frame["qualifiers"] or "Time Facing Opponent" in time_frame["qualifiers"] or "Time Through Lineup" in time_frame["qualifiers"] or "Number Of Men On Base" in time_frame["qualifiers"] or "Number Of Men In Scoring" in time_frame["qualifiers"] or "Run Support" in time_frame["qualifiers"] or "Opponent Score" in time_frame["qualifiers"] or "Score Margin" in time_frame["qualifiers"] or "Score Difference" in time_frame["qualifiers"] or "Ending Opponent Score" in time_frame["qualifiers"] or "Ending Score Margin" in time_frame["qualifiers"] or "Ending Score Difference" in time_frame["qualifiers"] or "current-stats" in extra_stats or "run-support-record" in extra_stats or "run-support" in extra_stats or "advanced-runner" in extra_stats or "exit-record" in extra_stats:
+        elif has_result_stat_qual or "Facing Lefty" in time_frame["qualifiers"] or "Facing Righty" in time_frame["qualifiers"] or "Batting Lefty" in time_frame["qualifiers"] or "Batting Righty" in time_frame["qualifiers"] or "Pitching Lefty" in time_frame["qualifiers"] or "Pitching Righty" in time_frame["qualifiers"] or "Stadium" in time_frame["qualifiers"] or "Start Time" in time_frame["qualifiers"] or "Local Start Time" in time_frame["qualifiers"] or "Game Number" in time_frame["qualifiers"] or "Event Formula" in time_frame["qualifiers"] or "Exact Pitch Type" in time_frame["qualifiers"] or "Pitch Type" in time_frame["qualifiers"] or "Exact Event Type" in time_frame["qualifiers"] or "Local Event Time" in time_frame["qualifiers"] or "Event Time" in time_frame["qualifiers"] or "Event Type" in time_frame["qualifiers"] or "Previous Exact Event Type" in time_frame["qualifiers"] or "Previous Event Type" in time_frame["qualifiers"] or "Upcoming Exact Player Event Type" in time_frame["qualifiers"] or "Upcoming Player Event Type" in time_frame["qualifiers"] or "Previous Exact Player Event Type" in time_frame["qualifiers"] or "Previous Player Event Type" in time_frame["qualifiers"] or "Upcoming Exact Event Type" in time_frame["qualifiers"] or "Upcoming Event Type" in time_frame["qualifiers"] or "Exact City" in time_frame["qualifiers"] or "City" in time_frame["qualifiers"] or "Exact State" in time_frame["qualifiers"] or "State" in time_frame["qualifiers"] or "Exact Time Zone" in time_frame["qualifiers"] or "Time Zone" in time_frame["qualifiers"] or "Exact Country" in time_frame["qualifiers"] or "Country" in time_frame["qualifiers"] or "Exact Event Description" in time_frame["qualifiers"] or "Event Description" in time_frame["qualifiers"] or "Hit Trajectory" in time_frame["qualifiers"] or "Hit Hardness" in time_frame["qualifiers"] or "Exact Stadium" in time_frame["qualifiers"] or "Facing Stat Rank" in time_frame["qualifiers"] or "Facing League Stat Rank" in time_frame["qualifiers"] or "Facing AL Stat Rank" in time_frame["qualifiers"] or "Facing NL Stat Rank" in time_frame["qualifiers"] or "Facing Stat Percent" in time_frame["qualifiers"] or "Facing League Stat Percent" in time_frame["qualifiers"] or "Facing AL Stat Percent" in time_frame["qualifiers"] or "Facing NL Stat Percent" in time_frame["qualifiers"] or "Facing Stat" in time_frame["qualifiers"] or "Facing AL Stat" in time_frame["qualifiers"] or "Facing NL Stat" in time_frame["qualifiers"] or "Batting In Front Of Stat Rank" in time_frame["qualifiers"] or "Batting In Front Of League Stat Rank" in time_frame["qualifiers"] or "Batting In Front Of AL Stat Rank" in time_frame["qualifiers"] or "Batting In Front Of NL Stat Rank" in time_frame["qualifiers"] or "Batting In Front Of Stat Percent" in time_frame["qualifiers"] or "Batting In Front Of League Stat Percent" in time_frame["qualifiers"] or "Batting In Front Of AL Stat Percent" in time_frame["qualifiers"] or "Batting In Front Of NL Stat Percent" in time_frame["qualifiers"] or "Batting In Front Of Stat" in time_frame["qualifiers"] or "Batting In Front Of AL Stat" in time_frame["qualifiers"] or "Batting In Front Of NL Stat" in time_frame["qualifiers"] or "Batting Behind Stat Rank" in time_frame["qualifiers"] or "Batting Behind League Stat Rank" in time_frame["qualifiers"] or "Batting Behind AL Stat Rank" in time_frame["qualifiers"] or "Batting Behind NL Stat Rank" in time_frame["qualifiers"] or "Batting Behind Stat Percent" in time_frame["qualifiers"] or "Batting Behind League Stat Percent" in time_frame["qualifiers"] or "Batting Behind AL Stat Percent" in time_frame["qualifiers"] or "Batting Behind NL Stat Percent" in time_frame["qualifiers"] or "Batting Behind Stat" in time_frame["qualifiers"] or "Batting Behind AL Stat" in time_frame["qualifiers"] or "Batting Behind NL Stat" in time_frame["qualifiers"] or "Batting Next To Stat Rank" in time_frame["qualifiers"] or "Batting Next To League Stat Rank" in time_frame["qualifiers"] or "Batting Next To AL Stat Rank" in time_frame["qualifiers"] or "Batting Next To NL Stat Rank" in time_frame["qualifiers"] or "Batting Next To Stat Percent" in time_frame["qualifiers"] or "Batting Next To League Stat Percent" in time_frame["qualifiers"] or "Batting Next To AL Stat Percent" in time_frame["qualifiers"] or "Batting Next To NL Stat Percent" in time_frame["qualifiers"] or "Batting Next To Stat" in time_frame["qualifiers"] or "Batting Next To AL Stat" in time_frame["qualifiers"] or "Batting Next To NL Stat" in time_frame["qualifiers"] or "Inning Stat" in time_frame["qualifiers"] or "Batting Against" in time_frame["qualifiers"] or "Pitching Against" in time_frame["qualifiers"] or "Batting Against First Name" in time_frame["qualifiers"] or "Pitching Against First Name" in time_frame["qualifiers"] or "Batting Against Last Name" in time_frame["qualifiers"] or "Pitching Against Last Name" in time_frame["qualifiers"] or "Driven In" in time_frame["qualifiers"] or "Batted In" in time_frame["qualifiers"] or "Back To Back With" in time_frame["qualifiers"] or "Batting In Front Of" in time_frame["qualifiers"] or "Batting Behind" in time_frame["qualifiers"] or "Batting Next To" in time_frame["qualifiers"] or "Caught By" in time_frame["qualifiers"] or "Stealing On" in time_frame["qualifiers"] or "On Field With" in time_frame["qualifiers"] or "On Field Against" in time_frame["qualifiers"] or "Position" in time_frame["qualifiers"] or "Hit Location" in time_frame["qualifiers"] or "Exact Hit Location" in time_frame["qualifiers"] or "Facing Position" in time_frame["qualifiers"] or "Facing Primary Position" in time_frame["qualifiers"] or "Facing Main Position" in time_frame["qualifiers"] or "Bases Empty" in time_frame["qualifiers"] or "Men On Base" in time_frame["qualifiers"] or "Walk Off" in time_frame["qualifiers"] or "Inside The Park HR" in time_frame["qualifiers"] or "Walk Off Opportunity" in time_frame["qualifiers"] or "Game Tying" in time_frame["qualifiers"] or "Late" in time_frame["qualifiers"] or "Close" in time_frame["qualifiers"] or "Game Tying Opportunity" in time_frame["qualifiers"] or "Go Ahead" in time_frame["qualifiers"] or "Go Ahead Opportunity" in time_frame["qualifiers"] or "Go Ahead Or Game Tying" in time_frame["qualifiers"] or "Go Ahead Or Game Tying Opportunity" in time_frame["qualifiers"] or "Game Winning" in time_frame["qualifiers"] or "Tying On Deck" in time_frame["qualifiers"] or "Winning On Deck" in time_frame["qualifiers"] or "Tying At Bat" in time_frame["qualifiers"] or "Winning At Bat" in time_frame["qualifiers"] or "Tying In Scoring" in time_frame["qualifiers"] or "Winning In Scoring" in time_frame["qualifiers"] or "Tying On Base" in time_frame["qualifiers"] or "Winning On Base" in time_frame["qualifiers"] or "Last Inning" in time_frame["qualifiers"] or "Last Out" in time_frame["qualifiers"] or "Last Batter" in time_frame["qualifiers"] or "Extra Innings" in time_frame["qualifiers"] or "RISP" in time_frame["qualifiers"] or "Event Sub Query" in time_frame["qualifiers"] or "Pitcher First Batter Faced" in time_frame["qualifiers"] or "Batter First Plate Appearance" in time_frame["qualifiers"]  or "Pitcher Last Batter Faced" in time_frame["qualifiers"] or "Batter Last Plate Appearance" in time_frame["qualifiers"] or "Facing Pitcher" in time_frame["qualifiers"] or "Facing Position Player" in time_frame["qualifiers"] or "Stealing Second" in time_frame["qualifiers"] or "Stealing Third" in time_frame["qualifiers"] or "Stealing Home" in time_frame["qualifiers"] or "Bunting" in time_frame["qualifiers"] or "Fastball" in time_frame["qualifiers"] or "Out Of Zone" in time_frame["qualifiers"] or "In Zone" in time_frame["qualifiers"] or "Breaking" in time_frame["qualifiers"] or "Offspeed" in time_frame["qualifiers"] or "Pinch Hitting" in time_frame["qualifiers"] or "Facing Starter" in time_frame["qualifiers"] or "Facing Reliever" in time_frame["qualifiers"] or "Leading Off Inning" in time_frame["qualifiers"] or "Inning Started" in time_frame["qualifiers"] or "Leading Off Game" in time_frame["qualifiers"] or "Leading Off Whole Game" in time_frame["qualifiers"] or "Swung At First Pitch" in time_frame["qualifiers"] or "First Pitch" in time_frame["qualifiers"] or "Batter Ahead" in time_frame["qualifiers"] or "Even Count" in time_frame["qualifiers"] or "Pitcher Ahead" in time_frame["qualifiers"] or "After Batter Ahead" in time_frame["qualifiers"] or "After Even Count" in time_frame["qualifiers"] or "After Pitcher Ahead" in time_frame["qualifiers"] or "Bottom Inning" in time_frame["qualifiers"] or "Top Inning" in time_frame["qualifiers"] or "Full Count" in time_frame["qualifiers"] or "Man On First" in time_frame["qualifiers"] or "Man On Second" in time_frame["qualifiers"] or "Man On Third" in time_frame["qualifiers"] or "Bases Loaded" in time_frame["qualifiers"] or "Ending Outs" in time_frame["qualifiers"] or "Outs" in time_frame["qualifiers"] or "Outs Remaining" in time_frame["qualifiers"] or "Swinging On Strikes" in time_frame["qualifiers"] or "Swinging On Balls" in time_frame["qualifiers"] or "After Swinging On Strikes" in time_frame["qualifiers"] or "After Swinging On Balls" in time_frame["qualifiers"] or "After Strikes" in time_frame["qualifiers"] or "After Balls" in time_frame["qualifiers"] or "Strikes" in time_frame["qualifiers"] or "Balls" in time_frame["qualifiers"] or "Runs" in time_frame["qualifiers"] or "Play Outs" in time_frame["qualifiers"] or "RBIs" in time_frame["qualifiers"] or "Number Drove In" in time_frame["qualifiers"] or "Pitch Speed" in time_frame["qualifiers"] or "Pitch Zone" in time_frame["qualifiers"] or "Pitch Spin" in time_frame["qualifiers"] or "Exit Velocity" in time_frame["qualifiers"] or "Hit Distance" in time_frame["qualifiers"] or "Launch Angle" in time_frame["qualifiers"] or "Inning" in time_frame["qualifiers"] or "Inning Reversed" in time_frame["qualifiers"] or "Scheduled Inning Reversed" in time_frame["qualifiers"] or "Pitching Against Batting Order" in time_frame["qualifiers"] or "Count" in time_frame["qualifiers"] or "After Count" in time_frame["qualifiers"] or "After Swinging On Count" in time_frame["qualifiers"] or "Swinging On Count" in time_frame["qualifiers"] or "Surface" in time_frame["qualifiers"] or "Condition" in time_frame["qualifiers"] or "Temperature" in time_frame["qualifiers"] or "Wind" in time_frame["qualifiers"] or "Umpire" in time_frame["qualifiers"] or "Home Plate Umpire" in time_frame["qualifiers"] or "Team Score" in time_frame["qualifiers"] or "Ending Team Score" in time_frame["qualifiers"] or "Game Pitch Count" in time_frame["qualifiers"] or "Team Pitch Count" in time_frame["qualifiers"] or "Pitch Count" in time_frame["qualifiers"] or "Pitcher Batters Faced" in time_frame["qualifiers"] or "Batter Plate Appearance" in time_frame["qualifiers"] or "Pitcher Batters Faced Reversed" in time_frame["qualifiers"] or "Batter Plate Appearance Reversed" in time_frame["qualifiers"] or "Starting Pitch Count" in time_frame["qualifiers"] or "At Bat Pitch Count" in time_frame["qualifiers"] or "Ending Innings Pitched" in time_frame["qualifiers"] or "Innings Pitched" in time_frame["qualifiers"] or "Men On Base" in time_frame["qualifiers"] or "Time Facing Opponent" in time_frame["qualifiers"] or "Time Through Lineup" in time_frame["qualifiers"] or "Number Of Men On Base" in time_frame["qualifiers"] or "Number Of Men In Scoring" in time_frame["qualifiers"] or "Run Support" in time_frame["qualifiers"] or "Opponent Score" in time_frame["qualifiers"] or "Score Margin" in time_frame["qualifiers"] or "Score Difference" in time_frame["qualifiers"] or "Ending Opponent Score" in time_frame["qualifiers"] or "Ending Score Margin" in time_frame["qualifiers"] or "Ending Score Difference" in time_frame["qualifiers"] or "current-stats" in extra_stats or "run-support-record" in extra_stats or "run-support" in extra_stats or "advanced-runner" in extra_stats or "exit-record" in extra_stats:
             all_rows, missing_games = handle_mlb_game_stats(all_rows, time_frame["qualifiers"], player_data, player_type, missing_games, extra_stats)
 
     if time_frame["qualifiers"]:
@@ -24443,6 +24475,17 @@ def handle_mlb_game_stats(all_rows, qualifiers, player_data, player_type, missin
                 
                     if not has_match:
                         games_to_skip.add(row_data["GameLink"])
+    if "Event Sub Query" in qualifiers:
+        for row_data in all_rows:
+            for qual_object in qualifiers["Event Sub Query"]:
+                if not qual_object["negate"]:
+                    has_match = False
+                    for player in qual_object["values"]:
+                        if row_data["GameLink"] in player["games"]:
+                            has_match = True
+                
+                    if not has_match:
+                        games_to_skip.add(row_data["GameLink"])
 
     return get_mlb_game_stats(all_rows, qualifiers, games_to_skip, player_data, missing_games, player_type, extra_stats, True)
 
@@ -24744,6 +24787,17 @@ def handle_mlb_game_stats_single_thread(all_rows, qualifiers, player_data, playe
                     has_match = False
                     for player in qual_object["values"]:
                         if row_data["Tm"].lower() in player["games"] and row_data["DateTime"] in player["games"][row_data["Tm"].lower()]:
+                            has_match = True
+                
+                    if not has_match:
+                        games_to_skip.add(row_data["GameLink"])
+    if "Event Sub Query" in qualifiers:
+        for row_data in all_rows:
+            for qual_object in qualifiers["Event Sub Query"]:
+                if not qual_object["negate"]:
+                    has_match = False
+                    for player in qual_object["values"]:
+                        if row_data["GameLink"] in player["games"]:
                             has_match = True
                 
                     if not has_match:
@@ -27153,6 +27207,10 @@ def add_row_numbers(row, at_bat_event, event_name, qualifiers, player_type):
                 elif ind_pitch in ("S", "M", "Q", "W", "T", "O"):
                     row["S/SO"] += 1
                 row["2StrK"] += 1
+    
+    if event_name not in row["event_mapping"]:
+        row["event_mapping"][event_name] = set()
+    row["event_mapping"][event_name].add(at_bat_event["event_id"])
 
 def add_pitch_row_numbers(row, at_bat_event, event_name, qualifiers, pitch_index, ind_pitch, pitch_event_obj):
     row["Pit"] += 1
@@ -27254,6 +27312,10 @@ def add_pitch_row_numbers(row, at_bat_event, event_name, qualifiers, pitch_index
     }]
     if handle_count_qual(pitch_event_obj, two_str_qual, False, False):
         row["2StrPit"] += 1
+    
+    if "pitch" not in row["event_mapping"]:
+        row["event_mapping"]["pitch"] = set()
+    row["event_mapping"]["pitch"].add(str(at_bat_event["event_id"]) + "-" + str(pitch_index + 1))
 
 def handle_da_mlb_quals(row, event_name, at_bat_event, qualifiers, player_data, player_type, player_game_info, skip_pitch_events=False, skip_career_events=False):
     if "Batting Against" in qualifiers:
@@ -30165,6 +30227,23 @@ def handle_da_mlb_quals(row, event_name, at_bat_event, qualifiers, player_data, 
             else:
                 if not (pitch_speed >= stat_val and pitch_speed <= end_val):
                     return False
+    
+    if "Event Sub Query" in qualifiers:
+        for qual_object in qualifiers["Event Sub Query"]:
+            has_match = False
+            for player in qual_object["values"]:
+                if row["GameLink"] in player["games"]:
+                    if at_bat_event["result"] in player["games"][row["GameLink"]]:
+                        event_id = at_bat_event["event_id"]
+                        if at_bat_event["result"] == "pitch":
+                            event_id = str(at_bat_event["event_id"]) + "-" + str(at_bat_event["pitch_index"]) 
+                        has_match = event_id in player["games"][row["GameLink"]][at_bat_event["result"]]
+            if qual_object["negate"]:
+                if has_match:
+                    return False
+            else:
+                if not has_match:
+                    return False
 
     return True
 
@@ -30778,7 +30857,8 @@ def handle_da_pitch_quals(row, event_name, at_bat_event, qualifiers, player_data
         "has_play_id" : at_bat_event["has_play_id"],
         "game_winning_run" : at_bat_event["game_winning_run"],
         "game_winning_team" : at_bat_event["game_winning_team"],
-        "sb_base" : None
+        "sb_base" : None,
+        "pitch_index" : pitch_index
     }
 
     for stat_str in at_bat_event:
@@ -32098,7 +32178,7 @@ def handle_result_qualifiers(game_data, index, row_data, sub_missing_games, play
         if not perform_mlb_game_qualifiers(row_data, qualifiers):
             return False, raw_row_data
     
-    if "Late" in qualifiers or "Close" in qualifiers or "Batting Against" in qualifiers or "Pitching Against" in qualifiers or "Batting Against First Name" in qualifiers or "Pitching Against First Name" in qualifiers or "Batting Against Last Name" in qualifiers or "Pitching Against Last Name" in qualifiers or "Facing Stat Rank" in qualifiers or "Facing League Stat Rank" in qualifiers or "Facing AL Stat Rank" in qualifiers or "Facing NL Stat Rank" in qualifiers or "Facing Stat Percent" in qualifiers or "Facing League Stat Percent" in qualifiers or "Facing AL Stat Percent" in qualifiers or "Facing NL Stat Percent" in qualifiers or "Facing Stat" in qualifiers or "Facing AL Stat" in qualifiers or "Facing NL Stat" in qualifiers or "Batting In Front Of Stat Rank" in qualifiers or "Batting In Front Of League Stat Rank" in qualifiers or "Batting In Front Of AL Stat Rank" in qualifiers or "Batting In Front Of NL Stat Rank" in qualifiers or "Batting In Front Of Stat Percent" in qualifiers or "Batting In Front Of League Stat Percent" in qualifiers or "Batting In Front Of AL Stat Percent" in qualifiers or "Batting In Front Of NL Stat Percent" in qualifiers or "Batting In Front Of Stat" in qualifiers or "Batting In Front Of AL Stat" in qualifiers or "Batting In Front Of NL Stat" in qualifiers or "Batting Behind Stat Rank" in qualifiers or "Batting Behind League Stat Rank" in qualifiers or "Batting Behind AL Stat Rank" in qualifiers or "Batting Behind NL Stat Rank" in qualifiers or "Batting Behind Stat Percent" in qualifiers or "Batting Behind League Stat Percent" in qualifiers or "Batting Behind AL Stat Percent" in qualifiers or "Batting Behind NL Stat Percent" in qualifiers or "Batting Behind Stat" in qualifiers or "Batting Behind AL Stat" in qualifiers or "Batting Behind NL Stat" in qualifiers or "Batting Next To Stat Rank" in qualifiers or "Batting Next To League Stat Rank" in qualifiers or "Batting Next To AL Stat Rank" in qualifiers or "Batting Next To NL Stat Rank" in qualifiers or "Batting Next To Stat Percent" in qualifiers or "Batting Next To League Stat Percent" in qualifiers or "Batting Next To AL Stat Percent" in qualifiers or "Batting Next To NL Stat Percent" in qualifiers or "Batting Next To Stat" in qualifiers or "Batting Next To AL Stat" in qualifiers or "Batting Next To NL Stat" in qualifiers or "Driven In" in qualifiers or "Batted In" in qualifiers or "Back To Back With" in qualifiers or "Batting Behind" in qualifiers or "Batting In Front Of" in qualifiers or "Batting Next To" in qualifiers or "Event Formula" in qualifiers or "Caught By" in qualifiers or "Stealing On" in qualifiers or "On Field With" in qualifiers or "On Field Against" in qualifiers or "Position" in qualifiers or "Hit Location" in qualifiers or "Exact Hit Location" in qualifiers or "Facing Primary Position" in qualifiers or "Facing Main Position" in qualifiers or "Facing Position" in qualifiers or "Bases Empty" in qualifiers or "Men On Base" in qualifiers or "Walk Off" in qualifiers or "Inside The Park HR" in qualifiers or "Walk Off Opportunity" in qualifiers or "Game Tying" in qualifiers or "Game Tying Opportunity" in qualifiers or "Go Ahead" in qualifiers or "Go Ahead Opportunity" in qualifiers or "Go Ahead Or Game Tying" in qualifiers or "Go Ahead Or Game Tying Opportunity" in qualifiers or "Game Winning" in qualifiers or "Tying On Deck" in qualifiers or "Winning On Deck" in qualifiers or "Tying At Bat" in qualifiers or "Winning At Bat" in qualifiers or "Tying In Scoring" in qualifiers or "Winning In Scoring" in qualifiers or "Tying On Base" in qualifiers or "Winning On Base" in qualifiers or "Last Inning" in qualifiers or "Last Out" in qualifiers or "Last Batter" in qualifiers or "Extra Innings" in qualifiers or "RISP" in qualifiers or "Batter First Plate Appearance" in qualifiers or "Pitcher First Batter Faced" in qualifiers or "Batter Last Plate Appearance" in qualifiers or "Pitcher Last Batter Faced" in qualifiers or "Facing Pitcher" in qualifiers or "Facing Position Player" in qualifiers or "Stealing Second" in qualifiers or "Stealing Third" in qualifiers or "Stealing Home" in qualifiers or "Bunting" in qualifiers or "Fastball" in qualifiers or "Out Of Zone" in qualifiers or "In Zone" in qualifiers or "Breaking" in qualifiers or "Offspeed" in qualifiers or "Pinch Hitting" in qualifiers or "Facing Starter" in qualifiers or "Facing Reliever" in qualifiers or "Leading Off Inning" in qualifiers or "Inning Started" in qualifiers or "Leading Off Game" in qualifiers or "Leading Off Whole Game" in qualifiers or "Swung At First Pitch" in qualifiers or "First Pitch" in qualifiers or "Batter Ahead" in qualifiers or "Even Count" in qualifiers or "Pitcher Ahead" in qualifiers or "After Batter Ahead" in qualifiers or "After Even Count" in qualifiers or "After Pitcher Ahead" in qualifiers or "Top Inning" in qualifiers or "Bottom Inning" in qualifiers or "Full Count" in qualifiers or "Man On First" in qualifiers or "Man On Second" in qualifiers or "Man On Third" in qualifiers or "Bases Loaded" in qualifiers or "Ending Outs" in qualifiers or "Outs" in qualifiers or "Outs Remaining" in qualifiers or "Swinging On Strikes" in qualifiers or "Swinging On Balls" in qualifiers or "After Swinging On Strikes" in qualifiers or "After Swinging On Balls" in qualifiers or "After Strikes" in qualifiers or "After Balls" in qualifiers or "Strikes" in qualifiers or "Balls" in qualifiers or "Runs" in qualifiers or "Play Outs" in qualifiers or "RBIs" in qualifiers or "Number Drove In" in qualifiers or "Pitch Speed" in qualifiers or "Pitch Zone" in qualifiers or "Pitch Spin" in qualifiers or "Exit Velocity" in qualifiers or "Hit Distance" in qualifiers or "Launch Angle" in qualifiers or "Inning" in qualifiers or "Inning Reversed" in qualifiers or "Scheduled Inning Reversed" in qualifiers or "Pitching Against Batting Order" in qualifiers or "Count" in qualifiers or "After Count" in qualifiers or "After Swinging On Count" in qualifiers or "Swinging On Count" in qualifiers or "Team Score" in qualifiers or "Ending Team Score" in qualifiers or "Game Pitch Count" in qualifiers or "Team Pitch Count" in qualifiers or "Pitch Count" in qualifiers or "Pitcher Batters Faced" in qualifiers or "Batter Plate Appearance"  in qualifiers or "Pitcher Batters Faced Reversed" in qualifiers or "Batter Plate Appearance Reversed" in qualifiers or "Starting Pitch Count" in qualifiers or "Innings Pitched" in qualifiers or "Ending Innings Pitched" in qualifiers or "At Bat Pitch Count" in qualifiers or "Time Facing Opponent" in qualifiers or "Number Of Men On Base" in qualifiers or "Number Of Men In Scoring" in qualifiers or "Men On Base" in qualifiers or "Time Through Lineup" in qualifiers or "Opponent Score" in qualifiers or "Score Margin" in qualifiers or "Score Difference" in qualifiers or  "Ending Opponent Score" in qualifiers or "Ending Score Margin" in qualifiers or "Ending Score Difference" in qualifiers or "Event Stat" in qualifiers or "Event Stat Reversed" in qualifiers or "Event Stats" in qualifiers or "Event Stats Reversed" in qualifiers or "Facing Lefty" in qualifiers or "Facing Righty" in qualifiers or "Batting Lefty" in qualifiers or "Batting Righty" in qualifiers or "Pitching Lefty" in qualifiers or "Pitching Righty" in qualifiers or "Pitch Type" in qualifiers or "Exact Pitch Type" in qualifiers or "Hit Trajectory" in qualifiers or "Hit Hardness" in qualifiers or "Event Type" in qualifiers or "Local Event Time" in qualifiers or "Event Time" in qualifiers or "Exact Event Type" in qualifiers or "Event Description" in qualifiers or "Previous Event Type" in qualifiers or "Previous Exact Event Type" in qualifiers or "Previous Event Description" in qualifiers or "Upcoming Event Type" in qualifiers or "Upcoming Exact Event Type" in qualifiers or "Upcoming Event Description" in qualifiers or "Exact Event Description" in qualifiers or "current-stats" in extra_stats:
+    if "Late" in qualifiers or "Close" in qualifiers or "Batting Against" in qualifiers or "Pitching Against" in qualifiers or "Batting Against First Name" in qualifiers or "Pitching Against First Name" in qualifiers or "Batting Against Last Name" in qualifiers or "Pitching Against Last Name" in qualifiers or "Facing Stat Rank" in qualifiers or "Facing League Stat Rank" in qualifiers or "Facing AL Stat Rank" in qualifiers or "Facing NL Stat Rank" in qualifiers or "Facing Stat Percent" in qualifiers or "Facing League Stat Percent" in qualifiers or "Facing AL Stat Percent" in qualifiers or "Facing NL Stat Percent" in qualifiers or "Facing Stat" in qualifiers or "Facing AL Stat" in qualifiers or "Facing NL Stat" in qualifiers or "Batting In Front Of Stat Rank" in qualifiers or "Batting In Front Of League Stat Rank" in qualifiers or "Batting In Front Of AL Stat Rank" in qualifiers or "Batting In Front Of NL Stat Rank" in qualifiers or "Batting In Front Of Stat Percent" in qualifiers or "Batting In Front Of League Stat Percent" in qualifiers or "Batting In Front Of AL Stat Percent" in qualifiers or "Batting In Front Of NL Stat Percent" in qualifiers or "Batting In Front Of Stat" in qualifiers or "Batting In Front Of AL Stat" in qualifiers or "Batting In Front Of NL Stat" in qualifiers or "Batting Behind Stat Rank" in qualifiers or "Batting Behind League Stat Rank" in qualifiers or "Batting Behind AL Stat Rank" in qualifiers or "Batting Behind NL Stat Rank" in qualifiers or "Batting Behind Stat Percent" in qualifiers or "Batting Behind League Stat Percent" in qualifiers or "Batting Behind AL Stat Percent" in qualifiers or "Batting Behind NL Stat Percent" in qualifiers or "Batting Behind Stat" in qualifiers or "Batting Behind AL Stat" in qualifiers or "Batting Behind NL Stat" in qualifiers or "Batting Next To Stat Rank" in qualifiers or "Batting Next To League Stat Rank" in qualifiers or "Batting Next To AL Stat Rank" in qualifiers or "Batting Next To NL Stat Rank" in qualifiers or "Batting Next To Stat Percent" in qualifiers or "Batting Next To League Stat Percent" in qualifiers or "Batting Next To AL Stat Percent" in qualifiers or "Batting Next To NL Stat Percent" in qualifiers or "Batting Next To Stat" in qualifiers or "Batting Next To AL Stat" in qualifiers or "Batting Next To NL Stat" in qualifiers or "Driven In" in qualifiers or "Batted In" in qualifiers or "Back To Back With" in qualifiers or "Batting Behind" in qualifiers or "Batting In Front Of" in qualifiers or "Batting Next To" in qualifiers or "Event Formula" in qualifiers or "Caught By" in qualifiers or "Stealing On" in qualifiers or "On Field With" in qualifiers or "On Field Against" in qualifiers or "Position" in qualifiers or "Hit Location" in qualifiers or "Exact Hit Location" in qualifiers or "Facing Primary Position" in qualifiers or "Facing Main Position" in qualifiers or "Facing Position" in qualifiers or "Bases Empty" in qualifiers or "Men On Base" in qualifiers or "Walk Off" in qualifiers or "Inside The Park HR" in qualifiers or "Walk Off Opportunity" in qualifiers or "Game Tying" in qualifiers or "Game Tying Opportunity" in qualifiers or "Go Ahead" in qualifiers or "Go Ahead Opportunity" in qualifiers or "Go Ahead Or Game Tying" in qualifiers or "Go Ahead Or Game Tying Opportunity" in qualifiers or "Game Winning" in qualifiers or "Tying On Deck" in qualifiers or "Winning On Deck" in qualifiers or "Tying At Bat" in qualifiers or "Winning At Bat" in qualifiers or "Tying In Scoring" in qualifiers or "Winning In Scoring" in qualifiers or "Tying On Base" in qualifiers or "Winning On Base" in qualifiers or "Last Inning" in qualifiers or "Last Out" in qualifiers or "Last Batter" in qualifiers or "Extra Innings" in qualifiers or "RISP" in qualifiers or "Event Sub Query" in qualifiers or "Batter First Plate Appearance" in qualifiers or "Pitcher First Batter Faced" in qualifiers or "Batter Last Plate Appearance" in qualifiers or "Pitcher Last Batter Faced" in qualifiers or "Facing Pitcher" in qualifiers or "Facing Position Player" in qualifiers or "Stealing Second" in qualifiers or "Stealing Third" in qualifiers or "Stealing Home" in qualifiers or "Bunting" in qualifiers or "Fastball" in qualifiers or "Out Of Zone" in qualifiers or "In Zone" in qualifiers or "Breaking" in qualifiers or "Offspeed" in qualifiers or "Pinch Hitting" in qualifiers or "Facing Starter" in qualifiers or "Facing Reliever" in qualifiers or "Leading Off Inning" in qualifiers or "Inning Started" in qualifiers or "Leading Off Game" in qualifiers or "Leading Off Whole Game" in qualifiers or "Swung At First Pitch" in qualifiers or "First Pitch" in qualifiers or "Batter Ahead" in qualifiers or "Even Count" in qualifiers or "Pitcher Ahead" in qualifiers or "After Batter Ahead" in qualifiers or "After Even Count" in qualifiers or "After Pitcher Ahead" in qualifiers or "Top Inning" in qualifiers or "Bottom Inning" in qualifiers or "Full Count" in qualifiers or "Man On First" in qualifiers or "Man On Second" in qualifiers or "Man On Third" in qualifiers or "Bases Loaded" in qualifiers or "Ending Outs" in qualifiers or "Outs" in qualifiers or "Outs Remaining" in qualifiers or "Swinging On Strikes" in qualifiers or "Swinging On Balls" in qualifiers or "After Swinging On Strikes" in qualifiers or "After Swinging On Balls" in qualifiers or "After Strikes" in qualifiers or "After Balls" in qualifiers or "Strikes" in qualifiers or "Balls" in qualifiers or "Runs" in qualifiers or "Play Outs" in qualifiers or "RBIs" in qualifiers or "Number Drove In" in qualifiers or "Pitch Speed" in qualifiers or "Pitch Zone" in qualifiers or "Pitch Spin" in qualifiers or "Exit Velocity" in qualifiers or "Hit Distance" in qualifiers or "Launch Angle" in qualifiers or "Inning" in qualifiers or "Inning Reversed" in qualifiers or "Scheduled Inning Reversed" in qualifiers or "Pitching Against Batting Order" in qualifiers or "Count" in qualifiers or "After Count" in qualifiers or "After Swinging On Count" in qualifiers or "Swinging On Count" in qualifiers or "Team Score" in qualifiers or "Ending Team Score" in qualifiers or "Game Pitch Count" in qualifiers or "Team Pitch Count" in qualifiers or "Pitch Count" in qualifiers or "Pitcher Batters Faced" in qualifiers or "Batter Plate Appearance"  in qualifiers or "Pitcher Batters Faced Reversed" in qualifiers or "Batter Plate Appearance Reversed" in qualifiers or "Starting Pitch Count" in qualifiers or "Innings Pitched" in qualifiers or "Ending Innings Pitched" in qualifiers or "At Bat Pitch Count" in qualifiers or "Time Facing Opponent" in qualifiers or "Number Of Men On Base" in qualifiers or "Number Of Men In Scoring" in qualifiers or "Men On Base" in qualifiers or "Time Through Lineup" in qualifiers or "Opponent Score" in qualifiers or "Score Margin" in qualifiers or "Score Difference" in qualifiers or  "Ending Opponent Score" in qualifiers or "Ending Score Margin" in qualifiers or "Ending Score Difference" in qualifiers or "Event Stat" in qualifiers or "Event Stat Reversed" in qualifiers or "Event Stats" in qualifiers or "Event Stats Reversed" in qualifiers or "Facing Lefty" in qualifiers or "Facing Righty" in qualifiers or "Batting Lefty" in qualifiers or "Batting Righty" in qualifiers or "Pitching Lefty" in qualifiers or "Pitching Righty" in qualifiers or "Pitch Type" in qualifiers or "Exact Pitch Type" in qualifiers or "Hit Trajectory" in qualifiers or "Hit Hardness" in qualifiers or "Event Type" in qualifiers or "Local Event Time" in qualifiers or "Event Time" in qualifiers or "Exact Event Type" in qualifiers or "Event Description" in qualifiers or "Previous Event Type" in qualifiers or "Previous Exact Event Type" in qualifiers or "Previous Event Description" in qualifiers or "Upcoming Event Type" in qualifiers or "Upcoming Exact Event Type" in qualifiers or "Upcoming Event Description" in qualifiers or "Exact Event Description" in qualifiers or "current-stats" in extra_stats:
         if sub_missing_games:
             count_info["missing_games"] = True
         has_match, raw_row_data = perform_sub_mlb_game_qualifiers(row_data, player_data, qualifiers, game_data, player_type, True)
@@ -32118,7 +32198,7 @@ def has_other_game_quals(qualifiers):
     if "Game Number" in qualifiers or "Stadium" in qualifiers or "Exact Stadium" in qualifiers or "Start Time" in qualifiers or "Local Start Time" in qualifiers or "Surface" in qualifiers or "Condition" in qualifiers or "Temperature" in qualifiers or "City" in qualifiers or "Exact City" in qualifiers or "State" in qualifiers or "Exact State" in qualifiers or "Time Zone" in qualifiers or "Exact Time Zone" in qualifiers or "Country" in qualifiers or "Exact Country" in qualifiers or "Wind" in qualifiers or "Umpire" in qualifiers or "Home Plate Umpire" in qualifiers or "Run Support" in qualifiers:
         return True
 
-    if "Event Stats" in qualifiers or "Event Stats Reversed" in qualifiers or "Late" in qualifiers or "Close" in qualifiers or "Batting Against" in qualifiers or "Pitching Against" in qualifiers or "Batting Against First Name" in qualifiers or "Pitching Against First Name" in qualifiers or "Batting Against Last Name" in qualifiers or "Pitching Against Last Name" in qualifiers or "Facing Stat Rank" in qualifiers or "Facing League Stat Rank" in qualifiers or "Facing AL Stat Rank" in qualifiers or "Facing NL Stat Rank" in qualifiers or "Facing Stat Percent" in qualifiers or "Facing League Stat Percent" in qualifiers or "Facing AL Stat Percent" in qualifiers or "Facing NL Stat Percent" in qualifiers or "Facing Stat" in qualifiers or "Facing AL Stat" in qualifiers or "Facing NL Stat" in qualifiers or "Batting In Front Of Stat Rank" in qualifiers or "Batting In Front Of League Stat Rank" in qualifiers or "Batting In Front Of AL Stat Rank" in qualifiers or "Batting In Front Of NL Stat Rank" in qualifiers or "Batting In Front Of Stat Percent" in qualifiers or "Batting In Front Of League Stat Percent" in qualifiers or "Batting In Front Of AL Stat Percent" in qualifiers or "Batting In Front Of NL Stat Percent" in qualifiers or "Batting In Front Of Stat" in qualifiers or "Batting In Front Of AL Stat" in qualifiers or "Batting In Front Of NL Stat" in qualifiers or "Batting Behind Stat Rank" in qualifiers or "Batting Behind League Stat Rank" in qualifiers or "Batting Behind AL Stat Rank" in qualifiers or "Batting Behind NL Stat Rank" in qualifiers or "Batting Behind Stat Percent" in qualifiers or "Batting Behind League Stat Percent" in qualifiers or "Batting Behind AL Stat Percent" in qualifiers or "Batting Behind NL Stat Percent" in qualifiers or "Batting Behind Stat" in qualifiers or "Batting Behind AL Stat" in qualifiers or "Batting Behind NL Stat" in qualifiers or "Batting Next To Stat Rank" in qualifiers or "Batting Next To League Stat Rank" in qualifiers or "Batting Next To AL Stat Rank" in qualifiers or "Batting Next To NL Stat Rank" in qualifiers or "Batting Next To Stat Percent" in qualifiers or "Batting Next To League Stat Percent" in qualifiers or "Batting Next To AL Stat Percent" in qualifiers or "Batting Next To NL Stat Percent" in qualifiers or "Batting Next To Stat" in qualifiers or "Batting Next To AL Stat" in qualifiers or "Batting Next To NL Stat" in qualifiers or "Inning Stat" in qualifiers or "Driven In" in qualifiers or "Batted In" in qualifiers or "Back To Back With" in qualifiers or "Batting Behind" in qualifiers or "Batting In Front Of" in qualifiers or "Batting Next To" in qualifiers or "Event Formula" in qualifiers or "Caught By" in qualifiers or "Stealing On" in qualifiers or "On Field With" in qualifiers or "On Field Against" in qualifiers or "Position" in qualifiers or "Hit Location" in qualifiers or "Exact Hit Location" in qualifiers or "Facing Primary Position" in qualifiers or "Facing Main Position" in qualifiers or "Facing Position" in qualifiers or "Bases Empty" in qualifiers or "Men On Base" in qualifiers or "Walk Off" in qualifiers or "Inside The Park HR" in qualifiers or "Walk Off Opportunity" in qualifiers or "Game Tying" in qualifiers or "Game Tying Opportunity" in qualifiers or "Go Ahead" in qualifiers or "Go Ahead Opportunity" in qualifiers or "Go Ahead Or Game Tying" in qualifiers or "Go Ahead Or Game Tying Opportunity" in qualifiers or "Game Winning" in qualifiers or "Tying On Deck" in qualifiers or "Winning On Deck" in qualifiers or "Tying At Bat" in qualifiers or "Winning At Bat" in qualifiers or "Tying In Scoring" in qualifiers or "Winning In Scoring" in qualifiers or "Tying On Base" in qualifiers or "Winning On Base" in qualifiers or "Last Inning" in qualifiers or "Last Out" in qualifiers or "Last Batter" in qualifiers or "Extra Innings" in qualifiers or "RISP" in qualifiers or "Batter First Plate Appearance" in qualifiers or "Pitcher First Batter Faced" in qualifiers or "Batter Last Plate Appearance" in qualifiers or "Pitcher Last Batter Faced" in qualifiers or "Facing Position Player" in qualifiers or "Facing Pitcher" in qualifiers or "Stealing Second" in qualifiers or "Stealing Third" in qualifiers or "Stealing Home" in qualifiers or "Bunting" in qualifiers or "Fastball" in qualifiers or "Out Of Zone" in qualifiers or "In Zone" in qualifiers or "Breaking" in qualifiers or "Offspeed" in qualifiers or "Pinch Hitting" in qualifiers or "Facing Starter" in qualifiers or "Facing Reliever" in qualifiers or "Leading Off Inning" in qualifiers or "Inning Started" in qualifiers or "Leading Off Game" in qualifiers or "Leading Off Whole Game" in qualifiers or "Swung At First Pitch" in qualifiers or "First Pitch" in qualifiers or "Batter Ahead" in qualifiers or "Even Count" in qualifiers or "Pitcher Ahead" in qualifiers or "After Batter Ahead" in qualifiers or "After Even Count" in qualifiers or "After Pitcher Ahead" in qualifiers or "Top Inning" in qualifiers or "Bottom Inning" in qualifiers or "Full Count" in qualifiers or "Man On First" in qualifiers or "Man On Second" in qualifiers or "Man On Third" in qualifiers or "Bases Loaded" in qualifiers or "Ending Outs" in qualifiers or "Outs" in qualifiers or "Outs Remaining" in qualifiers or "Swinging On Strikes" in qualifiers or "Swinging On Balls" in qualifiers or "After Swinging On Strikes" in qualifiers or "After Swinging On Balls" in qualifiers or "After Strikes" in qualifiers or "After Balls" in qualifiers or "Strikes" in qualifiers or "Balls" in qualifiers or "Runs" in qualifiers or "Play Outs" in qualifiers or "RBIs" in qualifiers or "Number Drove In" in qualifiers or "Pitch Speed" in qualifiers or "Pitch Zone" in qualifiers or "Pitch Spin" in qualifiers or "Exit Velocity" in qualifiers or "Hit Distance" in qualifiers or "Launch Angle" in qualifiers or "Inning" in qualifiers or "Inning Reversed" in qualifiers or "Scheduled Inning Reversed" in qualifiers or "Pitching Against Batting Order" in qualifiers or "Count" in qualifiers or "After Count" in qualifiers or "After Swinging On Count" in qualifiers or "Swinging On Count" in qualifiers or "Team Score" in qualifiers or "Ending Team Score" in qualifiers or "Game Pitch Count" in qualifiers or "Team Pitch Count" in qualifiers or "Pitch Count" in qualifiers or "Pitcher Batters Faced" in qualifiers or "Batter Plate Appearance" in qualifiers or "Pitcher Batters Faced Reversed" in qualifiers or "Batter Plate Appearance Reversed" in qualifiers or "Starting Pitch Count" in qualifiers or "Innings Pitched" in qualifiers or "Ending Innings Pitched" in qualifiers or "At Bat Pitch Count" in qualifiers or "Time Facing Opponent" in qualifiers or "Number Of Men On Base" in qualifiers or "Number Of Men In Scoring" in qualifiers or "Men On Base" in qualifiers or "Time Through Lineup" in qualifiers or "Opponent Score" in qualifiers or "Score Margin" in qualifiers or "Score Difference" in qualifiers or  "Ending Opponent Score" in qualifiers or "Ending Score Margin" in qualifiers or "Ending Score Difference" in qualifiers or "Facing Lefty" in qualifiers or "Facing Righty" in qualifiers or "Batting Lefty" in qualifiers or "Batting Righty" in qualifiers or "Pitching Lefty" in qualifiers or "Pitching Righty" in qualifiers or "Pitch Type" in qualifiers or "Exact Pitch Type" in qualifiers or "Hit Trajectory" in qualifiers or "Hit Hardness" in qualifiers or "Local Event Time" in qualifiers or "Event Time" in qualifiers or "Event Type" in qualifiers or "Exact Event Type" in qualifiers or "Event Description" in qualifiers or "Upcoming Player Event Type" in qualifiers or "Upcoming Exact Player Event Type" in qualifiers or "Previous Player Event Type" in qualifiers or "Previous Exact Player Event Type" in qualifiers or "Previous Event Type" in qualifiers or "Previous Exact Event Type" in qualifiers or "Previous Event Description" in qualifiers or "Upcoming Event Type" in qualifiers or "Upcoming Exact Event Type" in qualifiers or "Upcoming Event Description" in qualifiers or "Exact Event Description" in qualifiers:
+    if "Event Stats" in qualifiers or "Event Stats Reversed" in qualifiers or "Late" in qualifiers or "Close" in qualifiers or "Batting Against" in qualifiers or "Pitching Against" in qualifiers or "Batting Against First Name" in qualifiers or "Pitching Against First Name" in qualifiers or "Batting Against Last Name" in qualifiers or "Pitching Against Last Name" in qualifiers or "Facing Stat Rank" in qualifiers or "Facing League Stat Rank" in qualifiers or "Facing AL Stat Rank" in qualifiers or "Facing NL Stat Rank" in qualifiers or "Facing Stat Percent" in qualifiers or "Facing League Stat Percent" in qualifiers or "Facing AL Stat Percent" in qualifiers or "Facing NL Stat Percent" in qualifiers or "Facing Stat" in qualifiers or "Facing AL Stat" in qualifiers or "Facing NL Stat" in qualifiers or "Batting In Front Of Stat Rank" in qualifiers or "Batting In Front Of League Stat Rank" in qualifiers or "Batting In Front Of AL Stat Rank" in qualifiers or "Batting In Front Of NL Stat Rank" in qualifiers or "Batting In Front Of Stat Percent" in qualifiers or "Batting In Front Of League Stat Percent" in qualifiers or "Batting In Front Of AL Stat Percent" in qualifiers or "Batting In Front Of NL Stat Percent" in qualifiers or "Batting In Front Of Stat" in qualifiers or "Batting In Front Of AL Stat" in qualifiers or "Batting In Front Of NL Stat" in qualifiers or "Batting Behind Stat Rank" in qualifiers or "Batting Behind League Stat Rank" in qualifiers or "Batting Behind AL Stat Rank" in qualifiers or "Batting Behind NL Stat Rank" in qualifiers or "Batting Behind Stat Percent" in qualifiers or "Batting Behind League Stat Percent" in qualifiers or "Batting Behind AL Stat Percent" in qualifiers or "Batting Behind NL Stat Percent" in qualifiers or "Batting Behind Stat" in qualifiers or "Batting Behind AL Stat" in qualifiers or "Batting Behind NL Stat" in qualifiers or "Batting Next To Stat Rank" in qualifiers or "Batting Next To League Stat Rank" in qualifiers or "Batting Next To AL Stat Rank" in qualifiers or "Batting Next To NL Stat Rank" in qualifiers or "Batting Next To Stat Percent" in qualifiers or "Batting Next To League Stat Percent" in qualifiers or "Batting Next To AL Stat Percent" in qualifiers or "Batting Next To NL Stat Percent" in qualifiers or "Batting Next To Stat" in qualifiers or "Batting Next To AL Stat" in qualifiers or "Batting Next To NL Stat" in qualifiers or "Inning Stat" in qualifiers or "Driven In" in qualifiers or "Batted In" in qualifiers or "Back To Back With" in qualifiers or "Batting Behind" in qualifiers or "Batting In Front Of" in qualifiers or "Batting Next To" in qualifiers or "Event Formula" in qualifiers or "Caught By" in qualifiers or "Stealing On" in qualifiers or "On Field With" in qualifiers or "On Field Against" in qualifiers or "Position" in qualifiers or "Hit Location" in qualifiers or "Exact Hit Location" in qualifiers or "Facing Primary Position" in qualifiers or "Facing Main Position" in qualifiers or "Facing Position" in qualifiers or "Bases Empty" in qualifiers or "Men On Base" in qualifiers or "Walk Off" in qualifiers or "Inside The Park HR" in qualifiers or "Walk Off Opportunity" in qualifiers or "Game Tying" in qualifiers or "Game Tying Opportunity" in qualifiers or "Go Ahead" in qualifiers or "Go Ahead Opportunity" in qualifiers or "Go Ahead Or Game Tying" in qualifiers or "Go Ahead Or Game Tying Opportunity" in qualifiers or "Game Winning" in qualifiers or "Tying On Deck" in qualifiers or "Winning On Deck" in qualifiers or "Tying At Bat" in qualifiers or "Winning At Bat" in qualifiers or "Tying In Scoring" in qualifiers or "Winning In Scoring" in qualifiers or "Tying On Base" in qualifiers or "Winning On Base" in qualifiers or "Last Inning" in qualifiers or "Last Out" in qualifiers or "Last Batter" in qualifiers or "Extra Innings" in qualifiers or "RISP" in qualifiers or "Event Sub Query" in qualifiers or "Batter First Plate Appearance" in qualifiers or "Pitcher First Batter Faced" in qualifiers or "Batter Last Plate Appearance" in qualifiers or "Pitcher Last Batter Faced" in qualifiers or "Facing Position Player" in qualifiers or "Facing Pitcher" in qualifiers or "Stealing Second" in qualifiers or "Stealing Third" in qualifiers or "Stealing Home" in qualifiers or "Bunting" in qualifiers or "Fastball" in qualifiers or "Out Of Zone" in qualifiers or "In Zone" in qualifiers or "Breaking" in qualifiers or "Offspeed" in qualifiers or "Pinch Hitting" in qualifiers or "Facing Starter" in qualifiers or "Facing Reliever" in qualifiers or "Leading Off Inning" in qualifiers or "Inning Started" in qualifiers or "Leading Off Game" in qualifiers or "Leading Off Whole Game" in qualifiers or "Swung At First Pitch" in qualifiers or "First Pitch" in qualifiers or "Batter Ahead" in qualifiers or "Even Count" in qualifiers or "Pitcher Ahead" in qualifiers or "After Batter Ahead" in qualifiers or "After Even Count" in qualifiers or "After Pitcher Ahead" in qualifiers or "Top Inning" in qualifiers or "Bottom Inning" in qualifiers or "Full Count" in qualifiers or "Man On First" in qualifiers or "Man On Second" in qualifiers or "Man On Third" in qualifiers or "Bases Loaded" in qualifiers or "Ending Outs" in qualifiers or "Outs" in qualifiers or "Outs Remaining" in qualifiers or "Swinging On Strikes" in qualifiers or "Swinging On Balls" in qualifiers or "After Swinging On Strikes" in qualifiers or "After Swinging On Balls" in qualifiers or "After Strikes" in qualifiers or "After Balls" in qualifiers or "Strikes" in qualifiers or "Balls" in qualifiers or "Runs" in qualifiers or "Play Outs" in qualifiers or "RBIs" in qualifiers or "Number Drove In" in qualifiers or "Pitch Speed" in qualifiers or "Pitch Zone" in qualifiers or "Pitch Spin" in qualifiers or "Exit Velocity" in qualifiers or "Hit Distance" in qualifiers or "Launch Angle" in qualifiers or "Inning" in qualifiers or "Inning Reversed" in qualifiers or "Scheduled Inning Reversed" in qualifiers or "Pitching Against Batting Order" in qualifiers or "Count" in qualifiers or "After Count" in qualifiers or "After Swinging On Count" in qualifiers or "Swinging On Count" in qualifiers or "Team Score" in qualifiers or "Ending Team Score" in qualifiers or "Game Pitch Count" in qualifiers or "Team Pitch Count" in qualifiers or "Pitch Count" in qualifiers or "Pitcher Batters Faced" in qualifiers or "Batter Plate Appearance" in qualifiers or "Pitcher Batters Faced Reversed" in qualifiers or "Batter Plate Appearance Reversed" in qualifiers or "Starting Pitch Count" in qualifiers or "Innings Pitched" in qualifiers or "Ending Innings Pitched" in qualifiers or "At Bat Pitch Count" in qualifiers or "Time Facing Opponent" in qualifiers or "Number Of Men On Base" in qualifiers or "Number Of Men In Scoring" in qualifiers or "Men On Base" in qualifiers or "Time Through Lineup" in qualifiers or "Opponent Score" in qualifiers or "Score Margin" in qualifiers or "Score Difference" in qualifiers or  "Ending Opponent Score" in qualifiers or "Ending Score Margin" in qualifiers or "Ending Score Difference" in qualifiers or "Facing Lefty" in qualifiers or "Facing Righty" in qualifiers or "Batting Lefty" in qualifiers or "Batting Righty" in qualifiers or "Pitching Lefty" in qualifiers or "Pitching Righty" in qualifiers or "Pitch Type" in qualifiers or "Exact Pitch Type" in qualifiers or "Hit Trajectory" in qualifiers or "Hit Hardness" in qualifiers or "Local Event Time" in qualifiers or "Event Time" in qualifiers or "Event Type" in qualifiers or "Exact Event Type" in qualifiers or "Event Description" in qualifiers or "Upcoming Player Event Type" in qualifiers or "Upcoming Exact Player Event Type" in qualifiers or "Previous Player Event Type" in qualifiers or "Previous Exact Player Event Type" in qualifiers or "Previous Event Type" in qualifiers or "Previous Exact Event Type" in qualifiers or "Previous Event Description" in qualifiers or "Upcoming Event Type" in qualifiers or "Upcoming Exact Event Type" in qualifiers or "Upcoming Event Description" in qualifiers or "Exact Event Description" in qualifiers:
         return True
 
     return False
@@ -35008,6 +35088,7 @@ def clear_data(row):
     row["CS"] = 0
     row["SB"] = 0
     row["NS"] = 0
+    row["event_mapping"] = {}
 
 def calculate_data(row, player_type):
     if player_type["da_type"] == "Batter":

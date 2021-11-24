@@ -5314,7 +5314,7 @@ def sub_handle_the_quals(players, qualifier, qual_str, player_str, time_frame, k
 def determine_player_str(qualifier, player_str, time_frame, qual_str):
     player_str = unescape_string(player_str)
             
-    is_pre_query = "time_frame_str" not in qualifier
+    is_pre_query = "time_frame_str" not in qualifier and not "Sub Query" in qual_str and not re.search(r"(?<!\\)]", player_str)
     if not "<" in player_str:
         player_str = "<" + player_str + ">"
     player_str = "!nflcompare " + player_str
@@ -5336,8 +5336,8 @@ def determine_player_str(qualifier, player_str, time_frame, qual_str):
         bracket_index = re.search(r"(?<!\\)]", player_str).start()
         player_str = player_str[:bracket_index] + " " + get_time_str(time_frame["time_start"], False) + " to " + get_time_str(time_frame["time_end"], False) + player_str[bracket_index:]
 
-    bracket_index = re.search(r"(?<!\\)]", player_str).start()
     if not qual_str in ["Season Sub Query", "Season After Sub Query", "Season Before Sub Query"]:
+        bracket_index = re.search(r"(?<!\\)]", player_str).start()
         player_str = player_str[:bracket_index] + " force-dates" + player_str[bracket_index:]
     
     if "Ignore Start" not in time_frame["qualifiers"]:
