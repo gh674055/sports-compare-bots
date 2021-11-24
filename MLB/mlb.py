@@ -5623,6 +5623,7 @@ qualifier_map = {
 missing_player_data = {
     "ids" : [],
     "mlb_ids" : [],
+    "quals" : [],
     "Player" : "No Player Match!",
     "id" : "No Player Match!",
     "mlb_id" : "No Player Match!",
@@ -11130,6 +11131,7 @@ def handle_name_threads(sub_name, parse_time_frames, index, player_type, remove_
                     subbb_player_data = {
                         "ids" : [subb_player_data["id"]],
                         "mlb_ids" : [subb_player_data["mlb_id"]],
+                        "quals" : [subb_player_data["quals"]],
                         "has_season_stats" : subb_player_data["has_season_stats"],
                         "stat_values" : {
                             "DateStart" : subb_player_data["DateStart"],
@@ -11305,7 +11307,7 @@ def handle_against_qual(names, time_frames, player_type, comment_obj, extra_stat
                 if "Sub Query" in time_frame["qualifiers"]:
                     handle_the_quals(time_frame["qualifiers"], player_type, "Sub Query", sub_matching_names, time_frame, "Game", comment_obj, players_map, extra_stats)
                 if "Event Sub Query" in time_frame["qualifiers"]:
-                    handle_the_quals(time_frame["qualifiers"], player_type, "Event Sub Query", sub_matching_names, time_frame, "Event", comment_obj, players_map, extra_stats)
+                    handle_the_quals(time_frame["qualifiers"], player_type, "Event Sub Query", sub_matching_names, time_frame, "Game", comment_obj, players_map, extra_stats)
                 if "Day Of Sub Query" in time_frame["qualifiers"]:
                     handle_the_quals(time_frame["qualifiers"], player_type, "Day Of Sub Query", sub_matching_names, time_frame, "Date", comment_obj, players_map, extra_stats)
                 if "Day After Sub Query" in time_frame["qualifiers"]:
@@ -11537,8 +11539,6 @@ def sub_handle_the_quals(players, qualifier, real_player_type, qual_str, player_
                     player_games[row["GameLink"]] = True
                 elif key == "Season":
                     player_games[row["Year"]] = True
-                elif key == "Event":
-                    player_games[row["GameLink"]] = row["event_mapping"]
                 elif key == "Date":
                     date = row["Date"]
                     opponent = row["Tm"]
@@ -11594,6 +11594,8 @@ def sub_handle_the_quals(players, qualifier, real_player_type, qual_str, player_
             })
             if "On Field" in qual_str:
                 players[len(players) - 1]["pos"] = og_player_str["pos"]
+            if qual_str == "Event Sub Query":
+                players[len(players) - 1]["quals"] = player_data["quals"][index]
     
     if comment_obj and new_search and comment_obj["is_approved"]:
         try:
@@ -11654,7 +11656,6 @@ def determine_player_str(qualifier, player_type, player_str, time_frame, qual_st
     if qual_str == "Event Sub Query":
         bracket_index = re.search(r"(?<!\\)]", player_str).start()
         player_str = player_str[:bracket_index] + " show-advanced" + player_str[bracket_index:]
-        
     
     if "Ignore Start" not in time_frame["qualifiers"]:
         if "Start" in time_frame["qualifiers"]:
@@ -12006,6 +12007,7 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
     player_data = {
         "ids": [],
         "mlb_ids" : [],
+        "quals" : [],
         "stat_values": {}
     }
 
@@ -12769,6 +12771,7 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
         if all_unique_quals:
             multiple_matches = False
         for subbb_index, subbb_frame in enumerate(subb_frame):
+            player_data["quals"].append(subbb_frame["qualifiers"])
             if all_unique_quals and (subb_index or subbb_index):
                 continue
 
@@ -27208,10 +27211,6 @@ def add_row_numbers(row, at_bat_event, event_name, qualifiers, player_type):
                 elif ind_pitch in ("S", "M", "Q", "W", "T", "O"):
                     row["S/SO"] += 1
                 row["2StrK"] += 1
-    
-    if event_name not in row["event_mapping"]:
-        row["event_mapping"][event_name] = set()
-    row["event_mapping"][event_name].add(at_bat_event["event_id"])
 
 def add_pitch_row_numbers(row, at_bat_event, event_name, qualifiers, pitch_index, ind_pitch, pitch_event_obj):
     row["Pit"] += 1
@@ -27313,10 +27312,6 @@ def add_pitch_row_numbers(row, at_bat_event, event_name, qualifiers, pitch_index
     }]
     if handle_count_qual(pitch_event_obj, two_str_qual, False, False):
         row["2StrPit"] += 1
-    
-    if "pitch" not in row["event_mapping"]:
-        row["event_mapping"]["pitch"] = set()
-    row["event_mapping"]["pitch"].add(str(at_bat_event["event_id"]) + "-" + str(pitch_index + 1))
 
 def handle_da_mlb_quals(row, event_name, at_bat_event, qualifiers, player_data, player_type, player_game_info, skip_pitch_events=False, skip_career_events=False):
     if "Batting Against" in qualifiers:
@@ -28542,7 +28537,7 @@ def handle_da_mlb_quals(row, event_name, at_bat_event, qualifiers, player_data, 
                 return False
             qualifiers_copy = copy.deepcopy(qualifiers)
             del qualifiers_copy["Back To Back With"]
-            if not handle_da_mlb_quals(row, event_name, next_event, qualifiers_copy, player_data, player_type, player_game_info):
+            if not handle_da_mlb_quals(row, event_name, next_event, qualifiers_copy, player_data, player_type, player_game_info, skip_pitch_events, skip_career_events):
                 return False
 
             has_match = False
@@ -30234,11 +30229,7 @@ def handle_da_mlb_quals(row, event_name, at_bat_event, qualifiers, player_data, 
             has_match = False
             for player in qual_object["values"]:
                 if row["GameLink"] in player["games"]:
-                    if at_bat_event["result"] in player["games"][row["GameLink"]]:
-                        event_id = at_bat_event["event_id"]
-                        if at_bat_event["result"] == "pitch":
-                            event_id = str(at_bat_event["event_id"]) + "-" + str(at_bat_event["pitch_index"]) 
-                        has_match = event_id in player["games"][row["GameLink"]][at_bat_event["result"]]
+                    has_match = handle_da_mlb_quals(row, event_name, at_bat_event, player["quals"], player_data, player_type, player_game_info, skip_pitch_events, skip_career_events)
             if qual_object["negate"]:
                 if has_match:
                     return False
@@ -35089,7 +35080,6 @@ def clear_data(row):
     row["CS"] = 0
     row["SB"] = 0
     row["NS"] = 0
-    row["event_mapping"] = {}
 
 def calculate_data(row, player_type):
     if player_type["da_type"] == "Batter":

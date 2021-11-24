@@ -6170,6 +6170,7 @@ qualifier_map = {
 missing_player_data = {
     "ids" : [],
     "nhl_ids" : [],
+    "quals" : [],
     "Player" : "No Player Match!",
     "id" : "No Player Match!",
     "nhl_id" : "No Player Match!",
@@ -10879,6 +10880,7 @@ def handle_name_threads(sub_name, parse_time_frames, index, player_type, remove_
                     subbb_player_data = {
                         "ids" : [subb_player_data["id"]],
                         "nhl_ids" : [subb_player_data["nhl_id"]],
+                        "quals" : [subb_player_data["quals"]],
                         "player_position" : subb_player_data["player_position"],
                         "player_cap" : subb_player_data["player_cap"],
                         "has_season_stats" : subb_player_data["has_season_stats"],
@@ -11089,7 +11091,7 @@ def handle_against_qual(names, time_frames, comment_obj, extra_stats):
                 if "Sub Query" in time_frame["qualifiers"]:
                     handle_the_quals(time_frame["qualifiers"], "Sub Query", sub_matching_names, time_frame, "Game", comment_obj, players_map, extra_stats)
                 if "Event Sub Query" in time_frame["qualifiers"]:
-                    handle_the_quals(time_frame["qualifiers"], "Event Sub Query", sub_matching_names, time_frame, "Event", comment_obj, players_map, extra_stats)
+                    handle_the_quals(time_frame["qualifiers"], "Event Sub Query", sub_matching_names, time_frame, "Game", comment_obj, players_map, extra_stats)
                 if "Day Of Sub Query" in time_frame["qualifiers"]:
                     handle_the_quals(time_frame["qualifiers"], "Day Of Sub Query", sub_matching_names, time_frame, "Date", comment_obj, players_map, extra_stats)
                 if "Day After Sub Query" in time_frame["qualifiers"]:
@@ -11311,8 +11313,6 @@ def sub_handle_the_quals(players, qualifier, qual_str, player_str, time_frame, k
                     player_games[row["GameLink"]] = True
                 elif key == "Season":
                     player_games[row["Year"]] = True
-                elif key == "Event":
-                    player_games[row["GameLink"]] = row["event_mapping"]
                 elif key == "Date":
                     date = row["Date"]
                     opponent = row[key]
@@ -11365,6 +11365,8 @@ def sub_handle_the_quals(players, qualifier, qual_str, player_str, time_frame, k
                 "search_term" : player_data["stat_values"]["Search Term"],
                 "games" : player_games
             })
+            if qual_str == "Event Sub Query":
+                players[len(players) - 1]["quals"] = player_data["quals"][index]
 
     if comment_obj and new_search and comment_obj["is_approved"]:
         try:
@@ -11817,6 +11819,7 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
     player_data = {
         "ids": [],
         "nhl_ids" : [],
+        "quals" : [],
         "stat_values": {
             "is_shift_data" : has_against_quals_no_so(extra_stats),
             "is_leading_data" : bool(seasons_leading),
@@ -12484,6 +12487,7 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
         if all_unique_quals:
             multiple_matches = False
         for subbb_index, subbb_frame in enumerate(subb_frame):
+            player_data["quals"].append(subbb_frame["qualifiers"])
             if all_unique_quals and (subb_index or subbb_index):
                 continue
 
@@ -20989,19 +20993,13 @@ def perform_metadata_qual(event_name, goal_event, qualifiers, player_game_info, 
             has_match = False
             for player in qual_object["values"]:
                 if row["GameLink"] in player["games"]:
-                    if event_name in player["games"][row["GameLink"]]:
-                        event_id = goal_event["event_id"]
-                        has_match = event_id in player["games"][row["GameLink"]][event_name]
+                    has_match = perform_metadata_qual(event_name, goal_event, player["quals"], player_game_info, row, is_playoffs, year, is_faceoff, is_toi, is_off_ice)
             if qual_object["negate"]:
                 if has_match:
                     return False
             else:
                 if not has_match:
                     return False
-
-    if event_name not in row["event_mapping"]:
-        row["event_mapping"][event_name] = set()
-    row["event_mapping"][event_name].add(goal_event["event_id"])
 
     return True
 
@@ -21309,7 +21307,6 @@ def perform_side_qual(event, qualifiers, is_left):
 
 def clear_row_attrs(row, player_type):
     row["Per"] = 0
-    row["event_mapping"] = {}
     if player_type["da_type"]["type"] == "Skater":
         row["G"] = 0
         row["A"] = 0
