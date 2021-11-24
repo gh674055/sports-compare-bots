@@ -5137,6 +5137,7 @@ qualifier_map = {
         False : "Not Birthday"
     },
     "Sub Query" : {},
+    "Or Sub Query" : {},
     "Day Of Sub Query" : {},
     "Day After Sub Query" : {},
     "Day Before Sub Query" : {},

@@ -1363,7 +1363,7 @@ def handle_player_string(comment, player_type, is_fantasy, last_updated, hide_ta
                         og_time_str = time_frame
                         qualifiers = {}
 
-                        last_match = re.finditer(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?((?:sub-query|day-after-sub-query|day-before-sub-query|day-of-sub-query|game-after-sub-query|game-before-sub-query|season-sub-query|season-after-sub-query|season-before-sub-query|w|(?:playing|starting)-with|a|(?:playing|starting)-against|(?:playing|starting)-same-game|prv-w|previous-playing-with|prv-a|previous-playing-against|upc-w|upcoming-playing-with|upc-a|upcoming-playing-against|(?:playing|starting)-same-opponents?|(?:playing|starting)-same-dates?|holidays?|dts|dates|stadium|exact-stadium|arena|exact-arena|surface|roof|thrown-to|injury|start-time):(?<!\\)\(.*?(?<!\\)\))", time_frame)
+                        last_match = re.finditer(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?((?:sub-query|day-after-sub-query|or-sub-query|day-before-sub-query|day-of-sub-query|game-after-sub-query|game-before-sub-query|season-sub-query|season-after-sub-query|season-before-sub-query|w|(?:playing|starting)-with|a|(?:playing|starting)-against|(?:playing|starting)-same-game|prv-w|previous-playing-with|prv-a|previous-playing-against|upc-w|upcoming-playing-with|upc-a|upcoming-playing-against|(?:playing|starting)-same-opponents?|(?:playing|starting)-same-dates?|holidays?|dts|dates|stadium|exact-stadium|arena|exact-arena|surface|roof|thrown-to|injury|start-time):(?<!\\)\(.*?(?<!\\)\))", time_frame)
                         for m in last_match:
                             qualifier_obj = {}
                             negate_str = m.group(1)
@@ -1380,7 +1380,7 @@ def handle_player_string(comment, player_type, is_fantasy, last_updated, hide_ta
                                     "negate" : False
                                 })
 
-                            if qualifier_str.startswith("sub-query:") or qualifier_str.startswith("day-after-sub-query:") or qualifier_str.startswith("day-before-sub-query:") or qualifier_str.startswith("day-of-sub-query:") or qualifier_str.startswith("game-after-sub-query:") or qualifier_str.startswith("game-before-sub-query:") or qualifier_str.startswith("season-sub-query:") or qualifier_str.startswith("season-after-sub-query:") or qualifier_str.startswith("season-before-sub-query:") or qualifier_str.startswith("w:") or qualifier_str.startswith("playing-with:") or qualifier_str.startswith("playing-same-game:") or qualifier_str.startswith("starting-same-game:") or qualifier_str.startswith("a:") or qualifier_str.startswith("playing-against:") or qualifier_str.startswith("prv-w:") or qualifier_str.startswith("previous-playing-with:") or qualifier_str.startswith("prv-a:") or qualifier_str.startswith("previous-playing-against:") or qualifier_str.startswith("upc-w:") or qualifier_str.startswith("upcoming-playing-with:") or qualifier_str.startswith("upc-a:") or qualifier_str.startswith("upcoming-playing-against:") or qualifier_str.startswith("playing-same-opponent:")  or qualifier_str.startswith("playing-same-opponents:") or qualifier_str.startswith("playing-same-date:") or qualifier_str.startswith("playing-same-dates:") or qualifier_str.startswith("holiday:") or qualifier_str.startswith("holidays:") or qualifier_str.startswith("dts:") or qualifier_str.startswith("dates:") or qualifier_str.startswith("injury:") or qualifier_str.startswith("stadium:") or qualifier_str.startswith("exact-stadium:") or qualifier_str.startswith("arena:") or qualifier_str.startswith("exact-arena:") or qualifier_str.startswith("surface:") or qualifier_str.startswith("roof:") or qualifier_str.startswith("thrown-to:"):
+                            if qualifier_str.startswith("sub-query:") or qualifier_str.startswith("or-sub-query:") or qualifier_str.startswith("day-after-sub-query:") or qualifier_str.startswith("day-before-sub-query:") or qualifier_str.startswith("day-of-sub-query:") or qualifier_str.startswith("game-after-sub-query:") or qualifier_str.startswith("game-before-sub-query:") or qualifier_str.startswith("season-sub-query:") or qualifier_str.startswith("season-after-sub-query:") or qualifier_str.startswith("season-before-sub-query:") or qualifier_str.startswith("w:") or qualifier_str.startswith("playing-with:") or qualifier_str.startswith("playing-same-game:") or qualifier_str.startswith("starting-same-game:") or qualifier_str.startswith("a:") or qualifier_str.startswith("playing-against:") or qualifier_str.startswith("prv-w:") or qualifier_str.startswith("previous-playing-with:") or qualifier_str.startswith("prv-a:") or qualifier_str.startswith("previous-playing-against:") or qualifier_str.startswith("upc-w:") or qualifier_str.startswith("upcoming-playing-with:") or qualifier_str.startswith("upc-a:") or qualifier_str.startswith("upcoming-playing-against:") or qualifier_str.startswith("playing-same-opponent:")  or qualifier_str.startswith("playing-same-opponents:") or qualifier_str.startswith("playing-same-date:") or qualifier_str.startswith("playing-same-dates:") or qualifier_str.startswith("holiday:") or qualifier_str.startswith("holidays:") or qualifier_str.startswith("dts:") or qualifier_str.startswith("dates:") or qualifier_str.startswith("injury:") or qualifier_str.startswith("stadium:") or qualifier_str.startswith("exact-stadium:") or qualifier_str.startswith("arena:") or qualifier_str.startswith("exact-arena:") or qualifier_str.startswith("surface:") or qualifier_str.startswith("roof:") or qualifier_str.startswith("thrown-to:"):
                                 if qualifier_str.startswith("w:"):
                                     qual_str = "w:"
                                     qual_type = "Playing With"
@@ -1476,6 +1476,9 @@ def handle_player_string(comment, player_type, is_fantasy, last_updated, hide_ta
                                 elif qualifier_str.startswith("sub-query:"):
                                     qual_str = "sub-query:"
                                     qual_type = "Sub Query"
+                                elif qualifier_str.startswith("or-sub-query:"):
+                                    qual_str = "or-sub-query:"
+                                    qual_type = "Or Sub Query"
                                 elif qualifier_str.startswith("day-of-sub-query:"):
                                     qual_str = "day-of-sub-query:"
                                     qual_type = "Day Of Sub Query"
@@ -4365,6 +4368,14 @@ def handle_player_string(comment, player_type, is_fantasy, last_updated, hide_ta
                                 if player_str not in player_str_set:
                                     name_count += 1
                                     player_str_set.add(player_str)
+                if "Or Sub Query" in subbbb_date["qualifiers"]:
+                    for qual in subbbb_date["qualifiers"]["Or Sub Query"]:
+                        for player_str in qual["values"]:
+                            for match_name in sub_matching_names:
+                                player_str = determine_player_str(qual,  "<" + match_name + "> [" + player_str + "]", subbbb_date, "Or Sub Query")
+                                if player_str not in player_str_set:
+                                    name_count += 1
+                                    player_str_set.add(player_str)
                 if "Day After Sub Query" in subbbb_date["qualifiers"]:
                     for qual in subbbb_date["qualifiers"]["Day After Sub Query"]:
                         for player_str in qual["values"]:
@@ -5081,6 +5092,8 @@ def handle_against_qual(names, time_frames, comment_obj):
             for time_frame in subbb_frames:
                 if "Sub Query" in time_frame["qualifiers"]:
                     handle_the_quals(time_frame["qualifiers"], "Sub Query", sub_matching_names, time_frame, "Game", comment_obj, players_map)
+                if "Or Sub Query" in time_frame["qualifiers"]:
+                    handle_the_quals(time_frame["qualifiers"], "Or Sub Query", sub_matching_names, time_frame, "Game", comment_obj, players_map)
                 if "Day Of Sub Query" in time_frame["qualifiers"]:
                     handle_the_quals(time_frame["qualifiers"], "Day Of Sub Query", sub_matching_names, time_frame, "Date", comment_obj, players_map)
                 if "Day After Sub Query" in time_frame["qualifiers"]:
@@ -5775,6 +5788,11 @@ def combine_player_datas(player_datas, player_type, any_missing_games, time_fram
         for time_frame in subb_frame:
             if "Sub Query" in time_frame["qualifiers"]:
                 for qualifier in time_frame["qualifiers"]["Sub Query"]:
+                    for player in qualifier["values"]:
+                        if player["missing_games"]:
+                            any_missing_games = True
+            if "Or Sub Query" in time_frame["qualifiers"]:
+                for qualifier in time_frame["qualifiers"]["Or Sub Query"]:
                     for player in qualifier["values"]:
                         if player["missing_games"]:
                             any_missing_games = True
@@ -6512,7 +6530,7 @@ def determine_raw_str(subbb_frame):
                             qual_str += player_url_str + " (Searched Term: \"" + " + ".join(player["search_term"]) + "\")"
                         else:
                             qual_str += player_url_str + ((" (" + player["query"] + ")") if player["query"] != "Query: " else "")
-                elif qualifier == "Sub Query" or qualifier == "Day Of Sub Query" or qualifier == "Day After Sub Query" or qualifier == "Day Before Sub Query" or qualifier == "Game After Sub Query" or qualifier == "Game Before Sub Query" or qualifier == "Season Sub Query" or qualifier == "Season After Sub Query" or qualifier == "Season Before Sub Query":
+                elif qualifier == "Sub Query" or qualifier == "Or Sub Query" or qualifier == "Day Of Sub Query" or qualifier == "Day After Sub Query" or qualifier == "Day Before Sub Query" or qualifier == "Game After Sub Query" or qualifier == "Game Before Sub Query" or qualifier == "Season Sub Query" or qualifier == "Season After Sub Query" or qualifier == "Season Before Sub Query":
                     for player in qual_obj["values"]:
                         if not sub_sub_first:
                             qual_str += " + "
@@ -10606,6 +10624,22 @@ def perform_qualifier(player_data, player_type, ind_player_type, row, time_frame
             else:
                 if not has_match:
                     return False
+    
+    if "Or Sub Query" in qualifiers:
+        has_any_match = False
+        for qual_object in qualifiers["Or Sub Query"]:
+            has_match = False
+            for player in qual_object["values"]:
+                if row["Shared"]["GameLink"] in player["games"]:
+                    has_match = True
+            if qual_object["negate"]:
+                if not has_match:
+                    has_any_match = True
+            else:
+                if has_match:
+                    has_any_match = True
+        if not has_any_match:
+            return False
 
     if "Day Of Sub Query" in qualifiers:
         for qual_object in qualifiers["Day Of Sub Query"]:
