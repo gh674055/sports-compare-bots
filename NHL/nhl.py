@@ -7079,6 +7079,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                             elif qualifier_str.startswith("event-sub-query:"):
                                 qual_str = "event-sub-query:"
                                 qual_type = "Event Sub Query"
+                                extra_stats.add("current-stats")
                             elif qualifier_str.startswith("day-of-sub-query:"):
                                 qual_str = "day-of-sub-query:"
                                 qual_type = "Day Of Sub Query"
@@ -16863,7 +16864,7 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                     team_shootout_goal += 1
 
             if player_scored:
-                game_data["goal"].append(shared_data | {
+                game_data["goal"].append({**shared_data , **{
                     "goalie" : goalie,
                     "gameWinningGoal" : game_winning_goal,
                     "emptyNet" : "emptyNet" in scoring_play["result"] and scoring_play["result"]["emptyNet"],
@@ -16871,19 +16872,20 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                     "firstGoal" : first_goal,
                     "assists" : assists,
                     "secondaryType" : scoring_play["result"]["secondaryType"] if "secondaryType" in scoring_play["result"] else None
-                })
+                }})
             elif player_assisted:
-                game_data["assist"].append(shared_data | {
+                game_data["assist"].append({**shared_data , **{
                     "scorer" : scorer,
                     "is_primary" : is_primary,
                     "gameWinningGoal" : "gameWinningGoal" in scoring_play["result"] and scoring_play["result"]["gameWinningGoal"],
                     "emptyNet" : "emptyNet" in scoring_play["result"] and scoring_play["result"]["emptyNet"],
                     "assists" : assists
-                })
+                }})
             elif player_saved:
-                game_data["goal_against"].append(shared_data | {
+                game_data["goal_against"].append({**shared_data , **{
                     "scorer" : scorer,
-                    "gameWinningGoal" : "gameWinningGoal" in scoring_play["result"] and scoring_play["result"]["gameWinningGoal"]                })
+                    "gameWinningGoal" : "gameWinningGoal" in scoring_play["result"] and scoring_play["result"]["gameWinningGoal"]
+                }})
             
             if is_player_on_ice(game_data["shift_data"], team_on_ice, opp_on_ice, scoring_play["about"]["period"], period_time, player_id, True):
                 if scoring_play["team"]["id"] == game_data["team_id"]:
@@ -16932,15 +16934,15 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                         goalie = score_player["player"]["id"]
             
             if player_shot:
-                game_data["shot"].append(shared_data | {
+                game_data["shot"].append({**shared_data , **{
                     "penaltyShot" : next_shot_penalty_shot,
                     "secondaryType" : scoring_play["result"]["secondaryType"] if "secondaryType" in scoring_play["result"] else None
-                })
+                }})
             elif player_saved:
-                game_data["save_against"].append({
+                game_data["save_against"].append({**shared_data , **{
                     "penaltyShot" : next_shot_penalty_shot,
                     "secondaryType" : scoring_play["result"]["secondaryType"] if "secondaryType" in scoring_play["result"] else None
-                })
+                }})
 
             if is_player_on_ice(game_data["shift_data"], team_on_ice, opp_on_ice, scoring_play["about"]["period"], period_time, player_id, True):
                 if scoring_play["team"]["id"] == game_data["team_id"]:
@@ -16970,10 +16972,10 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                         player_shot = True
             
             if player_shot:
-                game_data["missed_shot"].append(shared_data | {
+                game_data["missed_shot"].append({**shared_data , **{
                     "penaltyShot" : next_shot_penalty_shot,
                     "description" : scoring_play["result"]["description"] if "description" in scoring_play["result"] else ""
-                })
+                }})
 
             if is_player_on_ice(game_data["shift_data"], team_on_ice, opp_on_ice, scoring_play["about"]["period"], period_time, player_id, True):
                 if scoring_play["team"]["id"] == game_data["team_id"]:
@@ -16992,10 +16994,10 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
 
             next_shot_penalty_shot = False
         elif scoring_play["result"]["event"] == "Penalty":
-            pen_obj = shared_data | {
+            pen_obj = {**shared_data , **{
                 "penalty_minutes" : scoring_play["result"]["penaltyMinutes"],
                 "penalty_minutes_to_use" : scoring_play["result"]["penaltyMinutes"]
-            }
+            }}
             player_penalty = False
             player_penalty_drawn = False
             penalty_against = None
@@ -17060,9 +17062,9 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                     hit_against = score_player["player"]["id"]
             
             if player_hit:
-                game_data["hit"].append(shared_data | {
+                game_data["hit"].append({**shared_data , **{
                     "hit_against" : hit_against
-                })
+                }})
         elif scoring_play["result"]["event"] == "Blocked Shot":
             player_block = False
             player_shot = False
@@ -17077,9 +17079,9 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                         player_shot = True
             
             if player_block:
-                game_data["block"].append(shared_data | {
+                game_data["block"].append({**shared_data , **{
                     "block_against" : block_against
-                })
+                }})
             elif player_shot:
                 game_data["blocked_shot"].append(shared_data)
 
@@ -17111,26 +17113,26 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                         faceoff_against = score_player["player"]["id"]
 
             if player_faceoff_winner:
-                game_data["faceoff"].append(shared_data | {
+                game_data["faceoff"].append({**shared_data , **{
                     "winner" : True,
                     "faceoff_against" : faceoff_against
-                })
+                }})
             elif player_faceoff_loser:
-                game_data["faceoff"].append(shared_data | {
+                game_data["faceoff"].append({**shared_data , **{
                     "winner" : False,
                     "faceoff_against" : faceoff_against
-                })
+                }})
             
             if is_player_on_ice(game_data["shift_data"], team_on_ice, opp_on_ice, scoring_play["about"]["period"], period_time, player_id, True, is_faceoff=True):
-                game_data["all_faceoffs"].append(shared_data | {
+                game_data["all_faceoffs"].append({**shared_data , **{
                     "winner" : True,
                     "faceoff_against" : faceoff_against
-                })
+                }})
         elif scoring_play["result"]["event"] == "Takeaway" or scoring_play["result"]["event"] == "Giveaway":
             if scoring_play["players"][0]["player"]["id"] == player_id:
-                game_data["takeaway"].append(shared_data | {
+                game_data["takeaway"].append({**shared_data , **{
                     "is_takeaway" : scoring_play["result"]["event"] == "Takeaway"
-                })
+                }})
     
     return game_data, row_data, missing_games
             

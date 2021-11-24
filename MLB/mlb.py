@@ -6546,6 +6546,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 elif qualifier_str.startswith("event-sub-query:"):
                                     qual_str = "event-sub-query:"
                                     qual_type = "Event Sub Query"
+                                    extra_stats.add("current-stats")
                                 elif qualifier_str.startswith("day-of-sub-query:"):
                                     qual_str = "day-of-sub-query:"
                                     qual_type = "Day Of Sub Query"
