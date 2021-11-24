@@ -1363,7 +1363,7 @@ def handle_player_string(comment, player_type, is_fantasy, last_updated, hide_ta
                         og_time_str = time_frame
                         qualifiers = {}
 
-                        last_match = re.finditer(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?((?:sub-query|day-after-sub-query|or-sub-query|day-before-sub-query|day-of-sub-query|game-after-sub-query|game-before-sub-query|season-sub-query|season-after-sub-query|season-before-sub-query|w|(?:playing|starting)-with|a|(?:playing|starting)-against|(?:playing|starting)-same-game|prv-w|previous-playing-with|prv-a|previous-playing-against|upc-w|upcoming-playing-with|upc-a|upcoming-playing-against|(?:playing|starting)-same-opponents?|(?:playing|starting)-same-dates?|holidays?|dts|dates|stadium|exact-stadium|arena|exact-arena|surface|roof|thrown-to|injury|start-time):(?<!\\)\(.*?(?<!\\)\))", time_frame)
+                        last_match = re.finditer(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?((?:sub-query|day-after-sub-query|or-sub-query|day-before-sub-query|day-of-sub-query|game-after-sub-query|game-before-sub-query|season-sub-query|or-season-sub-query|season-after-sub-query|season-before-sub-query|w|(?:playing|starting)-with|a|(?:playing|starting)-against|(?:playing|starting)-same-game|prv-w|previous-playing-with|prv-a|previous-playing-against|upc-w|upcoming-playing-with|upc-a|upcoming-playing-against|(?:playing|starting)-same-opponents?|(?:playing|starting)-same-dates?|holidays?|dts|dates|stadium|exact-stadium|arena|exact-arena|surface|roof|thrown-to|injury|start-time):(?<!\\)\(.*?(?<!\\)\))", time_frame)
                         for m in last_match:
                             qualifier_obj = {}
                             negate_str = m.group(1)
@@ -1380,7 +1380,7 @@ def handle_player_string(comment, player_type, is_fantasy, last_updated, hide_ta
                                     "negate" : False
                                 })
 
-                            if qualifier_str.startswith("sub-query:") or qualifier_str.startswith("or-sub-query:") or qualifier_str.startswith("day-after-sub-query:") or qualifier_str.startswith("day-before-sub-query:") or qualifier_str.startswith("day-of-sub-query:") or qualifier_str.startswith("game-after-sub-query:") or qualifier_str.startswith("game-before-sub-query:") or qualifier_str.startswith("season-sub-query:") or qualifier_str.startswith("season-after-sub-query:") or qualifier_str.startswith("season-before-sub-query:") or qualifier_str.startswith("w:") or qualifier_str.startswith("playing-with:") or qualifier_str.startswith("playing-same-game:") or qualifier_str.startswith("starting-same-game:") or qualifier_str.startswith("a:") or qualifier_str.startswith("playing-against:") or qualifier_str.startswith("prv-w:") or qualifier_str.startswith("previous-playing-with:") or qualifier_str.startswith("prv-a:") or qualifier_str.startswith("previous-playing-against:") or qualifier_str.startswith("upc-w:") or qualifier_str.startswith("upcoming-playing-with:") or qualifier_str.startswith("upc-a:") or qualifier_str.startswith("upcoming-playing-against:") or qualifier_str.startswith("playing-same-opponent:")  or qualifier_str.startswith("playing-same-opponents:") or qualifier_str.startswith("playing-same-date:") or qualifier_str.startswith("playing-same-dates:") or qualifier_str.startswith("holiday:") or qualifier_str.startswith("holidays:") or qualifier_str.startswith("dts:") or qualifier_str.startswith("dates:") or qualifier_str.startswith("injury:") or qualifier_str.startswith("stadium:") or qualifier_str.startswith("exact-stadium:") or qualifier_str.startswith("arena:") or qualifier_str.startswith("exact-arena:") or qualifier_str.startswith("surface:") or qualifier_str.startswith("roof:") or qualifier_str.startswith("thrown-to:"):
+                            if qualifier_str.startswith("sub-query:") or qualifier_str.startswith("or-sub-query:") or qualifier_str.startswith("day-after-sub-query:") or qualifier_str.startswith("day-before-sub-query:") or qualifier_str.startswith("day-of-sub-query:") or qualifier_str.startswith("game-after-sub-query:") or qualifier_str.startswith("game-before-sub-query:") or qualifier_str.startswith("season-sub-query:") or qualifier_str.startswith("or-season-sub-query:") or qualifier_str.startswith("season-after-sub-query:") or qualifier_str.startswith("season-before-sub-query:") or qualifier_str.startswith("w:") or qualifier_str.startswith("playing-with:") or qualifier_str.startswith("playing-same-game:") or qualifier_str.startswith("starting-same-game:") or qualifier_str.startswith("a:") or qualifier_str.startswith("playing-against:") or qualifier_str.startswith("prv-w:") or qualifier_str.startswith("previous-playing-with:") or qualifier_str.startswith("prv-a:") or qualifier_str.startswith("previous-playing-against:") or qualifier_str.startswith("upc-w:") or qualifier_str.startswith("upcoming-playing-with:") or qualifier_str.startswith("upc-a:") or qualifier_str.startswith("upcoming-playing-against:") or qualifier_str.startswith("playing-same-opponent:")  or qualifier_str.startswith("playing-same-opponents:") or qualifier_str.startswith("playing-same-date:") or qualifier_str.startswith("playing-same-dates:") or qualifier_str.startswith("holiday:") or qualifier_str.startswith("holidays:") or qualifier_str.startswith("dts:") or qualifier_str.startswith("dates:") or qualifier_str.startswith("injury:") or qualifier_str.startswith("stadium:") or qualifier_str.startswith("exact-stadium:") or qualifier_str.startswith("arena:") or qualifier_str.startswith("exact-arena:") or qualifier_str.startswith("surface:") or qualifier_str.startswith("roof:") or qualifier_str.startswith("thrown-to:"):
                                 if qualifier_str.startswith("w:"):
                                     qual_str = "w:"
                                     qual_type = "Playing With"
@@ -1497,6 +1497,9 @@ def handle_player_string(comment, player_type, is_fantasy, last_updated, hide_ta
                                 elif qualifier_str.startswith("season-sub-query:"):
                                     qual_str = "season-sub-query:"
                                     qual_type = "Season Sub Query"
+                                elif qualifier_str.startswith("or-season-sub-query:"):
+                                    qual_str = "or-season-sub-query:"
+                                    qual_type = "Or Season Sub Query"
                                 elif qualifier_str.startswith("season-after-sub-query:"):
                                     qual_str = "season-after-sub-query:"
                                     qual_type = "Season After Sub Query"
@@ -4412,7 +4415,15 @@ def handle_player_string(comment, player_type, is_fantasy, last_updated, hide_ta
                     for qual in subbbb_date["qualifiers"]["Season Sub Query"]:
                         for player_str in qual["values"]:
                             for match_name in sub_matching_names:
-                                player_str = determine_player_str(qual, player_type,  "<" + match_name + "> [" + player_str + "]", subbbb_date, "Season Sub Query")
+                                player_str = determine_player_str(qual,  "<" + match_name + "> [" + player_str + "]", subbbb_date, "Season Sub Query")
+                                if player_str not in player_str_set:
+                                    name_count += 1
+                                    player_str_set.add(player_str)
+                if "Or Season Sub Query" in subbbb_date["qualifiers"]:
+                    for qual in subbbb_date["qualifiers"]["Or Season Sub Query"]:
+                        for player_str in qual["values"]:
+                            for match_name in sub_matching_names:
+                                player_str = determine_player_str(qual,  "<" + match_name + "> [" + player_str + "]", subbbb_date, "Or Season Sub Query")
                                 if player_str not in player_str_set:
                                     name_count += 1
                                     player_str_set.add(player_str)
@@ -4420,7 +4431,7 @@ def handle_player_string(comment, player_type, is_fantasy, last_updated, hide_ta
                     for qual in subbbb_date["qualifiers"]["Season After Sub Query"]:
                         for player_str in qual["values"]:
                             for match_name in sub_matching_names:
-                                player_str = determine_player_str(qual, player_type,  "<" + match_name + "> [" + player_str + "]", subbbb_date, "Season After Sub Query")
+                                player_str = determine_player_str(qual,  "<" + match_name + "> [" + player_str + "]", subbbb_date, "Season After Sub Query")
                                 if player_str not in player_str_set:
                                     name_count += 1
                                     player_str_set.add(player_str)
@@ -4428,7 +4439,7 @@ def handle_player_string(comment, player_type, is_fantasy, last_updated, hide_ta
                     for qual in subbbb_date["qualifiers"]["Season Before Sub Query"]:
                         for player_str in qual["values"]:
                             for match_name in sub_matching_names:
-                                player_str = determine_player_str(qual, player_type,  "<" + match_name + "> [" + player_str + "]", subbbb_date, "Season Before Sub Query")
+                                player_str = determine_player_str(qual,  "<" + match_name + "> [" + player_str + "]", subbbb_date, "Season Before Sub Query")
                                 if player_str not in player_str_set:
                                     name_count += 1
                                     player_str_set.add(player_str)
@@ -5106,6 +5117,8 @@ def handle_against_qual(names, time_frames, comment_obj):
                     handle_the_quals(time_frame["qualifiers"], "Game Before Sub Query", sub_matching_names, time_frame, "Game", comment_obj, players_map)
                 if "Season Sub Query" in time_frame["qualifiers"]:
                     handle_the_quals(time_frame["qualifiers"], "Season Sub Query", sub_matching_names, time_frame, "Season", comment_obj, players_map)
+                if "Or Season Sub Query" in time_frame["qualifiers"]:
+                    handle_the_quals(time_frame["qualifiers"], "Or Season Sub Query", sub_matching_names, time_frame, "Season", comment_obj, players_map)
                 if "Season After Sub Query" in time_frame["qualifiers"]:
                     handle_the_quals(time_frame["qualifiers"], "Season After Sub Query", sub_matching_names, time_frame, "Season", comment_obj, players_map)
                 if "Season Before Sub Query" in time_frame["qualifiers"]:
@@ -5349,7 +5362,7 @@ def determine_player_str(qualifier, player_str, time_frame, qual_str):
         bracket_index = re.search(r"(?<!\\)]", player_str).start()
         player_str = player_str[:bracket_index] + " " + get_time_str(time_frame["time_start"], False) + " to " + get_time_str(time_frame["time_end"], False) + player_str[bracket_index:]
 
-    if not qual_str in ["Season Sub Query", "Season After Sub Query", "Season Before Sub Query"]:
+    if not qual_str in ["Season Sub Query", "Or Season Sub Query", "Season After Sub Query", "Season Before Sub Query"]:
         bracket_index = re.search(r"(?<!\\)]", player_str).start()
         player_str = player_str[:bracket_index] + " force-dates" + player_str[bracket_index:]
     
@@ -5823,6 +5836,11 @@ def combine_player_datas(player_datas, player_type, any_missing_games, time_fram
                             any_missing_games = True
             if "Season Sub Query" in time_frame["qualifiers"]:
                 for qualifier in time_frame["qualifiers"]["Season Sub Query"]:
+                    for player in qualifier["values"]:
+                        if player["missing_games"]:
+                            any_missing_games = True
+            if "Or Season Sub Query" in time_frame["qualifiers"]:
+                for qualifier in time_frame["qualifiers"]["Or Season Sub Query"]:
                     for player in qualifier["values"]:
                         if player["missing_games"]:
                             any_missing_games = True
@@ -6530,7 +6548,7 @@ def determine_raw_str(subbb_frame):
                             qual_str += player_url_str + " (Searched Term: \"" + " + ".join(player["search_term"]) + "\")"
                         else:
                             qual_str += player_url_str + ((" (" + player["query"] + ")") if player["query"] != "Query: " else "")
-                elif qualifier == "Sub Query" or qualifier == "Or Sub Query" or qualifier == "Day Of Sub Query" or qualifier == "Day After Sub Query" or qualifier == "Day Before Sub Query" or qualifier == "Game After Sub Query" or qualifier == "Game Before Sub Query" or qualifier == "Season Sub Query" or qualifier == "Season After Sub Query" or qualifier == "Season Before Sub Query":
+                elif qualifier == "Sub Query" or qualifier == "Or Sub Query" or qualifier == "Day Of Sub Query" or qualifier == "Day After Sub Query" or qualifier == "Day Before Sub Query" or qualifier == "Game After Sub Query" or qualifier == "Game Before Sub Query" or qualifier == "Season Sub Query" or qualifier == "Or Season Sub Query" or qualifier == "Season After Sub Query" or qualifier == "Season Before Sub Query":
                     for player in qual_obj["values"]:
                         if not sub_sub_first:
                             qual_str += " + "
@@ -7030,7 +7048,7 @@ def handle_player_data(player_data, time_frame, player_type, player_page, is_fan
     is_qual_match = False
     is_qual_match_excl_round = False
     for qualifier in time_frame["qualifiers"]:
-        if qualifier != "Team" and qualifier != "Team Franchise" and qualifier != "Team League" and qualifier != "Team Conference" and qualifier != "Team Division" and qualifier != "Rookie" and qualifier != "Max Stat" and qualifier != "Min Stat" and qualifier != "Max Streak" and qualifier != "Max Stretch" and qualifier != "Count Streak" and qualifier != "Quickest"  and qualifier != "Slowest" and qualifier != "Season Stat" and qualifier != "Season Age" and qualifier != "Season" and qualifier != "Season Reversed" and qualifier != "Previous Season Stat"  and qualifier != "Upcoming Season Stat" and qualifier != "Season Sub Query" and qualifier != "Season Before Sub Query" and qualifier != "Season After Sub Query" and qualifier != "Winning Team" and qualifier != "Losing Team" and qualifier != "Tied Team" and qualifier !=  "Winning Or Tied Team" and qualifier !=  "Losing Or Tied Team" and qualifier != "Playoff Team" and qualifier != "Champ Winner Team" and qualifier != "Conference Winner Team" and qualifier != "Division Winner Team" and qualifier != "Team Win Percentage" and qualifier != "Team Games Over 500" and qualifier != "Team Wins" and qualifier != "Team Losses" and qualifier != "Team Ties" and qualifier != "Team Points Rank" and qualifier != "Team Points Allowed Rank" and qualifier != "Team Yards Rank" and qualifier != "Team Yards Allowed Rank" and qualifier != "Team Pass TD Rank" and qualifier != "Team Pass TD Allowed Rank" and qualifier != "Team Pass Yards Rank" and qualifier != "Team Pass Yards Allowed Rank" and qualifier != "Team ANY/A Rank" and qualifier != "Team ANY/A Allowed Rank" and qualifier != "Team Passer Rating Rank" and qualifier != "Team Passer Rating Allowed Rank" and qualifier != "Team Rush TD Rank" and qualifier != "Team Rush TD Allowed Rank" and qualifier != "Team Rush Yards Rank" and qualifier != "Team Rush Yards Allowed Rank" and qualifier != "Team Fantasy Position Rank" and qualifier != "Season Formula" and qualifier != "Had Bye" and qualifier != "Number" and qualifier != "Even Year" and qualifier != "Odd Year" and qualifier != "Year":
+        if qualifier != "Team" and qualifier != "Team Franchise" and qualifier != "Team League" and qualifier != "Team Conference" and qualifier != "Team Division" and qualifier != "Rookie" and qualifier != "Max Stat" and qualifier != "Min Stat" and qualifier != "Max Streak" and qualifier != "Max Stretch" and qualifier != "Count Streak" and qualifier != "Quickest"  and qualifier != "Slowest" and qualifier != "Season Stat" and qualifier != "Season Age" and qualifier != "Season" and qualifier != "Season Reversed" and qualifier != "Previous Season Stat"  and qualifier != "Upcoming Season Stat" and qualifier != "Season Sub Query" and qualifier != "Or Season Sub Query" and qualifier != "Season Before Sub Query" and qualifier != "Season After Sub Query" and qualifier != "Winning Team" and qualifier != "Losing Team" and qualifier != "Tied Team" and qualifier !=  "Winning Or Tied Team" and qualifier !=  "Losing Or Tied Team" and qualifier != "Playoff Team" and qualifier != "Champ Winner Team" and qualifier != "Conference Winner Team" and qualifier != "Division Winner Team" and qualifier != "Team Win Percentage" and qualifier != "Team Games Over 500" and qualifier != "Team Wins" and qualifier != "Team Losses" and qualifier != "Team Ties" and qualifier != "Team Points Rank" and qualifier != "Team Points Allowed Rank" and qualifier != "Team Yards Rank" and qualifier != "Team Yards Allowed Rank" and qualifier != "Team Pass TD Rank" and qualifier != "Team Pass TD Allowed Rank" and qualifier != "Team Pass Yards Rank" and qualifier != "Team Pass Yards Allowed Rank" and qualifier != "Team ANY/A Rank" and qualifier != "Team ANY/A Allowed Rank" and qualifier != "Team Passer Rating Rank" and qualifier != "Team Passer Rating Allowed Rank" and qualifier != "Team Rush TD Rank" and qualifier != "Team Rush TD Allowed Rank" and qualifier != "Team Rush Yards Rank" and qualifier != "Team Rush Yards Allowed Rank" and qualifier != "Team Fantasy Position Rank" and qualifier != "Season Formula" and qualifier != "Had Bye" and qualifier != "Number" and qualifier != "Even Year" and qualifier != "Odd Year" and qualifier != "Year":
             is_qual_match = True
             if qualifier != "Round" and qualifier != "Super Bowl":
                 is_qual_match_excl_round = True
@@ -10744,6 +10762,24 @@ def perform_qualifier(player_data, player_type, ind_player_type, row, time_frame
                 if not has_match:
                     return False
 
+    if "Or Season Sub Query" in qualifiers:
+        has_row_match = False
+        for qual_object in qualifiers["Or Season Sub Query"]:
+            has_match = False
+            for player in qual_object["values"]:
+                if row["Shared"]["Year"] in player["games"]:
+                    has_match = True
+                    break
+            if qual_object["negate"]:
+                if not has_match:
+                    has_row_match = True
+            else:
+                if has_match:
+                    has_row_match = True
+        if not has_row_match:
+            return False
+
+
     if "Season After Sub Query" in qualifiers:
         valid_years = player_data["reg_year_valid_years"] if not time_frame["playoffs"] else player_data["year_valid_years"]
 
@@ -12750,7 +12786,9 @@ def handle_season_stats(all_rows, player_type, qualifiers):
 
         if "Season Stat" in qualifiers or "Previous Season Stat" in qualifiers or "Upcoming Season Stat" in qualifiers:
             season_row_map[season]["comb_row"] = comb_rows(season_matching_rows, player_type, stats=stats)
-            season_row_map[season]["comb_row"]["Shared"]["Year"] = season
+            season_row_map[season]["comb_row"]["Shared"] = {
+                "Year" : season
+            }
         if "Season Formula" in qualifiers:
             stats = set()
             for qual_object in qualifiers["Season Formula"]:
@@ -12771,7 +12809,9 @@ def handle_season_stats(all_rows, player_type, qualifiers):
                             stats[header].add(header)
 
             season_row_map[season]["comb_row_upper"] = comb_rows(season_matching_rows, player_type, False, stats=stats)
-            season_row_map[season]["comb_row_upper"]["Shared"]["Year"] = season
+            season_row_map[season]["comb_row_upper"]["Shared"] = {
+                "Year" : season
+            }
 
     explain_str_obj = None
     
@@ -16481,7 +16521,7 @@ def handle_playoffs_data(all_rows, player_data, player_type, ind_player_type, pl
 
     is_qual_match = False
     for qualifier in time_frame["qualifiers"]:
-        if qualifier != "Team" and qualifier != "Team Franchise" and qualifier != "Team League" and qualifier != "Team Conference" and qualifier != "Team Division" and qualifier != "Rookie" and qualifier != "Max Stat" and qualifier != "Min Stat" and qualifier != "Max Streak" and qualifier != "Max Stretch" and qualifier != "Count Streak" and qualifier != "Quickest"  and qualifier != "Slowest" and qualifier != "Season Stat" and qualifier != "Season Age" and qualifier != "Season" and qualifier != "Season Reversed" and qualifier != "Previous Season Stat"  and qualifier != "Upcoming Season Stat" and qualifier != "Season Sub Query" and qualifier != "Season Before Sub Query" and qualifier != "Season After Sub Query" and qualifier != "Winning Team" and qualifier != "Losing Team" and qualifier != "Tied Team" and qualifier !=  "Winning Or Tied Team" and qualifier !=  "Losing Or Tied Team" and qualifier != "Playoff Team" and qualifier != "Champ Winner Team" and qualifier != "Conference Winner Team" and qualifier != "Division Winner Team" and qualifier != "Team Win Percentage" and qualifier != "Team Games Over 500" and qualifier != "Team Wins" and qualifier != "Team Losses" and qualifier != "Team Ties" and qualifier != "Team Points Rank" and qualifier != "Team Points Allowed Rank" and qualifier != "Team Yards Rank" and qualifier != "Team Yards Allowed Rank" and qualifier != "Team Pass TD Rank" and qualifier != "Team Pass TD Allowed Rank" and qualifier != "Team Pass Yards Rank" and qualifier != "Team Pass Yards Allowed Rank" and qualifier != "Team ANY/A Rank" and qualifier != "Team ANY/A Allowed Rank" and qualifier != "Team Passer Rating Rank" and qualifier != "Team Passer Rating Allowed Rank" and qualifier != "Team Rush TD Rank" and qualifier != "Team Rush TD Allowed Rank" and qualifier != "Team Rush Yards Rank" and qualifier != "Team Rush Yards Allowed Rank" and qualifier != "Team Fantasy Position Rank" and qualifier != "Season Formula" and qualifier != "Had Bye" and qualifier != "Number" and qualifier != "Even Year" and qualifier != "Odd Year" and qualifier != "Year":
+        if qualifier != "Team" and qualifier != "Team Franchise" and qualifier != "Team League" and qualifier != "Team Conference" and qualifier != "Team Division" and qualifier != "Rookie" and qualifier != "Max Stat" and qualifier != "Min Stat" and qualifier != "Max Streak" and qualifier != "Max Stretch" and qualifier != "Count Streak" and qualifier != "Quickest"  and qualifier != "Slowest" and qualifier != "Season Stat" and qualifier != "Season Age" and qualifier != "Season" and qualifier != "Season Reversed" and qualifier != "Previous Season Stat"  and qualifier != "Upcoming Season Stat" and qualifier != "Season Sub Query" and qualifier != "Or Season Sub Query" and qualifier != "Season Before Sub Query" and qualifier != "Season After Sub Query" and qualifier != "Winning Team" and qualifier != "Losing Team" and qualifier != "Tied Team" and qualifier !=  "Winning Or Tied Team" and qualifier !=  "Losing Or Tied Team" and qualifier != "Playoff Team" and qualifier != "Champ Winner Team" and qualifier != "Conference Winner Team" and qualifier != "Division Winner Team" and qualifier != "Team Win Percentage" and qualifier != "Team Games Over 500" and qualifier != "Team Wins" and qualifier != "Team Losses" and qualifier != "Team Ties" and qualifier != "Team Points Rank" and qualifier != "Team Points Allowed Rank" and qualifier != "Team Yards Rank" and qualifier != "Team Yards Allowed Rank" and qualifier != "Team Pass TD Rank" and qualifier != "Team Pass TD Allowed Rank" and qualifier != "Team Pass Yards Rank" and qualifier != "Team Pass Yards Allowed Rank" and qualifier != "Team ANY/A Rank" and qualifier != "Team ANY/A Allowed Rank" and qualifier != "Team Passer Rating Rank" and qualifier != "Team Passer Rating Allowed Rank" and qualifier != "Team Rush TD Rank" and qualifier != "Team Rush TD Allowed Rank" and qualifier != "Team Rush Yards Rank" and qualifier != "Team Rush Yards Allowed Rank" and qualifier != "Team Fantasy Position Rank" and qualifier != "Season Formula" and qualifier != "Had Bye" and qualifier != "Number" and qualifier != "Even Year" and qualifier != "Odd Year" and qualifier != "Year":
             is_qual_match = True
         elif qualifier == "Max Stat" or qualifier == "Min Stat" or qualifier == "Max Streak" or qualifier == "Max Stretch" or qualifier == "Count Streak" or qualifier == "Quickest" or qualifier == "Slowest":
             for qual_object in time_frame["qualifiers"][qualifier]:

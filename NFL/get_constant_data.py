@@ -5144,6 +5144,7 @@ qualifier_map = {
     "Game After Sub Query" : {},
     "Game Before Sub Query" : {},
     "Season Sub Query" : {},
+    "Or Season Sub Query" : {},
     "Season After Sub Query" : {},
     "Season Before Sub Query" : {},
     "Moon Phase" : {},
