@@ -15970,21 +15970,26 @@ def get_nhl_schedule(player_data, all_rows, qualifiers):
             da_dates = sorted(da_dates, key = lambda game: dateutil.parser.parse(game["games"][0]["gameDate"]))
 
             for game in da_dates:
-                game_type = int(str(game["games"][0]["gamePk"])[4:6])
+                game_data = game["games"][0]
+                linescore_game_data = game_data
+                game_type = int(str(game_data["gamePk"])[4:6])
                 if game_type != 2 and game_type != 3:
                     continue
 
-                if game["games"][0]["season"] != year_str:
+                if game_data["season"] != year_str:
                     continue
+
+                if not "linescore" in linescore_game_data:
+                    linescore_game_data = url_request_json(urllib.request.Request("https://statsapi.web.nhl.com" + linescore_game_data["link"], headers=request_headers))["liveData"]
 
                 row_data = {}
                 row_data["Date"] = dateutil.parser.parse(game["date"]).date()
-                row_data["Arena"] = game["games"][0]["venue"]["name"]
-                if "id" in game["games"][0]["venue"]:
-                    row_data["ArenaID"] = game["games"][0]["venue"]["id"]
+                row_data["Arena"] = game_data["venue"]["name"]
+                if "id" in game_data["venue"]:
+                    row_data["ArenaID"] = game_data["venue"]["id"]
                 else:
                     row_data["ArenaID"] = None
-                game_datetime = dateutil.parser.parse(game["games"][0]["gameDate"])
+                game_datetime = dateutil.parser.parse(game_data["gameDate"])
                 game_datetime = game_datetime.astimezone(timezone("US/Eastern"))
                 
                 game_time = game_datetime.time()
@@ -15997,16 +16002,16 @@ def get_nhl_schedule(player_data, all_rows, qualifiers):
                 else:
                     row_data["Time"] = "L"
                 
-                row_data["StartTime"] = dateutil.parser.parse(game["games"][0]["gameDate"])
+                row_data["StartTime"] = dateutil.parser.parse(game_data["gameDate"])
                 row_data["Year"] = season
 
-                is_home = game["games"][0]["teams"]["home"]["team"]["id"] == team_id
+                is_home = game_data["teams"]["home"]["team"]["id"] == team_id
                 if is_home:
-                    player_team_id = game["games"][0]["teams"]["home"]["team"]["id"]
-                    player_opp_id = game["games"][0]["teams"]["away"]["team"]["id"]
+                    player_team_id = game_data["teams"]["home"]["team"]["id"]
+                    player_opp_id = game_data["teams"]["away"]["team"]["id"]
                 else:
-                    player_team_id = game["games"][0]["teams"]["away"]["team"]["id"]
-                    player_opp_id = game["games"][0]["teams"]["home"]["team"]["id"]
+                    player_team_id = game_data["teams"]["away"]["team"]["id"]
+                    player_opp_id = game_data["teams"]["home"]["team"]["id"]
 
                 parsed_team_name = {v: k for k, v in team_ids.items()}[player_team_id]
                 parsed_opp_name = {v: k for k, v in team_ids.items()}[player_opp_id]
@@ -16052,8 +16057,8 @@ def get_nhl_schedule(player_data, all_rows, qualifiers):
                 tv_networks = []
                 national_tv_networks = []
                 any_national_tv_networks = []
-                if "broadcasts" in game["games"][0] and game["games"][0]["broadcasts"]:
-                    for broadcast in game["games"][0]["broadcasts"]:
+                if "broadcasts" in game_data and game_data["broadcasts"]:
+                    for broadcast in game_data["broadcasts"]:
                         call_sign = broadcast["name"].split(" ")[0]
                             
                         if broadcast["type"] == "national":
@@ -16082,65 +16087,65 @@ def get_nhl_schedule(player_data, all_rows, qualifiers):
                     row_data["NationalTVNetworks"] = national_tv_networks
                     row_data["AnyNationalTVNetworks"] = any_national_tv_networks
 
-                is_final = game["games"][0]["status"]["abstractGameState"] == "Final"
-                is_home = game["games"][0]["teams"]["home"]["team"]["id"] == team_id
+                is_final = game_data["status"]["abstractGameState"] == "Final"
+                is_home = game_data["teams"]["home"]["team"]["id"] == team_id
                 team_str = "home" if is_home else "away"
                 opp_team_str = "away" if is_home else "home"
 
-                row_data["Team Score"] = game["games"][0]["linescore"]["teams"][team_str]["goals"]
-                row_data["Opponent Score"] = game["games"][0]["linescore"]["teams"][opp_team_str]["goals"]
+                row_data["Team Score"] = linescore_game_data["linescore"]["teams"][team_str]["goals"]
+                row_data["Opponent Score"] = linescore_game_data["linescore"]["teams"][opp_team_str]["goals"]
                 row_data["Team Goals"] = row_data["Team Score"]
                 row_data["Opponent Goals"] = row_data["Opponent Score"]
-                row_data["Per"] = len(game["games"][0]["linescore"]["periods"])
+                row_data["Per"] = len(linescore_game_data["linescore"]["periods"])
 
                 is_shootout = False
-                if "hasShootout" in game["games"][0]["linescore"] and game["games"][0]["linescore"]["hasShootout"]:
+                if "hasShootout" in linescore_game_data["linescore"] and linescore_game_data["linescore"]["hasShootout"]:
                     is_shootout = True
                     row_data["Per"] -= 1
-                    if game["games"][0]["linescore"]["shootoutInfo"][team_str]["scores"] > game["games"][0]["linescore"]["shootoutInfo"][opp_team_str]["scores"]:
+                    if linescore_game_data["linescore"]["shootoutInfo"][team_str]["scores"] > linescore_game_data["linescore"]["shootoutInfo"][opp_team_str]["scores"]:
                         row_data["Team Goals"] -= 1
                     else:
                         row_data["Opponent Goals"] -= 1
                 is_ot = False
-                if not is_shootout and len(game["games"][0]["linescore"]["periods"]) > 3:
+                if not is_shootout and len(linescore_game_data["linescore"]["periods"]) > 3:
                     is_ot = True
 
                 if is_home:
-                    row_data["CurrTmWins"] = game["games"][0]["teams"]["home"]["leagueRecord"]["wins"]
-                    row_data["CurrTmLosses"] = game["games"][0]["teams"]["home"]["leagueRecord"]["losses"]
+                    row_data["CurrTmWins"] = game_data["teams"]["home"]["leagueRecord"]["wins"]
+                    row_data["CurrTmLosses"] = game_data["teams"]["home"]["leagueRecord"]["losses"]
                     row_data["CurrTmTies"] = 0
                     row_data["CurrTmOTLosses"] = 0
-                    if "ot" in game["games"][0]["teams"]["home"]["leagueRecord"]:
-                        row_data["CurrTmOTLosses"] += game["games"][0]["teams"]["home"]["leagueRecord"]["ot"]
-                    elif "ties" in game["games"][0]["teams"]["home"]["leagueRecord"]:
-                        row_data["CurrTmTies"] = game["games"][0]["teams"]["home"]["leagueRecord"]["ties"]
+                    if "ot" in game_data["teams"]["home"]["leagueRecord"]:
+                        row_data["CurrTmOTLosses"] += game_data["teams"]["home"]["leagueRecord"]["ot"]
+                    elif "ties" in game_data["teams"]["home"]["leagueRecord"]:
+                        row_data["CurrTmTies"] = game_data["teams"]["home"]["leagueRecord"]["ties"]
 
-                    row_data["CurrOppWins"] = game["games"][0]["teams"]["away"]["leagueRecord"]["wins"]
-                    row_data["CurrOppLosses"] = game["games"][0]["teams"]["away"]["leagueRecord"]["losses"]
+                    row_data["CurrOppWins"] = game_data["teams"]["away"]["leagueRecord"]["wins"]
+                    row_data["CurrOppLosses"] = game_data["teams"]["away"]["leagueRecord"]["losses"]
                     row_data["CurrOppTies"] = 0
                     row_data["CurrOppOTLosses"] = 0
-                    if "ot" in game["games"][0]["teams"]["away"]["leagueRecord"]:
-                        row_data["CurrOppOTLosses"] += game["games"][0]["teams"]["away"]["leagueRecord"]["ot"]
-                    elif "ties" in game["games"][0]["teams"]["away"]["leagueRecord"]:
-                        row_data["CurrOppTies"] = game["games"][0]["teams"]["away"]["leagueRecord"]["ties"]
+                    if "ot" in game_data["teams"]["away"]["leagueRecord"]:
+                        row_data["CurrOppOTLosses"] += game_data["teams"]["away"]["leagueRecord"]["ot"]
+                    elif "ties" in game_data["teams"]["away"]["leagueRecord"]:
+                        row_data["CurrOppTies"] = game_data["teams"]["away"]["leagueRecord"]["ties"]
                 else:
-                    row_data["CurrTmWins"] = game["games"][0]["teams"]["away"]["leagueRecord"]["wins"]
-                    row_data["CurrTmLosses"] = game["games"][0]["teams"]["away"]["leagueRecord"]["losses"]
+                    row_data["CurrTmWins"] = game_data["teams"]["away"]["leagueRecord"]["wins"]
+                    row_data["CurrTmLosses"] = game_data["teams"]["away"]["leagueRecord"]["losses"]
                     row_data["CurrTmTies"] = 0
                     row_data["CurrTmOTLosses"] = 0
-                    if "ot" in game["games"][0]["teams"]["away"]["leagueRecord"]:
-                        row_data["CurrTmOTLosses"] += game["games"][0]["teams"]["away"]["leagueRecord"]["ot"]
-                    elif "ties" in game["games"][0]["teams"]["away"]["leagueRecord"]:
-                        row_data["CurrTmTies"] = game["games"][0]["teams"]["away"]["leagueRecord"]["ties"]
+                    if "ot" in game_data["teams"]["away"]["leagueRecord"]:
+                        row_data["CurrTmOTLosses"] += game_data["teams"]["away"]["leagueRecord"]["ot"]
+                    elif "ties" in game_data["teams"]["away"]["leagueRecord"]:
+                        row_data["CurrTmTies"] = game_data["teams"]["away"]["leagueRecord"]["ties"]
 
-                    row_data["CurrOppWins"] = game["games"][0]["teams"]["home"]["leagueRecord"]["wins"]
-                    row_data["CurrOppLosses"] = game["games"][0]["teams"]["home"]["leagueRecord"]["losses"]
+                    row_data["CurrOppWins"] = game_data["teams"]["home"]["leagueRecord"]["wins"]
+                    row_data["CurrOppLosses"] = game_data["teams"]["home"]["leagueRecord"]["losses"]
                     row_data["CurrOppTies"] = 0
                     row_data["CurrOppOTLosses"] = 0
-                    if "ot" in game["games"][0]["teams"]["home"]["leagueRecord"]:
-                        row_data["CurrOppOTLosses"] += game["games"][0]["teams"]["home"]["leagueRecord"]["ot"]
-                    elif "ties" in game["games"][0]["teams"]["home"]["leagueRecord"]:
-                        row_data["CurrOppTies"] = game["games"][0]["teams"]["home"]["leagueRecord"]["ties"]
+                    if "ot" in game_data["teams"]["home"]["leagueRecord"]:
+                        row_data["CurrOppOTLosses"] += game_data["teams"]["home"]["leagueRecord"]["ot"]
+                    elif "ties" in game_data["teams"]["home"]["leagueRecord"]:
+                        row_data["CurrOppTies"] = game_data["teams"]["home"]["leagueRecord"]["ties"]
 
                 if is_final:
                     if row_data["Team Score"] > row_data["Opponent Score"]:
@@ -16164,7 +16169,7 @@ def get_nhl_schedule(player_data, all_rows, qualifiers):
 
                     if is_shootout:
                         result_str += "-SO"
-                    elif len(game["games"][0]["linescore"]["periods"]) > 3:
+                    elif len(linescore_game_data["linescore"]["periods"]) > 3:
                         result_str += "-OT"
 
                     row_data["Result"] = result_str
