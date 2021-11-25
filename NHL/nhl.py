@@ -13594,7 +13594,7 @@ def handle_player_data(player_data, time_frame, player_type, player_page, valid_
     
     if "Max Stat" in time_frame["qualifiers"] or "Min Stat" in time_frame["qualifiers"]:
         all_rows = sorted(all_rows, key=lambda row: row["Date"])
-        all_rows = handle_max_min_data(all_rows, player_data, player_type, time_frame["qualifiers"])
+        all_rows = handle_max_min_data(all_rows, player_data, player_type, time_frame["qualifiers"], extra_stats)
     
     if "Season" in time_frame["qualifiers"]:
         seasons = sorted(list(set([row["Year"] for row in all_rows])))
