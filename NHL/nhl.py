@@ -9706,7 +9706,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
 
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
                     
-                        last_match = re.search(r"\b(no(?:t|n)?(?: |-))?(first|1st|last|this|past)?(?: ?(\S*) (game-minute|minute|min|game-shot|shot|s|period)s?)\b", time_frame)
+                        last_match = re.search(r"\b(no(?:t|n)?(?: |-))?(first|1st|last|this|past)?(?: ?(\S*) (game-minute|minute|min|game-shots?-faced|shot?-faced|game-shot|shot|s|period)s?)\b", time_frame)
                         if last_match:
                             compare_type = last_match.group(2)
                             time_unit = last_match.group(3)
@@ -9760,6 +9760,12 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                             elif qual_type == "game-shot":
                                 qual_type = "Game Shot"
                                 extra_stats.add("current-stats-no-game")
+                            elif qual_type == "game-shot-faced" or qual_type == "game-shots-faced":
+                                qual_type = "Game Shot"
+                                extra_stats.add("current-stats-no-game")
+                                player_type["da_type"] = {
+                                    "type" : "Goalie"
+                                }
                             elif qual_type == "period":
                                 qual_type = "Career Period"
                                 extra_stats.add("current-stats")
@@ -9770,6 +9776,12 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 extra_stats.add("show-stat-shtoi")
                                 extra_stats.add("show-stat-toi_5v5")
                                 extra_stats.add("current-stats-no-game")
+                            elif qual_type == "shot-faced" or qual_type == "shots-faced":
+                                qual_type = "Career Shot"
+                                extra_stats.add("current-stats-no-game")
+                                player_type["da_type"] = {
+                                    "type" : "Goalie"
+                                }
                             else:
                                 qual_type = "Career Shot"
                                 extra_stats.add("current-stats-no-game")
@@ -15511,7 +15523,7 @@ def handle_nhl_game_stats(player_data, all_rows, time_frame, player_link, player
                 saved_row_data[len(saved_row_data) - 1]["S"] = sub_row_data.get("S", 0)
             else:
                 saved_row_data[len(saved_row_data) - 1]["S"] = sub_row_data.get("SA", 0)
-
+    
     games_to_skip = set()
     if "Shot On" in time_frame["qualifiers"]:
         for row_data in all_rows:
@@ -16233,7 +16245,7 @@ def result_call_back(saved_row_data, index, time_frame, count_info, new_rows, pl
         set_row_data(game_data, row_data)
 
         if "Career Minute" in time_frame["qualifiers"] or "Career Minute Reversed" in time_frame["qualifiers"] or "Game Minute" in time_frame["qualifiers"] or "Game Minute Reversed" in time_frame["qualifiers"] or "Career Shot" in time_frame["qualifiers"] or "Career Shot Reversed" in time_frame["qualifiers"] or "Career Period" in time_frame["qualifiers"] or "Career Period Reversed" in time_frame["qualifiers"] or "Game Shot" in time_frame["qualifiers"] or "Game Shot Reversed" in time_frame["qualifiers"]:
-            setup_career_stats(row_data, game_data, saved_row_data, index, player_data, time_frame["qualifiers"])
+            setup_career_stats(row_data, game_data, saved_row_data, index, player_data, time_frame["qualifiers"], player_type)
 
         if "Game Number" in time_frame["qualifiers"]:
             if sub_missing_games:
@@ -16440,7 +16452,7 @@ def perform_sub_nhl_period_qualifiers(row, qualifiers, player_game_info, player_
     
     return overall_has_match
 
-def setup_career_stats(row_data, player_game_info, saved_row_data, index, player_data, qualifiers):
+def setup_career_stats(row_data, player_game_info, saved_row_data, index, player_data, qualifiers, player_type):
     if not player_game_info or player_game_info["missing_data"]:
         return
 
@@ -16484,7 +16496,7 @@ def setup_career_stats(row_data, player_game_info, saved_row_data, index, player
                         event["game_minute_reversed"] = game_minutes_reversed
                         event["career_minute_reversed"] = career_minutes_reversed
 
-                    game_shots, game_shots_reversed = determine_shots(player_game_info, event["period"], event["periodTime"], qualifiers, "faceoff" in event_name)
+                    game_shots, game_shots_reversed = determine_shots(player_game_info, event["period"], event["periodTime"], qualifiers, player_type, "faceoff" in event_name)
                     career_shots = sub_shots + game_shots
                     career_shots_reversed = sub_shots_reversed + game_shots_reversed
 
@@ -16548,14 +16560,15 @@ def determine_toi(shift_data, period, period_time, player_id, is_team, is_faceof
 
     return total_toi, total_toi_reversed
 
-def determine_shots(player_game_data, period, period_time, qualifiers, is_faceoff=False):
+def determine_shots(player_game_data, period, period_time, qualifiers, player_type, is_faceoff=False):
     total_goals = 0
     total_goals_reversed = 0
     count_misses = False
-    if not "Shot On" in qualifiers and not "Shot By" in qualifiers:
-        if "Penalty Shot" in qualifiers or "Shootout" in qualifiers:
-            count_misses = True
-    all_goal_events = player_game_data["goal"] + player_game_data["shot"]
+    if player_type["da_type"]["type"] == "Skater":
+        if not "Shot On" in qualifiers and not "Shot By" in qualifiers:
+            if "Penalty Shot" in qualifiers or "Shootout" in qualifiers:
+                count_misses = True
+    all_goal_events = player_game_data["goal" if player_type["da_type"]["type"] == "Skater" else "goal_against"] + player_game_data["shot" if player_type["da_type"]["type"] == "Skater" else "save_against"]
     if count_misses:
         all_goal_events += player_game_data["missed_shot"]
 
@@ -19791,10 +19804,11 @@ def perform_sub_nhl_game_qualifiers(row, qualifiers, player_game_info, player_ty
     
     if "Career Shot" in qualifiers:
         count_misses = False
-        if not "Shot On" in qualifiers and not "Shot By" in qualifiers:
-            if "Penalty Shot" in qualifiers or "Shootout" in qualifiers:
-                count_misses = True
-        all_goal_events = player_game_info["goal"] + player_game_info["shot"]
+        if player_type["da_type"]["type"] == "Skater":
+            if not "Shot On" in qualifiers and not "Shot By" in qualifiers:
+                if "Penalty Shot" in qualifiers or "Shootout" in qualifiers:
+                    count_misses = True
+        all_goal_events = player_game_info["goal" if player_type["da_type"]["type"] == "Skater" else "goal_against"] + player_game_info["shot" if player_type["da_type"]["type"] == "Skater" else "save_against"]
         if count_misses:
             all_goal_events += player_game_info["missed_shot"]
 
@@ -19808,10 +19822,11 @@ def perform_sub_nhl_game_qualifiers(row, qualifiers, player_game_info, player_ty
     
     if "Career Shot Reversed" in qualifiers:
         count_misses = False
-        if not "Shot On" in qualifiers and not "Shot By" in qualifiers:
-            if "Penalty Shot" in qualifiers or "Shootout" in qualifiers:
-                count_misses = True
-        all_goal_events = player_game_info["goal"] + player_game_info["shot"]
+        if player_type["da_type"]["type"] == "Skater":
+            if not "Shot On" in qualifiers and not "Shot By" in qualifiers:
+                if "Penalty Shot" in qualifiers or "Shootout" in qualifiers:
+                    count_misses = True
+        all_goal_events = player_game_info["goal" if player_type["da_type"]["type"] == "Skater" else "goal_against"] + player_game_info["shot" if player_type["da_type"]["type"] == "Skater" else "save_against"]
         if count_misses:
             all_goal_events += player_game_info["missed_shot"]
 
@@ -19823,45 +19838,9 @@ def perform_sub_nhl_game_qualifiers(row, qualifiers, player_game_info, player_ty
         if not has_row_match:
             return False
     
-    if "Game Shot" in qualifiers:
-        count_misses = False
-        if not "Shot On" in qualifiers and not "Shot By" in qualifiers:
-            if "Penalty Shot" in qualifiers or "Shootout" in qualifiers:
-                count_misses = True
-        all_goal_events = player_game_info["goal"] + player_game_info["shot"]
-        if count_misses:
-            all_goal_events += player_game_info["missed_shot"]
-
-        has_row_match = False
-        for goal_event in all_goal_events:
-            if perform_sub_metadata_qual(goal_event, "game_shot", qualifiers["Game Shot"], player_game_info, row["Year"]):
-                has_row_match = True
-                break
-        if not has_row_match:
-            return False
-    
-    
-    if "Game Shot Reversed" in qualifiers:
-        count_misses = False
-        if not "Shot On" in qualifiers and not "Shot By" in qualifiers:
-            if "Penalty Shot" in qualifiers or "Shootout" in qualifiers:
-                count_misses = True
-        all_goal_events = player_game_info["goal"] + player_game_info["shot"]
-        if count_misses:
-            all_goal_events += player_game_info["missed_shot"]
-
-        has_row_match = False
-        for goal_event in all_goal_events:
-            if perform_sub_metadata_qual(goal_event, "game_shot_reversed", qualifiers["CGame Shot Reversed"], player_game_info, row["Year"]):
-                has_row_match = True
-                break
-        if not has_row_match:
-            return False
-    
-
     perform_metadata_quals(qualifiers, player_type, row, player_game_info, player_id, clear_data)
     
-    calculate_toi(row, qualifiers, player_game_info, player_id, saved_row_data, index)
+    calculate_toi(row, qualifiers, player_game_info, player_id, saved_row_data, player_type, index)
 
     if "Career Minute" in qualifiers or "Career Minute Reversed" in qualifiers or "Game Minute" in qualifiers or "Game Minute Reversed" in qualifiers:
         if not row["TOI"]:
@@ -20187,7 +20166,7 @@ def perform_metadata_quals(qualifiers, player_type, row, player_game_info, nhl_p
                 row["GF"] += 1
     calculate_row_attrs(row, player_type)
 
-def calculate_toi(row, qualifiers, player_game_info, player_id, saved_row_data, index):
+def calculate_toi(row, qualifiers, player_game_info, player_id, saved_row_data, player_type, index):
     shift_data = player_game_info["shift_data"]
     row["TOI"] = 0
     row["offITOI"] = 0
@@ -20264,7 +20243,7 @@ def calculate_toi(row, qualifiers, player_game_info, player_id, saved_row_data, 
                         shift_event["game_minute_reversed"] = game_minutes_reversed
                         shift_event["career_minute_reversed"] = career_minutes_reversed
 
-                        game_shots, game_shots_reversed = determine_shots(player_game_info, shift_event["period"], second, qualifiers)
+                        game_shots, game_shots_reversed = determine_shots(player_game_info, shift_event["period"], second, qualifiers, player_type)
                         career_shots = sub_shots + game_shots
                         career_shots_reversed = sub_shots_reversed + game_shots_reversed
 
@@ -20327,7 +20306,7 @@ def calculate_toi(row, qualifiers, player_game_info, player_id, saved_row_data, 
                         shift_event["game_minute_reversed"] = game_minutes_reversed
                         shift_event["career_minute_reversed"] = career_minutes_reversed
 
-                        game_shots, game_shots_reversed = determine_shots(player_game_info, shift_event["period"], second, qualifiers)
+                        game_shots, game_shots_reversed = determine_shots(player_game_info, shift_event["period"], second, qualifiers, player_type)
                         career_shots = sub_shots + game_shots
                         career_shots_reversed = sub_shots_reversed + game_shots_reversed
 
