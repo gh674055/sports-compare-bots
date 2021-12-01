@@ -326,6 +326,7 @@ headers = {
         "FirstStar" : {
             "positive" : True,
             "display" : False,
+            "display-value" : "1stStar",
             "valid_since" : {
                 "season" : 1936,
                 "game" : 1936
@@ -334,6 +335,7 @@ headers = {
         "SecondStar" : {
             "positive" : True,
             "display" : False,
+            "display-value" : "2ndStar",
             "valid_since" : {
                 "season" : 1936,
                 "game" : 1936
@@ -342,6 +344,7 @@ headers = {
         "ThirdStar" : {
             "positive" : True,
             "display" : False,
+            "display-value" : "3rdStar",
             "valid_since" : {
                 "season" : 1936,
                 "game" : 1936
@@ -350,6 +353,7 @@ headers = {
         "TotalStar" : {
             "positive" : True,
             "display" : False,
+            "display-value" : "TtlStar",
             "valid_since" : {
                 "season" : 1936,
                 "game" : 1936
@@ -359,6 +363,7 @@ headers = {
             "positive" : True,
             "round" : "percent",
             "display" : False,
+            "display-value" : "1stStar%",
             "valid_since" : {
                 "season" : 1936,
                 "game" : 1936
@@ -368,6 +373,7 @@ headers = {
             "positive" : True,
             "round" : "percent",
             "display" : False,
+            "display-value" : "2ndStar%",
             "valid_since" : {
                 "season" : 1936,
                 "game" : 1936
@@ -377,6 +383,7 @@ headers = {
             "positive" : True,
             "round" : "percent",
             "display" : False,
+            "display-value" : "3rdStar%",
             "valid_since" : {
                 "season" : 1936,
                 "game" : 1936
@@ -386,6 +393,7 @@ headers = {
             "positive" : True,
             "round" : "percent",
             "display" : False,
+            "display-value" : "TtlStar%",
             "valid_since" : {
                 "season" : 1936,
                 "game" : 1936
@@ -4348,6 +4356,7 @@ headers = {
         "FirstStar" : {
             "positive" : True,
             "display" : False,
+            "display-value" : "1stStar",
             "valid_since" : {
                 "season" : 1936,
                 "game" : 1936
@@ -4356,6 +4365,7 @@ headers = {
         "SecondStar" : {
             "positive" : True,
             "display" : False,
+            "display-value" : "2ndStar",
             "valid_since" : {
                 "season" : 1936,
                 "game" : 1936
@@ -4364,6 +4374,7 @@ headers = {
         "ThirdStar" : {
             "positive" : True,
             "display" : False,
+            "display-value" : "3rdStar",
             "valid_since" : {
                 "season" : 1936,
                 "game" : 1936
@@ -4372,6 +4383,7 @@ headers = {
         "TotalStar" : {
             "positive" : True,
             "display" : False,
+            "display-value" : "TtlStar",
             "valid_since" : {
                 "season" : 1936,
                 "game" : 1936
@@ -4381,6 +4393,7 @@ headers = {
             "positive" : True,
             "round" : "percent",
             "display" : False,
+            "display-value" : "1stStar%",
             "valid_since" : {
                 "season" : 1936,
                 "game" : 1936
@@ -4390,6 +4403,7 @@ headers = {
             "positive" : True,
             "round" : "percent",
             "display" : False,
+            "display-value" : "2ndStar%",
             "valid_since" : {
                 "season" : 1936,
                 "game" : 1936
@@ -4399,6 +4413,7 @@ headers = {
             "positive" : True,
             "round" : "percent",
             "display" : False,
+            "display-value" : "3rdStar%",
             "valid_since" : {
                 "season" : 1936,
                 "game" : 1936
@@ -4408,6 +4423,7 @@ headers = {
             "positive" : True,
             "round" : "percent",
             "display" : False,
+            "display-value" : "TtlStar%",
             "valid_since" : {
                 "season" : 1936,
                 "game" : 1936
@@ -6023,16 +6039,22 @@ qualifier_map = {
     "Season" : {},
     "Season Reversed" : {},
     "Season Game" : {},
-    "Career Minute" : {},
-    "Career Minute Reversed" : {},
-    "Game Minute" : {},
-    "Game Minute Reversed" : {},
-    "Career Shot" : {},
-    "Career Shot Reversed" : {},
-    "Career Period" : {},
-    "Career Period Reversed" : {},
-    "Game Shot" : {},
-    "Game Shot Reversed" : {},
+    "Event Stat" : {},
+    "Event Stat Reversed" : {},
+    "Event Stats" : {},
+    "Event Stats Reversed" : {},
+    "Game Event Stat" : {},
+    "Game Event Stat Reversed" : {},
+    "Game Event Stats" : {},
+    "Game Event Stats Reversed" : {},
+    "Starting Event Stat" : {},
+    "Starting Event Stat Reversed" : {},
+    "Starting Event Stats" : {},
+    "Starting Event Stats Reversed" : {},
+    "Starting Game Event Stat" : {},
+    "Starting Game Event Stat Reversed" : {},
+    "Starting Game Event Stats" : {},
+    "Starting Game Event Stats Reversed" : {},
     "Career Game" : {},
     "Team Game" : {},
     "Career Game Reversed" : {},
@@ -6933,6 +6955,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 }
                                 extra_stats.add("Penalty On")
                                 extra_stats.add("penalties")
+                                extra_stats.add("current-stats")
                             elif qualifier_str.startswith("shot-on:"):
                                 qual_str = "shot-on:"
                                 qual_type = "Shot On"
@@ -6940,6 +6963,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                     "type" : "Skater"
                                 }
                                 extra_stats.add("Shot On")
+                                extra_stats.add("current-stats")
                             elif qualifier_str.startswith("shot-by:"):
                                 qual_str = "shot-by:"
                                 qual_type = "Shot By"
@@ -6947,6 +6971,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                     "type" : "Goalie"
                                 }
                                 extra_stats.add("Shot By")
+                                extra_stats.add("current-stats")
                             elif qualifier_str.startswith("on-ice-with:"):
                                 qual_str = "on-ice-with:"
                                 qual_type = "On Ice With"
@@ -6970,6 +6995,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                     "type" : "Skater"
                                 }
                                 extra_stats.add("Assisted On")
+                                extra_stats.add("current-stats")
                             elif qualifier_str.startswith("assisted-with:"):
                                 qual_str = "assisted-with:"
                                 qual_type = "Assisted With"
@@ -6977,6 +7003,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                     "type" : "Skater"
                                 }
                                 extra_stats.add("Assisted On")
+                                extra_stats.add("current-stats")
                             elif qualifier_str.startswith("points-with:"):
                                 qual_str = "points-with:"
                                 qual_type = "Points With"
@@ -6984,6 +7011,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                     "type" : "Skater"
                                 }
                                 extra_stats.add("Points On")
+                                extra_stats.add("current-stats")
                             elif qualifier_str.startswith("assisted-by:"):
                                 qual_str = "assisted-by:"
                                 qual_type = "Assisted By"
@@ -6991,6 +7019,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                     "type" : "Skater"
                                 }
                                 extra_stats.add("Assisted By")
+                                extra_stats.add("current-stats")
                             elif qualifier_str.startswith("primary-assisted-on:"):
                                 qual_str = "primary-assisted-on:"
                                 qual_type = "Primary Assisted On"
@@ -6998,6 +7027,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                     "type" : "Skater"
                                 }
                                 extra_stats.add("Assisted On")
+                                extra_stats.add("current-stats")
                             elif qualifier_str.startswith("primary-assisted-with:"):
                                 qual_str = "primary-assisted-with:"
                                 qual_type = "Primary Assisted With"
@@ -7005,6 +7035,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                     "type" : "Skater"
                                 }
                                 extra_stats.add("Assisted On")
+                                extra_stats.add("current-stats")
                             elif qualifier_str.startswith("primary-points-with:"):
                                 qual_str = "primary-points-with:"
                                 qual_type = "Primary Points With"
@@ -7012,6 +7043,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                     "type" : "Skater"
                                 }
                                 extra_stats.add("Points On")
+                                extra_stats.add("current-stats")
                             elif qualifier_str.startswith("primary-assisted-by:"):
                                 qual_str = "primary-assisted-by:"
                                 qual_type = "Primary Assisted By"
@@ -7019,6 +7051,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                     "type" : "Skater"
                                 }
                                 extra_stats.add("Assisted By")
+                                extra_stats.add("current-stats")
                             elif qualifier_str.startswith("hit-on:"):
                                 qual_str = "hit-on:"
                                 qual_type = "Hit On"
@@ -7026,13 +7059,15 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                     "type" : "Skater"
                                 }
                                 extra_stats.add("Hit On")
+                                extra_stats.add("current-stats")
                             elif qualifier_str.startswith("block-on:"):
                                 qual_str = "block-on:"
                                 qual_type = "Block On"
                                 player_type["da_type"] = {
                                     "type" : "Skater"
                                 }
-                                extra_stats.add("block On")
+                                extra_stats.add("Block On")
+                                extra_stats.add("current-stats")
                             elif qualifier_str.startswith("penalty-on:"):
                                 qual_str = "penalty-on:"
                                 qual_type = "Penalty On"
@@ -7041,6 +7076,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 }
                                 extra_stats.add("Penalty On")
                                 extra_stats.add("penalties")
+                                extra_stats.add("current-stats")
                             elif qualifier_str.startswith("faceoff-against:"):
                                 qual_str = "faceoff-against:"
                                 qual_type = "Faceoff Against"
@@ -7048,16 +7084,19 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                     "type" : "Skater"
                                 }
                                 extra_stats.add("Faceoff Against")
+                                extra_stats.add("current-stats")
                             elif qualifier_str.startswith("fight-against:"):
                                 qual_str = "fight-against:"
                                 qual_type = "Fight Against"
                                 extra_stats.add("Fight Against")
                                 extra_stats.add("penalties")
+                                extra_stats.add("current-stats")
                             elif qualifier_str.startswith("fighting-against:"):
                                 qual_str = "fighting-against:"
                                 qual_type = "Fight Against"
                                 extra_stats.add("Fight Against")
                                 extra_stats.add("penalties")
+                                extra_stats.add("current-stats")
                             elif qualifier_str.startswith("holiday:"):
                                 qual_str = "holiday:"
                                 qual_type = "Holiday"
@@ -7398,6 +7437,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                     "type" : "Skater"
                                 }
                                 extra_stats.add("Shot On")
+                                extra_stats.add("current-stats")
                             elif qualifier_str.startswith("shot-by"):
                                 qual_str = "shot-by"
                                 qual_type = "Shot By"
@@ -7405,6 +7445,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                     "type" : "Goalie"
                                 }
                                 extra_stats.add("Shot By")
+                                extra_stats.add("current-stats")
                             elif qualifier_str.startswith("on-ice-with"):
                                 qual_str = "on-ice-with"
                                 qual_type = "On Ice With"
@@ -7428,6 +7469,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                     "type" : "Skater"
                                 }
                                 extra_stats.add("Assisted On")
+                                extra_stats.add("current-stats")
                             elif qualifier_str.startswith("assisted-with"):
                                 qual_str = "assisted-with"
                                 qual_type = "Assisted With"
@@ -7435,6 +7477,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                     "type" : "Skater"
                                 }
                                 extra_stats.add("Assisted On")
+                                extra_stats.add("current-stats")
                             elif qualifier_str.startswith("points-with"):
                                 qual_str = "points-with"
                                 qual_type = "Points With"
@@ -7442,6 +7485,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                     "type" : "Skater"
                                 }
                                 extra_stats.add("Points On")
+                                extra_stats.add("current-stats")
                             elif qualifier_str.startswith("assisted-by"):
                                 qual_str = "assisted-by:"
                                 qual_type = "Assisted By"
@@ -7449,6 +7493,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                     "type" : "Skater"
                                 }
                                 extra_stats.add("Assisted By")
+                                extra_stats.add("current-stats")
                             elif qualifier_str.startswith("primary-assisted-on"):
                                 qual_str = "primary-assisted-on"
                                 qual_type = "Primary Assisted On"
@@ -7456,6 +7501,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                     "type" : "Skater"
                                 }
                                 extra_stats.add("Assisted On")
+                                extra_stats.add("current-stats")
                             elif qualifier_str.startswith("primary-assisted-with"):
                                 qual_str = "primary-assisted-with"
                                 qual_type = "Primary Assisted With"
@@ -7463,6 +7509,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                     "type" : "Skater"
                                 }
                                 extra_stats.add("Assisted On")
+                                extra_stats.add("current-stats")
                             elif qualifier_str.startswith("primary-points-with"):
                                 qual_str = "primary-points-with"
                                 qual_type = "Primary Points With"
@@ -7470,6 +7517,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                     "type" : "Skater"
                                 }
                                 extra_stats.add("Points On")
+                                extra_stats.add("current-stats")
                             elif qualifier_str.startswith("primary-assisted-by"):
                                 qual_str = "primary-assisted-by"
                                 qual_type = "Primary Assisted By"
@@ -7477,6 +7525,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                     "type" : "Skater"
                                 }
                                 extra_stats.add("Assisted By")
+                                extra_stats.add("current-stats")
                             elif qualifier_str.startswith("hit-on"):
                                 qual_str = "hit-on"
                                 qual_type = "Hit On"
@@ -7484,6 +7533,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                     "type" : "Skater"
                                 }
                                 extra_stats.add("Hit On")
+                                extra_stats.add("current-stats")
                             elif qualifier_str.startswith("block-on"):
                                 qual_str = "block-on"
                                 qual_type = "Block On"
@@ -7491,6 +7541,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                     "type" : "Skater"
                                 }
                                 extra_stats.add("Block On")
+                                extra_stats.add("current-stats")
                             elif qualifier_str.startswith("penalty-on"):
                                 qual_str = "penalty-on"
                                 qual_type = "Penalty On"
@@ -7499,6 +7550,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 }
                                 extra_stats.add("Penalty On")
                                 extra_stats.add("penalties")
+                                extra_stats.add("current-stats")
                             elif qualifier_str.startswith("faceoff-against"):
                                 qual_str = "faceoff-against"
                                 qual_type = "Faceoff Against"
@@ -7506,16 +7558,19 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                     "type" : "Skater"
                                 }
                                 extra_stats.add("Faceoff Against")
+                                extra_stats.add("current-stats")
                             elif qualifier_str.startswith("fight-against"):
                                 qual_str = "fight-against"
                                 qual_type = "Fight Against"
                                 extra_stats.add("Fight Against")
                                 extra_stats.add("penalties")
+                                extra_stats.add("current-stats")
                             elif qualifier_str.startswith("fighting-against"):
                                 qual_str = "fighting-against"
                                 qual_type = "Fight Against"
                                 extra_stats.add("Fight Against")
                                 extra_stats.add("penalties")
+                                extra_stats.add("current-stats")
                             elif qualifier_str.startswith("playing-same-game"):
                                 qual_str = "playing-same-game:"
                                 qual_type = "Playing Same Game"
@@ -7842,7 +7897,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
 
                                 time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
                         
-                        last_match = re.finditer(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?(current-season-age|first-minutes?|current-minutes?|first-shots?|current-shots?|first-periods?|current-shots?|first-games?|current-games?|first-seasons?|current-seasons?|last-minutes?|last-shots?|last-periods?|last-games?|last-seasons?|first-starts?|last-starts?|start-if-goalie|decision|current-age|rook|rookie|facing-former-franchise|facing-former-team|even-year|odd-year|interconference|intraconference|interdivision|intradivision|complete-games?|current-winning-opponents?|current-losing-opponents?|current-tied-opponents?|current-winning-or-tied-opponents?|current-losing-or-tied-opponents?|winning-opponents?|losing-opponents?|winning-or-tied-opponents?|losing-or-tied-opponents?|tied-opponents?|playoff-opponents?|cup-winner-opponent|conf-winner-opponent|current-winning-teams?|current-losing-teams?|current-tied-teams?|current-winning-or-tied-teams?|current-losing-or-tied-teams?|winning-teams?|losing-teams?|tied-teams?|winning-or-tied-teams?|losing-or-tied-teams?|playoff-teams?|cup-winner-team|conf-winner-team|penalty-shot|shootout|overtime|game-winning|offensive-zone|defensive-zone|neutral-zone|left-side|right-side|unassisted|even-skaters|team-goalie-pulled|opponent-goalie-pulled|more-skaters|less-skaters|power-play|short-handed|even-strength|elimination-or-clinching|clinching-or-elimination|elimination(?:-games?)?|eliminating(?:-games?)?|clinching(?:-games?)?|clinch(?:-games?)?|winner-take-all|behind-in-series|ahead-in-series|even-in-series|(?:nhl(?: |-))?(?:finals?|championship)|stanley(?: |-)cup|stanley|cup|sc|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?(?:league|conference)(?:(?: |-)finals?|(?: |-)championship)|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?cf|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?second(?: |-)round|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?sr|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?(?:league|conference) semi-?finals?|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?cs|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?first round|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?fr|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?(?:league|conference) quarter-?finals?|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?cq|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?qr|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?qualify(?:ing|er)?(?:(?: |-)round)?|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?pr|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?play(?:-| )?in(?:(?: |-)round)?|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?rr|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?(?:round )?robin|leading(:?-in-game)?|trailing(:?-in-game)?|tied(:?(?:-in)?-game)?|force-dates|first-half|second-half|pre-all-star|post-all-star|t:[\w-]+|o:[\w-]+|m:[\w-]+|d:[\w-]+|dt:[\w-]+|team-franchise:[\w-]+|opponent-franchise:[\w-]+|franchise:[\w-]+|tf:[\w-]+|of:[\w-]+|f:[\w-]+|team:[\w-]+|opponent:[\w-]+|new-moon|waning-crescent|third-quarter|waning-gibbous|full-moon|waxing-gibbous|first-quarter|waxing-crescent|tv-network:[\w-]+|raw-tv-network:[\w-]+|national-tv-network:[\w-]+|national-raw-tv-network:[\w-]+|any-national-tv-network:[\w-]+|any-national-raw-tv-network:[\w-]+|any-us-national-game|us-national-game|any-ca-national-game|ca-national-game|any-national-game|national-game|month:[\w-]+|day:[\w-]+|date:[\w-]+|series-game:[\w-]+|gm:[\w-]+|game:[\w-]+|season-gm:[\w-]+|season-game:[\w-]+|season:[\w-]+|season-reversed:[\w-]+|crgm:[\w-]+|career-game-reversed:[\w-]+|team-game-reversed:[\w-]+|season-game-reversed:[\w-]+|game-reversed:[\w-]+|career-game:[\w-]+|tmgm:[\w-]+|team-game:[\w-]+|game-number:[\w-]+|season-number:[\w-]+|number:[\w-]+|dr:[\w-]+|starts-days-rest:[\w-]+|days-rest:[\w-]+|prv-dr:[\w-]+|previous-days-rest:[\w-]+|upc-dr:[\w-]+|upcoming-starts-days-rest:[\w-]+|upcoming-days-rest:[\w-]+|gr:[\w-]+|games-rest:[\w-]+|starts-rest:[\w-]+|prv-gr:[\w-]+|-?starts?|-?started|-?starting|-?ignore-starts?|-?ignore-started?|-?ignore-starting|previous-games-rest:[\w-]+|upc-gr:[\w-]+|upcoming-games-rest:[\w-]+|days-in-a-row:[\w-]+|games-in-a-row:[\w-]+|starts-in-a-row:[\w-]+|prv-t:[\w-]+|prv-o:[\w-]+|upc-t:[\w-]+|upc-o:[\w-]+|upcoming-same-opponent|previous-same-opponent|previous-franchise:[\w-]+|previous-team-franchise:[\w-]+|previous-opponent-franchise:[\w-]+|upcoming-franchise:[\w-]+|upcoming-team-franchise:[\w-]+|upcoming-opponent-franchise:[\w-]+|previous-team:[\w-]+|previous-opponent:[\w-]+|upcoming-team:[\w-]+|upcoming-opponent:[\w-]+|score:[\S-]+|final-score:[\S-]+|previous-score:[\S-]+|upcoming-score:[\S-]+|final-team-score:[\w-]+|final-opponent-score:[\w-]+|final-score-margin:[\S-]+|final-score-difference:[\S-]+|team-score:[\w-]+|opponent-score:[\w-]+|score-margin:[\S-]+|score-difference:[\S-]+|period:[\w-]+|raw-x-coordinate:[\S-]+|raw-y-coordinate:[\S-]+|raw-coordinates:[\S-]+|absolute-x-coordinate:[\w-]+|absolute-y-coordinate:[\w-]+|absolute-coordinates:[\w-]+|x-coordinate:[\S-]+|y-coordinate:[\S-]+|coordinates:[\S-]+|team-skaters:[\w-]+|opponent-skaters:[\w-]+|team-players:[\w-]+|opponent-players:[\w-]+|period-time-remaining:[\S-]+|period-time:[\S-]+|season-st:[\S-]+|period-stat:[\S-]+|season-stat:[\S-]+|season-prv-st:[\S-]+|season-previous-stat:[\S-]+|season-upc-st:[\S-]+|season-upcoming-stat:[\S-]+|st:[\S-]+|stat:[\S-]+|prv-st:[\S-]+|previous-stat:[\S-]+|upc-st:[\S-]+|upcoming-stat:[\S-]+|min-st:[\S-]+|min-stat:[\S-]+|max-st:[\S-]+|max-stat:[\S-]+|totalgames-st:[\S-]+|totalgames-stat:[\S-]+|max-str:[\S-]+|max-streak:[\S-]+|max-stretch:[\S-]+|ctn-str:[\S-]+|count-streak:[\S-]+|q:[\S-]+|quickest:[\S-]+|s:[\S-]+|slowest:[\S-]+|with-new-team|with-new-franchise|summer|spring|winter|fall|autumn|away|home|road|previous-away|previous-home|previous-road|upcoming-away|upcoming-home|upcoming-road|win(?:s)?|loss(?:es)?|tie(?:es)?|w-ot|w-so|l-ot|l-so|so|ot|w|l|t|prv-w|prv-l|prv-t|prv-w-ot|prv-w-so|prv-l-ot|prv-l-so|prv-so|prv-ot|upc-w|upc-l|upc-t|upc-w-ot|upc-w-so|upc-l-ot|upc-l-so|upc-so|upc-ot|previous-win(?:s)?|previous-loss(?:es)?|previous-tie(?:es)|upcoming-win(?:s)?|upcoming-loss(?:es)?|upcoming-tie(?:es)|prv-t-w|prv-t-l|prv-t-t|prv-t-w-ot|prv-t-w-so|prv-t-l-ot|prv-t-l-so|prv-t-so|prv-t-ot|upc-t-w|upc-t-l|upc-t-t|upc-t-w-ot|upc-t-w-so|upc-t-l-ot|upc-t-l-so|upc-t-so|upc-t-ot|previous-team-win(?:s)?|previous-team-loss(?:es)?|previous-team-tie(?:es)|upcoming-team-win(?:s)?|upcoming-team-loss(?:es)?|upcoming-team-tie(?:es)|series-team-wins:[\w-]+|series-opponent-wins:[\w-]+|series-score-margin:[\S-]+|series-score-difference:[\S-]+|series-score:[\w-]+|current-team-wins:[\w-]+|current-team-losses:[\w-]+|current-team-ties:[\w-]+|current-team-points:[\w-]+|current-team-games-over-500:[\S-]+|current-opponent-wins:[\w-]+|current-opponent-losses:[\w-]+|current-opponent-ties:[\w-]+|current-opponent-points:[\w-]+|current-opponent-games-over-500:[\S-]+|team-wins:[\w-]+|team-losses:[\w-]+|team-ties:[\w-]+|team-points:[\w-]+|team-games-over-500:[\S-]+|opponent-wins:[\w-]+|opponent-losses:[\w-]+|opponent-ties:[\w-]+|opponent-points:[\w-]+|opponent-games-over-500:[\S-]+|opponent-goals?-rank:[\S-]+|opponent-standings-rank:[\S-]+|opponent-goals?-allowed-rank:[\S-]+|current-opponent-win(?:ning)?-percent:[\S-]+|opponent-win(?:ning)?-percent:[\S-]+|current-opponent-points-percent:[\S-]+|opponent-points-percent:[\S-]+|team-goals?-rank:[\S-]+|team-standings-rank:[\S-]+|team-goals?-allowed-rank:[\S-]+|years?:[\w-]+|current-team-win(?:ning)?-percent:[\S-]+|team-win(?:ning)?-percent:[\S-]+|current-team-points-percent:[\S-]+|team-points-percent:[\S-]+|early-?afternoon|late-?afternoon|morning|early|afternoon|day|night(?:time)?|late|team-conference:[\S-]+|opponent-conference:[\S-]+|team-division:[\S-]+|opponent-division:[\S-]+|birthda(?:y|te)|skat(?:(?:er)|(?:ing))|goalie|skater|" + all_months_re + r"|" + all_days_re + r")\b", time_frame)
+                        last_match = re.finditer(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?(current-season-age|first-minutes?|current-minutes?|first-shots?|current-shots?|first-periods?|current-shots?|first-games?|current-games?|first-seasons?|current-seasons?|last-minutes?|last-shots?|last-periods?|last-games?|last-seasons?|first-starts?|last-starts?|start-if-goalie|decision|current-age|rook|rookie|facing-former-franchise|facing-former-team|even-year|odd-year|interconference|intraconference|interdivision|intradivision|complete-games?|current-winning-opponents?|current-losing-opponents?|current-tied-opponents?|current-winning-or-tied-opponents?|current-losing-or-tied-opponents?|winning-opponents?|losing-opponents?|winning-or-tied-opponents?|losing-or-tied-opponents?|tied-opponents?|playoff-opponents?|cup-winner-opponent|conf-winner-opponent|current-winning-teams?|current-losing-teams?|current-tied-teams?|current-winning-or-tied-teams?|current-losing-or-tied-teams?|winning-teams?|losing-teams?|tied-teams?|winning-or-tied-teams?|losing-or-tied-teams?|playoff-teams?|cup-winner-team|conf-winner-team|penalty-shot|shootout|overtime|game-winning|offensive-zone|defensive-zone|neutral-zone|left-side|right-side|unassisted|even-skaters|team-goalie-pulled|opponent-goalie-pulled|more-skaters|less-skaters|power-play|short-handed|even-strength|elimination-or-clinching|clinching-or-elimination|elimination(?:-games?)?|eliminating(?:-games?)?|clinching(?:-games?)?|clinch(?:-games?)?|winner-take-all|behind-in-series|ahead-in-series|even-in-series|(?:nhl(?: |-))?(?:finals?|championship)|stanley(?: |-)cup|stanley|cup|sc|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?(?:league|conference)(?:(?: |-)finals?|(?: |-)championship)|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?cf|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?second(?: |-)round|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?sr|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?(?:league|conference) semi-?finals?|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?cs|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?first round|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?fr|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?(?:league|conference) quarter-?finals?|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?cq|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?qr|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?qualify(?:ing|er)?(?:(?: |-)round)?|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?pr|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?play(?:-| )?in(?:(?: |-)round)?|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?rr|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?(?:round )?robin|leading(:?-in-game)?|trailing(:?-in-game)?|tied(:?(?:-in)?-game)?|force-dates|first-half|second-half|pre-all-star|post-all-star|t:[\w-]+|o:[\w-]+|m:[\w-]+|d:[\w-]+|dt:[\w-]+|team-franchise:[\w-]+|opponent-franchise:[\w-]+|franchise:[\w-]+|tf:[\w-]+|of:[\w-]+|f:[\w-]+|team:[\w-]+|opponent:[\w-]+|new-moon|waning-crescent|third-quarter|waning-gibbous|full-moon|waxing-gibbous|first-quarter|waxing-crescent|tv-network:[\w-]+|raw-tv-network:[\w-]+|national-tv-network:[\w-]+|national-raw-tv-network:[\w-]+|any-national-tv-network:[\w-]+|any-national-raw-tv-network:[\w-]+|any-us-national-game|us-national-game|any-ca-national-game|ca-national-game|any-national-game|national-game|month:[\w-]+|day:[\w-]+|date:[\w-]+|series-game:[\w-]+|gm:[\w-]+|game:[\w-]+|season-gm:[\w-]+|season-game:[\w-]+|season:[\w-]+|season-reversed:[\w-]+|crgm:[\w-]+|career-game-reversed:[\w-]+|team-game-reversed:[\w-]+|season-game-reversed:[\w-]+|game-reversed:[\w-]+|career-game:[\w-]+|tmgm:[\w-]+|team-game:[\w-]+|game-number:[\w-]+|season-number:[\w-]+|number:[\w-]+|dr:[\w-]+|starts-days-rest:[\w-]+|days-rest:[\w-]+|prv-dr:[\w-]+|previous-days-rest:[\w-]+|upc-dr:[\w-]+|upcoming-starts-days-rest:[\w-]+|upcoming-days-rest:[\w-]+|gr:[\w-]+|games-rest:[\w-]+|starts-rest:[\w-]+|prv-gr:[\w-]+|-?starts?|-?started|-?starting|-?ignore-starts?|-?ignore-started?|-?ignore-starting|previous-games-rest:[\w-]+|upc-gr:[\w-]+|upcoming-games-rest:[\w-]+|days-in-a-row:[\w-]+|games-in-a-row:[\w-]+|starts-in-a-row:[\w-]+|prv-t:[\w-]+|prv-o:[\w-]+|upc-t:[\w-]+|upc-o:[\w-]+|upcoming-same-opponent|previous-same-opponent|previous-franchise:[\w-]+|previous-team-franchise:[\w-]+|previous-opponent-franchise:[\w-]+|upcoming-franchise:[\w-]+|upcoming-team-franchise:[\w-]+|upcoming-opponent-franchise:[\w-]+|previous-team:[\w-]+|previous-opponent:[\w-]+|upcoming-team:[\w-]+|upcoming-opponent:[\w-]+|score:[\S-]+|final-score:[\S-]+|previous-score:[\S-]+|upcoming-score:[\S-]+|final-team-score:[\w-]+|final-opponent-score:[\w-]+|final-score-margin:[\S-]+|final-score-difference:[\S-]+|team-score:[\w-]+|opponent-score:[\w-]+|score-margin:[\S-]+|score-difference:[\S-]+|period:[\w-]+|raw-x-coordinate:[\S-]+|raw-y-coordinate:[\S-]+|raw-coordinates:[\S-]+|absolute-x-coordinate:[\w-]+|absolute-y-coordinate:[\w-]+|absolute-coordinates:[\w-]+|x-coordinate:[\S-]+|y-coordinate:[\S-]+|coordinates:[\S-]+|team-skaters:[\w-]+|opponent-skaters:[\w-]+|team-players:[\w-]+|opponent-players:[\w-]+|period-time-remaining:[\S-]+|period-time:[\S-]+|season-st:[\S-]+|period-stat:[\S-]+|season-stat:[\S-]+|season-prv-st:[\S-]+|season-previous-stat:[\S-]+|season-upc-st:[\S-]+|season-upcoming-stat:[\S-]+|st:[\S-]+|stat:[\S-]+|prv-st:[\S-]+|previous-stat:[\S-]+|upc-st:[\S-]+|upcoming-stat:[\S-]+|min-st:[\S-]+|min-stat:[\S-]+|max-st:[\S-]+|max-stat:[\S-]+|totalgames-st:[\S-]+|totalgames-stat:[\S-]+|max-str:[\S-]+|max-streak:[\S-]+|max-stretch:[\S-]+|ctn-str:[\S-]+|count-streak:[\S-]+|q:[\S-]+|quickest:[\S-]+|s:[\S-]+|slowest:[\S-]+|game-event-stat:[\S-]+|game-event-stat-reversed:[\S-]+|game-event-stats:[\S-]+|game-event-stats-reversed:[\S-]+|event-stat:[\S-]+|event-stat-reversed:[\S-]+|event-stats:[\S-]+|event-stats-reversed:[\S-]+|starting-game-event-stat:[\S-]+|starting-game-event-stat-reversed:[\S-]+|starting-game-event-stats:[\S-]+|starting-game-event-stats-reversed:[\S-]+|starting-event-stat:[\S-]+|starting-event-stat-reversed:[\S-]+|starting-event-stats:[\S-]+|starting-event-stats-reversed:[\S-]+|with-new-team|with-new-franchise|summer|spring|winter|fall|autumn|away|home|road|previous-away|previous-home|previous-road|upcoming-away|upcoming-home|upcoming-road|win(?:s)?|loss(?:es)?|tie(?:es)?|w-ot|w-so|l-ot|l-so|so|ot|w|l|t|prv-w|prv-l|prv-t|prv-w-ot|prv-w-so|prv-l-ot|prv-l-so|prv-so|prv-ot|upc-w|upc-l|upc-t|upc-w-ot|upc-w-so|upc-l-ot|upc-l-so|upc-so|upc-ot|previous-win(?:s)?|previous-loss(?:es)?|previous-tie(?:es)|upcoming-win(?:s)?|upcoming-loss(?:es)?|upcoming-tie(?:es)|prv-t-w|prv-t-l|prv-t-t|prv-t-w-ot|prv-t-w-so|prv-t-l-ot|prv-t-l-so|prv-t-so|prv-t-ot|upc-t-w|upc-t-l|upc-t-t|upc-t-w-ot|upc-t-w-so|upc-t-l-ot|upc-t-l-so|upc-t-so|upc-t-ot|previous-team-win(?:s)?|previous-team-loss(?:es)?|previous-team-tie(?:es)|upcoming-team-win(?:s)?|upcoming-team-loss(?:es)?|upcoming-team-tie(?:es)|series-team-wins:[\w-]+|series-opponent-wins:[\w-]+|series-score-margin:[\S-]+|series-score-difference:[\S-]+|series-score:[\w-]+|current-team-wins:[\w-]+|current-team-losses:[\w-]+|current-team-ties:[\w-]+|current-team-points:[\w-]+|current-team-games-over-500:[\S-]+|current-opponent-wins:[\w-]+|current-opponent-losses:[\w-]+|current-opponent-ties:[\w-]+|current-opponent-points:[\w-]+|current-opponent-games-over-500:[\S-]+|team-wins:[\w-]+|team-losses:[\w-]+|team-ties:[\w-]+|team-points:[\w-]+|team-games-over-500:[\S-]+|opponent-wins:[\w-]+|opponent-losses:[\w-]+|opponent-ties:[\w-]+|opponent-points:[\w-]+|opponent-games-over-500:[\S-]+|opponent-goals?-rank:[\S-]+|opponent-standings-rank:[\S-]+|opponent-goals?-allowed-rank:[\S-]+|current-opponent-win(?:ning)?-percent:[\S-]+|opponent-win(?:ning)?-percent:[\S-]+|current-opponent-points-percent:[\S-]+|opponent-points-percent:[\S-]+|team-goals?-rank:[\S-]+|team-standings-rank:[\S-]+|team-goals?-allowed-rank:[\S-]+|years?:[\w-]+|current-team-win(?:ning)?-percent:[\S-]+|team-win(?:ning)?-percent:[\S-]+|current-team-points-percent:[\S-]+|team-points-percent:[\S-]+|early-?afternoon|late-?afternoon|morning|early|afternoon|day|night(?:time)?|late|team-conference:[\S-]+|opponent-conference:[\S-]+|team-division:[\S-]+|opponent-division:[\S-]+|birthda(?:y|te)|skat(?:(?:er)|(?:ing))|goalie|skater|" + all_months_re + r"|" + all_days_re + r")\b", time_frame)
                         for m in last_match:
                             qualifier_obj = {}
                             
@@ -8153,15 +8208,18 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                             elif qualifier_str == "penalty-shot":
                                 qual_type = "Penalty Shot"
                                 extra_stats.add("penalty-shot")
+                                extra_stats.add("current-stats")
                             elif qualifier_str == "shootout":
                                 qual_type = "Shootout"
                                 extra_stats.add("shootout")
+                                extra_stats.add("current-stats")
                             elif qualifier_str == "overtime":
                                 qual_type = "Overtime"
                                 extra_stats.add("current-stats")
                             elif qualifier_str == "game-winning":
                                 qual_type = "Game Winning"
                                 extra_stats.add("scoring-stats")
+                                extra_stats.add("current-stats")
                             elif qualifier_str == "offensive-zone":
                                 qual_type = "Offensive Zone"
                                 extra_stats.add("current-stats-zone")
@@ -8235,6 +8293,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                             elif qualifier_str == "unassisted":
                                 qual_type = "Unassisted"
                                 extra_stats.add("Assisted By")
+                                extra_stats.add("current-stats")
                             elif qualifier_str in ["new-moon", "waning-crescent", "third-quarter", "waning-gibbous", "full-moon", "waxing-gibbous", "first-quarter", "waxing-crescent"]:
                                 qual_type = "Moon Phase"
                                 qualifier_obj["values"] = [qualifier_str.replace("-", " ")]
@@ -9448,6 +9507,136 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                                 "end_val" : ordinal_to_number(split_vals[1]),
                                                 "end_exclusive" : end_exclusive
                                             })
+                            elif qualifier.startswith("event-stat:") or qualifier.startswith("event-stat-reversed:") or qualifier.startswith("event-stats:") or qualifier.startswith("event-stats-reversed:") or  qualifier.startswith("game-event-stat:") or qualifier.startswith("game-event-stat-reversed:") or qualifier.startswith("game-event-stats:") or qualifier.startswith("game-event-stats-reversed:") or qualifier.startswith("starting-event-stat:") or qualifier.startswith("starting-event-stat-reversed:") or qualifier.startswith("starting-event-stats:") or qualifier.startswith("starting-event-stats-reversed:") or  qualifier.startswith("starting-game-event-stat:") or qualifier.startswith("starting-game-event-stat-reversed:") or qualifier.startswith("starting-game-event-stats:") or qualifier.startswith("starting-game-event-stats-reversed:"):
+                                if qualifier_str.startswith("event-stat:"):
+                                    qual_str = "event-stat:"
+                                    qual_type = "Event Stat"
+                                    extra_stats.add("current-stats")
+                                elif qualifier_str.startswith("event-stat-reversed:"):
+                                    qual_str = "event-stat-reversed:"
+                                    qual_type = "Event Stat Reversed"
+                                    extra_stats.add("current-stats")
+                                elif qualifier_str.startswith("event-stats:"):
+                                    qual_str = "event-stats:"
+                                    qual_type = "Event Stats"
+                                    extra_stats.add("current-stats")
+                                elif qualifier_str.startswith("event-stats-reversed:"):
+                                    qual_str = "event-stats-reversed:"
+                                    qual_type = "Event Stats Reversed"
+                                    extra_stats.add("current-stats")
+                                elif qualifier_str.startswith("game-event-stat:"):
+                                    qual_str = "game-event-stat:"
+                                    qual_type = "Game Event Stat"
+                                    extra_stats.add("current-stats")
+                                elif qualifier_str.startswith("game-event-stat-reversed:"):
+                                    qual_str = "game-event-stat-reversed:"
+                                    qual_type = "Game Event Stat Reversed"
+                                    extra_stats.add("current-stats")
+                                elif qualifier_str.startswith("game-event-stats:"):
+                                    qual_str = "game-event-stats:"
+                                    qual_type = "Game Event Stats"
+                                    extra_stats.add("current-stats")
+                                elif qualifier_str.startswith("game-event-stats-reversed:"):
+                                    qual_str = "game-event-stats-reversed:"
+                                    qual_type = "Game Event Stats Reversed"
+                                    extra_stats.add("current-stats")
+                                elif qualifier_str.startswith("starting-event-stat:"):
+                                    qual_str = "starting-event-stat:"
+                                    qual_type = "Starting Event Stat"
+                                    extra_stats.add("current-stats")
+                                elif qualifier_str.startswith("starting-event-stat-reversed:"):
+                                    qual_str = "starting-event-stat-reversed:"
+                                    qual_type = "Starting Event Stat Reversed"
+                                    extra_stats.add("current-stats")
+                                elif qualifier_str.startswith("starting-event-stats:"):
+                                    qual_str = "starting-event-stats:"
+                                    qual_type = "Starting Event Stats"
+                                    extra_stats.add("current-stats")
+                                elif qualifier_str.startswith("starting-event-stats-reversed:"):
+                                    qual_str = "starting-event-stats-reversed:"
+                                    qual_type = "Starting Event Stats Reversed"
+                                    extra_stats.add("current-stats")
+                                elif qualifier_str.startswith("starting-game-event-stat:"):
+                                    qual_str = "starting-game-event-stat:"
+                                    qual_type = "Starting Game Event Stat"
+                                    extra_stats.add("current-stats")
+                                elif qualifier_str.startswith("starting-game-event-stat-reversed:"):
+                                    qual_str = "starting-game-event-stat-reversed:"
+                                    qual_type = "Starting Game Event Stat Reversed"
+                                    extra_stats.add("current-stats")
+                                elif qualifier_str.startswith("starting-game-event-stats:"):
+                                    qual_str = "starting-game-event-stats:"
+                                    qual_type = "Starting Game Event Stats"
+                                    extra_stats.add("current-stats")
+                                elif qualifier_str.startswith("starting-game-event-stats-reversed:"):
+                                    qual_str = "starting-game-event-stats-reversed:"
+                                    qual_type = "Starting Game Event Stats Reversed"
+                                    extra_stats.add("current-stats")
+                                
+                                split_vals = re.split(r"(?<!\\)\=", re.split(r"(?<!\\)" + qual_str, qualifier_str)[1])
+
+                                stat = unescape_string(split_vals[0])
+                                
+                                if stat == "minute" or stat == "second" or stat == "min" or stat == "toi":
+                                    stat = "TOI"
+                                elif stat == "period":
+                                    stat = "Per"
+                                    extra_stats.add("show-stat-per")
+                                    extra_stats.add("event-stat-per")
+                                elif stat == "shot":
+                                    stat = "S"
+                                elif qual_type == "shot-faced" or qual_type == "shots-faced":
+                                    stat = "SA"
+                                else:
+                                    stat = qual_type.upper()
+
+                                if len(split_vals) == 1:
+                                    time_start = 0
+                                    time_end = 1
+                                else:
+                                    split_vals = re.split(r"(?<!\\)\-", split_vals[1])
+                                    if len(split_vals) > 1:
+                                        if stat == "TOI" and not unescape_string(split_vals[0]) == "second":
+                                            period_time_spl = split_vals[0].split(":")
+                                            if len(period_time_spl) > 1:
+                                                time_start = (int(ordinal_to_number(period_time_spl[0])) * 60) + int(ordinal_to_number(period_time_spl[1]))
+                                            else:
+                                                time_start = (int(ordinal_to_number(period_time_spl[0])) * 60)
+                                            period_time_spl = split_vals[1].split(":")
+                                            if len(period_time_spl) > 1:
+                                                time_end = (int(ordinal_to_number(period_time_spl[0])) * 60) + int(ordinal_to_number(period_time_spl[1]))
+                                            else:
+                                                time_end = (int(ordinal_to_number(period_time_spl[0])) * 60)
+                                        else:
+                                            time_start = ordinal_to_number(split_vals[0])
+                                            time_end = ordinal_to_number(split_vals[1])
+                                    else:
+                                        time_start = 0
+                                        if stat == "TOI" and not unescape_string(split_vals[0]) == "second":
+                                            period_time_spl = time_unit.split(":")
+                                            if len(period_time_spl) > 1:
+                                                time_end = (int(ordinal_to_number(period_time_spl[0])) * 60) + int(ordinal_to_number(period_time_spl[1]))
+                                            else:
+                                                time_end = (int(ordinal_to_number(period_time_spl[0])) * 60)
+                                        else:
+                                            time_end = ordinal_to_number(time_unit)
+
+                                if stat in headers["Skater"] and stat not in headers["Skater"]:
+                                    player_type["da_type"] = {
+                                        "type" : "Skater"
+                                    }
+                                elif stat in headers["Goalie"] and stat not in headers["Goalie"]:
+                                    player_type["da_type"] = {
+                                        "type" : "Goalie"
+                                    }
+                                
+                                extra_stats.add("current-stats")
+
+                                qualifier_obj["values"] = {
+                                    "start_val" : time_start,
+                                    "end_val" : time_end
+                                }
+                                qualifier_obj["stat"] = stat
                             elif qualifier_str.startswith("min-st:") or qualifier_str.startswith("min-stat:") or qualifier_str.startswith("max-st:") or qualifier_str.startswith("max-stat:") or qualifier_str.startswith("max-str:") or qualifier_str.startswith("max-streak:") or qualifier_str.startswith("max-stretch:") or qualifier_str.startswith("ctn-str:") or qualifier_str.startswith("count-streak:") or qualifier_str.startswith("q:") or qualifier_str.startswith("quickest:") or qualifier_str.startswith("s:") or qualifier_str.startswith("slowest:"):
                                 if qualifier_str.startswith("min-st:"):
                                     qual_str = "min-st:"
@@ -9706,7 +9895,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
 
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
                     
-                        last_match = re.search(r"\b(no(?:t|n)?(?: |-))?(first|1st|last|this|past)?(?: ?(\S*) (game-minute|minute|min|game-shots?-faced|shot?-faced|game-shot|shot|s|period)s?)\b", time_frame)
+                        last_match = re.search(r"\b(no(?:t|n)?(?: |-))?(first|1st|last|this|past)?(?: ?(\S*) (starting-)?(game-)?(minute|second|min|toi|shot|shots?-faced|period|goal|assist|point)s?)\b", time_frame)
                         if last_match:
                             compare_type = last_match.group(2)
                             time_unit = last_match.group(3)
@@ -9714,14 +9903,14 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 compare_type = time_unit
                                 time_unit = "1"
 
-                            qual_type = last_match.group(4)
+                            qual_type = last_match.group(6)
                             if not time_unit.strip():
                                 time_start = 0
                                 time_end = 1
                             else:
                                 time_unit_spl = re.split(r"(?<!\\)-", time_unit)
                                 if len(time_unit_spl) > 1:
-                                    if "minute" in qual_type or "min" in qual_type:
+                                    if "minute" in qual_type or "min" in qual_type or "toi" in qual_type:
                                         period_time_spl = time_unit_spl[0].split(":")
                                         if len(period_time_spl) > 1:
                                             time_start = (int(ordinal_to_number(period_time_spl[0])) * 60) + int(ordinal_to_number(period_time_spl[1]))
@@ -9737,7 +9926,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                         time_end = ordinal_to_number(time_unit_spl[1])
                                 else:
                                     time_start = 0
-                                    if "minute" in qual_type or "min" in qual_type:
+                                    if "minute" in qual_type or "min" in qual_type or "toi" in qual_type:
                                         period_time_spl = time_unit.split(":")
                                         if len(period_time_spl) > 1:
                                             time_end = (int(ordinal_to_number(period_time_spl[0])) * 60) + int(ordinal_to_number(period_time_spl[1]))
@@ -9746,48 +9935,38 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                     else:
                                         time_end = ordinal_to_number(time_unit)
 
-                            if qual_type == "game-minute":
-                                qual_type = "Game Minute"
-                                extra_stats.add("current-stats-no-game")
-                            elif qual_type == "minute" or qual_type == "min":
-                                qual_type = "Career Minute"
-                                extra_stats.add("show-stat-toi")
-                                extra_stats.add("show-stat-evtoi")
-                                extra_stats.add("show-stat-pptoi")
-                                extra_stats.add("show-stat-shtoi")
-                                extra_stats.add("show-stat-toi_5v5")
-                                extra_stats.add("current-stats-no-game")
-                            elif qual_type == "game-shot":
-                                qual_type = "Game Shot"
-                                extra_stats.add("current-stats-no-game")
-                            elif qual_type == "game-shot-faced" or qual_type == "game-shots-faced":
-                                qual_type = "Game Shot"
-                                extra_stats.add("current-stats-no-game")
-                                player_type["da_type"] = {
-                                    "type" : "Goalie"
-                                }
+                            stat = None
+                            if qual_type == "minute" or qual_type == "second" or qual_type == "min" or qual_type == "toi":
+                                stat = "TOI"
                             elif qual_type == "period":
-                                qual_type = "Career Period"
-                                extra_stats.add("current-stats")
+                                stat = "Per"
                                 extra_stats.add("show-stat-per")
-                                extra_stats.add("show-stat-toi")
-                                extra_stats.add("show-stat-evtoi")
-                                extra_stats.add("show-stat-pptoi")
-                                extra_stats.add("show-stat-shtoi")
-                                extra_stats.add("show-stat-toi_5v5")
-                                extra_stats.add("current-stats-no-game")
+                                extra_stats.add("event-stat-per")
+                            elif qual_type == "shot":
+                                stat = "S"
                             elif qual_type == "shot-faced" or qual_type == "shots-faced":
-                                qual_type = "Career Shot"
-                                extra_stats.add("current-stats-no-game")
+                                stat = "SA"
+                            else:
+                                stat = qual_type.upper()
+
+                            if stat in headers["Skater"] and stat not in headers["Skater"]:
+                                player_type["da_type"] = {
+                                    "type" : "Skater"
+                                }
+                            elif stat in headers["Goalie"] and stat not in headers["Goalie"]:
                                 player_type["da_type"] = {
                                     "type" : "Goalie"
                                 }
-                            else:
-                                qual_type = "Career Shot"
-                                extra_stats.add("current-stats-no-game")
+
+                            qual_type_to_use = "Event Stat"
 
                             if compare_type and compare_type not in ("first", "1st"):
-                                qual_type += " Reversed"
+                                qual_type_to_use += " Reversed"
+
+                            if last_match.group(5):
+                                qual_type_to_use = "Game " + qual_type_to_use
+                            if last_match.group(4):
+                                qual_type_to_use = "Starting " + qual_type_to_use
 
                             extra_stats.add("current-stats")
 
@@ -9797,9 +9976,11 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 "start_val" : time_start,
                                 "end_val" : time_end
                             }
-                            if not qual_type in qualifiers:
-                                qualifiers[qual_type] = []
-                            qualifiers[qual_type].append(qualifier_obj)
+                            qualifier_obj["stat"] = stat
+
+                            if not qual_type_to_use in qualifiers:
+                                qualifiers[qual_type_to_use] = []
+                            qualifiers[qual_type_to_use].append(qualifier_obj)
 
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(last_match.group(0), "", 1)).strip()
 
@@ -10644,15 +10825,6 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
     handle_against_qual(names, parse_time_frames, comment_obj, extra_stats)
     handle_same_games_qual(names, player_type, parse_time_frames, comment_obj, extra_stats)
 
-    for subb_frames in parse_time_frames:
-        for subbb_frames in subb_frames:
-            for time_frame in subbb_frames:
-                if "Career Shot" in time_frame["qualifiers"] or "Career Shot Reversed" in time_frame["qualifiers"] or "Game Shot" in time_frame["qualifiers"] or "Game Shot Reversed" in time_frame["qualifiers"]:
-                    if player_type["da_type"]["type"] == "Skater":
-                        extra_stats.add("Shot On")
-                        if "current-stats" in extra_stats:
-                            extra_stats.remove("current-stats")
-
     player_datas = []
     arguments = []
     for index, sub_name in enumerate(names):
@@ -11228,21 +11400,21 @@ def handle_same_games_qual(names, player_type, time_frames, comment_obj, extra_s
                 if "First Games" in time_frame["qualifiers"]:
                     handle_the_same_games_quals(sub_name, "First Games", subbb_frames, time_frame, player_type, "Games", True, comment_obj, qual_map, extra_stats)
                 if "First Minutes" in time_frame["qualifiers"]:
-                    handle_the_same_games_quals(sub_name, "First Minutes", subbb_frames, time_frame, player_type, "Career Minute", True, comment_obj, qual_map, extra_stats)
+                    handle_the_same_games_quals(sub_name, "First Minutes", subbb_frames, time_frame, player_type, "TOI", True, comment_obj, qual_map, extra_stats)
                 if "First Shots" in time_frame["qualifiers"]:
-                    handle_the_same_games_quals(sub_name, "First Shots", subbb_frames, time_frame, player_type, "Career Shot", True, comment_obj, qual_map, extra_stats)
+                    handle_the_same_games_quals(sub_name, "First Shots", subbb_frames, time_frame, player_type, "S", True, comment_obj, qual_map, extra_stats)
                 if "First Periods" in time_frame["qualifiers"]:
-                    handle_the_same_games_quals(sub_name, "First Periods", subbb_frames, time_frame, player_type, "Career Period", True, comment_obj, qual_map, extra_stats)
+                    handle_the_same_games_quals(sub_name, "First Periods", subbb_frames, time_frame, player_type, "Per", True, comment_obj, qual_map, extra_stats)
                 if "First Seasons" in time_frame["qualifiers"]:
                     handle_the_same_games_quals(sub_name, "First Seasons", subbb_frames, time_frame, player_type, "Seasons", True, comment_obj, qual_map, extra_stats)
                 if "Last Games" in time_frame["qualifiers"]:
                     handle_the_same_games_quals(sub_name, "Last Games", subbb_frames, time_frame, player_type, "Games", False, comment_obj, qual_map, extra_stats)
                 if "Last Minutes" in time_frame["qualifiers"]:
-                    handle_the_same_games_quals(sub_name, "Last Minutes", subbb_frames, time_frame, player_type, "Career Minute", False, comment_obj, qual_map, extra_stats)
+                    handle_the_same_games_quals(sub_name, "Last Minutes", subbb_frames, time_frame, player_type, "TOI", False, comment_obj, qual_map, extra_stats)
                 if "Last Shots" in time_frame["qualifiers"]:
-                    handle_the_same_games_quals(sub_name, "Last Shots", subbb_frames, time_frame, player_type, "Career Shot", False, comment_obj, qual_map, extra_stats)
+                    handle_the_same_games_quals(sub_name, "Last Shots", subbb_frames, time_frame, player_type, "S", False, comment_obj, qual_map, extra_stats)
                 if "Last Periods" in time_frame["qualifiers"]:
-                    handle_the_same_games_quals(sub_name, "Last Periods", subbb_frames, time_frame, player_type, "Career Period", False, comment_obj, qual_map, extra_stats)
+                    handle_the_same_games_quals(sub_name, "Last Periods", subbb_frames, time_frame, player_type, "Per", False, comment_obj, qual_map, extra_stats)
                 if "Last Seasons" in time_frame["qualifiers"]:
                     handle_the_same_games_quals(sub_name, "Last Seasons", subbb_frames, time_frame, player_type, "Seasons", False, comment_obj, qual_map, extra_stats)
                 if "Current Age" in time_frame["qualifiers"]:
@@ -11264,16 +11436,21 @@ def handle_same_games_qual(names, player_type, time_frames, comment_obj, extra_s
                             "compare_type" : compare_type,
                             "time_unit" : int(min_value)
                         }
-                    elif new_qual_type == "Career Minute" or new_qual_type == "Career Shot" or new_qual_type == "Career Period":
+                    elif new_qual_type == "TOI" or new_qual_type == "S" or new_qual_type == "Per":
+                        qual_type = "Event Stat"
                         if not is_first:
-                            new_qual_type += " Reversed"
-                        time_frame["qualifiers"][new_qual_type] = [{
+                            qual_type += " Reversed"
+                        time_frame["qualifiers"][qual_type] = [{
                             "values" : {
                                 "start_val" : 0,
-                                "end_val" : int(min_value)
+                                "end_val" : min_value
                             },
+                            "stat" : new_qual_type,
                             "negate" : False
                         }]
+
+                        if new_qual_type == "period":
+                            extra_stats.add("event-stat-per")
                     elif new_qual_type == "Seasons":
                         time_start = None
                         time_end = None
@@ -11541,14 +11718,14 @@ def handle_the_same_games_quals(sub_name, qual_str, subbb_frames, time_frame, pl
 
             if new_qual_type == "Games":
                 min_value = calculated_values["stat_values"]["GP"]
-            elif new_qual_type == "Career Minute":
+            elif new_qual_type == "TOI":
                 min_value = calculated_values["stat_values"]["TOI"]
-            elif new_qual_type == "Career Shot":
+            elif new_qual_type == "S":
                 if player_type["da_type"]["type"] == "Skater":
                     min_value = calculated_values["stat_values"]["S"]
                 else:
                     min_value = calculated_values["stat_values"]["SA"]
-            elif new_qual_type == "Career Period":
+            elif new_qual_type == "Per":
                 min_value = calculated_values["stat_values"]["Per"]
             elif new_qual_type == "Seasons":
                 min_value = len(set([row["Year"] for row in player_data["stat_values"]["all_rows"]]))
@@ -12824,7 +13001,15 @@ def determine_raw_str(subbb_frame):
                         if qual_obj["negate"]:
                             qual_str += "Not "
                         qual_str += "(" + player["query"].replace("Query: ", "", 1) + ")"
-                elif qualifier == "Days Rest" or qualifier == "Career Shot" or qualifier == "Career Shot Reversed" or qualifier == "Career Period" or qualifier == "Career Period Reversed" or qualifier == "Game Shot" or qualifier == "Game Shot Reversed" or qualifier == "Upcoming Days Rest" or qualifier == "Starts Days Rest" or qualifier == "Upcoming Starts Days Rest" or qualifier == "Days In A Row" or qualifier == "Games In A Row" or qualifier == "Starts In A Row" or qualifier == "Games Rest" or qualifier == "Starts Rest" or qualifier == "Team Score" or qualifier == "Opponent Score" or qualifier == "Series Team Wins" or qualifier == "Series Opponent Wins" or qualifier == "Series Score Margin" or qualifier == "Series Score Difference" or qualifier == "Game Number" or qualifier == "Season Number" or qualifier == "Final Team Score" or qualifier == "Final Opponent Score" or qualifier == "Team Skaters" or qualifier == "Opponent Skaters" or qualifier == "Team Players" or qualifier == "Opponent Players" or qualifier == "Team Wins" or qualifier == "Team Losses" or qualifier == "Team Ties" or qualifier == "Team Points" or qualifier == "Opponent Wins" or qualifier == "Opponent Losses" or qualifier == "Opponent Ties" or qualifier == "Opponent Points" or qualifier == "Current Team Wins" or qualifier == "Current Team Losses" or qualifier == "Current Team Ties" or qualifier == "Current Team Points" or qualifier == "Current Opponent Wins" or qualifier == "Current Opponent Losses" or qualifier == "Current Opponent Ties" or qualifier == "Current Opponent Points" or qualifier == "Team Games Over 500" or qualifier == "Opponent Games Over 500" or qualifier == "Current Team Games Over 500" or qualifier == "Current Opponent Games Over 500" or qualifier == "X Coordinate" or qualifier == "Y Coordinate" or qualifier == "Raw X Coordinate" or qualifier == "Raw Y Coordinate" or qualifier == "Absolute X Coordinate" or qualifier == "Absolute Y Coordinate":
+                elif qualifier == "Event Stat" or qualifier == "Event Stat Reversed" or qualifier == "Event Stats" or qualifier == "Event Stats Reversed" or qualifier == "Game Event Stat" or qualifier == "Game Event Stat Reversed" or qualifier == "Game Event Stats" or qualifier == "Game Event Stats Reversed" or qualifier == "Starting Event Stat" or qualifier == "Starting Event Stat Reversed" or qualifier == "Starting Event Stats" or qualifier == "Starting Event Stats Reversed" or qualifier == "Starting Game Event Stat" or qualifier == "Starting Game Event Stat Reversed" or qualifier == "Starting Game Event Stats" or qualifier == "Starting Game Event Stats Reversed":
+                    if qual_obj["negate"]:
+                        qual_str += "Not "
+                    qual_str += qual_obj["stat"] + "="
+                    if qual_obj["values"]["start_val"] == qual_obj["values"]["end_val"]:
+                        qual_str += get_time_str(qual_obj["values"]["start_val"], False, period=qual_obj["stat"] == "TOI")
+                    else:
+                        qual_str += (get_time_str(qual_obj["values"]["start_val"], False, period=qual_obj["stat"] == "TOI")) + "-" + (get_time_str(qual_obj["values"]["end_val"], False, period=qual_obj["stat"] == "TOI"))
+                elif qualifier == "Days Rest" or qualifier == "Upcoming Days Rest" or qualifier == "Starts Days Rest" or qualifier == "Upcoming Starts Days Rest" or qualifier == "Days In A Row" or qualifier == "Games In A Row" or qualifier == "Starts In A Row" or qualifier == "Games Rest" or qualifier == "Starts Rest" or qualifier == "Team Score" or qualifier == "Opponent Score" or qualifier == "Series Team Wins" or qualifier == "Series Opponent Wins" or qualifier == "Series Score Margin" or qualifier == "Series Score Difference" or qualifier == "Game Number" or qualifier == "Season Number" or qualifier == "Final Team Score" or qualifier == "Final Opponent Score" or qualifier == "Team Skaters" or qualifier == "Opponent Skaters" or qualifier == "Team Players" or qualifier == "Opponent Players" or qualifier == "Team Wins" or qualifier == "Team Losses" or qualifier == "Team Ties" or qualifier == "Team Points" or qualifier == "Opponent Wins" or qualifier == "Opponent Losses" or qualifier == "Opponent Ties" or qualifier == "Opponent Points" or qualifier == "Current Team Wins" or qualifier == "Current Team Losses" or qualifier == "Current Team Ties" or qualifier == "Current Team Points" or qualifier == "Current Opponent Wins" or qualifier == "Current Opponent Losses" or qualifier == "Current Opponent Ties" or qualifier == "Current Opponent Points" or qualifier == "Team Games Over 500" or qualifier == "Opponent Games Over 500" or qualifier == "Current Team Games Over 500" or qualifier == "Current Opponent Games Over 500" or qualifier == "X Coordinate" or qualifier == "Y Coordinate" or qualifier == "Raw X Coordinate" or qualifier == "Raw Y Coordinate" or qualifier == "Absolute X Coordinate" or qualifier == "Absolute Y Coordinate":
                     if qual_obj["negate"]:
                         qual_str += "Not "
                     if qual_obj["values"]["start_val"] == qual_obj["values"]["end_val"]:
@@ -12880,7 +13065,7 @@ def determine_raw_str(subbb_frame):
                         qual_str += get_time_str(qual_obj["values"]["start_val"], False)
                     else:
                         qual_str += (get_time_str(qual_obj["values"]["start_val"], False)) + "-" + (get_time_str(qual_obj["values"]["end_val"], False))
-                elif qualifier == "Period Time" or qualifier == "Period Time Remaining" or qualifier == "Career Minute" or qualifier == "Career Minute Reversed" or qualifier == "Game Minute" or qualifier == "Game Minute Reversed":
+                elif qualifier == "Period Time" or qualifier == "Period Time Remaining":
                     if qual_obj["negate"]:
                         qual_str += "Not "
                     if qual_obj["values"]["start_val"] == qual_obj["values"]["end_val"]:
@@ -13060,7 +13245,7 @@ def calculate_values(all_rows, player_type, og_player_data, extra_stats={}):
         if "GP" in row:
             if row["Year"] >= adv_year:
                 total_games += row["GP"]
-            if row["Year"] >= 2010:
+            if row["Year"] >= 2007:
                 all_against_games += row["GP"]
             all_total_games += row["GP"]
     player_data["stat_values"]["GP_5v5" if player_type["da_type"]["type"] == "Skater" else "GP_Sit"] = total_games
@@ -13422,7 +13607,7 @@ def handle_player_data(player_data, time_frame, player_type, player_page, valid_
     
     has_schedule_stat_qual = False
     for qualifier in time_frame["qualifiers"]:
-        if "Season" not in qualifier and ("Stat" in qualifier or "Streak" in qualifier or "Stretch" in qualifier or ("Formula" in qualifier and qualifier != "Event Formula") or "Quickest" in qualifier or "Slowest" in qualifier):
+        if "Season" not in qualifier and "Event Stat" not in qualifier and ("Stat" in qualifier or "Streak" in qualifier or "Stretch" in qualifier or ("Formula" in qualifier and qualifier != "Event Formula") or "Quickest" in qualifier or "Slowest" in qualifier):
             for qual_object in time_frame["qualifiers"][qualifier]:
                 for sub_qual_object in qual_object["values"]:
                     if "Formula" in qualifier:
@@ -13439,6 +13624,8 @@ def handle_player_data(player_data, time_frame, player_type, player_page, valid_
                     has_schedule_stat_qual = True
                 if "fight" in stat:
                     extra_stats.add("penalties")
+                if "star" in stat:
+                    extra_stats.add("star")
     
     for extra_stat in extra_stats:
         if extra_stat.startswith("show-stat-"):
@@ -13447,6 +13634,8 @@ def handle_player_data(player_data, time_frame, player_type, player_page, valid_
                 has_schedule_stat_qual = True
             if stat == "fight":
                 extra_stats.add("penalties")
+            if "star" in stat:
+                extra_stats.add("star")
 
     needs_half = False
     if "First Half" in time_frame["qualifiers"] or "Second Half" in time_frame["qualifiers"]:
@@ -13455,7 +13644,7 @@ def handle_player_data(player_data, time_frame, player_type, player_page, valid_
             if str(year) not in all_star_games:
                 needs_half = True
 
-    if has_schedule_stat_qual or "Time" in time_frame["qualifiers"] or "Arena" in time_frame["qualifiers"] or "Exact Arena" in time_frame["qualifiers"] or "Result" in time_frame["qualifiers"] or "Career Period" in time_frame["qualifiers"] or "Career Period Reversed" in time_frame["qualifiers"] or "First Periods" in time_frame["qualifiers"] or "Last Periods" in time_frame["qualifiers"] or "Previous Result" in time_frame["qualifiers"] or "Upcoming Result" in time_frame["qualifiers"] or "Elimination" in time_frame["qualifiers"] or "Clinching" in time_frame["qualifiers"] or "Elimination Or Clinching" in time_frame["qualifiers"] or "Winner Take All" in time_frame["qualifiers"] or "Ahead In Series" in time_frame["qualifiers"] or "Behind In Series" in time_frame["qualifiers"] or "Even In Series" in time_frame["qualifiers"] or "Series Team Wins" in time_frame["qualifiers"] or "Series Opponent Wins" in time_frame["qualifiers"] or "Series Score Margin" in time_frame["qualifiers"] or "Series Score Difference" in time_frame["qualifiers"] or "Round" in time_frame["qualifiers"] or "Series Game" in time_frame["qualifiers"] or "Final Team Score" in time_frame["qualifiers"] or "Final Opponent Score" in time_frame["qualifiers"] or "Final Score Margin" in time_frame["qualifiers"] or "Final Score Difference" in time_frame["qualifiers"] or "Team Game" in time_frame["qualifiers"] or "Team Game Reversed" in time_frame["qualifiers"] or "Games Rest" in time_frame["qualifiers"] or "Starts Rest" in time_frame["qualifiers"] or "Days In A Row" in time_frame["qualifiers"] or "Games In A Row" in time_frame["qualifiers"] or "Starts In A Row" in time_frame["qualifiers"] or "Previous Team Result" in time_frame["qualifiers"] or "Upcoming Team Result" in time_frame["qualifiers"] or "National Game" in time_frame["qualifiers"] or "Any National Game" in time_frame["qualifiers"] or "US National Game" in time_frame["qualifiers"] or "Any US National Game" in time_frame["qualifiers"] or "CA National Game" in time_frame["qualifiers"] or "Any CA National Game" in time_frame["qualifiers"] or "TV Network" in time_frame["qualifiers"] or "Raw TV Network" in time_frame["qualifiers"] or "National TV Network" in time_frame["qualifiers"] or "National Raw TV Network" in time_frame["qualifiers"] or "Any National TV Network" in time_frame["qualifiers"] or "Any National Raw TV Network" in time_frame["qualifiers"] or "Start Time" in time_frame["qualifiers"] or "Current Winning Opponent" in time_frame["qualifiers"] or "Current Losing Opponent" in time_frame["qualifiers"] or "Current Tied Opponent" in time_frame["qualifiers"] or "Current Winning Or Tied Opponent" in time_frame["qualifiers"] or "Current Losing Or Tied Opponent" in time_frame["qualifiers"] or "Current Winning Team" in time_frame["qualifiers"] or "Current Losing Team" in time_frame["qualifiers"] or "Current Tied Team" in time_frame["qualifiers"] or "Current Winning Or Tied Team" in time_frame["qualifiers"] or "Current Losing Or Tied Team" in time_frame["qualifiers"] or "Current Team Win Percentage" in time_frame["qualifiers"] or "Current Opponent Win Percentage" in time_frame["qualifiers"] or "Current Team Points Percentage" in time_frame["qualifiers"] or "Current Opponent Points Percentage" in time_frame["qualifiers"] or "Current Team Wins" in time_frame["qualifiers"] or "Current Team Losses" in time_frame["qualifiers"] or "Current Team Ties" in time_frame["qualifiers"] or "Current Team Points" in time_frame["qualifiers"] or "Current Opponent Wins" in time_frame["qualifiers"] or "Current Opponent Losses" in time_frame["qualifiers"] or "Current Opponent Ties" in time_frame["qualifiers"] or "Current Opponent Points" in time_frame["qualifiers"] or "Current Team Games Over 500" in time_frame["qualifiers"] or "Current Opponent Games Over 500" in time_frame["qualifiers"] or needs_half or "score" in extra_stats or "record" in extra_stats:
+    if has_schedule_stat_qual or "Time" in time_frame["qualifiers"] or "Arena" in time_frame["qualifiers"] or "Exact Arena" in time_frame["qualifiers"] or "Result" in time_frame["qualifiers"] or "Previous Result" in time_frame["qualifiers"] or "Upcoming Result" in time_frame["qualifiers"] or "Elimination" in time_frame["qualifiers"] or "Clinching" in time_frame["qualifiers"] or "Elimination Or Clinching" in time_frame["qualifiers"] or "Winner Take All" in time_frame["qualifiers"] or "Ahead In Series" in time_frame["qualifiers"] or "Behind In Series" in time_frame["qualifiers"] or "Even In Series" in time_frame["qualifiers"] or "Series Team Wins" in time_frame["qualifiers"] or "Series Opponent Wins" in time_frame["qualifiers"] or "Series Score Margin" in time_frame["qualifiers"] or "Series Score Difference" in time_frame["qualifiers"] or "Round" in time_frame["qualifiers"] or "Series Game" in time_frame["qualifiers"] or "Final Team Score" in time_frame["qualifiers"] or "Final Opponent Score" in time_frame["qualifiers"] or "Final Score Margin" in time_frame["qualifiers"] or "Final Score Difference" in time_frame["qualifiers"] or "Team Game" in time_frame["qualifiers"] or "Team Game Reversed" in time_frame["qualifiers"] or "Games Rest" in time_frame["qualifiers"] or "Starts Rest" in time_frame["qualifiers"] or "Days In A Row" in time_frame["qualifiers"] or "Games In A Row" in time_frame["qualifiers"] or "Starts In A Row" in time_frame["qualifiers"] or "Previous Team Result" in time_frame["qualifiers"] or "Upcoming Team Result" in time_frame["qualifiers"] or "National Game" in time_frame["qualifiers"] or "Any National Game" in time_frame["qualifiers"] or "US National Game" in time_frame["qualifiers"] or "Any US National Game" in time_frame["qualifiers"] or "CA National Game" in time_frame["qualifiers"] or "Any CA National Game" in time_frame["qualifiers"] or "TV Network" in time_frame["qualifiers"] or "Raw TV Network" in time_frame["qualifiers"] or "National TV Network" in time_frame["qualifiers"] or "National Raw TV Network" in time_frame["qualifiers"] or "Any National TV Network" in time_frame["qualifiers"] or "Any National Raw TV Network" in time_frame["qualifiers"] or "Start Time" in time_frame["qualifiers"] or "Current Winning Opponent" in time_frame["qualifiers"] or "Current Losing Opponent" in time_frame["qualifiers"] or "Current Tied Opponent" in time_frame["qualifiers"] or "Current Winning Or Tied Opponent" in time_frame["qualifiers"] or "Current Losing Or Tied Opponent" in time_frame["qualifiers"] or "Current Winning Team" in time_frame["qualifiers"] or "Current Losing Team" in time_frame["qualifiers"] or "Current Tied Team" in time_frame["qualifiers"] or "Current Winning Or Tied Team" in time_frame["qualifiers"] or "Current Losing Or Tied Team" in time_frame["qualifiers"] or "Current Team Win Percentage" in time_frame["qualifiers"] or "Current Opponent Win Percentage" in time_frame["qualifiers"] or "Current Team Points Percentage" in time_frame["qualifiers"] or "Current Opponent Points Percentage" in time_frame["qualifiers"] or "Current Team Wins" in time_frame["qualifiers"] or "Current Team Losses" in time_frame["qualifiers"] or "Current Team Ties" in time_frame["qualifiers"] or "Current Team Points" in time_frame["qualifiers"] or "Current Opponent Wins" in time_frame["qualifiers"] or "Current Opponent Losses" in time_frame["qualifiers"] or "Current Opponent Ties" in time_frame["qualifiers"] or "Current Opponent Points" in time_frame["qualifiers"] or "Current Team Games Over 500" in time_frame["qualifiers"] or "Current Opponent Games Over 500" in time_frame["qualifiers"] or needs_half or "score" in extra_stats or "record" in extra_stats or "event-stat-per" in extra_stats:
         all_rows, missing_games = handle_schedule_stats(player_data, all_rows, time_frame["qualifiers"], time_frame["playoffs"], missing_games)
     
     if "Winning Opponent" in time_frame["qualifiers"] or "Losing Opponent" in time_frame["qualifiers"] or "Tied Opponent" in time_frame["qualifiers"] or "Winning Or Tied Opponent" in time_frame["qualifiers"] or "Losing Or Tied Opponent" in time_frame["qualifiers"] or "Playoff Opponent" in time_frame["qualifiers"] or "Cup Winner Opponent" in time_frame["qualifiers"] or "Conference Winner Opponent" in time_frame["qualifiers"] or "Opponent Goals Rank" in time_frame["qualifiers"] or "Opponent Goals Allowed Rank" in time_frame["qualifiers"] or "Opponent Win Percentage" in time_frame["qualifiers"] or "Opponent Points Percentage" in time_frame["qualifiers"] or "Winning Team" in time_frame["qualifiers"] or "Losing Team" in time_frame["qualifiers"] or "Tied Team" in time_frame["qualifiers"] or "Winning Or Tied Team" in time_frame["qualifiers"] or "Losing Or Tied Team" in time_frame["qualifiers"] or "Playoff Team" in time_frame["qualifiers"] or "Cup Winner Team" in time_frame["qualifiers"] or "Conference Winner Team" in time_frame["qualifiers"] or "Team Goals Rank" in time_frame["qualifiers"] or "Team Goals Allowed Rank" in time_frame["qualifiers"] or "Team Win Percentage" in time_frame["qualifiers"] or "Team Points Percentage" in time_frame["qualifiers"] or "Team Wins" in time_frame["qualifiers"] or "Team Losses" in time_frame["qualifiers"] or "Team Ties" in time_frame["qualifiers"] or "Team Points" in time_frame["qualifiers"] or "Opponent Wins" in time_frame["qualifiers"] or "Opponent Losses" in time_frame["qualifiers"] or "Opponent Ties" in time_frame["qualifiers"] or "Opponent Points" in time_frame["qualifiers"] or "Team Conference" in time_frame["qualifiers"] or "Team Division" in time_frame["qualifiers"] or "Opponent Conference" in time_frame["qualifiers"] or "Opponent Division" in time_frame["qualifiers"] or "Interconference" in time_frame["qualifiers"] or "Intraconference" in time_frame["qualifiers"] or "Intradivision" in time_frame["qualifiers"] or "Interdivision" in time_frame["qualifiers"] or "Team Standings Rank" in time_frame["qualifiers"] or "Opponent Standings Rank" in time_frame["qualifiers"] or "Team Games Over 500" in time_frame["qualifiers"] or "Opponent Games Over 500" in time_frame["qualifiers"]:
@@ -13488,7 +13677,10 @@ def handle_player_data(player_data, time_frame, player_type, player_page, valid_
         all_rows = new_rows
     
     if not "hide-advanced" in extra_stats or ("Game Number" in time_frame["qualifiers"] or "penalties" in extra_stats or "star" in extra_stats):
-        if "Game Number" in time_frame["qualifiers"] or "Shot On" in time_frame["qualifiers"] or "Shot By" in time_frame["qualifiers"] or "Event Formula" in time_frame["qualifiers"] or "On Ice With" in time_frame["qualifiers"] or "On Ice Against" in time_frame["qualifiers"] or "On Line With" in time_frame["qualifiers"] or "On Line Against" in time_frame["qualifiers"] or "Assisted On" in time_frame["qualifiers"] or "Assisted With" in time_frame["qualifiers"] or "Points With" in time_frame["qualifiers"] or "Assisted By" in time_frame["qualifiers"] or "Primary Assisted On" in time_frame["qualifiers"] or "Primary Assisted With" in time_frame["qualifiers"] or "Primary Points With" in time_frame["qualifiers"] or "Primary Assisted By" in time_frame["qualifiers"] or "Hit On" in time_frame["qualifiers"] or "Block On" in time_frame["qualifiers"] or "Penalty On" in time_frame["qualifiers"] or "Faceoff Against" in time_frame["qualifiers"] or "Fight Against" in time_frame["qualifiers"] or "Penalty Type" in time_frame["qualifiers"] or "Team Score" in time_frame["qualifiers"] or "Opponent Score" in time_frame["qualifiers"] or "Score Margin" in time_frame["qualifiers"] or "Score Difference" in time_frame["qualifiers"] or "Event Sub Query" in time_frame["qualifiers"] or "Or Event Sub Query" in time_frame["qualifiers"] or "Period" in time_frame["qualifiers"] or "Period Stat" in time_frame["qualifiers"] or "Coordinates" in time_frame["qualifiers"] or "X Coordinate" in time_frame["qualifiers"] or "Y Coordinate" in time_frame["qualifiers"] or "Raw Coordinates" in time_frame["qualifiers"] or "Raw X Coordinate" in time_frame["qualifiers"] or "Raw Y Coordinate" in time_frame["qualifiers"] or "Absolute Coordinates" in time_frame["qualifiers"] or "Absolute X Coordinate" in time_frame["qualifiers"] or "Absolute Y Coordinate" in time_frame["qualifiers"] or "Left Side" in time_frame["qualifiers"] or "Right Side" in time_frame["qualifiers"] or "Period Time" in time_frame["qualifiers"] or "Period Time Remaining" in time_frame["qualifiers"] or "Unassisted" in time_frame["qualifiers"] or "Career Minute" in time_frame["qualifiers"] or "Career Minute Reversed" in time_frame["qualifiers"] or "Game Minute" in time_frame["qualifiers"] or "Game Minute Reversed" in time_frame["qualifiers"] or "Career Shot" in time_frame["qualifiers"] or "Career Shot Reversed" in time_frame["qualifiers"] or "Career Period" in time_frame["qualifiers"] or "Career Period Reversed" in time_frame["qualifiers"] or "Game Shot" in time_frame["qualifiers"] or "Game Shot Reversed" in time_frame["qualifiers"] or "Strength" in time_frame["qualifiers"] or "Even Skaters" in time_frame["qualifiers"] or "Even Goalies" in time_frame["qualifiers"] or "More Skaters" in time_frame["qualifiers"] or "Less Skaters" in time_frame["qualifiers"] or "Team Goalie Pulled" in time_frame["qualifiers"] or "Opponent Goalie Pulled" in time_frame["qualifiers"] or "Power Play" in time_frame["qualifiers"] or "Short Handed" in time_frame["qualifiers"] or "Even Strength" in time_frame["qualifiers"] or "Team Skaters" in time_frame["qualifiers"] or "Opponent Skaters" in time_frame["qualifiers"] or "Team Players" in time_frame["qualifiers"] or "Opponent Players" in time_frame["qualifiers"] or "Overtime" in time_frame["qualifiers"] or "Game Winning" in time_frame["qualifiers"] or "Offensive Zone" in time_frame["qualifiers"] or "Defensive Zone" in time_frame["qualifiers"] or "Neutral Zone" in time_frame["qualifiers"] or "Event Time" in time_frame["qualifiers"] or "penalties" in extra_stats or "star" in extra_stats or "current-stats" in extra_stats:
+        if ("Event Stat" in time_frame["qualifiers"] or "Event Stat Reversed" in time_frame["qualifiers"] or "Event Stats" in time_frame["qualifiers"] or "Event Stats Reversed" in time_frame["qualifiers"] or "Starting Event Stat" in time_frame["qualifiers"] or "Starting Event Stat Reversed" in time_frame["qualifiers"] or "Starting Event Stats" in time_frame["qualifiers"] or "Starting Event Stats Reversed" in time_frame["qualifiers"]):
+            all_rows, missing_games, missing_toi = handle_nhl_game_stats_single_thread(player_data, all_rows, time_frame, player_link, player_type, missing_games, missing_toi, extra_stats)
+            player_data["stat_values"]["is_indv_shift_data"] = True
+        elif "Game Number" in time_frame["qualifiers"] or "penalties" in extra_stats or "star" in extra_stats or "current-stats" in extra_stats:
             all_rows, missing_games, missing_toi = handle_nhl_game_stats(player_data, all_rows, time_frame, player_link, player_type, missing_games, missing_toi, extra_stats)
             player_data["stat_values"]["is_indv_shift_data"] = True
 
@@ -15510,19 +15702,6 @@ def get_opponent_schedule(seasons):
 def handle_nhl_game_stats(player_data, all_rows, time_frame, player_link, player_type, missing_games, missing_toi, extra_stats):
     if not all_rows:
         return [], missing_games, missing_toi
-
-    saved_row_data = []
-    if "Career Minute" in time_frame["qualifiers"] or "Career Minute Reversed" in time_frame["qualifiers"] or "Game Minute" in time_frame["qualifiers"] or "Game Minute Reversed" in time_frame["qualifiers"] or "Career Shot" in time_frame["qualifiers"] or "Career Shot Reversed" in time_frame["qualifiers"] or "Career Period" in time_frame["qualifiers"] or "Career Period Reversed" in time_frame["qualifiers"] or "Game Shot" in time_frame["qualifiers"] or "Game Shot Reversed" in time_frame["qualifiers"]:
-        for sub_row_data in sorted(all_rows, key=lambda row: row["Date"]):
-            saved_row_data.append({
-                "TOI" : sub_row_data.get("TOI", 0),
-                "Per" : sub_row_data.get("Per", 0)
-            })
-
-            if player_type["da_type"]["type"] == "Skater":
-                saved_row_data[len(saved_row_data) - 1]["S"] = sub_row_data.get("S", 0)
-            else:
-                saved_row_data[len(saved_row_data) - 1]["S"] = sub_row_data.get("SA", 0)
     
     games_to_skip = set()
     if "Shot On" in time_frame["qualifiers"]:
@@ -15759,146 +15938,250 @@ def handle_nhl_game_stats(player_data, all_rows, time_frame, player_link, player
             if not has_match:
                 games_to_skip.add(row_data["NHLGameLink"])
 
-    if "Career Minute" in time_frame["qualifiers"]:
-        for index, row_data in enumerate(sorted(all_rows, key=lambda row: row["Date"])):
-            has_match = False
-            total_minute_entering = 0
-            for sub_row_data in saved_row_data[:index]:
-                total_minute_entering += sub_row_data["TOI"]
-            total_minute_exiting = total_minute_entering + saved_row_data[index]["TOI"]
+    all_rows = sorted(all_rows, key=lambda row: row["Date"])
+    return get_nhl_game_schedule(player_data, all_rows, games_to_skip, player_link, player_type, time_frame, missing_games, missing_toi, extra_stats)
 
-            goal_event = {
-                "career_minute" : total_minute_entering
-            }
-            if perform_sub_metadata_qual(goal_event, "career_minute", time_frame["qualifiers"]["Career Minute"], None, None):
-                has_match = True
-            else:
-                goal_event = {
-                    "career_minute" : total_minute_exiting
-                }
-                if perform_sub_metadata_qual(goal_event, "career_minute", time_frame["qualifiers"]["Career Minute"], None, None):
-                    has_match = True
-
-            if not has_match:
-                games_to_skip.add(row_data["NHLGameLink"])
+def handle_nhl_game_stats_single_thread(player_data, all_rows, time_frame, player_link, player_type, missing_games, missing_toi, extra_stats):
+    if not all_rows:
+        return [], missing_games, missing_toi
     
-    if "Career Minute Reversed" in time_frame["qualifiers"]:
-        for index, row_data in enumerate(sorted(all_rows, key=lambda row: row["Date"])):
+    games_to_skip = set()
+    if "Shot On" in time_frame["qualifiers"]:
+        for row_data in all_rows:
+            for qual_object in time_frame["qualifiers"]["Shot On"]:
+                if not qual_object["negate"]:
+                    has_match = False
+                    for player in qual_object["values"]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["Date"] in player["games"][row_data["Tm"].lower()]:
+                            has_match = True
+                
+                    if not has_match:
+                        games_to_skip.add(row_data["NHLGameLink"])
+    if "Shot By" in time_frame["qualifiers"]:
+        for row_data in all_rows:
+            for qual_object in time_frame["qualifiers"]["Shot By"]:
+                if not qual_object["negate"]:
+                    has_match = False
+                    for player in qual_object["values"]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["Date"] in player["games"][row_data["Tm"].lower()]:
+                            has_match = True
+                
+                    if not has_match:
+                        games_to_skip.add(row_data["NHLGameLink"])
+    if "On Ice With" in time_frame["qualifiers"]:
+        for row_data in all_rows:
+            for qual_object in time_frame["qualifiers"]["On Ice With"]:
+                if not qual_object["negate"]:
+                    has_match = False
+                    for player in qual_object["values"]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["Date"] in player["games"][row_data["Tm"].lower()]:
+                            has_match = True
+                
+                    if not has_match:
+                        games_to_skip.add(row_data["NHLGameLink"])
+    if "On Ice Against" in time_frame["qualifiers"]:
+        for row_data in all_rows:
+            for qual_object in time_frame["qualifiers"]["On Ice Against"]:
+                if not qual_object["negate"]:
+                    has_match = False
+                    for player in qual_object["values"]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["Date"] in player["games"][row_data["Tm"].lower()]:
+                            has_match = True
+                
+                    if not has_match:
+                        games_to_skip.add(row_data["NHLGameLink"])
+    if "On Line With" in time_frame["qualifiers"]:
+        for row_data in all_rows:
+            for qual_object in time_frame["qualifiers"]["On Line With"]:
+                if not qual_object["negate"]:
+                    has_match = False
+                    for player in qual_object["values"]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["Date"] in player["games"][row_data["Tm"].lower()]:
+                            has_match = True
+                
+                    if not has_match:
+                        games_to_skip.add(row_data["NHLGameLink"])
+    if "On Line Against" in time_frame["qualifiers"]:
+        for row_data in all_rows:
+            for qual_object in time_frame["qualifiers"]["On Line Against"]:
+                if not qual_object["negate"]:
+                    has_match = False
+                    for player in qual_object["values"]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["Date"] in player["games"][row_data["Tm"].lower()]:
+                            has_match = True
+                
+                    if not has_match:
+                        games_to_skip.add(row_data["NHLGameLink"])
+    if "Assisted On" in time_frame["qualifiers"]:
+        for row_data in all_rows:
+            for qual_object in time_frame["qualifiers"]["Assisted On"]:
+                if not qual_object["negate"]:
+                    has_match = False
+                    for player in qual_object["values"]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["Date"] in player["games"][row_data["Tm"].lower()]:
+                            has_match = True
+                
+                    if not has_match:
+                        games_to_skip.add(row_data["NHLGameLink"])
+    if "Assisted With" in time_frame["qualifiers"]:
+        for row_data in all_rows:
+            for qual_object in time_frame["qualifiers"]["Assisted With"]:
+                if not qual_object["negate"]:
+                    has_match = False
+                    for player in qual_object["values"]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["Date"] in player["games"][row_data["Tm"].lower()]:
+                            has_match = True
+                
+                    if not has_match:
+                        games_to_skip.add(row_data["NHLGameLink"])
+    if "Points With" in time_frame["qualifiers"]:
+        for row_data in all_rows:
+            for qual_object in time_frame["qualifiers"]["Points With"]:
+                if not qual_object["negate"]:
+                    has_match = False
+                    for player in qual_object["values"]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["Date"] in player["games"][row_data["Tm"].lower()]:
+                            has_match = True
+                
+                    if not has_match:
+                        games_to_skip.add(row_data["NHLGameLink"])
+    if "Assisted By" in time_frame["qualifiers"]:
+        for row_data in all_rows:
+            for qual_object in time_frame["qualifiers"]["Assisted By"]:
+                if not qual_object["negate"]:
+                    has_match = False
+                    for player in qual_object["values"]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["Date"] in player["games"][row_data["Tm"].lower()]:
+                            has_match = True
+                
+                    if not has_match:
+                        games_to_skip.add(row_data["NHLGameLink"])
+    if "Primary Assisted On" in time_frame["qualifiers"]:
+        for row_data in all_rows:
+            for qual_object in time_frame["qualifiers"]["Primary Assisted On"]:
+                if not qual_object["negate"]:
+                    has_match = False
+                    for player in qual_object["values"]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["Date"] in player["games"][row_data["Tm"].lower()]:
+                            has_match = True
+                
+                    if not has_match:
+                        games_to_skip.add(row_data["NHLGameLink"])
+    if "Primary Assisted With" in time_frame["qualifiers"]:
+        for row_data in all_rows:
+            for qual_object in time_frame["qualifiers"]["Primary Assisted With"]:
+                if not qual_object["negate"]:
+                    has_match = False
+                    for player in qual_object["values"]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["Date"] in player["games"][row_data["Tm"].lower()]:
+                            has_match = True
+                
+                    if not has_match:
+                        games_to_skip.add(row_data["NHLGameLink"])
+    if "Primary Points With" in time_frame["qualifiers"]:
+        for row_data in all_rows:
+            for qual_object in time_frame["qualifiers"]["Primary Points With"]:
+                if not qual_object["negate"]:
+                    has_match = False
+                    for player in qual_object["values"]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["Date"] in player["games"][row_data["Tm"].lower()]:
+                            has_match = True
+                
+                    if not has_match:
+                        games_to_skip.add(row_data["NHLGameLink"])
+    if "Primary Assisted By" in time_frame["qualifiers"]:
+        for row_data in all_rows:
+            for qual_object in time_frame["qualifiers"]["Primary Assisted By"]:
+                if not qual_object["negate"]:
+                    has_match = False
+                    for player in qual_object["values"]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["Date"] in player["games"][row_data["Tm"].lower()]:
+                            has_match = True
+                
+                    if not has_match:
+                        games_to_skip.add(row_data["NHLGameLink"])
+    if "Hit On" in time_frame["qualifiers"]:
+        for row_data in all_rows:
+            for qual_object in time_frame["qualifiers"]["Hit On"]:
+                if not qual_object["negate"]:
+                    has_match = False
+                    for player in qual_object["values"]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["Date"] in player["games"][row_data["Tm"].lower()]:
+                            has_match = True
+                
+                    if not has_match:
+                        games_to_skip.add(row_data["NHLGameLink"])
+    if "Penalty On" in time_frame["qualifiers"]:
+        for row_data in all_rows:
+            for qual_object in time_frame["qualifiers"]["Penalty On"]:
+                if not qual_object["negate"]:
+                    has_match = False
+                    for player in qual_object["values"]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["Date"] in player["games"][row_data["Tm"].lower()]:
+                            has_match = True
+                
+                    if not has_match:
+                        games_to_skip.add(row_data["NHLGameLink"])
+    if "Block On" in time_frame["qualifiers"]:
+        for row_data in all_rows:
+            for qual_object in time_frame["qualifiers"]["Block On"]:
+                if not qual_object["negate"]:
+                    has_match = False
+                    for player in qual_object["values"]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["Date"] in player["games"][row_data["Tm"].lower()]:
+                            has_match = True
+                
+                    if not has_match:
+                        games_to_skip.add(row_data["NHLGameLink"])
+    if "Faceoff Against" in time_frame["qualifiers"]:
+        for row_data in all_rows:
+            for qual_object in time_frame["qualifiers"]["Faceoff Against"]:
+                if not qual_object["negate"]:
+                    has_match = False
+                    for player in qual_object["values"]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["Date"] in player["games"][row_data["Tm"].lower()]:
+                            has_match = True
+                
+                    if not has_match:
+                        games_to_skip.add(row_data["NHLGameLink"])
+    if "Fight Against" in time_frame["qualifiers"]:
+        for row_data in all_rows:
+            for qual_object in time_frame["qualifiers"]["Fight Against"]:
+                if not qual_object["negate"]:
+                    has_match = False
+                    for player in qual_object["values"]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["Date"] in player["games"][row_data["Tm"].lower()]:
+                            has_match = True
+                
+                    if not has_match:
+                        games_to_skip.add(row_data["NHLGameLink"])
+    if "Event Sub Query" in time_frame["qualifiers"]:
+        for row_data in all_rows:
+            for qual_object in time_frame["qualifiers"]["Event Sub Query"]:
+                if not qual_object["negate"]:
+                    has_match = False
+                    for player in qual_object["values"]:
+                        if row_data["GameLink"] in player["games"]:
+                            has_match = True
+                
+                    if not has_match:
+                        games_to_skip.add(row_data["NHLGameLink"])
+    if "Or Event Sub Query" in time_frame["qualifiers"]:
+        for row_data in all_rows:
             has_match = False
-            total_minute_entering = 0
-            for sub_row_data in reversed(saved_row_data[(index + 1):]):
-                total_minute_entering += sub_row_data["TOI"]
-            total_minute_exiting = total_minute_entering + saved_row_data[index]["TOI"]
-
-            goal_event = {
-                "career_minute" : total_minute_entering
-            }
-            if perform_sub_metadata_qual(goal_event, "career_minute", time_frame["qualifiers"]["Career Minute Reversed"], None, None):
-                has_match = True
-            else:
-                goal_event = {
-                    "career_minute" : total_minute_exiting
-                }
-                if perform_sub_metadata_qual(goal_event, "career_minute", time_frame["qualifiers"]["Career Minute Reversed"], None, None):
+            for qual_object in time_frame["qualifiers"]["Or Event Sub Query"]:
+                if not qual_object["negate"]:
+                    for player in qual_object["values"]:
+                        if row_data["GameLink"] in player["games"]:
+                            has_match = True
+                else:
                     has_match = True
-
-            if not has_match:
-                games_to_skip.add(row_data["NHLGameLink"])
-    
-    if "Career Shot" in time_frame["qualifiers"]:
-        for index, row_data in enumerate(sorted(all_rows, key=lambda row: row["Date"])):
-            has_match = False
-            total_minute_entering = 0
-            for sub_row_data in saved_row_data[:index]:
-                total_minute_entering += sub_row_data["S"]
-            total_minute_exiting = total_minute_entering + saved_row_data[index]["S"]
-
-            goal_event = {
-                "career_minute" : total_minute_entering
-            }
-            if perform_sub_metadata_qual(goal_event, "career_minute", time_frame["qualifiers"]["Career Shot"], None, None):
-                has_match = True
-            else:
-                goal_event = {
-                    "career_minute" : total_minute_exiting
-                }
-                if perform_sub_metadata_qual(goal_event, "career_minute", time_frame["qualifiers"]["Career Shot"], None, None):
-                    has_match = True
-
-            if not has_match:
-                games_to_skip.add(row_data["NHLGameLink"])
-    
-    if "Career Shot Reversed" in time_frame["qualifiers"]:
-        for index, row_data in enumerate(sorted(all_rows, key=lambda row: row["Date"])):
-            has_match = False
-            total_minute_entering = 0
-            for sub_row_data in reversed(saved_row_data[(index + 1):]):
-                total_minute_entering += sub_row_data["S"]
-            total_minute_exiting = total_minute_entering + saved_row_data[index]["S"]
-
-            goal_event = {
-                "career_minute" : total_minute_entering
-            }
-            if perform_sub_metadata_qual(goal_event, "career_minute", time_frame["qualifiers"]["Career Shot Reversed"], None, None):
-                has_match = True
-            else:
-                goal_event = {
-                    "career_minute" : total_minute_exiting
-                }
-                if perform_sub_metadata_qual(goal_event, "career_minute", time_frame["qualifiers"]["Career Shot Reversed"], None, None):
-                    has_match = True
-
-            if not has_match:
-                games_to_skip.add(row_data["NHLGameLink"])
-    
-    if "Career Period" in time_frame["qualifiers"]:
-        for index, row_data in enumerate(sorted(all_rows, key=lambda row: row["Date"])):
-            has_match = False
-            total_minute_entering = 0
-            for sub_row_data in saved_row_data[:index]:
-                total_minute_entering += sub_row_data["Per"]
-            total_minute_exiting = total_minute_entering + saved_row_data[index]["Per"]
-
-            goal_event = {
-                "career_minute" : total_minute_entering
-            }
-            if perform_sub_metadata_qual(goal_event, "career_minute", time_frame["qualifiers"]["Career Period"], None, None):
-                has_match = True
-            else:
-                goal_event = {
-                    "career_minute" : total_minute_exiting
-                }
-                if perform_sub_metadata_qual(goal_event, "career_minute", time_frame["qualifiers"]["Career Period"], None, None):
-                    has_match = True
-
-            if not has_match:
-                games_to_skip.add(row_data["NHLGameLink"])
-    
-    if "Career Period Reversed" in time_frame["qualifiers"]:
-        for index, row_data in enumerate(sorted(all_rows, key=lambda row: row["Date"])):
-            has_match = False
-            total_minute_entering = 0
-            for sub_row_data in reversed(saved_row_data[(index + 1):]):
-                total_minute_entering += sub_row_data["Per"]
-            total_minute_exiting = total_minute_entering + saved_row_data[index]["Per"]
-
-            goal_event = {
-                "career_minute" : total_minute_entering
-            }
-            if perform_sub_metadata_qual(goal_event, "career_minute", time_frame["qualifiers"]["Career Period Reversed"], None, None):
-                has_match = True
-            else:
-                goal_event = {
-                    "career_minute" : total_minute_exiting
-                }
-                if perform_sub_metadata_qual(goal_event, "career_minute", time_frame["qualifiers"]["Career Period Reversed"], None, None):
-                    has_match = True
-
+                
             if not has_match:
                 games_to_skip.add(row_data["NHLGameLink"])
 
     all_rows = sorted(all_rows, key=lambda row: row["Date"])
-    return get_nhl_game_schedule(player_data, all_rows, games_to_skip, player_link, player_type, time_frame, missing_games, missing_toi, saved_row_data, extra_stats)
+    return get_nhl_game_schedule_single_thread(player_data, all_rows, games_to_skip, player_link, player_type, time_frame, missing_games, missing_toi, extra_stats)
 
 def get_nhl_schedule(player_data, all_rows, qualifiers):
     season_objs = {}
@@ -16197,7 +16480,7 @@ def get_nhl_schedule(player_data, all_rows, qualifiers):
     
     return season_objs
 
-def get_nhl_game_schedule(player_data, all_rows, games_to_skip, player_link, player_type, time_frame, missing_games, missing_toi, saved_row_data, extra_stats):
+def get_nhl_game_schedule(player_data, all_rows, games_to_skip, player_link, player_type, time_frame, missing_games, missing_toi, extra_stats):
     player_id = int(player_link.split('/')[-1])
 
     logger.info("#" + str(threading.get_ident()) + "#   " + player_data["id"] + " starting game data")
@@ -16219,7 +16502,7 @@ def get_nhl_game_schedule(player_data, all_rows, games_to_skip, player_link, pla
             if row_data["NHLGameLink"]:
                 if row_data["NHLGameLink"] not in games_to_skip:
                     future = sub_executor.submit(get_game_data, index, player_data, row_data, player_id, player_type, time_frame, extra_stats)
-                    future.add_done_callback(functools.partial(result_call_back, saved_row_data, index, time_frame, count_info, new_rows, player_type, player_data, player_link, row_data, extra_stats))
+                    future.add_done_callback(functools.partial(result_call_back, time_frame, count_info, new_rows, player_type, player_data, player_link, row_data, extra_stats, index))
             else:
                 count_info["missing_games"].append("[" + str(row_data["Date"]) + "](" + "https://www.nhl.com/gamecenter/" + str(row_data["NHLGameLink"]) + ")")
         
@@ -16228,7 +16511,124 @@ def get_nhl_game_schedule(player_data, all_rows, games_to_skip, player_link, pla
 
     return sorted(new_rows, key=lambda row: row["Date"]), missing_games, missing_toi
 
-def result_call_back(saved_row_data, index, time_frame, count_info, new_rows, player_type, player_data, player_link, old_row_data, extra_stats, result):
+def get_nhl_game_schedule_single_thread(player_data, all_rows, games_to_skip, player_link, player_type, time_frame, missing_games, missing_toi, extra_stats):
+    player_id = int(player_link.split('/')[-1])
+
+    logger.info("#" + str(threading.get_ident()) + "#   " + player_data["id"] + " starting game data")
+    count_info = {
+        "current_percent" : 10,
+        "count" : 1,
+        "total_count" : len(all_rows) - len(games_to_skip),
+        "missing_games" : missing_games,
+        "missing_toi" : missing_toi,
+        "exception" : None
+    }
+    new_rows = []
+
+    if not count_info["total_count"]:
+        return new_rows, missing_games, missing_toi
+
+    event_stats_needed = {}
+    event_reversed_stats_needed = {}
+    starting_event_stats_needed = {}
+    starting_event_reversed_stats_needed = {}
+    if "Event Stat" in time_frame["qualifiers"]:
+        for qual_obj in time_frame["qualifiers"]["Event Stat"]:
+            if qual_obj["stat"] not in event_stats_needed:
+                event_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
+            if qual_obj["values"]["end_val"] < event_stats_needed[qual_obj["stat"]]:
+                event_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
+    if "Event Stat Reversed" in time_frame["qualifiers"]:
+        for qual_obj in time_frame["qualifiers"]["Event Stat Reversed"]:
+            if qual_obj["stat"] not in event_reversed_stats_needed:
+                event_reversed_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
+            if qual_obj["values"]["end_val"] < event_reversed_stats_needed[qual_obj["stat"]]:
+                event_reversed_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
+    if "Starting Event Stat" in time_frame["qualifiers"]:
+        for qual_obj in time_frame["qualifiers"]["Starting Event Stat"]:
+            if qual_obj["stat"] not in starting_event_stats_needed:
+                starting_event_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
+            if qual_obj["values"]["end_val"] < starting_event_stats_needed[qual_obj["stat"]]:
+                starting_event_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
+    if "Starting Event Stat Reversed" in time_frame["qualifiers"]:
+        for qual_obj in time_frame["qualifiers"]["Starting Event Stat Reversed"]:
+            if qual_obj["stat"] not in starting_event_reversed_stats_needed:
+                starting_event_reversed_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
+            if qual_obj["values"]["end_val"] < starting_event_reversed_stats_needed[qual_obj["stat"]]:
+                starting_event_reversed_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
+    stats_needed = set(list(event_stats_needed.keys()) + list(event_reversed_stats_needed.keys()) + list(starting_event_stats_needed.keys()) + list(starting_event_reversed_stats_needed.keys()))
+    
+    saved_row_data = {}
+    for stat in stats_needed:
+        saved_row_data[stat] = 0
+
+    is_reverse = "Event Stat Reversed" in time_frame["qualifiers"] or "Starting Event Stat Reversed" in time_frame["qualifiers"]
+
+    hit_end = False
+    for index, row_data in enumerate(sorted(all_rows, key=lambda row: row["Date"], reverse=is_reverse)):
+        if hit_end:
+            continue
+
+        if row_data["NHLGameLink"] not in games_to_skip:
+            try:
+                game_data, row_data, sub_missing_games = get_game_data(index, player_data, row_data, player_id, player_type, time_frame, extra_stats)
+                has_match, raw_row_data = handle_result_qualifiers(game_data, row_data, sub_missing_games, time_frame, index, saved_row_data, count_info, player_type, player_data, player_link, extra_stats)
+                
+                if stat not in raw_row_data:
+                    break
+
+                if has_match:
+                    new_rows.append(row_data)
+
+                for stat in stats_needed:
+                    if stat in starting_event_stats_needed:
+                        saved_row_data["starting_career_stat_" + stat] = saved_row_data[stat]
+                        if saved_row_data[stat] >= starting_event_stats_needed[stat]:
+                            hit_end = True
+                    if stat in starting_event_reversed_stats_needed:
+                        saved_row_data["starting_career_stat_reversed_" + stat] = saved_row_data[stat]
+                        if saved_row_data[stat] >= starting_event_reversed_stats_needed[stat]:
+                            hit_end = True
+
+                    saved_row_data[stat] += raw_row_data[stat]
+                
+                    if stat in event_stats_needed:
+                        saved_row_data["career_stat_" + stat] = saved_row_data[stat]
+                        if saved_row_data[stat] >= event_stats_needed[stat]:
+                            hit_end = True
+                    if stat in event_reversed_stats_needed:
+                        saved_row_data["career_stat_reversed_" + stat] = saved_row_data[stat]
+                        if saved_row_data[stat] >= event_reversed_stats_needed[stat]:
+                            hit_end = True
+
+                if "Event Stat" in time_frame["qualifiers"]:
+                    if not handle_stat_num_qual(saved_row_data, time_frame["qualifiers"]["Event Stat"], False, True, False):
+                        break
+                if "Event Stat Reversed" in time_frame["qualifiers"]:
+                    if not handle_stat_num_qual(saved_row_data, time_frame["qualifiers"]["Event Stat Reversed"], True, True, False):
+                        break
+            
+                if "Starting Event Stat" in time_frame["qualifiers"]:
+                    if not handle_stat_num_qual(saved_row_data, time_frame["qualifiers"]["Starting Event Stat"], False, True, True):
+                        break
+                if "Starting Event Stat Reversed" in time_frame["qualifiers"]:
+                    if not handle_stat_num_qual(saved_row_data, time_frame["qualifiers"]["Starting Event Stat Reversed"], True, True, True):
+                        break
+
+                percent_complete = 100 * (count_info["count"] / count_info["total_count"])
+                if count_info["total_count"] >= 10 and percent_complete >= count_info["current_percent"]:
+                    logger.info("#" + str(threading.get_ident()) + "#   " + player_data["id"] + " game data " + str(count_info["current_percent"]) + "% complete")
+                    count_info["current_percent"] += 10
+                count_info["count"] += 1
+            except Exception:
+                logger.info("Error parsing date " + str(row_data["Date"]))
+                raise
+
+    logger.info("#" + str(threading.get_ident()) + "#   " + player_data["id"] + " completed game data")
+
+    return sorted(new_rows, key=lambda row: row["Date"]), count_info["missing_games"], count_info["missing_toi"]
+
+def result_call_back(time_frame, count_info, new_rows, player_type, player_data, player_link, old_row_data, extra_stats, index, result):
     try:
         if result.exception():
             logger.info("Error parsing date " + str(old_row_data["Date"]))
@@ -16242,63 +16642,9 @@ def result_call_back(saved_row_data, index, time_frame, count_info, new_rows, pl
             return
 
         game_data, row_data, sub_missing_games = result.result()
-        set_row_data(game_data, row_data)
-
-        if "Career Minute" in time_frame["qualifiers"] or "Career Minute Reversed" in time_frame["qualifiers"] or "Game Minute" in time_frame["qualifiers"] or "Game Minute Reversed" in time_frame["qualifiers"] or "Career Shot" in time_frame["qualifiers"] or "Career Shot Reversed" in time_frame["qualifiers"] or "Career Period" in time_frame["qualifiers"] or "Career Period Reversed" in time_frame["qualifiers"] or "Game Shot" in time_frame["qualifiers"] or "Game Shot Reversed" in time_frame["qualifiers"]:
-            setup_career_stats(row_data, game_data, saved_row_data, index, player_data, time_frame["qualifiers"], player_type)
-
-        if "Game Number" in time_frame["qualifiers"]:
-            if sub_missing_games:
-                if sub_missing_games:
-                    count_info["missing_games"].append("[" + str(row_data["Date"]) + "](" + "https://www.nhl.com/gamecenter/" + str(row_data["NHLGameLink"]) + ")")
-                if row_data["Year"] >= 2010 and not row_data.get("GP_TOI", None):
-                    count_info["missing_games"].append("[" + str(row_data["Date"]) + "](" + "https://www.nhl.com/gamecenter/" + str(row_data["NHLGameLink"]) + ")")
-
-            if not perform_nhl_game_qualifiers(row_data, time_frame["qualifiers"]):
-                percent_complete = 100 * (count_info["count"] / count_info["total_count"])
-                if count_info["total_count"] >= 10 and percent_complete >= count_info["current_percent"]:
-                    logger.info("#" + str(threading.get_ident()) + "#   " + player_data["id"] + " game data " + str(count_info["current_percent"]) + "% complete")
-                    count_info["current_percent"] += 10
-                count_info["count"] += 1
-                return
-
-        if "Shot On" in time_frame["qualifiers"] or "Shot By" in time_frame["qualifiers"]  or "Event Formula" in time_frame["qualifiers"] or "On Ice With" in time_frame["qualifiers"] or "On Ice Against" in time_frame["qualifiers"] or "On Line With" in time_frame["qualifiers"] or "On Line Against" in time_frame["qualifiers"] or "Assisted On" in time_frame["qualifiers"] or "Assisted With" in time_frame["qualifiers"] or "Points With" in time_frame["qualifiers"] or "Assisted By" in time_frame["qualifiers"] or "Primary Assisted On" in time_frame["qualifiers"] or "Primary Assisted With" in time_frame["qualifiers"] or "Primary Points With" in time_frame["qualifiers"] or "Primary Assisted By" in time_frame["qualifiers"] or "Hit On" in time_frame["qualifiers"] or "Block On" in time_frame["qualifiers"] or "Penalty On" in time_frame["qualifiers"] or "Faceoff Against" in time_frame["qualifiers"] or "Fight Against" in time_frame["qualifiers"] or "Penalty Type" in time_frame["qualifiers"] or "Team Score" in time_frame["qualifiers"] or "Opponent Score" in time_frame["qualifiers"] or "Score Margin" in time_frame["qualifiers"] or "Score Difference" in time_frame["qualifiers"] or "Event Sub Query" in time_frame["qualifiers"] or "Or Event Sub Query" in time_frame["qualifiers"] or "Period" in time_frame["qualifiers"] or "Coordinates" in time_frame["qualifiers"] or "X Coordinate" in time_frame["qualifiers"] or "Y Coordinate" in time_frame["qualifiers"] or "Raw Coordinates" in time_frame["qualifiers"] or "Raw X Coordinate" in time_frame["qualifiers"] or "Raw Y Coordinate" in time_frame["qualifiers"] or "Absolute Coordinates" in time_frame["qualifiers"] or "Absolute X Coordinate" in time_frame["qualifiers"] or "Absolute Y Coordinate" in time_frame["qualifiers"] or "Left Side" in time_frame["qualifiers"] or "Right Side" in time_frame["qualifiers"] or "Period Time" in time_frame["qualifiers"] or "Period Time Remaining" in time_frame["qualifiers"] or "Unassisted" in time_frame["qualifiers"] or "Strength" in time_frame["qualifiers"] or "Career Minute" in time_frame["qualifiers"] or "Career Minute Reversed" in time_frame["qualifiers"] or "Game Minute" in time_frame["qualifiers"] or "Game Minute Reversed" in time_frame["qualifiers"] or "Career Shot" in time_frame["qualifiers"] or "Career Shot Reversed" in time_frame["qualifiers"] or "Career Period" in time_frame["qualifiers"] or "Career Period Reversed" in time_frame["qualifiers"] or "Game Shot" in time_frame["qualifiers"] or "Game Shot Reversed" in time_frame["qualifiers"] or "Even Skaters" in time_frame["qualifiers"] or "Even Goalies" in time_frame["qualifiers"] or "More Skaters" in time_frame["qualifiers"] or "Less Skaters" in time_frame["qualifiers"] or "Team Goalie Pulled" in time_frame["qualifiers"] or "Opponent Goalie Pulled" in time_frame["qualifiers"] or "Power Play" in time_frame["qualifiers"] or "Short Handed" in time_frame["qualifiers"] or "Even Strength" in time_frame["qualifiers"] or "Team Skaters" in time_frame["qualifiers"] or "Opponent Skaters" in time_frame["qualifiers"] or "Team Players" in time_frame["qualifiers"] or "Opponent Players" in time_frame["qualifiers"] or "Overtime" in time_frame["qualifiers"] or "Game Winning" in time_frame["qualifiers"] or "Offensive Zone" in time_frame["qualifiers"] or "Defensive Zone" in time_frame["qualifiers"] or "Neutral Zone" in time_frame["qualifiers"] or "Event Time" in time_frame["qualifiers"] or "current-stats" in extra_stats:
-            if sub_missing_games:
-                if sub_missing_games:
-                    count_info["missing_games"].append("[" + str(row_data["Date"]) + "](" + "https://www.nhl.com/gamecenter/" + str(row_data["NHLGameLink"]) + ")")
-                if row_data["Year"] >= 2010 and not row_data.get("GP_TOI", None):
-                    count_info["missing_games"].append("[" + str(row_data["Date"]) + "](" + "https://www.nhl.com/gamecenter/" + str(row_data["NHLGameLink"]) + ")")
-            
-            if game_data["missing_toi"]:
-                count_info["missing_toi"].append("[" + str(row_data["Date"]) + "](" + "https://www.nhl.com/gamecenter/" + str(row_data["NHLGameLink"]) + ")")
-
-            if not perform_sub_nhl_game_qualifiers(row_data, time_frame["qualifiers"], game_data, player_type, player_link, saved_row_data, index, True):
-                percent_complete = 100 * (count_info["count"] / count_info["total_count"])
-                if count_info["total_count"] >= 10 and percent_complete >= count_info["current_percent"]:
-                    logger.info("#" + str(threading.get_ident()) + "#   " + player_data["id"] + " game data " + str(count_info["current_percent"]) + "% complete")
-                    count_info["current_percent"] += 10
-                count_info["count"] += 1
-                return
         
-        if "Period Stat" in time_frame["qualifiers"]:
-            if sub_missing_games:
-                if sub_missing_games:
-                    count_info["missing_games"].append("[" + str(row_data["Date"]) + "](" + "https://www.nhl.com/gamecenter/" + str(row_data["NHLGameLink"]) + ")")
-                if row_data["Year"] >= 2010 and not row_data.get("GP_TOI", None):
-                    count_info["missing_games"].append("[" + str(row_data["Date"]) + "](" + "https://www.nhl.com/gamecenter/" + str(row_data["NHLGameLink"]) + ")")
-            
-            if game_data["missing_toi"]:
-                count_info["missing_toi"].append("[" + str(row_data["Date"]) + "](" + "https://www.nhl.com/gamecenter/" + str(row_data["NHLGameLink"]) + ")")
-
-            if not perform_sub_nhl_period_qualifiers(row_data, time_frame["qualifiers"], game_data, player_type, player_data, player_link, saved_row_data, index):
-                percent_complete = 100 * (count_info["count"] / count_info["total_count"])
-                if count_info["total_count"] >= 10 and percent_complete >= count_info["current_percent"]:
-                    logger.info("#" + str(threading.get_ident()) + "#   " + player_data["id"] + " game data " + str(count_info["current_percent"]) + "% complete")
-                    count_info["current_percent"] += 10
-                count_info["count"] += 1
-                return
-
-        new_rows.append(row_data)
+        if handle_result_qualifiers(game_data, row_data, sub_missing_games, time_frame, index, None, count_info, player_type, player_data, player_link, extra_stats)[0]:
+            new_rows.append(row_data)
 
         percent_complete = 100 * (count_info["count"] / count_info["total_count"])
         if count_info["total_count"] >= 10 and percent_complete >= count_info["current_percent"]:
@@ -16318,6 +16664,63 @@ def result_call_back(saved_row_data, index, time_frame, count_info, new_rows, pl
             if not count_info["exception"]:
                 count_info["exception"] = err
         return
+
+def handle_result_qualifiers(game_data, row_data, sub_missing_games, time_frame, index, saved_row_data, count_info, player_type, player_data, player_link, extra_stats):
+    set_row_data(game_data, row_data)
+
+    raw_row_data = row_data
+    if "Event Stat" in time_frame["qualifiers"] or "Event Stat Reversed" in time_frame["qualifiers"] or "Event Stats" in time_frame["qualifiers"] or "Event Stats Reversed" in time_frame["qualifiers"]:
+        setup_career_stats(row_data, game_data, saved_row_data, index, player_type, player_link, time_frame["qualifiers"])
+    
+    if "Starting Event Stat" in time_frame["qualifiers"] or "Starting Event Stat Reversed" in time_frame["qualifiers"] or "Starting Event Stats" in time_frame["qualifiers"] or "Starting Event Stats Reversed" in time_frame["qualifiers"]:
+        setup_starting_career_stats(row_data, game_data, saved_row_data, index, player_type, player_link, time_frame["qualifiers"])
+    
+    if "Game Event Stat" in time_frame["qualifiers"] or "Game Event Stat Reversed" in time_frame["qualifiers"] or "Game Event Stats" in time_frame["qualifiers"] or "Game Event Stats Reversed" in time_frame["qualifiers"]:
+        setup_game_stats(row_data, game_data, index, player_type, player_link, time_frame["qualifiers"])
+    
+    if "Starting Game Event Stat" in time_frame["qualifiers"] or "Starting Game Event Stat Reversed" in time_frame["qualifiers"] or "Starting Game Event Stats" in time_frame["qualifiers"] or "Starting Game Event Stats Reversed" in time_frame["qualifiers"]:
+        setup_starting_game_stats(row_data, game_data, index, player_type, player_link, time_frame["qualifiers"])
+
+    raw_row_data = row_data
+    if "Game Number" in time_frame["qualifiers"]:
+        if sub_missing_games:
+            if sub_missing_games:
+                count_info["missing_games"].append("[" + str(row_data["Date"]) + "](" + "https://www.nhl.com/gamecenter/" + str(row_data["NHLGameLink"]) + ")")
+            if row_data["Year"] >= 2007 and not row_data.get("GP_TOI", None):
+                count_info["missing_games"].append("[" + str(row_data["Date"]) + "](" + "https://www.nhl.com/gamecenter/" + str(row_data["NHLGameLink"]) + ")")
+
+        if not perform_nhl_game_qualifiers(row_data, time_frame["qualifiers"]):
+            return False, raw_row_data
+
+    if "Shot On" in time_frame["qualifiers"] or "Shot By" in time_frame["qualifiers"]  or "Event Formula" in time_frame["qualifiers"] or "On Ice With" in time_frame["qualifiers"] or "On Ice Against" in time_frame["qualifiers"] or "On Line With" in time_frame["qualifiers"] or "On Line Against" in time_frame["qualifiers"] or "Assisted On" in time_frame["qualifiers"] or "Assisted With" in time_frame["qualifiers"] or "Points With" in time_frame["qualifiers"] or "Assisted By" in time_frame["qualifiers"] or "Primary Assisted On" in time_frame["qualifiers"] or "Primary Assisted With" in time_frame["qualifiers"] or "Primary Points With" in time_frame["qualifiers"] or "Primary Assisted By" in time_frame["qualifiers"] or "Hit On" in time_frame["qualifiers"] or "Block On" in time_frame["qualifiers"] or "Penalty On" in time_frame["qualifiers"] or "Faceoff Against" in time_frame["qualifiers"] or "Fight Against" in time_frame["qualifiers"] or "Penalty Type" in time_frame["qualifiers"] or "Team Score" in time_frame["qualifiers"] or "Opponent Score" in time_frame["qualifiers"] or "Score Margin" in time_frame["qualifiers"] or "Score Difference" in time_frame["qualifiers"] or "Event Sub Query" in time_frame["qualifiers"] or "Or Event Sub Query" in time_frame["qualifiers"] or "Period" in time_frame["qualifiers"] or "Coordinates" in time_frame["qualifiers"] or "X Coordinate" in time_frame["qualifiers"] or "Y Coordinate" in time_frame["qualifiers"] or "Raw Coordinates" in time_frame["qualifiers"] or "Raw X Coordinate" in time_frame["qualifiers"] or "Raw Y Coordinate" in time_frame["qualifiers"] or "Absolute Coordinates" in time_frame["qualifiers"] or "Absolute X Coordinate" in time_frame["qualifiers"] or "Absolute Y Coordinate" in time_frame["qualifiers"] or "Left Side" in time_frame["qualifiers"] or "Right Side" in time_frame["qualifiers"] or "Period Time" in time_frame["qualifiers"] or "Period Time Remaining" in time_frame["qualifiers"] or "Unassisted" in time_frame["qualifiers"] or "Strength" in time_frame["qualifiers"] or "Event Stat" in time_frame["qualifiers"] or "Event Stat Reversed" in time_frame["qualifiers"] or "Event Stats" in time_frame["qualifiers"] or "Event Stats Reversed" in time_frame["qualifiers"] or "Game Event Stat" in time_frame["qualifiers"] or "Game Event Stat Reversed" in time_frame["qualifiers"] or "Game Event Stats" in time_frame["qualifiers"] or "Game Event Stats Reversed" in time_frame["qualifiers"] or "Even Skaters" in time_frame["qualifiers"] or "Even Goalies" in time_frame["qualifiers"] or "More Skaters" in time_frame["qualifiers"] or "Less Skaters" in time_frame["qualifiers"] or "Team Goalie Pulled" in time_frame["qualifiers"] or "Opponent Goalie Pulled" in time_frame["qualifiers"] or "Power Play" in time_frame["qualifiers"] or "Short Handed" in time_frame["qualifiers"] or "Even Strength" in time_frame["qualifiers"] or "Team Skaters" in time_frame["qualifiers"] or "Opponent Skaters" in time_frame["qualifiers"] or "Team Players" in time_frame["qualifiers"] or "Opponent Players" in time_frame["qualifiers"] or "Overtime" in time_frame["qualifiers"] or "Game Winning" in time_frame["qualifiers"] or "Offensive Zone" in time_frame["qualifiers"] or "Defensive Zone" in time_frame["qualifiers"] or "Neutral Zone" in time_frame["qualifiers"] or "Event Time" in time_frame["qualifiers"] or "current-stats" in extra_stats:
+        if sub_missing_games:
+            if sub_missing_games:
+                count_info["missing_games"].append("[" + str(row_data["Date"]) + "](" + "https://www.nhl.com/gamecenter/" + str(row_data["NHLGameLink"]) + ")")
+            if row_data["Year"] >= 2007 and not row_data.get("GP_TOI", None):
+                count_info["missing_games"].append("[" + str(row_data["Date"]) + "](" + "https://www.nhl.com/gamecenter/" + str(row_data["NHLGameLink"]) + ")")
+        
+        if game_data["missing_toi"]:
+            count_info["missing_toi"].append("[" + str(row_data["Date"]) + "](" + "https://www.nhl.com/gamecenter/" + str(row_data["NHLGameLink"]) + ")")
+
+        has_match, raw_row_data = perform_sub_nhl_game_qualifiers(row_data, time_frame["qualifiers"], game_data, player_type, player_link, saved_row_data, index, True)
+        if not has_match:
+            return False, raw_row_data
+    
+    if "Period Stat" in time_frame["qualifiers"]:
+        if sub_missing_games:
+            if sub_missing_games:
+                count_info["missing_games"].append("[" + str(row_data["Date"]) + "](" + "https://www.nhl.com/gamecenter/" + str(row_data["NHLGameLink"]) + ")")
+            if row_data["Year"] >= 2007 and not row_data.get("GP_TOI", None):
+                count_info["missing_games"].append("[" + str(row_data["Date"]) + "](" + "https://www.nhl.com/gamecenter/" + str(row_data["NHLGameLink"]) + ")")
+        
+        if game_data["missing_toi"]:
+            count_info["missing_toi"].append("[" + str(row_data["Date"]) + "](" + "https://www.nhl.com/gamecenter/" + str(row_data["NHLGameLink"]) + ")")
+
+        has_match, raw_row_data = perform_sub_nhl_period_qualifiers(row_data, time_frame["qualifiers"], game_data, player_type, player_data, player_link, None, index)
+        if not has_match:
+            return False, raw_row_data
+
+    return True, raw_row_data
 
 def perform_sub_nhl_period_qualifiers(row, qualifiers, player_game_info, player_type, player_data, player_link, saved_row_data, index):
     if not player_game_info or player_game_info["missing_data"]:
@@ -16404,6 +16807,7 @@ def perform_sub_nhl_period_qualifiers(row, qualifiers, player_game_info, player_
                     events_by_period[goal_event["period"]][event_type].append(goal_event)
     
     overall_has_match = False
+    period_matches = 0
     for period in events_by_period:
         if period == 5 and player_game_info["is_shootout"]:
             continue
@@ -16446,71 +16850,843 @@ def perform_sub_nhl_period_qualifiers(row, qualifiers, player_game_info, player_
                         has_all_match = False
 
         if has_all_match:
-            row["Per"] += 1
+            period_matches += 1
             perform_sub_nhl_game_qualifiers(row, qualifiers, new_plater_game_info, player_type, player_link, saved_row_data, index, False)
             overall_has_match = True
+
+    row["Per"] = period_matches
     
     return overall_has_match
 
-def setup_career_stats(row_data, player_game_info, saved_row_data, index, player_data, qualifiers, player_type):
+def setup_career_stats(row_data, player_game_info, saved_row_data, index, player_type, player_link, qualifiers):
     if not player_game_info or player_game_info["missing_data"]:
         return
 
-    career_stats_info = {
-        "minutes" : 0,
-        "shots" : 0,
-        "periods" : 0
+    event_stats_needed = {}
+    event_reversed_stats_needed = {}
+    events_stats_needed = {}
+    events_reversed_stats_needed = {}
+    if "Event Stat" in qualifiers:
+        for qual_obj in qualifiers["Event Stat"]:
+            if qual_obj["stat"] not in event_stats_needed:
+                event_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
+            if qual_obj["values"]["end_val"] < event_stats_needed[qual_obj["stat"]]:
+                event_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
+    if "Event Stat Reversed" in qualifiers:
+        for qual_obj in qualifiers["Event Stat Reversed"]:
+            if qual_obj["stat"] not in event_reversed_stats_needed:
+                event_reversed_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
+            if qual_obj["values"]["end_val"] < event_reversed_stats_needed[qual_obj["stat"]]:
+                event_reversed_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
+    if "Event Stats" in qualifiers:
+        for qual_obj in qualifiers["Event Stats"]:
+            if qual_obj["stat"] not in events_stats_needed:
+                events_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
+            if qual_obj["values"]["end_val"] < events_stats_needed[qual_obj["stat"]]:
+                events_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
+    if "Event Stats Reversed" in qualifiers:
+        for qual_obj in qualifiers["Event Stats Reversed"]:
+            if qual_obj["stat"] not in events_reversed_stats_needed:
+                events_reversed_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
+            if qual_obj["values"]["end_val"] < events_reversed_stats_needed[qual_obj["stat"]]:
+                events_reversed_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
+
+    copied_quals = copy.deepcopy(qualifiers)
+
+    career_quals = ["Event Stat", "Event Stat Reversed"]
+    for career_qual in career_quals:
+        if career_qual in copied_quals:
+            del copied_quals[career_qual]
+
+    if event_stats_needed:
+        career_stats_info = {}
+        for stat in event_stats_needed:
+            career_stats_info[stat] = 0
+        
+        for stat in event_stats_needed:
+            career_stats_info[stat] += saved_row_data[stat]
+
+        hit_end = False
+        for period in sorted(player_game_info["all_events"], reverse=False):
+            has_period_match = False
+            for period_time in sorted(player_game_info["all_events"][period], reverse=False):
+                time_events = player_game_info["all_events"][period][period_time]
+                for stat in event_stats_needed:
+                    value_to_use = -1
+                    if not hit_end:
+                        if stat == "Per":
+                            if not has_period_match:
+                                career_stats_info[stat] += 1
+                                has_period_match = True
+                        else:
+                            career_stats_info[stat] += determine_stat_value(player_game_info, time_events, copied_quals, row_data, player_type, player_link, stat)
+                        value_to_use = career_stats_info[stat]
+                        if value_to_use >= event_stats_needed[stat]:
+                            hit_end = True
+                    for time_event in time_events:
+                        time_event["career_stat_" + stat] = value_to_use
+
+    if event_reversed_stats_needed:
+        career_stats_info = {}
+        for stat in event_reversed_stats_needed:
+            career_stats_info[stat] = 0
+        
+        for stat in event_reversed_stats_needed:
+            career_stats_info[stat] += saved_row_data[stat]
+
+        hit_end = False
+        for period in sorted(player_game_info["all_events"], reverse=True):
+            has_period_match = False
+            for period_time in sorted(player_game_info["all_events"][period], reverse=True):
+                time_events = player_game_info["all_events"][period][period_time]
+                for stat in event_reversed_stats_needed:
+                    value_to_use = -1
+                    if not hit_end:
+                        if stat == "Per":
+                            if not has_period_match:
+                                career_stats_info[stat] += 1
+                                has_period_match = True
+                        else:
+                            career_stats_info[stat] += determine_stat_value(player_game_info, time_events, copied_quals, row_data, player_type, player_link, stat)
+                        value_to_use = career_stats_info[stat]
+                        if value_to_use >= event_reversed_stats_needed[stat]:
+                            hit_end = True
+                    for time_event in time_events:
+                        time_event["career_stat_reversed_" + stat] = value_to_use
+
+    if events_stats_needed:
+        career_stats_info = {}
+        for stat in events_stats_needed:
+            career_stats_info[stat] = 0
+        
+        for stat in events_stats_needed:
+            career_stats_info[stat] += saved_row_data[stat]
+
+        for period in sorted(player_game_info["all_events"], reverse=False):
+            has_period_match = False
+            for period_time in sorted(player_game_info["all_events"][period], reverse=False):
+                time_events = player_game_info["all_events"][period][period_time]
+                for stat in events_stats_needed:
+                    if stat == "Per":
+                        if not has_period_match:
+                            career_stats_info[stat] += 1
+                            has_period_match = True
+                    else:
+                        career_stats_info[stat] += determine_stat_value(player_game_info, time_events, {}, row_data, player_type, player_link, stat)
+                    value_to_use = career_stats_info[stat]
+                    for time_event in time_events:
+                        time_event["career_stats_" + stat] = value_to_use
+
+    if events_reversed_stats_needed:
+        career_stats_info = {}
+        for stat in events_reversed_stats_needed:
+            career_stats_info[stat] = 0
+        
+        for stat in events_reversed_stats_needed:
+            career_stats_info[stat] += saved_row_data[stat]
+
+        hit_end = False
+        for period in sorted(player_game_info["all_events"], reverse=True):
+            has_period_match = False
+            for period_time in sorted(player_game_info["all_events"][period], reverse=True):
+                time_events = player_game_info["all_events"][period][period_time]
+                for stat in events_reversed_stats_needed:
+                    if stat == "Per":
+                        if not has_period_match:
+                            career_stats_info[stat] += 1
+                            has_period_match = True
+                    else:
+                        career_stats_info[stat] += determine_stat_value(player_game_info, time_events, {}, row_data, player_type, player_link, stat)
+                    value_to_use = career_stats_info[stat]
+                    for time_event in time_events:
+                        time_event["career_stats_reversed_" + stat] = value_to_use
+
+def setup_starting_career_stats(row_data, player_game_info, saved_row_data, index, player_type, player_link, qualifiers):
+    if not player_game_info or player_game_info["missing_data"]:
+        return
+
+    event_stats_needed = {}
+    event_reversed_stats_needed = {}
+    events_stats_needed = {}
+    events_reversed_stats_needed = {}
+    if "Starting Event Stat" in qualifiers:
+        for qual_obj in qualifiers["Starting Event Stat"]:
+            if qual_obj["stat"] not in event_stats_needed:
+                event_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
+            if qual_obj["values"]["end_val"] < event_stats_needed[qual_obj["stat"]]:
+                event_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
+    if "Starting Event Stat Reversed" in qualifiers:
+        for qual_obj in qualifiers["Starting Event Stat Reversed"]:
+            if qual_obj["stat"] not in event_reversed_stats_needed:
+                event_reversed_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
+            if qual_obj["values"]["end_val"] < event_reversed_stats_needed[qual_obj["stat"]]:
+                event_reversed_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
+    if "Starting Event Stats" in qualifiers:
+        for qual_obj in qualifiers["Starting Event Stats"]:
+            if qual_obj["stat"] not in events_stats_needed:
+                events_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
+            if qual_obj["values"]["end_val"] < events_stats_needed[qual_obj["stat"]]:
+                events_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
+    if "Starting Event Stats Reversed" in qualifiers:
+        for qual_obj in qualifiers["Starting Event Stats Reversed"]:
+            if qual_obj["stat"] not in events_reversed_stats_needed:
+                events_reversed_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
+            if qual_obj["values"]["end_val"] < events_reversed_stats_needed[qual_obj["stat"]]:
+                events_reversed_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
+
+    copied_quals = copy.deepcopy(qualifiers)
+
+    career_quals = ["Starting Event Stat", "Starting Event Stat Reversed"]
+    for career_qual in career_quals:
+        if career_qual in copied_quals:
+            del copied_quals[career_qual]
+
+    if event_stats_needed:
+        career_stats_info = {}
+        for stat in event_stats_needed:
+            career_stats_info[stat] = 0
+        
+        for stat in event_stats_needed:
+            career_stats_info[stat] += saved_row_data[stat]
+
+        hit_end = False
+        for period in sorted(player_game_info["all_events"], reverse=False):
+            has_period_match = False
+            for period_time in sorted(player_game_info["all_events"][period], reverse=False):
+                time_events = player_game_info["all_events"][period][period_time]
+                for stat in event_stats_needed:
+                    value_to_use = -1
+                    if not hit_end:
+                        value_to_use = career_stats_info[stat]
+                        if value_to_use >= event_stats_needed[stat]:
+                            hit_end = True
+                        if stat == "Per":
+                            if not has_period_match:
+                                career_stats_info[stat] += 1
+                                has_period_match = True
+                        else:
+                            career_stats_info[stat] += determine_stat_value(player_game_info, time_events, copied_quals, row_data, player_type, player_link, stat)
+                    for time_event in time_events:
+                        time_event["starting_career_stat_" + stat] = value_to_use
+
+    if event_reversed_stats_needed:
+        career_stats_info = {}
+        for stat in event_reversed_stats_needed:
+            career_stats_info[stat] = 0
+        
+        for stat in event_reversed_stats_needed:
+            career_stats_info[stat] += saved_row_data[stat]
+
+        hit_end = False
+        for period in sorted(player_game_info["all_events"], reverse=True):
+            has_period_match = False
+            for period_time in sorted(player_game_info["all_events"][period], reverse=True):
+                time_events = player_game_info["all_events"][period][period_time]
+                for stat in event_reversed_stats_needed:
+                    value_to_use = -1
+                    if not hit_end:
+                        value_to_use = career_stats_info[stat]
+                        if value_to_use >= event_reversed_stats_needed[stat]:
+                            hit_end = True
+                        if stat == "Per":
+                            if not has_period_match:
+                                career_stats_info[stat] += 1
+                                has_period_match = True
+                        else:
+                            career_stats_info[stat] += determine_stat_value(player_game_info, time_events, copied_quals, row_data, player_type, player_link, stat)
+                    for time_event in time_events:
+                        time_event["starting_career_stat_reversed_" + stat] = value_to_use
+
+    if events_stats_needed:
+        career_stats_info = {}
+        for stat in events_stats_needed:
+            career_stats_info[stat] = 0
+        
+        for stat in events_stats_needed:
+            career_stats_info[stat] += saved_row_data[stat]
+
+        for period in sorted(player_game_info["all_events"], reverse=False):
+            has_period_match = False
+            for period_time in sorted(player_game_info["all_events"][period], reverse=False):
+                time_events = player_game_info["all_events"][period][period_time]
+                for stat in events_stats_needed:
+                    value_to_use = career_stats_info[stat]
+                    if stat == "Per":
+                        if not has_period_match:
+                            career_stats_info[stat] += 1
+                            has_period_match = True
+                    else:
+                        career_stats_info[stat] += determine_stat_value(player_game_info, time_events, {}, row_data, player_type, player_link, stat)
+                    for time_event in time_events:
+                        time_event["starting_career_stats_" + stat] = value_to_use
+
+    if events_reversed_stats_needed:
+        career_stats_info = {}
+        for stat in events_reversed_stats_needed:
+            career_stats_info[stat] = 0
+        
+        for stat in events_reversed_stats_needed:
+            career_stats_info[stat] += saved_row_data[stat]
+
+        hit_end = False
+        for period in sorted(player_game_info["all_events"], reverse=True):
+            has_period_match = False
+            for period_time in sorted(player_game_info["all_events"][period], reverse=True):
+                time_events = player_game_info["all_events"][period][period_time]
+                for stat in events_reversed_stats_needed:
+                    value_to_use = career_stats_info[stat]
+                    if stat == "Per":
+                        if not has_period_match:
+                            career_stats_info[stat] += 1
+                            has_period_match = True
+                    else:
+                        career_stats_info[stat] += determine_stat_value(player_game_info, time_events, {}, row_data, player_type, player_link, stat)
+                    for time_event in time_events:
+                        time_event["starting_career_stats_reversed_" + stat] = value_to_use
+
+def setup_game_stats(row_data, player_game_info, index, player_type, player_link, qualifiers):
+    if not player_game_info or player_game_info["missing_data"]:
+        return
+
+    event_stats_needed = {}
+    event_reversed_stats_needed = {}
+    events_stats_needed = {}
+    events_reversed_stats_needed = {}
+    if "Game Event Stat" in qualifiers:
+        for qual_obj in qualifiers["Game Event Stat"]:
+            if qual_obj["stat"] not in event_stats_needed:
+                event_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
+            if qual_obj["values"]["end_val"] < event_stats_needed[qual_obj["stat"]]:
+                event_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
+    if "Game Event Stat Reversed" in qualifiers:
+        for qual_obj in qualifiers["Game Event Stat Reversed"]:
+            if qual_obj["stat"] not in event_reversed_stats_needed:
+                event_reversed_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
+            if qual_obj["values"]["end_val"] < event_reversed_stats_needed[qual_obj["stat"]]:
+                event_reversed_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
+    if "Game Event Stats" in qualifiers:
+        for qual_obj in qualifiers["Game Event Stats"]:
+            if qual_obj["stat"] not in events_stats_needed:
+                events_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
+            if qual_obj["values"]["end_val"] < events_stats_needed[qual_obj["stat"]]:
+                events_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
+    if "Game Event Stats Reversed" in qualifiers:
+        for qual_obj in qualifiers["Game Event Stats Reversed"]:
+            if qual_obj["stat"] not in events_reversed_stats_needed:
+                events_reversed_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
+            if qual_obj["values"]["end_val"] < events_reversed_stats_needed[qual_obj["stat"]]:
+                events_reversed_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
+
+    copied_quals = copy.deepcopy(qualifiers)
+
+    career_quals = ["Game Event Stat", "Game Event Stat Reversed"]
+    for career_qual in career_quals:
+        if career_qual in copied_quals:
+            del copied_quals[career_qual]
+
+    if event_stats_needed:
+        career_stats_info = {}
+        for stat in event_stats_needed:
+            career_stats_info[stat] = 0
+
+        hit_end = False
+        for period in sorted(player_game_info["all_events"], reverse=False):
+            has_period_match = False
+            for period_time in sorted(player_game_info["all_events"][period], reverse=False):
+                time_events = player_game_info["all_events"][period][period_time]
+                for stat in event_stats_needed:
+                    value_to_use = -1
+                    if not hit_end:
+                        if stat == "Per":
+                            if not has_period_match:
+                                career_stats_info[stat] += 1
+                                has_period_match = True
+                        else:
+                            career_stats_info[stat] += determine_stat_value(player_game_info, time_events, copied_quals, row_data, player_type, player_link, stat)
+                        value_to_use = career_stats_info[stat]
+                        if value_to_use >= event_stats_needed[stat]:
+                            hit_end = True
+                    for time_event in time_events:
+                        time_event["game_stat_" + stat] = value_to_use
+
+    if event_reversed_stats_needed:
+        career_stats_info = {}
+        for stat in event_reversed_stats_needed:
+            career_stats_info[stat] = 0
+
+        hit_end = False
+        for period in sorted(player_game_info["all_events"], reverse=True):
+            has_period_match = False
+            for period_time in sorted(player_game_info["all_events"][period], reverse=True):
+                time_events = player_game_info["all_events"][period][period_time]
+                for stat in event_reversed_stats_needed:
+                    value_to_use = -1
+                    if not hit_end:
+                        if stat == "Per":
+                            if not has_period_match:
+                                career_stats_info[stat] += 1
+                                has_period_match = True
+                        else:
+                            career_stats_info[stat] += determine_stat_value(player_game_info, time_events, copied_quals, row_data, player_type, player_link, stat)
+                        value_to_use = career_stats_info[stat]
+                        if value_to_use >= event_reversed_stats_needed[stat]:
+                            hit_end = True
+                    for time_event in time_events:
+                        time_event["game_stat_reversed_" + stat] = value_to_use
+
+    if events_stats_needed:
+        career_stats_info = {}
+        for stat in events_stats_needed:
+            career_stats_info[stat] = 0
+
+        for period in sorted(player_game_info["all_events"], reverse=False):
+            has_period_match = False
+            for period_time in sorted(player_game_info["all_events"][period], reverse=False):
+                time_events = player_game_info["all_events"][period][period_time]
+                for stat in events_stats_needed:
+                    if stat == "Per":
+                        if not has_period_match:
+                            career_stats_info[stat] += 1
+                            has_period_match = True
+                    else:
+                        career_stats_info[stat] += determine_stat_value(player_game_info, time_events, {}, row_data, player_type, player_link, stat)
+                    value_to_use = career_stats_info[stat]
+                    for time_event in time_events:
+                        time_event["game_stats_" + stat] = value_to_use
+
+    if events_reversed_stats_needed:
+        career_stats_info = {}
+        for stat in events_reversed_stats_needed:
+            career_stats_info[stat] = 0
+
+        hit_end = False
+        for period in sorted(player_game_info["all_events"], reverse=True):
+            has_period_match = False
+            for period_time in sorted(player_game_info["all_events"][period], reverse=True):
+                time_events = player_game_info["all_events"][period][period_time]
+                for stat in events_reversed_stats_needed:
+                    if stat == "Per":
+                        if not has_period_match:
+                            career_stats_info[stat] += 1
+                            has_period_match = True
+                    else:
+                        career_stats_info[stat] += determine_stat_value(player_game_info, time_events, {}, row_data, player_type, player_link, stat)
+                    value_to_use = career_stats_info[stat]
+                    for time_event in time_events:
+                        time_event["game_stats_reversed_" + stat] = value_to_use
+
+def setup_starting_game_stats(row_data, player_game_info, index, player_type, player_link, qualifiers):
+    if not player_game_info or player_game_info["missing_data"]:
+        return
+
+    event_stats_needed = {}
+    event_reversed_stats_needed = {}
+    events_stats_needed = {}
+    events_reversed_stats_needed = {}
+    if "Starting Game Event Stat" in qualifiers:
+        for qual_obj in qualifiers["Starting Game Event Stat"]:
+            if qual_obj["stat"] not in event_stats_needed:
+                event_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
+            if qual_obj["values"]["end_val"] < event_stats_needed[qual_obj["stat"]]:
+                event_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
+    if "Starting Game Event Stat Reversed" in qualifiers:
+        for qual_obj in qualifiers["Starting Game Event Stat Reversed"]:
+            if qual_obj["stat"] not in event_reversed_stats_needed:
+                event_reversed_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
+            if qual_obj["values"]["end_val"] < event_reversed_stats_needed[qual_obj["stat"]]:
+                event_reversed_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
+    if "Starting Game Event Stats" in qualifiers:
+        for qual_obj in qualifiers["Starting Game Event Stats"]:
+            if qual_obj["stat"] not in events_stats_needed:
+                events_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
+            if qual_obj["values"]["end_val"] < events_stats_needed[qual_obj["stat"]]:
+                events_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
+    if "Starting Game Event Stats Reversed" in qualifiers:
+        for qual_obj in qualifiers["Starting Game Event Stats Reversed"]:
+            if qual_obj["stat"] not in events_reversed_stats_needed:
+                events_reversed_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
+            if qual_obj["values"]["end_val"] < events_reversed_stats_needed[qual_obj["stat"]]:
+                events_reversed_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
+
+    copied_quals = copy.deepcopy(qualifiers)
+
+    career_quals = ["Starting Game Event Stat", "Starting Game Event Stat Reversed"]
+    for career_qual in career_quals:
+        if career_qual in copied_quals:
+            del copied_quals[career_qual]
+
+    if event_stats_needed:
+        career_stats_info = {}
+        for stat in event_stats_needed:
+            career_stats_info[stat] = 0
+
+        hit_end = False
+        for period in sorted(player_game_info["all_events"], reverse=False):
+            has_period_match = False
+            for period_time in sorted(player_game_info["all_events"][period], reverse=False):
+                time_events = player_game_info["all_events"][period][period_time]
+                for stat in event_stats_needed:
+                    value_to_use = -1
+                    if not hit_end:
+                        value_to_use = career_stats_info[stat]
+                        if value_to_use >= event_stats_needed[stat]:
+                            hit_end = True
+                        if stat == "Per":
+                            if not has_period_match:
+                                career_stats_info[stat] += 1
+                                has_period_match = True
+                        else:
+                            career_stats_info[stat] += determine_stat_value(player_game_info, time_events, copied_quals, row_data, player_type, player_link, stat)
+                    for time_event in time_events:
+                        time_event["starting_game_stat_" + stat] = value_to_use
+
+    if event_reversed_stats_needed:
+        career_stats_info = {}
+        for stat in event_reversed_stats_needed:
+            career_stats_info[stat] = 0
+
+        hit_end = False
+        for period in sorted(player_game_info["all_events"], reverse=True):
+            has_period_match = False
+            for period_time in sorted(player_game_info["all_events"][period], reverse=True):
+                time_events = player_game_info["all_events"][period][period_time]
+                for stat in event_reversed_stats_needed:
+                    value_to_use = -1
+                    if not hit_end:
+                        value_to_use = career_stats_info[stat]
+                        if value_to_use >= event_reversed_stats_needed[stat]:
+                            hit_end = True
+                        if stat == "Per":
+                            if not has_period_match:
+                                career_stats_info[stat] += 1
+                                has_period_match = True
+                        else:
+                            career_stats_info[stat] += determine_stat_value(player_game_info, time_events, copied_quals, row_data, player_type, player_link, stat)
+                    for time_event in time_events:
+                        time_event["starting_game_stat_reversed_" + stat] = value_to_use
+
+    if events_stats_needed:
+        career_stats_info = {}
+        for stat in events_stats_needed:
+            career_stats_info[stat] = 0
+
+        for period in sorted(player_game_info["all_events"], reverse=False):
+            has_period_match = False
+            for period_time in sorted(player_game_info["all_events"][period], reverse=False):
+                time_events = player_game_info["all_events"][period][period_time]
+                for stat in events_stats_needed:
+                    value_to_use = career_stats_info[stat]
+                    if stat == "Per":
+                        if not has_period_match:
+                            career_stats_info[stat] += 1
+                            has_period_match = True
+                    else:
+                        career_stats_info[stat] += determine_stat_value(player_game_info, time_events, {}, row_data, player_type, player_link, stat)
+                    for time_event in time_events:
+                        time_event["starting_game_stats_" + stat] = value_to_use
+
+    if events_reversed_stats_needed:
+        career_stats_info = {}
+        for stat in events_reversed_stats_needed:
+            career_stats_info[stat] = 0
+
+        hit_end = False
+        for period in sorted(player_game_info["all_events"], reverse=True):
+            has_period_match = False
+            for period_time in sorted(player_game_info["all_events"][period], reverse=True):
+                time_events = player_game_info["all_events"][period][period_time]
+                for stat in events_reversed_stats_needed:
+                    value_to_use = career_stats_info[stat]
+                    if stat == "Per":
+                        if not has_period_match:
+                            career_stats_info[stat] += 1
+                            has_period_match = True
+                    else:
+                        career_stats_info[stat] += determine_stat_value(player_game_info, time_events, {}, row_data, player_type, player_link, stat)
+                    for time_event in time_events:
+                        time_event["starting_game_stats_reversed_" + stat] = value_to_use
+
+def determine_stat_value(player_game_info, all_events, qualifiers, og_row, player_type, player_link, stat):
+    player_id = int(player_link.split('/')[-1])
+    count_misses = False
+    if not "Shot On" in qualifiers and not "Shot By" in qualifiers:
+        if "Penalty Shot" in qualifiers or "Shootout" in qualifiers:
+            count_misses = True
+
+    row = {
+        "Year" : og_row["Year"],
+        "is_playoffs" : og_row["is_playoffs"]
     }
-    for sub_row_data in saved_row_data[:index]:
-        career_stats_info["minutes"] += sub_row_data["TOI"]
-        career_stats_info["shots"] += sub_row_data["S"]
-        career_stats_info["periods"] += sub_row_data["Per"]
-    sub_minutes = career_stats_info["minutes"]
-    sub_shots = career_stats_info["shots"]
-    sub_periods = career_stats_info["periods"]
+    clear_row_attrs(row, player_type)
 
-    career_stats_info = {
-       "minutes" : 0,
-       "shots" : 0,
-       "periods" : 0
-    }
-    for sub_row_data in reversed(saved_row_data[(index + 1):]):
-        career_stats_info["minutes"] += sub_row_data["TOI"]
-        career_stats_info["shots"] += sub_row_data["S"]
-        career_stats_info["periods"] += sub_row_data["Per"]
-    sub_minutes_reversed = career_stats_info["minutes"]
-    sub_shots_reversed = career_stats_info["shots"]
-    sub_periods_reversed = career_stats_info["periods"]
+    if stat not in row:
+        return -1
 
-    for event_name in player_game_info:
-        if isinstance(player_game_info[event_name], list):
-            for event in player_game_info[event_name]:
-                if isinstance(event, dict) and "periodTime" in event:
-                    if player_game_info["shift_data"]:
-                        game_minutes, game_minutes_reversed = determine_toi(player_game_info["shift_data"], event["period"], event["periodTime"], player_data["nhl_id"], True, "faceoff" in event_name)
-                        career_minutes = sub_minutes + game_minutes
-                        career_minutes_reversed = sub_minutes_reversed + game_minutes_reversed
+    goal_stats = ["G", "EVG", "PPG", "SHG", "GWG", "ENG", "OTG", "1stG", "S", "WristS", "WristG", "DeflectS", "DeflectG", "SlapS" "SlapG", "TipS", "TipG", "BackS", "BackG", "WrapS", "WrapG", "TSA", "G_5v5", "S_5v5", "TSA_5v5"]
+    shot_stats = ["S", "WristS", "DeflectS", "SlapS", "TipS", "BackS", "WrapS", "TSA", "S_5v5", "TSA_5v5"]
+    missed_shot_stats = ["Post/Bar", "TSA", "TSM", "TSA_5v5", "TSM_5v5"]
+    blocked_shot_stats = ["TSA", "TSB", "TSA_5v5", "TSB_5v5"]
+    assist_stats = ["A", "A1", "A2", "EVA", "EVA1", "EVA2", "PPA", "PPA1", "PPA2", "SHA", "SHA1", "SHA2"< "ENA", "ENA1", "ENA2", "A_5v5", "A1_5v5", "A2_5v5"]
+    hit_stats = ["HIT"]
+    block_stats = ["BLK"]
+    faceoff_stats = ["FO", "FOW", "FOL", "OZFO", "OZFOW", "OZFOL", "NZFO", "NZFOW", "NZFOL", "DZFO", "DZFOW", "DZFOL"]
+    all_faceoff_stats = ["OZ", "NZ", "DZ"]
+    takeaway_stats = ["TK", "GV"]
+    penalty_stats = ["PIM", "PEN", "PenDrawn", "Minor", "Major", "Misconduct", "GameMisconduct", "Match", "Fight"]
+    goal_against_stats = ["GA", "SA", "EVGA", "EVSH", "PPGA", "PPSH", "SHGA", "SHSH"]
+    save_against_stats = ["SV", "SA", "EVSH", "PPSH", "SHGA"]
+    toi_stats = ["TOI", "EVTOI", "PPTOI", "SHTOI", "TOI_5v5", "Shft"]
 
-                        event["game_minute"] = game_minutes
-                        event["career_minute"] = career_minutes
-                        event["game_minute_reversed"] = game_minutes_reversed
-                        event["career_minute_reversed"] = career_minutes_reversed
+    if count_misses:
+        missed_shot_stats.append("S")
 
-                    game_shots, game_shots_reversed = determine_shots(player_game_info, event["period"], event["periodTime"], qualifiers, player_type, "faceoff" in event_name)
-                    career_shots = sub_shots + game_shots
-                    career_shots_reversed = sub_shots_reversed + game_shots_reversed
+    matching_shifts = set()
+    for goal_event in all_events:
+        if player_type["da_type"]["type"] == "Skater":
+            if stat in goal_stats:
+                if goal_event["event_name"] == "goal":
+                    if determine_event_match(goal_event, "goal", qualifiers, player_game_info, og_row):
+                        row["G"] += 1
+                        if goal_event["strength"] == "EVEN":
+                            row["EVG"] += 1
+                        elif goal_event["strength"] == "PPG":
+                            row["PPG"] += 1
+                        else:
+                            row["SHG"] += 1
+                        if goal_event["gameWinningGoal"]:
+                            row["GWG"] += 1
+                        if goal_event["emptyNet"]:
+                            row["ENG"] += 1
+                        if goal_event["period"] == 4 or (not player_game_info["is_shootout"] and goal_event["period"] > 4):
+                            row["OTG"] += 1
+                        if goal_event["firstGoal"]:
+                            row["1stG"] += 1
+                        if row["Year"] >= 2003:
+                            if (not "Shot On" in qualifiers and not "Shot By" in qualifiers) or row["Year"] >= 2007:
+                                row["S"] += 1
+                                if goal_event["secondaryType"] == "Wrist Shot":
+                                    row["WristS"] += 1
+                                    row["WristG"] += 1
+                                elif goal_event["secondaryType"] == "Deflected":
+                                    row["DeflectS"] += 1
+                                    row["DeflectG"] += 1
+                                elif goal_event["secondaryType"] == "Slap Shot":
+                                    row["SlapS"] += 1
+                                    row["SlapG"] += 1
+                                elif goal_event["secondaryType"] == "Snap Shot":
+                                    row["SnapS"] += 1
+                                    row["SnapG"] += 1
+                                elif goal_event["secondaryType"] == "Tip-In":
+                                    row["TipS"] += 1
+                                    row["TipG"] += 1
+                                elif goal_event["secondaryType"] == "Backhand":
+                                    row["BackS"] += 1
+                                    row["BackG"] += 1
+                                elif goal_event["secondaryType"] == "Wrap-around":
+                                    row["WrapS"] += 1
+                                    row["WrapG"] += 1
+                                if row["Year"] >= 2007:
+                                    row["TSA"] += 1
+                        if stat.endswith("_5v5"):
+                            if is_five_toi(player_game_info, goal_event, goal_event["period"], goal_event["periodTime"]):
+                                row["G_5v5"] += 1
+                                if row["Year"] >= 2003:
+                                    if (not "Shot On" in qualifiers and not "Shot By" in qualifiers) or row["Year"] >= 2007:
+                                        row["S_5v5"] += 1
+                                        if row["Year"] >= 2007:
+                                            row["TSA_5v5"] += 1
+            if stat in shot_stats:
+                if goal_event["event_name"] == "shot":
+                    if determine_event_match(goal_event, "shot", qualifiers, player_game_info, og_row):
+                        row["S"] += 1
+                        if goal_event["secondaryType"] == "Wrist Shot":
+                            row["WristS"] += 1
+                        elif goal_event["secondaryType"] == "Deflected":
+                            row["DeflectS"] += 1
+                        elif goal_event["secondaryType"] == "Slap Shot":
+                            row["SlapS"] += 1
+                        elif goal_event["secondaryType"] == "Snap Shot":
+                            row["SnapS"] += 1
+                        elif goal_event["secondaryType"] == "Tip-In":
+                            row["TipS"] += 1
+                        elif goal_event["secondaryType"] == "Backhand":
+                            row["BackS"] += 1
+                        elif goal_event["secondaryType"] == "Wrap-around":
+                            row["WrapS"] += 1
+                        if row["Year"] >= 2007:
+                            row["TSA"] += 1
+                        if stat.endswith("_5v5"):
+                            if is_five_toi(player_game_info, goal_event, goal_event["period"], goal_event["periodTime"]):
+                                row["S_5v5"] += 1
+                                if row["Year"] >= 2007:
+                                    row["TSA_5v5"] += 1
+            if stat in missed_shot_stats:
+                if goal_event["event_name"] == "missed_shot":
+                    if determine_event_match(goal_event, "missed_shot", qualifiers, player_game_info, og_row):
+                        if goal_event["description"].endswith(" Goalpost") or goal_event["description"].endswith("Hit Crossbar"):
+                            row["Post/Bar"] += 1
+                        if count_misses:
+                            row["S"] += 1
+                        if row["Year"] >= 2007:
+                            row["TSA"] += 1
+                            row["TSM"] += 1
+                            if stat.endswith("_5v5"):
+                                if is_five_toi(player_game_info, goal_event, goal_event["period"], goal_event["periodTime"]):
+                                    row["TSA_5v5"] += 1
+                                    row["TSM_5v5"] += 1
+            if stat in blocked_shot_stats:                     
+                if goal_event["event_name"] == "blocked_shot":
+                    if determine_event_match(goal_event, "blocked_shot", qualifiers, player_game_info, og_row):
+                        if row["Year"] >= 2007:
+                            row["TSA"] += 1
+                            row["TSB"] += 1
+                            if stat.endswith("_5v5"):
+                                if is_five_toi(player_game_info, goal_event, goal_event["period"], goal_event["periodTime"]):
+                                    row["TSA_5v5"] += 1
+                                    row["TSB_5v5"] += 1
+            if stat in assist_stats:
+                if goal_event["event_name"] == "assist":
+                    if determine_event_match(goal_event, "assist", qualifiers, player_game_info, og_row):
+                        row["A"] += 1
+                        if goal_event["emptyNet"]:
+                            row["ENA"] += 1
+                        if goal_event["strength"] == "EVEN":
+                            row["EVA"] += 1
+                        elif goal_event["strength"] == "PPG":
+                            row["PPA"] += 1
+                        else:
+                            row["SHA"] += 1
+                        if goal_event["is_primary"]:
+                            row["A1"] += 1
+                            if goal_event["strength"] == "EVEN":
+                                row["EVA1"] += 1
+                            elif goal_event["strength"] == "PPG":
+                                row["PPA1"] += 1
+                            else:
+                                row["SHA1"] += 1
+                        else:
+                            row["A2"] += 1
+                            if goal_event["strength"] == "EVEN":
+                                row["EVA2"] += 1
+                            elif goal_event["strength"] == "PPG":
+                                row["PPA2"] += 1
+                            else:
+                                row["SHA2"] += 1
+                        if stat.endswith("_5v5"):
+                            if is_five_toi(player_game_info, goal_event, goal_event["period"], goal_event["periodTime"]):
+                                row["A_5v5"] += 1
+                                if goal_event["is_primary"]:
+                                    row["A1_5v5"] += 1
+                                else:
+                                    row["A2_5v5"] += 1
+            if stat in hit_stats:
+                if goal_event["event_name"] == "hit":
+                    if determine_event_match(goal_event, "hit", qualifiers, player_game_info, og_row):
+                        row["HIT"] += 1
+            if stat in block_stats:
+                if goal_event["event_name"] == "block":
+                    if determine_event_match(goal_event, "block", qualifiers, player_game_info, og_row):
+                        row["BLK"] += 1
+            if stat in faceoff_stats:
+                if goal_event["event_name"] == "faceoff":
+                    if determine_event_match(goal_event, "faceoff", qualifiers, player_game_info, og_row, is_faceoff=True):
+                        row["FO"] += 1
+                        if goal_event["winner"]:
+                            row["FOW"] += 1
+                        else:
+                            row["FOL"] += 1
+                        if goal_event["zone"]:
+                            row[goal_event["zone"] + "FO"] += 1
+                            if goal_event["winner"]:
+                                row[goal_event["zone"] + "FOW"] += 1
+                            else:
+                                row[goal_event["zone"] + "FOL"] += 1
+            if stat in all_faceoff_stats:
+                if goal_event["event_name"] == "all_faceoffs":
+                    if goal_event["zone"]:
+                        if determine_event_match(goal_event, "all_faceoffs", qualifiers, player_game_info, og_row):
+                            row[goal_event["zone"]] += 1
+            if stat in takeaway_stats:
+                if goal_event["event_name"] == "takeaway":
+                    if determine_event_match(goal_event, "takeaway", qualifiers, player_game_info, og_row):
+                        if goal_event["is_takeaway"]:
+                            row["TK"] += 1
+                        else:
+                            row["GV"] += 1
+            if stat in penalty_stats:
+                if goal_event["event_name"] == "penalty":
+                    if determine_event_match(goal_event, "penalty", qualifiers, player_game_info, og_row):
+                        if goal_event["player_penalty"]:
+                            row["PEN"] += 1
+                            row["PIM"] += goal_event["penalty_minutes"]
+                            if "penalty_severity" in goal_event:
+                                row[goal_event["penalty_severity"]] += 1
+                        else:
+                            row["PenDrawn"] += 1
+                        
+                        if "secondary_type" in goal_event and goal_event["secondary_type"] == "Fighting":
+                            row["Fight"] += 1
+        else:
+            if stat in goal_against_stats:
+                if goal_event["event_name"] == "goal_against":
+                    if determine_event_match(goal_event, "goal_against", qualifiers, player_game_info, og_row):
+                        row["GA"] += 1
+                        if goal_event["strength"] == "EVEN":
+                            row["EVGA"] += 1
+                            row["EVSH"] += 1
+                        elif goal_event["strength"] == "PPG":
+                            row["SHGA"] += 1
+                            row["SHSH"] += 1
+                        else:
+                            row["PPGA"] += 1
+                            row["PPSH"] += 1
+                        if row["Year"] >= 2007:
+                            row["SA"] += 1
+            if stat in save_against_stats:
+                if goal_event["event_name"] == "save_against":
+                    if determine_event_match(goal_event, "save_against", qualifiers, player_game_info, og_row):
+                        if goal_event["strength"] == "EVEN":
+                            row["EVSH"] += 1
+                        elif goal_event["strength"] == "PPG":
+                            row["SHSH"] += 1
+                        else:
+                            row["PPSH"] += 1
+                        row["SV"] += 1
+                        row["SA"] += 1
 
-                    event["game_shot"] = game_shots
-                    event["career_shot"] = career_shots
-                    event["game_shot_reversed"] = game_shots_reversed
-                    event["career_shot_reversed"] = career_shots_reversed
+        if stat in toi_stats:
+            if goal_event["event_name"] == "shift_events":
+                if determine_event_match(goal_event, "shift", qualifiers, player_game_info, og_row, is_toi=True):
+                    row["TOI"] += 1
+                    strength = determine_strength(player_game_info, goal_event["period"], goal_event["periodTime"], goal_event)
+                    if strength:
+                        row[strength + "TOI"] += 1
+                    if stat.endswith("_5v5"):
+                        if is_five_toi(player_game_info, goal_event, goal_event["period"], goal_event["periodTime"]):
+                            row["TOI_5v5"] += 1
+                    is_shift_match = True
 
-                    game_periods, game_periods_reversed = determine_periods(player_game_info, event["period"])
-                    career_periods = sub_periods + game_periods
-                    career_periods_reversed = sub_periods_reversed + game_periods_reversed
+                if goal_event["shift_index"] not in matching_shifts:
+                    row["Shft"] += 1
+                    matching_shifts.add(goal_event["shift_index"])
 
-                    event["career_period"] = career_periods
-                    event["career_period_reversed"] = career_periods_reversed
+    calculate_row_attrs(row, player_type)
+
+    return row[stat]
+
+def determine_event_match(goal_event, event_name, qualifiers, player_game_info, row, is_faceoff=False, is_toi=False):
+    is_match = True
+    # is_match = goal_event["period"] == period and goal_event["periodTime"] == period_time
+    # if is_reverse:
+    #     if goal_event["period"]  period or (goal_event["period"] == period and goal_event["periodTime"] >= period_time):
+    #         is_match = True
+    # else:
+    #     if goal_event["period"] < period or (goal_event["period"] == period and goal_event["periodTime"] <= period_time):
+    #         is_match = True
+    if is_match:
+        if qualifiers and not perform_metadata_qual(event_name, goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], is_faceoff=is_faceoff, is_toi=is_toi, skip_career_events=True):
+            is_match = True
+    return is_match
 
 def is_player_on_ice(shift_data, team_on_ice, opp_on_ice, period, period_time, player_id, is_team, is_faceoff=False):
     if is_team and team_on_ice:
@@ -16532,80 +17708,6 @@ def is_player_on_ice(shift_data, team_on_ice, opp_on_ice, period, period_time, p
                 return True
     return False
 
-def determine_toi(shift_data, period, period_time, player_id, is_team, is_faceoff=False):        
-    team_str = "team" if is_team else "opp"
-    total_toi = 0
-    total_toi_reversed = 0
-    if not shift_data:
-        return total_toi, total_toi_reversed
-
-    for sub_period in shift_data[team_str][player_id]:
-        for shift_event in shift_data[team_str][player_id][sub_period]:
-            for second in range(shift_event["time_start"], shift_event["time_end"] + 1):
-                if period > shift_event["period"]:
-                    total_toi += 1
-                elif period == shift_event["period"]:
-                    if is_faceoff:
-                        if second <= period_time - 1:
-                            total_toi += 1
-                        if second >= period_time - 1:
-                            total_toi_reversed += 1
-                    else:
-                        if second <= period_time:
-                            total_toi += 1
-                        if second >= period_time:
-                            total_toi_reversed += 1
-                elif period < shift_event["period"]:
-                    total_toi_reversed += 1
-
-    return total_toi, total_toi_reversed
-
-def determine_shots(player_game_data, period, period_time, qualifiers, player_type, is_faceoff=False):
-    total_goals = 0
-    total_goals_reversed = 0
-    count_misses = False
-    if player_type["da_type"]["type"] == "Skater":
-        if not "Shot On" in qualifiers and not "Shot By" in qualifiers:
-            if "Penalty Shot" in qualifiers or "Shootout" in qualifiers:
-                count_misses = True
-    all_goal_events = player_game_data["goal" if player_type["da_type"]["type"] == "Skater" else "goal_against"] + player_game_data["shot" if player_type["da_type"]["type"] == "Skater" else "save_against"]
-    if count_misses:
-        all_goal_events += player_game_data["missed_shot"]
-
-    for goal_event in all_goal_events:
-        if period > goal_event["period"]:
-            total_goals += 1
-        elif period == goal_event["period"]:
-            if is_faceoff:
-                if goal_event["periodTime"] <= period_time - 1:
-                    total_goals += 1
-                if goal_event["periodTime"] >= period_time - 1:
-                    total_goals_reversed += 1
-            else:
-                if goal_event["periodTime"] <= period_time:
-                    total_goals += 1
-                if goal_event["periodTime"] >= period_time:
-                    total_goals_reversed += 1
-        elif period < goal_event["period"]:
-            total_goals_reversed += 1
-
-    return total_goals, total_goals_reversed
-
-def determine_periods(player_game_data, period):
-    total_goals = 0
-    total_goals_reversed = 0
-
-    for sub_period in player_game_data["periods"]:
-        if period > sub_period:
-            total_goals += 1
-        elif period == sub_period:
-            total_goals += 1
-            total_goals_reversed += 1
-        elif period < sub_period:
-            total_goals_reversed += 1
-
-    return total_goals, total_goals_reversed
-
 def set_row_data(player_game_info, row_data):
     if not player_game_info:
         return
@@ -16626,7 +17728,7 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
         else:
             return game_data, row_data, missing_games
 
-    if not ("Shot On" in time_frame["qualifiers"] or "Shot By" in time_frame["qualifiers"] or "Event Formula" in time_frame["qualifiers"] or "On Ice With" in time_frame["qualifiers"] or "On Ice Against" in time_frame["qualifiers"] or "On Line With" in time_frame["qualifiers"] or "On Line Against" in time_frame["qualifiers"] or "Assisted On" in time_frame["qualifiers"] or "Assisted With" in time_frame["qualifiers"] or "Points With" in time_frame["qualifiers"] or "Assisted By" in time_frame["qualifiers"] or "Primary Assisted On" in time_frame["qualifiers"] or "Primary Assisted With" in time_frame["qualifiers"] or "Primary Points With" in time_frame["qualifiers"] or "Primary Assisted By" in time_frame["qualifiers"] or "Hit On" in time_frame["qualifiers"] or "Block On" in time_frame["qualifiers"] or "Penalty On" in time_frame["qualifiers"] or "Faceoff Against" in time_frame["qualifiers"] or "Fight Against" in time_frame["qualifiers"] or "Penalty Type" in time_frame["qualifiers"] or "Team Score" in time_frame["qualifiers"] or "Opponent Score" in time_frame["qualifiers"] or "Score Margin" in time_frame["qualifiers"] or "Score Difference" in time_frame["qualifiers"] or "Event Sub Query" in time_frame["qualifiers"] or "Or Event Sub Query" in time_frame["qualifiers"] or "Period" in time_frame["qualifiers"] or "Period Stat" in time_frame["qualifiers"] or "Coordinates" in time_frame["qualifiers"] or "X Coordinate" in time_frame["qualifiers"] or "Y Coordinate" in time_frame["qualifiers"] or "Raw Coordinates" in time_frame["qualifiers"] or "Raw X Coordinate" in time_frame["qualifiers"] or "Raw Y Coordinate" in time_frame["qualifiers"] or "Absolute Coordinates" in time_frame["qualifiers"] or "Absolute X Coordinate" in time_frame["qualifiers"] or "Absolute Y Coordinate" in time_frame["qualifiers"] or "Left Side" in time_frame["qualifiers"] or "Right Side" in time_frame["qualifiers"] or "Period Time" in time_frame["qualifiers"] or "Period Time Remaining" in time_frame["qualifiers"] or "Unassisted" in time_frame["qualifiers"] or "Career Minute" in time_frame["qualifiers"] or "Career Minute Reversed" in time_frame["qualifiers"] or "Game Minute" in time_frame["qualifiers"] or "Game Minute Reversed" in time_frame["qualifiers"] or "Career Shot" in time_frame["qualifiers"] or "Career Shot Reversed" in time_frame["qualifiers"] or "Career Period" in time_frame["qualifiers"] or "Career Period Reversed" in time_frame["qualifiers"] or "Game Shot" in time_frame["qualifiers"] or "Game Shot Reversed" in time_frame["qualifiers"] or "Strength" in time_frame["qualifiers"] or "Even Skaters" in time_frame["qualifiers"] or "Even Goalies" in time_frame["qualifiers"] or "More Skaters" in time_frame["qualifiers"] or "Less Skaters" in time_frame["qualifiers"] or "Team Goalie Pulled" in time_frame["qualifiers"] or "Opponent Goalie Pulled" in time_frame["qualifiers"] or "Power Play" in time_frame["qualifiers"] or "Short Handed" in time_frame["qualifiers"] or "Even Strength" in time_frame["qualifiers"] or "Team Skaters" in time_frame["qualifiers"] or "Opponent Skaters" in time_frame["qualifiers"] or "Team Players" in time_frame["qualifiers"] or "Opponent Players" in time_frame["qualifiers"] or "Overtime" in time_frame["qualifiers"] or "Game Winning" in time_frame["qualifiers"] or "Offensive Zone" in time_frame["qualifiers"] or "Defensive Zone" in time_frame["qualifiers"] or "Neutral Zone" in time_frame["qualifiers"] or "Event Time" in time_frame["qualifiers"] or "penalties" in extra_stats or "current-stats" in extra_stats):
+    if not ("Shot On" in time_frame["qualifiers"] or "Shot By" in time_frame["qualifiers"] or "Event Formula" in time_frame["qualifiers"] or "On Ice With" in time_frame["qualifiers"] or "On Ice Against" in time_frame["qualifiers"] or "On Line With" in time_frame["qualifiers"] or "On Line Against" in time_frame["qualifiers"] or "Assisted On" in time_frame["qualifiers"] or "Assisted With" in time_frame["qualifiers"] or "Points With" in time_frame["qualifiers"] or "Assisted By" in time_frame["qualifiers"] or "Primary Assisted On" in time_frame["qualifiers"] or "Primary Assisted With" in time_frame["qualifiers"] or "Primary Points With" in time_frame["qualifiers"] or "Primary Assisted By" in time_frame["qualifiers"] or "Hit On" in time_frame["qualifiers"] or "Block On" in time_frame["qualifiers"] or "Penalty On" in time_frame["qualifiers"] or "Faceoff Against" in time_frame["qualifiers"] or "Fight Against" in time_frame["qualifiers"] or "Penalty Type" in time_frame["qualifiers"] or "Team Score" in time_frame["qualifiers"] or "Opponent Score" in time_frame["qualifiers"] or "Score Margin" in time_frame["qualifiers"] or "Score Difference" in time_frame["qualifiers"] or "Event Sub Query" in time_frame["qualifiers"] or "Or Event Sub Query" in time_frame["qualifiers"] or "Period" in time_frame["qualifiers"] or "Period Stat" in time_frame["qualifiers"] or "Coordinates" in time_frame["qualifiers"] or "X Coordinate" in time_frame["qualifiers"] or "Y Coordinate" in time_frame["qualifiers"] or "Raw Coordinates" in time_frame["qualifiers"] or "Raw X Coordinate" in time_frame["qualifiers"] or "Raw Y Coordinate" in time_frame["qualifiers"] or "Absolute Coordinates" in time_frame["qualifiers"] or "Absolute X Coordinate" in time_frame["qualifiers"] or "Absolute Y Coordinate" in time_frame["qualifiers"] or "Left Side" in time_frame["qualifiers"] or "Right Side" in time_frame["qualifiers"] or "Period Time" in time_frame["qualifiers"] or "Period Time Remaining" in time_frame["qualifiers"] or "Unassisted" in time_frame["qualifiers"] or "Event Stat" in time_frame["qualifiers"] or "Event Stat Reversed" in time_frame["qualifiers"] or "Event Stats" in time_frame["qualifiers"] or "Event Stats Reversed" in time_frame["qualifiers"] or "Game Event Stat" in time_frame["qualifiers"] or "Game Event Stat Reversed" in time_frame["qualifiers"] or "Game Event Stats" in time_frame["qualifiers"] or "Game Event Stats Reversed" in time_frame["qualifiers"] or "Starting Event Stat" in time_frame["qualifiers"] or "Starting Event Stat Reversed" in time_frame["qualifiers"] or "Starting Event Stats" in time_frame["qualifiers"] or "Starting Event Stats Reversed" in time_frame["qualifiers"] or "Starting Game Event Stat" in time_frame["qualifiers"] or "Starting Game Event Stat Reversed" in time_frame["qualifiers"] or "Starting Game Event Stats" in time_frame["qualifiers"] or "Starting Game Event Stats Reversed" in time_frame["qualifiers"] or "Strength" in time_frame["qualifiers"] or "Even Skaters" in time_frame["qualifiers"] or "Even Goalies" in time_frame["qualifiers"] or "More Skaters" in time_frame["qualifiers"] or "Less Skaters" in time_frame["qualifiers"] or "Team Goalie Pulled" in time_frame["qualifiers"] or "Opponent Goalie Pulled" in time_frame["qualifiers"] or "Power Play" in time_frame["qualifiers"] or "Short Handed" in time_frame["qualifiers"] or "Even Strength" in time_frame["qualifiers"] or "Team Skaters" in time_frame["qualifiers"] or "Opponent Skaters" in time_frame["qualifiers"] or "Team Players" in time_frame["qualifiers"] or "Opponent Players" in time_frame["qualifiers"] or "Overtime" in time_frame["qualifiers"] or "Game Winning" in time_frame["qualifiers"] or "Offensive Zone" in time_frame["qualifiers"] or "Defensive Zone" in time_frame["qualifiers"] or "Neutral Zone" in time_frame["qualifiers"] or "Event Time" in time_frame["qualifiers"] or "penalties" in extra_stats or "current-stats" in extra_stats):
         return game_data, row_data, missing_games
 
     scoring_plays = []
@@ -16648,7 +17750,7 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
     scoring_plays = sorted(scoring_plays, key = lambda scoring_play: (scoring_play["about"]["period"], start_time_to_str(scoring_play["about"]["periodTime"])))
 
     if not scoring_plays:
-        if "Shot On" in time_frame["qualifiers"] or "Shot By" in time_frame["qualifiers"] or "Event Formula" in time_frame["qualifiers"] or "On Ice With" in time_frame["qualifiers"] or "On Ice Against" in time_frame["qualifiers"] or "On Line With" in time_frame["qualifiers"] or "On Line Against" in time_frame["qualifiers"] or "Assisted On" in time_frame["qualifiers"] or "Assisted With" in time_frame["qualifiers"] or "Points With" in time_frame["qualifiers"] or "Assisted By" in time_frame["qualifiers"] or "Primary Assisted On" in time_frame["qualifiers"] or "Primary Assisted With" in time_frame["qualifiers"] or "Primary Points With" in time_frame["qualifiers"] or "Primary Assisted By" in time_frame["qualifiers"] or "Hit On" in time_frame["qualifiers"] or "Block On" in time_frame["qualifiers"] or "Penalty On" in time_frame["qualifiers"] or "Faceoff Against" in time_frame["qualifiers"] or "Fight Against" in time_frame["qualifiers"] or "Penalty Type" in time_frame["qualifiers"] or "Team Score" in time_frame["qualifiers"] or "Opponent Score" in time_frame["qualifiers"] or "Score Margin" in time_frame["qualifiers"] or "Score Difference" in time_frame["qualifiers"] or "Event Sub Query" in time_frame["qualifiers"] or "Or Event Sub Query" in time_frame["qualifiers"] or "Period" in time_frame["qualifiers"] or "Period Stat" in time_frame["qualifiers"] or "Coordinates" in time_frame["qualifiers"] or "X Coordinate" in time_frame["qualifiers"] or "Y Coordinate" in time_frame["qualifiers"] or "Raw Coordinates" in time_frame["qualifiers"] or "Raw X Coordinate" in time_frame["qualifiers"] or "Raw Y Coordinate" in time_frame["qualifiers"] or "Absolute Coordinates" in time_frame["qualifiers"] or "Absolute X Coordinate" in time_frame["qualifiers"] or "Absolute Y Coordinate" in time_frame["qualifiers"] or "Left Side" in time_frame["qualifiers"] or "Right Side" in time_frame["qualifiers"] or "Period Time" in time_frame["qualifiers"] or "Period Time Remaining" in time_frame["qualifiers"] or "Unassisted" in time_frame["qualifiers"] or "Strength" in time_frame["qualifiers"] or "Career Minute" in time_frame["qualifiers"] or "Career Minute Reversed" in time_frame["qualifiers"] or "Game Minute" in time_frame["qualifiers"] or "Game Minute Reversed" in time_frame["qualifiers"] or "Career Shot" in time_frame["qualifiers"] or "Career Shot Reversed" in time_frame["qualifiers"] or "Career Period" in time_frame["qualifiers"] or "Career Period Reversed" in time_frame["qualifiers"] or "Game Shot" in time_frame["qualifiers"] or "Game Shot Reversed" in time_frame["qualifiers"] or "Even Skaters" in time_frame["qualifiers"] or "More Skaters" in time_frame["qualifiers"] or "Less Skaters" in time_frame["qualifiers"] or "Team Skaters" in time_frame["qualifiers"] or "Opponent Skaters" in time_frame["qualifiers"] or "Team Players" in time_frame["qualifiers"] or "Opponent Players" in time_frame["qualifiers"] or "Team Goalie Pulled" in time_frame["qualifiers"] or "Opponent Goalie Pulled" in time_frame["qualifiers"] or "Power Play" in time_frame["qualifiers"] or "Short Handed" in time_frame["qualifiers"] or "Even Strength" in time_frame["qualifiers"] or "Shootout" in time_frame["qualifiers"] or "Overtime" in time_frame["qualifiers"] or "Game Winning" in time_frame["qualifiers"] or "Offensive Zone" in time_frame["qualifiers"] or "Defensive Zone" in time_frame["qualifiers"] or "Neutral Zone" in time_frame["qualifiers"] or "Event Time" in time_frame["qualifiers"] or "Penaltly Shot" in time_frame["qualifiers"] or "penalties" in extra_stats:
+        if "Shot On" in time_frame["qualifiers"] or "Shot By" in time_frame["qualifiers"] or "Event Formula" in time_frame["qualifiers"] or "On Ice With" in time_frame["qualifiers"] or "On Ice Against" in time_frame["qualifiers"] or "On Line With" in time_frame["qualifiers"] or "On Line Against" in time_frame["qualifiers"] or "Assisted On" in time_frame["qualifiers"] or "Assisted With" in time_frame["qualifiers"] or "Points With" in time_frame["qualifiers"] or "Assisted By" in time_frame["qualifiers"] or "Primary Assisted On" in time_frame["qualifiers"] or "Primary Assisted With" in time_frame["qualifiers"] or "Primary Points With" in time_frame["qualifiers"] or "Primary Assisted By" in time_frame["qualifiers"] or "Hit On" in time_frame["qualifiers"] or "Block On" in time_frame["qualifiers"] or "Penalty On" in time_frame["qualifiers"] or "Faceoff Against" in time_frame["qualifiers"] or "Fight Against" in time_frame["qualifiers"] or "Penalty Type" in time_frame["qualifiers"] or "Team Score" in time_frame["qualifiers"] or "Opponent Score" in time_frame["qualifiers"] or "Score Margin" in time_frame["qualifiers"] or "Score Difference" in time_frame["qualifiers"] or "Event Sub Query" in time_frame["qualifiers"] or "Or Event Sub Query" in time_frame["qualifiers"] or "Period" in time_frame["qualifiers"] or "Period Stat" in time_frame["qualifiers"] or "Coordinates" in time_frame["qualifiers"] or "X Coordinate" in time_frame["qualifiers"] or "Y Coordinate" in time_frame["qualifiers"] or "Raw Coordinates" in time_frame["qualifiers"] or "Raw X Coordinate" in time_frame["qualifiers"] or "Raw Y Coordinate" in time_frame["qualifiers"] or "Absolute Coordinates" in time_frame["qualifiers"] or "Absolute X Coordinate" in time_frame["qualifiers"] or "Absolute Y Coordinate" in time_frame["qualifiers"] or "Left Side" in time_frame["qualifiers"] or "Right Side" in time_frame["qualifiers"] or "Period Time" in time_frame["qualifiers"] or "Period Time Remaining" in time_frame["qualifiers"] or "Unassisted" in time_frame["qualifiers"] or "Strength" in time_frame["qualifiers"] or "Event Stat" in time_frame["qualifiers"] or "Event Stat Reversed" in time_frame["qualifiers"] or "Event Stats" in time_frame["qualifiers"] or "Event Stats Reversed" in time_frame["qualifiers"] or "Game Event Stat" in time_frame["qualifiers"] or "Game Event Stat Reversed" in time_frame["qualifiers"] or "Game Event Stats" in time_frame["qualifiers"] or "Game Event Stats Reversed" in time_frame["qualifiers"] or "Starting Event Stat" in time_frame["qualifiers"] or "Starting Event Stat Reversed" in time_frame["qualifiers"] or "Starting Event Stats" in time_frame["qualifiers"] or "Starting Event Stats Reversed" in time_frame["qualifiers"] or "Starting Game Event Stat" in time_frame["qualifiers"] or "Starting Game Event Stat Reversed" in time_frame["qualifiers"] or "Starting Game Event Stats" in time_frame["qualifiers"] or "Starting Game Event Stats Reversed" in time_frame["qualifiers"] or "Even Skaters" in time_frame["qualifiers"] or "More Skaters" in time_frame["qualifiers"] or "Less Skaters" in time_frame["qualifiers"] or "Team Skaters" in time_frame["qualifiers"] or "Opponent Skaters" in time_frame["qualifiers"] or "Team Players" in time_frame["qualifiers"] or "Opponent Players" in time_frame["qualifiers"] or "Team Goalie Pulled" in time_frame["qualifiers"] or "Opponent Goalie Pulled" in time_frame["qualifiers"] or "Power Play" in time_frame["qualifiers"] or "Short Handed" in time_frame["qualifiers"] or "Even Strength" in time_frame["qualifiers"] or "Shootout" in time_frame["qualifiers"] or "Overtime" in time_frame["qualifiers"] or "Game Winning" in time_frame["qualifiers"] or "Offensive Zone" in time_frame["qualifiers"] or "Defensive Zone" in time_frame["qualifiers"] or "Neutral Zone" in time_frame["qualifiers"] or "Event Time" in time_frame["qualifiers"] or "Penaltly Shot" in time_frame["qualifiers"] or "penalties" in extra_stats:
             missing_games = True
             game_data["missing_data"] = True
 
@@ -16692,7 +17794,7 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
 
     game_data["scoring_play_data"] = scoring_play_data
     
-    if row_data["Year"] >= 2010:
+    if row_data["Year"] >= 2007:
         game_data["shift_data"] = get_html_shift_data(row_data["NHLGameLink"], row_data["Location"], game_data, player_data)
         #if not game_data["shift_data"]:
         #    game_data["shift_data"], missing_games = get_shift_data(row_data["NHLGameLink"], game_data["team_id"], missing_games)
@@ -17228,6 +18330,75 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                 game_data["takeaway"].append({**shared_data , **{
                     "is_takeaway" : scoring_play["result"]["event"] == "Takeaway"
                 }})
+
+    shift_data = game_data["shift_data"]
+    if shift_data and player_id in shift_data["team"]:
+        for period in shift_data["team"][player_id]:
+            for shift_index, shift_event in enumerate(shift_data["team"][player_id][period]):
+                for second in range(shift_event["time_start"], shift_event["time_end"] + 1):
+                    shift_event = {
+                        "period" : period,
+                        "periodTime" : second
+                    }
+                    score_info = get_score_info(game_data["scoring_play_data"], period, second)
+                    shift_event["teamGoals"] = score_info[0]
+                    shift_event["oppGoals"] = score_info[1]
+                    shift_event["goalMargin"] = score_info[0] - score_info[1]
+
+                    if row_data["is_playoffs"] or shift_event["period"] <= 3:
+                        time_to_use = 1200
+                    elif row_data["Year"] <= 1942:
+                        time_to_use = 600
+                    else:
+                        time_to_use = 300
+
+                    shift_event["periodTimeRemaining"] = time_to_use - shift_event["periodTime"]
+
+                    shift_event["event_id"] = str(period) + "-"  + str(second)
+
+                    shift_event["shift_index"] = shift_index
+
+                    game_data["shift_events"].append(shift_event)
+
+        for period in game_data["periods"]:
+            for second in range(1, game_data["period_length"][period] + 1):
+                if not is_player_on_ice(shift_data, None, None, period, second, player_id, True):
+                    shift_event = {
+                        "period" : period
+                    }
+                    score_info = get_score_info(game_data["scoring_play_data"], period, second)
+                    shift_event["teamGoals"] = score_info[0]
+                    shift_event["oppGoals"] = score_info[1]
+                    shift_event["goalMargin"] = score_info[0] - score_info[1]
+                    shift_event["periodTime"] = second
+
+                    if row_data["is_playoffs"] or shift_event["period"] <= 3:
+                        time_to_use = 1200
+                    elif row_data["Year"] <= 1942:
+                        time_to_use = 600
+                    else:
+                        time_to_use = 300
+
+                    shift_event["periodTimeRemaining"] = time_to_use - shift_event["periodTime"]
+
+                    shift_event["event_id"] = str(period) + "-"  + str(second)
+
+                    game_data["oi_shift_events"].append(shift_event)
+
+    for event_str in game_data:
+        if not isinstance(game_data[event_str], list):
+            continue
+
+        for goal_event in game_data[event_str]:
+            if not isinstance(goal_event, dict) or not "periodTime" in goal_event:
+                continue
+            if goal_event["period"] not in game_data["all_events"]:
+                game_data["all_events"][goal_event["period"]] = {}
+            if goal_event["periodTime"] not in game_data["all_events"][goal_event["period"]]:
+                game_data["all_events"][goal_event["period"]][goal_event["periodTime"]] = []
+            goal_event["event_name"] = event_str
+
+            game_data["all_events"][goal_event["period"]][goal_event["periodTime"]].append(goal_event)
     
     return game_data, row_data, missing_games
             
@@ -17285,7 +18456,10 @@ def setup_game_data(player_data, row_data, player_id, player_type, time_frame):
         "missing_toi" : False,
         "is_shootout" : False,
         "period_length" : {},
-        "shift_data" : {}
+        "shift_data" : {},
+        "all_events" : {},
+        "shift_events" : [],
+        "oi_shift_events" : []
     }
 
     missing_games = False
@@ -19746,7 +20920,7 @@ def perform_nhl_game_qualifiers(row, qualifiers):
 def perform_sub_nhl_game_qualifiers(row, qualifiers, player_game_info, player_type, player_link, saved_row_data, index, clear_data):
     player_id = int(player_link.split('/')[-1])
     if not player_game_info or player_game_info["missing_data"]:
-        return False
+        return False, row
     
     if "Period" in qualifiers:
         has_row_match = True
@@ -19766,7 +20940,7 @@ def perform_sub_nhl_game_qualifiers(row, qualifiers, player_game_info, player_ty
             if not has_match:
                 has_row_match = False
         if not has_row_match:
-            return False
+            return False, row
 
     if "Shootout" in qualifiers:
         has_row_match = True
@@ -19783,7 +20957,7 @@ def perform_sub_nhl_game_qualifiers(row, qualifiers, player_game_info, player_ty
             if not has_match:
                 has_row_match = False
         if not has_row_match:
-            return False
+            return False, row
     
     if "Overtime" in qualifiers:
         has_row_match = True
@@ -19800,103 +20974,19 @@ def perform_sub_nhl_game_qualifiers(row, qualifiers, player_game_info, player_ty
             if not has_match:
                 has_row_match = False
         if not has_row_match:
-            return False
+            return False, row
+
+    raw_row_data = copy.copy(row)
     
-    if "Career Shot" in qualifiers:
-        count_misses = False
-        if player_type["da_type"]["type"] == "Skater":
-            if not "Shot On" in qualifiers and not "Shot By" in qualifiers:
-                if "Penalty Shot" in qualifiers or "Shootout" in qualifiers:
-                    count_misses = True
-        all_goal_events = player_game_info["goal" if player_type["da_type"]["type"] == "Skater" else "goal_against"] + player_game_info["shot" if player_type["da_type"]["type"] == "Skater" else "save_against"]
-        if count_misses:
-            all_goal_events += player_game_info["missed_shot"]
+    perform_metadata_quals(qualifiers, player_type, row, player_game_info, player_id, clear_data, False) 
+    calculate_toi(row, qualifiers, player_game_info, player_id, player_link, saved_row_data, player_type, index, False)
 
-        has_row_match = False
-        for goal_event in all_goal_events:
-            if perform_sub_metadata_qual(goal_event, "career_shot", qualifiers["Career Shot"], player_game_info, row["Year"]):
-                has_row_match = True
-                break
-        if not has_row_match:
-            return False
-    
-    if "Career Shot Reversed" in qualifiers:
-        count_misses = False
-        if player_type["da_type"]["type"] == "Skater":
-            if not "Shot On" in qualifiers and not "Shot By" in qualifiers:
-                if "Penalty Shot" in qualifiers or "Shootout" in qualifiers:
-                    count_misses = True
-        all_goal_events = player_game_info["goal" if player_type["da_type"]["type"] == "Skater" else "goal_against"] + player_game_info["shot" if player_type["da_type"]["type"] == "Skater" else "save_against"]
-        if count_misses:
-            all_goal_events += player_game_info["missed_shot"]
+    perform_metadata_quals(qualifiers, player_type, raw_row_data, player_game_info, player_id, clear_data, True) 
+    calculate_toi(raw_row_data, qualifiers, player_game_info, player_id, player_link, saved_row_data, player_type, index, True)
 
-        has_row_match = False
-        for goal_event in all_goal_events:
-            if perform_sub_metadata_qual(goal_event, "career_shot_reversed", qualifiers["Career Shot Reversed"], player_game_info, row["Year"]):
-                has_row_match = True
-                break
-        if not has_row_match:
-            return False
-    
-    perform_metadata_quals(qualifiers, player_type, row, player_game_info, player_id, clear_data)
-    
-    calculate_toi(row, qualifiers, player_game_info, player_id, saved_row_data, player_type, index)
+    return True, raw_row_data
 
-    if "Career Minute" in qualifiers or "Career Minute Reversed" in qualifiers or "Game Minute" in qualifiers or "Game Minute Reversed" in qualifiers:
-        if not row["TOI"]:
-            return False
-
-    if not "Period Stat" in qualifiers:
-        periods_to_skip = set()
-        for period in player_game_info["periods"]:
-            has_period_match = True
-            if "Career Period" in qualifiers:
-                has_match = False
-                total_minute_entering = 0
-                for sub_row_data in saved_row_data[:index]:
-                    total_minute_entering += sub_row_data["Per"]
-                total_minute_exiting = total_minute_entering + period
-
-                goal_event = {
-                    "career_minute" : total_minute_exiting
-                }
-                if perform_sub_metadata_qual(goal_event, "career_minute", qualifiers["Career Period"], None, None):
-                    has_match = True
-
-                if not has_match:
-                    periods_to_skip.add(period)
-                
-            if "Period" in qualifiers:
-                goal_event = {
-                    "period" : period
-                }
-                if not perform_sub_metadata_qual(goal_event, "period", qualifiers["Period"], None, None):
-                    periods_to_skip.add(period)
-            
-        for period in reversed(player_game_info["periods"]):
-            if "Career Period Reversed" in qualifiers:
-                has_match = False
-                total_minute_entering = 0
-                for sub_row_data in reversed(saved_row_data[(index + 1):]):
-                    total_minute_entering += sub_row_data["Per"]
-                total_minute_exiting = total_minute_entering + (len(player_game_info["periods"]) - period + 1)
-
-                goal_event = {
-                    "career_minute" : total_minute_exiting
-                }
-                if perform_sub_metadata_qual(goal_event, "career_minute", qualifiers["Career Period Reversed"], None, None):
-                    has_match = True
-
-                if not has_match:
-                    periods_to_skip.add(period)
-
-        for period in reversed(player_game_info["periods"]):
-            if period not in periods_to_skip:
-                row["Per"] += 1
-
-    return True
-
-def perform_metadata_quals(qualifiers, player_type, row, player_game_info, nhl_player_id, clear_data):
+def perform_metadata_quals(qualifiers, player_type, row, player_game_info, nhl_player_id, clear_data, skip_career_events):
     if clear_data:
         clear_row_attrs(row, player_type)
     count_misses = False
@@ -19905,7 +20995,7 @@ def perform_metadata_quals(qualifiers, player_type, row, player_game_info, nhl_p
             count_misses = True
     if player_type["da_type"]["type"] == "Skater":
         for goal_event in player_game_info["goal"]:
-            if perform_metadata_qual("goal", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"]):
+            if perform_metadata_qual("goal", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], skip_career_events=skip_career_events):
                 row["G"] += 1
                 if goal_event["strength"] == "EVEN":
                     row["EVG"] += 1
@@ -19955,7 +21045,7 @@ def perform_metadata_quals(qualifiers, player_type, row, player_game_info, nhl_p
                             if row["Year"] >= 2007:
                                 row["TSA_5v5"] += 1
         for goal_event in player_game_info["shot"]:
-            if perform_metadata_qual("shot", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"]):
+            if perform_metadata_qual("shot", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], skip_career_events=skip_career_events):
                 row["S"] += 1
                 if goal_event["secondaryType"] == "Wrist Shot":
                     row["WristS"] += 1
@@ -19978,7 +21068,7 @@ def perform_metadata_quals(qualifiers, player_type, row, player_game_info, nhl_p
                     if row["Year"] >= 2007:
                         row["TSA_5v5"] += 1
         for goal_event in player_game_info["missed_shot"]:
-            if perform_metadata_qual("missed_shot", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"]):
+            if perform_metadata_qual("missed_shot", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], skip_career_events=skip_career_events):
                 if goal_event["description"].endswith(" Goalpost") or goal_event["description"].endswith("Hit Crossbar"):
                     row["Post/Bar"] += 1
                 if count_misses:
@@ -19990,7 +21080,7 @@ def perform_metadata_quals(qualifiers, player_type, row, player_game_info, nhl_p
                         row["TSA_5v5"] += 1
                         row["TSM_5v5"] += 1
         for goal_event in player_game_info["blocked_shot"]:
-            if perform_metadata_qual("blocked_shot", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"]):
+            if perform_metadata_qual("blocked_shot", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], skip_career_events=skip_career_events):
                 if row["Year"] >= 2007:
                     row["TSA"] += 1
                     row["TSB"] += 1
@@ -19998,7 +21088,7 @@ def perform_metadata_quals(qualifiers, player_type, row, player_game_info, nhl_p
                         row["TSA_5v5"] += 1
                         row["TSB_5v5"] += 1
         for goal_event in player_game_info["assist"]:
-            if perform_metadata_qual("assist", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"]):
+            if perform_metadata_qual("assist", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], skip_career_events=skip_career_events):
                 row["A"] += 1
                 if goal_event["emptyNet"]:
                     row["ENA"] += 1
@@ -20031,13 +21121,13 @@ def perform_metadata_quals(qualifiers, player_type, row, player_game_info, nhl_p
                     else:
                         row["A2_5v5"] += 1
         for goal_event in player_game_info["hit"]:
-            if perform_metadata_qual("hit", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"]):   
+            if perform_metadata_qual("hit", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], skip_career_events=skip_career_events):
                 row["HIT"] += 1
         for goal_event in player_game_info["block"]:
-            if perform_metadata_qual("block", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"]):   
+            if perform_metadata_qual("block", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], skip_career_events=skip_career_events):
                 row["BLK"] += 1
         for goal_event in player_game_info["faceoff"]:
-            if perform_metadata_qual("faceoff", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], is_faceoff=True):
+            if perform_metadata_qual("faceoff", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], is_faceoff=True, skip_career_events=skip_career_events):
                 row["FO"] += 1
                 if goal_event["winner"]:
                     row["FOW"] += 1
@@ -20051,16 +21141,16 @@ def perform_metadata_quals(qualifiers, player_type, row, player_game_info, nhl_p
                         row[goal_event["zone"] + "FOL"] += 1
         for goal_event in player_game_info["all_faceoffs"]:
             if goal_event["zone"]:
-                if perform_metadata_qual("all_faceoffs", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], is_faceoff=True):
+                if perform_metadata_qual("all_faceoffs", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], is_faceoff=True, skip_career_events=skip_career_events):
                     row[goal_event["zone"]] += 1
         for goal_event in player_game_info["takeaway"]:
-            if perform_metadata_qual("takeaway", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"]):
+            if perform_metadata_qual("takeaway", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], skip_career_events=skip_career_events):
                 if goal_event["is_takeaway"]:
                     row["TK"] += 1
                 else:
                     row["GV"] += 1
         for goal_event in player_game_info["penalty"]:
-            if perform_metadata_qual("penalty", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"]):
+            if perform_metadata_qual("penalty", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], skip_career_events=skip_career_events):
                 if goal_event["player_penalty"]:
                     row["PEN"] += 1
                     row["PIM"] += goal_event["penalty_minutes"]
@@ -20068,77 +21158,75 @@ def perform_metadata_quals(qualifiers, player_type, row, player_game_info, nhl_p
                         row[goal_event["penalty_severity"]] += 1
                 else:
                     row["PenDrawn"] += 1
-        for goal_event in player_game_info["penalty"]:
-            if "secondary_type" in goal_event and goal_event["secondary_type"] == "Fighting":
-                if perform_metadata_qual("penalty", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"]):
+                if "secondary_type" in goal_event and goal_event["secondary_type"] == "Fighting":
                     row["Fight"] += 1
         for goal_event in player_game_info["all_team_goals"]:
-            if perform_metadata_qual("all_team_goals", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"]):
+            if perform_metadata_qual("all_team_goals", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], skip_career_events=skip_career_events):
                 row["GF"] += 1
                 if goal_event["strength"] == "EVEN" or goal_event["strength"] != "PPG":
                     row["PlusMinus"] += 1
                     if goal_event["strength"] == "EVEN":
                         row["EVGF"] += 1
         for goal_event in player_game_info["all_opp_goals"]:
-            if perform_metadata_qual("all_opp_goals", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"]):
+            if perform_metadata_qual("all_opp_goals", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], skip_career_events=skip_career_events):
                 row["GA"] += 1
                 if goal_event["strength"] == "EVEN" or goal_event["strength"] != "SHG":
                     row["PlusMinus"] -= 1
                     if goal_event["strength"] == "EVEN":
                         row["EVGA"] += 1
         for goal_event in player_game_info["all_team_shots_og"]:
-            if perform_metadata_qual("all_team_shots_og", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"]):
+            if perform_metadata_qual("all_team_shots_og", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], skip_career_events=skip_career_events):
                 row["oiTmS"] += 1
         for goal_event in player_game_info["all_opp_shots_og"]:
-            if perform_metadata_qual("all_opp_shots_og", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"]):
+            if perform_metadata_qual("all_opp_shots_og", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], skip_career_events=skip_career_events):
                 row["oiOppS"] += 1
         for goal_event in player_game_info["all_team_shots"]:
-            if perform_metadata_qual("all_team_shots", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"]):
+            if perform_metadata_qual("all_team_shots", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], skip_career_events=skip_career_events):
                 row["CF"] += 1
                 if is_five_toi(player_game_info, goal_event, goal_event["period"], goal_event["periodTime"]):
                     row["CF_5v5"] += 1
         for goal_event in player_game_info["all_opp_shots"]:
-            if perform_metadata_qual("all_opp_shots", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"]):
+            if perform_metadata_qual("all_opp_shots", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], skip_career_events=skip_career_events):
                 row["CA"] += 1
                 if is_five_toi(player_game_info, goal_event, goal_event["period"], goal_event["periodTime"]):
                     row["CA_5v5"] += 1
         for goal_event in player_game_info["all_team_unblocked_shots"]:
-            if perform_metadata_qual("all_team_unblocked_shots", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"]):
+            if perform_metadata_qual("all_team_unblocked_shots", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], skip_career_events=skip_career_events):
                 row["FF"] += 1
                 if is_five_toi(player_game_info, goal_event, goal_event["period"], goal_event["periodTime"]):
                     row["FF_5v5"] += 1
         for goal_event in player_game_info["all_opp_unblocked_shots"]:
-            if perform_metadata_qual("all_opp_unblocked_shots", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"]):
+            if perform_metadata_qual("all_opp_unblocked_shots", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], skip_career_events=skip_career_events):
                 row["FA"] += 1
                 if is_five_toi(player_game_info, goal_event, goal_event["period"], goal_event["periodTime"]):
                     row["FA_5v5"] += 1
         for goal_event in player_game_info["of_all_team_goals"]:
-            if perform_metadata_qual("of_all_team_goals", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], is_off_ice=True):
+            if perform_metadata_qual("of_all_team_goals", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], is_off_ice=True, skip_career_events=skip_career_events):
                 row["offIGF"] += 1
         for goal_event in player_game_info["of_all_opp_goals"]:
-            if perform_metadata_qual("of_all_opp_goals", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], is_off_ice=True):
+            if perform_metadata_qual("of_all_opp_goals", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], is_off_ice=True, skip_career_events=skip_career_events):
                 row["offIGA"] += 1
         for goal_event in player_game_info["of_all_team_shots"]:
-            if perform_metadata_qual("of_all_team_shots", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], is_off_ice=True):
+            if perform_metadata_qual("of_all_team_shots", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], is_off_ice=True, skip_career_events=skip_career_events):
                 row["offICF"] += 1
         for goal_event in player_game_info["of_all_opp_shots"]:
-            if perform_metadata_qual("of_all_opp_shots", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], is_off_ice=True):
+            if perform_metadata_qual("of_all_opp_shots", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], is_off_ice=True, skip_career_events=skip_career_events):
                 row["offICA"] += 1
         for goal_event in player_game_info["of_all_team_unblocked_shots"]:
-            if perform_metadata_qual("of_all_team_unblocked_shots", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], is_off_ice=True):
+            if perform_metadata_qual("of_all_team_unblocked_shots", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], is_off_ice=True, skip_career_events=skip_career_events):
                 row["offIFF"] += 1
         for goal_event in player_game_info["of_all_opp_unblocked_shots"]:
-            if perform_metadata_qual("of_all_opp_unblocked_shots", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], is_off_ice=True):
+            if perform_metadata_qual("of_all_opp_unblocked_shots", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], is_off_ice=True, skip_career_events=skip_career_events):
                 row["offIFA"] += 1
         for goal_event in player_game_info["of_all_team_shots_og"]:
-            if perform_metadata_qual("of_all_team_shots_og", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], is_off_ice=True):
+            if perform_metadata_qual("of_all_team_shots_og", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], is_off_ice=True, skip_career_events=skip_career_events):
                 row["offISF"] += 1
         for goal_event in player_game_info["of_all_opp_shots_og"]:
-            if perform_metadata_qual("of_all_opp_shots_og", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], is_off_ice=True):
+            if perform_metadata_qual("of_all_opp_shots_og", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], is_off_ice=True, skip_career_events=skip_career_events):
                 row["offISA"] += 1
     else:
         for goal_event in player_game_info["goal_against"]:
-            if perform_metadata_qual("goal_against", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"]):
+            if perform_metadata_qual("goal_against", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], skip_career_events=skip_career_events):
                 row["GA"] += 1
                 if goal_event["strength"] == "EVEN":
                     row["EVGA"] += 1
@@ -20152,7 +21240,7 @@ def perform_metadata_quals(qualifiers, player_type, row, player_game_info, nhl_p
                 if row["Year"] >= 2007:
                     row["SA"] += 1
         for goal_event in player_game_info["save_against"]:
-            if perform_metadata_qual("save_against", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"]):
+            if perform_metadata_qual("save_against", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], skip_career_events=skip_career_events):
                 if goal_event["strength"] == "EVEN":
                     row["EVSH"] += 1
                 elif goal_event["strength"] == "PPG":
@@ -20162,168 +21250,50 @@ def perform_metadata_quals(qualifiers, player_type, row, player_game_info, nhl_p
                 row["SV"] += 1
                 row["SA"] += 1
         for goal_event in player_game_info["all_team_goals"]:
-            if perform_metadata_qual("all_team_goals", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"]):
+            if perform_metadata_qual("all_team_goals", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], skip_career_events=skip_career_events):
                 row["GF"] += 1
+
+    for period in player_game_info["all_events"]:
+        for period_time in player_game_info["all_events"][period]:
+            goal_events = player_game_info["all_events"][period][period_time]
+            found_per_match = False
+            for goal_event in goal_events:
+                if perform_metadata_qual(goal_event["event_name"], goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], skip_career_events=skip_career_events):
+                    row["Per"] += 1
+                    found_per_match = True
+                    break
+            if found_per_match:
+                break
+
     calculate_row_attrs(row, player_type)
 
-def calculate_toi(row, qualifiers, player_game_info, player_id, saved_row_data, player_type, index):
+def calculate_toi(row, qualifiers, player_game_info, player_id, player_link, saved_row_data, player_type, index, skip_career_events):
     shift_data = player_game_info["shift_data"]
-    row["TOI"] = 0
-    row["offITOI"] = 0
-    row["EVTOI"] = 0
-    row["PPTOI"] = 0
-    row["SHTOI"] = 0
-    row["TOI_5v5"] = 0
-    row["GP_TOI"] = 0
-    row["GP_TOI_5v5"] = 0
-    row["Shft"] = 0
-
     if not shift_data or player_id not in shift_data["team"]:
         return
     
     row["GP_TOI"] = 1
     row["GP_TOI_5v5"] = 1
 
-    sub_minutes = None
-    sub_minutes_reversed = None
-    if "Career Minute" in qualifiers or "Career Minute Reversed" in qualifiers or "Game Minute" in qualifiers or "Game Minute Reversed" in qualifiers or "Career Shot" in qualifiers or "Career Shot Reversed" in qualifiers or "Career Period" in qualifiers or "Career Period Reversed" in qualifiers or "Game Shot" in qualifiers or "Game Shot Reversed" in qualifiers:
-        career_stats_info = {
-            "minutes" : 0,
-            "shots" : 0,
-            "periods" : 0
-        }
-        for sub_row_data in saved_row_data[:index]:
-            career_stats_info["minutes"] += sub_row_data["TOI"]
-            career_stats_info["shots"] += sub_row_data["S"]
-            career_stats_info["periods"] += sub_row_data["Per"]
-        sub_minutes = career_stats_info["minutes"]
-        sub_shots = career_stats_info["shots"]
-        sub_periods = career_stats_info["periods"]
+    matching_shifts = set()
+    for shift_event in player_game_info["shift_events"]:
+        if perform_on_ice_quals(qualifiers, shift_data, shift_event, row, shift_event["period"], shift_event["periodTime"]):
+            if perform_metadata_qual("shift", shift_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], is_toi=True, skip_career_events=skip_career_events):
+                row["TOI"] += 1
+                strength = determine_strength(player_game_info, shift_event["period"], shift_event["periodTime"], shift_event)
+                if strength:
+                    row[strength + "TOI"] += 1
+                if is_five_toi(player_game_info, shift_event, shift_event["period"], shift_event["periodTime"]):
+                    row["TOI_5v5"] += 1
 
-        career_stats_info = {
-        "minutes" : 0,
-        "shots" : 0,
-        "periods" : 0
-        }
-        for sub_row_data in reversed(saved_row_data[(index + 1):]):
-            career_stats_info["minutes"] += sub_row_data["TOI"]
-            career_stats_info["shots"] += sub_row_data["S"]
-            career_stats_info["periods"] += sub_row_data["Per"]
-        sub_minutes_reversed = career_stats_info["minutes"]
-        sub_shots_reversed = career_stats_info["shots"]
-        sub_periods_reversed = career_stats_info["periods"]
-
-    for period in shift_data["team"][player_id]:
-        for shift_event in shift_data["team"][player_id][period]:
-            has_shift_match = False
-            for second in range(shift_event["time_start"], shift_event["time_end"] + 1):
-                if perform_on_ice_quals(qualifiers, shift_data, shift_event, row, period, second):
-                    score_info = get_score_info(player_game_info["scoring_play_data"], period, second)
-                    shift_event["teamGoals"] = score_info[0]
-                    shift_event["oppGoals"] = score_info[1]
-                    shift_event["goalMargin"] = score_info[0] - score_info[1]
-                    shift_event["periodTime"] = second
-
-                    if row["is_playoffs"] or shift_event["period"] <= 3:
-                        time_to_use = 1200
-                    elif row["Year"] <= 1942:
-                        time_to_use = 600
-                    else:
-                        time_to_use = 300
-
-                    shift_event["periodTimeRemaining"] = time_to_use - shift_event["periodTime"]
-
-                    if "Career Minute" in qualifiers or "Career Minute Reversed" in qualifiers or "Game Minute" in qualifiers or "Game Minute Reversed" in qualifiers or "Career Shot" in qualifiers or "Career Shot Reversed" in qualifiers or "Career Period" in qualifiers or "Career Period Reversed" in qualifiers or "Game Shot" in qualifiers or "Game Shot Reversed" in qualifiers:
-                        game_minutes, game_minutes_reversed = determine_toi(player_game_info["shift_data"], shift_event["period"], second, player_id, True)
-                        career_minutes = sub_minutes + game_minutes
-                        career_minutes_reversed = sub_minutes_reversed + game_minutes_reversed
-
-                        shift_event["game_minute"] = game_minutes
-                        shift_event["career_minute"] = career_minutes
-                        shift_event["game_minute_reversed"] = game_minutes_reversed
-                        shift_event["career_minute_reversed"] = career_minutes_reversed
-
-                        game_shots, game_shots_reversed = determine_shots(player_game_info, shift_event["period"], second, qualifiers, player_type)
-                        career_shots = sub_shots + game_shots
-                        career_shots_reversed = sub_shots_reversed + game_shots_reversed
-
-                        shift_event["game_shot"] = game_shots
-                        shift_event["career_shot"] = career_shots
-                        shift_event["game_shot_reversed"] = game_shots_reversed
-                        shift_event["career_shot_reversed"] = career_shots_reversed
-
-                        game_periods, game_periods_reversed = determine_periods(player_game_info, shift_event["period"])
-                        career_periods = sub_periods + game_periods
-                        career_periods_reversed = sub_periods_reversed + game_periods_reversed
-
-                        shift_event["career_period"] = career_periods
-                        shift_event["career_period_reversed"] = career_periods_reversed
-
-                    shift_event["event_id"] = str(period) + "-"  + str(second)
-
-                    if perform_metadata_qual("shift", shift_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], is_toi=True):
-                        row["TOI"] += 1
-                        strength = determine_strength(player_game_info, period, second, shift_event)
-                        if strength:
-                            row[strength + "TOI"] += 1
-                        has_shift_match = True
-                        if is_five_toi(player_game_info, shift_event, period, second):
-                            row["TOI_5v5"] += 1
-            if has_shift_match:
-                row["Shft"] += 1
+                if shift_event["shift_index"] not in matching_shifts:
+                    row["Shft"] += 1
+                    matching_shifts.add(shift_event["shift_index"])
     
-    for period in player_game_info["periods"]:
-        for second in range(1, player_game_info["period_length"][period] + 1):
-            if not is_player_on_ice(shift_data, None, None, period, second, player_id, True):
-                if perform_on_ice_quals(qualifiers, shift_data, shift_event, row, period, second):
-                    shift_event = {
-                        "period" : period
-                    }
-                    score_info = get_score_info(player_game_info["scoring_play_data"], period, second)
-                    shift_event["teamGoals"] = score_info[0]
-                    shift_event["oppGoals"] = score_info[1]
-                    shift_event["goalMargin"] = score_info[0] - score_info[1]
-                    shift_event["periodTime"] = second
-
-                    if row["is_playoffs"] or shift_event["period"] <= 3:
-                        time_to_use = 1200
-                    elif row["Year"] <= 1942:
-                        time_to_use = 600
-                    else:
-                        time_to_use = 300
-
-                    shift_event["periodTimeRemaining"] = time_to_use - shift_event["periodTime"]
-
-                    shift_event["event_id"] = str(period) + "-"  + str(second)
-
-                    if "Career Minute" in qualifiers or "Career Minute Reversed" in qualifiers or "Game Minute" in qualifiers or "Game Minute Reversed" in qualifiers or "Career Shot" in qualifiers or "Career Shot Reversed" in qualifiers or "Career Period" in qualifiers or "Career Period Reversed" in qualifiers or "Game Shot" in qualifiers or "Game Shot Reversed" in qualifiers:
-                        game_minutes, game_minutes_reversed = determine_toi(player_game_info["shift_data"], shift_event["period"], second, player_id, True)
-                        career_minutes = sub_minutes + game_minutes
-                        career_minutes_reversed = sub_minutes_reversed + game_minutes_reversed
-
-                        shift_event["game_minute"] = game_minutes
-                        shift_event["career_minute"] = career_minutes
-                        shift_event["game_minute_reversed"] = game_minutes_reversed
-                        shift_event["career_minute_reversed"] = career_minutes_reversed
-
-                        game_shots, game_shots_reversed = determine_shots(player_game_info, shift_event["period"], second, qualifiers, player_type)
-                        career_shots = sub_shots + game_shots
-                        career_shots_reversed = sub_shots_reversed + game_shots_reversed
-
-                        shift_event["game_shot"] = game_shots
-                        shift_event["career_shot"] = career_shots
-                        shift_event["game_shot_reversed"] = game_shots_reversed
-                        shift_event["career_shot_reversed"] = career_shots_reversed
-
-                        game_periods, game_periods_reversed = determine_periods(player_game_info, shift_event["period"])
-                        career_periods = sub_periods + game_periods
-                        career_periods_reversed = sub_periods_reversed + game_periods_reversed
-
-                        shift_event["career_period"] = career_periods
-                        shift_event["career_period_reversed"] = career_periods_reversed
-
-                    if perform_metadata_qual("shift_oi", shift_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], is_toi=True, is_off_ice=True):
-                        row["offITOI"] += 1
+    for shift_event in player_game_info["oi_shift_events"]:
+        if perform_on_ice_quals(qualifiers, shift_data, shift_event, row, shift_event["period"], shift_event["periodTime"]):
+            if perform_metadata_qual("shift_oi", shift_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], is_toi=True, is_off_ice=True, skip_career_events=skip_career_events):
+                row["offITOI"] += 1
                 
 def is_five_toi(player_game_info, goal_event, period, second):
     team_skaters, team_goalies, opp_skaters, opp_goalies, has_shift = get_on_ice_info(player_game_info, goal_event, period, second)
@@ -20396,9 +21366,9 @@ def is_period_qual(qual_object):
     return True
 
 def has_shift_quals(qualifiers):
-    return "On Ice With" in qualifiers or "On Ice Against" in qualifiers or "On Line With" in qualifiers or "On Line Against" in qualifiers or "Strength" in qualifiers or "Career Minute" in qualifiers or "Career Minute Reversed" in qualifiers or "Game Minute" in qualifiers or "Game Minute Reversed" in qualifiers or "Even Skaters" in qualifiers or "More Skaters" in qualifiers or "Less Skaters" in qualifiers or "Team Goalie Pulled" in qualifiers or "Opponent Goalie Pulled" in qualifiers or "Team Skaters" in qualifiers or "Opponent Skaters" in qualifiers or "Team Players" in qualifiers or "Opponent Players" in qualifiers
+    return "On Ice With" in qualifiers or "On Ice Against" in qualifiers or "On Line With" in qualifiers or "On Line Against" in qualifiers or "Strength" in qualifiers or "Even Skaters" in qualifiers or "More Skaters" in qualifiers or "Less Skaters" in qualifiers or "Team Goalie Pulled" in qualifiers or "Opponent Goalie Pulled" in qualifiers or "Team Skaters" in qualifiers or "Opponent Skaters" in qualifiers or "Team Players" in qualifiers or "Opponent Players" in qualifiers
 
-def perform_metadata_qual(event_name, goal_event, qualifiers, player_game_info, row, is_playoffs, year, is_faceoff=False, is_toi=False, is_off_ice=False):
+def perform_metadata_qual(event_name, goal_event, qualifiers, player_game_info, row, is_playoffs, year, is_faceoff=False, is_toi=False, is_off_ice=False, skip_career_events=False):
     if not is_toi:
         if "Shot On" in qualifiers:
             if event_name != "goal" and event_name != "shot":
@@ -20857,46 +21827,71 @@ def perform_metadata_qual(event_name, goal_event, qualifiers, player_game_info, 
         if not perform_sub_metadata_qual(goal_event, "periodTimeRemaining", qualifiers["Period Time Remaining"], player_game_info, year):
             return False
     
-    if "Career Minute" in qualifiers:
-        if not perform_sub_metadata_qual(goal_event, "career_minute", qualifiers["Career Minute"], player_game_info, year):
+    if not skip_career_events:
+        if "Event Stat" in qualifiers:
+            if not handle_stat_num_qual(goal_event, qualifiers["Event Stat"], False, True, False):
+                return False
+        
+        if "Event Stat Reversed" in qualifiers:
+            if not handle_stat_num_qual(goal_event, qualifiers["Event Stat Reversed"], True, True, False):
+                return False
+
+        if "Game Event Stat" in qualifiers:
+            if not handle_stat_num_qual(goal_event, qualifiers["Game Event Stat"], False, False, False):
+                return False
+        
+        if "Game Event Stat Reversed" in qualifiers:
+            if not handle_stat_num_qual(goal_event, qualifiers["Game Event Stat Reversed"], True, False, False):
+                return False
+        
+        if "Starting Event Stat" in qualifiers:
+            if not handle_stat_num_qual(goal_event, qualifiers["Starting Event Stat"], False, True, True):
+                return False
+        
+        if "Starting Event Stat Reversed" in qualifiers:
+            if not handle_stat_num_qual(goal_event, qualifiers["Starting Event Stat Reversed"], True, True, True):
+                return False
+
+        if "Starting Game Event Stat" in qualifiers:
+            if not handle_stat_num_qual(goal_event, qualifiers["Starting Game Event Stat"], False, False, True):
+                return False
+        
+        if "Starting Game Event Stat Reversed" in qualifiers:
+            if not handle_stat_num_qual(goal_event, qualifiers["Starting Game Event Stat Reversed"], True, False, True):
+                return False
+    
+    if "Event Stats" in qualifiers:
+        if not handle_stats_num_qual(goal_event, qualifiers["Event Stats"], False, True, False):
             return False
     
-    if "Career Minute Reversed" in qualifiers:
-        if not perform_sub_metadata_qual(goal_event, "career_minute_reversed", qualifiers["Career Minute Reversed"], player_game_info, year):
+    if "Event Stats Reversed" in qualifiers:
+        if not handle_stats_num_qual(goal_event, qualifiers["Event Stats Reversed"], True, True, False):
             return False
     
-    if "Game Minute" in qualifiers:
-        if not perform_sub_metadata_qual(goal_event, "game_minute", qualifiers["Game Minute"], player_game_info, year):
+    if "Game Event Stats" in qualifiers:
+        if not handle_stats_num_qual(goal_event, qualifiers["Game Event Stats"], False, False, False):
             return False
     
-    if "Game Minute Reversed" in qualifiers:
-        if not perform_sub_metadata_qual(goal_event, "game_minute_reversed", qualifiers["Game Minute Reversed"], player_game_info, year):
+    if "Game Event Stats Reversed" in qualifiers:
+        if not handle_stats_num_qual(goal_event, qualifiers["Game Event Stats Reversed"], True, False, False):
             return False
     
-    if "Career Shot" in qualifiers:
-        if not perform_sub_metadata_qual(goal_event, "career_shot", qualifiers["Career Shot"], player_game_info, year):
+    if "Starting Event Stats" in qualifiers:
+        if not handle_stats_num_qual(goal_event, qualifiers["Starting Event Stats"], False, True, True):
             return False
     
-    if "Career Shot Reversed" in qualifiers:
-        if not perform_sub_metadata_qual(goal_event, "career_shot_reversed", qualifiers["Career Shot Reversed"], player_game_info, year):
+    if "Starting Event Stats Reversed" in qualifiers:
+        if not handle_stats_num_qual(goal_event, qualifiers["Starting Event Stats Reversed"], True, True, True):
             return False
     
-    if "Career Period" in qualifiers:
-        if not perform_sub_metadata_qual(goal_event, "career_period", qualifiers["Career Period"], player_game_info, year):
+    if "Starting Game Event Stats" in qualifiers:
+        if not handle_stats_num_qual(goal_event, qualifiers["Starting Game Event Stats"], False, False, True):
             return False
     
-    if "Career Period Reversed" in qualifiers:
-        if not perform_sub_metadata_qual(goal_event, "career_period_reversed", qualifiers["Career Period Reversed"], player_game_info, year):
+    if "Starting Game Event Stats Reversed" in qualifiers:
+        if not handle_stats_num_qual(goal_event, qualifiers["Starting Game Event Stats Reversed"], True, False, True):
             return False
-    
-    if "Game Shot" in qualifiers:
-        if not perform_sub_metadata_qual(goal_event, "game_shot", qualifiers["Game Shot"], player_game_info, year):
-            return False
-    
-    if "Game Shot Reversed" in qualifiers:
-        if not perform_sub_metadata_qual(goal_event, "game_shot_reversed", qualifiers["Game Shot Reversed"], player_game_info, year):
-            return False
-    
+     
     if "Penalty Shot" in qualifiers:
         if not perform_sub_metadata_qual(goal_event, "penaltyShot", qualifiers["Penalty Shot"], player_game_info, year):
             return False
@@ -21050,7 +22045,7 @@ def perform_metadata_qual(event_name, goal_event, qualifiers, player_game_info, 
             has_match = False
             for player in qual_object["values"]:
                 if row["GameLink"] in player["games"]:
-                    has_match = perform_metadata_qual(event_name, goal_event, player["quals"], player_game_info, row, is_playoffs, year, is_faceoff, is_toi, is_off_ice)
+                    has_match = perform_metadata_qual(event_name, goal_event, player["quals"], player_game_info, row, is_playoffs, year, is_faceoff, is_toi, is_off_ice, skip_career_events)
             if qual_object["negate"]:
                 if has_match:
                     return False
@@ -21064,7 +22059,7 @@ def perform_metadata_qual(event_name, goal_event, qualifiers, player_game_info, 
             has_match = False
             for player in qual_object["values"]:
                 if row["GameLink"] in player["games"]:
-                    has_match = perform_metadata_qual(event_name, goal_event, player["quals"], player_game_info, row, is_playoffs, year, is_faceoff, is_toi, is_off_ice)
+                    has_match = perform_metadata_qual(event_name, goal_event, player["quals"], player_game_info, row, is_playoffs, year, is_faceoff, is_toi, is_off_ice, skip_career_events)
             if qual_object["negate"]:
                 if not has_match:
                     has_any_match = True
@@ -21075,6 +22070,64 @@ def perform_metadata_qual(event_name, goal_event, qualifiers, player_game_info, 
             return False
 
     return True
+
+def handle_stat_num_qual(goal_event, qualifiers, is_reversed, is_career, is_starting):
+    has_any_match = False
+    for qual_object in qualifiers:
+        if is_reversed:
+            num_str = ("career_stat_reversed_" + qual_object["stat"]) if is_career else ("game_stat_reversed_" + qual_object["stat"])
+        else:
+            num_str = ("career_stat_" + qual_object["stat"]) if is_career else ("game_stat_" + qual_object["stat"])
+        if is_starting:
+            num_str = "starting_" + num_str
+        if num_str not in goal_event or goal_event[num_str] == None:
+            return False
+            
+        has_row_match = True
+        num_val = goal_event[num_str]
+        stat_val = qual_object["values"]["start_val"]
+        end_val = qual_object["values"]["end_val"]
+
+        if qual_object["negate"]:
+            if num_val >= stat_val and num_val <= end_val:
+                has_row_match = False
+        else:
+            if not (num_val >= stat_val and num_val <= end_val):
+                has_row_match = False
+    
+    if has_row_match:
+        has_any_match = True
+    
+    return has_any_match
+
+def handle_stats_num_qual(goal_event, qualifiers, is_reversed, is_career, is_starting):
+    has_any_match = False
+    for qual_object in qualifiers:
+        if is_reversed:
+            num_str = ("career_stats_reversed_" + qual_object["stat"]) if is_career else ("game_stats_reversed_" + qual_object["stat"])
+        else:
+            num_str = ("career_stats_" + qual_object["stat"]) if is_career else ("game_stats_" + qual_object["stat"])
+        if is_starting:
+            num_str = "starting_" + num_str
+        if num_str not in goal_event or goal_event[num_str] == None:
+            return False
+            
+        has_row_match = True
+        num_val = goal_event[num_str]
+        stat_val = qual_object["values"]["start_val"]
+        end_val = qual_object["values"]["end_val"]
+
+        if qual_object["negate"]:
+            if num_val >= stat_val and num_val <= end_val:
+                has_row_match = False
+        else:
+            if not (num_val >= stat_val and num_val <= end_val):
+                has_row_match = False
+    
+    if has_row_match:
+        has_any_match = True
+    
+    return has_any_match
 
 def perform_formula_qual(goal_event, qualifiers):
     goal_event_copy = {}
@@ -21380,6 +22433,16 @@ def perform_side_qual(event, qualifiers, is_left):
 
 def clear_row_attrs(row, player_type):
     row["Per"] = 0
+    row["TOI"] = 0
+    row["offITOI"] = 0
+    row["EVTOI"] = 0
+    row["PPTOI"] = 0
+    row["SHTOI"] = 0
+    row["TOI_5v5"] = 0
+    row["GP_TOI"] = 0
+    row["GP_TOI_5v5"] = 0
+    row["Shft"] = 0
+
     if player_type["da_type"]["type"] == "Skater":
         row["G"] = 0
         row["A"] = 0
@@ -26088,7 +27151,7 @@ def calculate_advanced_stats(data, all_rows, overall_type, position, player_data
                 for team in yearly_stats[year]:
                     for is_date_int in yearly_stats[year][team]:
                         for is_playoffs in yearly_stats[year][team][is_date_int]:
-                            if not "stat_values" in player_data or not player_data["stat_values"]["is_shift_data"] or year >= 2010:
+                            if not "stat_values" in player_data or not player_data["stat_values"]["is_shift_data"] or year >= 2007:
                                 total_adj_goaa += calculate_adjusted_gaa(yearly_stats[year][team][is_date_int][is_playoffs], data, year, team)
 
                                 if year >= 1955:
@@ -29313,7 +30376,7 @@ def print_player_data(player_datas, player_type, highest_vals, lowest_vals, has_
                     display_over_header = "5v5"
             elif display_over_header == "Per Game/60 Minutes":
                 if has_against_quals_no_so(extra_stats) and not "per-game" in extra_stats:
-                    display_over_header = "Per 60 Minutes (Avail since 2010-2011)"
+                    display_over_header = "Per 60 Minutes (Avail since 2007-2008)"
 
             if debug_mode:
                 if len(all_headers) > 1:
@@ -29565,7 +30628,7 @@ def get_reddit_player_table(player_datas, player_type, debug_mode, original_comm
                         display_over_header = "5v5"
                 elif display_over_header == "Per Game/60 Minutes":
                     if has_against_quals_no_so(extra_stats) and not "per-game" in extra_stats:
-                        display_over_header = "Per 60 Minutes (Avail since 2010-2011)"
+                        display_over_header = "Per 60 Minutes (Avail since 2007-2008)"
 
                 table_str += "**" + display_over_header + "**\n\n"
 
@@ -30784,8 +31847,8 @@ def is_invalid_stat(stat, player_type, data, count_inconsistent, player_data):
                         return current_season
 
                 if stat in header_shift_stats or "TOI" in stat or "/60M" in stat or "GAA" in stat or stat == "GP/GP":
-                    if data["YearStart"][index] < 2010:
-                        return 2010
+                    if data["YearStart"][index] < 2007:
+                        return 2007
                 if player_data["stat_values"]["is_strength_data"] and stat in strength_stats:
                     if data["YearStart"][index] < 2007:
                         return 2007

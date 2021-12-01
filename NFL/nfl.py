@@ -7985,17 +7985,18 @@ def get_game_data(index, player_data, row_data, qualifiers, extra_stats):
     else:
         away_team_ties = 0
 
-    if "Final" in str(player_page_xml.xpath("//div[@class = 'linescore_wrap']")[0].xpath("//tr")[0].text_content()):
-        home_team_score = int(str(home_team_divs[1].text_content()))
-        away_team_score = int(str(away_team_divs[1].text_content()))
+    home_team_score = int(str(home_team_divs[1].text_content()))
+    away_team_score = int(str(away_team_divs[1].text_content()))
 
-        if home_team_score > away_team_score:
-            home_team_wins -= 1
-        elif home_team_score < away_team_score:
-            away_team_wins -= 1
-        else:
-            home_team_ties -= 1
-            away_team_ties -= 1
+    if home_team_score > away_team_score:
+        home_team_wins -= 1
+        away_team_losses -= 1
+    elif home_team_score < away_team_score:
+        away_team_wins -= 1
+        home_team_losses -= 1
+    else:
+        home_team_ties -= 1
+        away_team_ties -= 1
     
     if row_data["Shared"]["RawTm"] == home_team_abbr:
         game_data["CurrTmWins"] = home_team_wins
@@ -18591,13 +18592,14 @@ def get_opponent_schedule(seasons, has_offensive_stats, has_defensive_stats, fan
                         table = temp_table
                         break
 
-            standard_table_rows = table.find("tbody").find_all("tr")
-            for row in standard_table_rows:
-                round_name = str(row.find("th", {"data-stat" : "week_num"}).find(text=True))
-                if round_name == "ConfChamp":
-                    ws_winner_el = row.find("td", {"data-stat" : "winner"})
-                    if ws_winner_el and ws_winner_el.find("a"):
-                        conf_winners.add(ws_winner_el.find("a")["href"].split("/")[2].strip().upper())
+            if table:
+                standard_table_rows = table.find("tbody").find_all("tr")
+                for row in standard_table_rows:
+                    round_name = str(row.find("th", {"data-stat" : "week_num"}).find(text=True))
+                    if round_name == "ConfChamp":
+                        ws_winner_el = row.find("td", {"data-stat" : "winner"})
+                        if ws_winner_el and ws_winner_el.find("a"):
+                            conf_winners.add(ws_winner_el.find("a")["href"].split("/")[2].strip().upper())
             
             table_names = ["AFC", "NFC", "team_stats", "passing"]
             team_obj[season_obj["Year"]] = {}

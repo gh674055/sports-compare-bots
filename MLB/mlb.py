@@ -5287,6 +5287,18 @@ qualifier_map = {
     "Event Stat Reversed" : {},
     "Event Stats" : {},
     "Event Stats Reversed" : {},
+    "Game Event Stat" : {},
+    "Game Event Stat Reversed" : {},
+    "Game Event Stats" : {},
+    "Game Event Stats Reversed" : {},
+    "Starting Event Stat" : {},
+    "Starting Event Stat Reversed" : {},
+    "Starting Event Stats" : {},
+    "Starting Event Stats Reversed" : {},
+    "Starting Game Event Stat" : {},
+    "Starting Game Event Stat Reversed" : {},
+    "Starting Game Event Stats" : {},
+    "Starting Game Event Stats Reversed" : {},
     "Career Game" : {},
     "Team Game" : {},
     "Career Game Reversed" : {},
@@ -7260,7 +7272,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
 
                                 time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
 
-                        last_match = re.finditer(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?(current-season-age|first-games?|current-games?|first-seasons?|current-seasons?|last-games?|last-seasons?|first-starts?|last-starts?|first-innings|last-innings|current-innings?|first-plate-appearances?|last-plate-appearances?|current-plate-appearances?|first-batters?-faced|last-batters?-faced|current-batters?-faced|first-pitches|last-pitch(?:es)|current-pitch(?:es)?|first-at-bats?|last-at-bats?|current-at-bats?|current-age|rook|rookie|facing-former-franchise|facing-former-team|decision|interleague|intraleague|interdivision|intradivision|current-winning-opponents?|current-losing-opponents?|current-tied-opponents?|current-winning-or-tied-opponents?|current-losing-or-tied-opponents?|winning-opponents?|losing-opponents?|tied-opponents?|winning-or-tied-opponents?|losing-or-tied-opponents?|playoff-opponents?|ws-winner-opponent|pennant-winner-opponent|division-winner-opponent|current-winning-teams?|current-losing-teams?|current-tied-teams?|current-winning-or-tied-teams?|current-losing-or-tied-teams?|winning-teams?|losing-teams?|tied-teams?|winning-or-tied-teams?|losing-or-tied-teams?|playoff-teams?|ws-winner-team|pennant-winner-team|division-winner-team|elimination-or-clinching|clinching-or-elimination|elimination(?:-games?)?|eliminating(?:-games?)?|clinching(?:-games?)?|clinch(?:-games?)?|winner-take-all|behind-in-series|ahead-in-series|even-in-series|leading(:?-in-game)?|trailing(:?-in-game)?|tied(:?(?:-in)?-game)?|force-dates|first-half|second-half|pre-all-star|post-all-star|series-games?:[\w-]+|t:[\w-]+|o:[\w-]+|m:[\w-]+|d:[\w-]+|dt:[\w-]+|team-franchise:[\w-]+|opponent-franchise:[\w-]+|franchise:[\w-]+|tf:[\w-]+|of:[\w-]+|f:[\w-]+|tv-network:[\w-]+|radio-network:[\w-]+|raw-tv-network:[\w-]+|raw-radio-network:[\w-]+|national-tv-network:[\w-]+|national-raw-tv-network:[\w-]+|any-national-tv-network:[\w-]+|any-national-raw-tv-network:[\w-]+|local-event-time:[\S-]+|local-start-time:[\S-]+|previous-event(?:-type)?:[\w-]+|previous-exact-event(?:-type)?:[\w-]+|upcoming-player-event(?:-type)?:[\w-]+|upcoming-exact-player-event(?:-type)?:[\w-]+|previous-player-event(?:-type)?:[\w-]+|previous-exact-player-event(?:-type)?:[\w-]+|upcoming-event(?:-type)?:[\w-]+|upcoming-exact-event(?:-type)?:[\w-]+|event(?:-type)?:[\w-]+|exact-event(?:-type)?:[\w-]+|team:[\w-]+|opponent:[\w-]+|time-zone:[\w-]+|exact-time-zone:[\w-]+|state:[\w-]+|exact-state:[\w-]+|month:[\w-]+|day:[\w-]+|date:[\w-]+|gm:[\w-]+|game:[\w-]+|season-gm:[\w-]+|season-game:[\w-]+|season:[\w-]+|season-reversed:[\w-]+|tmgm:[\w-]+|team-game:[\w-]+|crgm:[\w-]+|career-game-reversed:[\w-]+|team-game-reversed:[\w-]+|season-game-reversed:[\w-]+|game-reversed:[\w-]+|career-game:[\w-]+|dr:[\w-]+|starts-days-rest:[\w-]+|days-rest:[\w-]+|prv-dr:[\w-]+|previous-days-rest:[\w-]+|batter-plate-appearance:[\w-]+|pitcher-batters-faced:[\w-]+|batter-plate-appearance-reversed:[\w-]+|pitcher-batters-faced-reversed:[\w-]+|pitch-count:[\w-]+|starting-pitch-count:[\w-]+|innings-pitched:[\S-]+|ending-innings-pitched:[\S-]+|team-pitch-count:[\w-]+|game-pitch-count:[\w-]+|at-bat-pitch-count:[\w-]+|upc-dr:[\w-]+|upcoming-starts-days-rest:[\w-]+|upcoming-days-rest:[\w-]+|gr:[\w-]+|game-days-rest:[\w-]+|start-days-rest:[\w-]+|games-rest:[\w-]+|starts-rest:[\w-]+|prv-gr:[\w-]+|previous-games-rest:[\w-]+|start-days-in-a-row:[\w-]+|game-days-in-a-row:[\w-]+|days-in-a-row:[\w-]+|games-in-a-row:[\w-]+|starts-in-a-row:[\w-]+|game-number:[\w-]+|season-number:[\w-]+|number:[\w-]+|upc-gr:[\w-]+|upcoming-games-rest:[\w-]+|prv-t:[\w-]+|prv-o:[\w-]+|upc-t:[\w-]+|upc-o:[\w-]+|upcoming-same-opponent|previous-same-opponent|previous-franchise:[\w-]+|previous-team-franchise:[\w-]+|previous-opponent-franchise:[\w-]+|upcoming-franchise:[\w-]+|upcoming-team-franchise:[\w-]+|upcoming-opponent-franchise:[\w-]+|previous-team:[\w-]+|previous-opponent:[\w-]+|upcoming-team:[\w-]+|upcoming-opponent:[\w-]+|lg:[\w-]+|team-league:[\w-]+|opp-lg:[\w-]+|opponent-league:[\w-]+|previous-team-league:[\w-]+|previous-opponent-league:[\w-]+|upcoming-team-league:[\w-]+|upcoming-team-league:[\w-]+|team-division:[\S-]+|opponent-division:[\S-]+|primary-season-position:[\S-]+|season-position:[\S-]+|position:[\S-]+|hit-location:[\S-]+|exact-hit-location:[\S-]+|facing-primary-position:[\S-]+|facing-main-position:[\S-]+|facing-position:[\S-]+|primary-game-position:[\S-]+|game-position:[\S-]+|season-st:[\S-]+|season-stat:[\S-]+|event-stat:[\S-]+|event-stat-reversed:[\S-]+|event-stats:[\S-]+|event-stats-reversed:[\S-]+|inning-stat:[\S-]+|season-prv-st:[\S-]+|season-previous-stat:[\S-]+|season-upc-st:[\S-]+|season-upcoming-stat:[\S-]+|st:[\S-]+|stat:[\S-]+|prv-st:[\S-]+|previous-stat:[\S-]+|upc-st:[\S-]+|upcoming-stat:[\S-]+|min-st:[\S-]+|min-stat:[\S-]+|max-st:[\S-]+|max-stat:[\S-]+|totalgames-st:[\S-]+|totalgames-stat:[\S-]+|max-str:[\S-]+|max-streak:[\S-]+|max-stretch:[\S-]+|ctn-str:[\S-]+|count-streak:[\S-]+|q:[\S-]+|quickest:[\S-]+|s:[\S-]+|slowest:[\S-]+|dh(?::[((?:f|s|b|e)-]+)?|double-header(?::[((?:first|second|both|either)-]+)?|world(?:(?: |-)series|(?: |-)finals?|(?: |-)championship|(?: |-)round)?|ws|(?:(?:(?:american|al|national|nl)(?:(?: |-)league)?)(?: |-)?)?(?:championship|league)(?:(?: |-)series|(?: |-)finals?|(?: |-)championship|(?: |-)round)?|(?:(?:(?:american|al|national|nl)(?:(?: |-)league)?)(?: |-)?)?cs|(?:(?:(?:american|al|national|nl)(?:(?: |-)league)?)(?: |-)?)?division(?:(?: |-)series|(?: |-)finals?|(?: |-)championship|(?: |-)round)?|(?:(?:(?:american|al|national|nl)(?:(?: |-)league)?)(?: |-)?)?ds|(?:(?:(?:american|al|national|nl)(?:(?: |-)league)?)(?: |-)?)?wild card(?:(?: |-)series|(?: |-)finals?|(?: |-)championship|(?: |-)round)?|(?:(?:(?:american|al|national|nl)(?:(?: |-)league)?)(?: |-)?)?wc|summer|spring|winter|fall|autumn|away|home|road|bunt(?:ing)?|previous-away|previous-home|previous-road|upcoming-away|upcoming-home|upcoming-road|-?starts?|-?started|-?starting|-?ignore-starts?|-?ignore-started?|-?ignore-starting|finished|win(?:s)?|loss(?:es)?|tie(?:s)?|w|l|tprv-w|prv-l|prv-t|upc-w|upc-l|upc-t|previous-win(?:s)?|previous-loss(?:es)?|previous-tie(?:s)?|upcoming-win(?:s)?|upcoming-loss(?:es)?|upcoming-tie(?:s)?|prv-t-w|prv-t-l|prv-t-t|upc-t-w|upc-t-l|upc-t-t|previous-team-win(?:s)?|previous-team-loss(?:es)?|previous-team-tie(?:s)?|upcoming-team-win(?:s)?|upcoming-team-loss(?:es)?|upcoming-team-tie(?:s)?|save(?: |-)situations?|run-support:[\w-]+|final-team-score:[\w-]+|men-on-base:[\w-]+|time-through-lineup:[\w-]+|time-facing-opponent:[\w-]+|men-in-scoring-number:[\w-]+|men-on-base-number:[\w-]+|final-opponent-score:[\w-]+|final-score-margin:[\S-]+|final-score-difference:[\S-]+|ending-team-score:[\w-]+|ending-opponent-score:[\w-]+|ending-score-margin:[\S-]+|ending-score-difference:[\S-]+|team-score:[\w-]+|entered-score:[\w-]+|opponent-score:[\w-]+|score-margin-entered:[\S-]+|score-margin:[\S-]+|score-difference-entered:[\S-]+|score-difference:[\S-]+|wind:[\w-]+|inning-entered:[\w-]+|men-on-base-entered:[\w-]+|men-in-scoring-entered:[\w-]+|outs-entered:[\w-]+|bases-empty|men-on-base|risp|any-national-game|national-game|pitcher-first-batter-faced|batter-first-plate-appearance|pitcher-last-batter-faced|batter-last-plate-appearance|day-after-pitching|day-after-hitting|day-before-pitching|day-before-hitting|with-new-team|with-new-franchise|changing-team|changing-franchise|even-year|odd-year|activated-from-(?:il|dl)|activated|two-seam-fastball|4-seam-fastball|2-seam-fastball|four-seam-fastball|4-seam|2-seam|four-seam|two-seam|cutter|intentional-ball|sinker|slider|curveball|splitter|knuckle-curve|pitchout|knuckle-ball|changeup|screwball|eephus|automatic-ball|slow-curve|forkball|facing-position-player|facing-pitcher|stealing-second|stealing-third|stealing-home|fastball|out-of-zone|in-zone|breaking|offspeed|facing-lefty|facing-righty|batting-lefty|batting-righty|pitching-lefty|pitching-righty|pinch-hitting|facing-starter|facing-reliever|leading-off-inning|leading-off-whole-game|leading-off-game|leading-off|inning-started|swung-at-first-pitch|first-pitch|batter-ahead|pitcher-ahead|even-count|after-batter-ahead|after-pitcher-ahead|after-even-count|go-ahead-or-game-tying-opp|go-ahead-or-game-tying|game-tying-or-go-ahead-opp|game-tying-or-go-ahead|game-tying-opp|close|late|game-tying|go-ahead-opp|go-ahead|game-winning|last-inning-entered|last-inning|last-out|last-batter|extra-innings|inside-the-park-hr|walk-off-opp|walk-off|tying-on-deck|tying-at-bat|tying-in-scoring|tying-on-base|winning-on-deck|winning-at-bat|winning-in-scoring|winning-on-base|bottom-inning-entered|top-inning-entered|bottom-inning|top-inning|full-count|man-on-first|man-on-second|man-on-third|bases-loaded|after-swinging-on-strikes:[\w-]+|after-swinging-on-balls:[\w-]+|swinging-on-strikes:[\w-]+|swinging-on-balls:[\w-]+|after-strikes:[\w-]+|after-balls:[\w-]+|strikes:[\w-]+|balls:[\w-]+|ending-outs:[\w-]+|play-outs:[\w-]+|outs-remaining-entered:[\w-]+|outs-remaining:[\w-]+|outs:[\w-]+|runs:[\w-]+|rbis:[\w-]+|number-drove-in:[\w-]+|pitch-speed:[\S-]+|pitch-zone:[\w-]+|pitch-spin:[\S-]+|exit-velocity:[\S-]+|hit-distance:[\S-]+|launch-angle:[\S-]+|inning:[\S-]+|inning-reversed:[\S-]+|scheduled-inning-reversed:[\S-]+|pitching-against-batting-order:[\w-]+|count:[\S-]+|final-score:[\S-]+|previous-score:[\S-]+|upcoming-score:[\S-]+|ending-score:[\S-]+|score:[\S-]+|after-count:[\S-]+|after-swinging-on-count:[\S-]+|swinging-on-count:[\S-]+|temperature:[\w-]+|new-moon|waning-crescent|third-quarter|waning-gibbous|full-moon|waxing-gibbous|first-quarter|waxing-crescent|grass|artificial|rain|cloudy|partly-cloudy|overcast|drizzle|sunny|dome|roof-closed|clear|previous-team-score:[\w-]+|previous-opponent-score:[\w-]+|previous-score-margin:[\S-]+|previous-score-difference:[\S-]+|upcoming-team-score:[\w-]+|upcoming-opponent-score:[\w-]+|upcoming-score-margin:[\S-]+|upcoming-score-difference:[\S-]+|series-team-wins:[\w-]+|series-opponent-wins:[\w-]+|series-score-margin:[\w-]+|series-score-difference:[\w-]+|series-score:[\w-]+|years?:[\w-]+|batting-order(?:-pos(?:ition)?|-spot)?:[\w-]+|opponent-runs?-rank:[\S-]+|current-team-wins:[\w-]+|current-team-losses:[\w-]+|current-team-games-over-500:[\S-]+|current-opponent-wins:[\w-]+|current-opponent-losses:[\w-]+|current-opponent-games-over-500:[\S-]+|team-wins:[\w-]+|team-losses:[\w-]+|team-games-over-500:[\S-]+|opponent-wins:[\w-]+|opponent-losses:[\w-]+|opponent-games-over-500:[\S-]+|opponent-standings-rank:[\S-]+|opponent-runs?-allowed-rank:[\S-]+|opponent-wrc\\\+-rank:[\S-]+|opponent-avg-rank:[\S-]+|opponent-slg-rank:[\S-]+|opponent-obp-rank:[\S-]+|opponent-ops-rank:[\S-]+|opponent-era--rank:[\S-]+|opponent-era-rank:[\S-]+|current-opponent-win(?:ning)?-percent:[\S-]+|opponent-win(?:ning)?-percent:[\S-]+|team-runs?-rank:[\S-]+|team-standings-rank:[\S-]+|team-runs?-allowed-rank:[\S-]+|team-wrc\\\+-rank:[\S-]+|team-avg-rank:[\S-]+|team-slg-rank:[\S-]+|team-obp-rank:[\S-]+|team-ops-rank:[\S-]+|team-era--rank:[\S-]+|team-era-rank:[\S-]+|current-team-win(?:ning)?-percent:[\S-]+|team-win(?:ning)?-percent:[\S-]+|birthda(?:y|te)|day|night|pitching|batting|hitting|" + all_months_re + r"|" + all_days_re + r")\b", time_frame)
+                        last_match = re.finditer(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?(current-season-age|first-games?|current-games?|first-seasons?|current-seasons?|last-games?|last-seasons?|first-starts?|last-starts?|first-innings|last-innings|current-innings?|first-plate-appearances?|last-plate-appearances?|current-plate-appearances?|first-batters?-faced|last-batters?-faced|current-batters?-faced|first-pitches|last-pitch(?:es)|current-pitch(?:es)?|first-at-bats?|last-at-bats?|current-at-bats?|current-age|rook|rookie|facing-former-franchise|facing-former-team|decision|interleague|intraleague|interdivision|intradivision|current-winning-opponents?|current-losing-opponents?|current-tied-opponents?|current-winning-or-tied-opponents?|current-losing-or-tied-opponents?|winning-opponents?|losing-opponents?|tied-opponents?|winning-or-tied-opponents?|losing-or-tied-opponents?|playoff-opponents?|ws-winner-opponent|pennant-winner-opponent|division-winner-opponent|current-winning-teams?|current-losing-teams?|current-tied-teams?|current-winning-or-tied-teams?|current-losing-or-tied-teams?|winning-teams?|losing-teams?|tied-teams?|winning-or-tied-teams?|losing-or-tied-teams?|playoff-teams?|ws-winner-team|pennant-winner-team|division-winner-team|elimination-or-clinching|clinching-or-elimination|elimination(?:-games?)?|eliminating(?:-games?)?|clinching(?:-games?)?|clinch(?:-games?)?|winner-take-all|behind-in-series|ahead-in-series|even-in-series|leading(:?-in-game)?|trailing(:?-in-game)?|tied(:?(?:-in)?-game)?|force-dates|first-half|second-half|pre-all-star|post-all-star|series-games?:[\w-]+|t:[\w-]+|o:[\w-]+|m:[\w-]+|d:[\w-]+|dt:[\w-]+|team-franchise:[\w-]+|opponent-franchise:[\w-]+|franchise:[\w-]+|tf:[\w-]+|of:[\w-]+|f:[\w-]+|tv-network:[\w-]+|radio-network:[\w-]+|raw-tv-network:[\w-]+|raw-radio-network:[\w-]+|national-tv-network:[\w-]+|national-raw-tv-network:[\w-]+|any-national-tv-network:[\w-]+|any-national-raw-tv-network:[\w-]+|local-event-time:[\S-]+|local-start-time:[\S-]+|previous-event(?:-type)?:[\w-]+|previous-exact-event(?:-type)?:[\w-]+|upcoming-player-event(?:-type)?:[\w-]+|upcoming-exact-player-event(?:-type)?:[\w-]+|previous-player-event(?:-type)?:[\w-]+|previous-exact-player-event(?:-type)?:[\w-]+|upcoming-event(?:-type)?:[\w-]+|upcoming-exact-event(?:-type)?:[\w-]+|event(?:-type)?:[\w-]+|exact-event(?:-type)?:[\w-]+|team:[\w-]+|opponent:[\w-]+|time-zone:[\w-]+|exact-time-zone:[\w-]+|state:[\w-]+|exact-state:[\w-]+|month:[\w-]+|day:[\w-]+|date:[\w-]+|gm:[\w-]+|game:[\w-]+|season-gm:[\w-]+|season-game:[\w-]+|season:[\w-]+|season-reversed:[\w-]+|tmgm:[\w-]+|team-game:[\w-]+|crgm:[\w-]+|career-game-reversed:[\w-]+|team-game-reversed:[\w-]+|season-game-reversed:[\w-]+|game-reversed:[\w-]+|career-game:[\w-]+|dr:[\w-]+|starts-days-rest:[\w-]+|days-rest:[\w-]+|prv-dr:[\w-]+|previous-days-rest:[\w-]+|batter-plate-appearance:[\w-]+|pitcher-batters-faced:[\w-]+|batter-plate-appearance-reversed:[\w-]+|pitcher-batters-faced-reversed:[\w-]+|pitch-count:[\w-]+|starting-pitch-count:[\w-]+|innings-pitched:[\S-]+|ending-innings-pitched:[\S-]+|team-pitch-count:[\w-]+|game-pitch-count:[\w-]+|at-bat-pitch-count:[\w-]+|upc-dr:[\w-]+|upcoming-starts-days-rest:[\w-]+|upcoming-days-rest:[\w-]+|gr:[\w-]+|game-days-rest:[\w-]+|start-days-rest:[\w-]+|games-rest:[\w-]+|starts-rest:[\w-]+|prv-gr:[\w-]+|previous-games-rest:[\w-]+|start-days-in-a-row:[\w-]+|game-days-in-a-row:[\w-]+|days-in-a-row:[\w-]+|games-in-a-row:[\w-]+|starts-in-a-row:[\w-]+|game-number:[\w-]+|season-number:[\w-]+|number:[\w-]+|upc-gr:[\w-]+|upcoming-games-rest:[\w-]+|prv-t:[\w-]+|prv-o:[\w-]+|upc-t:[\w-]+|upc-o:[\w-]+|upcoming-same-opponent|previous-same-opponent|previous-franchise:[\w-]+|previous-team-franchise:[\w-]+|previous-opponent-franchise:[\w-]+|upcoming-franchise:[\w-]+|upcoming-team-franchise:[\w-]+|upcoming-opponent-franchise:[\w-]+|previous-team:[\w-]+|previous-opponent:[\w-]+|upcoming-team:[\w-]+|upcoming-opponent:[\w-]+|lg:[\w-]+|team-league:[\w-]+|opp-lg:[\w-]+|opponent-league:[\w-]+|previous-team-league:[\w-]+|previous-opponent-league:[\w-]+|upcoming-team-league:[\w-]+|upcoming-team-league:[\w-]+|team-division:[\S-]+|opponent-division:[\S-]+|primary-season-position:[\S-]+|season-position:[\S-]+|position:[\S-]+|hit-location:[\S-]+|exact-hit-location:[\S-]+|facing-primary-position:[\S-]+|facing-main-position:[\S-]+|facing-position:[\S-]+|primary-game-position:[\S-]+|game-position:[\S-]+|season-st:[\S-]+|season-stat:[\S-]+|game-event-stat:[\S-]+|game-event-stat-reversed:[\S-]+|game-event-stats:[\S-]+|game-event-stats-reversed:[\S-]+|event-stat:[\S-]+|event-stat-reversed:[\S-]+|event-stats:[\S-]+|event-stats-reversed:[\S-]+|starting-game-event-stat:[\S-]+|starting-game-event-stat-reversed:[\S-]+|starting-game-event-stats:[\S-]+|starting-game-event-stats-reversed:[\S-]+|starting-event-stat:[\S-]+|starting-event-stat-reversed:[\S-]+|starting-event-stats:[\S-]+|starting-event-stats-reversed:[\S-]+|inning-stat:[\S-]+|season-prv-st:[\S-]+|season-previous-stat:[\S-]+|season-upc-st:[\S-]+|season-upcoming-stat:[\S-]+|st:[\S-]+|stat:[\S-]+|prv-st:[\S-]+|previous-stat:[\S-]+|upc-st:[\S-]+|upcoming-stat:[\S-]+|min-st:[\S-]+|min-stat:[\S-]+|max-st:[\S-]+|max-stat:[\S-]+|totalgames-st:[\S-]+|totalgames-stat:[\S-]+|max-str:[\S-]+|max-streak:[\S-]+|max-stretch:[\S-]+|ctn-str:[\S-]+|count-streak:[\S-]+|q:[\S-]+|quickest:[\S-]+|s:[\S-]+|slowest:[\S-]+|dh(?::[((?:f|s|b|e)-]+)?|double-header(?::[((?:first|second|both|either)-]+)?|world(?:(?: |-)series|(?: |-)finals?|(?: |-)championship|(?: |-)round)?|ws|(?:(?:(?:american|al|national|nl)(?:(?: |-)league)?)(?: |-)?)?(?:championship|league)(?:(?: |-)series|(?: |-)finals?|(?: |-)championship|(?: |-)round)?|(?:(?:(?:american|al|national|nl)(?:(?: |-)league)?)(?: |-)?)?cs|(?:(?:(?:american|al|national|nl)(?:(?: |-)league)?)(?: |-)?)?division(?:(?: |-)series|(?: |-)finals?|(?: |-)championship|(?: |-)round)?|(?:(?:(?:american|al|national|nl)(?:(?: |-)league)?)(?: |-)?)?ds|(?:(?:(?:american|al|national|nl)(?:(?: |-)league)?)(?: |-)?)?wild card(?:(?: |-)series|(?: |-)finals?|(?: |-)championship|(?: |-)round)?|(?:(?:(?:american|al|national|nl)(?:(?: |-)league)?)(?: |-)?)?wc|summer|spring|winter|fall|autumn|away|home|road|bunt(?:ing)?|previous-away|previous-home|previous-road|upcoming-away|upcoming-home|upcoming-road|-?starts?|-?started|-?starting|-?ignore-starts?|-?ignore-started?|-?ignore-starting|finished|win(?:s)?|loss(?:es)?|tie(?:s)?|w|l|tprv-w|prv-l|prv-t|upc-w|upc-l|upc-t|previous-win(?:s)?|previous-loss(?:es)?|previous-tie(?:s)?|upcoming-win(?:s)?|upcoming-loss(?:es)?|upcoming-tie(?:s)?|prv-t-w|prv-t-l|prv-t-t|upc-t-w|upc-t-l|upc-t-t|previous-team-win(?:s)?|previous-team-loss(?:es)?|previous-team-tie(?:s)?|upcoming-team-win(?:s)?|upcoming-team-loss(?:es)?|upcoming-team-tie(?:s)?|save(?: |-)situations?|run-support:[\w-]+|final-team-score:[\w-]+|men-on-base:[\w-]+|time-through-lineup:[\w-]+|time-facing-opponent:[\w-]+|men-in-scoring-number:[\w-]+|men-on-base-number:[\w-]+|final-opponent-score:[\w-]+|final-score-margin:[\S-]+|final-score-difference:[\S-]+|ending-team-score:[\w-]+|ending-opponent-score:[\w-]+|ending-score-margin:[\S-]+|ending-score-difference:[\S-]+|team-score:[\w-]+|entered-score:[\w-]+|opponent-score:[\w-]+|score-margin-entered:[\S-]+|score-margin:[\S-]+|score-difference-entered:[\S-]+|score-difference:[\S-]+|wind:[\w-]+|inning-entered:[\w-]+|men-on-base-entered:[\w-]+|men-in-scoring-entered:[\w-]+|outs-entered:[\w-]+|bases-empty|men-on-base|risp|any-national-game|national-game|pitcher-first-batter-faced|batter-first-plate-appearance|pitcher-last-batter-faced|batter-last-plate-appearance|day-after-pitching|day-after-hitting|day-before-pitching|day-before-hitting|with-new-team|with-new-franchise|changing-team|changing-franchise|even-year|odd-year|activated-from-(?:il|dl)|activated|two-seam-fastball|4-seam-fastball|2-seam-fastball|four-seam-fastball|4-seam|2-seam|four-seam|two-seam|cutter|intentional-ball|sinker|slider|curveball|splitter|knuckle-curve|pitchout|knuckle-ball|changeup|screwball|eephus|automatic-ball|slow-curve|forkball|facing-position-player|facing-pitcher|stealing-second|stealing-third|stealing-home|fastball|out-of-zone|in-zone|breaking|offspeed|facing-lefty|facing-righty|batting-lefty|batting-righty|pitching-lefty|pitching-righty|pinch-hitting|facing-starter|facing-reliever|leading-off-inning|leading-off-whole-game|leading-off-game|leading-off|inning-started|swung-at-first-pitch|first-pitch|batter-ahead|pitcher-ahead|even-count|after-batter-ahead|after-pitcher-ahead|after-even-count|go-ahead-or-game-tying-opp|go-ahead-or-game-tying|game-tying-or-go-ahead-opp|game-tying-or-go-ahead|game-tying-opp|close|late|game-tying|go-ahead-opp|go-ahead|game-winning|last-inning-entered|last-inning|last-out|last-batter|extra-innings|inside-the-park-hr|walk-off-opp|walk-off|tying-on-deck|tying-at-bat|tying-in-scoring|tying-on-base|winning-on-deck|winning-at-bat|winning-in-scoring|winning-on-base|bottom-inning-entered|top-inning-entered|bottom-inning|top-inning|full-count|man-on-first|man-on-second|man-on-third|bases-loaded|after-swinging-on-strikes:[\w-]+|after-swinging-on-balls:[\w-]+|swinging-on-strikes:[\w-]+|swinging-on-balls:[\w-]+|after-strikes:[\w-]+|after-balls:[\w-]+|strikes:[\w-]+|balls:[\w-]+|ending-outs:[\w-]+|play-outs:[\w-]+|outs-remaining-entered:[\w-]+|outs-remaining:[\w-]+|outs:[\w-]+|runs:[\w-]+|rbis:[\w-]+|number-drove-in:[\w-]+|pitch-speed:[\S-]+|pitch-zone:[\w-]+|pitch-spin:[\S-]+|exit-velocity:[\S-]+|hit-distance:[\S-]+|launch-angle:[\S-]+|inning:[\S-]+|inning-reversed:[\S-]+|scheduled-inning-reversed:[\S-]+|pitching-against-batting-order:[\w-]+|count:[\S-]+|final-score:[\S-]+|previous-score:[\S-]+|upcoming-score:[\S-]+|ending-score:[\S-]+|score:[\S-]+|after-count:[\S-]+|after-swinging-on-count:[\S-]+|swinging-on-count:[\S-]+|temperature:[\w-]+|new-moon|waning-crescent|third-quarter|waning-gibbous|full-moon|waxing-gibbous|first-quarter|waxing-crescent|grass|artificial|rain|cloudy|partly-cloudy|overcast|drizzle|sunny|dome|roof-closed|clear|previous-team-score:[\w-]+|previous-opponent-score:[\w-]+|previous-score-margin:[\S-]+|previous-score-difference:[\S-]+|upcoming-team-score:[\w-]+|upcoming-opponent-score:[\w-]+|upcoming-score-margin:[\S-]+|upcoming-score-difference:[\S-]+|series-team-wins:[\w-]+|series-opponent-wins:[\w-]+|series-score-margin:[\w-]+|series-score-difference:[\w-]+|series-score:[\w-]+|years?:[\w-]+|batting-order(?:-pos(?:ition)?|-spot)?:[\w-]+|opponent-runs?-rank:[\S-]+|current-team-wins:[\w-]+|current-team-losses:[\w-]+|current-team-games-over-500:[\S-]+|current-opponent-wins:[\w-]+|current-opponent-losses:[\w-]+|current-opponent-games-over-500:[\S-]+|team-wins:[\w-]+|team-losses:[\w-]+|team-games-over-500:[\S-]+|opponent-wins:[\w-]+|opponent-losses:[\w-]+|opponent-games-over-500:[\S-]+|opponent-standings-rank:[\S-]+|opponent-runs?-allowed-rank:[\S-]+|opponent-wrc\\\+-rank:[\S-]+|opponent-avg-rank:[\S-]+|opponent-slg-rank:[\S-]+|opponent-obp-rank:[\S-]+|opponent-ops-rank:[\S-]+|opponent-era--rank:[\S-]+|opponent-era-rank:[\S-]+|current-opponent-win(?:ning)?-percent:[\S-]+|opponent-win(?:ning)?-percent:[\S-]+|team-runs?-rank:[\S-]+|team-standings-rank:[\S-]+|team-runs?-allowed-rank:[\S-]+|team-wrc\\\+-rank:[\S-]+|team-avg-rank:[\S-]+|team-slg-rank:[\S-]+|team-obp-rank:[\S-]+|team-ops-rank:[\S-]+|team-era--rank:[\S-]+|team-era-rank:[\S-]+|current-team-win(?:ning)?-percent:[\S-]+|team-win(?:ning)?-percent:[\S-]+|birthda(?:y|te)|day|night|pitching|batting|hitting|" + all_months_re + r"|" + all_days_re + r")\b", time_frame)
                         for m in last_match:
                             qualifier_obj = {}
                             
@@ -8563,7 +8575,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                         qualifier_obj["values"].append(qual_val)
                                 else:
                                     qualifier_obj["values"].append("Either")
-                            elif "start" in qualifier and not qualifier_str.startswith("starts-rest:") and not qualifier_str.startswith("starts-in-a-row:") and not qualifier_str.startswith("starts-days-rest:") and not qualifier_str.startswith("upcoming-starts-days-rest:") and not qualifier_str.startswith("start-time:") and not qualifier_str.startswith("local-start-time:"):
+                            elif "start" in qualifier and not qualifier_str.startswith("starts-rest:") and not qualifier_str.startswith("starts-in-a-row:") and not qualifier_str.startswith("starts-days-rest:") and not qualifier_str.startswith("upcoming-starts-days-rest:") and not qualifier_str.startswith("start-time:") and not qualifier_str.startswith("local-start-time:") and not qualifier_str.startswith("starting-event") and not qualifier_str.startswith("starting-game-event"):
                                 if "ignore" in qualifier:
                                     qual_type = "Ignore Start"
                                 else:
@@ -9425,7 +9437,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                                 "end_val" : ordinal_to_number(split_vals[1]),
                                                 "end_exclusive" : end_exclusive
                                             })
-                            elif qualifier.startswith("event-stat:") or qualifier.startswith("event-stat-reversed:") or qualifier.startswith("event-stats:") or qualifier.startswith("event-stats-reversed:"):
+                            elif qualifier.startswith("event-stat:") or qualifier.startswith("event-stat-reversed:") or qualifier.startswith("event-stats:") or qualifier.startswith("event-stats-reversed:") or  qualifier.startswith("game-event-stat:") or qualifier.startswith("game-event-stat-reversed:") or qualifier.startswith("game-event-stats:") or qualifier.startswith("game-event-stats-reversed:") or qualifier.startswith("starting-event-stat:") or qualifier.startswith("starting-event-stat-reversed:") or qualifier.startswith("starting-event-stats:") or qualifier.startswith("starting-event-stats-reversed:") or  qualifier.startswith("starting-game-event-stat:") or qualifier.startswith("starting-game-event-stat-reversed:") or qualifier.startswith("starting-game-event-stats:") or qualifier.startswith("starting-game-event-stats-reversed:"):
                                 if qualifier_str.startswith("event-stat:"):
                                     qual_str = "event-stat:"
                                     qual_type = "Event Stat"
@@ -9441,6 +9453,54 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 elif qualifier_str.startswith("event-stats-reversed:"):
                                     qual_str = "event-stats-reversed:"
                                     qual_type = "Event Stats Reversed"
+                                    extra_stats.add("current-stats")
+                                elif qualifier_str.startswith("game-event-stat:"):
+                                    qual_str = "game-event-stat:"
+                                    qual_type = "Game Event Stat"
+                                    extra_stats.add("current-stats")
+                                elif qualifier_str.startswith("game-event-stat-reversed:"):
+                                    qual_str = "game-event-stat-reversed:"
+                                    qual_type = "Game Event Stat Reversed"
+                                    extra_stats.add("current-stats")
+                                elif qualifier_str.startswith("game-event-stats:"):
+                                    qual_str = "game-event-stats:"
+                                    qual_type = "Game Event Stats"
+                                    extra_stats.add("current-stats")
+                                elif qualifier_str.startswith("game-event-stats-reversed:"):
+                                    qual_str = "game-event-stats-reversed:"
+                                    qual_type = "Game Event Stats Reversed"
+                                    extra_stats.add("current-stats")
+                                elif qualifier_str.startswith("starting-event-stat:"):
+                                    qual_str = "starting-event-stat:"
+                                    qual_type = "Starting Event Stat"
+                                    extra_stats.add("current-stats")
+                                elif qualifier_str.startswith("starting-event-stat-reversed:"):
+                                    qual_str = "starting-event-stat-reversed:"
+                                    qual_type = "Starting Event Stat Reversed"
+                                    extra_stats.add("current-stats")
+                                elif qualifier_str.startswith("starting-event-stats:"):
+                                    qual_str = "starting-event-stats:"
+                                    qual_type = "Starting Event Stats"
+                                    extra_stats.add("current-stats")
+                                elif qualifier_str.startswith("starting-event-stats-reversed:"):
+                                    qual_str = "starting-event-stats-reversed:"
+                                    qual_type = "Starting Event Stats Reversed"
+                                    extra_stats.add("current-stats")
+                                elif qualifier_str.startswith("starting-game-event-stat:"):
+                                    qual_str = "starting-game-event-stat:"
+                                    qual_type = "Starting Game Event Stat"
+                                    extra_stats.add("current-stats")
+                                elif qualifier_str.startswith("starting-game-event-stat-reversed:"):
+                                    qual_str = "starting-game-event-stat-reversed:"
+                                    qual_type = "Starting Game Event Stat Reversed"
+                                    extra_stats.add("current-stats")
+                                elif qualifier_str.startswith("starting-game-event-stats:"):
+                                    qual_str = "starting-game-event-stats:"
+                                    qual_type = "Starting Game Event Stats"
+                                    extra_stats.add("current-stats")
+                                elif qualifier_str.startswith("starting-game-event-stats-reversed:"):
+                                    qual_str = "starting-game-event-stats-reversed:"
+                                    qual_type = "Starting Game Event Stats Reversed"
                                     extra_stats.add("current-stats")
                                 
                                 split_vals = re.split(r"(?<!\\)\=", re.split(r"(?<!\\)" + qual_str, qualifier_str)[1])
@@ -9926,7 +9986,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
 
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
 
-                        last_match = re.search(r"\b(no(?:t|n)?(?: |-))?(first|1st|last|this|past)?(?: ?(\S*) (innings?-pitched|inning|ip|plate-appearance|pa|batters?-faced|bf|at-bat|ab|pitche?|pit|h|1b|2b|3b|hr|tb|xbh|tob|sb|cs|k|so|po|bb|ibb|hbp|sh|sf|gdp|r|er|rbi)s?)\b", time_frame)
+                        last_match = re.search(r"\b(no(?:t|n)?(?: |-))?(first|1st|last|this|past)?(?: ?(\S*) (starting-)?(game-)?(innings?-pitched|inning|ip|plate-appearance|pa|batters?-faced|bf|at-bat|ab|pitche?|pit|h|1b|2b|3b|hr|tb|xbh|tob|sb|cs|k|so|po|bb|ibb|hbp|sh|sf|gdp|r|er|rbi)s?)\b", time_frame)
                         if last_match:
                             compare_type = last_match.group(2)
                             time_unit = last_match.group(3)
@@ -9945,7 +10005,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 else:
                                     time_start = 0
                                     time_end = ordinal_to_number(time_unit)
-                            qual_type = last_match.group(4)
+                            qual_type = last_match.group(6)
 
                             stat = None
                             if qual_type == "plate-appearance":
@@ -9981,6 +10041,11 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
 
                             if compare_type and compare_type not in ("first", "1st"):
                                 qual_type_to_use += " Reversed"
+
+                            if last_match.group(5):
+                                qual_type_to_use = "Game " + qual_type_to_use
+                            if last_match.group(4):
+                                qual_type_to_use = "Starting " + qual_type_to_use
 
                             extra_stats.add("current-stats")
 
@@ -13327,7 +13392,7 @@ def determine_raw_str(subbb_frame):
                         qual_str += get_time_str(qual_obj["values"]["start_val"], False)
                     else:
                         qual_str += (get_time_str(qual_obj["values"]["start_val"], False)) + "-" + (get_time_str(qual_obj["values"]["end_val"], False))
-                elif qualifier == "Event Stat" or qualifier == "Event Stat Reversed" or qualifier == "Event Stats" or qualifier == "Event Stats Reversed":
+                elif qualifier == "Event Stat" or qualifier == "Event Stat Reversed" or qualifier == "Event Stats" or qualifier == "Event Stats Reversed" or qualifier == "Game Event Stat" or qualifier == "Game Event Stat Reversed" or qualifier == "Game Event Stats" or qualifier == "Game Event Stats Reversed" or qualifier == "Starting Event Stat" or qualifier == "Starting Event Stat Reversed" or qualifier == "Starting Event Stats" or qualifier == "Starting Event Stats Reversed" or qualifier == "Starting Game Event Stat" or qualifier == "Starting Game Event Stat Reversed" or qualifier == "Starting Game Event Stats" or qualifier == "Starting Game Event Stats Reversed":
                     if qual_obj["negate"]:
                         qual_str += "Not "
                     qual_str += qual_obj["stat"] + "="
@@ -13881,9 +13946,9 @@ def handle_player_data(player_data, time_frame, player_type, player_page, valid_
         handle_stat_rank_stats(all_rows, time_frame["qualifiers"], player_type)
 
     if not "hide-advanced" in extra_stats or (has_result_stat_qual or "Stadium" in time_frame["qualifiers"] or "Exact Stadium" in time_frame["qualifiers"] or "Start Time" in time_frame["qualifiers"] or "Local Start Time" in time_frame["qualifiers"] or "Game Number" in time_frame["qualifiers"] or "Exact City" in time_frame["qualifiers"] or "City" in time_frame["qualifiers"] or "Exact State" in time_frame["qualifiers"] or "State" in time_frame["qualifiers"] or "Exact Time Zone" in time_frame["qualifiers"] or "Time Zone" in time_frame["qualifiers"] or "Exact Country" in time_frame["qualifiers"] or "Country" in time_frame["qualifiers"] or "Surface" in time_frame["qualifiers"] or "Condition" in time_frame["qualifiers"] or "Temperature" in time_frame["qualifiers"] or "Wind" in time_frame["qualifiers"] or "Umpire" in time_frame["qualifiers"] or "Home Plate Umpire" in time_frame["qualifiers"] or "run-support-record" in extra_stats or "run-support" in extra_stats or "advanced-runner" in extra_stats or "exit-record" in extra_stats):
-        if ("Event Stat" in time_frame["qualifiers"] or "Event Stat Reversed" in time_frame["qualifiers"] or "Event Stats" in time_frame["qualifiers"] or "Event Stats Reversed" in time_frame["qualifiers"]):
+        if ("Event Stat" in time_frame["qualifiers"] or "Event Stat Reversed" in time_frame["qualifiers"] or "Event Stats" in time_frame["qualifiers"] or "Event Stats Reversed" in time_frame["qualifiers"] or "Starting Event Stat" in time_frame["qualifiers"] or "Starting Event Stat Reversed" in time_frame["qualifiers"] or "Starting Event Stats" in time_frame["qualifiers"] or "Starting Event Stats Reversed" in time_frame["qualifiers"]):
             all_rows, missing_games = handle_mlb_game_stats_single_thread(all_rows, time_frame["qualifiers"], player_data, player_type, missing_games, extra_stats)
-        elif has_result_stat_qual or "Facing Lefty" in time_frame["qualifiers"] or "Facing Righty" in time_frame["qualifiers"] or "Batting Lefty" in time_frame["qualifiers"] or "Batting Righty" in time_frame["qualifiers"] or "Pitching Lefty" in time_frame["qualifiers"] or "Pitching Righty" in time_frame["qualifiers"] or "Stadium" in time_frame["qualifiers"] or "Start Time" in time_frame["qualifiers"] or "Local Start Time" in time_frame["qualifiers"] or "Game Number" in time_frame["qualifiers"] or "Event Formula" in time_frame["qualifiers"] or "Exact Pitch Type" in time_frame["qualifiers"] or "Pitch Type" in time_frame["qualifiers"] or "Exact Event Type" in time_frame["qualifiers"] or "Local Event Time" in time_frame["qualifiers"] or "Event Time" in time_frame["qualifiers"] or "Event Type" in time_frame["qualifiers"] or "Previous Exact Event Type" in time_frame["qualifiers"] or "Previous Event Type" in time_frame["qualifiers"] or "Upcoming Exact Player Event Type" in time_frame["qualifiers"] or "Upcoming Player Event Type" in time_frame["qualifiers"] or "Previous Exact Player Event Type" in time_frame["qualifiers"] or "Previous Player Event Type" in time_frame["qualifiers"] or "Upcoming Exact Event Type" in time_frame["qualifiers"] or "Upcoming Event Type" in time_frame["qualifiers"] or "Exact City" in time_frame["qualifiers"] or "City" in time_frame["qualifiers"] or "Exact State" in time_frame["qualifiers"] or "State" in time_frame["qualifiers"] or "Exact Time Zone" in time_frame["qualifiers"] or "Time Zone" in time_frame["qualifiers"] or "Exact Country" in time_frame["qualifiers"] or "Country" in time_frame["qualifiers"] or "Exact Event Description" in time_frame["qualifiers"] or "Event Description" in time_frame["qualifiers"] or "Hit Trajectory" in time_frame["qualifiers"] or "Hit Hardness" in time_frame["qualifiers"] or "Exact Stadium" in time_frame["qualifiers"] or "Facing Stat Rank" in time_frame["qualifiers"] or "Facing League Stat Rank" in time_frame["qualifiers"] or "Facing AL Stat Rank" in time_frame["qualifiers"] or "Facing NL Stat Rank" in time_frame["qualifiers"] or "Facing Stat Percent" in time_frame["qualifiers"] or "Facing League Stat Percent" in time_frame["qualifiers"] or "Facing AL Stat Percent" in time_frame["qualifiers"] or "Facing NL Stat Percent" in time_frame["qualifiers"] or "Facing Stat" in time_frame["qualifiers"] or "Facing AL Stat" in time_frame["qualifiers"] or "Facing NL Stat" in time_frame["qualifiers"] or "Batting In Front Of Stat Rank" in time_frame["qualifiers"] or "Batting In Front Of League Stat Rank" in time_frame["qualifiers"] or "Batting In Front Of AL Stat Rank" in time_frame["qualifiers"] or "Batting In Front Of NL Stat Rank" in time_frame["qualifiers"] or "Batting In Front Of Stat Percent" in time_frame["qualifiers"] or "Batting In Front Of League Stat Percent" in time_frame["qualifiers"] or "Batting In Front Of AL Stat Percent" in time_frame["qualifiers"] or "Batting In Front Of NL Stat Percent" in time_frame["qualifiers"] or "Batting In Front Of Stat" in time_frame["qualifiers"] or "Batting In Front Of AL Stat" in time_frame["qualifiers"] or "Batting In Front Of NL Stat" in time_frame["qualifiers"] or "Batting Behind Stat Rank" in time_frame["qualifiers"] or "Batting Behind League Stat Rank" in time_frame["qualifiers"] or "Batting Behind AL Stat Rank" in time_frame["qualifiers"] or "Batting Behind NL Stat Rank" in time_frame["qualifiers"] or "Batting Behind Stat Percent" in time_frame["qualifiers"] or "Batting Behind League Stat Percent" in time_frame["qualifiers"] or "Batting Behind AL Stat Percent" in time_frame["qualifiers"] or "Batting Behind NL Stat Percent" in time_frame["qualifiers"] or "Batting Behind Stat" in time_frame["qualifiers"] or "Batting Behind AL Stat" in time_frame["qualifiers"] or "Batting Behind NL Stat" in time_frame["qualifiers"] or "Batting Next To Stat Rank" in time_frame["qualifiers"] or "Batting Next To League Stat Rank" in time_frame["qualifiers"] or "Batting Next To AL Stat Rank" in time_frame["qualifiers"] or "Batting Next To NL Stat Rank" in time_frame["qualifiers"] or "Batting Next To Stat Percent" in time_frame["qualifiers"] or "Batting Next To League Stat Percent" in time_frame["qualifiers"] or "Batting Next To AL Stat Percent" in time_frame["qualifiers"] or "Batting Next To NL Stat Percent" in time_frame["qualifiers"] or "Batting Next To Stat" in time_frame["qualifiers"] or "Batting Next To AL Stat" in time_frame["qualifiers"] or "Batting Next To NL Stat" in time_frame["qualifiers"] or "Inning Stat" in time_frame["qualifiers"] or "Batting Against" in time_frame["qualifiers"] or "Pitching Against" in time_frame["qualifiers"] or "Batting Against First Name" in time_frame["qualifiers"] or "Pitching Against First Name" in time_frame["qualifiers"] or "Batting Against Last Name" in time_frame["qualifiers"] or "Pitching Against Last Name" in time_frame["qualifiers"] or "Driven In" in time_frame["qualifiers"] or "Batted In" in time_frame["qualifiers"] or "Back To Back With" in time_frame["qualifiers"] or "Batting In Front Of" in time_frame["qualifiers"] or "Batting Behind" in time_frame["qualifiers"] or "Batting Next To" in time_frame["qualifiers"] or "Caught By" in time_frame["qualifiers"] or "Stealing On" in time_frame["qualifiers"] or "On Field With" in time_frame["qualifiers"] or "On Field Against" in time_frame["qualifiers"] or "Position" in time_frame["qualifiers"] or "Hit Location" in time_frame["qualifiers"] or "Exact Hit Location" in time_frame["qualifiers"] or "Facing Position" in time_frame["qualifiers"] or "Facing Primary Position" in time_frame["qualifiers"] or "Facing Main Position" in time_frame["qualifiers"] or "Bases Empty" in time_frame["qualifiers"] or "Men On Base" in time_frame["qualifiers"] or "Walk Off" in time_frame["qualifiers"] or "Inside The Park HR" in time_frame["qualifiers"] or "Walk Off Opportunity" in time_frame["qualifiers"] or "Game Tying" in time_frame["qualifiers"] or "Late" in time_frame["qualifiers"] or "Close" in time_frame["qualifiers"] or "Game Tying Opportunity" in time_frame["qualifiers"] or "Go Ahead" in time_frame["qualifiers"] or "Go Ahead Opportunity" in time_frame["qualifiers"] or "Go Ahead Or Game Tying" in time_frame["qualifiers"] or "Go Ahead Or Game Tying Opportunity" in time_frame["qualifiers"] or "Game Winning" in time_frame["qualifiers"] or "Tying On Deck" in time_frame["qualifiers"] or "Winning On Deck" in time_frame["qualifiers"] or "Tying At Bat" in time_frame["qualifiers"] or "Winning At Bat" in time_frame["qualifiers"] or "Tying In Scoring" in time_frame["qualifiers"] or "Winning In Scoring" in time_frame["qualifiers"] or "Tying On Base" in time_frame["qualifiers"] or "Winning On Base" in time_frame["qualifiers"] or "Last Inning" in time_frame["qualifiers"] or "Last Out" in time_frame["qualifiers"] or "Last Batter" in time_frame["qualifiers"] or "Extra Innings" in time_frame["qualifiers"] or "RISP" in time_frame["qualifiers"] or "Event Sub Query" in time_frame["qualifiers"] or "Or Event Sub Query" in time_frame["qualifiers"] or "Pitcher First Batter Faced" in time_frame["qualifiers"] or "Batter First Plate Appearance" in time_frame["qualifiers"]  or "Pitcher Last Batter Faced" in time_frame["qualifiers"] or "Batter Last Plate Appearance" in time_frame["qualifiers"] or "Facing Pitcher" in time_frame["qualifiers"] or "Facing Position Player" in time_frame["qualifiers"] or "Stealing Second" in time_frame["qualifiers"] or "Stealing Third" in time_frame["qualifiers"] or "Stealing Home" in time_frame["qualifiers"] or "Bunting" in time_frame["qualifiers"] or "Fastball" in time_frame["qualifiers"] or "Out Of Zone" in time_frame["qualifiers"] or "In Zone" in time_frame["qualifiers"] or "Breaking" in time_frame["qualifiers"] or "Offspeed" in time_frame["qualifiers"] or "Pinch Hitting" in time_frame["qualifiers"] or "Facing Starter" in time_frame["qualifiers"] or "Facing Reliever" in time_frame["qualifiers"] or "Leading Off Inning" in time_frame["qualifiers"] or "Inning Started" in time_frame["qualifiers"] or "Leading Off Game" in time_frame["qualifiers"] or "Leading Off Whole Game" in time_frame["qualifiers"] or "Swung At First Pitch" in time_frame["qualifiers"] or "First Pitch" in time_frame["qualifiers"] or "Batter Ahead" in time_frame["qualifiers"] or "Even Count" in time_frame["qualifiers"] or "Pitcher Ahead" in time_frame["qualifiers"] or "After Batter Ahead" in time_frame["qualifiers"] or "After Even Count" in time_frame["qualifiers"] or "After Pitcher Ahead" in time_frame["qualifiers"] or "Bottom Inning" in time_frame["qualifiers"] or "Top Inning" in time_frame["qualifiers"] or "Full Count" in time_frame["qualifiers"] or "Man On First" in time_frame["qualifiers"] or "Man On Second" in time_frame["qualifiers"] or "Man On Third" in time_frame["qualifiers"] or "Bases Loaded" in time_frame["qualifiers"] or "Ending Outs" in time_frame["qualifiers"] or "Outs" in time_frame["qualifiers"] or "Outs Remaining" in time_frame["qualifiers"] or "Swinging On Strikes" in time_frame["qualifiers"] or "Swinging On Balls" in time_frame["qualifiers"] or "After Swinging On Strikes" in time_frame["qualifiers"] or "After Swinging On Balls" in time_frame["qualifiers"] or "After Strikes" in time_frame["qualifiers"] or "After Balls" in time_frame["qualifiers"] or "Strikes" in time_frame["qualifiers"] or "Balls" in time_frame["qualifiers"] or "Runs" in time_frame["qualifiers"] or "Play Outs" in time_frame["qualifiers"] or "RBIs" in time_frame["qualifiers"] or "Number Drove In" in time_frame["qualifiers"] or "Pitch Speed" in time_frame["qualifiers"] or "Pitch Zone" in time_frame["qualifiers"] or "Pitch Spin" in time_frame["qualifiers"] or "Exit Velocity" in time_frame["qualifiers"] or "Hit Distance" in time_frame["qualifiers"] or "Launch Angle" in time_frame["qualifiers"] or "Inning" in time_frame["qualifiers"] or "Inning Reversed" in time_frame["qualifiers"] or "Scheduled Inning Reversed" in time_frame["qualifiers"] or "Pitching Against Batting Order" in time_frame["qualifiers"] or "Count" in time_frame["qualifiers"] or "After Count" in time_frame["qualifiers"] or "After Swinging On Count" in time_frame["qualifiers"] or "Swinging On Count" in time_frame["qualifiers"] or "Surface" in time_frame["qualifiers"] or "Condition" in time_frame["qualifiers"] or "Temperature" in time_frame["qualifiers"] or "Wind" in time_frame["qualifiers"] or "Umpire" in time_frame["qualifiers"] or "Home Plate Umpire" in time_frame["qualifiers"] or "Team Score" in time_frame["qualifiers"] or "Ending Team Score" in time_frame["qualifiers"] or "Game Pitch Count" in time_frame["qualifiers"] or "Team Pitch Count" in time_frame["qualifiers"] or "Pitch Count" in time_frame["qualifiers"] or "Pitcher Batters Faced" in time_frame["qualifiers"] or "Batter Plate Appearance" in time_frame["qualifiers"] or "Pitcher Batters Faced Reversed" in time_frame["qualifiers"] or "Batter Plate Appearance Reversed" in time_frame["qualifiers"] or "Starting Pitch Count" in time_frame["qualifiers"] or "At Bat Pitch Count" in time_frame["qualifiers"] or "Ending Innings Pitched" in time_frame["qualifiers"] or "Innings Pitched" in time_frame["qualifiers"] or "Men On Base" in time_frame["qualifiers"] or "Time Facing Opponent" in time_frame["qualifiers"] or "Time Through Lineup" in time_frame["qualifiers"] or "Number Of Men On Base" in time_frame["qualifiers"] or "Number Of Men In Scoring" in time_frame["qualifiers"] or "Run Support" in time_frame["qualifiers"] or "Opponent Score" in time_frame["qualifiers"] or "Score Margin" in time_frame["qualifiers"] or "Score Difference" in time_frame["qualifiers"] or "Ending Opponent Score" in time_frame["qualifiers"] or "Ending Score Margin" in time_frame["qualifiers"] or "Ending Score Difference" in time_frame["qualifiers"] or "current-stats" in extra_stats or "run-support-record" in extra_stats or "run-support" in extra_stats or "advanced-runner" in extra_stats or "exit-record" in extra_stats:
+        elif has_result_stat_qual or "Stadium" in time_frame["qualifiers"] or "Exact Stadium" in time_frame["qualifiers"] or "Start Time" in time_frame["qualifiers"] or "Local Start Time" in time_frame["qualifiers"] or "Game Number" in time_frame["qualifiers"] or "Exact City" in time_frame["qualifiers"] or "City" in time_frame["qualifiers"] or "Exact State" in time_frame["qualifiers"] or "State" in time_frame["qualifiers"] or "Exact Time Zone" in time_frame["qualifiers"] or "Time Zone" in time_frame["qualifiers"] or "Exact Country" in time_frame["qualifiers"] or "Country" in time_frame["qualifiers"] or "Surface" in time_frame["qualifiers"] or "Condition" in time_frame["qualifiers"] or "Temperature" in time_frame["qualifiers"] or "Wind" in time_frame["qualifiers"] or "Umpire" in time_frame["qualifiers"] or "Home Plate Umpire" in time_frame["qualifiers"] or "current-stats" in extra_stats or "run-support-record" in extra_stats or "run-support" in extra_stats or "advanced-runner" in extra_stats or "exit-record" in extra_stats:
             all_rows, missing_games = handle_mlb_game_stats(all_rows, time_frame["qualifiers"], player_data, player_type, missing_games, extra_stats)
 
     if time_frame["qualifiers"]:
@@ -24980,126 +25045,180 @@ def setup_career_stats(row_data, player_game_info, saved_row_data, index, player
         if career_qual in copied_quals:
             del copied_quals[career_qual]
 
-    career_stats_info = {}
-    for stat in event_stats_needed:
-        career_stats_info[stat] = 0
-        
-    for stat in event_stats_needed:
-        career_stats_info[stat] += saved_row_data[stat]
-
-    hit_end = False
-    last_hit_end_pa = True
-    for at_bat_event in player_game_info["batting_events" if player_type["da_type"] == "Batter" else "pitching_events"]:
-        if copied_quals and not handle_da_mlb_quals(row_data, "batting_events" if player_type["da_type"] == "Batter" else "pitching_events", at_bat_event, copied_quals, player_data, player_type, player_game_info):
-            continue
-        
+    if event_stats_needed:
+        career_stats_info = {}
         for stat in event_stats_needed:
-            if hit_end and (player_type["da_type"] != "Batter" or at_bat_event["result"] not in ("run_scored", "stolen_base", "caught_stealing") or at_bat_event["is_pr"] or not last_hit_end_pa):
-                at_bat_event["career_stat_" + stat] = -1
-                if at_bat_event["result"] not in ("run_scored", "stolen_base", "caught_stealing", "pick_off"):
-                    last_hit_end_pa = False
-            else:
-                if stat == "IP":
-                    innings_pitched_to_use = career_stats_info["IP"]
-                    if at_bat_event["result"] not in ("run_scored", "stolen_base", "caught_stealing", "pick_off"):
-                        if at_bat_event["num_outs"] == 1:
-                            career_stats_info["IP"] += 1/3
-                        elif at_bat_event["num_outs"] == 2:
-                            career_stats_info["IP"] += 2/3
-                        elif at_bat_event["num_outs"] == 3:
-                            career_stats_info["IP"] += 1
+            career_stats_info[stat] = 0
+            
+        for stat in event_stats_needed:
+            career_stats_info[stat] += saved_row_data[stat]
 
-                        if at_bat_event["num_outs"] >= 1:
-                            innings_pitched_to_use += 1/3
-                        
-                        frac, whole = math.modf(innings_pitched_to_use)
-                        frac = round_value(frac, 1)
-                        innings_pitched_to_use = whole
-                        if frac == 0.3:
-                            innings_pitched_to_use += 1/3
-                        elif frac == 0.7:
-                            innings_pitched_to_use += 2/3
-                        elif frac == 1.0:
-                            innings_pitched_to_use += 1
-                        
-                    at_bat_event["career_stat_IP"] = innings_pitched_to_use
-                elif stat == "Pit":
-                    if at_bat_event["result"] not in ("run_scored", "stolen_base", "caught_stealing", "pick_off"):
-                        career_stats_info["Pit"] += (at_bat_event["pitches"] if at_bat_event["pitches"] else 0)
-                    at_bat_event["career_stat_Pit"] = career_stats_info["Pit"]
-                else:
-                    career_stats_info[stat] += event_type_stat_mappings[at_bat_event["result"]].get(stat, 0)
-                    at_bat_event["career_stat_" + stat] = career_stats_info[stat]
-        
-                if career_stats_info[stat] >= event_stats_needed[stat]:
-                    hit_end = True
-
-        if player_type["da_type"] != "Batter":
-            if at_bat_event["event_id"] in player_game_info["pitch_event_to_run_event"]:
-                for sub_at_bat_event in player_game_info["pitch_event_to_run_event"][at_bat_event["event_id"]]:
-                    if not sub_at_bat_event["is_inherited"]:
-                        for stat in event_stats_needed:
-                            sub_at_bat_event["career_stat_" + stat] = at_bat_event["career_stat_" + stat]
-
-    for at_bat_event in player_game_info["pitching_run_events"]:
-        if copied_quals and not handle_da_mlb_quals(row_data, "pitching_run_events", at_bat_event, copied_quals, player_data, player_type, player_game_info):
-            continue
-        
-        if at_bat_event["is_inherited"]:
+        hit_end = False
+        last_hit_end_pa = True
+        for at_bat_event in player_game_info["batting_events" if player_type["da_type"] == "Batter" else "pitching_events"]:
+            if copied_quals and not handle_da_mlb_quals(row_data, "batting_events" if player_type["da_type"] == "Batter" else "pitching_events", at_bat_event, copied_quals, player_data, player_type, player_game_info):
+                continue
+            
             for stat in event_stats_needed:
-                if stat == "IP":
-                    frac, whole = math.modf(career_stats_info["IP"])
-                    frac = round_value(frac, 1)
-                    innings_pitched_to_use = whole
-                    if frac == 0.3:
-                        innings_pitched_to_use += 1/3
-                    elif frac == 0.7:
-                        innings_pitched_to_use += 2/3
-                    elif frac == 1.0:
-                        innings_pitched_to_use += 1
-                    at_bat_event["career_stat_IP"] = innings_pitched_to_use
+                if hit_end and (player_type["da_type"] != "Batter" or at_bat_event["result"] not in ("run_scored", "stolen_base", "caught_stealing") or at_bat_event["is_pr"] or not last_hit_end_pa):
+                    at_bat_event["career_stat_" + stat] = -1
+                    if at_bat_event["result"] not in ("run_scored", "stolen_base", "caught_stealing", "pick_off"):
+                        last_hit_end_pa = False
                 else:
-                    at_bat_event["career_stat_" + stat] = career_stats_info[stat]
+                    if stat == "IP":
+                        innings_pitched_to_use = career_stats_info["IP"]
+                        if at_bat_event["result"] not in ("run_scored", "stolen_base", "caught_stealing", "pick_off"):
+                            if at_bat_event["num_outs"] == 1:
+                                career_stats_info["IP"] += 1/3
+                            elif at_bat_event["num_outs"] == 2:
+                                career_stats_info["IP"] += 2/3
+                            elif at_bat_event["num_outs"] == 3:
+                                career_stats_info["IP"] += 1
 
-    career_stats_info = {}
-    for stat in event_reversed_stats_needed:
-        career_stats_info[stat] = 0
-    
-    for stat in event_reversed_stats_needed:
-        career_stats_info[stat] += saved_row_data[stat]
+                            if at_bat_event["num_outs"] >= 1:
+                                innings_pitched_to_use += 1/3
+                            
+                            frac, whole = math.modf(innings_pitched_to_use)
+                            frac = round_value(frac, 1)
+                            innings_pitched_to_use = whole
+                            if frac == 0.3:
+                                innings_pitched_to_use += 1/3
+                            elif frac == 0.7:
+                                innings_pitched_to_use += 2/3
+                            elif frac == 1.0:
+                                innings_pitched_to_use += 1
+                            
+                        at_bat_event["career_stat_IP"] = innings_pitched_to_use
+                    elif stat == "Pit":
+                        if at_bat_event["result"] not in ("run_scored", "stolen_base", "caught_stealing", "pick_off"):
+                            career_stats_info["Pit"] += (at_bat_event["pitches"] if at_bat_event["pitches"] else 0)
+                        at_bat_event["career_stat_Pit"] = career_stats_info["Pit"]
+                    else:
+                        career_stats_info[stat] += event_type_stat_mappings[at_bat_event["result"]].get(stat, 0)
+                        at_bat_event["career_stat_" + stat] = career_stats_info[stat]
+            
+                    if career_stats_info[stat] >= event_stats_needed[stat]:
+                        hit_end = True
 
-    for at_bat_event in player_game_info["pitching_run_events"]:
-        if copied_quals and not handle_da_mlb_quals(row_data, "pitching_run_events", at_bat_event, copied_quals, player_data, player_type, player_game_info):
-            continue
-        
-        if at_bat_event["is_inherited"]:
-            for stat in event_reversed_stats_needed:
-                if stat == "IP":
-                    frac, whole = math.modf(career_stats_info["IP"])
-                    frac = round_value(frac, 1)
-                    innings_pitched_to_use = whole
-                    if frac == 0.3:
-                        innings_pitched_to_use += 1/3
-                    elif frac == 0.7:
-                        innings_pitched_to_use += 2/3
-                    elif frac == 1.0:
-                        innings_pitched_to_use += 1
-                    at_bat_event["career_stat_reversed_IP"] = innings_pitched_to_use
-                else:
-                    at_bat_event["career_stat_reversed_" + stat] = career_stats_info[stat]
+            if player_type["da_type"] != "Batter":
+                if at_bat_event["event_id"] in player_game_info["pitch_event_to_run_event"]:
+                    for sub_at_bat_event in player_game_info["pitch_event_to_run_event"][at_bat_event["event_id"]]:
+                        if not sub_at_bat_event["is_inherited"]:
+                            for stat in event_stats_needed:
+                                sub_at_bat_event["career_stat_" + stat] = at_bat_event["career_stat_" + stat]
 
-    hit_end = False
-    last_hit_end_pa = True
-    for at_bat_event in reversed(player_game_info["batting_events" if player_type["da_type"] == "Batter" else "pitching_events"]):
-        if copied_quals and not handle_da_mlb_quals(row_data, "batting_events" if player_type["da_type"] == "Batter" else "pitching_events", at_bat_event, copied_quals, player_data, player_type, player_game_info):
-            continue
+        for at_bat_event in player_game_info["pitching_run_events"]:
+            if copied_quals and not handle_da_mlb_quals(row_data, "pitching_run_events", at_bat_event, copied_quals, player_data, player_type, player_game_info):
+                continue
+            
+            if at_bat_event["is_inherited"]:
+                for stat in event_stats_needed:
+                    if stat == "IP":
+                        frac, whole = math.modf(career_stats_info["IP"])
+                        frac = round_value(frac, 1)
+                        innings_pitched_to_use = whole
+                        if frac == 0.3:
+                            innings_pitched_to_use += 1/3
+                        elif frac == 0.7:
+                            innings_pitched_to_use += 2/3
+                        elif frac == 1.0:
+                            innings_pitched_to_use += 1
+                        at_bat_event["career_stat_IP"] = innings_pitched_to_use
+                    else:
+                        at_bat_event["career_stat_" + stat] = career_stats_info[stat]
 
+    if event_reversed_stats_needed:
+        career_stats_info = {}
         for stat in event_reversed_stats_needed:
-            if hit_end and (player_type["da_type"] != "Batter" or at_bat_event["result"] not in ("run_scored", "stolen_base", "caught_stealing") or at_bat_event["is_pr"] or not last_hit_end_pa):
-                at_bat_event["career_stat_reversed_" + stat] = -1
-                if at_bat_event["result"] not in ("run_scored", "stolen_base", "caught_stealing", "pick_off"):
-                    last_hit_end_pa = False
-            else:
+            career_stats_info[stat] = 0
+        
+        for stat in event_reversed_stats_needed:
+            career_stats_info[stat] += saved_row_data[stat]
+
+        for at_bat_event in player_game_info["pitching_run_events"]:
+            if copied_quals and not handle_da_mlb_quals(row_data, "pitching_run_events", at_bat_event, copied_quals, player_data, player_type, player_game_info):
+                continue
+            
+            if at_bat_event["is_inherited"]:
+                for stat in event_reversed_stats_needed:
+                    if stat == "IP":
+                        frac, whole = math.modf(career_stats_info["IP"])
+                        frac = round_value(frac, 1)
+                        innings_pitched_to_use = whole
+                        if frac == 0.3:
+                            innings_pitched_to_use += 1/3
+                        elif frac == 0.7:
+                            innings_pitched_to_use += 2/3
+                        elif frac == 1.0:
+                            innings_pitched_to_use += 1
+                        at_bat_event["career_stat_reversed_IP"] = innings_pitched_to_use
+                    else:
+                        at_bat_event["career_stat_reversed_" + stat] = career_stats_info[stat]
+
+        hit_end = False
+        last_hit_end_pa = True
+        for at_bat_event in reversed(player_game_info["batting_events" if player_type["da_type"] == "Batter" else "pitching_events"]):
+            if copied_quals and not handle_da_mlb_quals(row_data, "batting_events" if player_type["da_type"] == "Batter" else "pitching_events", at_bat_event, copied_quals, player_data, player_type, player_game_info):
+                continue
+
+            for stat in event_reversed_stats_needed:
+                if hit_end and (player_type["da_type"] != "Batter" or at_bat_event["result"] not in ("run_scored", "stolen_base", "caught_stealing") or at_bat_event["is_pr"] or not last_hit_end_pa):
+                    at_bat_event["career_stat_reversed_" + stat] = -1
+                    if at_bat_event["result"] not in ("run_scored", "stolen_base", "caught_stealing", "pick_off"):
+                        last_hit_end_pa = False
+                else:
+                    if stat == "IP":
+                        innings_pitched_to_use = career_stats_info["IP"]
+                        if at_bat_event["result"] not in ("run_scored", "stolen_base", "caught_stealing", "pick_off"):
+                            if at_bat_event["num_outs"] == 1:
+                                career_stats_info["IP"] += 1/3
+                            elif at_bat_event["num_outs"] == 2:
+                                career_stats_info["IP"] += 2/3
+                            elif at_bat_event["num_outs"] == 3:
+                                career_stats_info["IP"] += 1
+
+                            if at_bat_event["num_outs"] >= 1:
+                                innings_pitched_to_use += 1/3
+                            
+                            frac, whole = math.modf(innings_pitched_to_use)
+                            frac = round_value(frac, 1)
+                            innings_pitched_to_use = whole
+                            if frac == 0.3:
+                                innings_pitched_to_use += 1/3
+                            elif frac == 0.7:
+                                innings_pitched_to_use += 2/3
+                            elif frac == 1.0:
+                                innings_pitched_to_use += 1
+                            
+                        at_bat_event["career_stat_reversed_IP"] = innings_pitched_to_use
+                    elif stat == "Pit":
+                        if at_bat_event["result"] not in ("run_scored", "stolen_base", "caught_stealing", "pick_off"):
+                            career_stats_info["Pit"] += (at_bat_event["pitches"] if at_bat_event["pitches"] else 0)
+                        at_bat_event["career_stat_reversed_Pit"] = career_stats_info["Pit"]
+                    else:
+                        career_stats_info[stat] += event_type_stat_mappings[at_bat_event["result"]].get(stat, 0)
+                        at_bat_event["career_stat_reversed_" + stat] = career_stats_info[stat]
+                    
+                    if career_stats_info[stat] >= event_reversed_stats_needed[stat]:
+                        hit_end = True
+
+            if player_type["da_type"] != "Batter":
+                if at_bat_event["event_id"] in player_game_info["pitch_event_to_run_event"]:
+                    for sub_at_bat_event in player_game_info["pitch_event_to_run_event"][at_bat_event["event_id"]]:
+                        if not sub_at_bat_event["is_inherited"]:
+                            for stat in event_reversed_stats_needed:
+                                sub_at_bat_event["career_stat_reversed_" + stat] = at_bat_event["career_stat_reversed_" + stat]
+
+    if events_stats_needed:
+        career_stats_info = {}
+        for stat in events_stats_needed:
+            career_stats_info[stat] = 0
+            
+        for stat in events_stats_needed:
+            career_stats_info[stat] += saved_row_data[stat]
+
+        for at_bat_event in player_game_info["batting_events" if player_type["da_type"] == "Batter" else "pitching_events"]:        
+            for stat in events_stats_needed:
                 if stat == "IP":
                     innings_pitched_to_use = career_stats_info["IP"]
                     if at_bat_event["result"] not in ("run_scored", "stolen_base", "caught_stealing", "pick_off"):
@@ -25123,76 +25242,631 @@ def setup_career_stats(row_data, player_game_info, saved_row_data, index, player
                         elif frac == 1.0:
                             innings_pitched_to_use += 1
                         
-                    at_bat_event["career_stat_reversed_IP"] = innings_pitched_to_use
+                    at_bat_event["career_stats_IP"] = innings_pitched_to_use
                 elif stat == "Pit":
                     if at_bat_event["result"] not in ("run_scored", "stolen_base", "caught_stealing", "pick_off"):
                         career_stats_info["Pit"] += (at_bat_event["pitches"] if at_bat_event["pitches"] else 0)
-                    at_bat_event["career_stat_reversed_Pit"] = career_stats_info["Pit"]
+                    at_bat_event["career_stats_Pit"] = career_stats_info["Pit"]
                 else:
                     career_stats_info[stat] += event_type_stat_mappings[at_bat_event["result"]].get(stat, 0)
-                    at_bat_event["career_stat_reversed_" + stat] = career_stats_info[stat]
-                
-                if career_stats_info[stat] >= event_reversed_stats_needed[stat]:
-                    hit_end = True
+                    at_bat_event["career_stats_" + stat] = career_stats_info[stat]
 
-        if player_type["da_type"] != "Batter":
-            if at_bat_event["event_id"] in player_game_info["pitch_event_to_run_event"]:
-                for sub_at_bat_event in player_game_info["pitch_event_to_run_event"][at_bat_event["event_id"]]:
-                    if not sub_at_bat_event["is_inherited"]:
-                        for stat in event_reversed_stats_needed:
-                            sub_at_bat_event["career_stat_reversed_" + stat] = at_bat_event["career_stat_reversed_" + stat]
+            if player_type["da_type"] != "Batter":
+                if at_bat_event["event_id"] in player_game_info["pitch_event_to_run_event"]:
+                    for sub_at_bat_event in player_game_info["pitch_event_to_run_event"][at_bat_event["event_id"]]:
+                        if not sub_at_bat_event["is_inherited"]:
+                            for stat in events_stats_needed:
+                                sub_at_bat_event["career_stats_" + stat] = at_bat_event["career_stats_" + stat]
+
+        for at_bat_event in player_game_info["pitching_run_events"]:
+            if at_bat_event["is_inherited"]:
+                for stat in events_stats_needed:
+                    if stat == "IP":
+                        frac, whole = math.modf(career_stats_info["IP"])
+                        frac = round_value(frac, 1)
+                        innings_pitched_to_use = whole
+                        if frac == 0.3:
+                            innings_pitched_to_use += 1/3
+                        elif frac == 0.7:
+                            innings_pitched_to_use += 2/3
+                        elif frac == 1.0:
+                            innings_pitched_to_use += 1
+                        at_bat_event["career_stats_IP"] = innings_pitched_to_use
+                    else:
+                        at_bat_event["career_stats_" + stat] = career_stats_info[stat]
+
+    if events_reversed_stats_needed:
+        career_stats_info = {}
+        for stat in events_reversed_stats_needed:
+            career_stats_info[stat] = 0
+        
+        for stat in events_reversed_stats_needed:
+            career_stats_info[stat] += saved_row_data[stat]
+
+        for at_bat_event in player_game_info["pitching_run_events"]:
+            if at_bat_event["is_inherited"]:
+                for stat in events_reversed_stats_needed:
+                    if stat == "IP":
+                        frac, whole = math.modf(career_stats_info["IP"])
+                        frac = round_value(frac, 1)
+                        innings_pitched_to_use = whole
+                        if frac == 0.3:
+                            innings_pitched_to_use += 1/3
+                        elif frac == 0.7:
+                            innings_pitched_to_use += 2/3
+                        elif frac == 1.0:
+                            innings_pitched_to_use += 1
+                        at_bat_event["career_stats_reversed_IP"] = innings_pitched_to_use
+                    else:
+                        at_bat_event["career_stats_reversed_" + stat] = career_stats_info[stat]
+
+        for at_bat_event in reversed(player_game_info["batting_events" if player_type["da_type"] == "Batter" else "pitching_events"]):
+            for stat in events_reversed_stats_needed:
+                if stat == "IP":
+                    innings_pitched_to_use = career_stats_info["IP"]
+                    if at_bat_event["result"] not in ("run_scored", "stolen_base", "caught_stealing", "pick_off"):
+                        if at_bat_event["num_outs"] == 1:
+                            career_stats_info["IP"] += 1/3
+                        elif at_bat_event["num_outs"] == 2:
+                            career_stats_info["IP"] += 2/3
+                        elif at_bat_event["num_outs"] == 3:
+                            career_stats_info["IP"] += 1
+
+                        if at_bat_event["num_outs"] >= 1:
+                            innings_pitched_to_use += 1/3
+                        
+                        frac, whole = math.modf(innings_pitched_to_use)
+                        frac = round_value(frac, 1)
+                        innings_pitched_to_use = whole
+                        if frac == 0.3:
+                            innings_pitched_to_use += 1/3
+                        elif frac == 0.7:
+                            innings_pitched_to_use += 2/3
+                        elif frac == 1.0:
+                            innings_pitched_to_use += 1
+                        
+                    at_bat_event["career_stats_reversed_IP"] = innings_pitched_to_use
+                elif stat == "Pit":
+                    if at_bat_event["result"] not in ("run_scored", "stolen_base", "caught_stealing", "pick_off"):
+                        career_stats_info["Pit"] += (at_bat_event["pitches"] if at_bat_event["pitches"] else 0)
+                    at_bat_event["career_stats_reversed_Pit"] = career_stats_info["Pit"]
+                else:
+                    career_stats_info[stat] += event_type_stat_mappings[at_bat_event["result"]].get(stat, 0)
+                    at_bat_event["career_stats_reversed_" + stat] = career_stats_info[stat]
+
+            if player_type["da_type"] != "Batter":
+                if at_bat_event["event_id"] in player_game_info["pitch_event_to_run_event"]:
+                    for sub_at_bat_event in player_game_info["pitch_event_to_run_event"][at_bat_event["event_id"]]:
+                        if not sub_at_bat_event["is_inherited"]:
+                            for stat in events_reversed_stats_needed:
+                                sub_at_bat_event["careers_stat_reversed_" + stat] = at_bat_event["career_stats_reversed_" + stat]
+
+def setup_game_stats(row_data, player_game_info, player_type, player_data, qualifiers):
+    if not player_game_info or player_game_info["missing_data"]:
+        return
+
+    event_stats_needed = {}
+    event_reversed_stats_needed = {}
+    events_stats_needed = {}
+    events_reversed_stats_needed = {}
+    if "Game Event Stat" in qualifiers:
+        for qual_obj in qualifiers["Game Event Stat"]:
+            if qual_obj["stat"] not in event_stats_needed:
+                event_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
+            if qual_obj["values"]["end_val"] < event_stats_needed[qual_obj["stat"]]:
+                event_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
+    if "Game Event Stat Reversed" in qualifiers:
+        for qual_obj in qualifiers["Game Event Stat Reversed"]:
+            if qual_obj["stat"] not in event_reversed_stats_needed:
+                event_reversed_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
+            if qual_obj["values"]["end_val"] < event_reversed_stats_needed[qual_obj["stat"]]:
+                event_reversed_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
+    if "Game Event Stats" in qualifiers:
+        for qual_obj in qualifiers["Game Event Stats"]:
+            if qual_obj["stat"] not in events_stats_needed:
+                events_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
+            if qual_obj["values"]["end_val"] < events_stats_needed[qual_obj["stat"]]:
+                events_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
+    if "Game Event Stats Reversed" in qualifiers:
+        for qual_obj in qualifiers["Game Event Stats Reversed"]:
+            if qual_obj["stat"] not in events_reversed_stats_needed:
+                events_reversed_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
+            if qual_obj["values"]["end_val"] < events_reversed_stats_needed[qual_obj["stat"]]:
+                events_reversed_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
+
+    copied_quals = copy.deepcopy(qualifiers)
+
+    career_quals = ["Game Event Stat", "Game Event Stat Reversed"]
+    for career_qual in career_quals:
+        if career_qual in copied_quals:
+            del copied_quals[career_qual]
+
+    if event_stats_needed:
+        career_stats_info = {}
+        for stat in event_stats_needed:
+            career_stats_info[stat] = 0
+
+        hit_end = False
+        last_hit_end_pa = True
+        for at_bat_event in player_game_info["batting_events" if player_type["da_type"] == "Batter" else "pitching_events"]:
+            if copied_quals and not handle_da_mlb_quals(row_data, "batting_events" if player_type["da_type"] == "Batter" else "pitching_events", at_bat_event, copied_quals, player_data, player_type, player_game_info):
+                continue
+            
+            for stat in event_stats_needed:
+                if hit_end and (player_type["da_type"] != "Batter" or at_bat_event["result"] not in ("run_scored", "stolen_base", "caught_stealing") or at_bat_event["is_pr"] or not last_hit_end_pa):
+                    at_bat_event["game_stat_" + stat] = -1
+                    if at_bat_event["result"] not in ("run_scored", "stolen_base", "caught_stealing", "pick_off"):
+                        last_hit_end_pa = False
+                else:
+                    if stat == "IP":
+                        innings_pitched_to_use = career_stats_info["IP"]
+                        if at_bat_event["result"] not in ("run_scored", "stolen_base", "caught_stealing", "pick_off"):
+                            if at_bat_event["num_outs"] == 1:
+                                career_stats_info["IP"] += 1/3
+                            elif at_bat_event["num_outs"] == 2:
+                                career_stats_info["IP"] += 2/3
+                            elif at_bat_event["num_outs"] == 3:
+                                career_stats_info["IP"] += 1
+
+                            if at_bat_event["num_outs"] >= 1:
+                                innings_pitched_to_use += 1/3
+                            
+                            frac, whole = math.modf(innings_pitched_to_use)
+                            frac = round_value(frac, 1)
+                            innings_pitched_to_use = whole
+                            if frac == 0.3:
+                                innings_pitched_to_use += 1/3
+                            elif frac == 0.7:
+                                innings_pitched_to_use += 2/3
+                            elif frac == 1.0:
+                                innings_pitched_to_use += 1
+                            
+                        at_bat_event["game_stat_IP"] = innings_pitched_to_use
+                    elif stat == "Pit":
+                        if at_bat_event["result"] not in ("run_scored", "stolen_base", "caught_stealing", "pick_off"):
+                            career_stats_info["Pit"] += (at_bat_event["pitches"] if at_bat_event["pitches"] else 0)
+                        at_bat_event["game_stat_Pit"] = career_stats_info["Pit"]
+                    else:
+                        career_stats_info[stat] += event_type_stat_mappings[at_bat_event["result"]].get(stat, 0)
+                        at_bat_event["game_stat_" + stat] = career_stats_info[stat]
+            
+                    if career_stats_info[stat] >= event_stats_needed[stat]:
+                        hit_end = True
+
+            if player_type["da_type"] != "Batter":
+                if at_bat_event["event_id"] in player_game_info["pitch_event_to_run_event"]:
+                    for sub_at_bat_event in player_game_info["pitch_event_to_run_event"][at_bat_event["event_id"]]:
+                        if not sub_at_bat_event["is_inherited"]:
+                            for stat in event_stats_needed:
+                                sub_at_bat_event["game_stat_" + stat] = at_bat_event["game_stat_" + stat]
+
+        for at_bat_event in player_game_info["pitching_run_events"]:
+            if copied_quals and not handle_da_mlb_quals(row_data, "pitching_run_events", at_bat_event, copied_quals, player_data, player_type, player_game_info):
+                continue
+            
+            if at_bat_event["is_inherited"]:
+                for stat in event_stats_needed:
+                    if stat == "IP":
+                        frac, whole = math.modf(career_stats_info["IP"])
+                        frac = round_value(frac, 1)
+                        innings_pitched_to_use = whole
+                        if frac == 0.3:
+                            innings_pitched_to_use += 1/3
+                        elif frac == 0.7:
+                            innings_pitched_to_use += 2/3
+                        elif frac == 1.0:
+                            innings_pitched_to_use += 1
+                        at_bat_event["game_stat_IP"] = innings_pitched_to_use
+                    else:
+                        at_bat_event["game_stat_" + stat] = career_stats_info[stat]
+
+    if event_reversed_stats_needed:
+        career_stats_info = {}
+        for stat in event_reversed_stats_needed:
+            career_stats_info[stat] = 0
+
+        for at_bat_event in player_game_info["pitching_run_events"]:
+            if copied_quals and not handle_da_mlb_quals(row_data, "pitching_run_events", at_bat_event, copied_quals, player_data, player_type, player_game_info):
+                continue
+            
+            if at_bat_event["is_inherited"]:
+                for stat in event_reversed_stats_needed:
+                    if stat == "IP":
+                        frac, whole = math.modf(career_stats_info["IP"])
+                        frac = round_value(frac, 1)
+                        innings_pitched_to_use = whole
+                        if frac == 0.3:
+                            innings_pitched_to_use += 1/3
+                        elif frac == 0.7:
+                            innings_pitched_to_use += 2/3
+                        elif frac == 1.0:
+                            innings_pitched_to_use += 1
+                        at_bat_event["game_stat_reversed_IP"] = innings_pitched_to_use
+                    else:
+                        at_bat_event["game_stat_reversed_" + stat] = career_stats_info[stat]
+
+        hit_end = False
+        last_hit_end_pa = True
+        for at_bat_event in reversed(player_game_info["batting_events" if player_type["da_type"] == "Batter" else "pitching_events"]):
+            if copied_quals and not handle_da_mlb_quals(row_data, "batting_events" if player_type["da_type"] == "Batter" else "pitching_events", at_bat_event, copied_quals, player_data, player_type, player_game_info):
+                continue
+
+            for stat in event_reversed_stats_needed:
+                if hit_end and (player_type["da_type"] != "Batter" or at_bat_event["result"] not in ("run_scored", "stolen_base", "caught_stealing") or at_bat_event["is_pr"] or not last_hit_end_pa):
+                    at_bat_event["game_stat_reversed_" + stat] = -1
+                    if at_bat_event["result"] not in ("run_scored", "stolen_base", "caught_stealing", "pick_off"):
+                        last_hit_end_pa = False
+                else:
+                    if stat == "IP":
+                        innings_pitched_to_use = career_stats_info["IP"]
+                        if at_bat_event["result"] not in ("run_scored", "stolen_base", "caught_stealing", "pick_off"):
+                            if at_bat_event["num_outs"] == 1:
+                                career_stats_info["IP"] += 1/3
+                            elif at_bat_event["num_outs"] == 2:
+                                career_stats_info["IP"] += 2/3
+                            elif at_bat_event["num_outs"] == 3:
+                                career_stats_info["IP"] += 1
+
+                            if at_bat_event["num_outs"] >= 1:
+                                innings_pitched_to_use += 1/3
+                            
+                            frac, whole = math.modf(innings_pitched_to_use)
+                            frac = round_value(frac, 1)
+                            innings_pitched_to_use = whole
+                            if frac == 0.3:
+                                innings_pitched_to_use += 1/3
+                            elif frac == 0.7:
+                                innings_pitched_to_use += 2/3
+                            elif frac == 1.0:
+                                innings_pitched_to_use += 1
+                            
+                        at_bat_event["game_stat_reversed_IP"] = innings_pitched_to_use
+                    elif stat == "Pit":
+                        if at_bat_event["result"] not in ("run_scored", "stolen_base", "caught_stealing", "pick_off"):
+                            career_stats_info["Pit"] += (at_bat_event["pitches"] if at_bat_event["pitches"] else 0)
+                        at_bat_event["game_stat_reversed_Pit"] = career_stats_info["Pit"]
+                    else:
+                        career_stats_info[stat] += event_type_stat_mappings[at_bat_event["result"]].get(stat, 0)
+                        at_bat_event["game_stat_reversed_" + stat] = career_stats_info[stat]
+                    
+                    if career_stats_info[stat] >= event_reversed_stats_needed[stat]:
+                        hit_end = True
+
+            if player_type["da_type"] != "Batter":
+                if at_bat_event["event_id"] in player_game_info["pitch_event_to_run_event"]:
+                    for sub_at_bat_event in player_game_info["pitch_event_to_run_event"][at_bat_event["event_id"]]:
+                        if not sub_at_bat_event["is_inherited"]:
+                            for stat in event_reversed_stats_needed:
+                                sub_at_bat_event["game_stat_reversed_" + stat] = at_bat_event["game_stat_reversed_" + stat]
     
 
-    career_stats_info = {}
-    for stat in events_stats_needed:
-        career_stats_info[stat] = 0
-        
-    for stat in events_stats_needed:
-        career_stats_info[stat] += saved_row_data[stat]
-
-    for at_bat_event in player_game_info["batting_events" if player_type["da_type"] == "Batter" else "pitching_events"]:        
+    if events_stats_needed:
+        career_stats_info = {}
         for stat in events_stats_needed:
-            if stat == "IP":
-                innings_pitched_to_use = career_stats_info["IP"]
-                if at_bat_event["result"] not in ("run_scored", "stolen_base", "caught_stealing", "pick_off"):
-                    if at_bat_event["num_outs"] == 1:
-                        career_stats_info["IP"] += 1/3
-                    elif at_bat_event["num_outs"] == 2:
-                        career_stats_info["IP"] += 2/3
-                    elif at_bat_event["num_outs"] == 3:
-                        career_stats_info["IP"] += 1
+            career_stats_info[stat] = 0
 
-                    if at_bat_event["num_outs"] >= 1:
-                        innings_pitched_to_use += 1/3
-                    
-                    frac, whole = math.modf(innings_pitched_to_use)
-                    frac = round_value(frac, 1)
-                    innings_pitched_to_use = whole
-                    if frac == 0.3:
-                        innings_pitched_to_use += 1/3
-                    elif frac == 0.7:
-                        innings_pitched_to_use += 2/3
-                    elif frac == 1.0:
-                        innings_pitched_to_use += 1
-                    
-                at_bat_event["career_stats_IP"] = innings_pitched_to_use
-            elif stat == "Pit":
-                if at_bat_event["result"] not in ("run_scored", "stolen_base", "caught_stealing", "pick_off"):
-                    career_stats_info["Pit"] += (at_bat_event["pitches"] if at_bat_event["pitches"] else 0)
-                at_bat_event["career_stats_Pit"] = career_stats_info["Pit"]
-            else:
-                career_stats_info[stat] += event_type_stat_mappings[at_bat_event["result"]].get(stat, 0)
-                at_bat_event["career_stats_" + stat] = career_stats_info[stat]
+        for at_bat_event in player_game_info["batting_events" if player_type["da_type"] == "Batter" else "pitching_events"]:        
+            for stat in events_stats_needed:
+                if stat == "IP":
+                    innings_pitched_to_use = career_stats_info["IP"]
+                    if at_bat_event["result"] not in ("run_scored", "stolen_base", "caught_stealing", "pick_off"):
+                        if at_bat_event["num_outs"] == 1:
+                            career_stats_info["IP"] += 1/3
+                        elif at_bat_event["num_outs"] == 2:
+                            career_stats_info["IP"] += 2/3
+                        elif at_bat_event["num_outs"] == 3:
+                            career_stats_info["IP"] += 1
 
-        if player_type["da_type"] != "Batter":
-            if at_bat_event["event_id"] in player_game_info["pitch_event_to_run_event"]:
-                for sub_at_bat_event in player_game_info["pitch_event_to_run_event"][at_bat_event["event_id"]]:
-                    if not sub_at_bat_event["is_inherited"]:
-                        for stat in events_stats_needed:
-                            sub_at_bat_event["career_stats_" + stat] = at_bat_event["career_stats_" + stat]
+                        if at_bat_event["num_outs"] >= 1:
+                            innings_pitched_to_use += 1/3
+                        
+                        frac, whole = math.modf(innings_pitched_to_use)
+                        frac = round_value(frac, 1)
+                        innings_pitched_to_use = whole
+                        if frac == 0.3:
+                            innings_pitched_to_use += 1/3
+                        elif frac == 0.7:
+                            innings_pitched_to_use += 2/3
+                        elif frac == 1.0:
+                            innings_pitched_to_use += 1
+                        
+                    at_bat_event["game_stats_IP"] = innings_pitched_to_use
+                elif stat == "Pit":
+                    if at_bat_event["result"] not in ("run_scored", "stolen_base", "caught_stealing", "pick_off"):
+                        career_stats_info["Pit"] += (at_bat_event["pitches"] if at_bat_event["pitches"] else 0)
+                    at_bat_event["game_stats_Pit"] = career_stats_info["Pit"]
+                else:
+                    career_stats_info[stat] += event_type_stat_mappings[at_bat_event["result"]].get(stat, 0)
+                    at_bat_event["game_stats_" + stat] = career_stats_info[stat]
 
-    for at_bat_event in player_game_info["pitching_run_events"]:
-        if at_bat_event["is_inherited"]:
+            if player_type["da_type"] != "Batter":
+                if at_bat_event["event_id"] in player_game_info["pitch_event_to_run_event"]:
+                    for sub_at_bat_event in player_game_info["pitch_event_to_run_event"][at_bat_event["event_id"]]:
+                        if not sub_at_bat_event["is_inherited"]:
+                            for stat in events_stats_needed:
+                                sub_at_bat_event["game_stats_" + stat] = at_bat_event["game_stats_" + stat]
+
+        for at_bat_event in player_game_info["pitching_run_events"]:
+            if at_bat_event["is_inherited"]:
+                for stat in events_stats_needed:
+                    if stat == "IP":
+                        frac, whole = math.modf(career_stats_info["IP"])
+                        frac = round_value(frac, 1)
+                        innings_pitched_to_use = whole
+                        if frac == 0.3:
+                            innings_pitched_to_use += 1/3
+                        elif frac == 0.7:
+                            innings_pitched_to_use += 2/3
+                        elif frac == 1.0:
+                            innings_pitched_to_use += 1
+                        at_bat_event["game_stats_IP"] = innings_pitched_to_use
+                    else:
+                        at_bat_event["game_stats_" + stat] = career_stats_info[stat]
+
+    if events_reversed_stats_needed:
+        career_stats_info = {}
+        for stat in events_reversed_stats_needed:
+            career_stats_info[stat] = 0
+        
+        for at_bat_event in player_game_info["pitching_run_events"]:
+            if at_bat_event["is_inherited"]:
+                for stat in events_reversed_stats_needed:
+                    if stat == "IP":
+                        frac, whole = math.modf(career_stats_info["IP"])
+                        frac = round_value(frac, 1)
+                        innings_pitched_to_use = whole
+                        if frac == 0.3:
+                            innings_pitched_to_use += 1/3
+                        elif frac == 0.7:
+                            innings_pitched_to_use += 2/3
+                        elif frac == 1.0:
+                            innings_pitched_to_use += 1
+                        at_bat_event["game_stats_reversed_IP"] = innings_pitched_to_use
+                    else:
+                        at_bat_event["game_stats_reversed_" + stat] = career_stats_info[stat]
+
+        for at_bat_event in reversed(player_game_info["batting_events" if player_type["da_type"] == "Batter" else "pitching_events"]):
+            for stat in events_reversed_stats_needed:
+                if stat == "IP":
+                    innings_pitched_to_use = career_stats_info["IP"]
+                    if at_bat_event["result"] not in ("run_scored", "stolen_base", "caught_stealing", "pick_off"):
+                        if at_bat_event["num_outs"] == 1:
+                            career_stats_info["IP"] += 1/3
+                        elif at_bat_event["num_outs"] == 2:
+                            career_stats_info["IP"] += 2/3
+                        elif at_bat_event["num_outs"] == 3:
+                            career_stats_info["IP"] += 1
+
+                        if at_bat_event["num_outs"] >= 1:
+                            innings_pitched_to_use += 1/3
+                        
+                        frac, whole = math.modf(innings_pitched_to_use)
+                        frac = round_value(frac, 1)
+                        innings_pitched_to_use = whole
+                        if frac == 0.3:
+                            innings_pitched_to_use += 1/3
+                        elif frac == 0.7:
+                            innings_pitched_to_use += 2/3
+                        elif frac == 1.0:
+                            innings_pitched_to_use += 1
+                        
+                    at_bat_event["game_stats_reversed_IP"] = innings_pitched_to_use
+                elif stat == "Pit":
+                    if at_bat_event["result"] not in ("run_scored", "stolen_base", "caught_stealing", "pick_off"):
+                        career_stats_info["Pit"] += (at_bat_event["pitches"] if at_bat_event["pitches"] else 0)
+                    at_bat_event["game_stats_reversed_Pit"] = career_stats_info["Pit"]
+                else:
+                    career_stats_info[stat] += event_type_stat_mappings[at_bat_event["result"]].get(stat, 0)
+                    at_bat_event["game_stats_reversed_" + stat] = career_stats_info[stat]
+
+            if player_type["da_type"] != "Batter":
+                if at_bat_event["event_id"] in player_game_info["pitch_event_to_run_event"]:
+                    for sub_at_bat_event in player_game_info["pitch_event_to_run_event"][at_bat_event["event_id"]]:
+                        if not sub_at_bat_event["is_inherited"]:
+                            for stat in events_reversed_stats_needed:
+                                sub_at_bat_event["game_stats_reversed_" + stat] = at_bat_event["game_stats_reversed_" + stat]
+
+def setup_starting_career_stats(row_data, player_game_info, saved_row_data, index, player_type, player_data, qualifiers):
+    if not player_game_info or player_game_info["missing_data"]:
+        return
+
+    event_stats_needed = {}
+    event_reversed_stats_needed = {}
+    events_stats_needed = {}
+    events_reversed_stats_needed = {}
+    if "Starting Event Stat" in qualifiers:
+        for qual_obj in qualifiers["Starting Event Stat"]:
+            if qual_obj["stat"] not in event_stats_needed:
+                event_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
+            if qual_obj["values"]["end_val"] < event_stats_needed[qual_obj["stat"]]:
+                event_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
+    if "Starting Event Stat Reversed" in qualifiers:
+        for qual_obj in qualifiers["Starting Event Stat Reversed"]:
+            if qual_obj["stat"] not in event_reversed_stats_needed:
+                event_reversed_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
+            if qual_obj["values"]["end_val"] < event_reversed_stats_needed[qual_obj["stat"]]:
+                event_reversed_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
+    if "Starting Event Stats" in qualifiers:
+        for qual_obj in qualifiers["Starting Event Stats"]:
+            if qual_obj["stat"] not in events_stats_needed:
+                events_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
+            if qual_obj["values"]["end_val"] < events_stats_needed[qual_obj["stat"]]:
+                events_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
+    if "Starting Event Stats Reversed" in qualifiers:
+        for qual_obj in qualifiers["Starting Event Stats Reversed"]:
+            if qual_obj["stat"] not in events_reversed_stats_needed:
+                events_reversed_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
+            if qual_obj["values"]["end_val"] < events_reversed_stats_needed[qual_obj["stat"]]:
+                events_reversed_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
+
+    copied_quals = copy.deepcopy(qualifiers)
+
+    career_quals = ["Starting Event Stat", "Starting Event Stat Reversed"]
+    for career_qual in career_quals:
+        if career_qual in copied_quals:
+            del copied_quals[career_qual]
+
+    if event_stats_needed:
+        career_stats_info = {}
+        for stat in event_stats_needed:
+            career_stats_info[stat] = 0
+            
+        for stat in event_stats_needed:
+            career_stats_info[stat] += saved_row_data[stat]
+
+        hit_end = False
+        last_hit_end_pa = True
+        for at_bat_event in player_game_info["batting_events" if player_type["da_type"] == "Batter" else "pitching_events"]:
+            if copied_quals and not handle_da_mlb_quals(row_data, "batting_events" if player_type["da_type"] == "Batter" else "pitching_events", at_bat_event, copied_quals, player_data, player_type, player_game_info):
+                continue
+            
+            for stat in event_stats_needed:
+                if hit_end and (player_type["da_type"] != "Batter" or at_bat_event["result"] not in ("run_scored", "stolen_base", "caught_stealing") or at_bat_event["is_pr"] or not last_hit_end_pa):
+                    at_bat_event["starting_career_stat_" + stat] = -1
+                    if at_bat_event["result"] not in ("run_scored", "stolen_base", "caught_stealing", "pick_off"):
+                        last_hit_end_pa = False
+                else:
+                    if career_stats_info[stat] >= event_stats_needed[stat]:
+                        hit_end = True
+
+                    if stat == "IP":
+                        frac, whole = math.modf(career_stats_info["IP"])
+                        frac = round_value(frac, 1)
+                        innings_pitched_to_use = whole
+                        if frac == 0.3:
+                            innings_pitched_to_use += 1/3
+                        elif frac == 0.7:
+                            innings_pitched_to_use += 2/3
+                        elif frac == 1.0:
+                            innings_pitched_to_use += 1
+                        at_bat_event["starting_career_stat_" + stat] = innings_pitched_to_use
+                        if at_bat_event["result"] not in ("run_scored", "stolen_base", "caught_stealing", "pick_off"):
+                            if at_bat_event["num_outs"] == 1:
+                                career_stats_info["IP"] += 1/3
+                            elif at_bat_event["num_outs"] == 2:
+                                career_stats_info["IP"] += 2/3
+                            elif at_bat_event["num_outs"] == 3:
+                                career_stats_info["IP"] += 1
+                    elif stat == "Pit":
+                        at_bat_event["starting_career_stat_" + stat] = career_stats_info[stat]
+                        if at_bat_event["result"] not in ("run_scored", "stolen_base", "caught_stealing", "pick_off"):
+                            career_stats_info["Pit"] += (at_bat_event["pitches"] if at_bat_event["pitches"] else 0)
+                    else:
+                        at_bat_event["starting_career_stat_" + stat] = career_stats_info[stat]
+                        career_stats_info[stat] += event_type_stat_mappings[at_bat_event["result"]].get(stat, 0)
+
+            if player_type["da_type"] != "Batter":
+                if at_bat_event["event_id"] in player_game_info["pitch_event_to_run_event"]:
+                    for sub_at_bat_event in player_game_info["pitch_event_to_run_event"][at_bat_event["event_id"]]:
+                        if not sub_at_bat_event["is_inherited"]:
+                            for stat in event_stats_needed:
+                                sub_at_bat_event["starting_career_stat_" + stat] = at_bat_event["starting_career_stat_" + stat]
+
+        for at_bat_event in player_game_info["pitching_run_events"]:
+            if copied_quals and not handle_da_mlb_quals(row_data, "pitching_run_events", at_bat_event, copied_quals, player_data, player_type, player_game_info):
+                continue
+            
+            if at_bat_event["is_inherited"]:
+                for stat in event_stats_needed:
+                    if stat == "IP":
+                        frac, whole = math.modf(career_stats_info["IP"])
+                        frac = round_value(frac, 1)
+                        innings_pitched_to_use = whole
+                        if frac == 0.3:
+                            innings_pitched_to_use += 1/3
+                        elif frac == 0.7:
+                            innings_pitched_to_use += 2/3
+                        elif frac == 1.0:
+                            innings_pitched_to_use += 1
+                        at_bat_event["starting_career_stat_IP"] = innings_pitched_to_use
+                    else:
+                        at_bat_event["starting_career_stat_" + stat] = career_stats_info[stat]
+
+    if event_reversed_stats_needed:
+        career_stats_info = {}
+        for stat in event_reversed_stats_needed:
+            career_stats_info[stat] = 0
+        
+        for stat in event_reversed_stats_needed:
+            career_stats_info[stat] += saved_row_data[stat]
+
+        for at_bat_event in player_game_info["pitching_run_events"]:
+            if copied_quals and not handle_da_mlb_quals(row_data, "pitching_run_events", at_bat_event, copied_quals, player_data, player_type, player_game_info):
+                continue
+            
+            if at_bat_event["is_inherited"]:
+                for stat in event_reversed_stats_needed:
+                    if stat == "IP":
+                        frac, whole = math.modf(career_stats_info["IP"])
+                        frac = round_value(frac, 1)
+                        innings_pitched_to_use = whole
+                        if frac == 0.3:
+                            innings_pitched_to_use += 1/3
+                        elif frac == 0.7:
+                            innings_pitched_to_use += 2/3
+                        elif frac == 1.0:
+                            innings_pitched_to_use += 1
+                        at_bat_event["starting_career_stat_reversed_IP"] = innings_pitched_to_use
+                    else:
+                        at_bat_event["starting_career_stat_reversed_" + stat] = career_stats_info[stat]
+
+        hit_end = False
+        last_hit_end_pa = True
+        for at_bat_event in reversed(player_game_info["batting_events" if player_type["da_type"] == "Batter" else "pitching_events"]):
+            if copied_quals and not handle_da_mlb_quals(row_data, "batting_events" if player_type["da_type"] == "Batter" else "pitching_events", at_bat_event, copied_quals, player_data, player_type, player_game_info):
+                continue
+
+            for stat in event_reversed_stats_needed:
+                if hit_end and (player_type["da_type"] != "Batter" or at_bat_event["result"] not in ("run_scored", "stolen_base", "caught_stealing") or at_bat_event["is_pr"] or not last_hit_end_pa):
+                    at_bat_event["starting_career_stat_reversed_" + stat] = -1
+                    if at_bat_event["result"] not in ("run_scored", "stolen_base", "caught_stealing", "pick_off"):
+                        last_hit_end_pa = False
+                else:
+                    if career_stats_info[stat] >= event_stats_needed[stat]:
+                        hit_end = True
+
+                    if stat == "IP":
+                        frac, whole = math.modf(career_stats_info["IP"])
+                        frac = round_value(frac, 1)
+                        innings_pitched_to_use = whole
+                        if frac == 0.3:
+                            innings_pitched_to_use += 1/3
+                        elif frac == 0.7:
+                            innings_pitched_to_use += 2/3
+                        elif frac == 1.0:
+                            innings_pitched_to_use += 1
+                        at_bat_event["starting_career_stat_reversed_" + stat] = innings_pitched_to_use
+                        if at_bat_event["result"] not in ("run_scored", "stolen_base", "caught_stealing", "pick_off"):
+                            if at_bat_event["num_outs"] == 1:
+                                career_stats_info["IP"] += 1/3
+                            elif at_bat_event["num_outs"] == 2:
+                                career_stats_info["IP"] += 2/3
+                            elif at_bat_event["num_outs"] == 3:
+                                career_stats_info["IP"] += 1
+                    elif stat == "Pit":
+                        at_bat_event["starting_career_stat_reversed_" + stat] = career_stats_info[stat]
+                        if at_bat_event["result"] not in ("run_scored", "stolen_base", "caught_stealing", "pick_off"):
+                            career_stats_info["Pit"] += (at_bat_event["pitches"] if at_bat_event["pitches"] else 0)
+                    else:
+                        at_bat_event["starting_career_stat_reversed_" + stat] = career_stats_info[stat]
+                        career_stats_info[stat] += event_type_stat_mappings[at_bat_event["result"]].get(stat, 0)
+
+            if player_type["da_type"] != "Batter":
+                if at_bat_event["event_id"] in player_game_info["pitch_event_to_run_event"]:
+                    for sub_at_bat_event in player_game_info["pitch_event_to_run_event"][at_bat_event["event_id"]]:
+                        if not sub_at_bat_event["is_inherited"]:
+                            for stat in event_reversed_stats_needed:
+                                sub_at_bat_event["starting_career_stat_reversed_" + stat] = at_bat_event["starting_career_stat_reversed_" + stat]
+    
+    if events_stats_needed:
+        career_stats_info = {}
+        for stat in events_stats_needed:
+            career_stats_info[stat] = 0
+            
+        for stat in events_stats_needed:
+            career_stats_info[stat] += saved_row_data[stat]
+
+        for at_bat_event in player_game_info["batting_events" if player_type["da_type"] == "Batter" else "pitching_events"]:        
             for stat in events_stats_needed:
                 if stat == "IP":
                     frac, whole = math.modf(career_stats_info["IP"])
@@ -25204,19 +25878,72 @@ def setup_career_stats(row_data, player_game_info, saved_row_data, index, player
                         innings_pitched_to_use += 2/3
                     elif frac == 1.0:
                         innings_pitched_to_use += 1
-                    at_bat_event["career_stats_IP"] = innings_pitched_to_use
+                    at_bat_event["starting_career_stats_" + stat] = innings_pitched_to_use
+                    if at_bat_event["result"] not in ("run_scored", "stolen_base", "caught_stealing", "pick_off"):
+                        if at_bat_event["num_outs"] == 1:
+                            career_stats_info["IP"] += 1/3
+                        elif at_bat_event["num_outs"] == 2:
+                            career_stats_info["IP"] += 2/3
+                        elif at_bat_event["num_outs"] == 3:
+                            career_stats_info["IP"] += 1
+                elif stat == "Pit":
+                    at_bat_event["starting_career_stats_" + stat] = career_stats_info[stat]
+                    if at_bat_event["result"] not in ("run_scored", "stolen_base", "caught_stealing", "pick_off"):
+                        career_stats_info["Pit"] += (at_bat_event["pitches"] if at_bat_event["pitches"] else 0)
                 else:
-                    at_bat_event["career_stats_" + stat] = career_stats_info[stat]
+                    at_bat_event["starting_career_stats_" + stat] = career_stats_info[stat]
+                    career_stats_info[stat] += event_type_stat_mappings[at_bat_event["result"]].get(stat, 0)
 
-    career_stats_info = {}
-    for stat in events_reversed_stats_needed:
-        career_stats_info[stat] = 0
-    
-    for stat in events_reversed_stats_needed:
-        career_stats_info[stat] += saved_row_data[stat]
+            if player_type["da_type"] != "Batter":
+                if at_bat_event["event_id"] in player_game_info["pitch_event_to_run_event"]:
+                    for sub_at_bat_event in player_game_info["pitch_event_to_run_event"][at_bat_event["event_id"]]:
+                        if not sub_at_bat_event["is_inherited"]:
+                            for stat in events_stats_needed:
+                                sub_at_bat_event["starting_career_stats_" + stat] = at_bat_event["starting_career_stats_" + stat]
 
-    for at_bat_event in player_game_info["pitching_run_events"]:
-        if at_bat_event["is_inherited"]:
+        for at_bat_event in player_game_info["pitching_run_events"]:
+            if at_bat_event["is_inherited"]:
+                for stat in events_stats_needed:
+                    if stat == "IP":
+                        frac, whole = math.modf(career_stats_info["IP"])
+                        frac = round_value(frac, 1)
+                        innings_pitched_to_use = whole
+                        if frac == 0.3:
+                            innings_pitched_to_use += 1/3
+                        elif frac == 0.7:
+                            innings_pitched_to_use += 2/3
+                        elif frac == 1.0:
+                            innings_pitched_to_use += 1
+                        at_bat_event["starting_career_stats_IP"] = innings_pitched_to_use
+                    else:
+                        at_bat_event["starting_career_stats_" + stat] = career_stats_info[stat]
+
+    if events_reversed_stats_needed:
+        career_stats_info = {}
+        for stat in events_reversed_stats_needed:
+            career_stats_info[stat] = 0
+        
+        for stat in events_reversed_stats_needed:
+            career_stats_info[stat] += saved_row_data[stat]
+
+        for at_bat_event in player_game_info["pitching_run_events"]:
+            if at_bat_event["is_inherited"]:
+                for stat in events_reversed_stats_needed:
+                    if stat == "IP":
+                        frac, whole = math.modf(career_stats_info["IP"])
+                        frac = round_value(frac, 1)
+                        innings_pitched_to_use = whole
+                        if frac == 0.3:
+                            innings_pitched_to_use += 1/3
+                        elif frac == 0.7:
+                            innings_pitched_to_use += 2/3
+                        elif frac == 1.0:
+                            innings_pitched_to_use += 1
+                        at_bat_event["starting_career_stats_reversed_IP"] = innings_pitched_to_use
+                    else:
+                        at_bat_event["starting_career_stats_reversed_" + stat] = career_stats_info[stat]
+
+        for at_bat_event in reversed(player_game_info["batting_events" if player_type["da_type"] == "Batter" else "pitching_events"]):
             for stat in events_reversed_stats_needed:
                 if stat == "IP":
                     frac, whole = math.modf(career_stats_info["IP"])
@@ -25228,26 +25955,224 @@ def setup_career_stats(row_data, player_game_info, saved_row_data, index, player
                         innings_pitched_to_use += 2/3
                     elif frac == 1.0:
                         innings_pitched_to_use += 1
-                    at_bat_event["career_stats_reversed_IP"] = innings_pitched_to_use
+                    at_bat_event["starting_career_stats_reversed_" + stat] = innings_pitched_to_use
+                    if at_bat_event["result"] not in ("run_scored", "stolen_base", "caught_stealing", "pick_off"):
+                        if at_bat_event["num_outs"] == 1:
+                            career_stats_info["IP"] += 1/3
+                        elif at_bat_event["num_outs"] == 2:
+                            career_stats_info["IP"] += 2/3
+                        elif at_bat_event["num_outs"] == 3:
+                            career_stats_info["IP"] += 1
+                elif stat == "Pit":
+                    at_bat_event["starting_career_stats_reversed_" + stat] = career_stats_info[stat]
+                    if at_bat_event["result"] not in ("run_scored", "stolen_base", "caught_stealing", "pick_off"):
+                        career_stats_info["Pit"] += (at_bat_event["pitches"] if at_bat_event["pitches"] else 0)
                 else:
-                    at_bat_event["career_stats_reversed_" + stat] = career_stats_info[stat]
+                    at_bat_event["starting_career_stats_reversed_" + stat] = career_stats_info[stat]
+                    career_stats_info[stat] += event_type_stat_mappings[at_bat_event["result"]].get(stat, 0)
 
-    for at_bat_event in reversed(player_game_info["batting_events" if player_type["da_type"] == "Batter" else "pitching_events"]):
-        for stat in events_reversed_stats_needed:
-            if stat == "IP":
-                innings_pitched_to_use = career_stats_info["IP"]
-                if at_bat_event["result"] not in ("run_scored", "stolen_base", "caught_stealing", "pick_off"):
-                    if at_bat_event["num_outs"] == 1:
-                        career_stats_info["IP"] += 1/3
-                    elif at_bat_event["num_outs"] == 2:
-                        career_stats_info["IP"] += 2/3
-                    elif at_bat_event["num_outs"] == 3:
-                        career_stats_info["IP"] += 1
+            if player_type["da_type"] != "Batter":
+                if at_bat_event["event_id"] in player_game_info["pitch_event_to_run_event"]:
+                    for sub_at_bat_event in player_game_info["pitch_event_to_run_event"][at_bat_event["event_id"]]:
+                        if not sub_at_bat_event["is_inherited"]:
+                            for stat in events_reversed_stats_needed:
+                                sub_at_bat_event["careers_stat_reversed_" + stat] = at_bat_event["starting_career_stats_reversed_" + stat]
 
-                    if at_bat_event["num_outs"] >= 1:
-                        innings_pitched_to_use += 1/3
-                    
-                    frac, whole = math.modf(innings_pitched_to_use)
+def setup_starting_game_stats(row_data, player_game_info, player_type, player_data, qualifiers):
+    if not player_game_info or player_game_info["missing_data"]:
+        return
+
+    event_stats_needed = {}
+    event_reversed_stats_needed = {}
+    events_stats_needed = {}
+    events_reversed_stats_needed = {}
+    if "Starting Game Event Stat" in qualifiers:
+        for qual_obj in qualifiers["Starting Game Event Stat"]:
+            if qual_obj["stat"] not in event_stats_needed:
+                event_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
+            if qual_obj["values"]["end_val"] < event_stats_needed[qual_obj["stat"]]:
+                event_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
+    if "Starting Game Event Stat Reversed" in qualifiers:
+        for qual_obj in qualifiers["Starting Game Event Stat Reversed"]:
+            if qual_obj["stat"] not in event_reversed_stats_needed:
+                event_reversed_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
+            if qual_obj["values"]["end_val"] < event_reversed_stats_needed[qual_obj["stat"]]:
+                event_reversed_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
+    if "Starting Game Event Stats" in qualifiers:
+        for qual_obj in qualifiers["Starting Game Event Stats"]:
+            if qual_obj["stat"] not in events_stats_needed:
+                events_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
+            if qual_obj["values"]["end_val"] < events_stats_needed[qual_obj["stat"]]:
+                events_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
+    if "Starting Game Event Stats Reversed" in qualifiers:
+        for qual_obj in qualifiers["Starting Game Event Stats Reversed"]:
+            if qual_obj["stat"] not in events_reversed_stats_needed:
+                events_reversed_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
+            if qual_obj["values"]["end_val"] < events_reversed_stats_needed[qual_obj["stat"]]:
+                events_reversed_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
+
+    copied_quals = copy.deepcopy(qualifiers)
+
+    career_quals = ["Starting Game Event Stat", "Starting Game Event Stat Reversed"]
+    for career_qual in career_quals:
+        if career_qual in copied_quals:
+            del copied_quals[career_qual]
+
+    if event_stats_needed:
+        career_stats_info = {}
+        for stat in event_stats_needed:
+            career_stats_info[stat] = 0
+
+        hit_end = False
+        last_hit_end_pa = True
+        for at_bat_event in player_game_info["batting_events" if player_type["da_type"] == "Batter" else "pitching_events"]:
+            if copied_quals and not handle_da_mlb_quals(row_data, "batting_events" if player_type["da_type"] == "Batter" else "pitching_events", at_bat_event, copied_quals, player_data, player_type, player_game_info):
+                continue
+            
+            for stat in event_stats_needed:
+                if hit_end and (player_type["da_type"] != "Batter" or at_bat_event["result"] not in ("run_scored", "stolen_base", "caught_stealing") or at_bat_event["is_pr"] or not last_hit_end_pa):
+                    at_bat_event["starting_game_stat_" + stat] = -1
+                    if at_bat_event["result"] not in ("run_scored", "stolen_base", "caught_stealing", "pick_off"):
+                        last_hit_end_pa = False
+                else:
+                    if career_stats_info[stat] >= event_stats_needed[stat]:
+                        hit_end = True
+
+                    if stat == "IP":
+                        frac, whole = math.modf(career_stats_info["IP"])
+                        frac = round_value(frac, 1)
+                        innings_pitched_to_use = whole
+                        if frac == 0.3:
+                            innings_pitched_to_use += 1/3
+                        elif frac == 0.7:
+                            innings_pitched_to_use += 2/3
+                        elif frac == 1.0:
+                            innings_pitched_to_use += 1
+                        at_bat_event["starting_game_stat_" + stat] = innings_pitched_to_use
+                        if at_bat_event["result"] not in ("run_scored", "stolen_base", "caught_stealing", "pick_off"):
+                            if at_bat_event["num_outs"] == 1:
+                                career_stats_info["IP"] += 1/3
+                            elif at_bat_event["num_outs"] == 2:
+                                career_stats_info["IP"] += 2/3
+                            elif at_bat_event["num_outs"] == 3:
+                                career_stats_info["IP"] += 1
+                    elif stat == "Pit":
+                        at_bat_event["starting_game_stat_" + stat] = career_stats_info[stat]
+                        if at_bat_event["result"] not in ("run_scored", "stolen_base", "caught_stealing", "pick_off"):
+                            career_stats_info["Pit"] += (at_bat_event["pitches"] if at_bat_event["pitches"] else 0)
+                    else:
+                        at_bat_event["starting_game_stat_" + stat] = career_stats_info[stat]
+                        career_stats_info[stat] += event_type_stat_mappings[at_bat_event["result"]].get(stat, 0)
+
+            if player_type["da_type"] != "Batter":
+                if at_bat_event["event_id"] in player_game_info["pitch_event_to_run_event"]:
+                    for sub_at_bat_event in player_game_info["pitch_event_to_run_event"][at_bat_event["event_id"]]:
+                        if not sub_at_bat_event["is_inherited"]:
+                            for stat in event_stats_needed:
+                                sub_at_bat_event["starting_game_stat_" + stat] = at_bat_event["starting_game_stat_" + stat]
+
+        for at_bat_event in player_game_info["pitching_run_events"]:
+            if copied_quals and not handle_da_mlb_quals(row_data, "pitching_run_events", at_bat_event, copied_quals, player_data, player_type, player_game_info):
+                continue
+            
+            if at_bat_event["is_inherited"]:
+                for stat in event_stats_needed:
+                    if stat == "IP":
+                        frac, whole = math.modf(career_stats_info["IP"])
+                        frac = round_value(frac, 1)
+                        innings_pitched_to_use = whole
+                        if frac == 0.3:
+                            innings_pitched_to_use += 1/3
+                        elif frac == 0.7:
+                            innings_pitched_to_use += 2/3
+                        elif frac == 1.0:
+                            innings_pitched_to_use += 1
+                        at_bat_event["starting_game_stat_IP"] = innings_pitched_to_use
+                    else:
+                        at_bat_event["starting_game_stat_" + stat] = career_stats_info[stat]
+
+    if event_reversed_stats_needed:
+        career_stats_info = {}
+        for stat in event_reversed_stats_needed:
+            career_stats_info[stat] = 0
+
+        for at_bat_event in player_game_info["pitching_run_events"]:
+            if copied_quals and not handle_da_mlb_quals(row_data, "pitching_run_events", at_bat_event, copied_quals, player_data, player_type, player_game_info):
+                continue
+            
+            if at_bat_event["is_inherited"]:
+                for stat in event_reversed_stats_needed:
+                    if stat == "IP":
+                        frac, whole = math.modf(career_stats_info["IP"])
+                        frac = round_value(frac, 1)
+                        innings_pitched_to_use = whole
+                        if frac == 0.3:
+                            innings_pitched_to_use += 1/3
+                        elif frac == 0.7:
+                            innings_pitched_to_use += 2/3
+                        elif frac == 1.0:
+                            innings_pitched_to_use += 1
+                        at_bat_event["starting_game_stat_reversed_IP"] = innings_pitched_to_use
+                    else:
+                        at_bat_event["starting_game_stat_reversed_" + stat] = career_stats_info[stat]
+
+        hit_end = False
+        last_hit_end_pa = True
+        for at_bat_event in reversed(player_game_info["batting_events" if player_type["da_type"] == "Batter" else "pitching_events"]):
+            if copied_quals and not handle_da_mlb_quals(row_data, "batting_events" if player_type["da_type"] == "Batter" else "pitching_events", at_bat_event, copied_quals, player_data, player_type, player_game_info):
+                continue
+
+            for stat in event_reversed_stats_needed:
+                if hit_end and (player_type["da_type"] != "Batter" or at_bat_event["result"] not in ("run_scored", "stolen_base", "caught_stealing") or at_bat_event["is_pr"] or not last_hit_end_pa):
+                    at_bat_event["starting_game_stat_reversed_" + stat] = -1
+                    if at_bat_event["result"] not in ("run_scored", "stolen_base", "caught_stealing", "pick_off"):
+                        last_hit_end_pa = False
+                else:
+                    if career_stats_info[stat] >= event_stats_needed[stat]:
+                        hit_end = True
+
+                    if stat == "IP":
+                        frac, whole = math.modf(career_stats_info["IP"])
+                        frac = round_value(frac, 1)
+                        innings_pitched_to_use = whole
+                        if frac == 0.3:
+                            innings_pitched_to_use += 1/3
+                        elif frac == 0.7:
+                            innings_pitched_to_use += 2/3
+                        elif frac == 1.0:
+                            innings_pitched_to_use += 1
+                        at_bat_event["starting_game_stat_reversed_" + stat] = innings_pitched_to_use
+                        if at_bat_event["result"] not in ("run_scored", "stolen_base", "caught_stealing", "pick_off"):
+                            if at_bat_event["num_outs"] == 1:
+                                career_stats_info["IP"] += 1/3
+                            elif at_bat_event["num_outs"] == 2:
+                                career_stats_info["IP"] += 2/3
+                            elif at_bat_event["num_outs"] == 3:
+                                career_stats_info["IP"] += 1
+                    elif stat == "Pit":
+                        at_bat_event["starting_game_stat_reversed_" + stat] = career_stats_info[stat]
+                        if at_bat_event["result"] not in ("run_scored", "stolen_base", "caught_stealing", "pick_off"):
+                            career_stats_info["Pit"] += (at_bat_event["pitches"] if at_bat_event["pitches"] else 0)
+                    else:
+                        at_bat_event["starting_game_stat_reversed_" + stat] = career_stats_info[stat]
+                        career_stats_info[stat] += event_type_stat_mappings[at_bat_event["result"]].get(stat, 0)
+
+            if player_type["da_type"] != "Batter":
+                if at_bat_event["event_id"] in player_game_info["pitch_event_to_run_event"]:
+                    for sub_at_bat_event in player_game_info["pitch_event_to_run_event"][at_bat_event["event_id"]]:
+                        if not sub_at_bat_event["is_inherited"]:
+                            for stat in event_reversed_stats_needed:
+                                sub_at_bat_event["starting_game_stat_reversed_" + stat] = at_bat_event["starting_game_stat_reversed_" + stat]
+    
+    if events_stats_needed:
+        career_stats_info = {}
+        for stat in events_stats_needed:
+            career_stats_info[stat] = 0
+
+        for at_bat_event in player_game_info["batting_events" if player_type["da_type"] == "Batter" else "pitching_events"]:        
+            for stat in events_stats_needed:
+                if stat == "IP":
+                    frac, whole = math.modf(career_stats_info["IP"])
                     frac = round_value(frac, 1)
                     innings_pitched_to_use = whole
                     if frac == 0.3:
@@ -25256,22 +26181,102 @@ def setup_career_stats(row_data, player_game_info, saved_row_data, index, player
                         innings_pitched_to_use += 2/3
                     elif frac == 1.0:
                         innings_pitched_to_use += 1
-                    
-                at_bat_event["career_stats_reversed_IP"] = innings_pitched_to_use
-            elif stat == "Pit":
-                if at_bat_event["result"] not in ("run_scored", "stolen_base", "caught_stealing", "pick_off"):
-                    career_stats_info["Pit"] += (at_bat_event["pitches"] if at_bat_event["pitches"] else 0)
-                at_bat_event["career_stats_reversed_Pit"] = career_stats_info["Pit"]
-            else:
-                career_stats_info[stat] += event_type_stat_mappings[at_bat_event["result"]].get(stat, 0)
-                at_bat_event["career_stats_reversed_" + stat] = career_stats_info[stat]
+                    at_bat_event["starting_game_stats_" + stat] = innings_pitched_to_use
+                    if at_bat_event["result"] not in ("run_scored", "stolen_base", "caught_stealing", "pick_off"):
+                        if at_bat_event["num_outs"] == 1:
+                            career_stats_info["IP"] += 1/3
+                        elif at_bat_event["num_outs"] == 2:
+                            career_stats_info["IP"] += 2/3
+                        elif at_bat_event["num_outs"] == 3:
+                            career_stats_info["IP"] += 1
+                elif stat == "Pit":
+                    at_bat_event["starting_game_stats_" + stat] = career_stats_info[stat]
+                    if at_bat_event["result"] not in ("run_scored", "stolen_base", "caught_stealing", "pick_off"):
+                        career_stats_info["Pit"] += (at_bat_event["pitches"] if at_bat_event["pitches"] else 0)
+                else:
+                    at_bat_event["starting_game_stats_" + stat] = career_stats_info[stat]
+                    career_stats_info[stat] += event_type_stat_mappings[at_bat_event["result"]].get(stat, 0)
 
-        if player_type["da_type"] != "Batter":
-            if at_bat_event["event_id"] in player_game_info["pitch_event_to_run_event"]:
-                for sub_at_bat_event in player_game_info["pitch_event_to_run_event"][at_bat_event["event_id"]]:
-                    if not sub_at_bat_event["is_inherited"]:
-                        for stat in events_reversed_stats_needed:
-                            sub_at_bat_event["careers_stat_reversed_" + stat] = at_bat_event["career_stats_reversed_" + stat]
+            if player_type["da_type"] != "Batter":
+                if at_bat_event["event_id"] in player_game_info["pitch_event_to_run_event"]:
+                    for sub_at_bat_event in player_game_info["pitch_event_to_run_event"][at_bat_event["event_id"]]:
+                        if not sub_at_bat_event["is_inherited"]:
+                            for stat in events_stats_needed:
+                                sub_at_bat_event["starting_game_stats_" + stat] = at_bat_event["starting_game_stats_" + stat]
+
+        for at_bat_event in player_game_info["pitching_run_events"]:
+            if at_bat_event["is_inherited"]:
+                for stat in events_stats_needed:
+                    if stat == "IP":
+                        frac, whole = math.modf(career_stats_info["IP"])
+                        frac = round_value(frac, 1)
+                        innings_pitched_to_use = whole
+                        if frac == 0.3:
+                            innings_pitched_to_use += 1/3
+                        elif frac == 0.7:
+                            innings_pitched_to_use += 2/3
+                        elif frac == 1.0:
+                            innings_pitched_to_use += 1
+                        at_bat_event["starting_game_stats_IP"] = innings_pitched_to_use
+                    else:
+                        at_bat_event["starting_game_stats_" + stat] = career_stats_info[stat]
+
+    if events_reversed_stats_needed:
+    career_stats_info = {}
+        for stat in events_reversed_stats_needed:
+            career_stats_info[stat] = 0
+        
+        for at_bat_event in player_game_info["pitching_run_events"]:
+            if at_bat_event["is_inherited"]:
+                for stat in events_reversed_stats_needed:
+                    if stat == "IP":
+                        frac, whole = math.modf(career_stats_info["IP"])
+                        frac = round_value(frac, 1)
+                        innings_pitched_to_use = whole
+                        if frac == 0.3:
+                            innings_pitched_to_use += 1/3
+                        elif frac == 0.7:
+                            innings_pitched_to_use += 2/3
+                        elif frac == 1.0:
+                            innings_pitched_to_use += 1
+                        at_bat_event["starting_game_stats_reversed_IP"] = innings_pitched_to_use
+                    else:
+                        at_bat_event["starting_game_stats_reversed_" + stat] = career_stats_info[stat]
+
+        for at_bat_event in reversed(player_game_info["batting_events" if player_type["da_type"] == "Batter" else "pitching_events"]):
+            for stat in events_reversed_stats_needed:
+                if stat == "IP":
+                    frac, whole = math.modf(career_stats_info["IP"])
+                    frac = round_value(frac, 1)
+                    innings_pitched_to_use = whole
+                    if frac == 0.3:
+                        innings_pitched_to_use += 1/3
+                    elif frac == 0.7:
+                        innings_pitched_to_use += 2/3
+                    elif frac == 1.0:
+                        innings_pitched_to_use += 1
+                    at_bat_event["starting_game_stats_reversed_" + stat] = innings_pitched_to_use
+                    if at_bat_event["result"] not in ("run_scored", "stolen_base", "caught_stealing", "pick_off"):
+                        if at_bat_event["num_outs"] == 1:
+                            career_stats_info["IP"] += 1/3
+                        elif at_bat_event["num_outs"] == 2:
+                            career_stats_info["IP"] += 2/3
+                        elif at_bat_event["num_outs"] == 3:
+                            career_stats_info["IP"] += 1
+                elif stat == "Pit":
+                    at_bat_event["starting_game_stats_reversed_" + stat] = career_stats_info[stat]
+                    if at_bat_event["result"] not in ("run_scored", "stolen_base", "caught_stealing", "pick_off"):
+                        career_stats_info["Pit"] += (at_bat_event["pitches"] if at_bat_event["pitches"] else 0)
+                else:
+                    at_bat_event["starting_game_stats_reversed_" + stat] = career_stats_info[stat]
+                    career_stats_info[stat] += event_type_stat_mappings[at_bat_event["result"]].get(stat, 0)
+
+            if player_type["da_type"] != "Batter":
+                if at_bat_event["event_id"] in player_game_info["pitch_event_to_run_event"]:
+                    for sub_at_bat_event in player_game_info["pitch_event_to_run_event"][at_bat_event["event_id"]]:
+                        if not sub_at_bat_event["is_inherited"]:
+                            for stat in events_reversed_stats_needed:
+                                sub_at_bat_event["starting_game_stats_reversed_" + stat] = at_bat_event["starting_game_stats_reversed_" + stat]
 
 def perform_sub_mlb_inning_qualifiers(row, player_data, qualifiers, player_game_info, player_type):
     if not player_game_info or player_game_info["missing_data"]:
@@ -29442,19 +30447,67 @@ def handle_da_mlb_quals(row, event_name, at_bat_event, qualifiers, player_data, 
 
     if not skip_career_events:
         if "Event Stat" in qualifiers:
-            if not handle_stat_num_qual(at_bat_event, qualifiers["Event Stat"], False):
+            if not handle_stat_num_qual(at_bat_event, qualifiers["Event Stat"], False, True, False):
                 return False
         
         if "Event Stat Reversed" in qualifiers:
-            if not handle_stat_num_qual(at_bat_event, qualifiers["Event Stat Reversed"], True):
+            if not handle_stat_num_qual(at_bat_event, qualifiers["Event Stat Reversed"], True, True, False):
+                return False
+
+        if "Game Event Stat" in qualifiers:
+            if not handle_stat_num_qual(at_bat_event, qualifiers["Game Event Stat"], False, False, False):
+                return False
+        
+        if "Game Event Stat Reversed" in qualifiers:
+            if not handle_stat_num_qual(at_bat_event, qualifiers["Game Event Stat Reversed"], True, False, False):
+                return False
+        
+        if "Starting Event Stat" in qualifiers:
+            if not handle_stat_num_qual(at_bat_event, qualifiers["Starting Event Stat"], False, True, True):
+                return False
+        
+        if "Starting Event Stat Reversed" in qualifiers:
+            if not handle_stat_num_qual(at_bat_event, qualifiers["Starting Event Stat Reversed"], True, True, True):
+                return False
+
+        if "Starting Game Event Stat" in qualifiers:
+            if not handle_stat_num_qual(at_bat_event, qualifiers["Starting Game Event Stat"], False, False, True):
+                return False
+        
+        if "Starting Game Event Stat Reversed" in qualifiers:
+            if not handle_stat_num_qual(at_bat_event, qualifiers["Starting Game Event Stat Reversed"], True, False, True):
                 return False
     
     if "Event Stats" in qualifiers:
-        if not handle_stats_num_qual(at_bat_event, qualifiers["Event Stats"], False):
+        if not handle_stats_num_qual(at_bat_event, qualifiers["Event Stats"], False, True, False):
             return False
     
     if "Event Stats Reversed" in qualifiers:
-        if not handle_stats_num_qual(at_bat_event, qualifiers["Event Stats Reversed"], True):
+        if not handle_stats_num_qual(at_bat_event, qualifiers["Event Stats Reversed"], True, True, False):
+            return False
+    
+    if "Game Event Stats" in qualifiers:
+        if not handle_stats_num_qual(at_bat_event, qualifiers["Game Event Stats"], False, False, False):
+            return False
+    
+    if "Game Event Stats Reversed" in qualifiers:
+        if not handle_stats_num_qual(at_bat_event, qualifiers["Game Event Stats Reversed"], True, False, False):
+            return False
+    
+    if "Starting Event Stats" in qualifiers:
+        if not handle_stats_num_qual(at_bat_event, qualifiers["Starting Event Stats"], False, True, True):
+            return False
+    
+    if "Starting Event Stats Reversed" in qualifiers:
+        if not handle_stats_num_qual(at_bat_event, qualifiers["Starting Event Stats Reversed"], True, True, True):
+            return False
+    
+    if "Starting Game Event Stats" in qualifiers:
+        if not handle_stats_num_qual(at_bat_event, qualifiers["Starting Game Event Stats"], False, False, True):
+            return False
+    
+    if "Starting Game Event Stats Reversed" in qualifiers:
+        if not handle_stats_num_qual(at_bat_event, qualifiers["Starting Game Event Stats Reversed"], True, False, True):
             return False
 
     if "Leading Off Game" in qualifiers:
@@ -31001,8 +32054,8 @@ def handle_da_pitch_quals(row, event_name, at_bat_event, qualifiers, player_data
     }
 
     for stat_str in at_bat_event:
-        if stat_str.startswith("career_stat_"):
-            if stat_str in ["career_stat_Pit", "career_stat_reversed_Pit"]:
+        if stat_str.startswith("career_stat_") or stat_str.startswith("game_stat_") or stat_str.startswith("starting_career_stat_") or stat_str.startswith("starting_game_stat_"):
+            if stat_str.endswith("_Pit"):
                 sub_event_obj[stat_str] = at_bat_event[stat_str] - (at_bat_event["pitches"] if at_bat_event["pitches"] else 0) + (sub_event_obj["pitches"] if sub_event_obj["pitches"] else 0)
             else:
                 sub_event_obj[stat_str] = at_bat_event[stat_str]
@@ -31051,13 +32104,15 @@ def handle_bool_qual(at_bat_event, qualifiers, loaded_str, negate=False):
 
     return True
 
-def handle_stat_num_qual(at_bat_event, qualifiers, is_reversed):
+def handle_stat_num_qual(at_bat_event, qualifiers, is_reversed, is_career, is_starting):
     has_any_match = False
     for qual_object in qualifiers:
         if is_reversed:
-            num_str = "career_stat_reversed_" + qual_object["stat"]
+            num_str = ("career_stat_reversed_" + qual_object["stat"]) if is_career else ("game_stat_reversed_" + qual_object["stat"])
         else:
-            num_str = "career_stat_" + qual_object["stat"]
+            num_str = ("career_stat_" + qual_object["stat"]) if is_career else ("game_stat_" + qual_object["stat"])
+        if is_starting:
+            num_str = "starting_" + num_str
         if num_str not in at_bat_event or at_bat_event[num_str] == None:
             return False
             
@@ -31080,13 +32135,15 @@ def handle_stat_num_qual(at_bat_event, qualifiers, is_reversed):
     
     return has_any_match
 
-def handle_stats_num_qual(at_bat_event, qualifiers, is_reversed):
+def handle_stats_num_qual(at_bat_event, qualifiers, is_reversed, is_career, is_starting):
     has_any_match = False
     for qual_object in qualifiers:
         if is_reversed:
-            num_str = "career_stats_reversed_" + qual_object["stat"]
+            num_str = ("career_stats_reversed_" + qual_object["stat"]) if is_career else ("game_stats_reversed_" + qual_object["stat"])
         else:
-            num_str = "career_stats_" + qual_object["stat"]
+            num_str = ("career_stats_" + qual_object["stat"]) if is_career else ("game_stats_" + qual_object["stat"])
+        if is_starting:
+            num_str = "starting_" + num_str
         if num_str not in at_bat_event or at_bat_event[num_str] == None:
             return False
             
@@ -31788,6 +32845,8 @@ def get_mlb_game_stats_single_thread(all_rows, qualifiers, games_to_skip, player
 
     event_stats_needed = {}
     event_reversed_stats_needed = {}
+    starting_event_stats_needed = {}
+    starting_event_reversed_stats_needed = {}
     if "Event Stat" in qualifiers:
         for qual_obj in qualifiers["Event Stat"]:
             if qual_obj["stat"] not in event_stats_needed:
@@ -31800,13 +32859,25 @@ def get_mlb_game_stats_single_thread(all_rows, qualifiers, games_to_skip, player
                 event_reversed_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
             if qual_obj["values"]["end_val"] < event_reversed_stats_needed[qual_obj["stat"]]:
                 event_reversed_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
-    stats_needed = set(list(event_stats_needed.keys()) + list(event_reversed_stats_needed.keys()))
+    if "Starting Event Stat" in qualifiers:
+        for qual_obj in qualifiers["Starting Event Stat"]:
+            if qual_obj["stat"] not in starting_event_stats_needed:
+                starting_event_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
+            if qual_obj["values"]["end_val"] < starting_event_stats_needed[qual_obj["stat"]]:
+                starting_event_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
+    if "Starting Event Stat Reversed" in qualifiers:
+        for qual_obj in qualifiers["Starting Event Stat Reversed"]:
+            if qual_obj["stat"] not in starting_event_reversed_stats_needed:
+                starting_event_reversed_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
+            if qual_obj["values"]["end_val"] < starting_event_reversed_stats_needed[qual_obj["stat"]]:
+                starting_event_reversed_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
+    stats_needed = set(list(event_stats_needed.keys()) + list(event_reversed_stats_needed.keys()) + list(starting_event_stats_needed.keys()) + list(starting_event_reversed_stats_needed.keys()))
     
     saved_row_data = {}
     for stat in stats_needed:
         saved_row_data[stat] = 0
 
-    is_reverse = "Event Stat Reversed" in qualifiers
+    is_reverse = "Event Stat Reversed" in qualifiers or "Starting Event Stat Reversed" in qualifiers
 
     get_mlb_game_links(player_data, player_type, player_data["player_link"], all_rows)
 
@@ -31820,11 +32891,23 @@ def get_mlb_game_stats_single_thread(all_rows, qualifiers, games_to_skip, player
                 game_data, row_data, index, sub_missing_games = get_live_game_data(index, player_data, row_data, player_type, qualifiers, True)
                 has_match, raw_row_data = handle_result_qualifiers(game_data, index, row_data, sub_missing_games, player_type, player_data, qualifiers, saved_row_data, count_info, extra_stats)
                 
+                if stat not in raw_row_data:
+                    break
+
                 if has_match:
                     new_rows.append(row_data)
 
                 for stat in stats_needed:
-                    saved_row_data[stat] += raw_row_data.get(stat, 0)
+                    if stat in starting_event_stats_needed:
+                        saved_row_data["starting_career_stat_" + stat] = saved_row_data[stat]
+                        if saved_row_data[stat] >= starting_event_stats_needed[stat]:
+                            hit_end = True
+                    if stat in starting_event_reversed_stats_needed:
+                        saved_row_data["starting_career_stat_reversed_" + stat] = saved_row_data[stat]
+                        if saved_row_data[stat] >= starting_event_reversed_stats_needed[stat]:
+                            hit_end = True
+
+                    saved_row_data[stat] += raw_row_data[stat]
                 
                     if stat in event_stats_needed:
                         saved_row_data["career_stat_" + stat] = saved_row_data[stat]
@@ -31836,10 +32919,17 @@ def get_mlb_game_stats_single_thread(all_rows, qualifiers, games_to_skip, player
                             hit_end = True
 
                 if "Event Stat" in qualifiers:
-                    if not handle_stat_num_qual(saved_row_data, qualifiers["Event Stat"], False):
+                    if not handle_stat_num_qual(saved_row_data, qualifiers["Event Stat"], False, True, False):
                         break
                 if "Event Stat Reversed" in qualifiers:
-                    if not handle_stat_num_qual(saved_row_data, qualifiers["Event Stat Reversed"], True):
+                    if not handle_stat_num_qual(saved_row_data, qualifiers["Event Stat Reversed"], True, True, False):
+                        break
+            
+                if "Starting Event Stat" in qualifiers:
+                    if not handle_stat_num_qual(saved_row_data, qualifiers["Starting Event Stat"], False, True, True):
+                        break
+                if "Starting Event Stat Reversed" in qualifiers:
+                    if not handle_stat_num_qual(saved_row_data, qualifiers["Starting Event Stat Reversed"], True, True, True):
                         break
 
                 percent_complete = 100 * (count_info["count"] / count_info["total_count"])
@@ -32312,12 +33402,21 @@ def handle_result_qualifiers(game_data, index, row_data, sub_missing_games, play
     raw_row_data = row_data
     if "Event Stat" in qualifiers or "Event Stat Reversed" in qualifiers or "Event Stats" in qualifiers or "Event Stats Reversed" in qualifiers:
         setup_career_stats(row_data, game_data, saved_row_data, index, player_type, player_data, qualifiers)
+    
+    if "Starting Event Stat" in qualifiers or "Starting Event Stat Reversed" in qualifiers or "Starting Event Stats" in qualifiers or "Starting Event Stats Reversed" in qualifiers:
+        setup_starting_career_stats(row_data, game_data, saved_row_data, index, player_type, player_data, qualifiers)
+    
+    if "Game Event Stat" in qualifiers or "Game Event Stat Reversed" in qualifiers or "Game Event Stats" in qualifiers or "Game Event Stats Reversed" in qualifiers:
+        setup_game_stats(row_data, game_data, player_type, player_data, qualifiers)
+    
+    if "Starting Game Event Stat" in qualifiers or "Starting Game Event Stat Reversed" in qualifiers or "Starting Game Event Stats" in qualifiers or "Starting Game Event Stats Reversed" in qualifiers:
+        setup_starting_game_stats(row_data, game_data, player_type, player_data, qualifiers)
 
     if "Game Number" in qualifiers or "Stadium" in qualifiers or "Exact Stadium" in qualifiers or "Start Time" in qualifiers or "Local Start Time" in qualifiers or "Surface" in qualifiers or "Condition" in qualifiers or "Temperature" in qualifiers or "City" in qualifiers or "Exact City" in qualifiers or "State" in qualifiers or "Exact State" in qualifiers or "Time Zone" in qualifiers or "Exact Time Zone" in qualifiers or "Country" in qualifiers or "Exact Country" in qualifiers or "Wind" in qualifiers or "Umpire" in qualifiers or "Home Plate Umpire" in qualifiers or "Run Support" in qualifiers:
         if not perform_mlb_game_qualifiers(row_data, qualifiers):
             return False, raw_row_data
 
-    if "Late" in qualifiers or "Close" in qualifiers or "Batting Against" in qualifiers or "Pitching Against" in qualifiers or "Batting Against First Name" in qualifiers or "Pitching Against First Name" in qualifiers or "Batting Against Last Name" in qualifiers or "Pitching Against Last Name" in qualifiers or "Facing Stat Rank" in qualifiers or "Facing League Stat Rank" in qualifiers or "Facing AL Stat Rank" in qualifiers or "Facing NL Stat Rank" in qualifiers or "Facing Stat Percent" in qualifiers or "Facing League Stat Percent" in qualifiers or "Facing AL Stat Percent" in qualifiers or "Facing NL Stat Percent" in qualifiers or "Facing Stat" in qualifiers or "Facing AL Stat" in qualifiers or "Facing NL Stat" in qualifiers or "Batting In Front Of Stat Rank" in qualifiers or "Batting In Front Of League Stat Rank" in qualifiers or "Batting In Front Of AL Stat Rank" in qualifiers or "Batting In Front Of NL Stat Rank" in qualifiers or "Batting In Front Of Stat Percent" in qualifiers or "Batting In Front Of League Stat Percent" in qualifiers or "Batting In Front Of AL Stat Percent" in qualifiers or "Batting In Front Of NL Stat Percent" in qualifiers or "Batting In Front Of Stat" in qualifiers or "Batting In Front Of AL Stat" in qualifiers or "Batting In Front Of NL Stat" in qualifiers or "Batting Behind Stat Rank" in qualifiers or "Batting Behind League Stat Rank" in qualifiers or "Batting Behind AL Stat Rank" in qualifiers or "Batting Behind NL Stat Rank" in qualifiers or "Batting Behind Stat Percent" in qualifiers or "Batting Behind League Stat Percent" in qualifiers or "Batting Behind AL Stat Percent" in qualifiers or "Batting Behind NL Stat Percent" in qualifiers or "Batting Behind Stat" in qualifiers or "Batting Behind AL Stat" in qualifiers or "Batting Behind NL Stat" in qualifiers or "Batting Next To Stat Rank" in qualifiers or "Batting Next To League Stat Rank" in qualifiers or "Batting Next To AL Stat Rank" in qualifiers or "Batting Next To NL Stat Rank" in qualifiers or "Batting Next To Stat Percent" in qualifiers or "Batting Next To League Stat Percent" in qualifiers or "Batting Next To AL Stat Percent" in qualifiers or "Batting Next To NL Stat Percent" in qualifiers or "Batting Next To Stat" in qualifiers or "Batting Next To AL Stat" in qualifiers or "Batting Next To NL Stat" in qualifiers or "Driven In" in qualifiers or "Batted In" in qualifiers or "Back To Back With" in qualifiers or "Batting Behind" in qualifiers or "Batting In Front Of" in qualifiers or "Batting Next To" in qualifiers or "Event Formula" in qualifiers or "Caught By" in qualifiers or "Stealing On" in qualifiers or "On Field With" in qualifiers or "On Field Against" in qualifiers or "Position" in qualifiers or "Hit Location" in qualifiers or "Exact Hit Location" in qualifiers or "Facing Primary Position" in qualifiers or "Facing Main Position" in qualifiers or "Facing Position" in qualifiers or "Bases Empty" in qualifiers or "Men On Base" in qualifiers or "Walk Off" in qualifiers or "Inside The Park HR" in qualifiers or "Walk Off Opportunity" in qualifiers or "Game Tying" in qualifiers or "Game Tying Opportunity" in qualifiers or "Go Ahead" in qualifiers or "Go Ahead Opportunity" in qualifiers or "Go Ahead Or Game Tying" in qualifiers or "Go Ahead Or Game Tying Opportunity" in qualifiers or "Game Winning" in qualifiers or "Tying On Deck" in qualifiers or "Winning On Deck" in qualifiers or "Tying At Bat" in qualifiers or "Winning At Bat" in qualifiers or "Tying In Scoring" in qualifiers or "Winning In Scoring" in qualifiers or "Tying On Base" in qualifiers or "Winning On Base" in qualifiers or "Last Inning" in qualifiers or "Last Out" in qualifiers or "Last Batter" in qualifiers or "Extra Innings" in qualifiers or "RISP" in qualifiers or "Event Sub Query" in qualifiers or "Or Event Sub Query" in qualifiers or "Batter First Plate Appearance" in qualifiers or "Pitcher First Batter Faced" in qualifiers or "Batter Last Plate Appearance" in qualifiers or "Pitcher Last Batter Faced" in qualifiers or "Facing Pitcher" in qualifiers or "Facing Position Player" in qualifiers or "Stealing Second" in qualifiers or "Stealing Third" in qualifiers or "Stealing Home" in qualifiers or "Bunting" in qualifiers or "Fastball" in qualifiers or "Out Of Zone" in qualifiers or "In Zone" in qualifiers or "Breaking" in qualifiers or "Offspeed" in qualifiers or "Pinch Hitting" in qualifiers or "Facing Starter" in qualifiers or "Facing Reliever" in qualifiers or "Leading Off Inning" in qualifiers or "Inning Started" in qualifiers or "Leading Off Game" in qualifiers or "Leading Off Whole Game" in qualifiers or "Swung At First Pitch" in qualifiers or "First Pitch" in qualifiers or "Batter Ahead" in qualifiers or "Even Count" in qualifiers or "Pitcher Ahead" in qualifiers or "After Batter Ahead" in qualifiers or "After Even Count" in qualifiers or "After Pitcher Ahead" in qualifiers or "Top Inning" in qualifiers or "Bottom Inning" in qualifiers or "Full Count" in qualifiers or "Man On First" in qualifiers or "Man On Second" in qualifiers or "Man On Third" in qualifiers or "Bases Loaded" in qualifiers or "Ending Outs" in qualifiers or "Outs" in qualifiers or "Outs Remaining" in qualifiers or "Swinging On Strikes" in qualifiers or "Swinging On Balls" in qualifiers or "After Swinging On Strikes" in qualifiers or "After Swinging On Balls" in qualifiers or "After Strikes" in qualifiers or "After Balls" in qualifiers or "Strikes" in qualifiers or "Balls" in qualifiers or "Runs" in qualifiers or "Play Outs" in qualifiers or "RBIs" in qualifiers or "Number Drove In" in qualifiers or "Pitch Speed" in qualifiers or "Pitch Zone" in qualifiers or "Pitch Spin" in qualifiers or "Exit Velocity" in qualifiers or "Hit Distance" in qualifiers or "Launch Angle" in qualifiers or "Inning" in qualifiers or "Inning Reversed" in qualifiers or "Scheduled Inning Reversed" in qualifiers or "Pitching Against Batting Order" in qualifiers or "Count" in qualifiers or "After Count" in qualifiers or "After Swinging On Count" in qualifiers or "Swinging On Count" in qualifiers or "Team Score" in qualifiers or "Ending Team Score" in qualifiers or "Game Pitch Count" in qualifiers or "Team Pitch Count" in qualifiers or "Pitch Count" in qualifiers or "Pitcher Batters Faced" in qualifiers or "Batter Plate Appearance"  in qualifiers or "Pitcher Batters Faced Reversed" in qualifiers or "Batter Plate Appearance Reversed" in qualifiers or "Starting Pitch Count" in qualifiers or "Innings Pitched" in qualifiers or "Ending Innings Pitched" in qualifiers or "At Bat Pitch Count" in qualifiers or "Time Facing Opponent" in qualifiers or "Number Of Men On Base" in qualifiers or "Number Of Men In Scoring" in qualifiers or "Men On Base" in qualifiers or "Time Through Lineup" in qualifiers or "Opponent Score" in qualifiers or "Score Margin" in qualifiers or "Score Difference" in qualifiers or  "Ending Opponent Score" in qualifiers or "Ending Score Margin" in qualifiers or "Ending Score Difference" in qualifiers or "Event Stat" in qualifiers or "Event Stat Reversed" in qualifiers or "Event Stats" in qualifiers or "Event Stats Reversed" in qualifiers or "Facing Lefty" in qualifiers or "Facing Righty" in qualifiers or "Batting Lefty" in qualifiers or "Batting Righty" in qualifiers or "Pitching Lefty" in qualifiers or "Pitching Righty" in qualifiers or "Pitch Type" in qualifiers or "Exact Pitch Type" in qualifiers or "Hit Trajectory" in qualifiers or "Hit Hardness" in qualifiers or "Event Type" in qualifiers or "Local Event Time" in qualifiers or "Event Time" in qualifiers or "Exact Event Type" in qualifiers or "Event Description" in qualifiers or "Previous Event Type" in qualifiers or "Previous Exact Event Type" in qualifiers or "Previous Event Description" in qualifiers or "Upcoming Event Type" in qualifiers or "Upcoming Exact Event Type" in qualifiers or "Upcoming Event Description" in qualifiers or "Exact Event Description" in qualifiers or "current-stats" in extra_stats:    
+    if "Late" in qualifiers or "Close" in qualifiers or "Batting Against" in qualifiers or "Pitching Against" in qualifiers or "Batting Against First Name" in qualifiers or "Pitching Against First Name" in qualifiers or "Batting Against Last Name" in qualifiers or "Pitching Against Last Name" in qualifiers or "Facing Stat Rank" in qualifiers or "Facing League Stat Rank" in qualifiers or "Facing AL Stat Rank" in qualifiers or "Facing NL Stat Rank" in qualifiers or "Facing Stat Percent" in qualifiers or "Facing League Stat Percent" in qualifiers or "Facing AL Stat Percent" in qualifiers or "Facing NL Stat Percent" in qualifiers or "Facing Stat" in qualifiers or "Facing AL Stat" in qualifiers or "Facing NL Stat" in qualifiers or "Batting In Front Of Stat Rank" in qualifiers or "Batting In Front Of League Stat Rank" in qualifiers or "Batting In Front Of AL Stat Rank" in qualifiers or "Batting In Front Of NL Stat Rank" in qualifiers or "Batting In Front Of Stat Percent" in qualifiers or "Batting In Front Of League Stat Percent" in qualifiers or "Batting In Front Of AL Stat Percent" in qualifiers or "Batting In Front Of NL Stat Percent" in qualifiers or "Batting In Front Of Stat" in qualifiers or "Batting In Front Of AL Stat" in qualifiers or "Batting In Front Of NL Stat" in qualifiers or "Batting Behind Stat Rank" in qualifiers or "Batting Behind League Stat Rank" in qualifiers or "Batting Behind AL Stat Rank" in qualifiers or "Batting Behind NL Stat Rank" in qualifiers or "Batting Behind Stat Percent" in qualifiers or "Batting Behind League Stat Percent" in qualifiers or "Batting Behind AL Stat Percent" in qualifiers or "Batting Behind NL Stat Percent" in qualifiers or "Batting Behind Stat" in qualifiers or "Batting Behind AL Stat" in qualifiers or "Batting Behind NL Stat" in qualifiers or "Batting Next To Stat Rank" in qualifiers or "Batting Next To League Stat Rank" in qualifiers or "Batting Next To AL Stat Rank" in qualifiers or "Batting Next To NL Stat Rank" in qualifiers or "Batting Next To Stat Percent" in qualifiers or "Batting Next To League Stat Percent" in qualifiers or "Batting Next To AL Stat Percent" in qualifiers or "Batting Next To NL Stat Percent" in qualifiers or "Batting Next To Stat" in qualifiers or "Batting Next To AL Stat" in qualifiers or "Batting Next To NL Stat" in qualifiers or "Driven In" in qualifiers or "Batted In" in qualifiers or "Back To Back With" in qualifiers or "Batting Behind" in qualifiers or "Batting In Front Of" in qualifiers or "Batting Next To" in qualifiers or "Event Formula" in qualifiers or "Caught By" in qualifiers or "Stealing On" in qualifiers or "On Field With" in qualifiers or "On Field Against" in qualifiers or "Position" in qualifiers or "Hit Location" in qualifiers or "Exact Hit Location" in qualifiers or "Facing Primary Position" in qualifiers or "Facing Main Position" in qualifiers or "Facing Position" in qualifiers or "Bases Empty" in qualifiers or "Men On Base" in qualifiers or "Walk Off" in qualifiers or "Inside The Park HR" in qualifiers or "Walk Off Opportunity" in qualifiers or "Game Tying" in qualifiers or "Game Tying Opportunity" in qualifiers or "Go Ahead" in qualifiers or "Go Ahead Opportunity" in qualifiers or "Go Ahead Or Game Tying" in qualifiers or "Go Ahead Or Game Tying Opportunity" in qualifiers or "Game Winning" in qualifiers or "Tying On Deck" in qualifiers or "Winning On Deck" in qualifiers or "Tying At Bat" in qualifiers or "Winning At Bat" in qualifiers or "Tying In Scoring" in qualifiers or "Winning In Scoring" in qualifiers or "Tying On Base" in qualifiers or "Winning On Base" in qualifiers or "Last Inning" in qualifiers or "Last Out" in qualifiers or "Last Batter" in qualifiers or "Extra Innings" in qualifiers or "RISP" in qualifiers or "Event Sub Query" in qualifiers or "Or Event Sub Query" in qualifiers or "Batter First Plate Appearance" in qualifiers or "Pitcher First Batter Faced" in qualifiers or "Batter Last Plate Appearance" in qualifiers or "Pitcher Last Batter Faced" in qualifiers or "Facing Pitcher" in qualifiers or "Facing Position Player" in qualifiers or "Stealing Second" in qualifiers or "Stealing Third" in qualifiers or "Stealing Home" in qualifiers or "Bunting" in qualifiers or "Fastball" in qualifiers or "Out Of Zone" in qualifiers or "In Zone" in qualifiers or "Breaking" in qualifiers or "Offspeed" in qualifiers or "Pinch Hitting" in qualifiers or "Facing Starter" in qualifiers or "Facing Reliever" in qualifiers or "Leading Off Inning" in qualifiers or "Inning Started" in qualifiers or "Leading Off Game" in qualifiers or "Leading Off Whole Game" in qualifiers or "Swung At First Pitch" in qualifiers or "First Pitch" in qualifiers or "Batter Ahead" in qualifiers or "Even Count" in qualifiers or "Pitcher Ahead" in qualifiers or "After Batter Ahead" in qualifiers or "After Even Count" in qualifiers or "After Pitcher Ahead" in qualifiers or "Top Inning" in qualifiers or "Bottom Inning" in qualifiers or "Full Count" in qualifiers or "Man On First" in qualifiers or "Man On Second" in qualifiers or "Man On Third" in qualifiers or "Bases Loaded" in qualifiers or "Ending Outs" in qualifiers or "Outs" in qualifiers or "Outs Remaining" in qualifiers or "Swinging On Strikes" in qualifiers or "Swinging On Balls" in qualifiers or "After Swinging On Strikes" in qualifiers or "After Swinging On Balls" in qualifiers or "After Strikes" in qualifiers or "After Balls" in qualifiers or "Strikes" in qualifiers or "Balls" in qualifiers or "Runs" in qualifiers or "Play Outs" in qualifiers or "RBIs" in qualifiers or "Number Drove In" in qualifiers or "Pitch Speed" in qualifiers or "Pitch Zone" in qualifiers or "Pitch Spin" in qualifiers or "Exit Velocity" in qualifiers or "Hit Distance" in qualifiers or "Launch Angle" in qualifiers or "Inning" in qualifiers or "Inning Reversed" in qualifiers or "Scheduled Inning Reversed" in qualifiers or "Pitching Against Batting Order" in qualifiers or "Count" in qualifiers or "After Count" in qualifiers or "After Swinging On Count" in qualifiers or "Swinging On Count" in qualifiers or "Team Score" in qualifiers or "Ending Team Score" in qualifiers or "Game Pitch Count" in qualifiers or "Team Pitch Count" in qualifiers or "Pitch Count" in qualifiers or "Pitcher Batters Faced" in qualifiers or "Batter Plate Appearance"  in qualifiers or "Pitcher Batters Faced Reversed" in qualifiers or "Batter Plate Appearance Reversed" in qualifiers or "Starting Pitch Count" in qualifiers or "Innings Pitched" in qualifiers or "Ending Innings Pitched" in qualifiers or "At Bat Pitch Count" in qualifiers or "Time Facing Opponent" in qualifiers or "Number Of Men On Base" in qualifiers or "Number Of Men In Scoring" in qualifiers or "Men On Base" in qualifiers or "Time Through Lineup" in qualifiers or "Opponent Score" in qualifiers or "Score Margin" in qualifiers or "Score Difference" in qualifiers or  "Ending Opponent Score" in qualifiers or "Ending Score Margin" in qualifiers or "Ending Score Difference" in qualifiers or "Event Stat" in qualifiers or "Event Stat Reversed" in qualifiers or "Event Stats" in qualifiers or "Event Stats Reversed" in qualifiers or "Game Event Stat" in qualifiers or "Game Event Stat Reversed" in qualifiers or "Game Event Stats" in qualifiers or "Game Event Stats Reversed" in qualifiers or "Starting Event Stat" in qualifiers or "Starting Event Stat Reversed" in qualifiers or "Starting Event Stats" in qualifiers or "Starting Event Stats Reversed" in qualifiers or "Starting Game Event Stat" in qualifiers or "Starting Game Event Stat Reversed" in qualifiers or "Starting Game Event Stats" in qualifiers or "Starting Game Event Stats Reversed" in qualifiers or "Facing Lefty" in qualifiers or "Facing Righty" in qualifiers or "Batting Lefty" in qualifiers or "Batting Righty" in qualifiers or "Pitching Lefty" in qualifiers or "Pitching Righty" in qualifiers or "Pitch Type" in qualifiers or "Exact Pitch Type" in qualifiers or "Hit Trajectory" in qualifiers or "Hit Hardness" in qualifiers or "Event Type" in qualifiers or "Local Event Time" in qualifiers or "Event Time" in qualifiers or "Exact Event Type" in qualifiers or "Event Description" in qualifiers or "Previous Event Type" in qualifiers or "Previous Exact Event Type" in qualifiers or "Previous Event Description" in qualifiers or "Upcoming Event Type" in qualifiers or "Upcoming Exact Event Type" in qualifiers or "Upcoming Event Description" in qualifiers or "Exact Event Description" in qualifiers or "current-stats" in extra_stats:    
         if sub_missing_games:
             count_info["missing_games"] = True
         has_match, raw_row_data = perform_sub_mlb_game_qualifiers(row_data, player_data, qualifiers, game_data, player_type, True)
@@ -32337,7 +33436,7 @@ def has_other_game_quals(qualifiers):
     if "Game Number" in qualifiers or "Stadium" in qualifiers or "Exact Stadium" in qualifiers or "Start Time" in qualifiers or "Local Start Time" in qualifiers or "Surface" in qualifiers or "Condition" in qualifiers or "Temperature" in qualifiers or "City" in qualifiers or "Exact City" in qualifiers or "State" in qualifiers or "Exact State" in qualifiers or "Time Zone" in qualifiers or "Exact Time Zone" in qualifiers or "Country" in qualifiers or "Exact Country" in qualifiers or "Wind" in qualifiers or "Umpire" in qualifiers or "Home Plate Umpire" in qualifiers or "Run Support" in qualifiers:
         return True
 
-    if "Event Stats" in qualifiers or "Event Stats Reversed" in qualifiers or "Late" in qualifiers or "Close" in qualifiers or "Batting Against" in qualifiers or "Pitching Against" in qualifiers or "Batting Against First Name" in qualifiers or "Pitching Against First Name" in qualifiers or "Batting Against Last Name" in qualifiers or "Pitching Against Last Name" in qualifiers or "Facing Stat Rank" in qualifiers or "Facing League Stat Rank" in qualifiers or "Facing AL Stat Rank" in qualifiers or "Facing NL Stat Rank" in qualifiers or "Facing Stat Percent" in qualifiers or "Facing League Stat Percent" in qualifiers or "Facing AL Stat Percent" in qualifiers or "Facing NL Stat Percent" in qualifiers or "Facing Stat" in qualifiers or "Facing AL Stat" in qualifiers or "Facing NL Stat" in qualifiers or "Batting In Front Of Stat Rank" in qualifiers or "Batting In Front Of League Stat Rank" in qualifiers or "Batting In Front Of AL Stat Rank" in qualifiers or "Batting In Front Of NL Stat Rank" in qualifiers or "Batting In Front Of Stat Percent" in qualifiers or "Batting In Front Of League Stat Percent" in qualifiers or "Batting In Front Of AL Stat Percent" in qualifiers or "Batting In Front Of NL Stat Percent" in qualifiers or "Batting In Front Of Stat" in qualifiers or "Batting In Front Of AL Stat" in qualifiers or "Batting In Front Of NL Stat" in qualifiers or "Batting Behind Stat Rank" in qualifiers or "Batting Behind League Stat Rank" in qualifiers or "Batting Behind AL Stat Rank" in qualifiers or "Batting Behind NL Stat Rank" in qualifiers or "Batting Behind Stat Percent" in qualifiers or "Batting Behind League Stat Percent" in qualifiers or "Batting Behind AL Stat Percent" in qualifiers or "Batting Behind NL Stat Percent" in qualifiers or "Batting Behind Stat" in qualifiers or "Batting Behind AL Stat" in qualifiers or "Batting Behind NL Stat" in qualifiers or "Batting Next To Stat Rank" in qualifiers or "Batting Next To League Stat Rank" in qualifiers or "Batting Next To AL Stat Rank" in qualifiers or "Batting Next To NL Stat Rank" in qualifiers or "Batting Next To Stat Percent" in qualifiers or "Batting Next To League Stat Percent" in qualifiers or "Batting Next To AL Stat Percent" in qualifiers or "Batting Next To NL Stat Percent" in qualifiers or "Batting Next To Stat" in qualifiers or "Batting Next To AL Stat" in qualifiers or "Batting Next To NL Stat" in qualifiers or "Inning Stat" in qualifiers or "Driven In" in qualifiers or "Batted In" in qualifiers or "Back To Back With" in qualifiers or "Batting Behind" in qualifiers or "Batting In Front Of" in qualifiers or "Batting Next To" in qualifiers or "Event Formula" in qualifiers or "Caught By" in qualifiers or "Stealing On" in qualifiers or "On Field With" in qualifiers or "On Field Against" in qualifiers or "Position" in qualifiers or "Hit Location" in qualifiers or "Exact Hit Location" in qualifiers or "Facing Primary Position" in qualifiers or "Facing Main Position" in qualifiers or "Facing Position" in qualifiers or "Bases Empty" in qualifiers or "Men On Base" in qualifiers or "Walk Off" in qualifiers or "Inside The Park HR" in qualifiers or "Walk Off Opportunity" in qualifiers or "Game Tying" in qualifiers or "Game Tying Opportunity" in qualifiers or "Go Ahead" in qualifiers or "Go Ahead Opportunity" in qualifiers or "Go Ahead Or Game Tying" in qualifiers or "Go Ahead Or Game Tying Opportunity" in qualifiers or "Game Winning" in qualifiers or "Tying On Deck" in qualifiers or "Winning On Deck" in qualifiers or "Tying At Bat" in qualifiers or "Winning At Bat" in qualifiers or "Tying In Scoring" in qualifiers or "Winning In Scoring" in qualifiers or "Tying On Base" in qualifiers or "Winning On Base" in qualifiers or "Last Inning" in qualifiers or "Last Out" in qualifiers or "Last Batter" in qualifiers or "Extra Innings" in qualifiers or "RISP" in qualifiers or "Event Sub Query" in qualifiers or "Or Event Sub Query" in qualifiers or "Batter First Plate Appearance" in qualifiers or "Pitcher First Batter Faced" in qualifiers or "Batter Last Plate Appearance" in qualifiers or "Pitcher Last Batter Faced" in qualifiers or "Facing Position Player" in qualifiers or "Facing Pitcher" in qualifiers or "Stealing Second" in qualifiers or "Stealing Third" in qualifiers or "Stealing Home" in qualifiers or "Bunting" in qualifiers or "Fastball" in qualifiers or "Out Of Zone" in qualifiers or "In Zone" in qualifiers or "Breaking" in qualifiers or "Offspeed" in qualifiers or "Pinch Hitting" in qualifiers or "Facing Starter" in qualifiers or "Facing Reliever" in qualifiers or "Leading Off Inning" in qualifiers or "Inning Started" in qualifiers or "Leading Off Game" in qualifiers or "Leading Off Whole Game" in qualifiers or "Swung At First Pitch" in qualifiers or "First Pitch" in qualifiers or "Batter Ahead" in qualifiers or "Even Count" in qualifiers or "Pitcher Ahead" in qualifiers or "After Batter Ahead" in qualifiers or "After Even Count" in qualifiers or "After Pitcher Ahead" in qualifiers or "Top Inning" in qualifiers or "Bottom Inning" in qualifiers or "Full Count" in qualifiers or "Man On First" in qualifiers or "Man On Second" in qualifiers or "Man On Third" in qualifiers or "Bases Loaded" in qualifiers or "Ending Outs" in qualifiers or "Outs" in qualifiers or "Outs Remaining" in qualifiers or "Swinging On Strikes" in qualifiers or "Swinging On Balls" in qualifiers or "After Swinging On Strikes" in qualifiers or "After Swinging On Balls" in qualifiers or "After Strikes" in qualifiers or "After Balls" in qualifiers or "Strikes" in qualifiers or "Balls" in qualifiers or "Runs" in qualifiers or "Play Outs" in qualifiers or "RBIs" in qualifiers or "Number Drove In" in qualifiers or "Pitch Speed" in qualifiers or "Pitch Zone" in qualifiers or "Pitch Spin" in qualifiers or "Exit Velocity" in qualifiers or "Hit Distance" in qualifiers or "Launch Angle" in qualifiers or "Inning" in qualifiers or "Inning Reversed" in qualifiers or "Scheduled Inning Reversed" in qualifiers or "Pitching Against Batting Order" in qualifiers or "Count" in qualifiers or "After Count" in qualifiers or "After Swinging On Count" in qualifiers or "Swinging On Count" in qualifiers or "Team Score" in qualifiers or "Ending Team Score" in qualifiers or "Game Pitch Count" in qualifiers or "Team Pitch Count" in qualifiers or "Pitch Count" in qualifiers or "Pitcher Batters Faced" in qualifiers or "Batter Plate Appearance" in qualifiers or "Pitcher Batters Faced Reversed" in qualifiers or "Batter Plate Appearance Reversed" in qualifiers or "Starting Pitch Count" in qualifiers or "Innings Pitched" in qualifiers or "Ending Innings Pitched" in qualifiers or "At Bat Pitch Count" in qualifiers or "Time Facing Opponent" in qualifiers or "Number Of Men On Base" in qualifiers or "Number Of Men In Scoring" in qualifiers or "Men On Base" in qualifiers or "Time Through Lineup" in qualifiers or "Opponent Score" in qualifiers or "Score Margin" in qualifiers or "Score Difference" in qualifiers or  "Ending Opponent Score" in qualifiers or "Ending Score Margin" in qualifiers or "Ending Score Difference" in qualifiers or "Facing Lefty" in qualifiers or "Facing Righty" in qualifiers or "Batting Lefty" in qualifiers or "Batting Righty" in qualifiers or "Pitching Lefty" in qualifiers or "Pitching Righty" in qualifiers or "Pitch Type" in qualifiers or "Exact Pitch Type" in qualifiers or "Hit Trajectory" in qualifiers or "Hit Hardness" in qualifiers or "Local Event Time" in qualifiers or "Event Time" in qualifiers or "Event Type" in qualifiers or "Exact Event Type" in qualifiers or "Event Description" in qualifiers or "Upcoming Player Event Type" in qualifiers or "Upcoming Exact Player Event Type" in qualifiers or "Previous Player Event Type" in qualifiers or "Previous Exact Player Event Type" in qualifiers or "Previous Event Type" in qualifiers or "Previous Exact Event Type" in qualifiers or "Previous Event Description" in qualifiers or "Upcoming Event Type" in qualifiers or "Upcoming Exact Event Type" in qualifiers or "Upcoming Event Description" in qualifiers or "Exact Event Description" in qualifiers:
+    if "Event Stats" in qualifiers or "Event Stats Reversed" in qualifiers or "Game Event Stats" in qualifiers or "Game Event Stats Reversed" in qualifiers or "Starting Event Stats" in qualifiers or "Starting Event Stats Reversed" in qualifiers or "Starting Game Event Stats" in qualifiers or "Starting Game Event Stats Reversed" in qualifiers or "Late" in qualifiers or "Close" in qualifiers or "Batting Against" in qualifiers or "Pitching Against" in qualifiers or "Batting Against First Name" in qualifiers or "Pitching Against First Name" in qualifiers or "Batting Against Last Name" in qualifiers or "Pitching Against Last Name" in qualifiers or "Facing Stat Rank" in qualifiers or "Facing League Stat Rank" in qualifiers or "Facing AL Stat Rank" in qualifiers or "Facing NL Stat Rank" in qualifiers or "Facing Stat Percent" in qualifiers or "Facing League Stat Percent" in qualifiers or "Facing AL Stat Percent" in qualifiers or "Facing NL Stat Percent" in qualifiers or "Facing Stat" in qualifiers or "Facing AL Stat" in qualifiers or "Facing NL Stat" in qualifiers or "Batting In Front Of Stat Rank" in qualifiers or "Batting In Front Of League Stat Rank" in qualifiers or "Batting In Front Of AL Stat Rank" in qualifiers or "Batting In Front Of NL Stat Rank" in qualifiers or "Batting In Front Of Stat Percent" in qualifiers or "Batting In Front Of League Stat Percent" in qualifiers or "Batting In Front Of AL Stat Percent" in qualifiers or "Batting In Front Of NL Stat Percent" in qualifiers or "Batting In Front Of Stat" in qualifiers or "Batting In Front Of AL Stat" in qualifiers or "Batting In Front Of NL Stat" in qualifiers or "Batting Behind Stat Rank" in qualifiers or "Batting Behind League Stat Rank" in qualifiers or "Batting Behind AL Stat Rank" in qualifiers or "Batting Behind NL Stat Rank" in qualifiers or "Batting Behind Stat Percent" in qualifiers or "Batting Behind League Stat Percent" in qualifiers or "Batting Behind AL Stat Percent" in qualifiers or "Batting Behind NL Stat Percent" in qualifiers or "Batting Behind Stat" in qualifiers or "Batting Behind AL Stat" in qualifiers or "Batting Behind NL Stat" in qualifiers or "Batting Next To Stat Rank" in qualifiers or "Batting Next To League Stat Rank" in qualifiers or "Batting Next To AL Stat Rank" in qualifiers or "Batting Next To NL Stat Rank" in qualifiers or "Batting Next To Stat Percent" in qualifiers or "Batting Next To League Stat Percent" in qualifiers or "Batting Next To AL Stat Percent" in qualifiers or "Batting Next To NL Stat Percent" in qualifiers or "Batting Next To Stat" in qualifiers or "Batting Next To AL Stat" in qualifiers or "Batting Next To NL Stat" in qualifiers or "Inning Stat" in qualifiers or "Driven In" in qualifiers or "Batted In" in qualifiers or "Back To Back With" in qualifiers or "Batting Behind" in qualifiers or "Batting In Front Of" in qualifiers or "Batting Next To" in qualifiers or "Event Formula" in qualifiers or "Caught By" in qualifiers or "Stealing On" in qualifiers or "On Field With" in qualifiers or "On Field Against" in qualifiers or "Position" in qualifiers or "Hit Location" in qualifiers or "Exact Hit Location" in qualifiers or "Facing Primary Position" in qualifiers or "Facing Main Position" in qualifiers or "Facing Position" in qualifiers or "Bases Empty" in qualifiers or "Men On Base" in qualifiers or "Walk Off" in qualifiers or "Inside The Park HR" in qualifiers or "Walk Off Opportunity" in qualifiers or "Game Tying" in qualifiers or "Game Tying Opportunity" in qualifiers or "Go Ahead" in qualifiers or "Go Ahead Opportunity" in qualifiers or "Go Ahead Or Game Tying" in qualifiers or "Go Ahead Or Game Tying Opportunity" in qualifiers or "Game Winning" in qualifiers or "Tying On Deck" in qualifiers or "Winning On Deck" in qualifiers or "Tying At Bat" in qualifiers or "Winning At Bat" in qualifiers or "Tying In Scoring" in qualifiers or "Winning In Scoring" in qualifiers or "Tying On Base" in qualifiers or "Winning On Base" in qualifiers or "Last Inning" in qualifiers or "Last Out" in qualifiers or "Last Batter" in qualifiers or "Extra Innings" in qualifiers or "RISP" in qualifiers or "Event Sub Query" in qualifiers or "Or Event Sub Query" in qualifiers or "Batter First Plate Appearance" in qualifiers or "Pitcher First Batter Faced" in qualifiers or "Batter Last Plate Appearance" in qualifiers or "Pitcher Last Batter Faced" in qualifiers or "Facing Position Player" in qualifiers or "Facing Pitcher" in qualifiers or "Stealing Second" in qualifiers or "Stealing Third" in qualifiers or "Stealing Home" in qualifiers or "Bunting" in qualifiers or "Fastball" in qualifiers or "Out Of Zone" in qualifiers or "In Zone" in qualifiers or "Breaking" in qualifiers or "Offspeed" in qualifiers or "Pinch Hitting" in qualifiers or "Facing Starter" in qualifiers or "Facing Reliever" in qualifiers or "Leading Off Inning" in qualifiers or "Inning Started" in qualifiers or "Leading Off Game" in qualifiers or "Leading Off Whole Game" in qualifiers or "Swung At First Pitch" in qualifiers or "First Pitch" in qualifiers or "Batter Ahead" in qualifiers or "Even Count" in qualifiers or "Pitcher Ahead" in qualifiers or "After Batter Ahead" in qualifiers or "After Even Count" in qualifiers or "After Pitcher Ahead" in qualifiers or "Top Inning" in qualifiers or "Bottom Inning" in qualifiers or "Full Count" in qualifiers or "Man On First" in qualifiers or "Man On Second" in qualifiers or "Man On Third" in qualifiers or "Bases Loaded" in qualifiers or "Ending Outs" in qualifiers or "Outs" in qualifiers or "Outs Remaining" in qualifiers or "Swinging On Strikes" in qualifiers or "Swinging On Balls" in qualifiers or "After Swinging On Strikes" in qualifiers or "After Swinging On Balls" in qualifiers or "After Strikes" in qualifiers or "After Balls" in qualifiers or "Strikes" in qualifiers or "Balls" in qualifiers or "Runs" in qualifiers or "Play Outs" in qualifiers or "RBIs" in qualifiers or "Number Drove In" in qualifiers or "Pitch Speed" in qualifiers or "Pitch Zone" in qualifiers or "Pitch Spin" in qualifiers or "Exit Velocity" in qualifiers or "Hit Distance" in qualifiers or "Launch Angle" in qualifiers or "Inning" in qualifiers or "Inning Reversed" in qualifiers or "Scheduled Inning Reversed" in qualifiers or "Pitching Against Batting Order" in qualifiers or "Count" in qualifiers or "After Count" in qualifiers or "After Swinging On Count" in qualifiers or "Swinging On Count" in qualifiers or "Team Score" in qualifiers or "Ending Team Score" in qualifiers or "Game Pitch Count" in qualifiers or "Team Pitch Count" in qualifiers or "Pitch Count" in qualifiers or "Pitcher Batters Faced" in qualifiers or "Batter Plate Appearance" in qualifiers or "Pitcher Batters Faced Reversed" in qualifiers or "Batter Plate Appearance Reversed" in qualifiers or "Starting Pitch Count" in qualifiers or "Innings Pitched" in qualifiers or "Ending Innings Pitched" in qualifiers or "At Bat Pitch Count" in qualifiers or "Time Facing Opponent" in qualifiers or "Number Of Men On Base" in qualifiers or "Number Of Men In Scoring" in qualifiers or "Men On Base" in qualifiers or "Time Through Lineup" in qualifiers or "Opponent Score" in qualifiers or "Score Margin" in qualifiers or "Score Difference" in qualifiers or  "Ending Opponent Score" in qualifiers or "Ending Score Margin" in qualifiers or "Ending Score Difference" in qualifiers or "Facing Lefty" in qualifiers or "Facing Righty" in qualifiers or "Batting Lefty" in qualifiers or "Batting Righty" in qualifiers or "Pitching Lefty" in qualifiers or "Pitching Righty" in qualifiers or "Pitch Type" in qualifiers or "Exact Pitch Type" in qualifiers or "Hit Trajectory" in qualifiers or "Hit Hardness" in qualifiers or "Local Event Time" in qualifiers or "Event Time" in qualifiers or "Event Type" in qualifiers or "Exact Event Type" in qualifiers or "Event Description" in qualifiers or "Upcoming Player Event Type" in qualifiers or "Upcoming Exact Player Event Type" in qualifiers or "Previous Player Event Type" in qualifiers or "Previous Exact Player Event Type" in qualifiers or "Previous Event Type" in qualifiers or "Previous Exact Event Type" in qualifiers or "Previous Event Description" in qualifiers or "Upcoming Event Type" in qualifiers or "Upcoming Exact Event Type" in qualifiers or "Upcoming Event Description" in qualifiers or "Exact Event Description" in qualifiers:
         return True
 
     return False
