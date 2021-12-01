@@ -9023,7 +9023,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                     player_type["da_type"] = {
                                         "type" : "Skater"
                                     }
-                                    extra_stats.add("Shot On")
+                                    extra_stats.add("Shot")
                                     extra_stats.add("penalties")
                                     extra_stats.add("current-stats")
                                 
@@ -18133,12 +18133,14 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                     "is_primary" : is_primary,
                     "gameWinningGoal" : "gameWinningGoal" in scoring_play["result"] and scoring_play["result"]["gameWinningGoal"],
                     "emptyNet" : "emptyNet" in scoring_play["result"] and scoring_play["result"]["emptyNet"],
-                    "assists" : assists
+                    "assists" : assists,
+                    "shotType" : scoring_play["result"]["secondaryType"] if "secondaryType" in scoring_play["result"] else None
                 }})
             elif player_saved:
                 game_data["goal_against"].append({**shared_data , **{
                     "scorer" : scorer,
-                    "gameWinningGoal" : "gameWinningGoal" in scoring_play["result"] and scoring_play["result"]["gameWinningGoal"]
+                    "gameWinningGoal" : "gameWinningGoal" in scoring_play["result"] and scoring_play["result"]["gameWinningGoal"],
+                    "shotType" : scoring_play["result"]["secondaryType"] if "secondaryType" in scoring_play["result"] else None
                 }})
             
             if is_player_on_ice(game_data["shift_data"], team_on_ice, opp_on_ice, scoring_play["about"]["period"], period_time, player_id, True):
@@ -22451,7 +22453,7 @@ def perform_sub_metadata_qual(event, attr_str, qualifiers, player_game_info, yea
                 if event["assists"]:
                     return False
     elif attr_str == "penaltyType":
-        if "penaltyType" not in event:
+        if "penaltyType" not in event or not event["penaltyType"]:
             return False
             
         for qual_object in qualifiers:
@@ -22462,7 +22464,7 @@ def perform_sub_metadata_qual(event, attr_str, qualifiers, player_game_info, yea
                 if not re.sub(r"[\s-]+", "", event["penaltyType"].lower()) in qual_object["values"]:
                     return False
     elif attr_str == "shotType":
-        if "shotType" not in event:
+        if "shotType" not in event or not event["shotType"]:
             return False
             
         for qual_object in qualifiers:
@@ -31856,6 +31858,9 @@ def is_against_header(header, extra_stats, player_type, has_toi_stats):
 
     if header.startswith("Player"):
         return False
+
+    if "show-stat-" + header.lower() in extra_stats:
+        return False
     
     if "shootout" in extra_stats or "penalty-shot" in extra_stats:
         if player_type["da_type"]["type"] == "Skater":
@@ -31873,11 +31878,11 @@ def is_against_header(header, extra_stats, player_type, has_toi_stats):
         return True
 
     if ("/GP" in header or "/82GP" in header) and not header == "GP/GP":
-        if "show-stat-" + header.lower() not in extra_stats and not "per-game" in extra_stats:
+        if not "per-game" in extra_stats:
             if "TOI" not in header or "current-stats-no-game" in extra_stats:
                 return True
 
-    if header == "CurrentCap$" and "show-stat-" + header.lower() not in extra_stats:
+    if header == "CurrentCap$":
         return True
 
     if header.startswith("GP") and not header.startswith("GP_TOI"):
@@ -31897,7 +31902,7 @@ def is_against_header(header, extra_stats, player_type, has_toi_stats):
     if (header.startswith("EV") or header.startswith("PP") or header.startswith("SH")) and "strength" in extra_stats:
         return True
 
-    if "Shot On" in extra_stats:
+    if "Shot On" in extra_stats or ("Shot" in extra_stats and player_type["da_type"]["type"] == "Skater"):
         return header not in ("G", "G_5v5", "Shft", "Shft/GP", "TOI/Shft", "OTG", "EVTOI",  "PPTOI",  "SHTOI", "TOI_5v5", "EVTOI/GP",  "PPTOI/GP",  "SHTOI/GP", "TOI/GP_5v5", "GWG", "1stG", "HAT", "EVG", "AdjG", "PPG", "SHG", "S", "S%", "S_5v5", "S%_5v5", "G/GP", "EVG/GP", "PPG/GP", "SHG/GP", "S/GP", "G/60M", "EVG/60M", "PPG/60M", "SHG/60M", "S/60M",  "G/60M_5v5", "S/60M_5v5")
         #return header not in ("G", "G_5v5", "OTG", "TOI/GP_5v5", "GWG", "1stG", "HAT", "EVG", "AdjG", "PPG", "SHG", "S", "S%", "S_5v5", "S%_5v5", "G/GP", "EVG/GP", "PPG/GP", "SHG/GP", "S/GP", "G/60M", "S/60M",  "G/60M_5v5", "S/60M_5v5")
     if "Assisted By" in extra_stats:
@@ -31925,7 +31930,7 @@ def is_against_header(header, extra_stats, player_type, has_toi_stats):
         return header not in ("Shft", "Shft/GP", "TOI/Shft", "OTG", "EVTOI",  "PPTOI",  "SHTOI", "TOI_5v5", "EVTOI/GP",  "PPTOI/GP",  "SHTOI/GP", "TOI/GP_5v5", "FO", "FOW", "FO%", "OZFO", "OZFOW", "OZFO%", "DZFO", "DZFOW", "DZFO%", "FO/GP", "FOW/GP", "FO/60M", "FOW/60M")
     if "Fight Against" in extra_stats:
         return header not in ("Shft", "Shft/GP", "TOI/Shft", "EVTOI",  "PPTOI",  "SHTOI", "TOI_5v5", "EVTOI/GP",  "PPTOI/GP",  "SHTOI/GP", "TOI/GP_5v5", "Fight", "Fight/GP", "Fight/60M")
-    if "Shot By" in extra_stats:
+    if "Shot By" in extra_stats or ("Shot" in extra_stats and player_type["da_type"]["type"] != "Skater"):
         if header in ("GF", "GFA"):
             return True
     if "current-stats" in extra_stats or "current-stats-zone" in extra_stats or "Shot By" in extra_stats:
@@ -31937,10 +31942,10 @@ def is_against_header(header, extra_stats, player_type, has_toi_stats):
             if "type" in headers[player_type["da_type"]["type"]][header] and (headers[player_type["da_type"]["type"]][header]["type"] == "Awards/Honors" or headers[player_type["da_type"]["type"]][header]["type"] == "5v5"):
                 return True
             if "type" in headers[player_type["da_type"]["type"]][header] and (headers[player_type["da_type"]["type"]][header]["type"] == "Advanced") and ("S%" in header or "EV" in header or "Post" in header):
-                if "show-stat-" + header.lower() not in extra_stats and ("shot" not in extra_stats or not ("S%" in header)):
+                if ("shot" not in extra_stats or not ("S%" in header)):
                     return True
             if "Adj" in header:
-                if "show-stat-" + header.lower() not in extra_stats and "adjusted" not in extra_stats:
+                if "adjusted" not in extra_stats:
                     return True
             if "type" in headers[player_type["da_type"]["type"]][header] and (headers[player_type["da_type"]["type"]][header]["type"] == "5v5") and "strength" in extra_stats:
                 return True

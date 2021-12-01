@@ -38764,6 +38764,9 @@ def is_against_header(header, extra_stats, player_type):
     if header.startswith("Player") or (header.startswith("G") and not header.startswith("GS") and not header.startswith("GDP") and not header.startswith("GWRBI")):
         return False
 
+    if "show-stat-" + header.lower() in extra_stats:
+        return False
+
     if "type" in headers[player_type["da_type"]][header] and headers[player_type["da_type"]][header]["type"] != "Per Game/Advanced":
         return True
 

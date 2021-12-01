@@ -20589,6 +20589,9 @@ def is_against_header(header, over_header, extra_stats):
     if header.startswith("Player") or header == "G":
         return False
 
+    if "show-stat-" + header.lower() in extra_stats:
+        return False
+
     if over_header == "Passing" or over_header == "Rushing" or over_header == "Receiving":
         if "FmbLst" in header:
             return True
