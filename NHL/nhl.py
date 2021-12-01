@@ -18826,6 +18826,9 @@ def is_player_on_ice(shift_data, team_on_ice, opp_on_ice, period, period_time, p
     return False
 
 def start_time_to_str(time_str):
+    if not time_str:
+        return 0
+
     time_split = time_str.split(":")
     if len(time_split) > 1:
         minutes = int(time_split[0])
