@@ -364,6 +364,7 @@ headers = {
             "round" : "percent",
             "display" : False,
             "display-value" : "1stStar%",
+            "type" : "Per Game/60 Minutes",
             "valid_since" : {
                 "season" : 1936,
                 "game" : 1936
@@ -374,6 +375,7 @@ headers = {
             "round" : "percent",
             "display" : False,
             "display-value" : "2ndStar%",
+            "type" : "Per Game/60 Minutes",
             "valid_since" : {
                 "season" : 1936,
                 "game" : 1936
@@ -384,6 +386,7 @@ headers = {
             "round" : "percent",
             "display" : False,
             "display-value" : "3rdStar%",
+            "type" : "Per Game/60 Minutes",
             "valid_since" : {
                 "season" : 1936,
                 "game" : 1936
@@ -394,6 +397,7 @@ headers = {
             "round" : "percent",
             "display" : False,
             "display-value" : "TtlStar%",
+            "type" : "Per Game/60 Minutes",
             "valid_since" : {
                 "season" : 1936,
                 "game" : 1936
