@@ -21877,11 +21877,11 @@ def perform_metadata_qual(event_name, goal_event, qualifiers, player_game_info, 
                 return False
         
         if "Penalty Type" in qualifiers:
-            if not perform_sub_metadata_qual(goal_event, "penaltyType", qualifiers["Unassisted"], player_game_info, year):
+            if not perform_sub_metadata_qual(goal_event, "penaltyType", qualifiers["Penalty Type"], player_game_info, year):
                 return False
         
         if "Shot Type" in qualifiers:
-            if not perform_sub_metadata_qual(goal_event, "shotType", qualifiers["Unassisted"], player_game_info, year):
+            if not perform_sub_metadata_qual(goal_event, "shotType", qualifiers["Shot Type"], player_game_info, year):
                 return False
 
     if "On Ice With" in qualifiers:
