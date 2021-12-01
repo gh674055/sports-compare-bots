@@ -26222,7 +26222,7 @@ def setup_starting_game_stats(row_data, player_game_info, player_type, player_da
                         at_bat_event["starting_game_stats_" + stat] = career_stats_info[stat]
 
     if events_reversed_stats_needed:
-    career_stats_info = {}
+        career_stats_info = {}
         for stat in events_reversed_stats_needed:
             career_stats_info[stat] = 0
         
