@@ -30346,16 +30346,12 @@ def print_player_data(player_datas, player_type, highest_vals, lowest_vals, has_
         if len(all_headers["Advanced"]) <= 4 or "Penalty On" in extra_stats:
             if "PEN" in all_headers["Advanced"]:
                 pen_obj = all_headers["Advanced"]["PEN"]
-                pim_obj = all_headers["Standard"]["PIM"]
                 del all_headers["Standard"]["PIM"]
                 all_headers["Standard"]["PEN"] = pen_obj
-                all_headers["Standard"]["PIM"] = pim_obj
             if "PEN/60M" in all_headers["Advanced"]:
                 pen_obj = all_headers["Advanced"]["PEN/60M"]
-                pim_obj = all_headers["Per Game/60 Minutes"]["PIM/60M"]
-                del all_headers["Per Game/60 Minutes"]["PIM/60M"]
+                del all_headers["Per Game/60 Minutes"]["PEN/60M"]
                 all_headers["Per Game/60 Minutes"]["PEN/60M"] = pen_obj
-                all_headers["Per Game/60 Minutes"]["PIM/60M"] = pim_obj
             del all_headers["Advanced"]
 
     error_getting_adv = False
@@ -30681,16 +30677,12 @@ def get_reddit_player_table(player_datas, player_type, debug_mode, original_comm
         if len(all_headers["Advanced"]) <= 4 or "Penalty On" in extra_stats:
             if "PEN" in all_headers["Advanced"]:
                 pen_obj = all_headers["Advanced"]["PEN"]
-                pim_obj = all_headers["Standard"]["PIM"]
                 del all_headers["Standard"]["PIM"]
                 all_headers["Standard"]["PEN"] = pen_obj
-                all_headers["Standard"]["PIM"] = pim_obj
             if "PEN/60M" in all_headers["Advanced"]:
                 pen_obj = all_headers["Advanced"]["PEN/60M"]
-                pim_obj = all_headers["Per Game/60 Minutes"]["PIM/60M"]
-                del all_headers["Per Game/60 Minutes"]["PIM/60M"]
+                del all_headers["Per Game/60 Minutes"]["PEN/60M"]
                 all_headers["Per Game/60 Minutes"]["PEN/60M"] = pen_obj
-                all_headers["Per Game/60 Minutes"]["PIM/60M"] = pim_obj
             del all_headers["Advanced"]
 
     all_unique_quals = True
@@ -31934,7 +31926,7 @@ def is_against_header(header, extra_stats, player_type, has_toi_stats):
     if "Block On" in extra_stats:
         return header not in ("Shft", "Shft/GP", "TOI/Shft", "OTG", "EVTOI",  "PPTOI",  "SHTOI", "TOI_5v5", "EVTOI/GP",  "PPTOI/GP",  "SHTOI/GP", "TOI/GP_5v5", "BLK", "BLK/GP", "BLK/60M")
     if "Penalty On" in extra_stats:
-        if header in ("Shft", "Shft/GP", "TOI/Shft", "EVTOI",  "PPTOI",  "SHTOI", "TOI_5v5", "EVTOI/GP",  "PPTOI/GP",  "SHTOI/GP", "TOI/GP_5v5", "PIM", "PEN", "PIM/GP", "PEN/GP", "PEN/60M"):
+        if header in ("Shft", "Shft/GP", "TOI/Shft", "EVTOI",  "PPTOI",  "SHTOI", "TOI_5v5", "EVTOI/GP",  "PPTOI/GP",  "SHTOI/GP", "TOI/GP_5v5", "PIM", "PEN", "PIM/GP", "PEN/GP", "PEN/60M", "PIM/60M"):
             return False
         else:
             return not ("type" in headers[player_type["da_type"]["type"]][header] and headers[player_type["da_type"]["type"]][header]["type"] == "Penalty")
