@@ -30346,11 +30346,11 @@ def print_player_data(player_datas, player_type, highest_vals, lowest_vals, has_
         if len(all_headers["Advanced"]) <= 4 or "Penalty On" in extra_stats:
             if "PEN" in all_headers["Advanced"]:
                 pen_obj = all_headers["Advanced"]["PEN"]
-                del all_headers["Standard"]["PIM"]
+                del all_headers["Advanced"]["PEN"]
                 all_headers["Standard"]["PEN"] = pen_obj
             if "PEN/60M" in all_headers["Advanced"]:
                 pen_obj = all_headers["Advanced"]["PEN/60M"]
-                del all_headers["Per Game/60 Minutes"]["PEN/60M"]
+                del all_headers["Advanced"]["PEN/60M"]
                 all_headers["Per Game/60 Minutes"]["PEN/60M"] = pen_obj
             del all_headers["Advanced"]
 
@@ -30677,11 +30677,11 @@ def get_reddit_player_table(player_datas, player_type, debug_mode, original_comm
         if len(all_headers["Advanced"]) <= 4 or "Penalty On" in extra_stats:
             if "PEN" in all_headers["Advanced"]:
                 pen_obj = all_headers["Advanced"]["PEN"]
-                del all_headers["Standard"]["PIM"]
+                del all_headers["Advanced"]["PEN"]
                 all_headers["Standard"]["PEN"] = pen_obj
             if "PEN/60M" in all_headers["Advanced"]:
                 pen_obj = all_headers["Advanced"]["PEN/60M"]
-                del all_headers["Per Game/60 Minutes"]["PEN/60M"]
+                del all_headers["Advanced"]["PEN/60M"]
                 all_headers["Per Game/60 Minutes"]["PEN/60M"] = pen_obj
             del all_headers["Advanced"]
 
