@@ -31922,18 +31922,18 @@ def is_against_header(header, extra_stats, player_type, has_toi_stats):
         #return header not in ("G", "G_5v5", "OTG", "TOI/GP_5v5","GWG", "EVG", "AdjG", "PPG", "SHG", "G/GP", "EVG/GP", "PPG/GP", "SHG/GP", "G/60M",  "G/60M_5v5", "A", "A/GP", "A/60M", "A1", "A1%", "A1/GP", "A1/60M", "A_5v5", "A/60M_5v5", "A1_5v5", "A1%_5v5", "A1/60M_5v5", "AdjA", "EVA", "EVA/GP", "EVA1", "EVA1%", "EVA1/GP", "SHA", "SHA/GP", "SHA1", "SHA1%", "SHA1/GP", "PPA", "PPA/GP", "PPA1", "PPA1%", "PPA1/GP", "P", "P/GP", "P/60M", "P_5v5", "P/60M_5v5", "AdjP", "EVP", "EVP/GP", "SHP", "SHP/GP", "PPP", "PPP/GP")
         return header not in ("G", "G_5v5", "OTG", "Shft", "Shft/GP", "TOI/Shft", "EVTOI",  "PPTOI",  "SHTOI", "TOI_5v5", "EVTOI/GP",  "PPTOI/GP",  "SHTOI/GP", "TOI/GP_5v5","GWG", "1stG", "HAT", "ENG", "ENA", "ENP", "EVG", "AdjG", "PPG", "SHG", "G/GP", "EVG/GP", "EVG/60M", "PPG/GP", "PPG/60M", "G/60M",  "G/60M_5v5", "A", "A/GP", "A/60M", "A1", "A1%", "A1/GP", "A1/60M", "A_5v5", "A/60M_5v5", "A1_5v5", "A1%_5v5", "A1/60M_5v5", "AdjA", "EVA", "SHA", "PPA", "P", "P/GP", "P/60M", "P1", "P1%", "P1/GP", "P1/60M", "P_5v5", "P/60M_5v5", "P1_5v5", "P1%_5v5", "P1/60M_5v5", "AdjP", "EVP", "EVP/GP", "EVP/60M", "SHP", "PPP", "PPP/GP", "PPP/60M", "EVA1%", "EVP1%", "SHA1%", "SHP1%", "PPA1%", "PPP1%", "EVA1", "EVP1", "SHA1", "SHP1", "PPA1", "PPP1", "SHG/GP", "SHP/GP", "SHP/60M", "SHG/60M")
     if "Hit On" in extra_stats:
-        return header not in ("Shft", "Shft/GP", "TOI/Shft", "OTG", "EVTOI",  "PPTOI",  "SHTOI", "TOI_5v5", "EVTOI/GP",  "PPTOI/GP",  "SHTOI/GP", "TOI/GP_5v5", "HIT", "HIT/GP", "HIT/60M")
+        return header not in ("HIT", "HIT/GP", "HIT/60M")
     if "Block On" in extra_stats:
-        return header not in ("Shft", "Shft/GP", "TOI/Shft", "OTG", "EVTOI",  "PPTOI",  "SHTOI", "TOI_5v5", "EVTOI/GP",  "PPTOI/GP",  "SHTOI/GP", "TOI/GP_5v5", "BLK", "BLK/GP", "BLK/60M")
+        return header not in ("BLK", "BLK/GP", "BLK/60M")
     if "Penalty On" in extra_stats:
-        if header in ("Shft", "Shft/GP", "TOI/Shft", "EVTOI",  "PPTOI",  "SHTOI", "TOI_5v5", "EVTOI/GP",  "PPTOI/GP",  "SHTOI/GP", "TOI/GP_5v5", "PIM", "PEN", "PIM/GP", "PEN/GP", "PEN/60M", "PIM/60M"):
+        if header in ("PIM", "PEN", "PIM/GP", "PEN/GP", "PEN/60M", "PIM/60M"):
             return False
         else:
             return not ("type" in headers[player_type["da_type"]["type"]][header] and headers[player_type["da_type"]["type"]][header]["type"] == "Penalty")
     if "Faceoff Against" in extra_stats:
-        return header not in ("Shft", "Shft/GP", "TOI/Shft", "OTG", "EVTOI",  "PPTOI",  "SHTOI", "TOI_5v5", "EVTOI/GP",  "PPTOI/GP",  "SHTOI/GP", "TOI/GP_5v5", "FO", "FOW", "FO%", "OZFO", "OZFOW", "OZFO%", "DZFO", "DZFOW", "DZFO%", "FO/GP", "FOW/GP", "FO/60M", "FOW/60M")
+        return header not in ("FO", "FOW", "FO%", "OZFO", "OZFOW", "OZFO%", "DZFO", "DZFOW", "DZFO%", "FO/GP", "FOW/GP", "FO/60M", "FOW/60M")
     if "Fight Against" in extra_stats:
-        return header not in ("Shft", "Shft/GP", "TOI/Shft", "EVTOI",  "PPTOI",  "SHTOI", "TOI_5v5", "EVTOI/GP",  "PPTOI/GP",  "SHTOI/GP", "TOI/GP_5v5", "Fight", "Fight/GP", "Fight/60M")
+        return header not in ("Fight", "Fight/GP", "Fight/60M")
     if "Shot By" in extra_stats or ("Shot" in extra_stats and player_type["da_type"]["type"] != "Skater"):
         if header in ("GF", "GFA"):
             return True
