@@ -9645,7 +9645,13 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                     extra_stats.add("event-stat-per")
                                 elif stat == "shot":
                                     stat = "S"
-                                elif qual_type == "shot-faced" or qual_type == "shots-faced":
+                                elif stat == "goal":
+                                    stat = "G"
+                                elif stat == "assist":
+                                    stat = "A"
+                                elif stat == "point":
+                                    stat = "P"
+                                elif stat == "shot-faced" or stat == "shots-faced":
                                     stat = "SA"
                                 else:
                                     stat = qual_type.upper()
@@ -10004,6 +10010,12 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 extra_stats.add("event-stat-per")
                             elif qual_type == "shot":
                                 stat = "S"
+                            elif qual_type == "goal":
+                                stat = "G"
+                            elif qual_type == "assist":
+                                stat = "A"
+                            elif qual_type == "point":
+                                stat = "P"
                             elif qual_type == "shot-faced" or qual_type == "shots-faced":
                                 stat = "SA"
                             else:
