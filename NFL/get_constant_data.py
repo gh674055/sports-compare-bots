@@ -86,7 +86,6 @@ stat_groups = {
         },
         "SkYds": {
             "positive" : False,
-            "display" : False,
             "valid_since" : {
                 "season" : 1969,
                 "game-np" : 1970
@@ -188,7 +187,6 @@ stat_groups = {
         },
         "SkYds/G": {
             "positive" : False,
-            "display" : False,
             "round" : 2,
             "valid_since" : {
                 "season" : 1969,
@@ -225,7 +223,6 @@ stat_groups = {
         },
         "SkYds/17G": {
             "positive" : False,
-            "display" : False,
             "round" : 2,
             "valid_since" : {
                 "season" : 1969,
