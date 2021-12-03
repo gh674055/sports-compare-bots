@@ -17742,9 +17742,9 @@ def determine_stat_value(player_game_info, all_events, qualifiers, og_row, playe
                             row["TOI_5v5"] += 1
                     is_shift_match = True
 
-                if goal_event["shift_index"] not in matching_shifts:
-                    row["Shft"] += 1
-                    matching_shifts.add(goal_event["shift_index"])
+                    if goal_event["shift_index"] not in matching_shifts:
+                        row["Shft"] += 1
+                        matching_shifts.add(goal_event["shift_index"])
 
     calculate_row_attrs(row, player_type)
 
