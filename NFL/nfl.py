@@ -64,7 +64,6 @@ import multiprocessing
 import functools
 import ephem
 import ssl
-import ephem
 
 subreddits_to_crawl = {
     "sportscomparebots" : False,
@@ -10398,20 +10397,22 @@ def perform_qualifier(player_data, player_type, ind_player_type, row, time_frame
     
     if "Temperate Season" in qualifiers:
         for qual_object in qualifiers["Temperate Season"]:
-            winter_start = ephem.localtime(ephem.previous_winter_solstice(str(row["Shared"]["Year"]))).date()
-            spring_start = ephem.localtime(ephem.next_spring_equinox(str(row["Shared"]["Year"]))).date()
-            summer_start = ephem.localtime(ephem.next_summer_solstice(str(row["Shared"]["Year"]))).date()
-            fall_start = ephem.localtime(ephem.next_fall_equinox(str(row["Shared"]["Year"]))).date()
-            winter_2_start = ephem.localtime(ephem.next_winter_solstice(str(row["Shared"]["Year"]))).date()
+            winter_start = ephem.date(ephem.previous_winter_solstice(str(row["Shared"]["Year"])))
+            spring_start = ephem.date(ephem.next_spring_equinox(str(row["Shared"]["Year"])))
+            summer_start = ephem.date(ephem.next_summer_solstice(str(row["Shared"]["Year"])))
+            fall_start = ephem.date(ephem.next_fall_equinox(str(row["Shared"]["Year"])))
+            winter_2_start = ephem.date(ephem.next_winter_solstice(str(row["Shared"]["Year"])))
+
+            ephem_date = ephem.date(row["Shared"]["Date"])
 
             season = None
-            if row["Shared"]["Date"] >= winter_start and row["Shared"]["Date"] < spring_start:
+            if ephem_date >= winter_start and ephem_date < spring_start:
                 season = "Winter"
-            elif row["Shared"]["Date"] >= spring_start and row["Shared"]["Date"] < summer_start:
+            elif ephem_date >= spring_start and ephem_date < summer_start:
                 season = "Spring"
-            elif row["Shared"]["Date"] >= summer_start and row["Shared"]["Date"] < fall_start:
+            elif ephem_date >= summer_start and ephem_date < fall_start:
                 season = "Summer"
-            elif row["Shared"]["Date"] >= fall_start and row["Shared"]["Date"] < winter_2_start:
+            elif ephem_date >= fall_start and ephem_date < winter_2_start:
                 season = "Fall"
             else:
                 season = "Winter"
@@ -10422,7 +10423,6 @@ def perform_qualifier(player_data, player_type, ind_player_type, row, time_frame
             else:
                 if not season in qual_object["values"]:
                     return False
-
     if "Previous Location" in qualifiers:
         if not row["Shared"]["Previous Row"]:
             return False

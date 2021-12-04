@@ -69,7 +69,6 @@ import multiprocessing
 import functools
 import ephem
 import ssl
-import ephem
 
 subreddits_to_crawl = [
     "sportscomparebots",
@@ -23589,20 +23588,22 @@ def perform_qualifier(player_data, player_type, row, time_frame, all_rows):
     
     if "Temperate Season" in qualifiers:
         for qual_object in qualifiers["Temperate Season"]:
-            winter_start = ephem.localtime(ephem.previous_winter_solstice(str(row["Year"]))).date()
-            spring_start = ephem.localtime(ephem.next_spring_equinox(str(row["Year"]))).date()
-            summer_start = ephem.localtime(ephem.next_summer_solstice(str(row["Year"]))).date()
-            fall_start = ephem.localtime(ephem.next_fall_equinox(str(row["Year"]))).date()
-            winter_2_start = ephem.localtime(ephem.next_winter_solstice(str(row["Year"]))).date()
+            winter_start = ephem.date(ephem.previous_winter_solstice(str(row["Year"])))
+            spring_start = ephem.date(ephem.next_spring_equinox(str(row["Year"])))
+            summer_start = ephem.date(ephem.next_summer_solstice(str(row["Year"])))
+            fall_start = ephem.date(ephem.next_fall_equinox(str(row["Year"])))
+            winter_2_start = ephem.date(ephem.next_winter_solstice(str(row["Year"])))
+
+            ephem_date = ephem.date(row["Date"])
 
             season = None
-            if row["Date"] >= winter_start and row["Date"] < spring_start:
+            if ephem_date >= winter_start and ephem_date < spring_start:
                 season = "Winter"
-            elif row["Date"] >= spring_start and row["Date"] < summer_start:
+            elif ephem_date >= spring_start and ephem_date < summer_start:
                 season = "Spring"
-            elif row["Date"] >= summer_start and row["Date"] < fall_start:
+            elif ephem_date >= summer_start and ephem_date < fall_start:
                 season = "Summer"
-            elif row["Date"] >= fall_start and row["Date"] < winter_2_start:
+            elif ephem_date >= fall_start and ephem_date < winter_2_start:
                 season = "Fall"
             else:
                 season = "Winter"
