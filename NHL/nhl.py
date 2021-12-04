@@ -2978,6 +2978,24 @@ headers = {
                 "game" : 1997
             }
         },
+        "HITTkn": {
+            "positive" : True,
+            "display" : False,
+            "valid_since" : {
+                "season" : 1997,
+                "game" : 1997
+            }
+        },
+        "HITTkn/GP": {
+            "positive" : True,
+            "round" : 2,
+            "display" : False,
+            "type" : "Per Game/60 Minutes",
+            "valid_since" : {
+                "season" : 1997,
+                "game" : 1997
+            }
+        },
         "BLK": {
             "positive" : True,
             "valid_since" : {
@@ -3500,6 +3518,16 @@ headers = {
             "positive" : True,
             "round" : 2,
             "type" : "Per Game/60 Minutes",
+            "valid_since" : {
+                "season" : 1997,
+                "game" : 1997
+            }
+        },
+        "HITTkn/60M": {
+            "positive" : True,
+            "round" : 2,
+            "type" : "Per Game/60 Minutes",
+            "display" : False,
             "valid_since" : {
                 "season" : 1997,
                 "game" : 1997
@@ -5545,6 +5573,7 @@ formulas = {
         "SHG/GP" : "SHG / GP",
         "SHA/GP" : "SHA / GP",
         "HIT/GP" : "HIT / GP",
+        "HITTkn/GP" : "HITTkn / GP",
         "BLK/GP" : "BLK / GP",
         "TOI/GP" : "TOI / GP_TOI",
         "TOI/Shft" : "TOI / Shft",
@@ -5601,6 +5630,7 @@ formulas = {
         "FO/60M" : "FO / (TOI / 3600)",
         "FOW/60M" : "FOW / (TOI / 3600)",
         "HIT/60M" : "HIT / (TOI / 3600)",
+        "HITTkn/60M" : "HITTkn / (TOI / 3600)",
         "BLK/60M" : "BLK / (TOI / 3600)",
         "PIM/60M" : "PIM / (TOI / 3600)",
         "PIM/GP" : "PIM / GP",
@@ -13699,16 +13729,30 @@ def handle_player_data(player_data, time_frame, player_type, player_page, valid_
                     extra_stats.add("penalties")
                 if "star" in stat:
                     extra_stats.add("star")
+                if "hittkn" in stat:
+                    extra_stats.add("current-stats")
     
+    add_pen = False
+    add_star = False
+    add_current_stats = False
     for extra_stat in extra_stats:
         if extra_stat.startswith("show-stat-"):
             stat = extra_stat.split("show-stat-", 1)[1]
             if stat == "time" or stat == "arena" or stat == "score" or stat == "goal" or stat == "result" or stat == "round" or stat == "series" or stat == "tmgm" or stat == "gamesrest" or stat == "gamesinarow" or stat == "daysinarow" or stat == "elimination" or stat == "clinching" or stat == "tmhg" or stat == "oppg" or stat == "ttlg" or stat == "gdiff":
                 has_schedule_stat_qual = True
             if stat == "fight":
-                extra_stats.add("penalties")
+                add_pen = True
             if "star" in stat:
-                extra_stats.add("star")
+                add_star = True
+            if stat == "hittkn":
+                add_current_stats = True
+    
+    if add_pen:
+        extra_stats.add("penalties")
+    if add_star:
+        extra_stats.add("star")
+    if add_current_stats:
+        extra_stats.add("current-stats")
 
     needs_half = False
     if "First Half" in time_frame["qualifiers"] or "Second Half" in time_frame["qualifiers"]:
@@ -17598,6 +17642,7 @@ def determine_stat_value(player_game_info, all_events, qualifiers, og_row, playe
     blocked_shot_stats = ["TSA", "TSB", "TSA_5v5", "TSB_5v5"]
     assist_stats = ["A", "A1", "A2", "EVA", "EVA1", "EVA2", "PPA", "PPA1", "PPA2", "SHA", "SHA1", "SHA2"< "ENA", "ENA1", "ENA2", "A_5v5", "A1_5v5", "A2_5v5"]
     hit_stats = ["HIT"]
+    hit_taken_stats = ["HITTkn"]
     block_stats = ["BLK"]
     faceoff_stats = ["FO", "FOW", "FOL", "OZFO", "OZFOW", "OZFOL", "NZFO", "NZFOW", "NZFOL", "DZFO", "DZFOW", "DZFOL"]
     all_faceoff_stats = ["OZ", "NZ", "DZ"]
@@ -17752,6 +17797,10 @@ def determine_stat_value(player_game_info, all_events, qualifiers, og_row, playe
                 if goal_event["event_name"] == "hit":
                     if determine_event_match(goal_event, "hit", qualifiers, player_game_info, og_row):
                         row["HIT"] += 1
+            if stat in hit_taken_stats:
+                if goal_event["event_name"] == "hit_taken":
+                    if determine_event_match(goal_event, "hit_taken", qualifiers, player_game_info, og_row):
+                        row["HITTkn"] += 1
             if stat in block_stats:
                 if goal_event["event_name"] == "block":
                     if determine_event_match(goal_event, "block", qualifiers, player_game_info, og_row):
@@ -18427,18 +18476,21 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
             if not ("penaltySeverity" in pen_obj and (pen_obj["penaltySeverity"] == "Misconduct" or pen_obj["penaltySeverity"] == "GameMisconduct")) and not ("penaltyType" in pen_obj and pen_obj["penaltyType"] == "Fighting"):
                 game_data["all_penalty"].append(pen_obj)
         elif scoring_play["result"]["event"] == "Hit":
-            player_hit = False
+            hit_by = None
             hit_against = None
             for score_player in scoring_play["players"]:
                 if score_player["playerType"] == "Hitter":
-                    if score_player["player"]["id"] == player_id or score_player["player"]["id"] == player_data["id"]:
-                        player_hit = True
+                    hit_by = score_player["player"]["id"]
                 elif score_player["playerType"] == "Hittee":
                     hit_against = score_player["player"]["id"]
             
-            if player_hit:
+            if hit_by == player_id or hit_by == player_data["id"]:
                 game_data["hit"].append({**shared_data , **{
                     "hit_against" : hit_against
+                }})
+            elif hit_against == player_id or hit_against == player_data["id"]:
+                game_data["hit_taken"].append({**shared_data , **{
+                    "hit_by" : hit_by
                 }})
         elif scoring_play["result"]["event"] == "Blocked Shot":
             player_block = False
@@ -18604,6 +18656,7 @@ def setup_game_data(player_data, row_data, player_id, player_type, time_frame):
         "missed_shot" : [],
         "blocked_shot" : [],
         "hit" : [],
+        "hit_taken" : [],
         "block" : [],
         "penalty" : [],
         "all_penalty" : [],
@@ -18779,6 +18832,7 @@ def setup_href_game_data(player_data, row_data, player_id, player_type, time_fra
         "missed_shot" : [],
         "blocked_shot" : [],
         "hit" : [],
+        "hit_taken" : [],
         "block" : [],
         "penalty" : [],
         "all_penalty" : [],
@@ -21350,6 +21404,9 @@ def perform_metadata_quals(qualifiers, player_type, row, player_game_info, nhl_p
         for goal_event in player_game_info["hit"]:
             if perform_metadata_qual("hit", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], skip_career_events=skip_career_events):
                 row["HIT"] += 1
+        for goal_event in player_game_info["hit_taken"]:
+            if perform_metadata_qual("hit_taken", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], skip_career_events=skip_career_events):
+                row["HITTkn"] += 1
         for goal_event in player_game_info["block"]:
             if perform_metadata_qual("block", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], skip_career_events=skip_career_events):
                 row["BLK"] += 1
@@ -22787,6 +22844,7 @@ def clear_row_attrs(row, player_type):
         row["ENP"] = 0
 
         row["HIT"] = 0
+        row["HITTkn"] = 0
         row["BLK"] = 0
         row["Post/Bar"] = 0
 
@@ -32083,7 +32141,7 @@ def is_invalid_stat(stat, player_type, data, count_inconsistent, player_data):
         if player_type["da_type"]["type"] == "Skater":
             header_shift_stats = ["Shft", "Shft/GP", "TOI/Shft"]
             report_2_stats = ["PenDrawn", "NetPEN", "Post/Bar", "CF", "CA", "CFPer", "CF/60M", "CA/60M", "FF", "FA", "FFPer", "SF/60M", "SA/60M", "SFPer", "CFRelPer", "FFRelPer", "GFRelPer", "SFRelPer", "FF/60M", "FA/60M", "offIGF", "offIGA", "offICF", "offICA", "offIFF", "offIFA", "offISF", "offISA", "offIGF/60M", "offICA/60M", "offIFF/60M" , "offISA/60M", "offIGA/60M", "offICF/60M", "offIFA/60M", "offISF/60M", "offIG/60M", "offIC/60M", "offIF/60M", "offIS/60M", "GFRel/60M", "CFRel/60M", "FFRel/60M", "SFRel/60M", "GARel/60M", "CARel/60M", "FARel/60M", "SARel/60M", "OZ%", "oiSPer", "oiSVPer", "PDO", "oiSRelPer", "oiSVRelPer", "PDORel", "TSA", "TSM", "TSB", "TSA/GP", "TSB/GP", "TSM/GP", "TS%", "SThr%"]
-            report_3_stats = ["TK", "GV", "TK/GV", "HIT", "BLK"]
+            report_3_stats = ["TK", "GV", "TK/GV", "HIT", "HITTkn", "BLK"]
             strength_stats = ["PEN", "PEN/GP", "PIM", "PIM/GP", "OZFO%", "DZFO%", "FOW/GP", "FO/GP", "FOW", "FO", "FO%"]
             shot_on_stats = ["S", "S%", "S/GP"]
             shot_on_on_stats = ["S", "S%", "S/GP"]
