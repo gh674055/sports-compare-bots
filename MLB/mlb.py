@@ -74,7 +74,6 @@ import get_constant_data
 import get_team_ids
 import ephem
 import ssl
-import ephem
 
 subreddits_to_crawl = [
     "sportscomparebots",
@@ -16762,11 +16761,11 @@ def perform_qualifier(player_data, player_type, row, time_frame, all_rows):
     
     if "Temperate Season" in qualifiers:
         for qual_object in qualifiers["Temperate Season"]:
-            winter_start = ephem.localtime(ephem.previous_winter_solstice(str(row["Year"]))).date()
-            spring_start = ephem.localtime(ephem.next_spring_equinox(str(row["Year"]))).date()
-            summer_start = ephem.localtime(ephem.next_summer_solstice(str(row["Year"]))).date()
-            fall_start = ephem.localtime(ephem.next_fall_equinox(str(row["Year"]))).date()
-            winter_2_start = ephem.localtime(ephem.next_winter_solstice(str(row["Year"]))).date()
+            winter_start = ephem.date(ephem.previous_winter_solstice(str(row["Year"]))).datetime().date()
+            spring_start = ephem.date(ephem.next_spring_equinox(str(row["Year"]))).datetime().date()
+            summer_start = ephem.date(ephem.next_summer_solstice(str(row["Year"]))).datetime().date()
+            fall_start = ephem.date(ephem.next_fall_equinox(str(row["Year"]))).datetime().date()
+            winter_2_start = ephem.date(ephem.next_winter_solstice(str(row["Year"]))).datetime().date()
 
             season = None
             if row["Date"] >= winter_start and row["Date"] < spring_start:
