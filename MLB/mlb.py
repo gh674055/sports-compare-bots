@@ -22528,7 +22528,7 @@ def handle_schedule_stats(player_data, live_game, all_rows, qualifiers, is_playo
             })
     
     player_data["team_games_map"] = {}
-    team_schedule = get_team_schedule(player_data, seasons, True, True, "Time" in qualifiers, player_type)
+    team_schedule = get_team_schedule(player_data, seasons, True, True, "Time" in qualifiers, is_playoffs, player_type)
 
     all_dates = set()
     for year in team_schedule:
@@ -24076,7 +24076,7 @@ def perform_team_opponent_schedule_qualifiers(row, qualifiers):
     
     return True
 
-def get_team_schedule(player_data, seasons, needs_reg_season, needs_playoffs, needs_time, player_type):
+def get_team_schedule(player_data, seasons, needs_reg_season, needs_playoffs, needs_time, is_playoffs, player_type):
     season_objs = {}
 
     for season_obj in seasons:
@@ -24279,7 +24279,7 @@ def get_team_schedule(player_data, seasons, needs_reg_season, needs_playoffs, ne
 
                                             new_season_obj["playoffs"].append(row_data)
             
-            if needs_time:
+            if needs_time and is_playoffs:
                 get_mlb_game_stats(new_season_obj["playoffs"], {}, set(), player_data, False, player_type, set(), False)
 
             new_season_obj["playoffs"] = sorted(new_season_obj["playoffs"], key=lambda row: row["DateTime"])
