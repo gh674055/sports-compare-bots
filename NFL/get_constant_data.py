@@ -5176,6 +5176,8 @@ qualifier_map = {
     "Favorite" : {},
     "Season" : {},
     "Season Reversed" : {},
+    "Season Index" : {},
+    "Season Index Reversed" : {},
     "Season Game" : {},
     "Career Game" : {},
     "Team Game" : {},

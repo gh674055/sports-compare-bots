@@ -3148,24 +3148,6 @@ headers = {
             },
             "display-value" : "+/-/82GP"
         },
-        "OPS/82GP" : {
-            "positive" : True,
-            "display" : False,
-            "round" : 2,
-            "type" : "Per Game/60 Minutes"
-        },
-        "DPS/82GP" : {
-            "positive" : True,
-            "display" : False,
-            "round" : 2,
-            "type" : "Per Game/60 Minutes"
-        },
-        "PS/82GP" : {
-            "positive" : True,
-            "display" : False,
-            "round" : 2,
-            "type" : "Per Game/60 Minutes"
-        },
         "G/60M" : {
             "positive" : True,
             "round" : 2,
@@ -3544,36 +3526,6 @@ headers = {
         "PIM/60M" : {
             "positive" : False,
             "round" : 2,
-            "type" : "Per Game/60 Minutes",
-            "valid_since" : {
-                "season" : 1997,
-                "game" : 1997
-            }
-        },
-        "OPS/60M" : {
-            "positive" : True,
-            "round" : 2,
-            "display" : False,
-            "type" : "Per Game/60 Minutes",
-            "valid_since" : {
-                "season" : 1997,
-                "game" : 1997
-            }
-        },
-        "DPS/60M" : {
-            "positive" : True,
-            "round" : 2,
-            "display" : False,
-            "type" : "Per Game/60 Minutes",
-            "valid_since" : {
-                "season" : 1997,
-                "game" : 1997
-            }
-        },
-        "PS/60M" : {
-            "positive" : True,
-            "round" : 2,
-            "display" : False,
             "type" : "Per Game/60 Minutes",
             "valid_since" : {
                 "season" : 1997,
@@ -6073,6 +6025,8 @@ qualifier_map = {
     "Even In Series" : {},
     "Season" : {},
     "Season Reversed" : {},
+    "Season Index" : {},
+    "Season Index Reversed" : {},
     "Season Game" : {},
     "Event Stat" : {},
     "Event Stat Reversed" : {},
@@ -7924,7 +7878,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
 
                                 time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
                         
-                        last_match = re.finditer(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?(current-season-age|first-minutes?|current-minutes?|first-shots?|current-shots?|first-periods?|current-shots?|first-games?|current-games?|first-seasons?|current-seasons?|last-minutes?|last-shots?|last-periods?|last-games?|last-seasons?|first-starts?|last-starts?|start-if-goalie|decision|current-age|rook|rookie|facing-former-franchise|facing-former-team|even-year|odd-year|interconference|intraconference|interdivision|intradivision|complete-games?|current-winning-opponents?|current-losing-opponents?|current-tied-opponents?|current-winning-or-tied-opponents?|current-losing-or-tied-opponents?|winning-opponents?|losing-opponents?|winning-or-tied-opponents?|losing-or-tied-opponents?|tied-opponents?|playoff-opponents?|cup-winner-opponent|conf-winner-opponent|current-winning-teams?|current-losing-teams?|current-tied-teams?|current-winning-or-tied-teams?|current-losing-or-tied-teams?|winning-teams?|losing-teams?|tied-teams?|winning-or-tied-teams?|losing-or-tied-teams?|playoff-teams?|cup-winner-team|conf-winner-team|penalty-shot|shootout|overtime|game-winning|offensive-zone|defensive-zone|neutral-zone|left-side|right-side|unassisted|even-skaters|team-goalie-pulled|opponent-goalie-pulled|more-skaters|less-skaters|power-play|short-handed|even-strength|elimination-or-clinching|clinching-or-elimination|elimination(?:-games?)?|eliminating(?:-games?)?|clinching(?:-games?)?|clinch(?:-games?)?|winner-take-all|behind-in-series|ahead-in-series|even-in-series|(?:nhl(?: |-))?(?:finals?|championship)|stanley(?: |-)cup|stanley|cup|sc|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?(?:league|conference)(?:(?: |-)finals?|(?: |-)championship)|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?cf|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?second(?: |-)round|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?sr|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?(?:league|conference) semi-?finals?|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?cs|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?first round|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?fr|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?(?:league|conference) quarter-?finals?|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?cq|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?qr|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?qualify(?:ing|er)?(?:(?: |-)round)?|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?pr|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?play(?:-| )?in(?:(?: |-)round)?|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?rr|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?(?:round )?robin|leading(:?-in-game)?|trailing(:?-in-game)?|tied(:?(?:-in)?-game)?|force-dates|first-half|second-half|pre-all-star|post-all-star|t:[\w-]+|o:[\w-]+|m:[\w-]+|d:[\w-]+|dt:[\w-]+|penalty-type:[\w-]+|penalty-severity:[\w-]+|shot-type:[\w-]+|team-franchise:[\w-]+|opponent-franchise:[\w-]+|franchise:[\w-]+|tf:[\w-]+|of:[\w-]+|f:[\w-]+|team:[\w-]+|opponent:[\w-]+|new-moon|waning-crescent|third-quarter|waning-gibbous|full-moon|waxing-gibbous|first-quarter|waxing-crescent|tv-network:[\w-]+|raw-tv-network:[\w-]+|national-tv-network:[\w-]+|national-raw-tv-network:[\w-]+|any-national-tv-network:[\w-]+|any-national-raw-tv-network:[\w-]+|any-us-national-game|us-national-game|any-ca-national-game|ca-national-game|any-national-game|national-game|month:[\w-]+|day:[\w-]+|date:[\w-]+|series-game:[\w-]+|gm:[\w-]+|game:[\w-]+|season-gm:[\w-]+|season-game:[\w-]+|season:[\w-]+|season-reversed:[\w-]+|crgm:[\w-]+|career-game-reversed:[\w-]+|team-game-reversed:[\w-]+|season-game-reversed:[\w-]+|game-reversed:[\w-]+|career-game:[\w-]+|tmgm:[\w-]+|team-game:[\w-]+|game-number:[\w-]+|season-number:[\w-]+|number:[\w-]+|dr:[\w-]+|starts-days-rest:[\w-]+|days-rest:[\w-]+|prv-dr:[\w-]+|previous-days-rest:[\w-]+|upc-dr:[\w-]+|upcoming-starts-days-rest:[\w-]+|upcoming-days-rest:[\w-]+|gr:[\w-]+|games-rest:[\w-]+|starts-rest:[\w-]+|prv-gr:[\w-]+|-?starts?|-?started|-?starting|-?ignore-starts?|-?ignore-started?|-?ignore-starting|previous-games-rest:[\w-]+|upc-gr:[\w-]+|upcoming-games-rest:[\w-]+|days-in-a-row:[\w-]+|games-in-a-row:[\w-]+|starts-in-a-row:[\w-]+|prv-t:[\w-]+|prv-o:[\w-]+|upc-t:[\w-]+|upc-o:[\w-]+|upcoming-same-opponent|previous-same-opponent|previous-franchise:[\w-]+|previous-team-franchise:[\w-]+|previous-opponent-franchise:[\w-]+|upcoming-franchise:[\w-]+|upcoming-team-franchise:[\w-]+|upcoming-opponent-franchise:[\w-]+|previous-team:[\w-]+|previous-opponent:[\w-]+|upcoming-team:[\w-]+|upcoming-opponent:[\w-]+|score:[\S-]+|final-score:[\S-]+|previous-score:[\S-]+|upcoming-score:[\S-]+|final-team-score:[\w-]+|final-opponent-score:[\w-]+|final-score-margin:[\S-]+|final-score-difference:[\S-]+|team-score:[\w-]+|opponent-score:[\w-]+|score-margin:[\S-]+|score-difference:[\S-]+|period:[\w-]+|raw-x-coordinate:[\S-]+|raw-y-coordinate:[\S-]+|raw-coordinates:[\S-]+|absolute-x-coordinate:[\w-]+|absolute-y-coordinate:[\w-]+|absolute-coordinates:[\w-]+|x-coordinate:[\S-]+|y-coordinate:[\S-]+|coordinates:[\S-]+|team-skaters:[\w-]+|opponent-skaters:[\w-]+|team-players:[\w-]+|opponent-players:[\w-]+|period-time-remaining:[\S-]+|period-time:[\S-]+|season-st:[\S-]+|period-stat:[\S-]+|season-stat:[\S-]+|season-prv-st:[\S-]+|season-previous-stat:[\S-]+|season-upc-st:[\S-]+|season-upcoming-stat:[\S-]+|st:[\S-]+|stat:[\S-]+|prv-st:[\S-]+|previous-stat:[\S-]+|upc-st:[\S-]+|upcoming-stat:[\S-]+|min-st:[\S-]+|min-stat:[\S-]+|max-st:[\S-]+|max-stat:[\S-]+|totalgames-st:[\S-]+|totalgames-stat:[\S-]+|max-str:[\S-]+|max-streak:[\S-]+|max-stretch:[\S-]+|ctn-str:[\S-]+|count-streak:[\S-]+|q:[\S-]+|quickest:[\S-]+|s:[\S-]+|slowest:[\S-]+|game-event-stat:[\S-]+|game-event-stat-reversed:[\S-]+|game-event-stats:[\S-]+|game-event-stats-reversed:[\S-]+|event-stat:[\S-]+|event-stat-reversed:[\S-]+|event-stats:[\S-]+|event-stats-reversed:[\S-]+|starting-game-event-stat:[\S-]+|starting-game-event-stat-reversed:[\S-]+|starting-game-event-stats:[\S-]+|starting-game-event-stats-reversed:[\S-]+|starting-event-stat:[\S-]+|starting-event-stat-reversed:[\S-]+|starting-event-stats:[\S-]+|starting-event-stats-reversed:[\S-]+|with-new-team|with-new-franchise|summer|spring|winter|fall|autumn|away|home|road|previous-away|previous-home|previous-road|upcoming-away|upcoming-home|upcoming-road|win(?:s)?|loss(?:es)?|tie(?:es)?|w-ot|w-so|l-ot|l-so|so|ot|w|l|t|prv-w|prv-l|prv-t|prv-w-ot|prv-w-so|prv-l-ot|prv-l-so|prv-so|prv-ot|upc-w|upc-l|upc-t|upc-w-ot|upc-w-so|upc-l-ot|upc-l-so|upc-so|upc-ot|previous-win(?:s)?|previous-loss(?:es)?|previous-tie(?:es)|upcoming-win(?:s)?|upcoming-loss(?:es)?|upcoming-tie(?:es)|prv-t-w|prv-t-l|prv-t-t|prv-t-w-ot|prv-t-w-so|prv-t-l-ot|prv-t-l-so|prv-t-so|prv-t-ot|upc-t-w|upc-t-l|upc-t-t|upc-t-w-ot|upc-t-w-so|upc-t-l-ot|upc-t-l-so|upc-t-so|upc-t-ot|previous-team-win(?:s)?|previous-team-loss(?:es)?|previous-team-tie(?:es)|upcoming-team-win(?:s)?|upcoming-team-loss(?:es)?|upcoming-team-tie(?:es)|series-team-wins:[\w-]+|series-opponent-wins:[\w-]+|series-score-margin:[\S-]+|series-score-difference:[\S-]+|series-score:[\w-]+|current-team-wins:[\w-]+|current-team-losses:[\w-]+|current-team-ties:[\w-]+|current-team-points:[\w-]+|current-team-games-over-500:[\S-]+|current-opponent-wins:[\w-]+|current-opponent-losses:[\w-]+|current-opponent-ties:[\w-]+|current-opponent-points:[\w-]+|current-opponent-games-over-500:[\S-]+|team-wins:[\w-]+|team-losses:[\w-]+|team-ties:[\w-]+|team-points:[\w-]+|team-games-over-500:[\S-]+|opponent-wins:[\w-]+|opponent-losses:[\w-]+|opponent-ties:[\w-]+|opponent-points:[\w-]+|opponent-games-over-500:[\S-]+|opponent-goals?-rank:[\S-]+|opponent-standings-rank:[\S-]+|opponent-goals?-allowed-rank:[\S-]+|current-opponent-win(?:ning)?-percent:[\S-]+|opponent-win(?:ning)?-percent:[\S-]+|current-opponent-points-percent:[\S-]+|opponent-points-percent:[\S-]+|team-goals?-rank:[\S-]+|team-standings-rank:[\S-]+|team-goals?-allowed-rank:[\S-]+|years?:[\w-]+|current-team-win(?:ning)?-percent:[\S-]+|team-win(?:ning)?-percent:[\S-]+|current-team-points-percent:[\S-]+|team-points-percent:[\S-]+|early-?afternoon|late-?afternoon|morning|early|afternoon|day|night(?:time)?|late|team-conference:[\S-]+|opponent-conference:[\S-]+|team-division:[\S-]+|opponent-division:[\S-]+|birthda(?:y|te)|skat(?:(?:er)|(?:ing))|position:[\S-]+|left-wing(?:er)?|right-wing(?:er)?|center|defense(?:man)?|wing(?:er)?|forward|goalie|skater|" + all_months_re + r"|" + all_days_re + r")\b", time_frame)
+                        last_match = re.finditer(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?(current-season-age|first-minutes?|current-minutes?|first-shots?|current-shots?|first-periods?|current-shots?|first-games?|current-games?|first-seasons?|current-seasons?|last-minutes?|last-shots?|last-periods?|last-games?|last-seasons?|first-starts?|last-starts?|start-if-goalie|decision|current-age|rook|rookie|facing-former-franchise|facing-former-team|even-year|odd-year|interconference|intraconference|interdivision|intradivision|complete-games?|current-winning-opponents?|current-losing-opponents?|current-tied-opponents?|current-winning-or-tied-opponents?|current-losing-or-tied-opponents?|winning-opponents?|losing-opponents?|winning-or-tied-opponents?|losing-or-tied-opponents?|tied-opponents?|playoff-opponents?|cup-winner-opponent|conf-winner-opponent|current-winning-teams?|current-losing-teams?|current-tied-teams?|current-winning-or-tied-teams?|current-losing-or-tied-teams?|winning-teams?|losing-teams?|tied-teams?|winning-or-tied-teams?|losing-or-tied-teams?|playoff-teams?|cup-winner-team|conf-winner-team|penalty-shot|shootout|overtime|game-winning|offensive-zone|defensive-zone|neutral-zone|left-side|right-side|unassisted|even-skaters|team-goalie-pulled|opponent-goalie-pulled|more-skaters|less-skaters|power-play|short-handed|even-strength|elimination-or-clinching|clinching-or-elimination|elimination(?:-games?)?|eliminating(?:-games?)?|clinching(?:-games?)?|clinch(?:-games?)?|winner-take-all|behind-in-series|ahead-in-series|even-in-series|(?:nhl(?: |-))?(?:finals?|championship)|stanley(?: |-)cup|stanley|cup|sc|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?(?:league|conference)(?:(?: |-)finals?|(?: |-)championship)|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?cf|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?second(?: |-)round|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?sr|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?(?:league|conference) semi-?finals?|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?cs|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?first round|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?fr|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?(?:league|conference) quarter-?finals?|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?cq|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?qr|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?qualify(?:ing|er)?(?:(?: |-)round)?|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?pr|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?play(?:-| )?in(?:(?: |-)round)?|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?rr|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?(?:round )?robin|leading(:?-in-game)?|trailing(:?-in-game)?|tied(:?(?:-in)?-game)?|force-dates|first-half|second-half|pre-all-star|post-all-star|t:[\w-]+|o:[\w-]+|m:[\w-]+|d:[\w-]+|dt:[\w-]+|penalty-type:[\w-]+|penalty-severity:[\w-]+|shot-type:[\w-]+|team-franchise:[\w-]+|opponent-franchise:[\w-]+|franchise:[\w-]+|tf:[\w-]+|of:[\w-]+|f:[\w-]+|team:[\w-]+|opponent:[\w-]+|new-moon|waning-crescent|third-quarter|waning-gibbous|full-moon|waxing-gibbous|first-quarter|waxing-crescent|tv-network:[\w-]+|raw-tv-network:[\w-]+|national-tv-network:[\w-]+|national-raw-tv-network:[\w-]+|any-national-tv-network:[\w-]+|any-national-raw-tv-network:[\w-]+|any-us-national-game|us-national-game|any-ca-national-game|ca-national-game|any-national-game|national-game|month:[\w-]+|day:[\w-]+|date:[\w-]+|series-game:[\w-]+|gm:[\w-]+|game:[\w-]+|season-gm:[\w-]+|season-game:[\w-]+|season:[\w-]+|season-reversed:[\w-]+|seasons:[\w-]+|seasons-reversed:[\w-]+|crgm:[\w-]+|career-game-reversed:[\w-]+|team-game-reversed:[\w-]+|season-game-reversed:[\w-]+|game-reversed:[\w-]+|career-game:[\w-]+|tmgm:[\w-]+|team-game:[\w-]+|game-number:[\w-]+|season-number:[\w-]+|number:[\w-]+|dr:[\w-]+|starts-days-rest:[\w-]+|days-rest:[\w-]+|prv-dr:[\w-]+|previous-days-rest:[\w-]+|upc-dr:[\w-]+|upcoming-starts-days-rest:[\w-]+|upcoming-days-rest:[\w-]+|gr:[\w-]+|games-rest:[\w-]+|starts-rest:[\w-]+|prv-gr:[\w-]+|-?starts?|-?started|-?starting|-?ignore-starts?|-?ignore-started?|-?ignore-starting|previous-games-rest:[\w-]+|upc-gr:[\w-]+|upcoming-games-rest:[\w-]+|days-in-a-row:[\w-]+|games-in-a-row:[\w-]+|starts-in-a-row:[\w-]+|prv-t:[\w-]+|prv-o:[\w-]+|upc-t:[\w-]+|upc-o:[\w-]+|upcoming-same-opponent|previous-same-opponent|previous-franchise:[\w-]+|previous-team-franchise:[\w-]+|previous-opponent-franchise:[\w-]+|upcoming-franchise:[\w-]+|upcoming-team-franchise:[\w-]+|upcoming-opponent-franchise:[\w-]+|previous-team:[\w-]+|previous-opponent:[\w-]+|upcoming-team:[\w-]+|upcoming-opponent:[\w-]+|score:[\S-]+|final-score:[\S-]+|previous-score:[\S-]+|upcoming-score:[\S-]+|final-team-score:[\w-]+|final-opponent-score:[\w-]+|final-score-margin:[\S-]+|final-score-difference:[\S-]+|team-score:[\w-]+|opponent-score:[\w-]+|score-margin:[\S-]+|score-difference:[\S-]+|period:[\w-]+|raw-x-coordinate:[\S-]+|raw-y-coordinate:[\S-]+|raw-coordinates:[\S-]+|absolute-x-coordinate:[\w-]+|absolute-y-coordinate:[\w-]+|absolute-coordinates:[\w-]+|x-coordinate:[\S-]+|y-coordinate:[\S-]+|coordinates:[\S-]+|team-skaters:[\w-]+|opponent-skaters:[\w-]+|team-players:[\w-]+|opponent-players:[\w-]+|period-time-remaining:[\S-]+|period-time:[\S-]+|season-st:[\S-]+|period-stat:[\S-]+|season-stat:[\S-]+|season-prv-st:[\S-]+|season-previous-stat:[\S-]+|season-upc-st:[\S-]+|season-upcoming-stat:[\S-]+|st:[\S-]+|stat:[\S-]+|prv-st:[\S-]+|previous-stat:[\S-]+|upc-st:[\S-]+|upcoming-stat:[\S-]+|min-st:[\S-]+|min-stat:[\S-]+|max-st:[\S-]+|max-stat:[\S-]+|totalgames-st:[\S-]+|totalgames-stat:[\S-]+|max-str:[\S-]+|max-streak:[\S-]+|max-stretch:[\S-]+|ctn-str:[\S-]+|count-streak:[\S-]+|q:[\S-]+|quickest:[\S-]+|s:[\S-]+|slowest:[\S-]+|game-event-stat:[\S-]+|game-event-stat-reversed:[\S-]+|game-event-stats:[\S-]+|game-event-stats-reversed:[\S-]+|event-stat:[\S-]+|event-stat-reversed:[\S-]+|event-stats:[\S-]+|event-stats-reversed:[\S-]+|starting-game-event-stat:[\S-]+|starting-game-event-stat-reversed:[\S-]+|starting-game-event-stats:[\S-]+|starting-game-event-stats-reversed:[\S-]+|starting-event-stat:[\S-]+|starting-event-stat-reversed:[\S-]+|starting-event-stats:[\S-]+|starting-event-stats-reversed:[\S-]+|with-new-team|with-new-franchise|summer|spring|winter|fall|autumn|away|home|road|previous-away|previous-home|previous-road|upcoming-away|upcoming-home|upcoming-road|win(?:s)?|loss(?:es)?|tie(?:es)?|w-ot|w-so|l-ot|l-so|so|ot|w|l|t|prv-w|prv-l|prv-t|prv-w-ot|prv-w-so|prv-l-ot|prv-l-so|prv-so|prv-ot|upc-w|upc-l|upc-t|upc-w-ot|upc-w-so|upc-l-ot|upc-l-so|upc-so|upc-ot|previous-win(?:s)?|previous-loss(?:es)?|previous-tie(?:es)|upcoming-win(?:s)?|upcoming-loss(?:es)?|upcoming-tie(?:es)|prv-t-w|prv-t-l|prv-t-t|prv-t-w-ot|prv-t-w-so|prv-t-l-ot|prv-t-l-so|prv-t-so|prv-t-ot|upc-t-w|upc-t-l|upc-t-t|upc-t-w-ot|upc-t-w-so|upc-t-l-ot|upc-t-l-so|upc-t-so|upc-t-ot|previous-team-win(?:s)?|previous-team-loss(?:es)?|previous-team-tie(?:es)|upcoming-team-win(?:s)?|upcoming-team-loss(?:es)?|upcoming-team-tie(?:es)|series-team-wins:[\w-]+|series-opponent-wins:[\w-]+|series-score-margin:[\S-]+|series-score-difference:[\S-]+|series-score:[\w-]+|current-team-wins:[\w-]+|current-team-losses:[\w-]+|current-team-ties:[\w-]+|current-team-points:[\w-]+|current-team-games-over-500:[\S-]+|current-opponent-wins:[\w-]+|current-opponent-losses:[\w-]+|current-opponent-ties:[\w-]+|current-opponent-points:[\w-]+|current-opponent-games-over-500:[\S-]+|team-wins:[\w-]+|team-losses:[\w-]+|team-ties:[\w-]+|team-points:[\w-]+|team-games-over-500:[\S-]+|opponent-wins:[\w-]+|opponent-losses:[\w-]+|opponent-ties:[\w-]+|opponent-points:[\w-]+|opponent-games-over-500:[\S-]+|opponent-goals?-rank:[\S-]+|opponent-standings-rank:[\S-]+|opponent-goals?-allowed-rank:[\S-]+|current-opponent-win(?:ning)?-percent:[\S-]+|opponent-win(?:ning)?-percent:[\S-]+|current-opponent-points-percent:[\S-]+|opponent-points-percent:[\S-]+|team-goals?-rank:[\S-]+|team-standings-rank:[\S-]+|team-goals?-allowed-rank:[\S-]+|years?:[\w-]+|current-team-win(?:ning)?-percent:[\S-]+|team-win(?:ning)?-percent:[\S-]+|current-team-points-percent:[\S-]+|team-points-percent:[\S-]+|early-?afternoon|late-?afternoon|morning|early|afternoon|day|night(?:time)?|late|team-conference:[\S-]+|opponent-conference:[\S-]+|team-division:[\S-]+|opponent-division:[\S-]+|birthda(?:y|te)|skat(?:(?:er)|(?:ing))|position:[\S-]+|left-wing(?:er)?|right-wing(?:er)?|center|defense(?:man)?|wing(?:er)?|forward|goalie|skater|" + all_months_re + r"|" + all_days_re + r")\b", time_frame)
                         for m in last_match:
                             qualifier_obj = {}
                             
@@ -9158,7 +9112,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                     for value in values:
                                         qualifier_obj["values"].append(ordinal_to_number(value))
                                 qual_type = "Date"
-                            elif qualifier_str.startswith("series-game:") or qualifier_str.startswith("gm:") or qualifier_str.startswith("game:") or qualifier_str.startswith("season-gm:") or qualifier_str.startswith("season-game:") or qualifier_str.startswith("season:") or qualifier_str.startswith("season-reversed:") or qualifier_str.startswith("tmgm:") or qualifier_str.startswith("team-game:") or qualifier_str.startswith("crgm:") or qualifier_str.startswith("career-game:") or qualifier_str.startswith("game-reversed:") or qualifier_str.startswith("career-game-reversed:") or qualifier_str.startswith("team-game-reversed:") or qualifier_str.startswith("season-game-reversed:") or qualifier_str.startswith("dr:") or qualifier_str.startswith("days-rest:") or qualifier_str.startswith("starts-days-rest:") or qualifier_str.startswith("prv-dr:") or qualifier_str.startswith("previous-days-rest:") or qualifier_str.startswith("upc-dr:") or qualifier_str.startswith("upcoming-days-rest:") or qualifier_str.startswith("upcoming-starts-days-rest:") or qualifier_str.startswith("gr:") or qualifier_str.startswith("games-rest:") or qualifier_str.startswith("starts-rest:") or qualifier_str.startswith("prv-gr:") or qualifier_str.startswith("previous-games-rest:") or qualifier_str.startswith("upc-gr:") or qualifier_str.startswith("upcoming-games-rest:") or qualifier_str.startswith("days-in-a-row:") or qualifier_str.startswith("games-in-a-row:") or qualifier_str.startswith("starts-in-a-row:") or qualifier_str.startswith("number:") or qualifier_str.startswith("game-number:") or qualifier_str.startswith("season-number:"):
+                            elif qualifier_str.startswith("series-game:") or qualifier_str.startswith("gm:") or qualifier_str.startswith("game:") or qualifier_str.startswith("season-gm:") or qualifier_str.startswith("season-game:") or qualifier_str.startswith("season:") or qualifier_str.startswith("season-reversed:") or qualifier_str.startswith("seasons:") or qualifier_str.startswith("seasons-reversed:") or qualifier_str.startswith("tmgm:") or qualifier_str.startswith("team-game:") or qualifier_str.startswith("crgm:") or qualifier_str.startswith("career-game:") or qualifier_str.startswith("game-reversed:") or qualifier_str.startswith("career-game-reversed:") or qualifier_str.startswith("team-game-reversed:") or qualifier_str.startswith("season-game-reversed:") or qualifier_str.startswith("dr:") or qualifier_str.startswith("days-rest:") or qualifier_str.startswith("starts-days-rest:") or qualifier_str.startswith("prv-dr:") or qualifier_str.startswith("previous-days-rest:") or qualifier_str.startswith("upc-dr:") or qualifier_str.startswith("upcoming-days-rest:") or qualifier_str.startswith("upcoming-starts-days-rest:") or qualifier_str.startswith("gr:") or qualifier_str.startswith("games-rest:") or qualifier_str.startswith("starts-rest:") or qualifier_str.startswith("prv-gr:") or qualifier_str.startswith("previous-games-rest:") or qualifier_str.startswith("upc-gr:") or qualifier_str.startswith("upcoming-games-rest:") or qualifier_str.startswith("days-in-a-row:") or qualifier_str.startswith("games-in-a-row:") or qualifier_str.startswith("starts-in-a-row:") or qualifier_str.startswith("number:") or qualifier_str.startswith("game-number:") or qualifier_str.startswith("season-number:"):
                                 qualifier_obj["values"] = []
 
                                 if qualifier_str.startswith("series-game:"):
@@ -9184,6 +9138,12 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 elif qualifier_str.startswith("season-reversed:"):
                                     qual_str = "season-reversed:"
                                     qual_type = "Season Reversed"
+                                elif qualifier_str.startswith("season-index:"):
+                                    qual_str = "season-index:"
+                                    qual_type = "Season Index"
+                                elif qualifier_str.startswith("season-index-reversed:"):
+                                    qual_str = "season-index-reversed:"
+                                    qual_type = "Season Index Reversed"
                                 elif qualifier_str.startswith("tmgm:"):
                                     qual_str = "tmgm:"
                                     qual_type = "Team Game"
@@ -9992,8 +9952,8 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
 
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
                     
-                        last_match = re.search(r"\b(no(?:t|n)?(?: |-))?(first|1st|last|this|past)?(?: ?(\S*) (starting-)?(game-)?(minute|second|min|toi|shot|shots?-faced|period|shift|goal|assist|point)s?)\b", time_frame)
-                        if last_match:
+                        last_matches = re.finditer(r"\b(no(?:t|n)?(?: |-))?(first|1st|last|this|past)?(?: ?(\S*) (starting-)?(game-)?(minute|second|min|toi|shot|shots?-faced|period|shift|goal|assist|point)s?)\b", time_frame)
+                        for last_match in last_matches:
                             compare_type = last_match.group(2)
                             time_unit = last_match.group(3)
                             if time_unit in ["first", "1st", "last", "this", "past"]:
@@ -10089,62 +10049,63 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
 
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(last_match.group(0), "", 1)).strip()
 
-                        last_match = re.search(r"(no(?:t|n)?(?: |-))?(first|1st|last|this|past)? ?(\S*)? ?(?:season(?:[- ]))?(games?)", time_frame)
+                        last_matches = list(re.finditer(r"(no(?:t|n)?(?: |-))?(first|1st|last|this|past)? ?(\S*)? ?(?:season(?:[- ]))?(games?)", time_frame))
                         sub_last_match = re.search(r"(no(?:t|n)?(?: |-))?(first|1st|last|this|past)? ?(\S*)? ?((?:(?:calendar|date)(?: |-))?days?|(?:(?:calendar|date)(?: |-))?weeks?|(?:(?:calendar|date)(?: |-))?months?|(?:(?:calendar|date)(?: |-))?years?|seasons?)( ([\w-]+)( reversed?)?)?", time_frame)
-                        if not last_match and ("Start" in qualifiers or playoffs != "Only") and (not sub_last_match or sub_last_match.group(3).endswith("to") or sub_last_match.group(3).endswith("yester")):
-                            last_match = re.search(r"(no(?:t|n)?(?: |-))?(first|1st|last|this|past) ?(\S*)", time_frame)
-                        if last_match and not last_match.group(3).endswith("to") and not last_match.group(3).endswith("yester") and (last_match.group(2) or not re.search(r"(no(?:t|n)?(?: |-))?(?:season(?:[- ]))?games? ([\w-]+)( reversed?)?", time_frame)):
-                            compare_type = last_match.group(2)
-                            skip_time = False
-                            if not compare_type or not compare_type.strip():
-                                if last_match.group(3) == "first" or last_match.group(3) == "1st" or last_match.group(3) == "this" or last_match.group(3) == "past" or last_match.group(3) == "last":
-                                    compare_type = last_match.group(3)
-                                    skip_time = True
-                                else:
-                                    compare_type = "special"
+                        if ("Start" in qualifiers or playoffs != "Only") and (not sub_last_match or sub_last_match.group(3).endswith("to") or sub_last_match.group(3).endswith("yester")):
+                            last_matches += list(re.finditer(r"(no(?:t|n)?(?: |-))?(first|1st|last|this|past) ?(\S*)", time_frame))
+                        for last_match in last_matches:
+                            if last_match and not last_match.group(3).endswith("to") and not last_match.group(3).endswith("yester") and (last_match.group(2) or not re.search(r"(no(?:t|n)?(?: |-))?(?:season(?:[- ]))?games? ([\w-]+)( reversed?)?", time_frame)):
+                                compare_type = last_match.group(2)
+                                skip_time = False
+                                if not compare_type or not compare_type.strip():
+                                    if last_match.group(3) == "first" or last_match.group(3) == "1st" or last_match.group(3) == "this" or last_match.group(3) == "past" or last_match.group(3) == "last":
+                                        compare_type = last_match.group(3)
+                                        skip_time = True
+                                    else:
+                                        compare_type = "special"
 
-                            if compare_type == "1st":
-                                compare_type = "first"
+                                if compare_type == "1st":
+                                    compare_type = "first"
 
-                            if not skip_time:
-                                time_unit = last_match.group(3)
-                                if time_unit and "season" not in time_unit:
-                                    time_unit = ordinal_to_number(time_unit)
-                                    if time_unit < 1:
+                                if not skip_time:
+                                    time_unit = last_match.group(3)
+                                    if time_unit and "season" not in time_unit:
+                                        time_unit = ordinal_to_number(time_unit)
+                                        if time_unit < 1:
+                                            time_unit = 1
+                                    else:
                                         time_unit = 1
                                 else:
                                     time_unit = 1
-                            else:
-                                time_unit = 1
-                            
-                            if compare_type == "special":
-                                qual_type = "Career Game"
-                                qualifier_obj = {}
-                                qualifier_obj["negate"] = bool(last_match.group(1))
-                                qualifier_obj["values"] = {
-                                    "start_val" : time_unit,
-                                    "end_val" : time_unit
-                                }
-                                if not qual_type in qualifiers:
-                                    qualifiers[qual_type] = []
-                                qualifiers[qual_type].append(qualifier_obj)
-                            else:
-                                qual_type = "Games"
-                                if "season" in last_match.group(0):
-                                    qual_type = "Season Games"
-                                if not qual_type in qualifiers:
-                                    qualifiers[qual_type] = []
+                                
+                                if compare_type == "special":
+                                    qual_type = "Career Game"
+                                    qualifier_obj = {}
+                                    qualifier_obj["negate"] = bool(last_match.group(1))
+                                    qualifier_obj["values"] = {
+                                        "start_val" : time_unit,
+                                        "end_val" : time_unit
+                                    }
+                                    if not qual_type in qualifiers:
+                                        qualifiers[qual_type] = []
+                                    qualifiers[qual_type].append(qualifier_obj)
+                                else:
+                                    qual_type = "Games"
+                                    if "season" in last_match.group(0):
+                                        qual_type = "Season Games"
+                                    if not qual_type in qualifiers:
+                                        qualifiers[qual_type] = []
 
-                                qualifiers[qual_type] = {
-                                    "compare_type" : compare_type,
-                                    "time_unit" : time_unit,
-                                    "negate" : bool(last_match.group(1))
-                                }
+                                    qualifiers[qual_type] = {
+                                        "compare_type" : compare_type,
+                                        "time_unit" : time_unit,
+                                        "negate" : bool(last_match.group(1))
+                                    }
 
-                            time_frame = re.sub(r"\s+", " ", time_frame.replace(last_match.group(0), "", 1)).strip()
+                                time_frame = re.sub(r"\s+", " ", time_frame.replace(last_match.group(0), "", 1)).strip()
                         
-                        last_match = re.search(r"(no(?:t|n)?(?: |-))?(?:season(?:[- ]))?games? ([\w-]+)( reversed?)?", time_frame)
-                        if last_match:
+                        last_matches = re.finditer(r"(no(?:t|n)?(?: |-))?(?:season(?:[- ]))?games? ([\w-]+)( reversed?)?", time_frame)
+                        for last_match in last_matches:
                             time_unit = re.split(r"(?<!\\)-", last_match.group(2))
                             if len(time_unit) == 1:
                                 time_start = ordinal_to_number(time_unit[0])
@@ -10172,19 +10133,10 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                             }
 
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(last_match.group(0), "", 1)).strip()
-
-                        time_frame_type = "date"
-                        if not time_frame:
-                            time_start = 0
-                            time_end = datetime.date.today().year
-                        else:
+                        
+                        last_matches = re.finditer(r"(no(?:t|n)?(?: |-))(first|1st|last|this|past)? ?(\S*)? ?((?:(?:calendar|date)(?: |-))?days?|(?:(?:calendar|date)(?: |-))?weeks?|(?:(?:calendar|date)(?: |-))?months?|(?:(?:calendar|date)(?: |-))?years?|seasons?)( ([\w-]+)( reversed?)?)?", time_frame)
+                        for last_match in last_matches:
                             unit = None
-                            last_match = re.search(r"(no(?:t|n)?(?: |-))?(first|1st|last|this|past)? ?(\S*)? ?((?:(?:calendar|date)(?: |-))?days?|(?:(?:calendar|date)(?: |-))?weeks?|(?:(?:calendar|date)(?: |-))?months?|(?:(?:calendar|date)(?: |-))?years?|seasons?)( ([\w-]+)( reversed?)?)?", time_frame)
-                            if not last_match:
-                                last_match = re.search(r"(no(?:t|n)?(?: |-))?(first|1st|last|this|past) ?(\S*)", time_frame)
-                                unit = "season"
-                                if last_match and not last_match.group(3).endswith("to") and not last_match.group(3).endswith("yester") and playoffs == "Only":
-                                    time_frame_type = "special-qual"
                             if last_match and not last_match.group(3).endswith("to") and not last_match.group(3).endswith("yester"):
                                 compare_type = last_match.group(2)
                                 if not compare_type or not compare_type.strip():
@@ -10216,14 +10168,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                         else:
                                             time_start = ordinal_to_number(time_unit[0])
                                             time_end = ordinal_to_number(time_unit[1])
-
-                                        if time_frame_type != "special-qual":
-                                            time_frame_type = "season-range"
-                                            if last_match.group(7):
-                                                time_frame_type = "season-range-reversed"
                                     else:
-                                        if time_frame_type != "special-qual":
-                                            time_frame_type = "season"
                                         if compare_type == "first":
                                             time_start = time_unit
                                         else:
@@ -10253,9 +10198,333 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                                 else:
                                                     time_start = ordinal_to_number(time_unit[0])
                                                     time_end = ordinal_to_number(time_unit[1])
+                                            else:
+                                                if compare_type == "first":
+                                                    time_start = time_unit
+                                                else:
+                                                    time_end = time_unit
+                                            is_seasons = True
+                                    else:
+                                        days = time_unit
+
+                                    if not is_seasons:
+                                        if compare_type == "first":
+                                            time_start = datetime.date.min
+                                            time_end = dateutil.relativedelta.relativedelta(years=years, months=months, weeks=weeks, days=days - 1)
+
+                                            if "week" in unit:
+                                                time_end.seconds = 1
+                                                time_end.minutes = weeks
+                                            elif "month" in unit:
+                                                time_end.seconds = 2
+                                                time_end.minutes = months
+                                            elif "year" in unit:
+                                                time_end.seconds = 3
+                                                time_end.minutes = years
+                                            else:
+                                                time_end.minutes = days
+
+                                            if "calendar" in unit:
+                                                time_end.microseconds = 1
+                                        else:
+                                            time_end = datetime.date.today()
+                                            if "calendar" in unit:
+                                                if "week" in unit:
+                                                    time_end = time_end + datetime.timedelta(days=6 - time_end.weekday())
+                                                    if datetime.date.today().weekday() <= 3:
+                                                        time_end -= dateutil.relativedelta.relativedelta(years=0, months=0, weeks=1, days=0)
+                                                    time_start = time_end - dateutil.relativedelta.relativedelta(years=years, months=months, weeks=weeks, days=days - 1)
+                                                elif "month" in unit:
+                                                    if datetime.date.today().day > 15:
+                                                        time_end = datetime.datetime(time_end.year, time_end.month, calendar.monthrange(time_end.year, time_end.month)[1]).date()
+                                                    else:
+                                                        if time_end.month == 1:
+                                                            time_end = datetime.datetime(time_end.year - 1, 12, calendar.monthrange(time_end.year, 12)[1]).date()
+                                                        else:
+                                                            time_end = datetime.datetime(time_end.year, time_end.month - 1, calendar.monthrange(time_end.year, time_end.month - 1)[1]).date()
+                                                    time_start = time_end - dateutil.relativedelta.relativedelta(years=years, months=months, weeks=weeks, days=days - 1)
+                                                    original_day = time_start.day
+                                                    time_start = time_start.replace(day=1)
+                                                    if original_day > 15:
+                                                        if time_start.month == 12:
+                                                            time_start = time_start.replace(month=1, year=time_start.year + 1)
+                                                        else:
+                                                            time_start = time_start.replace(month=(time_start.month + 1))
+                                                elif "year" in unit:
+                                                    time_end = datetime.datetime(time_end.year, 12, calendar.monthrange(time_end.year, 12)[1]).date()
+                                                    if datetime.date.today().month <= 6:
+                                                        time_end -=- dateutil.relativedelta.relativedelta(years=1, months=0, weeks=0, days=0)
+                                                    time_start = time_end - dateutil.relativedelta.relativedelta(years=years, months=months, weeks=weeks, days=days - 1)
+                                                else:
+                                                    time_start = time_end - dateutil.relativedelta.relativedelta(years=years, months=months, weeks=weeks, days=days - 1)
+                                            else:
+                                                time_start = time_end - dateutil.relativedelta.relativedelta(years=years, months=months, weeks=weeks, days=days - 1)
+                                
+                                qualifier_obj = {}
+                                qualifier_obj["negate"] = True
+                                qual_str = "Season Index" if (unit.startswith("season") or time_frame_type == "special-qual") else "Dates"
+                                if qual_str == "Season Index":
+                                    qual_str = "Season Index Reversed" if time_start == None and compare_type != "special" else "Season Index"
+                                    if not time_start or not time_end:    
+                                        time_end = time_start if time_start else time_end
+                                        if compare_type != "special":
+                                            time_start = 1
+                                        else:
+                                            time_start = time_end
+                                    qualifier_obj["values"] = {
+                                        "start_val" : time_start,
+                                        "end_val" : time_end
+                                    }
+                                else:
+                                    qualifier_obj["values"] = [{
+                                        "start_val" : time_start,
+                                        "end_val" : time_end
+                                    }]
+
+                                if not qual_str in qualifiers:
+                                    qualifiers[qual_str] = []
+                                qualifiers[qual_str].append(qualifier_obj)
+
+                                time_frame = re.sub(r"\s+", " ", time_frame.replace(last_match.group(0), "", 1)).strip()
+                        
+                        last_matches = re.finditer(r"(no(?:t|n)?(?: |-))(first|1st|last|this|past) ?(\S*)", time_frame)
+                        for last_match in last_matches:
+                            unit = "season"
+                            if last_match and not last_match.group(3).endswith("to") and not last_match.group(3).endswith("yester") and playoffs == "Only":
+                                time_frame_type = "special-qual"
+                            if last_match and not last_match.group(3).endswith("to") and not last_match.group(3).endswith("yester"):
+                                compare_type = last_match.group(2)
+                                if not compare_type or not compare_type.strip():
+                                    if unit == "season" or (last_match.group(4) and (last_match.group(4).startswith("season") or last_match.group(3).startswith("year"))):
+                                        compare_type = "special"
+                                    else:
+                                        compare_type = "last"
+
+                                if compare_type == "1st":
+                                    compare_type = "first"
+
+                                time_unit = last_match.group(3)
+                                if time_unit and not ("calendar" in time_unit or "date" in time_unit):
+                                    time_unit = ordinal_to_number(time_unit)
+                                    if time_unit < 1:
+                                        time_unit = 1
+                                else:
+                                    time_unit = 1
+                                if not unit:
+                                    unit = last_match.group(4)
+                                if ("calendar" in last_match.group(3) or "date" in last_match.group(3)):
+                                    unit = last_match.group(3) + unit
+                                if unit.startswith("season"):
+                                    if len(last_match.groups()) > 3 and last_match.group(6):
+                                        time_unit = re.split(r"(?<!\\)-", last_match.group(6))
+                                        if len(time_unit) == 1:
+                                            time_start = ordinal_to_number(time_unit[0])
+                                            time_end = ordinal_to_number(time_unit[0])
+                                        else:
+                                            time_start = ordinal_to_number(time_unit[0])
+                                            time_end = ordinal_to_number(time_unit[1])
+                                    else:
+                                        if compare_type == "first":
+                                            time_start = time_unit
+                                        else:
+                                            time_end = time_unit
+                                else:
+                                    days = 0
+                                    weeks = 0
+                                    months = 0
+                                    years = 0
+
+                                    is_seasons = False
+                                    if "week" in unit:
+                                        weeks = time_unit
+                                    elif "month" in unit:
+                                        months = time_unit
+                                    elif "year" in unit:
+                                        if "date" in unit or "calendar" in unit:
+                                            years = time_unit
+                                        else:
+                                            if len(last_match.groups()) > 3 and last_match.group(6):
+                                                time_unit = re.split(r"(?<!\\)-", last_match.group(6))
+                                                time_start = -float("inf")
+                                                time_end = float("inf")
+                                                if len(time_unit) == 1:
+                                                    time_start = ordinal_to_number(time_unit[0])
+                                                    time_end = ordinal_to_number(time_unit[0])
+                                                else:
+                                                    time_start = ordinal_to_number(time_unit[0])
+                                                    time_end = ordinal_to_number(time_unit[1])
+                                            else:
+                                                if compare_type == "first":
+                                                    time_start = time_unit
+                                                else:
+                                                    time_end = time_unit
+                                            is_seasons = True
+                                    else:
+                                        days = time_unit
+
+                                    if not is_seasons:
+                                        if compare_type == "first":
+                                            time_start = datetime.date.min
+                                            time_end = dateutil.relativedelta.relativedelta(years=years, months=months, weeks=weeks, days=days - 1)
+
+                                            if "week" in unit:
+                                                time_end.seconds = 1
+                                                time_end.minutes = weeks
+                                            elif "month" in unit:
+                                                time_end.seconds = 2
+                                                time_end.minutes = months
+                                            elif "year" in unit:
+                                                time_end.seconds = 3
+                                                time_end.minutes = years
+                                            else:
+                                                time_end.minutes = days
+
+                                            if "calendar" in unit:
+                                                time_end.microseconds = 1
+                                        else:
+                                            time_end = datetime.date.today()
+                                            if "calendar" in unit:
+                                                if "week" in unit:
+                                                    time_end = time_end + datetime.timedelta(days=6 - time_end.weekday())
+                                                    if datetime.date.today().weekday() <= 3:
+                                                        time_end -= dateutil.relativedelta.relativedelta(years=0, months=0, weeks=1, days=0)
+                                                    time_start = time_end - dateutil.relativedelta.relativedelta(years=years, months=months, weeks=weeks, days=days - 1)
+                                                elif "month" in unit:
+                                                    if datetime.date.today().day > 15:
+                                                        time_end = datetime.datetime(time_end.year, time_end.month, calendar.monthrange(time_end.year, time_end.month)[1]).date()
+                                                    else:
+                                                        if time_end.month == 1:
+                                                            time_end = datetime.datetime(time_end.year - 1, 12, calendar.monthrange(time_end.year, 12)[1]).date()
+                                                        else:
+                                                            time_end = datetime.datetime(time_end.year, time_end.month - 1, calendar.monthrange(time_end.year, time_end.month - 1)[1]).date()
+                                                    time_start = time_end - dateutil.relativedelta.relativedelta(years=years, months=months, weeks=weeks, days=days - 1)
+                                                    original_day = time_start.day
+                                                    time_start = time_start.replace(day=1)
+                                                    if original_day > 15:
+                                                        if time_start.month == 12:
+                                                            time_start = time_start.replace(month=1, year=time_start.year + 1)
+                                                        else:
+                                                            time_start = time_start.replace(month=(time_start.month + 1))
+                                                elif "year" in unit:
+                                                    time_end = datetime.datetime(time_end.year, 12, calendar.monthrange(time_end.year, 12)[1]).date()
+                                                    if datetime.date.today().month <= 6:
+                                                        time_end -=- dateutil.relativedelta.relativedelta(years=1, months=0, weeks=0, days=0)
+                                                    time_start = time_end - dateutil.relativedelta.relativedelta(years=years, months=months, weeks=weeks, days=days - 1)
+                                                else:
+                                                    time_start = time_end - dateutil.relativedelta.relativedelta(years=years, months=months, weeks=weeks, days=days - 1)
+                                            else:
+                                                time_start = time_end - dateutil.relativedelta.relativedelta(years=years, months=months, weeks=weeks, days=days - 1)
+                                
+                                qualifier_obj = {}
+                                qualifier_obj["negate"] = True
+                                qual_str = "Season Index" if (unit.startswith("season") or time_frame_type == "special-qual") else "Dates"
+                                if qual_str == "Season Index":
+                                    qual_str = "Season Index Reversed" if time_start == None and compare_type != "special" else "Season Index"
+                                    if not time_start or not time_end:
+                                        time_end = time_start if time_start else time_end
+                                        if compare_type != "special":
+                                            time_start = 1
+                                        else:
+                                            time_start = time_end
+                                    qualifier_obj["values"] = {
+                                        "start_val" : time_start,
+                                        "end_val" : time_end
+                                    }
+                                else:
+                                    qualifier_obj["values"] = [{
+                                        "start_val" : time_start,
+                                        "end_val" : time_end
+                                    }]
+
+                                if not qual_str in qualifiers:
+                                    qualifiers[qual_str] = []
+                                qualifiers[qual_str].append(qualifier_obj)
+
+                                time_frame = re.sub(r"\s+", " ", time_frame.replace(last_match.group(0), "", 1)).strip()
+
+                        time_frame_type = "date"
+                        if not time_frame:
+                            time_start = 0
+                            time_end = datetime.date.today().year
+                        else:
+                            unit = None
+                            last_match = re.search(r"(first|1st|last|this|past)? ?(\S*)? ?((?:(?:calendar|date)(?: |-))?days?|(?:(?:calendar|date)(?: |-))?weeks?|(?:(?:calendar|date)(?: |-))?months?|(?:(?:calendar|date)(?: |-))?years?|seasons?)( ([\w-]+)( reversed?)?)?", time_frame)
+                            if not last_match:
+                                last_match = re.search(r"(first|1st|last|this|past) ?(\S*)", time_frame)
+                                unit = "season"
+                                if last_match and not last_match.group(2).endswith("to") and not last_match.group(2).endswith("yester") and playoffs == "Only":
+                                    time_frame_type = "special-qual"
+                            if last_match and not last_match.group(2).endswith("to") and not last_match.group(2).endswith("yester"):
+                                compare_type = last_match.group(1)
+                                if not compare_type or not compare_type.strip():
+                                    if unit == "season" or (last_match.group(3) and (last_match.group(3).startswith("season") or last_match.group(3).startswith("year"))):
+                                        compare_type = "special"
+                                    else:
+                                        compare_type = "last"
+
+                                if compare_type == "1st":
+                                    compare_type = "first"
+
+                                time_unit = last_match.group(2)
+                                if time_unit and not ("calendar" in time_unit or "date" in time_unit):
+                                    time_unit = ordinal_to_number(time_unit)
+                                    if time_unit < 1:
+                                        time_unit = 1
+                                else:
+                                    time_unit = 1
+                                if not unit:
+                                    unit = last_match.group(3)
+                                if ("calendar" in last_match.group(2) or "date" in last_match.group(2)):
+                                    unit = last_match.group(2) + unit
+                                if unit.startswith("season"):
+                                    if len(last_match.groups()) > 2 and last_match.group(5):
+                                        time_unit = re.split(r"(?<!\\)-", last_match.group(5))
+                                        if len(time_unit) == 1:
+                                            time_start = ordinal_to_number(time_unit[0])
+                                            time_end = ordinal_to_number(time_unit[0])
+                                        else:
+                                            time_start = ordinal_to_number(time_unit[0])
+                                            time_end = ordinal_to_number(time_unit[1])
+
+                                        if time_frame_type != "special-qual":
+                                            time_frame_type = "season-range"
+                                            if last_match.group(6):
+                                                time_frame_type = "season-range-reversed"
+                                    else:
+                                        if time_frame_type != "special-qual":
+                                            time_frame_type = "season"
+                                        if compare_type == "first":
+                                            time_start = time_unit
+                                        else:
+                                            time_end = time_unit
+                                else:
+                                    days = 0
+                                    weeks = 0
+                                    months = 0
+                                    years = 0
+
+                                    is_seasons = False
+                                    if "week" in unit:
+                                        weeks = time_unit
+                                    elif "month" in unit:
+                                        months = time_unit
+                                    elif "year" in unit:
+                                        if "date" in unit or "calendar" in unit:
+                                            years = time_unit
+                                        else:
+                                            if len(last_match.groups()) > 2 and last_match.group(5):
+                                                time_unit = re.split(r"(?<!\\)-", last_match.group(5))
+                                                time_start = -float("inf")
+                                                time_end = float("inf")
+                                                if len(time_unit) == 1:
+                                                    time_start = ordinal_to_number(time_unit[0])
+                                                    time_end = ordinal_to_number(time_unit[0])
+                                                else:
+                                                    time_start = ordinal_to_number(time_unit[0])
+                                                    time_end = ordinal_to_number(time_unit[1])
 
                                                 time_frame_type = "season-range"
-                                                if last_match.group(7):
+                                                if last_match.group(6):
                                                     time_frame_type = "season-range-reversed"
                                             else:
                                                 time_frame_type = "season"
@@ -10323,17 +10592,22 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 if compare_type == "special" and time_frame_type == "season":
                                     time_frame_type = "season-range"
                                 
-                                if last_match.group(1):
+                                if time_frame_type == "special-qual":
                                     qualifier_obj = {}
-                                    qualifier_obj["negate"] = True
-                                    qual_str = "Season" if unit.startswith("season") else "Dates"
-                                    if qual_str == "Season":
+                                    qualifier_obj["negate"] = False
+                                    qual_str = "Season Index" if (unit.startswith("season") or time_frame_type == "special-qual") else "Dates"
+                                    if qual_str == "Season Index":
+                                        qual_str = "Season Index Reversed" if time_start == None and compare_type != "special" else "Season Index"
+                                        if not time_start or not time_end:
+                                            time_end = time_start if time_start else time_end
+                                            if compare_type != "special":
+                                                time_start = 1
+                                            else:
+                                                time_start = time_end
                                         qualifier_obj["values"] = {
-                                            "start_val" : time_end if time_start == None else time_start,
-                                            "end_val" : time_start if time_end == None else time_end
+                                            "start_val" : time_start,
+                                            "end_val" : time_end
                                         }
-                                        if time_start == None:
-                                            qual_str = "Season Reversed"
                                     else:
                                         qualifier_obj["values"] = [{
                                             "start_val" : time_start,
@@ -10439,26 +10713,6 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                         time_start = datetime.date(year=time_start, month=1, day=1)
                                     elif isinstance(time_end, int) and not isinstance(time_start, int):
                                         time_end = datetime.date(year=time_end, month=12, day=31)
-                        
-                        if time_frame_type == "special-qual":
-                            qualifier_obj = {}
-                            qualifier_obj["negate"] = False
-                            qual_str = "Season Reversed" if time_start == None else "Season"
-                            if not time_start or not time_end:
-                                has_time_end = bool(time_end)
-                                time_end = time_start if time_start else time_end
-                                time_start = 1
-                            qualifier_obj["values"] = {
-                                "start_val" : time_start,
-                                "end_val" : time_end
-                            }
-                            if not qual_str in qualifiers:
-                                qualifiers[qual_str] = []
-                            qualifiers[qual_str].append(qualifier_obj)
-
-                            time_frame_type = "date"
-                            time_start = 0
-                            time_end = datetime.date.today().year
                                             
                         da_time_frames.append({
                             "time_start" : time_start,
@@ -13176,7 +13430,7 @@ def determine_raw_str(subbb_frame):
                         qual_str += get_time_str(qual_obj["values"]["start_val"], False, period=True)
                     else:
                         qual_str += (get_time_str(qual_obj["values"]["start_val"], False, period=True)) + "-" + (get_time_str(qual_obj["values"]["end_val"], False, period=True))
-                elif qualifier == "Season" or qualifier == "Season Reversed" or qualifier == "Series Game" or qualifier == "Season Game" or qualifier == "Career Game" or qualifier == "Career Game Reversed" or qualifier == "Season Game Reversed" or qualifier == "Team Game Reversed" or qualifier == "Team Game" or qualifier == "Team Standings Rank" or qualifier == "Opponent Standings Rank" or qualifier == "Opponent Goals Rank" or qualifier == "Team Standings Rank" or qualifier == "Opponent Standings Rank" or qualifier == "Opponent Goals Allowed Rank" or qualifier == "Team Goals Rank" or qualifier == "Team Goals Allowed Rank" or qualifier == "Period":
+                elif qualifier == "Season" or qualifier == "Season Reversed" or qualifier == "Season Index" or qualifier == "Season Index Reversed" or qualifier == "Series Game" or qualifier == "Season Game" or qualifier == "Career Game" or qualifier == "Career Game Reversed" or qualifier == "Season Game Reversed" or qualifier == "Team Game Reversed" or qualifier == "Team Game" or qualifier == "Team Standings Rank" or qualifier == "Opponent Standings Rank" or qualifier == "Opponent Goals Rank" or qualifier == "Team Standings Rank" or qualifier == "Opponent Standings Rank" or qualifier == "Opponent Goals Allowed Rank" or qualifier == "Team Goals Rank" or qualifier == "Team Goals Allowed Rank" or qualifier == "Period":
                     if qual_obj["negate"]:
                         qual_str += "Not "
                     if qual_obj["values"]["start_val"] == qual_obj["values"]["end_val"]:
@@ -13557,7 +13811,7 @@ def handle_player_data(player_data, time_frame, player_type, player_page, valid_
     is_qual_match = False
     is_qual_match_excl_round = False
     for qualifier in time_frame["qualifiers"]:
-        if qualifier != "Team" and qualifier != "Team Franchise" and qualifier != "Team Conference" and qualifier != "Team Division" and qualifier != "Rookie" and qualifier != "Max Stat" and qualifier != "Min Stat" and qualifier != "Max Streak" and qualifier != "Max Stretch" and qualifier != "Count Streak" and qualifier != "Quickest"  and qualifier != "Slowest" and qualifier != "Season Stat" and qualifier != "Season Age" and qualifier != "Season" and qualifier != "Season Reversed" and qualifier != "Previous Season Stat"  and qualifier != "Upcoming Season Stat" and qualifier != "Season Sub Query" and qualifier != "Or Season Sub Query" and qualifier != "Season Before Sub Query" and qualifier != "Season After Sub Query" and qualifier != "Winning Team" and  qualifier != "Losing Team" and qualifier !=  "Winning Or Tied Team" and qualifier !=  "Losing Or Tied Team" and  qualifier != "Tied Team" and  qualifier != "Playoff Team" and qualifier != "Team Win Percentage" and qualifier != "Team Points Percentage" and qualifier != "Team Games Over 500" and qualifier != "Team Wins" and qualifier != "Team Losses" and qualifier != "Team Ties" and qualifier != "Team Points" and  qualifier != "Cup Winner Team" and qualifier != "Conference Winner Team" and  qualifier != "Team Goals Rank" and  qualifier != "Team Goals Allowed Rank" and qualifier != "Season Formula" and qualifier != "Season Number" and qualifier != "Even Year" and qualifier != "Odd Year" and qualifier != "Year":
+        if qualifier != "Team" and qualifier != "Team Franchise" and qualifier != "Team Conference" and qualifier != "Team Division" and qualifier != "Rookie" and qualifier != "Max Stat" and qualifier != "Min Stat" and qualifier != "Max Streak" and qualifier != "Max Stretch" and qualifier != "Count Streak" and qualifier != "Quickest"  and qualifier != "Slowest" and qualifier != "Season Stat" and qualifier != "Season Age" and qualifier != "Season" and qualifier != "Season Reversed" and qualifier != "Season Index" and qualifier != "Season Index Reversed" and qualifier != "Previous Season Stat"  and qualifier != "Upcoming Season Stat" and qualifier != "Season Sub Query" and qualifier != "Or Season Sub Query" and qualifier != "Season Before Sub Query" and qualifier != "Season After Sub Query" and qualifier != "Winning Team" and  qualifier != "Losing Team" and qualifier !=  "Winning Or Tied Team" and qualifier !=  "Losing Or Tied Team" and  qualifier != "Tied Team" and  qualifier != "Playoff Team" and qualifier != "Team Win Percentage" and qualifier != "Team Points Percentage" and qualifier != "Team Games Over 500" and qualifier != "Team Wins" and qualifier != "Team Losses" and qualifier != "Team Ties" and qualifier != "Team Points" and  qualifier != "Cup Winner Team" and qualifier != "Conference Winner Team" and  qualifier != "Team Goals Rank" and  qualifier != "Team Goals Allowed Rank" and qualifier != "Season Formula" and qualifier != "Season Number" and qualifier != "Even Year" and qualifier != "Odd Year" and qualifier != "Year":
             is_qual_match = True
             if qualifier != "Round":
                 is_qual_match_excl_round = True
@@ -23370,6 +23624,62 @@ def perform_qualifier(player_data, player_type, row, time_frame, all_rows):
     if "fake_playoff_row" in row and row["fake_playoff_row"]:
         return True
 
+    if "Season Index" in qualifiers:
+        valid_years = player_data["reg_year_valid_years"] if not time_frame["playoffs"] else player_data["year_valid_years"]
+        for qual_object in qualifiers["Season Index"]:
+            time_index_start = qual_object["values"]["start_val"] - 1
+            time_index_end = qual_object["values"]["end_val"] - 1
+
+            if time_index_start < 0:
+                time_index_start = 0
+            if time_index_end < 0:
+                time_index_end = 0
+            if time_index_start > len(valid_years) - 1:
+                start_val = -1
+                end_val = -1
+            else:
+                if time_index_end > len(valid_years) - 1:
+                    time_index_end = len(valid_years) - 1
+                start_val = valid_years[time_index_start]
+                end_val = valid_years[time_index_end]
+
+            if qual_object["negate"]:
+                if row["Year"] >= start_val and row["Year"] <= end_val:
+                    return False
+            else:
+                if not (row["Year"] >= start_val and row["Year"] <= end_val):
+                    return False
+    
+    if "Season Index Reversed" in qualifiers:
+        valid_years = player_data["reg_year_valid_years"] if not time_frame["playoffs"] else player_data["year_valid_years"]
+        for qual_object in qualifiers["Season Index Reversed"]:
+            time_index_start = qual_object["values"]["start_val"] - 1
+            time_index_end = qual_object["values"]["end_val"] - 1
+
+            temp_time_index_start = time_index_start
+            time_index_start = len(valid_years) - time_index_start - 1
+            time_index_end = len(valid_years) - time_index_end - temp_time_index_start
+
+            if time_index_start < 0:
+                time_index_start = 0
+            if time_index_end < 0:
+                time_index_end = 0
+            if time_index_start > len(valid_years) - 1:
+                start_val = -1
+                end_val = -1
+            else:
+                if time_index_end > len(valid_years) - 1:
+                    time_index_end = len(valid_years) - 1
+                start_val = valid_years[time_index_start]
+                end_val = valid_years[time_index_end]
+
+            if qual_object["negate"]:
+                if row["Year"] >= start_val and row["Year"] <= end_val:
+                    return False
+            else:
+                if not (row["Year"] >= start_val and row["Year"] <= end_val):
+                    return False
+
     if "Rookie" in qualifiers:
         for qual_object in qualifiers["Rookie"]:
             if qual_object["negate"]:
@@ -28731,7 +29041,7 @@ def parse_row(row, time_frame, year, is_playoffs, player_type, header_values, ta
 def fix_playoffs_data(all_rows, time_frame):
     is_qual_match = False
     for qualifier in time_frame["qualifiers"]:
-        if qualifier != "Team" and qualifier != "Team Franchise" and qualifier != "Team Conference" and qualifier != "Team Division" and qualifier != "Rookie" and qualifier != "Max Stat" and qualifier != "Min Stat" and qualifier != "Max Streak" and qualifier != "Max Stretch" and qualifier != "Count Streak" and qualifier != "Quickest"  and qualifier != "Slowest" and qualifier != "Season Stat" and qualifier != "Season Age" and qualifier != "Season" and qualifier != "Season Reversed" and qualifier != "Previous Season Stat"  and qualifier != "Upcoming Season Stat" and qualifier != "Season Sub Query" and qualifier != "Or Season Sub Query" and qualifier != "Season Before Sub Query" and qualifier != "Season After Sub Query" and qualifier != "Winning Team" and  qualifier != "Losing Team" and  qualifier != "Tied Team" and qualifier !=  "Winning Or Tied Team" and qualifier !=  "Losing Or Tied Team" and  qualifier != "Playoff Team" and qualifier != "Team Win Percentage" and qualifier != "Team Points Percentage" and qualifier != "Team Games Over 500" and qualifier != "Team Wins" and qualifier != "Team Losses" and qualifier != "Team Ties" and qualifier != "Team Points" and  qualifier != "Cup Winner Team" and qualifier != "Conference Winner Team" and  qualifier != "Team Goals Rank" and  qualifier != "Team Goals Allowed Rank" and qualifier != "Season Formula" and qualifier != "Season Number" and qualifier != "Even Year" and qualifier != "Odd Year" and qualifier != "Year":
+        if qualifier != "Team" and qualifier != "Team Franchise" and qualifier != "Team Conference" and qualifier != "Team Division" and qualifier != "Rookie" and qualifier != "Max Stat" and qualifier != "Min Stat" and qualifier != "Max Streak" and qualifier != "Max Stretch" and qualifier != "Count Streak" and qualifier != "Quickest"  and qualifier != "Slowest" and qualifier != "Season Stat" and qualifier != "Season Age" and qualifier != "Season" and qualifier != "Season Reversed" and qualifier != "Season Index" and qualifier != "Season Index Reversed" and qualifier != "Previous Season Stat"  and qualifier != "Upcoming Season Stat" and qualifier != "Season Sub Query" and qualifier != "Or Season Sub Query" and qualifier != "Season Before Sub Query" and qualifier != "Season After Sub Query" and qualifier != "Winning Team" and  qualifier != "Losing Team" and  qualifier != "Tied Team" and qualifier !=  "Winning Or Tied Team" and qualifier !=  "Losing Or Tied Team" and  qualifier != "Playoff Team" and qualifier != "Team Win Percentage" and qualifier != "Team Points Percentage" and qualifier != "Team Games Over 500" and qualifier != "Team Wins" and qualifier != "Team Losses" and qualifier != "Team Ties" and qualifier != "Team Points" and  qualifier != "Cup Winner Team" and qualifier != "Conference Winner Team" and  qualifier != "Team Goals Rank" and  qualifier != "Team Goals Allowed Rank" and qualifier != "Season Formula" and qualifier != "Season Number" and qualifier != "Even Year" and qualifier != "Odd Year" and qualifier != "Year":
             is_qual_match = True
         elif qualifier == "Max Stat" or qualifier == "Min Stat" or qualifier == "Max Streak" or qualifier == "Max Stretch" or qualifier == "Count Streak" or qualifier == "Quickest" or qualifier == "Slowest":
             for qual_object in time_frame["qualifiers"][qualifier]:
@@ -28894,47 +29204,48 @@ def handle_schedule_stats(player_data, all_rows, qualifiers, is_playoffs, missin
                                 row_data["AnyNationalTVNetworks"] = data["AnyNationalTVNetworks"]
 
                             if not isinstance(row_data["Date"], int):
-                                games_rest = 0
-                                starts_rest = 0
-                                games_in_a_row = 1
-                                starts_in_a_row = 1 if "GS" in row_data and row_data["GS"] else 0
-                                count_games_rest = True
-                                count_starts_rest = True
-                                count_games_rest_2 = True
-                                count_starts_rest_2 = True
-                                not_first_game = False
-                                for sub_data in sorted(season_obj["regular_season"] + season_obj["playoffs"], key=lambda seas_row: seas_row["Date"], reverse=True):
-                                    if sub_data["Date"] < row_data["Date"]:
-                                        not_first_game = True
-                                        if sub_data["Date"] in [row_subbest_data["Date"] for row_subbest_data in all_rows]:
-                                            count_games_rest = False
-                                        if count_games_rest:
-                                            games_rest += 1
-                                        if sub_data["Date"] in [row_subbest_data["Date"] for row_subbest_data in all_rows if "GS" in row_subbest_data and row_subbest_data["GS"]]:
-                                            count_starts_rest = False
-                                        if count_starts_rest:
-                                            starts_rest += 1
+                                if "Games Rest" in qualifiers or "Starts Rest" in qualifiers or "Games In A Row" in qualifiers or "Starts In A Row" in qualifiers:
+                                    games_rest = 0
+                                    starts_rest = 0
+                                    games_in_a_row = 1
+                                    starts_in_a_row = 1 if "GS" in row_data and row_data["GS"] else 0
+                                    count_games_rest = True
+                                    count_starts_rest = True
+                                    count_games_rest_2 = True
+                                    count_starts_rest_2 = True
+                                    not_first_game = False
+                                    for sub_data in sorted(season_obj["regular_season"] + season_obj["playoffs"], key=lambda seas_row: seas_row["Date"], reverse=True):
+                                        if sub_data["Date"] < row_data["Date"]:
+                                            not_first_game = True
+                                            if sub_data["Date"] in [row_subbest_data["Date"] for row_subbest_data in all_rows]:
+                                                count_games_rest = False
+                                            if count_games_rest:
+                                                games_rest += 1
+                                            if sub_data["Date"] in [row_subbest_data["Date"] for row_subbest_data in all_rows if "GS" in row_subbest_data and row_subbest_data["GS"]]:
+                                                count_starts_rest = False
+                                            if count_starts_rest:
+                                                starts_rest += 1
 
-                                        if sub_data["Date"] not in [row_subbest_data["Date"] for row_subbest_data in all_rows]:
-                                            count_games_rest_2 = False
-                                        if count_games_rest_2:
-                                            games_in_a_row += 1
-                                        if "GS" in row_data and row_data["GS"]:
-                                            if sub_data["Date"] not in [row_subbest_data["Date"] for row_subbest_data in all_rows if "GS" in row_subbest_data and row_subbest_data["GS"]]:
-                                                count_starts_rest_2 = False
-                                            if count_starts_rest_2:
-                                                starts_in_a_row += 1
+                                            if sub_data["Date"] not in [row_subbest_data["Date"] for row_subbest_data in all_rows]:
+                                                count_games_rest_2 = False
+                                            if count_games_rest_2:
+                                                games_in_a_row += 1
+                                            if "GS" in row_data and row_data["GS"]:
+                                                if sub_data["Date"] not in [row_subbest_data["Date"] for row_subbest_data in all_rows if "GS" in row_subbest_data and row_subbest_data["GS"]]:
+                                                    count_starts_rest_2 = False
+                                                if count_starts_rest_2:
+                                                    starts_in_a_row += 1
 
-                                        if not count_games_rest and not count_starts_rest and not count_games_rest_2 and not count_starts_rest_2:
-                                            break
-                                if not_first_game:
-                                    row_data["GamesRest"] = games_rest
-                                    row_data["StartsRest"] = starts_rest
-                                else:
-                                    row_data["GamesRest"] = float("inf")
-                                    row_data["StartsRest"] = float("inf")
-                                row_data["GamesInARow"] = games_in_a_row
-                                row_data["StartsInARow"] = starts_in_a_row
+                                            if not count_games_rest and not count_starts_rest and not count_games_rest_2 and not count_starts_rest_2:
+                                                break
+                                    if not_first_game:
+                                        row_data["GamesRest"] = games_rest
+                                        row_data["StartsRest"] = starts_rest
+                                    else:
+                                        row_data["GamesRest"] = float("inf")
+                                        row_data["StartsRest"] = float("inf")
+                                    row_data["GamesInARow"] = games_in_a_row
+                                    row_data["StartsInARow"] = starts_in_a_row
 
             for index, data in enumerate(season_obj["playoffs"]):
                 round_index = 0
@@ -29126,59 +29437,61 @@ def handle_schedule_stats(player_data, all_rows, qualifiers, is_playoffs, missin
                             row_data["AnyNationalTVNetworks"] = data["AnyNationalTVNetworks"]
 
                         if not isinstance(row_data["Date"], int):
-                            games_rest = 0
-                            starts_rest = 0
-                            games_in_a_row = 1
-                            starts_in_a_row = 1 if "GS" in row_data and row_data["GS"] else 0
-                            count_games_rest = True
-                            count_starts_rest = True
-                            count_games_rest_2 = True
-                            count_starts_rest_2 = True
-                            not_first_game = False
-                            for sub_data in sorted(season_obj["regular_season"] + season_obj["playoffs"], key=lambda seas_row: seas_row["Date"], reverse=True):
-                                if sub_data["Date"] < row_data["Date"]:
-                                    not_first_game = True
-                                    if sub_data["Date"] in [row_subbest_data["Date"] for row_subbest_data in all_rows]:
-                                        count_games_rest = False
-                                    if count_games_rest:
-                                        games_rest += 1
-                                    if sub_data["Date"] in [row_subbest_data["Date"] for row_subbest_data in all_rows if "GS" in row_subbest_data and row_subbest_data["GS"]]:
-                                        count_starts_rest = False
-                                    if count_starts_rest:
-                                        starts_rest += 1
+                            if "Games Rest" in qualifiers or "Starts Rest" in qualifiers or "Games In A Row" in qualifiers or "Starts In A Row" in qualifiers:
+                                games_rest = 0
+                                starts_rest = 0
+                                games_in_a_row = 1
+                                starts_in_a_row = 1 if "GS" in row_data and row_data["GS"] else 0
+                                count_games_rest = True
+                                count_starts_rest = True
+                                count_games_rest_2 = True
+                                count_starts_rest_2 = True
+                                not_first_game = False
+                                for sub_data in sorted(season_obj["regular_season"] + season_obj["playoffs"], key=lambda seas_row: seas_row["Date"], reverse=True):
+                                    if sub_data["Date"] < row_data["Date"]:
+                                        not_first_game = True
+                                        if sub_data["Date"] in [row_subbest_data["Date"] for row_subbest_data in all_rows]:
+                                            count_games_rest = False
+                                        if count_games_rest:
+                                            games_rest += 1
+                                        if sub_data["Date"] in [row_subbest_data["Date"] for row_subbest_data in all_rows if "GS" in row_subbest_data and row_subbest_data["GS"]]:
+                                            count_starts_rest = False
+                                        if count_starts_rest:
+                                            starts_rest += 1
 
-                                    if sub_data["Date"] not in [row_subbest_data["Date"] for row_subbest_data in all_rows]:
-                                        count_games_rest_2 = False
-                                    if count_games_rest_2:
-                                        games_in_a_row += 1
-                                    if "GS" in row_data and row_data["GS"]:
-                                        if sub_data["Date"] not in [row_subbest_data["Date"] for row_subbest_data in all_rows if "GS" in row_subbest_data and row_subbest_data["GS"]]:
-                                            count_starts_rest_2 = False
-                                        if count_starts_rest_2:
-                                            starts_in_a_row += 1
+                                        if sub_data["Date"] not in [row_subbest_data["Date"] for row_subbest_data in all_rows]:
+                                            count_games_rest_2 = False
+                                        if count_games_rest_2:
+                                            games_in_a_row += 1
+                                        if "GS" in row_data and row_data["GS"]:
+                                            if sub_data["Date"] not in [row_subbest_data["Date"] for row_subbest_data in all_rows if "GS" in row_subbest_data and row_subbest_data["GS"]]:
+                                                count_starts_rest_2 = False
+                                            if count_starts_rest_2:
+                                                starts_in_a_row += 1
 
-                                    if not count_games_rest and not count_starts_rest and not count_games_rest_2 and not count_starts_rest_2:
-                                        break
-                            if not_first_game:
-                                row_data["GamesRest"] = games_rest
-                                row_data["StartsRest"] = starts_rest
-                            else:
-                                row_data["GamesRest"] = float("inf")
-                                row_data["StartsRest"] = float("inf")
-                            row_data["GamesInARow"] = games_in_a_row
-                            row_data["StartsInARow"] = starts_in_a_row
+                                        if not count_games_rest and not count_starts_rest and not count_games_rest_2 and not count_starts_rest_2:
+                                            break
+                                if not_first_game:
+                                    row_data["GamesRest"] = games_rest
+                                    row_data["StartsRest"] = starts_rest
+                                else:
+                                    row_data["GamesRest"] = float("inf")
+                                    row_data["StartsRest"] = float("inf")
+                                row_data["GamesInARow"] = games_in_a_row
+                                row_data["StartsInARow"] = starts_in_a_row
 
                         break
     
-    for row_data in all_rows:
-        if not isinstance(row_data["Date"], int):
-            days_in_a_row = 1
-            date_to_check = row_data["Date"] - datetime.timedelta(days=1)
-            for sub_data in sorted(all_rows, key=lambda seas_row: seas_row["Date"], reverse=True):
-                if sub_data["Date"] == date_to_check:
-                    days_in_a_row += 1
-                    date_to_check -= datetime.timedelta(days=1)
-            row_data["DaysInARow"] = days_in_a_row
+    if "Days In A Row" in qualifiers:
+        for row_data in all_rows:
+            if not isinstance(row_data["Date"], int):
+                days_in_a_row = 1
+                date_to_check = row_data["Date"] - datetime.timedelta(days=1)
+                for sub_data in sorted(all_rows, key=lambda seas_row: seas_row["Date"], reverse=True):
+                    if sub_data["Date"] == date_to_check:
+                        days_in_a_row += 1
+                        date_to_check -= datetime.timedelta(days=1)
+                row_data["DaysInARow"] = days_in_a_row
 
     for row_data in all_rows:
         if "TmGm" not in row_data or row_data["TmGm"] == None:
