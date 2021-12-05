@@ -16319,6 +16319,10 @@ def handle_nhl_game_stats(player_data, all_rows, time_frame, player_link, player
                 
             if not has_match:
                 games_to_skip.add(row_data["NHLGameLink"])
+    if has_coordinate_quals(time_frame["qualifiers"]) or has_time_quals(time_frame["qualifiers"]):
+        for row_data in all_rows:
+            if row_data["Year"] < 2010:
+                 games_to_skip.add(row_data["NHLGameLink"])
 
     all_rows = sorted(all_rows, key=lambda row: row["Date"])
     return get_nhl_game_schedule(player_data, all_rows, games_to_skip, player_link, player_type, time_frame, missing_games, missing_toi, extra_stats)
@@ -16561,6 +16565,10 @@ def handle_nhl_game_stats_single_thread(player_data, all_rows, time_frame, playe
                 
             if not has_match:
                 games_to_skip.add(row_data["NHLGameLink"])
+    if has_coordinate_quals(time_frame["qualifiers"]) or has_time_quals(time_frame["qualifiers"]):
+        for row_data in all_rows:
+            if row_data["Year"] < 2010:
+                 games_to_skip.add(row_data["NHLGameLink"])
 
     all_rows = sorted(all_rows, key=lambda row: row["Date"])
     return get_nhl_game_schedule_single_thread(player_data, all_rows, games_to_skip, player_link, player_type, time_frame, missing_games, missing_toi, extra_stats)
@@ -32423,6 +32431,12 @@ def has_against_quals_no_so(extra_stats):
 def has_api_quals(qualifiers):
     return "Event Time" in qualifiers or "Coordinates" in qualifiers or "Left Side" in qualifiers or "Right Side" in qualifiers or "Faceoff Circle" in qualifiers or "Crease" in qualifiers or "X Coordinate" in qualifiers or "Y Coordinate" in qualifiers or "Raw Coordinates" in qualifiers or "Raw X Coordinate" in qualifiers or "Raw Y Coordinate" in qualifiers or "Absolute Coordinates" in qualifiers or "Absolute X Coordinate" in qualifiers or "Absolute Y Coordinate" in qualifiers
 
+def has_coordinate_quals(qualifiers):
+    return "Coordinates" in qualifiers or "Left Side" in qualifiers or "Right Side" in qualifiers or "Faceoff Circle" in qualifiers or "Crease" in qualifiers or "X Coordinate" in qualifiers or "Y Coordinate" in qualifiers or "Raw Coordinates" in qualifiers or "Raw X Coordinate" in qualifiers or "Raw Y Coordinate" in qualifiers or "Absolute Coordinates" in qualifiers or "Absolute X Coordinate" in qualifiers or "Absolute Y Coordinate" in qualifiers
+
+def has_time_quals(qualifiers):
+    return "Event Time" in qualifiers
+
 def is_against_header(header, extra_stats, player_type, has_toi_stats):
     if not has_against_quals(extra_stats):
         return False
@@ -32536,13 +32550,13 @@ def is_invalid_stat(stat, player_type, data, count_inconsistent, player_data):
     if "YearStart" in data and stat in headers[player_type["da_type"]["type"]] and data["YearStart"]:
         if player_type["da_type"]["type"] == "Skater":
             header_shift_stats = ["Shft", "Shft/GP", "TOI/Shft"]
-            report_2_stats = ["PenDrawn", "NetPEN", "Post/Bar", "CF", "CA", "CFPer", "CF/60M", "CA/60M", "FF", "FA", "FFPer", "SF/60M", "SA/60M", "SFPer", "CFRelPer", "FFRelPer", "GFRelPer", "SFRelPer", "FF/60M", "FA/60M", "offIGF", "offIGA", "offICF", "offICA", "offIFF", "offIFA", "offISF", "offISA", "offIGF/60M", "offICA/60M", "offIFF/60M" , "offISA/60M", "offIGA/60M", "offICF/60M", "offIFA/60M", "offISF/60M", "offIG/60M", "offIC/60M", "offIF/60M", "offIS/60M", "GFRel/60M", "CFRel/60M", "FFRel/60M", "SFRel/60M", "GARel/60M", "CARel/60M", "FARel/60M", "SARel/60M", "OZ%", "oiSPer", "oiSVPer", "PDO", "oiSRelPer", "oiSVRelPer", "PDORel", "TSA", "TSM", "TSB", "TSA/GP", "TSB/GP", "TSM/GP", "TS%", "SThr%"]
+            report_2_stats = ["PenDrawn", "NetPEN", "Post/Bar", "CF", "CA", "CFPer", "CF/60M", "CA/60M", "FF", "FA", "FFPer", "SF/60M", "SA/60M", "SFPer", "CFRelPer", "FFRelPer", "SFRelPer", "FF/60M", "FA/60M", "offICF", "offICA", "offIFF", "offIFA", "offISF", "offISA", "offICA/60M", "offIFF/60M" , "offISA/60M", "offICF/60M", "offIFA/60M", "offISF/60M", "offIC/60M", "offIF/60M", "offIS/60M", "CFRel/60M", "FFRel/60M", "SFRel/60M", "CARel/60M", "FARel/60M", "SARel/60M", "OZ%", "oiSPer", "oiSVPer", "PDO", "oiSRelPer", "oiSVRelPer", "PDORel", "TSA", "TSM", "TSB", "TSA/GP", "TSB/GP", "TSM/GP", "TS%", "SThr%"]
             report_3_stats = ["TK", "GV", "TK/GV", "HIT", "HITTkn", "BLK"]
             strength_stats = ["PEN", "PEN/GP", "PIM", "PIM/GP", "OZFO%", "DZFO%", "FOW/GP", "FO/GP", "FOW", "FO", "FO%"]
             shot_on_stats = ["S", "S%", "S/GP"]
             shot_on_on_stats = ["S", "S%", "S/GP"]
             report_stats = ["OZFO%", "DZFO%", "FOW/GP", "FO/GP", "FOW", "FO", "FO%", "S", "S%", "S/GP"]
-            game_report_stats = ["PlusMinus", "GF", "EVGF", "GA", "EVGA", "IGP", "EVIGP", "IPP", "EVIPP", "GF%", "EVGF%", "GF/60M", "GA/60M"]
+            game_report_stats = ["PlusMinus", "GF", "EVGF", "GA", "EVGA", "IGP", "EVIGP", "IPP", "EVIPP", "GF%", "EVGF%", "GF/60M", "GA/60M", "GFRelPer", "offIGF", "offIGA", "offIGF/60M", "offIGA/60M", "GFRel/60M", "offIG/60M", "GARel/60M"]
             header_indv_shift_stats = ["CF", "CA", "CFPer", "CF/60M", "CA/60M", "FF", "FA", "FFPer", "SF/60M", "SA/60M", "SFPer", "FF/60M", "FA/60M", "offIGF", "offIGA", "offICF", "offICA", "offIFF", "offIFA", "offISF", "offISA", "offIGF/60M", "offICA/60M", "offIFF/60M" , "offISA/60M", "offIGA/60M", "offICF/60M", "offIFA/60M", "offISF/60M", "offIG/60M", "offIC/60M", "offIF/60M", "offIS/60M", "GFRel/60M", "CFRel/60M", "FFRel/60M", "SFRel/60M", "GARel/60M", "CARel/60M", "FARel/60M", "SARel/60M", "CFRelPer", "FFRelPer", "GFRelPer", "SFRelPer", "oiSPer", "oiSVPer", "PDO", "oiSRelPer", "oiSVRelPer", "PDORel", "OZ%", "OZFO%", "DZFO%", "TSA", "TSM", "TSB", "TSA/GP", "TSA/60M", "TSB/GP", "TSB/60M", "TSM/GP", "TSM/60M", "TS%", "SThr%"]
         else:
             header_shift_stats = []
