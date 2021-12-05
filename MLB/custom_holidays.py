@@ -57,3 +57,17 @@ def get_savings_times(date, country, eve):
                 daylight_savings_times.append(pot_date.date())
     
     return daylight_savings_times
+
+def chanukkah(date, church, country, obseverd, eve):
+    return hanukkah(date, church, country, obseverd, eve)
+
+def hanukkah(date, church, country, obseverd, eve):
+    year, month, day = hebrew.to_jd_gregorianyear(year, hebrew.KISLEV, 25)
+    if not obseverd:
+        day -= 1
+    start_date = datetime.date(year, month, day)
+    if not obseverd:
+        end_date = start_date + datetime.timedelta(days=8)
+    else:
+        end_date = start_date + datetime.timedelta(days=7)
+    return [start_date + datetime.timedelta(days=x) for x in range((end_date - start_date).days + 1)]
