@@ -10329,9 +10329,11 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                     qual_str = "Season" if unit.startswith("season") else "Dates"
                                     if qual_str == "Season":
                                         qualifier_obj["values"] = {
-                                            "start_val" : time_start,
-                                            "end_val" : time_end
+                                            "start_val" : time_end if time_start == None else time_start,
+                                            "end_val" : time_start if time_end == None else time_end
                                         }
+                                        if time_start == None:
+                                            qual_str = "Season Reversed"
                                     else:
                                         qualifier_obj["values"] = [{
                                             "start_val" : time_start,
