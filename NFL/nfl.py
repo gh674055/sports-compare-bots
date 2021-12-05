@@ -11378,6 +11378,8 @@ def perform_qualifier(player_data, player_type, ind_player_type, row, time_frame
                                 holiday_date = holiday_func[1](game_date.year, country=country)
                             elif "observed" in arguments:
                                 holiday_date = holiday_func[1](game_date.year, observed=observed)
+                            elif "eve" in arguments:
+                                holiday_date = holiday_func[1](game_date.year, eve=eve)
                             else:
                                 holiday_date = holiday_func[1](game_date.year)
 
