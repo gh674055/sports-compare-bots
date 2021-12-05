@@ -62,7 +62,7 @@ def chanukkah(date, church, country, obseverd, eve):
     return hanukkah(date, church, country, obseverd, eve)
 
 def hanukkah(date, church, country, obseverd, eve):
-    year, month, day = hebrew.to_jd_gregorianyear(year, hebrew.KISLEV, 25)
+    year, month, day = hebrew.to_jd_gregorianyear(date.year, hebrew.KISLEV, 25)
     if not obseverd:
         day -= 1
     start_date = datetime.date(year, month, day)
