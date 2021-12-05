@@ -70,4 +70,4 @@ def hanukkah(date, church, country, obseverd, eve):
         end_date = start_date + datetime.timedelta(days=8)
     else:
         end_date = start_date + datetime.timedelta(days=7)
-    return [start_date + datetime.timedelta(days=x) for x in range((end_date - start_date).days + 1)]
+    return date in [start_date + datetime.timedelta(days=x) for x in range((end_date - start_date).days + 1)]
