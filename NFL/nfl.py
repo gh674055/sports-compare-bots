@@ -15999,7 +15999,7 @@ def get_player_current_team_number(player_page, needs_numbers):
                         end_year = int(pot_number_text_split[1])
                     else:
                         end_year = start_year
-                    if pot_number.text and str(pot_number.text).strip().isdigit():
+                    if pot_number.text and str(pot_number.text).strip():
                         sub_number = int(re.sub("[^0-9\/]", "", str(pot_number.text)).strip())
                         numbers_map.append({
                             "start_year" : start_year,
