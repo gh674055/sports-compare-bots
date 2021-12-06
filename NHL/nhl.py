@@ -2675,6 +2675,7 @@ headers = {
         "DeflectS%" : {
             "positive" : True,
             "round" : "percent",
+            "display" : False,
             "display-value" : "S% Deflect",
             "type" : "Advanced",
             "valid_since" : {
@@ -2714,6 +2715,7 @@ headers = {
             "positive" : True,
             "round" : "percent",
             "display-value" : "S% Wrap",
+            "display" : False,
             "type" : "Advanced",
             "valid_since" : {
                 "season" : 2009,
