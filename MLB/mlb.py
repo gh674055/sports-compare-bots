@@ -33077,7 +33077,7 @@ def perform_mlb_game_qualifiers(row, qualifiers):
         for qual_object in qualifiers["Time Zone"]:
             has_match = False
             for stadium in qual_object["values"]:
-                if stadium in row["TimeZone"].lower():
+                if stadium in row["TimeZone"].lower().replace("_", ""):
                     has_match = True
                     break
             if qual_object["negate"]:
@@ -33094,7 +33094,7 @@ def perform_mlb_game_qualifiers(row, qualifiers):
         for qual_object in qualifiers["Exact Time Zone"]:
             has_match = False
             for stadium in qual_object["values"]:
-                if stadium == row["TimeZone"].lower():
+                if stadium == row["TimeZone"].lower().replace("_", ""):
                     has_match = True
                     break
             if qual_object["negate"]:
