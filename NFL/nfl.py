@@ -6914,6 +6914,10 @@ def determine_raw_str(subbb_frame):
                             qual_str += "Not "
                         qual_str += "(" + player["query"].replace("Query: ", "", 1) + ")"
                 elif qualifier == "Days Rest" or qualifier == "Upcoming Days Rest" or qualifier == "Starts Days Rest" or qualifier == "Upcoming Starts Days Rest" or qualifier == "Days In A Row" or qualifier == "Games In A Row" or qualifier == "Starts In A Row" or qualifier == "Games Rest" or qualifier == "Starts Rest" or qualifier == "Team Score" or qualifier == "Opponent Score" or qualifier == "Previous Team Score" or qualifier == "Previous Opponent Score" or qualifier == "Upcoming Team Score" or qualifier == "Upcoming Opponent Score" or qualifier == "Over/Under" or qualifier == "Super Bowl" or qualifier == "Number" or qualifier == "Team Wins" or qualifier == "Team Losses" or qualifier == "Team Ties" or qualifier == "Opponent Wins" or qualifier == "Opponent Losses" or qualifier == "Opponent Ties" or qualifier == "Current Team Wins" or qualifier == "Current Team Losses" or qualifier == "Current Team Ties" or qualifier == "Current Opponent Wins" or qualifier == "Current Opponent Losses" or qualifier == "Current Opponent Ties" or qualifier == "Team Games Over 500" or qualifier == "Opponent Games Over 500" or qualifier == "Current Team Games Over 500" or qualifier == "Current Opponent Games Over 500":
+                    if not sub_sub_first:
+                        qual_str += " + "
+                    else:
+                        sub_sub_first = False
                     if qual_obj["negate"]:
                         qual_str += "Not "
                     if qual_obj["values"]["start_val"] == qual_obj["values"]["end_val"]:
@@ -6933,6 +6937,10 @@ def determine_raw_str(subbb_frame):
                     else:
                         qual_str += (get_time_str(qual_obj["values"]["start_val"], False)) + "-" + (get_time_str(qual_obj["values"]["end_val"], False))
                 elif qualifier == "Temperature" or qualifier == "Wind Chill":
+                    if not sub_sub_first:
+                        qual_str += " + "
+                    else:
+                        sub_sub_first = False
                     if qual_obj["negate"]:
                         qual_str += "Not "
                     if qual_obj["values"]["start_val"] == qual_obj["values"]["end_val"]:
@@ -6941,6 +6949,10 @@ def determine_raw_str(subbb_frame):
                         qual_str += (get_time_str(qual_obj["values"]["start_val"], False)) + "-" + (get_time_str(qual_obj["values"]["end_val"], False))
                     qual_str += " °F"
                 elif qualifier == "Wind":
+                    if not sub_sub_first:
+                        qual_str += " + "
+                    else:
+                        sub_sub_first = False
                     if qual_obj["negate"]:
                         qual_str += "Not "
                     if qual_obj["values"]["start_val"] == qual_obj["values"]["end_val"]:
@@ -6950,6 +6962,10 @@ def determine_raw_str(subbb_frame):
                 
                     qual_str += " MPH"
                 elif qualifier == "Humidity":
+                    if not sub_sub_first:
+                        qual_str += " + "
+                    else:
+                        sub_sub_first = False
                     if qual_obj["negate"]:
                         qual_str += "Not "
                     if qual_obj["values"]["start_val"] == qual_obj["values"]["end_val"]:
@@ -6957,7 +6973,7 @@ def determine_raw_str(subbb_frame):
                     else:
                         qual_str += (get_time_str(qual_obj["values"]["start_val"], False)) + "-" + (get_time_str(qual_obj["values"]["end_val"], False))
                 
-                    qual_str += " MPH"
+                    qual_str += "%"
                 elif qualifier == "Dates":
                     for date_obj in qual_obj["values"]:
                         if not sub_sub_first:
@@ -6972,6 +6988,10 @@ def determine_raw_str(subbb_frame):
                         else:
                             qual_str += get_time_str(date_obj["start_val"], False) + " to " + get_time_str(date_obj["end_val"], False)
                 elif qualifier == "Score Margin" or qualifier == "Previous Score Margin" or qualifier == "Upcoming Score Margin" or qualifier == "Score Difference" or qualifier == "Previous Score Difference" or qualifier == "Upcoming Score Difference" or qualifier == "Spread" or qualifier == "Spread Margin" or qualifier == "Over/Under Margin" or qualifier == "Quarter" or qualifier == "Down" or qualifier == "Down Distance" or qualifier == "Field Position" or qualifier == "Current Team Score" or qualifier == "Current Opponent Score" or qualifier == "Current Score Margin" or qualifier == "Current Score Difference":
+                    if not sub_sub_first:
+                        qual_str += " + "
+                    else:
+                        sub_sub_first = False
                     if qual_obj["negate"]:
                         qual_str += "Not "
                     if qual_obj["values"]["start_val"] == qual_obj["values"]["end_val"]:
@@ -6979,6 +6999,10 @@ def determine_raw_str(subbb_frame):
                     else:
                         qual_str += (get_time_str(qual_obj["values"]["start_val"], False)) + "-" + (get_time_str(qual_obj["values"]["end_val"], False))
                 elif qualifier == "Quarter Time" or qualifier == "Quarter Time Remaining":
+                    if not sub_sub_first:
+                        qual_str += " + "
+                    else:
+                        sub_sub_first = False
                     if qual_obj["negate"]:
                         qual_str += "Not "
                     if qual_obj["values"]["start_val"] == qual_obj["values"]["end_val"]:
@@ -6986,6 +7010,10 @@ def determine_raw_str(subbb_frame):
                     else:
                         qual_str += (get_time_str(qual_obj["values"]["start_val"], False, quarter=True)) + "-" + (get_time_str(qual_obj["values"]["end_val"], False, quarter=True))
                 elif qualifier == "Season" or qualifier == "Season Reversed" or qualifier == "Season Index" or qualifier == "Season Index Reversed" or qualifier == "Series Game" or qualifier == "Season Game" or qualifier == "Career Game" or qualifier == "Career Game Reversed" or qualifier == "Season Game Reversed" or qualifier == "Team Game Reversed" or qualifier == "Team Game" or qualifier == "Week" or qualifier == "Opponent Points Rank" or qualifier == "Opponent Points Allowed Rank" or qualifier == "Opponent Yards Rank" or qualifier == "Opponent Yards Allowed Rank" or qualifier == "Opponent Pass TD Rank" or qualifier == "Opponent Pass TD Allowed Rank" or qualifier == "Opponent Pass Yards Rank" or qualifier == "Opponent Pass Yards Allowed Rank" or qualifier == "Opponent Rush TD Rank" or qualifier == "Opponent Rush TD Allowed Rank" or qualifier == "Opponent Rush Yards Rank" or qualifier == "Opponent Rush Yards Allowed Rank" or qualifier == "Opponent ANY/A Rank" or qualifier == "Opponent ANY/A Allowed Rank" or qualifier == "Opponent Passer Rating Rank" or qualifier == "Opponent Passer Rating Allowed Rank" or qualifier == "Opponent Fantasy Position Rank" or qualifier == "Team Points Rank" or qualifier == "Team Points Allowed Rank" or qualifier == "Team Yards Rank" or qualifier == "Team Yards Allowed Rank" or qualifier == "Team Pass TD Rank" or qualifier == "Team Pass TD Allowed Rank" or qualifier == "Team Pass Yards Rank" or qualifier == "Team Pass Yards Allowed Rank" or qualifier == "Team Rush TD Rank" or qualifier == "Team Rush TD Allowed Rank" or qualifier == "Team Rush Yards Rank" or qualifier == "Team Rush Yards Allowed Rank" or qualifier == "Team ANY/A Rank" or qualifier == "Team ANY/A Allowed Rank" or qualifier == "Team Passer Rating Rank" or qualifier == "Team Passer Rating Allowed Rank" or qualifier == "Team Fantasy Position Rank":
+                    if not sub_sub_first:
+                        qual_str += " + "
+                    else:
+                        sub_sub_first = False
                     if qual_obj["negate"]:
                         qual_str += "Not "
                     if qual_obj["values"]["start_val"] == qual_obj["values"]["end_val"]:
@@ -7011,6 +7039,10 @@ def determine_raw_str(subbb_frame):
                     if "position" in qual_obj["values"] and qual_obj["values"]["position"]:
                         qual_str += " against " + qual_obj["values"]["position"] + "s"
                 elif qualifier == "Opponent Win Percentage" or qualifier == "Team Win Percentage" or qualifier == "Current Opponent Win Percentage" or qualifier == "Current Team Win Percentage":
+                    if not sub_sub_first:
+                        qual_str += " + "
+                    else:
+                        sub_sub_first = False
                     if qual_obj["negate"]:
                         qual_str += "Not "
                     if qual_obj["values"]["start_val"] == qual_obj["values"]["end_val"]:
@@ -7018,6 +7050,10 @@ def determine_raw_str(subbb_frame):
                     else:
                         qual_str += (get_time_str(qual_obj["values"]["start_val"], True, True)) + " to " + (get_time_str(qual_obj["values"]["end_val"], True, True))
                 elif qualifier == "Start Time":
+                    if not sub_sub_first:
+                        qual_str += " + "
+                    else:
+                        sub_sub_first = False
                     if qual_obj["negate"]:
                         qual_str += "Not "
 

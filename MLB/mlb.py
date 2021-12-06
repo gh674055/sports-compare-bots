@@ -13689,6 +13689,10 @@ def determine_raw_str(subbb_frame):
                         else:
                             qual_str += player_url_str + ((" (" + player["query"] + ")") if player["query"] != "Query: " else "")
                 elif qualifier == "Days Rest" or qualifier == "Upcoming Days Rest" or qualifier == "Starts Days Rest" or qualifier == "Upcoming Starts Days Rest" or qualifier == "Start Days In A Row" or qualifier == "Game Days In A Row" or qualifier == "Days In A Row" or qualifier == "Games In A Row" or qualifier == "Starts In A Row" or qualifier == "Game Days Rest" or qualifier == "Start Days Rest" or qualifier == "Games Rest" or qualifier == "Starts Rest" or qualifier == "Inning Entered" or qualifier == "Outs Entered" or qualifier == "Outs Remaining Entered" or qualifier == "Men On Base Entered" or qualifier == "Men In Scoring Entered" or qualifier == "Team Score" or qualifier == "Ending Team Score" or qualifier == "Run Support" or qualifier == "Opponent Score" or qualifier == "Ending Opponent Score" or qualifier == "Previous Team Score" or qualifier == "Previous Opponent Score" or qualifier == "Final Team Score" or qualifier == "Team Pitch Count" or qualifier == "Game Pitch Count" or qualifier == "Pitch Count" or qualifier == "Pitcher Batters Faced" or qualifier == "Batter Plate Appearance" or qualifier == "Pitcher Batters Faced Reversed" or qualifier == "Batter Plate Appearance Reversed" or qualifier == "Starting Pitch Count" or qualifier == "At Bat Pitch Count" or qualifier == "Men On Base" or qualifier == "Final Opponent Score" or qualifier == "Upcoming Team Score" or qualifier == "Upcoming Opponent Score" or qualifier == "Series Team Wins" or qualifier == "Series Opponent Wins" or qualifier == "Series Score Margin" or qualifier == "Series Score Difference" or qualifier == "Season Number" or qualifier == "Game Number" or qualifier == "Ending Outs" or qualifier == "Outs" or qualifier == "Outs Remaining" or qualifier == "After Strikes" or qualifier == "After Balls" or qualifier == "Swinging On Strikes" or qualifier == "Swinging On Balls" or qualifier == "After Swinging On Strikes" or qualifier == "After Swinging On Balls" or qualifier == "Strikes" or qualifier == "Balls" or qualifier == "Runs" or qualifier == "Play Outs" or qualifier == "RBIs" or qualifier == "Number Drove In" or qualifier == "Pitch Speed" or qualifier == "Pitch Zone" or qualifier == "Pitch Spin" or qualifier == "Exit Velocity" or qualifier == "Hit Distance" or qualifier == "Launch Angle" or qualifier == "Number Of Men On Base" or qualifier == "Number Of Men In Scoring" or qualifier == "Team Wins" or qualifier == "Team Losses" or qualifier == "Opponent Wins" or qualifier == "Opponent Losses" or qualifier == "Current Team Wins" or qualifier == "Current Team Losses" or qualifier == "Current Opponent Wins" or qualifier == "Current Opponent Losses" or qualifier == "Team Games Over 500" or qualifier == "Opponent Games Over 500" or qualifier == "Current Team Games Over 500" or qualifier == "Current Opponent Games Over 500":
+                    if not sub_sub_first:
+                        qual_str += " + "
+                    else:
+                        sub_sub_first = False
                     if qual_obj["negate"]:
                         qual_str += "Not "
                     if qual_obj["values"]["start_val"] == qual_obj["values"]["end_val"]:
@@ -13696,6 +13700,10 @@ def determine_raw_str(subbb_frame):
                     else:
                         qual_str += (get_time_str(qual_obj["values"]["start_val"], False)) + "-" + (get_time_str(qual_obj["values"]["end_val"], False))
                 elif qualifier == "Event Stat" or qualifier == "Event Stat Reversed" or qualifier == "Event Stats" or qualifier == "Event Stats Reversed" or qualifier == "Game Event Stat" or qualifier == "Game Event Stat Reversed" or qualifier == "Game Event Stats" or qualifier == "Game Event Stats Reversed" or qualifier == "Starting Event Stat" or qualifier == "Starting Event Stat Reversed" or qualifier == "Starting Event Stats" or qualifier == "Starting Event Stats Reversed" or qualifier == "Starting Game Event Stat" or qualifier == "Starting Game Event Stat Reversed" or qualifier == "Starting Game Event Stats" or qualifier == "Starting Game Event Stats Reversed":
+                    if not sub_sub_first:
+                        qual_str += " + "
+                    else:
+                        sub_sub_first = False
                     if qual_obj["negate"]:
                         qual_str += "Not "
                     qual_str += qual_obj["stat"] + "="
@@ -13736,6 +13744,10 @@ def determine_raw_str(subbb_frame):
                         whole += 1
                     end_val = ("{:.1f}").format(round_value(frac + whole, 2))
 
+                    if not sub_sub_first:
+                        qual_str += " + "
+                    else:
+                        sub_sub_first = False
                     if qual_obj["negate"]:
                         qual_str += "Not "
                     if start_val == qual_obj["values"]["end_val"]:
@@ -13755,6 +13767,10 @@ def determine_raw_str(subbb_frame):
                     else:
                         qual_str += (get_time_str(qual_obj["values"]["start_val"], False)) + "-" + (get_time_str(qual_obj["values"]["end_val"], False))
                 elif qualifier == "Temperature":
+                    if not sub_sub_first:
+                        qual_str += " + "
+                    else:
+                        sub_sub_first = False
                     if qual_obj["negate"]:
                         qual_str += "Not "
                     if qual_obj["values"]["start_val"] == qual_obj["values"]["end_val"]:
@@ -13776,6 +13792,10 @@ def determine_raw_str(subbb_frame):
                         else:
                             qual_str += get_time_str(date_obj["start_val"], False) + " to " + get_time_str(date_obj["end_val"], False)
                 elif qualifier == "Wind":
+                    if not sub_sub_first:
+                        qual_str += " + "
+                    else:
+                        sub_sub_first = False
                     if qual_obj["negate"]:
                         qual_str += "Not "
                     if qual_obj["values"]["start_val"] == qual_obj["values"]["end_val"]:
@@ -13785,6 +13805,10 @@ def determine_raw_str(subbb_frame):
                 
                     qual_str += " MPH"
                 elif qualifier == "Count" or qualifier == "After Count" or qualifier == "After Swinging On Count" or qualifier == "Swinging On Count":
+                    if not sub_sub_first:
+                        qual_str += " + "
+                    else:
+                        sub_sub_first = False
                     if qual_obj["negate"]:
                         qual_str += "Not "
                     qual_str += "Balls: "
@@ -13799,6 +13823,10 @@ def determine_raw_str(subbb_frame):
                     else:
                         qual_str += (get_time_str(qual_obj["values"]["strikes"]["start_val"], False)) + "-" + (get_time_str(qual_obj["values"]["strikes"]["end_val"], False))
                 elif qualifier == "Score Margin" or qualifier == "Score Margin Entered" or qualifier == "Ending Score Margin" or qualifier == "Previous Score Margin" or qualifier == "Upcoming Score Margin" or qualifier == "Final Score Margin" or qualifier == "Score Difference" or qualifier == "Score Difference Entered" or qualifier == "Ending Score Difference" or qualifier == "Previous Score Difference" or qualifier == "Upcoming Score Difference" or qualifier == "Final Score Difference":
+                    if not sub_sub_first:
+                        qual_str += " + "
+                    else:
+                        sub_sub_first = False
                     if qual_obj["negate"]:
                         qual_str += "Not "
                     if qual_obj["values"]["start_val"] == qual_obj["values"]["end_val"]:
@@ -13806,6 +13834,10 @@ def determine_raw_str(subbb_frame):
                     else:
                         qual_str += (get_time_str(qual_obj["values"]["start_val"], False)) + "-" + (get_time_str(qual_obj["values"]["end_val"], False))
                 elif qualifier == "Season" or qualifier == "Season Reversed" or qualifier == "Season Index" or qualifier == "Season Index Reversed" or qualifier == "Series Game" or qualifier == "Season Game" or qualifier == "Career Game" or qualifier == "Career Game Reversed" or qualifier == "Season Game Reversed" or qualifier == "Team Game Reversed" or qualifier == "Team Game" or qualifier == "Team Standings Rank" or qualifier == "Opponent Standings Rank" or qualifier == "Opponent Runs Rank" or qualifier == "Opponent Runs Allowed Rank" or qualifier == "Opponent wRC+ Rank" or qualifier == "Opponent AVG Rank" or qualifier == "Opponent OBP Rank" or qualifier == "Opponent SLG Rank" or qualifier == "Opponent OPS Rank" or qualifier == "Opponent ERA- Rank" or qualifier == "Opponent ERA Rank" or qualifier == "Team Runs Rank" or qualifier == "Team Runs Allowed Rank" or qualifier == "Team wRC+ Rank" or qualifier == "Team AVG Rank" or qualifier == "Team SLG Rank" or qualifier == "Team OPS Rank" or qualifier == "Team OBP Rank" or qualifier == "Team ERA- Rank" or qualifier == "Team ERA Rank" or qualifier == "Batting Order Position" or qualifier == "Pitching Against Batting Order" or qualifier == "Inning" or qualifier == "Inning Reversed" or qualifier == "Scheduled Inning Reversed" or qualifier == "Time Facing Opponent" or qualifier == "Time Through Lineup":
+                    if not sub_sub_first:
+                        qual_str += " + "
+                    else:
+                        sub_sub_first = False
                     if qual_obj["negate"]:
                         qual_str += "Not "
                     if qual_obj["values"]["start_val"] == qual_obj["values"]["end_val"]:
@@ -13824,6 +13856,10 @@ def determine_raw_str(subbb_frame):
                     else:
                         qual_str += (get_time_str(qual_obj["values"]["start_val"], True, True)) + " to " + (get_time_str(qual_obj["values"]["end_val"], True, True))
                 elif qualifier == "Event Time" or qualifier == "Start Time":
+                    if not sub_sub_first:
+                        qual_str += " + "
+                    else:
+                        sub_sub_first = False
                     if qual_obj["negate"]:
                         qual_str += "Not "
 
@@ -13836,6 +13872,10 @@ def determine_raw_str(subbb_frame):
                         qual_str += start_time.strftime("%I:%M:%S%p") + " to " + end_time.strftime("%I:%M:%S%p")
                     qual_str += " " + qual_obj["values"]["time_zone"]
                 elif qualifier == "Local Event Time" or qualifier == "Local Start Time":
+                    if not sub_sub_first:
+                        qual_str += " + "
+                    else:
+                        sub_sub_first = False
                     if qual_obj["negate"]:
                         qual_str += "Not "
 
