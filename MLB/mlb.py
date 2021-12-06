@@ -22089,13 +22089,14 @@ def get_player_current_team_number(player_id, player_page):
                     end_year = int(pot_number_text_split[1])
                 else:
                     end_year = start_year
-                sub_number = int(re.sub("[^0-9\/]", "", str(pot_number.text)))
-                numbers_map.append({
-                    "start_year" : start_year,
-                    "end_year" : end_year,
-                    "number" : sub_number,
-                    "teams" : parsed_teams
-                })
+                if pot_number.text and str(pot_number.text).strip().isdigit():
+                    sub_number = int(re.sub("[^0-9\/]", "", str(pot_number.text)).strip())
+                    numbers_map.append({
+                        "start_year" : start_year,
+                        "end_year" : end_year,
+                        "number" : sub_number,
+                        "teams" : parsed_teams
+                    })
 
     if not numbers_team_map or not numbers_year_map:
         team_info = player_page.find("div", {"itemtype" : "https://schema.org/Person"}).find("strong", text="Team:")
