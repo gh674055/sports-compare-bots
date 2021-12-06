@@ -1,0 +1,1629 @@
+{
+    "AKR00": {
+        "city": "Akron",
+        "country": "USA",
+        "state": "OH",
+        "time_zone": "America/New_York",
+        "venues": [
+            "League Park"
+        ]
+    },
+    "AKR01": {
+        "city": "Akron",
+        "country": "USA",
+        "state": "OH",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Rubber Bowl"
+        ]
+    },
+    "AKR98": {
+        "city": "Akron",
+        "country": "USA",
+        "state": "OH",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Wooster Avenue Stadium"
+        ]
+    },
+    "AKR99": {
+        "city": "Akron",
+        "country": "USA",
+        "state": "OH",
+        "time_zone": "America/New_York",
+        "venues": [
+            "General Field"
+        ]
+    },
+    "ALA00": {
+        "city": "Birmingham",
+        "country": "USA",
+        "state": "AL",
+        "time_zone": "America/Chicago",
+        "venues": [
+            "Legion Field"
+        ]
+    },
+    "ATL00": {
+        "city": "Atlanta",
+        "country": "USA",
+        "state": "GA",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Georgia Dome"
+        ]
+    },
+    "ATL97": {
+        "city": "Atlanta",
+        "country": "USA",
+        "state": "GA",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Mercedes-Benz Stadium"
+        ]
+    },
+    "ATL98": {
+        "city": "Atlanta",
+        "country": "USA",
+        "state": "GA",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Grant Field"
+        ]
+    },
+    "ATL99": {
+        "city": "Atlanta",
+        "country": "USA",
+        "state": "GA",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Atlanta-Fulton County Stadium",
+            "Atlanta Stadium"
+        ]
+    },
+    "BAL00": {
+        "city": "Baltimore",
+        "country": "USA",
+        "state": "MD",
+        "time_zone": "America/New_York",
+        "venues": [
+            "M&T Bank Stadium",
+            "Ravens Stadium at Camden Yards",
+            "PSINet Stadium",
+            "Ravens Stadium"
+        ]
+    },
+    "BAL99": {
+        "city": "Baltimore",
+        "country": "USA",
+        "state": "MD",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Memorial Stadium (Baltimore)",
+            "Baltimore Memorial Stadium"
+        ]
+    },
+    "BFD99": {
+        "city": "Evansville",
+        "country": "USA",
+        "state": "IN",
+        "time_zone": "America/Chicago",
+        "venues": [
+            "Bosse Field"
+        ]
+    },
+    "BOS00": {
+        "city": "Foxborough",
+        "country": "USA",
+        "state": "MA",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Gillette Stadium"
+        ]
+    },
+    "BOS94": {
+        "city": "Boston",
+        "country": "USA",
+        "state": "MA",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Braves Field",
+            "Nickerson Field"
+        ]
+    },
+    "BOS96": {
+        "city": "Boston",
+        "country": "USA",
+        "state": "MA",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Fenway Park"
+        ]
+    },
+    "BOS97": {
+        "city": "Chestnut Hill",
+        "country": "USA",
+        "state": "MA",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Alumni Stadium"
+        ]
+    },
+    "BOS98": {
+        "city": "Boston",
+        "country": "USA",
+        "state": "MA",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Harvard Stadium"
+        ]
+    },
+    "BOS99": {
+        "city": "Foxborough",
+        "country": "USA",
+        "state": "MA",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Foxboro Stadium",
+            "Schaefer Stadium",
+            "Sullivan Stadium"
+        ]
+    },
+    "BRD00": {
+        "city": "Colorado Springs",
+        "country": "USA",
+        "state": "CO",
+        "time_zone": "America/Denver",
+        "venues": [
+            "Broadmoor Stadium"
+        ]
+    },
+    "BRG00": {
+        "city": "Baton Rouge",
+        "country": "USA",
+        "state": "LA",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Tiger Stadium (LSU)"
+        ]
+    },
+    "BRK00": {
+        "city": "New York",
+        "country": "USA",
+        "state": "NY",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Ebbets Field"
+        ]
+    },
+    "BUF00": {
+        "city": "Orchard Park",
+        "country": "USA",
+        "state": "NY",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Highmark Stadium",
+            "Rich Stadium",
+            "Ralph Wilson Stadium",
+            "New Era Field",
+            "Bills Stadium"
+        ]
+    },
+    "BUF01": {
+        "city": "Toronto",
+        "country": "Canada",
+        "state": "ON",
+        "time_zone": "America/Toronto",
+        "venues": [
+            "Rogers Centre"
+        ]
+    },
+    "BUF97": {
+        "city": "Buffalo",
+        "country": "USA",
+        "state": "NY",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Buffalo Baseball Park"
+        ]
+    },
+    "BUF98": {
+        "city": "Buffalo",
+        "country": "USA",
+        "state": "NY",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Bison Stadium"
+        ]
+    },
+    "BUF99": {
+        "city": "Buffalo",
+        "country": "USA",
+        "state": "NY",
+        "time_zone": "America/New_York",
+        "venues": [
+            "War Memorial Stadium",
+            "Buffalo Civic Stadium",
+            "Civic Stadium"
+        ]
+    },
+    "CAN00": {
+        "city": "Canton",
+        "country": "USA",
+        "state": "OH",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Lakeside Park"
+        ]
+    },
+    "CAR00": {
+        "city": "Charlotte",
+        "country": "USA",
+        "state": "NC",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Bank of America Stadium",
+            "Ericsson Stadium"
+        ]
+    },
+    "CHI87": {
+        "city": "Chicago",
+        "country": "USA",
+        "state": "IL",
+        "time_zone": "America/Chicago",
+        "venues": [
+            "Pyott's Park"
+        ]
+    },
+    "CHI88": {
+        "city": "Chicago",
+        "country": "USA",
+        "state": "IL",
+        "time_zone": "America/Chicago",
+        "venues": [
+            "St. Rita's Stadium"
+        ]
+    },
+    "CHI89": {
+        "city": "Chicago",
+        "country": "USA",
+        "state": "IL",
+        "time_zone": "America/Chicago",
+        "venues": [
+            "DePaul Field"
+        ]
+    },
+    "CHI90": {
+        "city": "Chicago",
+        "country": "USA",
+        "state": "IL",
+        "time_zone": "America/Chicago",
+        "venues": [
+            "Mills Stadium"
+        ]
+    },
+    "CHI91": {
+        "city": "Chicago",
+        "country": "USA",
+        "state": "IL",
+        "time_zone": "America/Chicago",
+        "venues": [
+            "Loyola Stadium"
+        ]
+    },
+    "CHI92": {
+        "city": "Chicago",
+        "country": "USA",
+        "state": "IL",
+        "time_zone": "America/Chicago",
+        "venues": [
+            "Chicago Stadium"
+        ]
+    },
+    "CHI93": {
+        "city": "Decatur",
+        "country": "USA",
+        "state": "IL",
+        "time_zone": "America/Chicago",
+        "venues": [
+            "Staley Field"
+        ]
+    },
+    "CHI94": {
+        "city": "Chicago",
+        "country": "USA",
+        "state": "IL",
+        "time_zone": "America/Chicago",
+        "venues": [
+            "Normal Park"
+        ]
+    },
+    "CHI95": {
+        "city": "Chicago",
+        "country": "USA",
+        "state": "IL",
+        "time_zone": "America/Chicago",
+        "venues": [
+            "Comiskey Park"
+        ]
+    },
+    "CHI96": {
+        "city": "Chicago",
+        "country": "USA",
+        "state": "IL",
+        "time_zone": "America/Chicago",
+        "venues": [
+            "Wrigley Field",
+            "Cubs Park"
+        ]
+    },
+    "CHI97": {
+        "city": "Evanston",
+        "country": "USA",
+        "state": "IL",
+        "time_zone": "America/Chicago",
+        "venues": [
+            "Dyche Stadium"
+        ]
+    },
+    "CHI98": {
+        "city": "Chicago",
+        "country": "USA",
+        "state": "IL",
+        "time_zone": "America/Chicago",
+        "venues": [
+            "Soldier Field"
+        ]
+    },
+    "CHI99": {
+        "city": "Champaign",
+        "country": "USA",
+        "state": "IL",
+        "time_zone": "America/Chicago",
+        "venues": [
+            "Memorial Stadium (Champaign)"
+        ]
+    },
+    "CIN00": {
+        "city": "Cincinnati",
+        "country": "USA",
+        "state": "OH",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Paul Brown Stadium"
+        ]
+    },
+    "CIN96": {
+        "city": "Cincinnati",
+        "country": "USA",
+        "state": "OH",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Corcoran Field"
+        ]
+    },
+    "CIN97": {
+        "city": "Cincinnati",
+        "country": "USA",
+        "state": "OH",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Crosley Field",
+            "Redland Field"
+        ]
+    },
+    "CIN98": {
+        "city": "Cincinnati",
+        "country": "USA",
+        "state": "OH",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Nippert Stadium"
+        ]
+    },
+    "CIN99": {
+        "city": "Cincinnati",
+        "country": "USA",
+        "state": "OH",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Cinergy Field",
+            "Riverfront Stadium"
+        ]
+    },
+    "CLE00": {
+        "city": "Cleveland",
+        "country": "USA",
+        "state": "OH",
+        "time_zone": "America/New_York",
+        "venues": [
+            "FirstEnergy Stadium",
+            "Cleveland Browns Stadium"
+        ]
+    },
+    "CLE96": {
+        "city": "Cleveland",
+        "country": "USA",
+        "state": "OH",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Luna Park"
+        ]
+    },
+    "CLE97": {
+        "city": "East Cleveland",
+        "country": "USA",
+        "state": "OH",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Shaw Stadium"
+        ]
+    },
+    "CLE98": {
+        "city": "Cleveland",
+        "country": "USA",
+        "state": "OH",
+        "time_zone": "America/New_York",
+        "venues": [
+            "League Park",
+            "Dunn Field"
+        ]
+    },
+    "CLE99": {
+        "city": "Cleveland",
+        "country": "USA",
+        "state": "OH",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Cleveland Municipal Stadium"
+        ]
+    },
+    "CLM00": {
+        "city": "Clemson",
+        "country": "USA",
+        "state": "SC",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Memorial Stadium (Clemson)"
+        ]
+    },
+    "COL00": {
+        "city": "Columbus",
+        "country": "USA",
+        "state": "OH",
+        "time_zone": "America/New_York",
+        "venues": [
+            "West Side Athletic Club Field "
+        ]
+    },
+    "COL99": {
+        "city": "Columbus",
+        "country": "USA",
+        "state": "OH",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Neil Park"
+        ]
+    },
+    "DAL00": {
+        "city": "Arlington",
+        "country": "USA",
+        "state": "TX",
+        "time_zone": "America/Chicago",
+        "venues": [
+            "AT&T Stadium",
+            "Cowboys Stadium"
+        ]
+    },
+    "DAL98": {
+        "city": "Dallas",
+        "country": "USA",
+        "state": "TX",
+        "time_zone": "America/Chicago",
+        "venues": [
+            "Cotton Bowl"
+        ]
+    },
+    "DAL99": {
+        "city": "Irving",
+        "country": "USA",
+        "state": "TX",
+        "time_zone": "America/Chicago",
+        "venues": [
+            "Texas Stadium"
+        ]
+    },
+    "DAY00": {
+        "city": "Dayton",
+        "country": "USA",
+        "state": "OH",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Triangle Park"
+        ]
+    },
+    "DEN00": {
+        "city": "Denver",
+        "country": "USA",
+        "state": "CO",
+        "time_zone": "America/Denver",
+        "venues": [
+            "Sports Authority Field at Mile High",
+            "Invesco Field at Mile High",
+            "Empower Field at Mile High"
+        ]
+    },
+    "DEN99": {
+        "city": "Denver",
+        "country": "USA",
+        "state": "CO",
+        "time_zone": "America/Denver",
+        "venues": [
+            "Mile High Stadium",
+            "Bears Stadium"
+        ]
+    },
+    "DET00": {
+        "city": "Detroit",
+        "country": "USA",
+        "state": "MI",
+        "time_zone": "America/Detroit",
+        "venues": [
+            "Ford Field"
+        ]
+    },
+    "DET96": {
+        "city": "Portsmouth",
+        "country": "USA",
+        "state": "OH",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Universal Stadium"
+        ]
+    },
+    "DET97": {
+        "city": "Detroit",
+        "country": "USA",
+        "state": "MI",
+        "time_zone": "America/Detroit",
+        "venues": [
+            "University of Detroit Stadium"
+        ]
+    },
+    "DET98": {
+        "city": "Detroit",
+        "country": "USA",
+        "state": "MI",
+        "time_zone": "America/Detroit",
+        "venues": [
+            "Tiger Stadium",
+            "Navin Field",
+            "Briggs Stadium"
+        ]
+    },
+    "DET99": {
+        "city": "Pontiac",
+        "country": "USA",
+        "state": "MI",
+        "time_zone": "America/Detroit",
+        "venues": [
+            "Pontiac Silverdome"
+        ]
+    },
+    "DUL00": {
+        "city": "Duluth",
+        "country": "USA",
+        "state": "MN",
+        "time_zone": "America/Chicago",
+        "venues": [
+            "Duluth Athletic Park"
+        ]
+    },
+    "ERI00": {
+        "city": "Erie",
+        "country": "USA",
+        "state": "PA",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Erie Stadium"
+        ]
+    },
+    "FYJ00": {
+        "city": "Philadelphia",
+        "country": "USA",
+        "state": "PA",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Frankford Stadium"
+        ]
+    },
+    "GNB00": {
+        "city": "Green Bay",
+        "country": "USA",
+        "state": "WI",
+        "time_zone": "America/Chicago",
+        "venues": [
+            "Lambeau Field",
+            "New City Stadium"
+        ]
+    },
+    "GNB97": {
+        "city": "Green Bay",
+        "country": "USA",
+        "state": "WI",
+        "time_zone": "America/Chicago",
+        "venues": [
+            "Hagemeister Park"
+        ]
+    },
+    "GNB98": {
+        "city": "Green Bay",
+        "country": "USA",
+        "state": "WI",
+        "time_zone": "America/Chicago",
+        "venues": [
+            "Bellevue Park"
+        ]
+    },
+    "GNB99": {
+        "city": "Green Bay",
+        "country": "USA",
+        "state": "WI",
+        "time_zone": "America/Chicago",
+        "venues": [
+            "City Stadium"
+        ]
+    },
+    "HAM00": {
+        "city": "Hammond",
+        "country": "USA",
+        "state": "IN",
+        "time_zone": "America/Chicago",
+        "venues": [
+            "Turner Field"
+        ]
+    },
+    "HAW00": {
+        "city": "Honolulu",
+        "country": "USA",
+        "state": "HI",
+        "time_zone": "Pacific/Honolulu",
+        "venues": [
+            "Aloha Stadium"
+        ]
+    },
+    "HOU00": {
+        "city": "Houston",
+        "country": "USA",
+        "state": "TX",
+        "time_zone": "America/Chicago",
+        "venues": [
+            "NRG Stadium",
+            "Reliant Stadium"
+        ]
+    },
+    "HOU97": {
+        "city": "Houston",
+        "country": "USA",
+        "state": "TX",
+        "time_zone": "America/Chicago",
+        "venues": [
+            "Jeppesen Stadium"
+        ]
+    },
+    "HOU98": {
+        "city": "Houston",
+        "country": "USA",
+        "state": "TX",
+        "time_zone": "America/Chicago",
+        "venues": [
+            "Rice Stadium"
+        ]
+    },
+    "HOU99": {
+        "city": "Houston",
+        "country": "USA",
+        "state": "TX",
+        "time_zone": "America/Chicago",
+        "venues": [
+            "Houston Astrodome"
+        ]
+    },
+    "HRT00": {
+        "city": "Hartford",
+        "country": "USA",
+        "state": "CT",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Clarkin Field"
+        ]
+    },
+    "HRT01": {
+        "city": "East Hartford",
+        "country": "USA",
+        "state": "CT",
+        "time_zone": "America/Chicago",
+        "venues": [
+            "East Hartford Velodrome"
+        ]
+    },
+    "IND00": {
+        "city": "Indianapolis",
+        "country": "USA",
+        "state": "IN",
+        "time_zone": "America/Indiana/Indianapolis",
+        "venues": [
+            "Lucas Oil Stadium"
+        ]
+    },
+    "IND99": {
+        "city": "Indianapolis",
+        "country": "USA",
+        "state": "IN",
+        "time_zone": "America/Indiana/Indianapolis",
+        "venues": [
+            "RCA Dome",
+            "Hoosier Dome"
+        ]
+    },
+    "JAX00": {
+        "city": "Jacksonville",
+        "country": "USA",
+        "state": "FL",
+        "time_zone": "America/New_York",
+        "venues": [
+            "EverBank Field",
+            "Jacksonville Municipal Stadium",
+            "Alltel Stadium",
+            "TIAA Bank Stadium"
+        ]
+    },
+    "JHN00": {
+        "city": "Johnstown",
+        "country": "USA",
+        "state": "PA",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Point Stadium"
+        ]
+    },
+    "KAN00": {
+        "city": "Kansas City",
+        "country": "USA",
+        "state": "MO",
+        "time_zone": "America/Chicago",
+        "venues": [
+            "GEHA Field at Arrowhead Stadium",
+            "Arrowhead Stadium"
+        ]
+    },
+    "KAN98": {
+        "city": "Kansas City",
+        "country": "USA",
+        "state": "MO",
+        "time_zone": "America/Chicago",
+        "venues": [
+            "Muehlebach Field"
+        ]
+    },
+    "KAN99": {
+        "city": "Kansas City",
+        "country": "USA",
+        "state": "MO",
+        "time_zone": "America/Chicago",
+        "venues": [
+            "Kansas City Municipal Stadium"
+        ]
+    },
+    "KEN00": {
+        "city": "Kenosha",
+        "country": "USA",
+        "state": "WI",
+        "time_zone": "America/Chicago",
+        "venues": [
+            "Nash Employees' Field"
+        ]
+    },
+    "LAX00": {
+        "city": "Anaheim",
+        "country": "USA",
+        "state": "CA",
+        "time_zone": "America/Los_Angeles",
+        "venues": [
+            "Anaheim Stadium"
+        ]
+    },
+    "LAX96": {
+        "city": "Inglewood",
+        "country": "USA",
+        "state": "CA",
+        "time_zone": "America/Los_Angeles",
+        "venues": [
+            "SoFi Stadium"
+        ]
+    },
+    "LAX97": {
+        "city": "Carson",
+        "country": "USA",
+        "state": "CA",
+        "time_zone": "America/Los_Angeles",
+        "venues": [
+            "StubHub Center"
+        ]
+    },
+    "LAX98": {
+        "city": "Pasadena",
+        "country": "USA",
+        "state": "CA",
+        "time_zone": "America/Los_Angeles",
+        "venues": [
+            "Rose Bowl"
+        ]
+    },
+    "LAX99": {
+        "city": "Los Angeles",
+        "country": "USA",
+        "state": "CA",
+        "time_zone": "America/Los_Angeles",
+        "venues": [
+            "Los Angeles Memorial Coliseum"
+        ]
+    },
+    "LON00": {
+        "city": "London",
+        "country": "England",
+        "state": "UK",
+        "time_zone": "Europe/London",
+        "venues": [
+            "Wembley Stadium"
+        ]
+    },
+    "LON01": {
+        "city": "Twickenham",
+        "country": "England",
+        "state": "UK",
+        "time_zone": "Europe/London",
+        "venues": [
+            "Twickenham Stadium"
+        ]
+    },
+    "LON02": {
+        "city": "London",
+        "country": "England",
+        "state": "UK",
+        "time_zone": "Europe/London",
+        "venues": [
+            "Tottenham Stadium"
+        ]
+    },
+    "LOU00": {
+        "city": "Louisville",
+        "country": "USA",
+        "state": "KY",
+        "time_zone": "America/Kentucky/Louisville",
+        "venues": [
+            "Parkway Field"
+        ]
+    },
+    "MAD00": {
+        "city": "Madison",
+        "country": "USA",
+        "state": "WI",
+        "time_zone": "America/Chicago",
+        "venues": [
+            "Breese Stevens Field"
+        ]
+    },
+    "MAR00": {
+        "city": "Marion",
+        "country": "USA",
+        "state": "OH",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Lincoln Park"
+        ]
+    },
+    "MEM00": {
+        "city": "Memphis",
+        "country": "USA",
+        "state": "TN",
+        "time_zone": "America/Chicago",
+        "venues": [
+            "Liberty Bowl Memorial Stadium"
+        ]
+    },
+    "MEX00": {
+        "city": "Mexico City",
+        "country": "Mexico",
+        "state": "MX",
+        "time_zone": "America/Mexico_City",
+        "venues": [
+            "Azteca Stadium"
+        ]
+    },
+    "MIA00": {
+        "city": "Miami Gardens",
+        "country": "USA",
+        "state": "FL",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Hard Rock Stadium",
+            "Joe Robbie Stadium",
+            "Pro Player Stadium",
+            "Dolphin Stadium",
+            "Sun Life Stadium"
+        ]
+    },
+    "MIA99": {
+        "city": "Miami",
+        "country": "USA",
+        "state": "FL",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Orange Bowl"
+        ]
+    },
+    "MIL00": {
+        "city": "Milwaukee",
+        "country": "USA",
+        "state": "WI",
+        "time_zone": "America/Chicago",
+        "venues": [
+            "Milwaukee County Stadium"
+        ]
+    },
+    "MIL97": {
+        "city": "Milwaukee",
+        "country": "USA",
+        "state": "WI",
+        "time_zone": "America/Chicago",
+        "venues": [
+            "Borchert Field",
+            "Milwaukee Athletic Park",
+            "Athletic Park"
+        ]
+    },
+    "MIL98": {
+        "city": "West Allis",
+        "country": "USA",
+        "state": "WI",
+        "time_zone": "America/Chicago",
+        "venues": [
+            "Wisconsin State Fair Park"
+        ]
+    },
+    "MIL99": {
+        "city": "Milwaukee",
+        "country": "USA",
+        "state": "WI",
+        "time_zone": "America/Chicago",
+        "venues": [
+            "Marquette Stadium"
+        ]
+    },
+    "MIN00": {
+        "city": "Minneapolis",
+        "country": "USA",
+        "state": "MN",
+        "time_zone": "America/Chicago",
+        "venues": [
+            "Mall of America Field",
+            "Hubert H. Humphrey Metrodome"
+        ]
+    },
+    "MIN01": {
+        "city": "Minneapolis",
+        "country": "USA",
+        "state": "MN",
+        "time_zone": "America/Chicago",
+        "venues": [
+            "U.S. Bank Stadium"
+        ]
+    },
+    "MIN96": {
+        "city": "Minneapolis",
+        "country": "USA",
+        "state": "MN",
+        "time_zone": "America/Chicago",
+        "venues": [
+            "Nicollet Park"
+        ]
+    },
+    "MIN97": {
+        "city": "Minneapolis",
+        "country": "USA",
+        "state": "MN",
+        "time_zone": "America/Chicago",
+        "venues": [
+            "Memorial Stadium (Minnesota)"
+        ]
+    },
+    "MIN98": {
+        "city": "Minneapolis",
+        "country": "USA",
+        "state": "MN",
+        "time_zone": "America/Chicago",
+        "venues": [
+            "TCF Bank Stadium"
+        ]
+    },
+    "MIN99": {
+        "city": "Bloomington",
+        "country": "USA",
+        "state": "MN",
+        "time_zone": "America/Chicago",
+        "venues": [
+            "Metropolitan Stadium"
+        ]
+    },
+    "NAS00": {
+        "city": "Nashville",
+        "country": "USA",
+        "state": "TN",
+        "time_zone": "America/Chicago",
+        "venues": [
+            "Nissan Stadium",
+            "Adelphia Coliseum",
+            "The Coliseum",
+            "LP Field"
+        ]
+    },
+    "NAS99": {
+        "city": "Nashville",
+        "country": "USA",
+        "state": "TN",
+        "time_zone": "America/Chicago",
+        "venues": [
+            "Vanderbilt Stadium"
+        ]
+    },
+    "NOR00": {
+        "city": "New Orleans",
+        "country": "USA",
+        "state": "LA",
+        "time_zone": "America/Chicago",
+        "venues": [
+            "Caesars Superdome",
+            "Louisiana Superdome",
+            "Mercedes-Benz Superdome"
+        ]
+    },
+    "NOR99": {
+        "city": "New Orleans",
+        "country": "USA",
+        "state": "LA",
+        "time_zone": "America/Chicago",
+        "venues": [
+            "Tulane Stadium"
+        ]
+    },
+    "NWK00": {
+        "city": "Newark",
+        "country": "USA",
+        "state": "NJ",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Newark Schools Stadium"
+        ]
+    },
+    "NWK99": {
+        "city": "Newark",
+        "country": "USA",
+        "state": "NJ",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Velodrome"
+        ]
+    },
+    "NYC00": {
+        "city": "East Rutherford",
+        "country": "USA",
+        "state": "NJ",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Giants Stadium"
+        ]
+    },
+    "NYC01": {
+        "city": "East Rutherford",
+        "country": "USA",
+        "state": "NJ",
+        "time_zone": "America/New_York",
+        "venues": [
+            "MetLife Stadium",
+            "New Meadowlands Stadium"
+        ]
+    },
+    "NYC96": {
+        "city": "New York",
+        "country": "USA",
+        "state": "NY",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Polo Grounds"
+        ]
+    },
+    "NYC97": {
+        "city": "New York",
+        "country": "USA",
+        "state": "NY",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Yankee Stadium"
+        ]
+    },
+    "NYC98": {
+        "city": "New Haven",
+        "country": "USA",
+        "state": "CT",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Yale Bowl"
+        ]
+    },
+    "NYC99": {
+        "city": "New York",
+        "country": "USA",
+        "state": "NY",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Shea Stadium"
+        ]
+    },
+    "OAK00": {
+        "city": "Oakland",
+        "country": "USA",
+        "state": "CA",
+        "time_zone": "America/Los_Angeles",
+        "venues": [
+            "Oakland Coliseum",
+            "Oakland-Alameda County Coliseum",
+            "Network Associates Coliseum",
+            "McAfee Coliseum",
+            "O.co Coliseum",
+            "Ring Central Coliseum"
+        ]
+    },
+    "OAK98": {
+        "city": "Berkeley",
+        "country": "USA",
+        "state": "CA",
+        "time_zone": "America/Los_Angeles",
+        "venues": [
+            "California Memorial Stadium"
+        ]
+    },
+    "OAK99": {
+        "city": "Oakland",
+        "country": "USA",
+        "state": "CA",
+        "time_zone": "America/Los_Angeles",
+        "venues": [
+            "Frank Youell Field"
+        ]
+    },
+    "ORA00": {
+        "city": "East Orange",
+        "country": "USA",
+        "state": "NJ",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Knights of Columbus Stadium"
+        ]
+    },
+    "PHI00": {
+        "city": "Philadelphia",
+        "country": "USA",
+        "state": "PA",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Lincoln Financial Field"
+        ]
+    },
+    "PHI94": {
+        "city": "Philadelphia",
+        "country": "USA",
+        "state": "PA",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Temple Stadium"
+        ]
+    },
+    "PHI95": {
+        "city": "Philadelphia",
+        "country": "USA",
+        "state": "PA",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Baker Bowl"
+        ]
+    },
+    "PHI96": {
+        "city": "Philadelphia",
+        "country": "USA",
+        "state": "PA",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Philadelphia Municipal Stadium"
+        ]
+    },
+    "PHI97": {
+        "city": "Philadelphia",
+        "country": "USA",
+        "state": "PA",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Shibe Park",
+            "Connie Mack Stadium"
+        ]
+    },
+    "PHI98": {
+        "city": "Philadelphia",
+        "country": "USA",
+        "state": "PA",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Franklin Field"
+        ]
+    },
+    "PHI99": {
+        "city": "Philadelphia",
+        "country": "USA",
+        "state": "PA",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Veterans Stadium"
+        ]
+    },
+    "PHO00": {
+        "city": "Glendale",
+        "country": "USA",
+        "state": "AZ",
+        "time_zone": "America/Phoenix",
+        "venues": [
+            "University of Phoenix Stadium",
+            "State Farm Stadium"
+        ]
+    },
+    "PHO99": {
+        "city": "Tempe",
+        "country": "USA",
+        "state": "AZ",
+        "time_zone": "America/Phoenix",
+        "venues": [
+            "Sun Devil Stadium"
+        ]
+    },
+    "PIT00": {
+        "city": "Pittsburgh",
+        "country": "USA",
+        "state": "PA",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Heinz Field"
+        ]
+    },
+    "PIT97": {
+        "city": "Pittsburgh",
+        "country": "USA",
+        "state": "PA",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Forbes Field"
+        ]
+    },
+    "PIT98": {
+        "city": "Pittsburgh",
+        "country": "USA",
+        "state": "PA",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Pitt Stadium "
+        ]
+    },
+    "PIT99": {
+        "city": "Pittsburgh",
+        "country": "USA",
+        "state": "PA",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Three Rivers Stadium"
+        ]
+    },
+    "POT00": {
+        "city": "Minersville",
+        "country": "USA",
+        "state": "PA",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Minersville Park"
+        ]
+    },
+    "PRV00": {
+        "city": "Providence",
+        "country": "USA",
+        "state": "RI",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Cycledrome"
+        ]
+    },
+    "PRV99": {
+        "city": "Providence",
+        "country": "USA",
+        "state": "RI",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Kinsley Park"
+        ]
+    },
+    "RAC00": {
+        "city": "Racine",
+        "country": "USA",
+        "state": "WI",
+        "time_zone": "America/Chicago",
+        "venues": [
+            "Horlick Legion Field",
+            "Horlick Legion Athletic Field"
+        ]
+    },
+    "RII00": {
+        "city": "Rock Island",
+        "country": "USA",
+        "state": "IL",
+        "time_zone": "America/Chicago",
+        "venues": [
+            "Douglas Park"
+        ]
+    },
+    "ROC00": {
+        "city": "Rochester",
+        "country": "USA",
+        "state": "NY",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Edgerton Park"
+        ]
+    },
+    "SAN00": {
+        "city": "San Antonio",
+        "country": "USA",
+        "state": "TX",
+        "time_zone": "America/Chicago",
+        "venues": [
+            "Alamo Dome"
+        ]
+    },
+    "SDG00": {
+        "city": "San Diego",
+        "country": "USA",
+        "state": "CA",
+        "time_zone": "America/Los_Angeles",
+        "venues": [
+            "Qualcomm Stadium",
+            "San Diego Stadium",
+            "Jack Murphy Stadium"
+        ]
+    },
+    "SDG99": {
+        "city": "San Diego",
+        "country": "USA",
+        "state": "CA",
+        "time_zone": "America/Los_Angeles",
+        "venues": [
+            "Balboa Stadium"
+        ]
+    },
+    "SEA00": {
+        "city": "Seattle",
+        "country": "USA",
+        "state": "WA",
+        "time_zone": "America/Los_Angeles",
+        "venues": [
+            "CenturyLink Field",
+            "Seahawks Stadium",
+            "Qwest Field",
+            "Lumen Field"
+        ]
+    },
+    "SEA98": {
+        "city": "Seattle",
+        "country": "USA",
+        "state": "WA",
+        "time_zone": "America/Los_Angeles",
+        "venues": [
+            "Seattle Kingdome"
+        ]
+    },
+    "SEA99": {
+        "city": "Seattle",
+        "country": "USA",
+        "state": "WA",
+        "time_zone": "America/Los_Angeles",
+        "venues": [
+            "Husky Stadium"
+        ]
+    },
+    "SFO00": {
+        "city": "San Francisco",
+        "country": "USA",
+        "state": "CA",
+        "time_zone": "America/Los_Angeles",
+        "venues": [
+            "Candlestick Park",
+            "3Com Park",
+            "Monster Park"
+        ]
+    },
+    "SFO01": {
+        "city": "Santa Clara",
+        "country": "USA",
+        "state": "CA",
+        "time_zone": "America/Los_Angeles",
+        "venues": [
+            "Levi's Stadium"
+        ]
+    },
+    "SFO98": {
+        "city": "Stanford",
+        "country": "USA",
+        "state": "CA",
+        "time_zone": "America/Los_Angeles",
+        "venues": [
+            "Stanford Stadium"
+        ]
+    },
+    "SFO99": {
+        "city": "San Francisco",
+        "country": "USA",
+        "state": "CA",
+        "time_zone": "America/Los_Angeles",
+        "venues": [
+            "Kezar Stadium"
+        ]
+    },
+    "STI00": {
+        "city": "Staten Island",
+        "country": "USA",
+        "state": "NY",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Thompson's Stadium"
+        ]
+    },
+    "STL00": {
+        "city": "St. Louis",
+        "country": "USA",
+        "state": "MO",
+        "time_zone": "America/Chicago",
+        "venues": [
+            "Edward Jones Dome",
+            "TWA Dome",
+            "Dome at America's Center"
+        ]
+    },
+    "STL98": {
+        "city": "St. Louis",
+        "country": "USA",
+        "state": "MO",
+        "time_zone": "America/Chicago",
+        "venues": [
+            "Busch Stadium (Sportsman's Park)",
+            "Sportsman's Park"
+        ]
+    },
+    "STL99": {
+        "city": "St. Louis",
+        "country": "USA",
+        "state": "MO",
+        "time_zone": "America/Chicago",
+        "venues": [
+            "Busch Memorial Stadium",
+            "Civic Center Busch Memorial Stadium",
+            "Busch Stadium"
+        ]
+    },
+    "SYR00": {
+        "city": "Syracuse",
+        "country": "USA",
+        "state": "NY",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Archbold Stadium"
+        ]
+    },
+    "TAM00": {
+        "city": "Tampa",
+        "country": "USA",
+        "state": "FL",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Raymond James Stadium"
+        ]
+    },
+    "TAM99": {
+        "city": "Tampa",
+        "country": "USA",
+        "state": "FL",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Houlihan's Stadium",
+            "Tampa Stadium"
+        ]
+    },
+    "TOL00": {
+        "city": "Toledo",
+        "country": "USA",
+        "state": "OH",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Armory Park"
+        ]
+    },
+    "TOL99": {
+        "city": "Toledo",
+        "country": "USA",
+        "state": "OH",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Swayne Field"
+        ]
+    },
+    "VEG00": {
+        "city": "Las Vegas",
+        "country": "USA",
+        "state": "NV",
+        "time_zone": "America/Los_Angeles",
+        "venues": [
+            "Allegiant Stadium"
+        ]
+    },
+    "WAS00": {
+        "city": "Landover",
+        "country": "USA",
+        "state": "MD",
+        "time_zone": "America/New_York",
+        "venues": [
+            "FedExField",
+            "Jack Kent Cooke Stadium"
+        ]
+    },
+    "WAS98": {
+        "city": "Washington",
+        "country": "USA",
+        "state": "DC",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Griffith Stadium"
+        ]
+    },
+    "WAS99": {
+        "city": "Washington",
+        "country": "USA",
+        "state": "DC",
+        "time_zone": "America/New_York",
+        "venues": [
+            "RFK Memorial Stadium",
+            "District of Columbia Stadium",
+            "Robert F. Kennedy Memorial Stadium"
+        ]
+    },
+    "WIN00": {
+        "city": "Winnipeg",
+        "country": "USA",
+        "state": "MB",
+        "time_zone": "America/Chicago",
+        "venues": [
+            "IG Field"
+        ]
+    },
+    "WVA00": {
+        "city": "Charleston",
+        "country": "USA",
+        "state": "WV",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Laidley Field"
+        ]
+    }
+}

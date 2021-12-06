@@ -46,7 +46,10 @@ def main():
                 venue_id = team["venue"]["id"]
                 team_name = unidecode.unidecode(team["venue"]["name"])
 
-                team_venues[venue_id] = team_name
+                if venue_id not in team_venues:
+                    team_venues[venue_id] = []
+                if team_name not in team_venues[venue_id]:
+                    team_venues[venue_id].append(team_name)
 
         request = urllib.request.Request(mlb_teams_url_format.format(id_val) + "/history", headers=request_headers)
         try:
@@ -62,12 +65,12 @@ def main():
         for team in data["teams"]:
             if team["sport"]["id"] == 1 and "name" in team["league"]:
                 venue_id = team["venue"]["id"]
+                team_name = unidecode.unidecode(team["venue"]["name"])
+
                 if venue_id not in team_venues:
-                    team_name = unidecode.unidecode(team["venue"]["name"])
-
-                    team_venues[venue_id] = team_name
-
-        print(id_val)
+                    team_venues[venue_id] = []
+                if team_name not in team_venues[venue_id]:
+                    team_venues[venue_id].append(team_name)
 
     with open("team_venues.json", "w") as file:
         file.write(json.dumps(team_venues, indent=4, sort_keys=True))

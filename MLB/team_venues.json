@@ -1,95 +1,300 @@
 {
-    "1": "Angel Stadium",
-    "2": "Oriole Park at Camden Yards",
-    "3": "Fenway Park",
-    "4": "Guaranteed Rate Field",
-    "5": "Progressive Field",
-    "6": "Navin Field",
-    "7": "Kauffman Stadium",
-    "8": "Hubert H. Humphrey Metrodome",
-    "9": "Yankee Stadium",
-    "10": "Oakland Coliseum",
-    "11": "The Kingdome",
-    "12": "Tropicana Field",
-    "13": "The Ballpark at Arlington",
-    "14": "Rogers Centre",
-    "15": "Chase Field",
-    "16": "Turner Field",
-    "17": "Wrigley Field",
-    "18": "Riverfront Stadium",
-    "19": "Coors Field",
-    "20": "Joe Robbie Stadium",
-    "21": "Astrodome",
-    "22": "Dodger Stadium",
-    "23": "Milwaukee County Stadium",
-    "24": "Olympic Stadium",
-    "25": "Shea Stadium",
-    "26": "Veterans Stadium",
-    "27": "Three Rivers Stadium",
-    "28": "San Diego Stadium",
-    "29": "Candlestick Park",
-    "30": "Busch Stadium",
-    "31": "PNC Park",
-    "32": "American Family Field",
-    "401": "TBD",
-    "680": "T-Mobile Park",
-    "2392": "Minute Maid Park",
-    "2394": "Comerica Park",
-    "2395": "Oracle Park",
-    "2602": "Great American Ball Park",
-    "2680": "Petco Park",
-    "2681": "Citizens Bank Park",
-    "2721": "Robert F. Kennedy Memorial Stadium",
-    "2889": "Busch Stadium",
-    "3109": "League Park",
-    "3111": "Arlington Stadium",
-    "3112": "Atlanta Stadium",
-    "3113": "Baker Bowl",
-    "3114": "Bennett Park",
-    "3115": "Braves Field",
-    "3116": "Cleveland Municipal Stadium",
-    "3117": "Colt Stadium",
-    "3118": "Columbia Park",
-    "3119": "Comiskey Park",
-    "3120": "Crosley Field",
-    "3121": "Ebbets Field",
-    "3123": "Exhibition Stadium",
-    "3124": "Exposition Park",
-    "3125": "Forbes Field",
-    "3126": "Griffith Stadium",
-    "3127": "Hilltop Park",
-    "3128": "Huntington Avenue Grounds",
-    "3129": "Jarry Park",
-    "3131": "League Park",
-    "3132": "Lloyd Street Grounds",
-    "3133": "Los Angeles Memorial Coliseum",
-    "3134": "Memorial Stadium",
-    "3135": "Metropolitan Stadium",
-    "3136": "Mile High Stadium",
-    "3137": "Municipal Stadium",
-    "3138": "Palace of the Fans",
-    "3139": "Polo Grounds",
-    "3140": "Polo Grounds",
-    "3141": "Robison Field",
-    "3142": "Seals Stadium",
-    "3143": "Shibe Park",
-    "3144": "Sicks Stadium",
-    "3147": "South End Grounds",
-    "3148": "South Side Park ",
-    "3149": "Sportsman's Park",
-    "3150": "Washington Park ",
-    "3153": "Wrigley Field",
-    "3159": "League Park",
-    "3160": "League Park",
-    "3164": "Oriole Park",
-    "3168": "Sportsman's Park",
-    "3169": "West Side Park",
-    "3289": "Citi Field",
-    "3309": "Nationals Park",
-    "3312": "Target Field",
-    "3313": "Yankee Stadium",
-    "3833": "NL City",
-    "4169": "loanDepot park",
-    "4705": "Truist Park",
-    "5325": "Globe Life Field"
+    "1": [
+        "Angel Stadium",
+        "Angel Stadium of Anaheim",
+        "Anaheim Stadium"
+    ],
+    "2": [
+        "Oriole Park at Camden Yards"
+    ],
+    "3": [
+        "Fenway Park"
+    ],
+    "4": [
+        "Guaranteed Rate Field",
+        "Comiskey Park"
+    ],
+    "5": [
+        "Progressive Field",
+        "Jacobs Field"
+    ],
+    "6": [
+        "Navin Field"
+    ],
+    "7": [
+        "Kauffman Stadium",
+        "Royals Stadium"
+    ],
+    "8": [
+        "Hubert H. Humphrey Metrodome"
+    ],
+    "9": [
+        "Yankee Stadium"
+    ],
+    "10": [
+        "Oakland Coliseum",
+        "Oakland-Alameda County Coliseum"
+    ],
+    "11": [
+        "The Kingdome"
+    ],
+    "12": [
+        "Tropicana Field"
+    ],
+    "13": [
+        "The Ballpark at Arlington"
+    ],
+    "14": [
+        "Rogers Centre",
+        "SkyDome"
+    ],
+    "15": [
+        "Chase Field",
+        "Bank One Ballpark"
+    ],
+    "16": [
+        "Turner Field"
+    ],
+    "17": [
+        "Wrigley Field",
+        "Weeghman Park"
+    ],
+    "18": [
+        "Riverfront Stadium"
+    ],
+    "19": [
+        "Coors Field"
+    ],
+    "20": [
+        "Joe Robbie Stadium"
+    ],
+    "21": [
+        "Astrodome"
+    ],
+    "22": [
+        "Dodger Stadium"
+    ],
+    "23": [
+        "Milwaukee County Stadium"
+    ],
+    "24": [
+        "Olympic Stadium"
+    ],
+    "25": [
+        "Shea Stadium"
+    ],
+    "26": [
+        "Veterans Stadium"
+    ],
+    "27": [
+        "Three Rivers Stadium"
+    ],
+    "28": [
+        "San Diego Stadium"
+    ],
+    "29": [
+        "Candlestick Park"
+    ],
+    "30": [
+        "Busch Stadium"
+    ],
+    "31": [
+        "PNC Park"
+    ],
+    "32": [
+        "American Family Field",
+        "Miller Park"
+    ],
+    "401": [
+        "TBD",
+        "Generic"
+    ],
+    "680": [
+        "T-Mobile Park",
+        "Safeco Field"
+    ],
+    "2392": [
+        "Minute Maid Park",
+        "Enron Field"
+    ],
+    "2394": [
+        "Comerica Park"
+    ],
+    "2395": [
+        "Oracle Park",
+        "PacBell Park"
+    ],
+    "2602": [
+        "Great American Ball Park"
+    ],
+    "2680": [
+        "Petco Park",
+        "PETCO Park"
+    ],
+    "2681": [
+        "Citizens Bank Park"
+    ],
+    "2721": [
+        "Robert F. Kennedy Memorial Stadium",
+        "D.C. Stadium"
+    ],
+    "2889": [
+        "Busch Stadium"
+    ],
+    "3109": [
+        "League Park"
+    ],
+    "3111": [
+        "Arlington Stadium"
+    ],
+    "3112": [
+        "Atlanta Stadium"
+    ],
+    "3113": [
+        "Baker Bowl"
+    ],
+    "3114": [
+        "Bennett Park"
+    ],
+    "3115": [
+        "Braves Field"
+    ],
+    "3116": [
+        "Cleveland Municipal Stadium"
+    ],
+    "3117": [
+        "Colt Stadium"
+    ],
+    "3118": [
+        "Columbia Park"
+    ],
+    "3119": [
+        "Comiskey Park"
+    ],
+    "3120": [
+        "Crosley Field",
+        "Redland Field"
+    ],
+    "3121": [
+        "Ebbets Field"
+    ],
+    "3123": [
+        "Exhibition Stadium"
+    ],
+    "3124": [
+        "Exposition Park"
+    ],
+    "3125": [
+        "Forbes Field"
+    ],
+    "3126": [
+        "Griffith Stadium"
+    ],
+    "3127": [
+        "Hilltop Park"
+    ],
+    "3128": [
+        "Huntington Avenue Grounds"
+    ],
+    "3129": [
+        "Jarry Park"
+    ],
+    "3131": [
+        "League Park"
+    ],
+    "3132": [
+        "Lloyd Street Grounds"
+    ],
+    "3133": [
+        "Los Angeles Memorial Coliseum"
+    ],
+    "3134": [
+        "Memorial Stadium"
+    ],
+    "3135": [
+        "Metropolitan Stadium"
+    ],
+    "3136": [
+        "Mile High Stadium"
+    ],
+    "3137": [
+        "Municipal Stadium"
+    ],
+    "3138": [
+        "Palace of the Fans"
+    ],
+    "3139": [
+        "Polo Grounds"
+    ],
+    "3140": [
+        "Polo Grounds"
+    ],
+    "3141": [
+        "Robison Field"
+    ],
+    "3142": [
+        "Seals Stadium"
+    ],
+    "3143": [
+        "Shibe Park"
+    ],
+    "3144": [
+        "Sicks Stadium"
+    ],
+    "3147": [
+        "South End Grounds"
+    ],
+    "3148": [
+        "South Side Park "
+    ],
+    "3149": [
+        "Sportsman's Park"
+    ],
+    "3150": [
+        "Washington Park "
+    ],
+    "3153": [
+        "Wrigley Field"
+    ],
+    "3159": [
+        "League Park"
+    ],
+    "3160": [
+        "League Park"
+    ],
+    "3164": [
+        "Oriole Park"
+    ],
+    "3168": [
+        "Sportsman's Park"
+    ],
+    "3169": [
+        "West Side Park"
+    ],
+    "3289": [
+        "Citi Field"
+    ],
+    "3309": [
+        "Nationals Park"
+    ],
+    "3312": [
+        "Target Field"
+    ],
+    "3313": [
+        "Yankee Stadium"
+    ],
+    "3833": [
+        "NL City"
+    ],
+    "4169": [
+        "loanDepot park",
+        "Marlins Park"
+    ],
+    "4705": [
+        "Truist Park",
+        "SunTrust Park"
+    ],
+    "5325": [
+        "Globe Life Field"
+    ]
 }
