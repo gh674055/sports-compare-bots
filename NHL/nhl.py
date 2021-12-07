@@ -18617,9 +18617,9 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
             "opp_on_ice" : opp_on_ice,
             "team_on_ice_pos" : team_on_ice_pos,
             "opp_on_ice_pos" : opp_on_ice_pos,
-            "teamGoals" : scoring_play["about"]["goals"][game_data["team_str"]] - 1,
+            "teamGoals" : scoring_play["about"]["goals"][game_data["team_str"]],
             "oppGoals" : scoring_play["about"]["goals"][game_data["opp_str"]],
-            "goalMargin" : (scoring_play["about"]["goals"][game_data["team_str"]] - 1) - scoring_play["about"]["goals"][game_data["opp_str"]],
+            "goalMargin" : scoring_play["about"]["goals"][game_data["team_str"]] - scoring_play["about"]["goals"][game_data["opp_str"]],
             "description" : scoring_play["result"]["description"] if "description" in scoring_play["result"] else "",
             "event_id" : event_id
         }
@@ -18660,6 +18660,13 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                     if team_shootout_goal == shootout_game_winner:
                         game_winning_goal = True
                     team_shootout_goal += 1
+            
+            if scoring_play["team"]["id"] == game_data["team_id"]:
+                shared_data["teamGoals"] -= 1
+                shared_data["goalMargin"] -= 1
+            else:
+                shared_data["oppGoals"] -= 1
+                shared_data["goalMargin"] += 1
 
             if player_scored:
                 game_data["goal"].append({**shared_data , **{
