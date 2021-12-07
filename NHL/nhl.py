@@ -861,7 +861,6 @@ headers = {
         },
         "GF/60M" : {
             "positive" : True,
-            "display" : False,
             "round" : 2,
             "type" : "Advanced",
             "valid_since" : {
@@ -871,7 +870,6 @@ headers = {
         },
         "GA/60M" : {
             "positive" : False,
-            "display" : False,
             "round" : 2,
             "type" : "Advanced",
             "valid_since" : {
@@ -891,7 +889,6 @@ headers = {
         },
         "GFPer" : {
             "positive" : True,
-            "display" : False,
             "display-value" : "GF%",
             "round" : "percent",
             "type" : "Advanced",
