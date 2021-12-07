@@ -32593,7 +32593,7 @@ def is_against_header(header, extra_stats, player_type, has_toi_stats):
             else:
                 return header not in ("GP", "GA", "SV", "SA", "SV%")
 
-    if "current-stats-zone" in extra_stats and ("/60M" in header or "TOI" in header):
+    if "current-stats-zone" in extra_stats and ("/60M" in header or "TOI" in header or "GAA" in header):
         return True
 
     if ("/GP" in header or "/82GP" in header) and not header == "GP/GP":
