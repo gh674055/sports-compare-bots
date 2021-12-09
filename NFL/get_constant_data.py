@@ -1726,15 +1726,23 @@ stat_groups = {
             "positive" : True,
             "valid_since" : {
                 "inconsistent" : 1993,
-                "inconsistent-game" : 1993
+                "game" : 1990
             }
         },
         "FR": {
-            "positive" : True
+            "positive" : True,
+            "valid_since" : {
+                "inconsistent" : 1993,
+                "game" : 1990
+            }
         },
         "FR Yds": {
             "positive" : True,
-            "display" : False
+            "display" : False,
+            "valid_since" : {
+                "inconsistent" : 1993,
+                "game" : 1990
+            }
         },
         "FR TD": {
             "positive" : True
@@ -1874,7 +1882,11 @@ stat_groups = {
         },
         "FF/17": {
             "positive" : True,
-            "round" : 2
+            "round" : 2,
+            "valid_since" : {
+                "inconsistent" : 1993,
+                "game" : 1990
+            }
         },
         "Int/17": {
             "positive" : True,
@@ -1944,7 +1956,11 @@ stat_groups = {
         "FF%": {
             "positive" : True,
             "display": False,
-            "round" : "percent"
+            "round" : "percent",
+            "valid_since" : {
+                "season" : 2012,
+                "game" : 2012
+             }
         },
         "Int%": {
             "positive" : True,
