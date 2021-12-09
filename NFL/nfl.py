@@ -3916,11 +3916,13 @@ def handle_player_string(comment, player_type, is_fantasy, last_updated, hide_ta
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
                         
                         last_matches = list(re.finditer(r"(no(?:t|n)?(?: |-))?(first|1st|last|this|past)? ?(\S*)? ?(?:season(?:[- ]))?(games?|weeks?)", time_frame))
+                        start_match = False
                         sub_last_match = re.search(r"(no(?:t|n)?(?: |-))?(first|1st|last|this|past)? ?(\S*)? ?((?:(?:calendar|date)(?: |-))?days?|(?:(?:calendar|date)(?: |-))?weeks?|(?:(?:calendar|date)(?: |-))?months?|(?:(?:calendar|date)(?: |-))?years?|seasons?)( ([\w-]+)( reversed?)?)?", time_frame)
                         if ("Start" in qualifiers or playoffs != "Only") and (not sub_last_match or sub_last_match.group(3).endswith("to") or sub_last_match.group(3).endswith("yester")):
                             last_matches += list(re.finditer(r"(no(?:t|n)?(?: |-))?(first|1st|last|this|past) ?(\S*)", time_frame))
+                            start_match = True
                         for last_match in last_matches:
-                            if last_match and not last_match.group(3).endswith("to") and not last_match.group(3).endswith("yester") and (last_match.group(2) or not re.search(r"(no(?:t|n)?(?: |-))?((?:season(?:[- ]))?games?|weeks?) ([\w-]+)( reversed?)?", time_frame)) and (False or "week" not in last_match.group(4) or not re.search(r"(no(?:t|n)?(?: |-))?(?:(?:calendar|date)(?: |-))weeks?", time_frame)):
+                            if last_match and not last_match.group(3).endswith("to") and not last_match.group(3).endswith("yester") and (last_match.group(2) or not re.search(r"(no(?:t|n)?(?: |-))?((?:season(?:[- ]))?games?|weeks?) ([\w-]+)( reversed?)?", time_frame)) and (start_match or "week" not in last_match.group(4) or not re.search(r"(no(?:t|n)?(?: |-))?(?:(?:calendar|date)(?: |-))weeks?", time_frame)):
                                 compare_type = last_match.group(2)
                                 skip_time = False
                                 if not compare_type or not compare_type.strip():
