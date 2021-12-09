@@ -69,6 +69,7 @@ import multiprocessing
 import functools
 import ephem
 import ssl
+import mergedeep
 
 subreddits_to_crawl = [
     "sportscomparebots",
@@ -6562,6 +6563,16 @@ manual_info = {
         "Road TmGm" : 65,
         "Per" : 3
     },
+}
+
+missing_event_data = {
+    1985020010 : {
+        16 : {
+            "about" : {
+                "periodTime" : "7:48"
+            }
+        }
+    }
 }
 
 ssl._create_default_https_context = ssl._create_unverified_context
@@ -18340,6 +18351,11 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
     if not scoring_plays and sub_data:
         scoring_plays = sub_data["liveData"]["plays"]["allPlays"]
 
+    if row_data["NHLGameLink"] in missing_event_data:
+        for scoring_play in scoring_plays:
+            if "eventIdx" in scoring_play["about"] and scoring_play["about"]["eventIdx"] in missing_event_data[row_data["NHLGameLink"]]:
+                mergedeep.merge(scoring_play, missing_event_data[row_data["NHLGameLink"]][scoring_play["about"]["eventIdx"]])
+
     scoring_plays = sorted(scoring_plays, key = lambda scoring_play: (scoring_play["about"]["period"], start_time_to_str(scoring_play["about"]["periodTime"])))
 
     if not scoring_plays:
@@ -19094,6 +19110,7 @@ def setup_game_data(player_data, row_data, player_id, player_type, time_frame):
         game_data["missing_data"] = True
         return game_data, missing_games, None
     
+    #print("https://statsapi.web.nhl.com/api/v1/game/" + str(row_data["NHLGameLink"]) + "/feed/live")
     try:
         request = urllib.request.Request("https://statsapi.web.nhl.com/api/v1/game/" + str(row_data["NHLGameLink"]) + "/feed/live", headers=request_headers)
         sub_data = url_request_json(request)
