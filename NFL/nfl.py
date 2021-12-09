@@ -5293,6 +5293,9 @@ def handle_name_threads(sub_name, parse_time_frames, index, player_type, is_fant
             player_data["sort_index"] = index
         
         return player_datas
+    except urllib.error.URLError as err:
+        logger.error(traceback.format_exc())
+        raise urllib.error.URLError(err.reason)
     except Exception as err:
         logger.error(traceback.format_exc())
         raise err

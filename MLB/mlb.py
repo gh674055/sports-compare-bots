@@ -11570,6 +11570,9 @@ def handle_name_threads(sub_name, parse_time_frames, index, player_type, remove_
         for player_data in player_datas:
             player_data["sort_index"] = index    
         return player_datas
+    except urllib.error.URLError as err:
+        logger.error(traceback.format_exc())
+        raise urllib.error.URLError(err.reason)
     except Exception as err:
         logger.error(traceback.format_exc())
         raise err
