@@ -13951,7 +13951,7 @@ def handle_player_data(player_data, time_frame, player_type, player_page, valid_
     if not player_info:
         raise Exception("Unable to get NHL player link for HRef ID : " + player_data["id"] + ". Will not get any stats")
     player_link, player_name, player_position, handiness = player_info
-    if player_position == "D":
+    if player_position == "D" and handiness:
         if handiness == "L":
             player_position = "LHD"
         elif handiness == "R":
@@ -28910,7 +28910,7 @@ def get_nhl_player_link(player_data):
                     
                     if len(matching_players) == 1:
                         logger.info("#" + str(threading.get_ident()) + "#   " + "Found NHL Player " + matching_players[0]["fullName"] + " (" + str(matching_players[0]["id"]) + ") by birthdate")
-                        return matching_players[0]["link"], matching_players[0]["fullName"], matching_players[0]["primaryPosition"]["abbreviation"], matching_players[0]["shootsCatches"]
+                        return matching_players[0]["link"], matching_players[0]["fullName"], matching_players[0]["primaryPosition"]["abbreviation"], matching_players[0]["shootsCatches"] if ("shootsCatches" in matching_players[0] and matching_players[0]["shootsCatches"]) else None
                 except urllib.error.HTTPError:
                     raise
             else:
@@ -28932,7 +28932,7 @@ def get_nhl_player_link(player_data):
                 
                 if len(matching_players) == 1:
                     logger.info("#" + str(threading.get_ident()) + "#   " + "Found NHL Player " + matching_players[0]["person"]["fullName"] + " (" + str(matching_players[0]["person"]["id"]) + ") by birthdate")
-                    return matching_players[0]["person"]["link"], matching_players[0]["person"]["fullName"], matching_players[0]["person"]["primaryPosition"]["abbreviation"], matching_players[0]["person"]["shootsCatches"]
+                    return matching_players[0]["person"]["link"], matching_players[0]["person"]["fullName"], matching_players[0]["person"]["primaryPosition"]["abbreviation"], matching_players[0]["person"]["shootsCatches"] if ("shootsCatches" in matching_players[0]["person"] and matching_players[0]["person"]["shootsCatches"]) else None
     
     for sub_year in player_data["numbers_year_map"]:
         year_str = str(sub_year)
@@ -29050,7 +29050,7 @@ def get_nhl_player_link(player_data):
                                     continue
 
                             logger.info("#" + str(threading.get_ident()) + "#   " + "Found NHL Player " + player["person"]["fullName"] + " (" + str(player["person"]["id"]) + ") by name")
-                            return player["person"]["link"], player["person"]["fullName"], player["person"]["primaryPosition"]["abbreviation"], player["person"]["shootsCatches"]
+                            return player["person"]["link"], player["person"]["fullName"], player["person"]["primaryPosition"]["abbreviation"], player["person"]["shootsCatches"] if ("shootsCatches" in player["person"] and player["person"]["shootsCatches"]) else None
                 except urllib.error.HTTPError:
                     raise
             else:
@@ -29106,7 +29106,7 @@ def get_nhl_player_link(player_data):
 
                         player = data["roster"][player["index"]]
                         logger.info("#" + str(threading.get_ident()) + "#   " + "Found NHL Player " + player["person"]["fullName"] + " (" + str(player["person"]["id"]) + ") by name")
-                        return player["person"]["link"], player["person"]["fullName"], player["person"]["primaryPosition"]["abbreviation"], player["person"]["shootsCatches"]
+                        return player["person"]["link"], player["person"]["fullName"], player["person"]["primaryPosition"]["abbreviation"], player["person"]["shootsCatches"] if ("shootsCatches" in player["person"] and player["person"]["shootsCatches"]) else None
 
 def parse_row(row, time_frame, year, is_playoffs, player_type, header_values, table_index, table_name):
     season_year = None
