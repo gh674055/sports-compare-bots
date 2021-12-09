@@ -13951,7 +13951,7 @@ def handle_player_data(player_data, time_frame, player_type, player_page, valid_
     if not player_info:
         raise Exception("Unable to get NHL player link for HRef ID : " + player_data["id"] + ". Will not get any stats")
     player_link, player_name, player_position, handiness = player_info
-    if player_position == "D" and handiness:
+    if player_position == "D":
         if handiness == "L":
             player_position = "LHD"
         elif handiness == "R":
