@@ -3916,67 +3916,11 @@ def handle_player_string(comment, player_type, is_fantasy, last_updated, hide_ta
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
                         
                         last_matches = list(re.finditer(r"(no(?:t|n)?(?: |-))?(first|1st|last|this|past)? ?(\S*)? ?(?:season(?:[- ]))?(games?|weeks?)", time_frame))
+                        sub_last_match = re.search(r"(no(?:t|n)?(?: |-))?(first|1st|last|this|past)? ?(\S*)? ?((?:(?:calendar|date)(?: |-))?days?|(?:(?:calendar|date)(?: |-))?weeks?|(?:(?:calendar|date)(?: |-))?months?|(?:(?:calendar|date)(?: |-))?years?|seasons?)( ([\w-]+)( reversed?)?)?", time_frame)
+                        if ("Start" in qualifiers or playoffs != "Only") and (not sub_last_match or sub_last_match.group(3).endswith("to") or sub_last_match.group(3).endswith("yester")):
+                            last_matches += list(re.finditer(r"(no(?:t|n)?(?: |-))?(first|1st|last|this|past) ?(\S*)", time_frame))
                         for last_match in last_matches:
                             if last_match and not last_match.group(3).endswith("to") and not last_match.group(3).endswith("yester") and (last_match.group(2) or not re.search(r"(no(?:t|n)?(?: |-))?((?:season(?:[- ]))?games?|weeks?) ([\w-]+)( reversed?)?", time_frame)) and (False or "week" not in last_match.group(4) or not re.search(r"(no(?:t|n)?(?: |-))?(?:(?:calendar|date)(?: |-))weeks?", time_frame)):
-                                compare_type = last_match.group(2)
-                                skip_time = False
-                                if not compare_type or not compare_type.strip():
-                                    if last_match.group(3) == "first" or last_match.group(3) == "1st" or last_match.group(3) == "this" or last_match.group(3) == "past" or last_match.group(3) == "last":
-                                        compare_type = last_match.group(3)
-                                        skip_time = True
-                                    else:
-                                        compare_type = "special"
-
-                                if compare_type == "1st":
-                                    compare_type = "first"
-
-                                if not skip_time:
-                                    time_unit = last_match.group(3)
-                                    if time_unit and "season" not in time_unit:
-                                        time_unit = ordinal_to_number(time_unit)
-                                        if time_unit < 1:
-                                            time_unit = 1
-                                    else:
-                                        time_unit = 1
-                                else:
-                                    time_unit = 1
-                                
-                                if len(last_match.groups()) == 4 and "week" in last_match.group(4):
-                                    compare_unit = "Weeks"
-                                    if compare_type == "last" and not current_week:
-                                        current_week = get_current_week()
-                                else:
-                                    compare_unit = "Games"
-                                    if "season" in last_match.group(0):
-                                        compare_unit = "Season Games"
-
-                                if compare_type == "special":
-                                    qual_type = "Week" if compare_unit == "Weeks" else "Career Game"
-                                    qualifier_obj = {}
-                                    qualifier_obj["negate"] = bool(last_match.group(1))
-                                    qualifier_obj["values"] = {
-                                        "start_val" : time_unit,
-                                        "end_val" : time_unit
-                                    }
-                                    if not qual_type in qualifiers:
-                                        qualifiers[qual_type] = []
-                                    qualifiers[qual_type].append(qualifier_obj)
-                                else:
-                                    if not compare_unit in qualifiers:
-                                        qualifiers[compare_unit] = []
-
-                                    qualifiers[compare_unit] = {
-                                        "compare_type" : compare_type,
-                                        "time_unit" : time_unit,
-                                        "current_week" : current_week,
-                                        "negate" : bool(last_match.group(1))
-                                    }
-
-                                time_frame = re.sub(r"\s+", " ", time_frame.replace(last_match.group(0), "", 1)).strip()
-                        
-                        last_matches = list(re.finditer(r"(no(?:t|n)?(?: |-))?(first|1st|last|this|past) ?(\S*)", time_frame))
-                        for last_match in last_matches:
-                            if last_match and not last_match.group(3).endswith("to") and not last_match.group(3).endswith("yester") and (last_match.group(2) or not re.search(r"(no(?:t|n)?(?: |-))?((?:season(?:[- ]))?games?|weeks?) ([\w-]+)( reversed?)?", time_frame)) and (True or "week" not in last_match.group(4) or not re.search(r"(no(?:t|n)?(?: |-))?(?:(?:calendar|date)(?: |-))weeks?", time_frame)):
                                 compare_type = last_match.group(2)
                                 skip_time = False
                                 if not compare_type or not compare_type.strip():
