@@ -5376,6 +5376,8 @@ qualifier_map = {
     "Holiday" : {},
     "After Bye" : {},
     "Before Bye" : {},
+    "After Playoffs Bye" : {},
+    "Before Playoffs Bye" : {},
     "Game After Bye" : {},
     "Game Before Bye" : {},
     "Had Bye" : {},
