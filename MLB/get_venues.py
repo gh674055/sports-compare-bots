@@ -59,7 +59,7 @@ def main():
         data = json.load(response)
         for date in data["dates"]:
             for game in date["games"]:
-                team_name = game["venue"]["name"]
+                team_name = unidecode.unidecode(game["venue"]["name"])
                 venue_id = str(game["venue"]["id"])
 
                 if venue_id not in team_venues:
