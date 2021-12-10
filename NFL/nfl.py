@@ -9330,7 +9330,6 @@ def perform_nfl_game_qualifiers(row, qualifiers):
         venue_obj = team_venues[row["Shared"]["StadiumID"]]
         val_to_check = venue_obj["time_zone"]
         utc_time = row["Shared"]["StartTime"].astimezone(pytz.UTC).replace(tzinfo=None)
-        print(utc_time)
 
         tz_offset = pytz.timezone(val_to_check).utcoffset(utc_time).seconds
         
