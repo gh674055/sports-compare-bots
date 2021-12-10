@@ -3,8 +3,9 @@
         "City": "Anaheim",
         "Country": "USA",
         "State": "CA",
-        "TimeZone": "PST",
-        "TimeZoneID": "America/Los_Angeles",
+        "TimeZone": "America/Los_Angeles",
+        "TimeZoneID": "PST",
+        "TimeZoneOffset": -8,
         "values": [
             "Anaheim Stadium",
             "Edison International Field",
@@ -16,8 +17,9 @@
         "City": "Oakland",
         "Country": "USA",
         "State": "CA",
-        "TimeZone": "PST",
-        "TimeZoneID": "America/Los_Angeles",
+        "TimeZone": "America/Los_Angeles",
+        "TimeZoneID": "PST",
+        "TimeZoneOffset": -8,
         "values": [
             "Oakland-Alameda County Coliseum",
             "Network Associates Coliseum",
@@ -30,8 +32,9 @@
         "City": "Seattle",
         "Country": "USA",
         "State": "WA",
-        "TimeZone": "PST",
-        "TimeZoneID": "America/Los_Angeles",
+        "TimeZone": "America/Los_Angeles",
+        "TimeZoneID": "PST",
+        "TimeZoneOffset": -8,
         "values": [
             "The Kingdome"
         ]
@@ -40,8 +43,9 @@
         "City": "St. Petersburg",
         "Country": "USA",
         "State": "FL",
-        "TimeZone": "EST",
-        "TimeZoneID": "America/New_York",
+        "TimeZone": "America/New_York",
+        "TimeZoneID": "EST",
+        "TimeZoneOffset": -5,
         "values": [
             "Tropicana Field"
         ]
@@ -50,8 +54,9 @@
         "City": "Arlington",
         "Country": "USA",
         "State": "TX",
-        "TimeZone": "CST",
-        "TimeZoneID": "America/Chicago",
+        "TimeZone": "America/Chicago",
+        "TimeZoneID": "CST",
+        "TimeZoneOffset": -6,
         "values": [
             "The Ballpark at Arlington",
             "Ameriquest Field",
@@ -63,8 +68,9 @@
         "City": "Toronto",
         "Country": "Canada",
         "State": "ON",
-        "TimeZone": "EST",
-        "TimeZoneID": "America/Toronto",
+        "TimeZone": "America/Toronto",
+        "TimeZoneID": "EST",
+        "TimeZoneOffset": -5,
         "values": [
             "SkyDome",
             "Rogers Centre"
@@ -74,8 +80,9 @@
         "City": "Phoenix",
         "Country": "USA",
         "State": "AZ",
-        "TimeZone": "MST",
-        "TimeZoneID": "America/Phoenix",
+        "TimeZone": "America/Phoenix",
+        "TimeZoneID": "MST",
+        "TimeZoneOffset": -7,
         "values": [
             "Bank One Ballpark",
             "Chase Field"
@@ -85,8 +92,9 @@
         "City": "Atlanta",
         "Country": "USA",
         "State": "GA",
-        "TimeZone": "EST",
-        "TimeZoneID": "America/New_York",
+        "TimeZone": "America/New_York",
+        "TimeZoneID": "EST",
+        "TimeZoneOffset": -5,
         "values": [
             "Turner Field"
         ]
@@ -95,8 +103,9 @@
         "City": "Chicago",
         "Country": "USA",
         "State": "IL",
-        "TimeZone": "CST",
-        "TimeZoneID": "America/Chicago",
+        "TimeZone": "America/Chicago",
+        "TimeZoneID": "CST",
+        "TimeZoneOffset": -6,
         "values": [
             "Weeghman Park",
             "Cubs Park",
@@ -107,8 +116,9 @@
         "City": "Cincinnati",
         "Country": "USA",
         "State": "OH",
-        "TimeZone": "EST",
-        "TimeZoneID": "America/New_York",
+        "TimeZone": "America/New_York",
+        "TimeZoneID": "EST",
+        "TimeZoneOffset": -5,
         "values": [
             "Riverfront Stadium",
             "Cinergy Field"
@@ -118,8 +128,9 @@
         "City": "Denver",
         "Country": "USA",
         "State": "CO",
-        "TimeZone": "MST",
-        "TimeZoneID": "America/Denver",
+        "TimeZone": "America/Denver",
+        "TimeZoneID": "MST",
+        "TimeZoneOffset": -7,
         "values": [
             "Coors Field"
         ]
@@ -128,8 +139,9 @@
         "City": "Baltimore",
         "Country": "USA",
         "State": "MD",
-        "TimeZone": "EST",
-        "TimeZoneID": "America/New_York",
+        "TimeZone": "America/New_York",
+        "TimeZoneID": "EST",
+        "TimeZoneOffset": -5,
         "values": [
             "Oriole Park at Camden Yards"
         ]
@@ -138,8 +150,9 @@
         "City": "Miami",
         "Country": "USA",
         "State": "FL",
-        "TimeZone": "EST",
-        "TimeZoneID": "America/New_York",
+        "TimeZone": "America/New_York",
+        "TimeZoneID": "EST",
+        "TimeZoneOffset": -5,
         "values": [
             "Joe Robbie Stadium",
             "Pro Player Stadium",
@@ -152,8 +165,9 @@
         "City": "Houston",
         "Country": "USA",
         "State": "TX",
-        "TimeZone": "CST",
-        "TimeZoneID": "America/Chicago",
+        "TimeZone": "America/Chicago",
+        "TimeZoneID": "CST",
+        "TimeZoneOffset": -6,
         "values": [
             "Astrodome"
         ]
@@ -162,8 +176,9 @@
         "City": "Los Angeles",
         "Country": "USA",
         "State": "CA",
-        "TimeZone": "PST",
-        "TimeZoneID": "America/Los_Angeles",
+        "TimeZone": "America/Los_Angeles",
+        "TimeZoneID": "PST",
+        "TimeZoneOffset": -8,
         "values": [
             "Dodger Stadium"
         ]
@@ -172,8 +187,9 @@
         "City": "Milwaukee",
         "Country": "USA",
         "State": "WI",
-        "TimeZone": "CST",
-        "TimeZoneID": "America/Chicago",
+        "TimeZone": "America/Chicago",
+        "TimeZoneID": "CST",
+        "TimeZoneOffset": -6,
         "values": [
             "Milwaukee County Stadium"
         ]
@@ -182,8 +198,9 @@
         "City": "Houston",
         "Country": "USA",
         "State": "TX",
-        "TimeZone": "CST",
-        "TimeZoneID": "America/Chicago",
+        "TimeZone": "America/Chicago",
+        "TimeZoneID": "CST",
+        "TimeZoneOffset": -6,
         "values": [
             "Enron Field",
             "Astros Field",
@@ -194,8 +211,9 @@
         "City": "Detroit",
         "Country": "USA",
         "State": "MI",
-        "TimeZone": "EST",
-        "TimeZoneID": "America/Detroit",
+        "TimeZone": "America/Detroit",
+        "TimeZoneID": "EST",
+        "TimeZoneOffset": -5,
         "values": [
             "Comerica Park"
         ]
@@ -204,8 +222,9 @@
         "City": "San Francisco",
         "Country": "USA",
         "State": "CA",
-        "TimeZone": "PST",
-        "TimeZoneID": "America/Los_Angeles",
+        "TimeZone": "America/Los_Angeles",
+        "TimeZoneID": "PST",
+        "TimeZoneOffset": -8,
         "values": [
             "PacBell Park",
             "SBC Park",
@@ -217,8 +236,9 @@
         "City": "Bunkyo City",
         "Country": "Japan",
         "State": "JP",
-        "TimeZone": "JST",
-        "TimeZoneID": "Asia/Tokyo",
+        "TimeZone": "Asia/Tokyo",
+        "TimeZoneID": "JST",
+        "TimeZoneOffset": 9,
         "values": [
             "Tokyo Dome"
         ]
@@ -227,8 +247,9 @@
         "City": "Montreal",
         "Country": "Canada",
         "State": "QB",
-        "TimeZone": "EST",
-        "TimeZoneID": "America/Toronto",
+        "TimeZone": "America/Toronto",
+        "TimeZoneID": "EST",
+        "TimeZoneOffset": -5,
         "values": [
             "Olympic Stadium"
         ]
@@ -237,8 +258,9 @@
         "City": "Flushing",
         "Country": "USA",
         "State": "NY",
-        "TimeZone": "EST",
-        "TimeZoneID": "America/New_York",
+        "TimeZone": "America/New_York",
+        "TimeZoneID": "EST",
+        "TimeZoneOffset": -5,
         "values": [
             "Shea Stadium"
         ]
@@ -247,8 +269,9 @@
         "City": "Las Vegas",
         "Country": "USA",
         "State": "NV",
-        "TimeZone": "PST",
-        "TimeZoneID": "America/Los_Angeles",
+        "TimeZone": "America/Los_Angeles",
+        "TimeZoneID": "PST",
+        "TimeZoneOffset": -8,
         "values": [
             "Cashman Field"
         ]
@@ -257,8 +280,9 @@
         "City": "Lake Buena Vista",
         "Country": "USA",
         "State": "FL",
-        "TimeZone": "EST",
-        "TimeZoneID": "America/New_York",
+        "TimeZone": "America/New_York",
+        "TimeZoneID": "EST",
+        "TimeZoneOffset": -5,
         "values": [
             "Disney's Wide World of Sports",
             "Champion Stadium"
@@ -268,8 +292,9 @@
         "City": "San Juan",
         "Country": "Puerto Rico",
         "State": "PR",
-        "TimeZone": "AST",
-        "TimeZoneID": "America/Puerto_Rico",
+        "TimeZone": "America/Puerto_Rico",
+        "TimeZoneID": "AST",
+        "TimeZoneOffset": -4,
         "values": [
             "Hiram Bithorn Stadium"
         ]
@@ -278,8 +303,9 @@
         "City": "Dunedin",
         "Country": "USA",
         "State": "FL",
-        "TimeZone": "EST",
-        "TimeZoneID": "America/New_York",
+        "TimeZone": "America/New_York",
+        "TimeZoneID": "EST",
+        "TimeZoneOffset": -5,
         "values": [
             "TD Ballpark"
         ]
@@ -288,8 +314,9 @@
         "City": "Philadelphia",
         "Country": "USA",
         "State": "PA",
-        "TimeZone": "EST",
-        "TimeZoneID": "America/New_York",
+        "TimeZone": "America/New_York",
+        "TimeZoneID": "EST",
+        "TimeZoneOffset": -5,
         "values": [
             "Veterans Stadium"
         ]
@@ -298,8 +325,9 @@
         "City": "Cincinnati",
         "Country": "USA",
         "State": "OH",
-        "TimeZone": "EST",
-        "TimeZoneID": "America/New_York",
+        "TimeZone": "America/New_York",
+        "TimeZoneID": "EST",
+        "TimeZoneOffset": -5,
         "values": [
             "Great American Ball Park"
         ]
@@ -308,8 +336,9 @@
         "City": "San Diego",
         "Country": "USA",
         "State": "CA",
-        "TimeZone": "PST",
-        "TimeZoneID": "America/Los_Angeles",
+        "TimeZone": "America/Los_Angeles",
+        "TimeZoneID": "PST",
+        "TimeZoneOffset": -8,
         "values": [
             "PETCO Park",
             "Petco Park"
@@ -319,8 +348,9 @@
         "City": "Philadelphia",
         "Country": "USA",
         "State": "PA",
-        "TimeZone": "EST",
-        "TimeZoneID": "America/New_York",
+        "TimeZone": "America/New_York",
+        "TimeZoneID": "EST",
+        "TimeZoneOffset": -5,
         "values": [
             "Citizens Bank Park"
         ]
@@ -329,8 +359,9 @@
         "City": "Pittsburgh",
         "Country": "USA",
         "State": "PA",
-        "TimeZone": "EST",
-        "TimeZoneID": "America/New_York",
+        "TimeZone": "America/New_York",
+        "TimeZoneID": "EST",
+        "TimeZoneOffset": -5,
         "values": [
             "Three Rivers Stadium"
         ]
@@ -339,8 +370,9 @@
         "City": "Monterrey",
         "Country": "Mexico",
         "State": "MX",
-        "TimeZone": "CST",
-        "TimeZoneID": "America/Monterrey",
+        "TimeZone": "America/Monterrey",
+        "TimeZoneID": "CST",
+        "TimeZoneOffset": -6,
         "values": [
             "Estadio de Beisbol Monterrey"
         ]
@@ -349,8 +381,9 @@
         "City": "Washington",
         "Country": "USA",
         "State": "DC",
-        "TimeZone": "EST",
-        "TimeZoneID": "America/New_York",
+        "TimeZone": "America/New_York",
+        "TimeZoneID": "EST",
+        "TimeZoneOffset": -5,
         "values": [
             "D.C. Stadium",
             "Robert F. Kennedy Memorial Stadium"
@@ -360,8 +393,9 @@
         "City": "Williamsport",
         "Country": "USA",
         "State": "PA",
-        "TimeZone": "EST",
-        "TimeZoneID": "America/New_York",
+        "TimeZone": "America/New_York",
+        "TimeZoneID": "EST",
+        "TimeZoneOffset": -5,
         "values": [
             "BB&T Ballpark"
         ]
@@ -370,8 +404,9 @@
         "City": "Buffalo",
         "Country": "USA",
         "State": "NY",
-        "TimeZone": "EST",
-        "TimeZoneID": "America/New_York",
+        "TimeZone": "America/New_York",
+        "TimeZoneID": "EST",
+        "TimeZoneOffset": -5,
         "values": [
             "Sahlen Field"
         ]
@@ -380,8 +415,9 @@
         "City": "San Diego",
         "Country": "USA",
         "State": "CA",
-        "TimeZone": "PST",
-        "TimeZoneID": "America/Los_Angeles",
+        "TimeZone": "America/Los_Angeles",
+        "TimeZoneID": "PST",
+        "TimeZoneOffset": -8,
         "values": [
             "San Diego Stadium",
             "Jack Murphy Stadium",
@@ -392,8 +428,9 @@
         "City": "St. Louis",
         "Country": "USA",
         "State": "MO",
-        "TimeZone": "CST",
-        "TimeZoneID": "America/Chicago",
+        "TimeZone": "America/Chicago",
+        "TimeZoneID": "CST",
+        "TimeZoneOffset": -6,
         "values": [
             "Busch Stadium"
         ]
@@ -402,8 +439,9 @@
         "City": "San Francisco",
         "Country": "USA",
         "State": "CA",
-        "TimeZone": "PST",
-        "TimeZoneID": "America/Los_Angeles",
+        "TimeZone": "America/Los_Angeles",
+        "TimeZoneID": "PST",
+        "TimeZoneOffset": -8,
         "values": [
             "Candlestick Park",
             "3Com Park at Candlestick Point"
@@ -413,8 +451,9 @@
         "City": "Boston",
         "Country": "USA",
         "State": "MA",
-        "TimeZone": "EST",
-        "TimeZoneID": "America/New_York",
+        "TimeZone": "America/New_York",
+        "TimeZoneID": "EST",
+        "TimeZoneOffset": -5,
         "values": [
             "Fenway Park"
         ]
@@ -423,8 +462,9 @@
         "City": "St. Louis",
         "Country": "USA",
         "State": "MO",
-        "TimeZone": "CST",
-        "TimeZoneID": "America/Chicago",
+        "TimeZone": "America/Chicago",
+        "TimeZoneID": "CST",
+        "TimeZoneOffset": -6,
         "values": [
             "Busch Stadium"
         ]
@@ -433,8 +473,9 @@
         "City": "Pittsburgh",
         "Country": "USA",
         "State": "PA",
-        "TimeZone": "EST",
-        "TimeZoneID": "America/New_York",
+        "TimeZone": "America/New_York",
+        "TimeZoneID": "EST",
+        "TimeZoneOffset": -5,
         "values": [
             "PNC Park"
         ]
@@ -443,8 +484,9 @@
         "City": "Washington",
         "Country": "USA",
         "State": "DC",
-        "TimeZone": "EST",
-        "TimeZoneID": "America/New_York",
+        "TimeZone": "America/New_York",
+        "TimeZoneID": "EST",
+        "TimeZoneOffset": -5,
         "values": [
             "League Park"
         ]
@@ -453,8 +495,9 @@
         "City": "Washington",
         "Country": "USA",
         "State": "DC",
-        "TimeZone": "EST",
-        "TimeZoneID": "America/New_York",
+        "TimeZone": "America/New_York",
+        "TimeZoneID": "EST",
+        "TimeZoneOffset": -5,
         "values": [
             "League Park"
         ]
@@ -463,8 +506,9 @@
         "City": "Arlington",
         "Country": "USA",
         "State": "TX",
-        "TimeZone": "CST",
-        "TimeZoneID": "America/Chicago",
+        "TimeZone": "America/Chicago",
+        "TimeZoneID": "CST",
+        "TimeZoneOffset": -6,
         "values": [
             "Arlington Stadium"
         ]
@@ -473,8 +517,9 @@
         "City": "Atlanta",
         "Country": "USA",
         "State": "GA",
-        "TimeZone": "EST",
-        "TimeZoneID": "America/New_York",
+        "TimeZone": "America/New_York",
+        "TimeZoneID": "EST",
+        "TimeZoneOffset": -5,
         "values": [
             "Atlanta Stadium",
             "Atlanta-Fulton County Stadium"
@@ -484,8 +529,9 @@
         "City": "Philadelphia",
         "Country": "USA",
         "State": "PA",
-        "TimeZone": "EST",
-        "TimeZoneID": "America/New_York",
+        "TimeZone": "America/New_York",
+        "TimeZoneID": "EST",
+        "TimeZoneOffset": -5,
         "values": [
             "Baker Bowl"
         ]
@@ -494,8 +540,9 @@
         "City": "Detroit",
         "Country": "USA",
         "State": "MI",
-        "TimeZone": "EST",
-        "TimeZoneID": "America/Detroit",
+        "TimeZone": "America/Detroit",
+        "TimeZoneID": "EST",
+        "TimeZoneOffset": -5,
         "values": [
             "Bennett Park"
         ]
@@ -504,8 +551,9 @@
         "City": "Boston",
         "Country": "USA",
         "State": "MA",
-        "TimeZone": "EST",
-        "TimeZoneID": "America/New_York",
+        "TimeZone": "America/New_York",
+        "TimeZoneID": "EST",
+        "TimeZoneOffset": -5,
         "values": [
             "Braves Field"
         ]
@@ -514,8 +562,9 @@
         "City": "Cleveland",
         "Country": "USA",
         "State": "OH",
-        "TimeZone": "EST",
-        "TimeZoneID": "America/New_York",
+        "TimeZone": "America/New_York",
+        "TimeZoneID": "EST",
+        "TimeZoneOffset": -5,
         "values": [
             "Cleveland Municipal Stadium"
         ]
@@ -524,8 +573,9 @@
         "City": "Houston",
         "Country": "USA",
         "State": "TX",
-        "TimeZone": "CST",
-        "TimeZoneID": "America/Chicago",
+        "TimeZone": "America/Chicago",
+        "TimeZoneID": "CST",
+        "TimeZoneOffset": -6,
         "values": [
             "Colt Stadium"
         ]
@@ -534,8 +584,9 @@
         "City": "Philadelphia",
         "Country": "USA",
         "State": "PA",
-        "TimeZone": "EST",
-        "TimeZoneID": "America/New_York",
+        "TimeZone": "America/New_York",
+        "TimeZoneID": "EST",
+        "TimeZoneOffset": -5,
         "values": [
             "Columbia Park"
         ]
@@ -544,8 +595,9 @@
         "City": "Chicago",
         "Country": "USA",
         "State": "IL",
-        "TimeZone": "CST",
-        "TimeZoneID": "America/Chicago",
+        "TimeZone": "America/Chicago",
+        "TimeZoneID": "CST",
+        "TimeZoneOffset": -6,
         "values": [
             "Comiskey Park"
         ]
@@ -554,8 +606,9 @@
         "City": "Cincinnati",
         "Country": "USA",
         "State": "OH",
-        "TimeZone": "EST",
-        "TimeZoneID": "America/New_York",
+        "TimeZone": "America/New_York",
+        "TimeZoneID": "EST",
+        "TimeZoneOffset": -5,
         "values": [
             "Redland Field",
             "Crosley Field"
@@ -565,8 +618,9 @@
         "City": "Brooklyn",
         "Country": "USA",
         "State": "NY",
-        "TimeZone": "EST",
-        "TimeZoneID": "America/New_York",
+        "TimeZone": "America/New_York",
+        "TimeZoneID": "EST",
+        "TimeZoneOffset": -5,
         "values": [
             "Ebbets Field"
         ]
@@ -575,8 +629,9 @@
         "City": "Toronto",
         "Country": "USA",
         "State": "ON",
-        "TimeZone": "EST",
-        "TimeZoneID": "America/Toronto",
+        "TimeZone": "America/Toronto",
+        "TimeZoneID": "EST",
+        "TimeZoneOffset": -5,
         "values": [
             "Exhibition Stadium"
         ]
@@ -585,8 +640,9 @@
         "City": "Pittsburgh",
         "Country": "USA",
         "State": "PA",
-        "TimeZone": "EST",
-        "TimeZoneID": "America/New_York",
+        "TimeZone": "America/New_York",
+        "TimeZoneID": "EST",
+        "TimeZoneOffset": -5,
         "values": [
             "Exposition Park"
         ]
@@ -595,8 +651,9 @@
         "City": "Pittsburgh",
         "Country": "USA",
         "State": "PA",
-        "TimeZone": "EST",
-        "TimeZoneID": "America/New_York",
+        "TimeZone": "America/New_York",
+        "TimeZoneID": "EST",
+        "TimeZoneOffset": -5,
         "values": [
             "Forbes Field"
         ]
@@ -605,8 +662,9 @@
         "City": "Washington",
         "Country": "USA",
         "State": "DC",
-        "TimeZone": "EST",
-        "TimeZoneID": "America/New_York",
+        "TimeZone": "America/New_York",
+        "TimeZoneID": "EST",
+        "TimeZoneOffset": -5,
         "values": [
             "National Park",
             "Griffith Stadium"
@@ -616,8 +674,9 @@
         "City": "New York",
         "Country": "USA",
         "State": "NY",
-        "TimeZone": "EST",
-        "TimeZoneID": "America/New_York",
+        "TimeZone": "America/New_York",
+        "TimeZoneID": "EST",
+        "TimeZoneOffset": -5,
         "values": [
             "Hilltop Park"
         ]
@@ -626,8 +685,9 @@
         "City": "Boston",
         "Country": "USA",
         "State": "MA",
-        "TimeZone": "EST",
-        "TimeZoneID": "America/New_York",
+        "TimeZone": "America/New_York",
+        "TimeZoneID": "EST",
+        "TimeZoneOffset": -5,
         "values": [
             "Huntington Avenue Grounds"
         ]
@@ -636,8 +696,9 @@
         "City": "Montreal",
         "Country": "USA",
         "State": "QB",
-        "TimeZone": "EST",
-        "TimeZoneID": "America/Toronto",
+        "TimeZone": "America/Toronto",
+        "TimeZoneID": "EST",
+        "TimeZoneOffset": -5,
         "values": [
             "Jarry Park"
         ]
@@ -646,8 +707,9 @@
         "City": "Cleveland",
         "Country": "USA",
         "State": "OH",
-        "TimeZone": "EST",
-        "TimeZoneID": "America/New_York",
+        "TimeZone": "America/New_York",
+        "TimeZoneID": "EST",
+        "TimeZoneOffset": -5,
         "values": [
             "League Park",
             "Dunn Field"
@@ -657,8 +719,9 @@
         "City": "Milwaukee",
         "Country": "USA",
         "State": "WI",
-        "TimeZone": "CST",
-        "TimeZoneID": "America/Chicago",
+        "TimeZone": "America/Chicago",
+        "TimeZoneID": "CST",
+        "TimeZoneOffset": -6,
         "values": [
             "Lloyd Street Grounds"
         ]
@@ -667,8 +730,9 @@
         "City": "Los Angeles",
         "Country": "USA",
         "State": "CA",
-        "TimeZone": "PST",
-        "TimeZoneID": "America/Los_Angeles",
+        "TimeZone": "America/Los_Angeles",
+        "TimeZoneID": "PST",
+        "TimeZoneOffset": -8,
         "values": [
             "Los Angeles Memorial Coliseum"
         ]
@@ -677,8 +741,9 @@
         "City": "Baltimore",
         "Country": "USA",
         "State": "MD",
-        "TimeZone": "EST",
-        "TimeZoneID": "America/New_York",
+        "TimeZone": "America/New_York",
+        "TimeZoneID": "EST",
+        "TimeZoneOffset": -5,
         "values": [
             "Memorial Stadium"
         ]
@@ -687,8 +752,9 @@
         "City": "Bloomington ",
         "Country": "USA",
         "State": "MI",
-        "TimeZone": "CST",
-        "TimeZoneID": "America/Chicago",
+        "TimeZone": "America/Chicago",
+        "TimeZoneID": "CST",
+        "TimeZoneOffset": -6,
         "values": [
             "Metropolitan Stadium"
         ]
@@ -697,8 +763,9 @@
         "City": "Denver",
         "Country": "USA",
         "State": "CO",
-        "TimeZone": "MST",
-        "TimeZoneID": "America/Denver",
+        "TimeZone": "America/Denver",
+        "TimeZoneID": "MST",
+        "TimeZoneOffset": -7,
         "values": [
             "Mile High Stadium"
         ]
@@ -707,8 +774,9 @@
         "City": "Kansas City",
         "Country": "USA",
         "State": "MO",
-        "TimeZone": "CST",
-        "TimeZoneID": "America/Chicago",
+        "TimeZone": "America/Chicago",
+        "TimeZoneID": "CST",
+        "TimeZoneOffset": -6,
         "values": [
             "Municipal Stadium"
         ]
@@ -717,8 +785,9 @@
         "City": "Cincinnati",
         "Country": "USA",
         "State": "OH",
-        "TimeZone": "EST",
-        "TimeZoneID": "America/New_York",
+        "TimeZone": "America/New_York",
+        "TimeZoneID": "EST",
+        "TimeZoneOffset": -5,
         "values": [
             "Palace of the Fans"
         ]
@@ -727,8 +796,9 @@
         "City": "New York",
         "Country": "USA",
         "State": "NY",
-        "TimeZone": "EST",
-        "TimeZoneID": "America/New_York",
+        "TimeZone": "America/New_York",
+        "TimeZoneID": "EST",
+        "TimeZoneOffset": -5,
         "values": [
             "Polo Grounds"
         ]
@@ -737,8 +807,9 @@
         "City": "New York",
         "Country": "USA",
         "State": "NY",
-        "TimeZone": "EST",
-        "TimeZoneID": "America/New_York",
+        "TimeZone": "America/New_York",
+        "TimeZoneID": "EST",
+        "TimeZoneOffset": -5,
         "values": [
             "Polo Grounds"
         ]
@@ -747,8 +818,9 @@
         "City": "St. Louis",
         "Country": "USA",
         "State": "MO",
-        "TimeZone": "CST",
-        "TimeZoneID": "America/Chicago",
+        "TimeZone": "America/Chicago",
+        "TimeZoneID": "CST",
+        "TimeZoneOffset": -6,
         "values": [
             "Robison Field"
         ]
@@ -757,8 +829,9 @@
         "City": "San Francisco  ",
         "Country": "USA",
         "State": "CA",
-        "TimeZone": "PST",
-        "TimeZoneID": "America/Los_Angeles",
+        "TimeZone": "America/Los_Angeles",
+        "TimeZoneID": "PST",
+        "TimeZoneOffset": -8,
         "values": [
             "Seals Stadium"
         ]
@@ -767,8 +840,9 @@
         "City": "Philadelphia",
         "Country": "USA",
         "State": "PA",
-        "TimeZone": "EST",
-        "TimeZoneID": "America/New_York",
+        "TimeZone": "America/New_York",
+        "TimeZoneID": "EST",
+        "TimeZoneOffset": -5,
         "values": [
             "Shibe Park",
             "Connie Mack Stadium"
@@ -778,8 +852,9 @@
         "City": "Boston",
         "Country": "USA",
         "State": "MA",
-        "TimeZone": "PST",
-        "TimeZoneID": "America/Los_Angeles",
+        "TimeZone": "America/Los_Angeles",
+        "TimeZoneID": "PST",
+        "TimeZoneOffset": -8,
         "values": [
             "Sicks Stadium"
         ]
@@ -788,8 +863,9 @@
         "City": "Boston",
         "Country": "USA",
         "State": "MA",
-        "TimeZone": "EST",
-        "TimeZoneID": "America/New_York",
+        "TimeZone": "America/New_York",
+        "TimeZoneID": "EST",
+        "TimeZoneOffset": -5,
         "values": [
             "South End Grounds"
         ]
@@ -798,8 +874,9 @@
         "City": "Chicago",
         "Country": "USA",
         "State": "IL",
-        "TimeZone": "CST",
-        "TimeZoneID": "America/Chicago",
+        "TimeZone": "America/Chicago",
+        "TimeZoneID": "CST",
+        "TimeZoneOffset": -6,
         "values": [
             "South Side Park "
         ]
@@ -808,8 +885,9 @@
         "City": "St. Louis",
         "Country": "USA",
         "State": "MO",
-        "TimeZone": "CST",
-        "TimeZoneID": "America/Chicago",
+        "TimeZone": "America/Chicago",
+        "TimeZoneID": "CST",
+        "TimeZoneOffset": -6,
         "values": [
             "Sportsman's Park"
         ]
@@ -818,8 +896,9 @@
         "City": "Brooklyn",
         "Country": "USA",
         "State": "NY",
-        "TimeZone": "EST",
-        "TimeZoneID": "America/New_York",
+        "TimeZone": "America/New_York",
+        "TimeZoneID": "EST",
+        "TimeZoneOffset": -5,
         "values": [
             "Washington Park "
         ]
@@ -828,8 +907,9 @@
         "City": "Los Angeles",
         "Country": "USA",
         "State": "CA",
-        "TimeZone": "PST",
-        "TimeZoneID": "America/Los_Angeles",
+        "TimeZone": "America/Los_Angeles",
+        "TimeZoneID": "PST",
+        "TimeZoneOffset": -8,
         "values": [
             "Wrigley Field"
         ]
@@ -838,8 +918,9 @@
         "City": "Honolulu",
         "Country": "USA",
         "State": "HI",
-        "TimeZone": "HST",
-        "TimeZoneID": "Pacific/Honolulu",
+        "TimeZone": "Pacific/Honolulu",
+        "TimeZoneID": "HST",
+        "TimeZoneOffset": -10,
         "values": [
             "Aloha Stadium"
         ]
@@ -848,8 +929,9 @@
         "City": "Toledo",
         "Country": "USA",
         "State": "OH",
-        "TimeZone": "EST",
-        "TimeZoneID": "America/New_York",
+        "TimeZone": "America/New_York",
+        "TimeZoneID": "EST",
+        "TimeZoneOffset": -5,
         "values": [
             "Armory Park"
         ]
@@ -858,8 +940,9 @@
         "City": "Detroit",
         "Country": "USA",
         "State": "MI",
-        "TimeZone": "EST",
-        "TimeZoneID": "America/Detroit",
+        "TimeZone": "America/Detroit",
+        "TimeZoneID": "EST",
+        "TimeZoneOffset": -5,
         "values": [
             "Burns Park"
         ]
@@ -868,8 +951,9 @@
         "City": "Dayton",
         "Country": "USA",
         "State": "OH",
-        "TimeZone": "EST",
-        "TimeZoneID": "America/New_York",
+        "TimeZone": "America/New_York",
+        "TimeZoneID": "EST",
+        "TimeZoneOffset": -5,
         "values": [
             "Fairview Park"
         ]
@@ -878,8 +962,9 @@
         "City": "Fort Wayne",
         "Country": "USA",
         "State": "IN",
-        "TimeZone": "EST",
-        "TimeZoneID": "America/Indiana/Indianapolis",
+        "TimeZone": "America/Indiana/Indianapolis",
+        "TimeZoneID": "EST",
+        "TimeZoneOffset": -5,
         "values": [
             "Jailhouse Flats"
         ]
@@ -888,8 +973,9 @@
         "City": "Cleveland",
         "Country": "USA",
         "State": "OH",
-        "TimeZone": "EST",
-        "TimeZoneID": "America/New_York",
+        "TimeZone": "America/New_York",
+        "TimeZoneID": "EST",
+        "TimeZoneOffset": -5,
         "values": [
             "League Park"
         ]
@@ -898,8 +984,9 @@
         "City": "Cincinnati",
         "Country": "USA",
         "State": "OH",
-        "TimeZone": "EST",
-        "TimeZoneID": "America/New_York",
+        "TimeZone": "America/New_York",
+        "TimeZoneID": "EST",
+        "TimeZoneOffset": -5,
         "values": [
             "League Park"
         ]
@@ -908,8 +995,9 @@
         "City": "Canton",
         "Country": "USA",
         "State": "OH",
-        "TimeZone": "EST",
-        "TimeZoneID": "America/New_York",
+        "TimeZone": "America/New_York",
+        "TimeZoneID": "EST",
+        "TimeZoneOffset": -5,
         "values": [
             "Mahaffey Park"
         ]
@@ -918,8 +1006,9 @@
         "City": "Columbus",
         "Country": "USA",
         "State": "OH",
-        "TimeZone": "EST",
-        "TimeZoneID": "America/New_York",
+        "TimeZone": "America/New_York",
+        "TimeZoneID": "EST",
+        "TimeZoneOffset": -5,
         "values": [
             "Neil Park"
         ]
@@ -928,8 +1017,9 @@
         "City": "Columbus",
         "Country": "USA",
         "State": "OH",
-        "TimeZone": "EST",
-        "TimeZoneID": "America/New_York",
+        "TimeZone": "America/New_York",
+        "TimeZoneID": "EST",
+        "TimeZoneOffset": -5,
         "values": [
             "Neil Park"
         ]
@@ -938,8 +1028,9 @@
         "City": "Baltimore",
         "Country": "USA",
         "State": "MD",
-        "TimeZone": "EST",
-        "TimeZoneID": "America/New_York",
+        "TimeZone": "America/New_York",
+        "TimeZoneID": "EST",
+        "TimeZoneOffset": -5,
         "values": [
             "Oriole Park"
         ]
@@ -948,8 +1039,9 @@
         "City": "Grand Rapids",
         "Country": "USA",
         "State": "MI",
-        "TimeZone": "EST",
-        "TimeZoneID": "America/Detroit",
+        "TimeZone": "America/Detroit",
+        "TimeZoneID": "EST",
+        "TimeZoneOffset": -5,
         "values": [
             "Ramona Park"
         ]
@@ -958,8 +1050,9 @@
         "City": "Warwick",
         "Country": "USA",
         "State": "RI",
-        "TimeZone": "EST",
-        "TimeZoneID": "America/New_York",
+        "TimeZone": "America/New_York",
+        "TimeZoneID": "EST",
+        "TimeZoneOffset": -5,
         "values": [
             "Rocky Point Park"
         ]
@@ -968,8 +1061,9 @@
         "City": "St. Louis",
         "Country": "USA",
         "State": "MO",
-        "TimeZone": "EST",
-        "TimeZoneID": "America/New_York",
+        "TimeZone": "America/New_York",
+        "TimeZoneID": "EST",
+        "TimeZoneOffset": -5,
         "values": [
             "Roosevelt Stadium"
         ]
@@ -978,8 +1072,9 @@
         "City": "St. Louis",
         "Country": "USA",
         "State": "MO",
-        "TimeZone": "CST",
-        "TimeZoneID": "America/Chicago",
+        "TimeZone": "America/Chicago",
+        "TimeZoneID": "CST",
+        "TimeZoneOffset": -6,
         "values": [
             "Sportsman's Park"
         ]
@@ -988,8 +1083,9 @@
         "City": "Chicago",
         "Country": "USA",
         "State": "IL",
-        "TimeZone": "CST",
-        "TimeZoneID": "America/Chicago",
+        "TimeZone": "America/Chicago",
+        "TimeZoneID": "CST",
+        "TimeZoneOffset": -6,
         "values": [
             "West Side Park"
         ]
@@ -998,8 +1094,9 @@
         "City": "Newark",
         "Country": "USA",
         "State": "NJ",
-        "TimeZone": "EST",
-        "TimeZoneID": "America/New_York",
+        "TimeZone": "America/New_York",
+        "TimeZoneID": "EST",
+        "TimeZoneOffset": -5,
         "values": [
             "Wiedenmeyer's Park"
         ]
@@ -1008,8 +1105,9 @@
         "City": "Milwaukee",
         "Country": "USA",
         "State": "WI",
-        "TimeZone": "CST",
-        "TimeZoneID": "America/Chicago",
+        "TimeZone": "America/Chicago",
+        "TimeZoneID": "CST",
+        "TimeZoneOffset": -6,
         "values": [
             "Miller Park",
             "American Family Field"
@@ -1019,8 +1117,9 @@
         "City": "Flushing",
         "Country": "USA",
         "State": "NY",
-        "TimeZone": "EST",
-        "TimeZoneID": "America/New_York",
+        "TimeZone": "America/New_York",
+        "TimeZoneID": "EST",
+        "TimeZoneOffset": -5,
         "values": [
             "Citi Field"
         ]
@@ -1029,8 +1128,9 @@
         "City": "Washington",
         "Country": "USA",
         "State": "DC",
-        "TimeZone": "EST",
-        "TimeZoneID": "America/New_York",
+        "TimeZone": "America/New_York",
+        "TimeZoneID": "EST",
+        "TimeZoneOffset": -5,
         "values": [
             "Nationals Park"
         ]
@@ -1039,8 +1139,9 @@
         "City": "Minneapolis",
         "Country": "USA",
         "State": "MN",
-        "TimeZone": "CST",
-        "TimeZoneID": "America/Chicago",
+        "TimeZone": "America/Chicago",
+        "TimeZoneID": "CST",
+        "TimeZoneOffset": -6,
         "values": [
             "Target Field"
         ]
@@ -1049,8 +1150,9 @@
         "City": "Bronx",
         "Country": "USA",
         "State": "NY",
-        "TimeZone": "EST",
-        "TimeZoneID": "America/New_York",
+        "TimeZone": "America/New_York",
+        "TimeZoneID": "EST",
+        "TimeZoneOffset": -5,
         "values": [
             "Yankee Stadium"
         ]
@@ -1059,8 +1161,9 @@
         "City": "Chicago",
         "Country": "USA",
         "State": "IL",
-        "TimeZone": "CST",
-        "TimeZoneID": "America/Chicago",
+        "TimeZone": "America/Chicago",
+        "TimeZoneID": "CST",
+        "TimeZoneOffset": -6,
         "values": [
             "Comiskey Park",
             "U.S. Cellular Field",
@@ -1071,8 +1174,9 @@
         "City": "United States",
         "Country": "USA",
         "State": null,
-        "TimeZone": "EST",
-        "TimeZoneID": "America/New_York",
+        "TimeZone": "America/New_York",
+        "TimeZoneID": "EST",
+        "TimeZoneOffset": -5,
         "values": [
             "Generic"
         ]
@@ -1081,8 +1185,9 @@
         "City": "Miami",
         "Country": "USA",
         "State": "FL",
-        "TimeZone": "EST",
-        "TimeZoneID": "America/New_York",
+        "TimeZone": "America/New_York",
+        "TimeZoneID": "EST",
+        "TimeZoneOffset": -5,
         "values": [
             "Marlins Park",
             "loanDepot park"
@@ -1092,8 +1197,9 @@
         "City": "Sydney",
         "Country": "Australia",
         "State": null,
-        "TimeZone": "AEDT",
-        "TimeZoneID": "Australia/Sydney",
+        "TimeZone": "Australia/Sydney",
+        "TimeZoneID": "AEDT",
+        "TimeZoneOffset": 11,
         "values": [
             "Sydney Cricket Ground"
         ]
@@ -1102,8 +1208,9 @@
         "City": "Atlanta",
         "Country": "USA",
         "State": "GA",
-        "TimeZone": "EST",
-        "TimeZoneID": "America/New_York",
+        "TimeZone": "America/New_York",
+        "TimeZoneID": "EST",
+        "TimeZoneOffset": -5,
         "values": [
             "SunTrust Park",
             "Truist Park"
@@ -1113,8 +1220,9 @@
         "City": "Cleveland",
         "Country": "USA",
         "State": "OH",
-        "TimeZone": "EST",
-        "TimeZoneID": "America/New_York",
+        "TimeZone": "America/New_York",
+        "TimeZoneID": "EST",
+        "TimeZoneOffset": -5,
         "values": [
             "Jacobs Field",
             "Progressive Field"
@@ -1124,8 +1232,9 @@
         "City": "Fort Bragg",
         "Country": "USA",
         "State": "NC",
-        "TimeZone": "EST",
-        "TimeZoneID": "America/New_York",
+        "TimeZone": "America/New_York",
+        "TimeZoneID": "EST",
+        "TimeZoneOffset": -5,
         "values": [
             "Fort Bragg Field"
         ]
@@ -1134,8 +1243,9 @@
         "City": "Arlington",
         "Country": "USA",
         "State": "TX",
-        "TimeZone": "CST",
-        "TimeZoneID": "America/Chicago",
+        "TimeZone": "America/Chicago",
+        "TimeZoneID": "CST",
+        "TimeZoneOffset": -6,
         "values": [
             "Globe Life Field"
         ]
@@ -1144,8 +1254,9 @@
         "City": "Omaha",
         "Country": "USA",
         "State": "NE",
-        "TimeZone": "CST",
-        "TimeZoneID": "America/Chicago",
+        "TimeZone": "America/Chicago",
+        "TimeZoneID": "CST",
+        "TimeZoneOffset": -6,
         "values": [
             "TD Ameritrade Park"
         ]
@@ -1154,8 +1265,9 @@
         "City": "London",
         "Country": "United Kingdom",
         "State": null,
-        "TimeZone": "GMT",
-        "TimeZoneID": "Europe/London",
+        "TimeZone": "Europe/London",
+        "TimeZoneID": "GMT",
+        "TimeZoneOffset": 0,
         "values": [
             "London Stadium"
         ]
@@ -1164,8 +1276,9 @@
         "City": "Dyersville",
         "Country": "USA",
         "State": "IA",
-        "TimeZone": "CST",
-        "TimeZoneID": "America/Chicago",
+        "TimeZone": "America/Chicago",
+        "TimeZoneID": "CST",
+        "TimeZoneOffset": -6,
         "values": [
             "Field of Dreams"
         ]
@@ -1174,8 +1287,9 @@
         "City": "Detroit",
         "Country": "USA",
         "State": "MI",
-        "TimeZone": "EST",
-        "TimeZoneID": "America/Detroit",
+        "TimeZone": "America/Detroit",
+        "TimeZoneID": "EST",
+        "TimeZoneOffset": -5,
         "values": [
             "Navin Field",
             "Briggs Stadium",
@@ -1186,8 +1300,9 @@
         "City": "Seattle",
         "Country": "USA",
         "State": "WA",
-        "TimeZone": "PST",
-        "TimeZoneID": "America/Los_Angeles",
+        "TimeZone": "America/Los_Angeles",
+        "TimeZoneID": "PST",
+        "TimeZoneOffset": -8,
         "values": [
             "Safeco Field",
             "T-Mobile Park"
@@ -1197,8 +1312,9 @@
         "City": "Kansas City",
         "Country": "USA",
         "State": "MO",
-        "TimeZone": "CST",
-        "TimeZoneID": "America/Chicago",
+        "TimeZone": "America/Chicago",
+        "TimeZoneID": "CST",
+        "TimeZoneOffset": -6,
         "values": [
             "Royals Stadium",
             "Kauffman Stadium"
@@ -1208,8 +1324,9 @@
         "City": "Minneapolis",
         "Country": "USA",
         "State": "MN",
-        "TimeZone": "CST",
-        "TimeZoneID": "America/Chicago",
+        "TimeZone": "America/Chicago",
+        "TimeZoneID": "CST",
+        "TimeZoneOffset": -6,
         "values": [
             "Hubert H. Humphrey Metrodome"
         ]
@@ -1218,8 +1335,9 @@
         "City": "Bronx",
         "Country": "USA",
         "State": "NY",
-        "TimeZone": "EST",
-        "TimeZoneID": "America/New_York",
+        "TimeZone": "America/New_York",
+        "TimeZoneID": "EST",
+        "TimeZoneOffset": -5,
         "values": [
             "Yankee Stadium"
         ]

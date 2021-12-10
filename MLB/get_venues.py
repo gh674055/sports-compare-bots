@@ -72,8 +72,9 @@ def main():
                         "City" : sub_data["gameData"]["venue"]["location"]["city"] if "city" in sub_data["gameData"]["venue"]["location"] else None,
                         "State" : sub_data["gameData"]["venue"]["location"]["stateAbbrev"] if "stateAbbrev" in sub_data["gameData"]["venue"]["location"] else None,
                         "Country" : sub_data["gameData"]["venue"]["location"]["country"] if "country" in sub_data["gameData"]["venue"]["location"] else None,
-                        "TimeZoneID" : sub_data["gameData"]["venue"]["timeZone"]["id"],
-                        "TimeZone" : sub_data["gameData"]["venue"]["timeZone"]["tz"]
+                        "TimeZoneID" : sub_data["gameData"]["venue"]["timeZone"]["tz"],
+                        "TimeZoneOffset" : sub_data["gameData"]["venue"]["timeZone"]["offset"],
+                        "TimeZone" : sub_data["gameData"]["venue"]["timeZone"]["id"]
                     }
                 if team_name not in team_venues[venue_id]["values"]:
                     team_venues[venue_id]["values"].append(team_name)

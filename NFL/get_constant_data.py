@@ -5116,6 +5116,7 @@ qualifier_map = {
         "l" : "Night"
     },
     "Start Time" : {},
+    "Local Start Time" : {},
     "Location" : {
         "home" : "Home",
         "away" : "Away",
