@@ -32631,10 +32631,9 @@ def handle_table_data(player_data, player_type, over_header, header, highest_val
                 has_non_goalie = True
         
             if not has_non_goalie:
-                if header not in ("G", "A", "P", "GC", "HAT", "AdjG", "AdjA", "AdjP", "AdjGC", "PlusMinus", "PIM", "OPS", "DPS", "PS", "TOI/GP", "G/GP", "A/GP", "P/GP", "GC/GP", "G/82GP", "A/82GP", "P/82GP", "G/60M", "A/60M", "P/60M", "PIM/60M") and not header.startswith("Player") and not header.startswith("GP") and not ("type" in headers[player_type["da_type"]["type"]][header] and headers[player_type["da_type"]["type"]][header]["type"] == "Awards/Honors"):
-                    return "N/A"
-                if "PlusMinus" in header:
-                    return "N/A"
+                if header not in ("G", "A", "P", "GC", "HAT", "AdjG", "AdjA", "AdjP", "AdjGC", "PIM", "OPS", "DPS", "PS", "TOI/GP", "G/GP", "A/GP", "P/GP", "GC/GP", "G/82GP", "A/82GP", "P/82GP", "G/60M", "A/60M", "P/60M", "PIM/60M") and not header.startswith("Player") and not header.startswith("GP") and not ("type" in headers[player_type["da_type"]["type"]][header] and headers[player_type["da_type"]["type"]][header]["type"] == "Awards/Honors"):
+                    if header not in headers["Goalie"]:
+                        return "N/A"
 
         any_missing_cap = False
         for cap_hit in player_data["player_cap"]:
@@ -32760,10 +32759,9 @@ def handle_table_data(player_data, player_type, over_header, header, highest_val
                     has_non_goalie = True
             
                 if has_goalie:
-                    if header not in ("G", "A", "P", "GC", "HAT", "AdjG", "AdjA", "AdjP", "AdjGC", "PlusMinus", "PIM", "OPS", "DPS", "PS", "TOI/GP", "G/GP", "A/GP", "P/GP", "GC/GP", "G/82GP", "A/82GP", "P/82GP", "G/60M", "A/60M", "P/60M", "PIM/60M") and not header.startswith("Player") and not header.startswith("GP") and not ("type" in headers[player_type["da_type"]["type"]][header] and headers[player_type["da_type"]["type"]][header]["type"] == "Awards/Honors"):
-                        is_invalid_goalie_stat = True
-                    if "PlusMinus" in header:
-                        is_invalid_goalie_stat = True
+                    if header not in ("G", "A", "P", "GC", "HAT", "AdjG", "AdjA", "AdjP", "AdjGC", "PIM", "OPS", "DPS", "PS", "TOI/GP", "G/GP", "A/GP", "P/GP", "GC/GP", "G/82GP", "A/82GP", "P/82GP", "G/60M", "A/60M", "P/60M", "PIM/60M") and not header.startswith("Player") and not header.startswith("GP") and not ("type" in headers[player_type["da_type"]["type"]][header] and headers[player_type["da_type"]["type"]][header]["type"] == "Awards/Honors"):
+                        if header not in headers["Goalie"]:
+                            is_invalid_goalie_stat = True
             
             if is_invalid_goalie_stat:
                 value += "*"
