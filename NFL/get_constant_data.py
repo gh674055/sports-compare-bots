@@ -5700,10 +5700,10 @@ def calculate_formula(stat, formula, data, header, headers, player_data, player_
             value = 0
             if player_data:
                 if "Birthday" in player_data:
-                    value += (datetime.datetime.now().date() - player_data["Birthday"]).days + 1
+                    value += (datetime.datetime.now().date() - player_data["Birthday"]).days
                 else:
                     for birthday in player_data["stat_values"]["Shared"]["Birthdays"]:
-                        value += (datetime.datetime.now().date() - birthday).days + 1
+                        value += (datetime.datetime.now().date() - birthday).days
             return value
         elif stat == "Rate":
             return calculate_passer_rating(data[header], header)

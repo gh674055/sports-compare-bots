@@ -30855,11 +30855,11 @@ def calculate_formula(stat, player_type, formula, data, all_rows, player_data, s
             value = 0
             if "Birthday" in player_data:
                 if player_data["Birthday"]:
-                    value += (datetime.datetime.now().date() - player_data["Birthday"]).days + 1
+                    value += (datetime.datetime.now().date() - player_data["Birthday"]).days
             else:
                 for birthday in player_data["stat_values"]["Birthdays"]:
                     if birthday:
-                        value += (datetime.datetime.now().date() - birthday).days + 1
+                        value += (datetime.datetime.now().date() - birthday).days
             return value
         elif stat in ("TmW", "TmL", "TmTtlL", "TmT", "TmOTL", "TmROW", "TmROL"):
             return calculate_team_win_losses(data, all_rows, stat)
