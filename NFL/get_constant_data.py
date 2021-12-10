@@ -5698,12 +5698,20 @@ def calculate_formula(stat, formula, data, header, headers, player_data, player_
     if formula == "Special":
         if stat == "DaysOnEarth":
             value = 0
-            if player_data:
-                if "Birthday" in player_data:
-                    value += (datetime.datetime.now().date() - player_data["Birthday"]).days
-                else:
-                    for birthday in player_data["stat_values"]["Shared"]["Birthdays"]:
-                        value += (datetime.datetime.now().date() - birthday).days
+            if "Birthday" in player_data:
+                if player_data["Birthday"]:
+                    if player_data["Deathday"]:
+                        value += (player_data["Deathday"] - player_data["Birthday"]).days
+                    else:
+                        value += (datetime.datetime.now().date() - player_data["Birthday"]).days
+            else:
+                for index, birthday in enumerate(player_data["stat_values"]["Shared"]["Birthdays"]):
+                    if birthday:
+                        death_day = player_data["stat_values"]["Shared"]["Deathdays"][index]
+                        if death_day:
+                            value += (death_day - birthday).days
+                        else:
+                            value += (datetime.datetime.now().date() - birthday).days
             return value
         elif stat == "Rate":
             return calculate_passer_rating(data[header], header)

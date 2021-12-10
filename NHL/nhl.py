@@ -6248,6 +6248,7 @@ missing_player_data = {
     "YearStart" : [],
     "YearEnd" : [],
     "Birthday" : None,
+    "Deathday" : None,
     "stat_values" : {
         "Player" : ["No Player Match!"],
         "Player/GP" : ["No Player Match!"],
@@ -11566,6 +11567,7 @@ def handle_name_threads(sub_name, parse_time_frames, index, player_type, remove_
                             "DateStart" : subb_player_data["DateStart"],
                             "DateEnd" : subb_player_data["DateEnd"],
                             "Birthdays" : [subb_player_data["Birthday"]],
+                            "Deathdays" : [subb_player_data["Deathday"]],
                             "is_playoffs" : subb_player_data["is_playoffs"],
                             "Player" : [subb_player_data["Player"]],
                             "Player_Score" : [subb_player_data["Player"]],
@@ -12156,6 +12158,7 @@ def handle_the_same_games_quals(sub_name, qual_str, subbb_frames, time_frame, pl
             player_data["stat_values"]["YearStart"] = player_data["YearStart"]
             player_data["stat_values"]["YearEnd"] = player_data["YearEnd"]
             player_data["stat_values"]["Birthdays"] = [player_data["Birthday"]]
+            player_data["stat_values"]["Deathdays"] = [player_data["Deathday"]]
             player_data["stat_values"]["is_playoffs"] = None
             if time_frame["playoffs"] == "Only":
                 player_data["stat_values"]["is_playoffs"] = "Only"
@@ -12535,6 +12538,7 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
     player_data["stat_values"]["YearStart"] = []
     player_data["stat_values"]["YearEnd"] = []
     player_data["stat_values"]["Birthdays"] = []
+    player_data["stat_values"]["Deathdays"] = []
     player_data["stat_values"]["Player"] = []
     player_data["stat_values"]["Search Term"] = []
     player_data["stat_values"]["Raw Player"] = ""
@@ -13028,6 +13032,7 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
         player_data["nhl_ids"].append(sub_player_data["nhl_id"])
         player_data["stat_values"]["Player"].append((sub_player_data["Player"] if "hide-name" not in extra_stats else "?????"))
         player_data["stat_values"]["Birthdays"].append(sub_player_data["Birthday"])
+        player_data["stat_values"]["Deathdays"].append(sub_player_data["Deathday"])
         player_data["stat_values"]["Search Term"].append(sub_player_data["Search Term"])
         player_data["stat_values"]["LastUpdated"] = sub_player_data["LastUpdated"]
         player_data["stat_values"]["is_indv_shift_data"] = is_indv_shift_data
@@ -13817,6 +13822,7 @@ def handle_multi_player_data(player_id, time_frames, player_type, player_page, r
     #    player_data["LastUpdated"] = None
     player_data["LastUpdated"] = None
     player_data["Birthday"] = get_player_birthday(player_id, player_page)
+    player_data["Deathday"] = get_player_deathday(player_id, player_page)
     #player_data["Player_Active"] = get_player_is_active(player_id, player_page)
     player_data["player_image_url"] = get_player_image(player_page)
     player_data["year_valid_years"], player_data["reg_year_valid_years"], player_data["game_valid_years"], valid_teams, valid_teams_raw_key, valid_year_teams = get_valid_years(player_page, player_type)
@@ -28492,6 +28498,13 @@ def get_player_birthday(player_id, player_page):
     else:
         return None
 
+def get_player_deathday(player_id, player_page):
+    birthday_span = player_page.find("span", {"id" : "necro-death"})
+    if birthday_span:
+        return dateutil.parser.parse(birthday_span["data-death"]).date()
+    else:
+        return None
+
 def get_player_name(player_page):
     player_info = player_page.find("div", {"itemtype" : "https://schema.org/Person"})
     player_name_el = player_info.find("h1", {"itemprop" : "name"})
@@ -30855,11 +30868,18 @@ def calculate_formula(stat, player_type, formula, data, all_rows, player_data, s
             value = 0
             if "Birthday" in player_data:
                 if player_data["Birthday"]:
-                    value += (datetime.datetime.now().date() - player_data["Birthday"]).days
+                    if player_data["Deathday"]:
+                        value += (player_data["Deathday"] - player_data["Birthday"]).days
+                    else:
+                        value += (datetime.datetime.now().date() - player_data["Birthday"]).days
             else:
-                for birthday in player_data["stat_values"]["Birthdays"]:
+                for index, birthday in enumerate(player_data["stat_values"]["Birthdays"]):
                     if birthday:
-                        value += (datetime.datetime.now().date() - birthday).days
+                        death_day = player_data["stat_values"]["Deathdays"][index]
+                        if death_day:
+                            value += (death_day - birthday).days
+                        else:
+                            value += (datetime.datetime.now().date() - birthday).days
             return value
         elif stat in ("TmW", "TmL", "TmTtlL", "TmT", "TmOTL", "TmROW", "TmROL"):
             return calculate_team_win_losses(data, all_rows, stat)

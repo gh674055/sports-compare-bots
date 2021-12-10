@@ -786,6 +786,7 @@ missing_player_data = {
     "YearStart" : [],
     "YearEnd" : [],
     "Birthday" : None,
+    "Deathday" : None,
     "stat_values" : {
         "Shared" : {
             "Player" : ["No Player Match!"],
@@ -5255,6 +5256,7 @@ def handle_name_threads(sub_name, parse_time_frames, index, player_type, is_fant
                                 "DateStart" : subb_player_data["DateStart"],
                                 "DateEnd" : subb_player_data["DateEnd"],
                                 "Birthdays" : [subb_player_data["Birthday"]],
+                                "Deathdays" : [subb_player_data["Deathday"]],
                                 "is_playoffs" : subb_player_data["is_playoffs"],
                                 "Player" : [subb_player_data["Player"]],
                                 "Types" : [subb_player_data["Type"]],
@@ -5797,6 +5799,7 @@ def handle_the_same_games_quals(sub_name, qual_str, subbb_frames, time_frame, pl
             player_data["stat_values"]["Shared"]["YearStart"] = player_data["YearStart"]
             player_data["stat_values"]["Shared"]["YearEnd"] = player_data["YearEnd"]
             player_data["stat_values"]["Shared"]["Birthdays"] = [player_data["Birthday"]]
+            player_data["stat_values"]["Shared"]["Deathdays"] = [player_data["Deathday"]]
             player_data["stat_values"]["Shared"]["is_playoffs"] = None
             if time_frame["playoffs"] == "Only":
                 player_data["stat_values"]["Shared"]["is_playoffs"] = "Only"
@@ -6173,6 +6176,7 @@ def combine_player_datas(player_datas, player_type, any_missing_games, time_fram
     player_data["stat_values"]["Shared"]["YearStart"] = []
     player_data["stat_values"]["Shared"]["YearEnd"] = []
     player_data["stat_values"]["Shared"]["Birthdays"] = []
+    player_data["stat_values"]["Shared"]["Deathdays"] = []
     player_data["stat_values"]["Shared"]["Player"] = []
     player_data["stat_values"]["Shared"]["Search Term"] = []
     player_data["stat_values"]["Shared"]["Types"] = []
@@ -6519,6 +6523,7 @@ def combine_player_datas(player_datas, player_type, any_missing_games, time_fram
         player_data["ids"].append(sub_player_data["id"])
         player_data["stat_values"]["Shared"]["Player"].append((sub_player_data["Player"] if "hide-name" not in extra_stats else "?????"))
         player_data["stat_values"]["Shared"]["Birthdays"].append(sub_player_data["Birthday"])
+        player_data["stat_values"]["Shared"]["Deathdays"].append(sub_player_data["Deathday"])
         player_data["stat_values"]["Shared"]["Search Term"].append(sub_player_data["Search Term"])
         player_data["stat_values"]["Shared"]["LastUpdated"] = sub_player_data["LastUpdated"]
         player_data["stat_values"]["Shared"]["Types"].append(sub_player_data["Type"])
@@ -7364,6 +7369,7 @@ def handle_multi_player_data(player_id, time_frames, player_type, player_page, i
     except Exception:
         player_data["LastUpdated"] = None
     player_data["Birthday"] = get_player_birthday(player_page)
+    player_data["Deathday"] = get_player_deathday(player_page)
     player_data["player_image_url"] = get_player_image(player_page)
     player_data["player_current_team"], player_data["player_current_team_link"], player_data["player_current_number"], player_data["player_all_numbers"] = get_player_current_team_number(player_page, needs_numbers)
     player_data["player_position"] = get_player_position(player_page)
@@ -16137,6 +16143,13 @@ def get_player_birthday(player_page):
     birthday_span = player_page.find("span", {"id" : "necro-birth"})
     if birthday_span:
         return dateutil.parser.parse(birthday_span["data-birth"]).date()
+    else:
+        return None
+
+def get_player_deathday(player_page):
+    birthday_span = player_page.find("span", {"id" : "necro-death"})
+    if birthday_span:
+        return dateutil.parser.parse(birthday_span["data-death"]).date()
     else:
         return None
 
