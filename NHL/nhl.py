@@ -32646,9 +32646,29 @@ def handle_table_data(player_data, player_type, over_header, header, highest_val
             elif header == "TmRORec":
                 rec_split = value.split(":")
                 value = str(round_value(float(rec_split[0]))) + ":" + str(round_value(float(rec_split[1])))
-            value = str(value) 
+            value = str(value)
+
+            is_invalid_goalie_stat = False
+            if player_type["da_type"]["type"] == "Skater" and not has_against_quals(extra_stats):
+                has_goalie = False
+                for player_pos in player_data["player_position"]:
+                    player_pos_split = player_pos.split("/")
+                    for sub_player_pos in player_pos_split:
+                        if sub_player_pos == "G":
+                            has_goalie = True
+                
+                if not has_some_position:
+                    has_non_goalie = True
             
-            if header.startswith("GP"):
+                if has_goalie:
+                    if header not in ("G", "A", "P", "GC", "HAT", "AdjG", "AdjA", "AdjP", "AdjGC", "PlusMinus", "PIM", "OPS", "DPS", "PS", "TOI/GP", "G/GP", "A/GP", "P/GP", "GC/GP", "G/82GP", "A/82GP", "P/82GP", "G/60M", "A/60M", "P/60M", "PIM/60M") and not header.startswith("Player") and not header.startswith("GP") and not ("type" in headers[player_type["da_type"]["type"]][header] and headers[player_type["da_type"]["type"]][header]["type"] == "Awards/Honors"):
+                        is_invalid_goalie_stat = True
+                    if "PlusMinus" in header:
+                        is_invalid_goalie_stat = True
+            
+            if is_invalid_goalie_stat:
+                value += "*"
+            elif header.startswith("GP"):
                 if player_data["stat_values"]["any_missing_games"] or is_invalid_stat(header, player_type, player_data["stat_values"], True, player_data):
                     value += "*"
             elif "TOI" in header or header == "GP_5v5":
