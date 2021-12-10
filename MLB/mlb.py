@@ -201,7 +201,7 @@ headers = {
             "positive" : True,
             "display" : False
         },
-        "DyRst" : {
+        "DaysOnEarth" : {
             "positive" : True,
             "display" : False
         },
@@ -2063,7 +2063,7 @@ headers = {
             "positive" : True,
             "display" : False
         },
-        "DyRst" : {
+        "DaysOnEarth" : {
             "positive" : True,
             "display" : False
         },
@@ -4249,6 +4249,7 @@ decimal_stats = [
 
 formulas = {
     "Batter" : {
+        "DaysOnEarth" : "Special",
         "TmW" : "Special",
         "TmL" : "Special",
         "TmT" : "Special",
@@ -4369,6 +4370,7 @@ formulas = {
         "MVPShr%" : "MVPShares / RegularSeasons",
         "WS%" : "WS / UniqueSeasons"
     }, "Pitcher" : {
+        "DaysOnEarth" : "Special",
         "TmW" : "Special",
         "TmL" : "Special",
         "TmT" : "Special",
@@ -5662,6 +5664,7 @@ missing_player_data = {
     "seperate_rows" : [],
     "DateStart" : [],
     "DateEnd" : [],
+    "Birthday" : None,
     "stat_values" : {
         "Player" : ["No Player Match!"],
         "any_missing_games" : False,
@@ -11541,6 +11544,7 @@ def handle_name_threads(sub_name, parse_time_frames, index, player_type, remove_
                         "stat_values" : {
                             "DateStart" : subb_player_data["DateStart"],
                             "DateEnd" : subb_player_data["DateEnd"],
+                            "Birthdays" : [subb_player_data["Birthday"]],
                             "is_playoffs" : subb_player_data["is_playoffs"],
                             "Player" : [subb_player_data["Player"]],
                             "any_missing_games" : False,
@@ -12104,6 +12108,7 @@ def handle_the_same_games_quals(sub_name, qual_str, subbb_frames, time_frame, pl
             player_data["stat_values"] = {}
             player_data["stat_values"]["DateStart"] = player_data["DateStart"]
             player_data["stat_values"]["DateEnd"] = player_data["DateEnd"]
+            player_data["stat_values"]["Birthdays"] = [player_data["Birthday"]]
             player_data["stat_values"]["is_playoffs"] = None
             if time_frame["playoffs"] == "Only":
                 player_data["stat_values"]["is_playoffs"] = "Only"
@@ -12429,6 +12434,7 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
 
     player_data["stat_values"]["DateStart"] = []
     player_data["stat_values"]["DateEnd"] = []
+    player_data["stat_values"]["Birthdays"] = []
     player_data["stat_values"]["Player"] = []
     player_data["stat_values"]["Search Term"] = []
     player_data["stat_values"]["Raw Player"] = ""
@@ -13031,6 +13037,7 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
         player_data["ids"].append(sub_player_data["id"])
         player_data["mlb_ids"].append(sub_player_data["mlb_id"])
         player_data["stat_values"]["Player"].append((sub_player_data["Player"] if "hide-name" not in extra_stats else "?????"))
+        player_data["stat_values"]["Birthdays"].append(sub_player_data["Birthday"])
         player_data["stat_values"]["Search Term"].append(sub_player_data["Search Term"])
         player_data["stat_values"]["LastUpdated"] = sub_player_data["LastUpdated"]
 
@@ -13400,7 +13407,7 @@ def calculate_values(all_rows, player_type, time_frame, og_player_data, extra_st
         
         if not seasons_leading or stat == "TmRec":
             formula = formulas[player_type["da_type"]][stat]
-            value = calculate_formula(stat, player_type, formula, player_data["stat_values"], all_rows)
+            value = calculate_formula(stat, og_player_data, player_type, formula, player_data["stat_values"], all_rows)
             player_data["stat_values"][stat] = value
 
     if not seasons_leading:
@@ -14486,11 +14493,11 @@ def handle_player_data(player_data, time_frame, player_type, player_page, valid_
 
     if "Season Stat" in time_frame["qualifiers"] or "Previous Season Stat" in time_frame["qualifiers"] or "Upcoming Season Stat" in time_frame["qualifiers"] or "Season Formula" in time_frame["qualifiers"]:
         all_rows = sorted(all_rows, key=lambda row: row["DateTime"])
-        all_rows = handle_season_stats(all_rows, player_type, time_frame["qualifiers"])
+        all_rows = handle_season_stats(all_rows, player_data, player_type, time_frame["qualifiers"])
 
     if "Total Games Stat" in time_frame["qualifiers"]:
         all_rows = sorted(all_rows, key=lambda row: row["DateTime"])
-        all_rows = handle_career_stats(all_rows, player_type, time_frame["qualifiers"])
+        all_rows = handle_career_stats(all_rows, player_data, player_type, time_frame["qualifiers"])
     
     if "Max Streak" in time_frame["qualifiers"]:
         all_rows = sorted(all_rows, key=lambda row: row["DateTime"])
@@ -16715,7 +16722,7 @@ def perform_post_qualifier(player_data, player_type, row, qualifiers, all_rows):
     if "Stat" in qualifiers:
         stats = set()
         find_stat_match(qualifiers["Stat"], player_type, stats)
-        row_lower = fill_row(row, player_type, stats=stats)
+        row_lower = fill_row(row, player_data, player_type, stats=stats)
         for qual_object in qualifiers["Stat"]:
             has_match = False
             for sub_qual_object in qual_object["values"]:
@@ -16753,11 +16760,11 @@ def perform_post_qualifier(player_data, player_type, row, qualifiers, all_rows):
                 if match:
                     stats.add(header)
             
-        row_normal = fill_row(row, player_type, lower=False, stats=stats)
+        row_normal = fill_row(row, player_data, player_type, lower=False, stats=stats)
         for qual_object in qualifiers["Formula"]:
             formula = qual_object["values"][0]
             try:
-                has_match = bool(calculate_formula("custom_formula", player_type, formula, row_normal, all_rows, safe_eval=True))
+                has_match = bool(calculate_formula("custom_formula", player_data, player_type, formula, row_normal, all_rows, safe_eval=True))
             except Exception:
                 return False
 
@@ -16774,7 +16781,7 @@ def perform_post_qualifier(player_data, player_type, row, qualifiers, all_rows):
         stats = set()
         find_stat_match(qualifiers["Previous Stat"], player_type, stats)
         prev_row = row["Previous Row"]
-        row_lower = fill_row(prev_row, player_type, stats=stats)
+        row_lower = fill_row(prev_row, player_data, player_type, stats=stats)
         for qual_object in qualifiers["Previous Stat"]:
             has_match = False
             for sub_qual_object in qual_object["values"]:
@@ -16803,7 +16810,7 @@ def perform_post_qualifier(player_data, player_type, row, qualifiers, all_rows):
         stats = set()
         find_stat_match(qualifiers["Upcoming Stat"], player_type, stats)
         upc_row = row["Upcoming Row"]
-        row_lower = fill_row(upc_row, player_type, stats=stats)
+        row_lower = fill_row(upc_row, player_data, player_type, stats=stats)
         for qual_object in qualifiers["Upcoming Stat"]:
             has_match = False
             for sub_qual_object in qual_object["values"]:
@@ -18829,7 +18836,7 @@ def handle_max_min_data(all_rows, player_data, player_type, qualifiers, extra_st
                 min_stats = []
                 if not time_frame:
                     for row in all_rows:
-                        row_lower = fill_row(row, player_type, stats=da_max_stats)
+                        row_lower = fill_row(row, player_data, player_type, stats=da_max_stats)
                         if stat not in row_lower:
                             for header_stat in headers[player_type["da_type"]]:
                                 if "display-value" in headers[player_type["da_type"]][header_stat] and headers[player_type["da_type"]][header_stat]["display-value"].lower() == stat:
@@ -18845,7 +18852,7 @@ def handle_max_min_data(all_rows, player_data, player_type, qualifiers, extra_st
                                 "counter" : 0
                             })
                 else:
-                    handle_min_max_calc(min_stats, stat_quals, player_type, stat, time_frame, all_rows)
+                    handle_min_max_calc(min_stats, stat_quals, player_data, player_type, stat, time_frame, all_rows)
 
                 if start_level == float("inf"):
                     start_level = len(min_stats) - 1
@@ -18881,7 +18888,7 @@ def handle_max_min_data(all_rows, player_data, player_type, qualifiers, extra_st
                 max_stats = []
                 if not time_frame:
                     for row in all_rows:
-                        row_lower = fill_row(row, player_type, stats=da_min_stats)
+                        row_lower = fill_row(row, player_data, player_type, stats=da_min_stats)
                         if stat not in row_lower:
                             for header_stat in headers[player_type["da_type"]]:
                                 if "display-value" in headers[player_type["da_type"]][header_stat] and headers[player_type["da_type"]][header_stat]["display-value"].lower() == stat:
@@ -18897,7 +18904,7 @@ def handle_max_min_data(all_rows, player_data, player_type, qualifiers, extra_st
                                 "counter" : 0
                             })
                 else:
-                    handle_min_max_calc(max_stats, stat_quals, player_type, stat, time_frame, all_rows)
+                    handle_min_max_calc(max_stats, stat_quals, player_data, player_type, stat, time_frame, all_rows)
 
                 if start_level == float("inf"):
                     start_level = len(max_stats) - 1
@@ -18982,7 +18989,7 @@ def handle_max_min_data(all_rows, player_data, player_type, qualifiers, extra_st
         if not time_frame:
             stat_val["stat_obj"]["explain_str"] += stat.upper() + ":" + ",".join(transformed_vals)
             for row in all_rows:
-                row_lower = fill_row(row, player_type, stats=stats)
+                row_lower = fill_row(row, player_data, player_type, stats=stats)
 
                 if stat not in row_lower:
                     for header_stat in headers[player_type["da_type"]]:
@@ -19009,7 +19016,7 @@ def handle_max_min_data(all_rows, player_data, player_type, qualifiers, extra_st
     
     return [row for n, row in enumerate(new_rows) if row not in new_rows[:n]]
 
-def handle_min_max_calc(the_stats, stat_quals, player_type, stat, time_frame, all_rows):
+def handle_min_max_calc(the_stats, stat_quals, player_data, player_type, stat, time_frame, all_rows):
     if not all_rows:
         return
 
@@ -19046,7 +19053,7 @@ def handle_min_max_calc(the_stats, stat_quals, player_type, stat, time_frame, al
             
             for days in range((end_date - start_date).days + 1):
                 current_start_date = start_date + datetime.timedelta(days)
-                stat_value, matching_rows = handle_date_rows(player_type, stat, current_start_date, date_diff, all_rows)
+                stat_value, matching_rows = handle_date_rows(player_data, player_type, stat, current_start_date, date_diff, all_rows)
                 if matching_rows:
                     if not stat_quals:
                         single_index = 0
@@ -19058,7 +19065,7 @@ def handle_min_max_calc(the_stats, stat_quals, player_type, stat, time_frame, al
                             "value" : stat_value,
                             "counter" : 0
                         })
-                    elif valid_matching_rows(matching_rows, stat_quals, player_type):
+                    elif valid_matching_rows(matching_rows, stat_quals, player_type, player_data):
                         single_index = 0
                         for single_stat in the_stats:
                             if single_stat["value"] == stat_value:
@@ -19084,7 +19091,7 @@ def handle_min_max_calc(the_stats, stat_quals, player_type, stat, time_frame, al
             tmp_end_date = end_date - datetime.timedelta(days=end_date.weekday())
             end_date = tmp_end_date + datetime.timedelta(days=6)
             for date in dateutil.rrule.rrule(dateutil.rrule.WEEKLY, dtstart=start_date, until=end_date):
-                stat_value, matching_rows = handle_week_rows(player_type, stat, date, all_rows)
+                stat_value, matching_rows = handle_week_rows(player_data, player_type, stat, date, all_rows)
                 if matching_rows:
                     if not stat_quals:
                         single_index = 0
@@ -19096,7 +19103,7 @@ def handle_min_max_calc(the_stats, stat_quals, player_type, stat, time_frame, al
                             "value" : stat_value,
                             "counter" : 0
                         })
-                    elif valid_matching_rows(matching_rows, stat_quals, player_type):
+                    elif valid_matching_rows(matching_rows, stat_quals, player_type, player_data):
                         single_index = 0
                         for single_stat in the_stats:
                             if single_stat["value"] == stat_value:
@@ -19110,7 +19117,7 @@ def handle_min_max_calc(the_stats, stat_quals, player_type, stat, time_frame, al
             start_date = datetime.datetime(start_date.year, start_date.month, 1)
             end_date = datetime.datetime(end_date.year, end_date.month, calendar.monthrange(end_date.year, end_date.month)[1])
             for date in dateutil.rrule.rrule(dateutil.rrule.MONTHLY, dtstart=start_date, until=end_date):
-                stat_value, matching_rows = handle_month_rows(player_type, stat, date, all_rows)
+                stat_value, matching_rows = handle_month_rows(player_data, player_type, stat, date, all_rows)
                 if matching_rows:
                     if not stat_quals:
                         single_index = 0
@@ -19122,7 +19129,7 @@ def handle_min_max_calc(the_stats, stat_quals, player_type, stat, time_frame, al
                             "value" : stat_value,
                             "counter" : 0
                         })
-                    elif valid_matching_rows(matching_rows, stat_quals, player_type):
+                    elif valid_matching_rows(matching_rows, stat_quals, player_type, player_data):
                         single_index = 0
                         for single_stat in the_stats:
                             if single_stat["value"] == stat_value:
@@ -19136,7 +19143,7 @@ def handle_min_max_calc(the_stats, stat_quals, player_type, stat, time_frame, al
             start_date = datetime.datetime(start_date.year, 1, 1)
             end_date = datetime.datetime(end_date.year, 12, calendar.monthrange(end_date.year, 12)[1])
             for date in dateutil.rrule.rrule(dateutil.rrule.YEARLY, dtstart=start_date, until=end_date):
-                stat_value, matching_rows = handle_year_rows(player_type, stat, date, all_rows)
+                stat_value, matching_rows = handle_year_rows(player_data, player_type, stat, date, all_rows)
                 if matching_rows:
                     if not stat_quals:
                         single_index = 0
@@ -19148,7 +19155,7 @@ def handle_min_max_calc(the_stats, stat_quals, player_type, stat, time_frame, al
                             "value" : stat_value,
                             "counter" : 0
                         })
-                    elif valid_matching_rows(matching_rows, stat_quals, player_type):
+                    elif valid_matching_rows(matching_rows, stat_quals, player_type, player_data):
                         single_index = 0
                         for single_stat in the_stats:
                             if single_stat["value"] == stat_value:
@@ -19162,7 +19169,7 @@ def handle_min_max_calc(the_stats, stat_quals, player_type, stat, time_frame, al
         qual_num = qual_num_start
         while (True):
             for i in range(len(all_rows)):
-                stat_value, matching_rows = handle_game_rows(i, player_type, stat, qual_num, all_rows, only_seasons)
+                stat_value, matching_rows = handle_game_rows(i, player_data, player_type, stat, qual_num, all_rows, only_seasons)
                 if matching_rows:
                     if not stat_quals:
                         single_index = 0
@@ -19174,7 +19181,7 @@ def handle_min_max_calc(the_stats, stat_quals, player_type, stat, time_frame, al
                             "value" : stat_value,
                             "counter" : 0
                         })
-                    elif valid_matching_rows(matching_rows, stat_quals, player_type):
+                    elif valid_matching_rows(matching_rows, stat_quals, player_type, player_data):
                         single_index = 0
                         for single_stat in the_stats:
                             if single_stat["value"] == stat_value:
@@ -19203,7 +19210,7 @@ def handle_min_max_calc(the_stats, stat_quals, player_type, stat, time_frame, al
                     current_end_season = seasons[next_season_index - 1] + 1
                 else:
                     current_end_season = seasons[next_season_index]
-                stat_value, matching_rows = handle_season_rows(season, current_end_season, player_type, stat, all_rows)
+                stat_value, matching_rows = handle_season_rows(season, current_end_season, player_data, player_type, stat, all_rows)
                 if matching_rows:
                     if not stat_quals:
                         single_index = 0
@@ -19215,7 +19222,7 @@ def handle_min_max_calc(the_stats, stat_quals, player_type, stat, time_frame, al
                             "value" : stat_value,
                             "counter" : 0
                         })
-                    elif valid_matching_rows(matching_rows, stat_quals, player_type):
+                    elif valid_matching_rows(matching_rows, stat_quals, player_type, player_data):
                         single_index = 0
                         for single_stat in the_stats:
                             if single_stat["value"] == stat_value:
@@ -19239,7 +19246,7 @@ def handle_min_max_calc(the_stats, stat_quals, player_type, stat, time_frame, al
                 season_rows = [row for row in all_rows if row["Year"] == season]
                 teams = set([row[row_stat] for row in season_rows])
                 for team in teams:
-                    stat_value, matching_rows = handle_team_rows(team, row_stat, player_type, stat, season_rows)
+                    stat_value, matching_rows = handle_team_rows(team, row_stat, player_data, player_type, stat, season_rows)
                     if matching_rows:
                         if not stat_quals:
                             single_index = 0
@@ -19251,7 +19258,7 @@ def handle_min_max_calc(the_stats, stat_quals, player_type, stat, time_frame, al
                                 "value" : stat_value,
                                 "counter" : 0
                             })
-                        elif valid_matching_rows(matching_rows, stat_quals, player_type):
+                        elif valid_matching_rows(matching_rows, stat_quals, player_type, player_data):
                             single_index = 0
                             for single_stat in the_stats:
                                 if single_stat["value"] == stat_value:
@@ -19264,7 +19271,7 @@ def handle_min_max_calc(the_stats, stat_quals, player_type, stat, time_frame, al
         else:
             teams = set([row[row_stat] for row in all_rows])
             for team in teams:
-                stat_value, matching_rows = handle_team_rows(team, row_stat, player_type, stat, all_rows)
+                stat_value, matching_rows = handle_team_rows(team, row_stat, player_data, player_type, stat, all_rows)
                 if matching_rows:
                     if not stat_quals:
                         single_index = 0
@@ -19276,7 +19283,7 @@ def handle_min_max_calc(the_stats, stat_quals, player_type, stat, time_frame, al
                             "value" : stat_value,
                             "counter" : 0
                         })
-                    elif valid_matching_rows(matching_rows, stat_quals, player_type):
+                    elif valid_matching_rows(matching_rows, stat_quals, player_type, player_data):
                         single_index = 0
                         for single_stat in the_stats:
                             if single_stat["value"] == stat_value:
@@ -19346,7 +19353,7 @@ def handle_min_max_final(stat_val, current_explain_strs, player_data, player_typ
             
             for days in range((end_date - start_date).days + 1):
                 current_start_date = start_date + datetime.timedelta(days)
-                stat_value, matching_rows = handle_date_rows(player_type, stat, current_start_date, date_diff, all_rows)
+                stat_value, matching_rows = handle_date_rows(player_data, player_type, stat, current_start_date, date_diff, all_rows)
                 if matching_rows:
                     has_match = False
                     has_value_match = False
@@ -19358,7 +19365,7 @@ def handle_min_max_final(stat_val, current_explain_strs, player_data, player_typ
                     if has_value_match or match_all:
                         if not stat_quals:
                             has_match = True
-                        elif valid_matching_rows(matching_rows, stat_quals, player_type):
+                        elif valid_matching_rows(matching_rows, stat_quals, player_type, player_data):
                             has_match = True
 
                     found_match = False
@@ -19411,7 +19418,7 @@ def handle_min_max_final(stat_val, current_explain_strs, player_data, player_typ
                 tmp_real_end_date = date - datetime.timedelta(days=date.weekday())
                 real_end_date = tmp_real_end_date + datetime.timedelta(days=6)
 
-                stat_value, matching_rows = handle_week_rows(player_type, stat, date, all_rows)
+                stat_value, matching_rows = handle_week_rows(player_data, player_type, stat, date, all_rows)
                 if matching_rows:
                     has_match = False
                     has_value_match = False
@@ -19423,7 +19430,7 @@ def handle_min_max_final(stat_val, current_explain_strs, player_data, player_typ
                     if has_value_match or match_all:
                         if not stat_quals:
                             has_match = True
-                        elif valid_matching_rows(matching_rows, stat_quals, player_type):
+                        elif valid_matching_rows(matching_rows, stat_quals, player_type, player_data):
                             has_match = True
                     
                     found_match = False
@@ -19461,7 +19468,7 @@ def handle_min_max_final(stat_val, current_explain_strs, player_data, player_typ
             start_date = datetime.datetime(start_date.year, start_date.month, 1)
             end_date = datetime.datetime(end_date.year, end_date.month, calendar.monthrange(end_date.year, end_date.month)[1])
             for date in dateutil.rrule.rrule(dateutil.rrule.MONTHLY, dtstart=start_date, until=end_date):
-                stat_value, matching_rows = handle_month_rows(player_type, stat, date, all_rows)
+                stat_value, matching_rows = handle_month_rows(player_data, player_type, stat, date, all_rows)
                 if matching_rows:
                     has_match = False
                     has_value_match = False
@@ -19473,7 +19480,7 @@ def handle_min_max_final(stat_val, current_explain_strs, player_data, player_typ
                     if has_value_match or match_all:
                         if not stat_quals:
                             has_match = True
-                        elif valid_matching_rows(matching_rows, stat_quals, player_type):
+                        elif valid_matching_rows(matching_rows, stat_quals, player_type, player_data):
                             has_match = True
                     
                     found_match = False
@@ -19505,7 +19512,7 @@ def handle_min_max_final(stat_val, current_explain_strs, player_data, player_typ
             start_date = datetime.datetime(start_date.year, 1, 1)
             end_date = datetime.datetime(end_date.year, 12, calendar.monthrange(end_date.year, 12)[1])
             for date in dateutil.rrule.rrule(dateutil.rrule.YEARLY, dtstart=start_date, until=end_date):
-                stat_value, matching_rows = handle_year_rows(player_type, stat, date, all_rows)
+                stat_value, matching_rows = handle_year_rows(player_data, player_type, stat, date, all_rows)
                 if matching_rows:
                     has_match = False
                     has_value_match = False
@@ -19517,7 +19524,7 @@ def handle_min_max_final(stat_val, current_explain_strs, player_data, player_typ
                     if has_value_match or match_all:
                         if not stat_quals:
                             has_match = True
-                        elif valid_matching_rows(matching_rows, stat_quals, player_type):
+                        elif valid_matching_rows(matching_rows, stat_quals, player_type, player_data):
                             has_match = True
                     
                     found_match = False
@@ -19549,7 +19556,7 @@ def handle_min_max_final(stat_val, current_explain_strs, player_data, player_typ
         qual_num = qual_num_start
         while (True):
             for i in range(len(all_rows)):
-                stat_value, matching_rows = handle_game_rows(i, player_type, stat, qual_num, all_rows, only_seasons)
+                stat_value, matching_rows = handle_game_rows(i, player_data, player_type, stat, qual_num, all_rows, only_seasons)
                 if matching_rows:
                     has_match = False
                     has_value_match = False
@@ -19561,7 +19568,7 @@ def handle_min_max_final(stat_val, current_explain_strs, player_data, player_typ
                     if has_value_match or match_all:
                         if not stat_quals:
                             has_match = True
-                        elif valid_matching_rows(matching_rows, stat_quals, player_type):
+                        elif valid_matching_rows(matching_rows, stat_quals, player_type, player_data):
                             has_match = True
 
                     found_match = False
@@ -19676,7 +19683,7 @@ def handle_min_max_final(stat_val, current_explain_strs, player_data, player_typ
                     current_end_season = seasons[next_season_index - 1] + 1
                 else:
                     current_end_season = seasons[next_season_index]
-                stat_value, matching_rows = handle_season_rows(season, current_end_season, player_type, stat, all_rows)
+                stat_value, matching_rows = handle_season_rows(season, current_end_season, player_data, player_type, stat, all_rows)
                 if matching_rows:
                     has_match = False
                     has_value_match = False
@@ -19688,7 +19695,7 @@ def handle_min_max_final(stat_val, current_explain_strs, player_data, player_typ
                     if has_value_match or match_all:
                         if not stat_quals:
                             has_match = True
-                        elif valid_matching_rows(matching_rows, stat_quals, player_type):
+                        elif valid_matching_rows(matching_rows, stat_quals, player_type, player_data):
                             has_match = True
 
                     found_match = False
@@ -19756,7 +19763,7 @@ def handle_min_max_final(stat_val, current_explain_strs, player_data, player_typ
                 season_rows = [row for row in all_rows if row["Year"] == season]
                 teams = set([row[row_stat] for row in season_rows])
                 for team in teams:
-                    stat_value, matching_rows = handle_team_rows(team, row_stat, player_type, stat, season_rows)
+                    stat_value, matching_rows = handle_team_rows(team, row_stat, player_data, player_type, stat, season_rows)
                     if matching_rows:
                         has_match = False
                         has_value_match = False
@@ -19768,7 +19775,7 @@ def handle_min_max_final(stat_val, current_explain_strs, player_data, player_typ
                         if has_value_match or match_all:
                             if not stat_quals:
                                 has_match = True
-                            elif valid_matching_rows(matching_rows, stat_quals, player_type):
+                            elif valid_matching_rows(matching_rows, stat_quals, player_type, player_data):
                                 has_match = True
                         
                         found_match = False
@@ -19799,7 +19806,7 @@ def handle_min_max_final(stat_val, current_explain_strs, player_data, player_typ
         else:
             teams = set([row[row_stat] for row in all_rows])
             for team in teams:
-                stat_value, matching_rows = handle_team_rows(team, row_stat, player_type, stat, all_rows)
+                stat_value, matching_rows = handle_team_rows(team, row_stat, player_data, player_type, stat, all_rows)
                 if matching_rows:
                     has_match = False
                     has_value_match = False
@@ -19811,7 +19818,7 @@ def handle_min_max_final(stat_val, current_explain_strs, player_data, player_typ
                     if has_value_match or match_all:
                         if not stat_quals:
                             has_match = True
-                        elif valid_matching_rows(matching_rows, stat_quals, player_type):
+                        elif valid_matching_rows(matching_rows, stat_quals, player_type, player_data):
                             has_match = True
 
                     found_match = False
@@ -19897,7 +19904,7 @@ def find_sub_sub_stat_match(stat, player_type, stats):
             stats.add(sub_stat)
             return
 
-def handle_season_stats(all_rows, player_type, qualifiers):
+def handle_season_stats(all_rows, player_data, player_type, qualifiers):
     if not all_rows:
         return []
 
@@ -19922,7 +19929,7 @@ def handle_season_stats(all_rows, player_type, qualifiers):
         }
 
         if "Season Stat" in qualifiers or "Previous Season Stat" in qualifiers or "Upcoming Season Stat" in qualifiers:
-            season_row_map[season]["comb_row"] = comb_rows(season_matching_rows, player_type, stats=stats)
+            season_row_map[season]["comb_row"] = comb_rows(season_matching_rows, player_data, player_type, stats=stats)
             season_row_map[season]["comb_row"]["Year"] = season
         if "Season Formula" in qualifiers:
             stats = set()
@@ -19938,7 +19945,7 @@ def handle_season_stats(all_rows, player_type, qualifiers):
                     if match:
                         stats.add(header)
                         
-            season_row_map[season]["comb_row_upper"] = comb_rows(season_matching_rows, player_type, False, stats=stats)
+            season_row_map[season]["comb_row_upper"] = comb_rows(season_matching_rows, player_data, player_type, False, stats=stats)
             season_row_map[season]["comb_row_upper"]["Year"] = season
 
     explain_str_obj = None
@@ -20046,7 +20053,7 @@ def handle_season_stats(all_rows, player_type, qualifiers):
             for qual_object in qualifiers["Season Formula"]:
                 formula = qual_object["values"][0]
                 try:
-                    has_match = bool(calculate_formula("custom_formula", player_type, formula, season_row_map[season]["comb_row_upper"], season_row_map[season]["ind_rows"], safe_eval=True))
+                    has_match = bool(calculate_formula("custom_formula", player_data, player_type, formula, season_row_map[season]["comb_row_upper"], season_row_map[season]["ind_rows"], safe_eval=True))
                 except Exception:
                     has_match = False
                     add_row = False
@@ -20084,7 +20091,7 @@ def handle_season_stats(all_rows, player_type, qualifiers):
 
     return new_rows
 
-def handle_career_stats(all_rows, player_type, qualifiers):
+def handle_career_stats(all_rows, player_data, player_type, qualifiers):
     if not all_rows:
         return []
 
@@ -20099,7 +20106,7 @@ def handle_career_stats(all_rows, player_type, qualifiers):
 
     for row in all_rows:
         matching_rows.append(row)
-        comb_row = comb_rows(matching_rows, player_type, stats=stats)
+        comb_row = comb_rows(matching_rows, player_data, player_type, stats=stats)
         add_row = True
         for qual_object in qualifiers["Total Games Stat"]:    
             has_match = False
@@ -20261,7 +20268,7 @@ def handle_max_streak_calc(new_rows, stat_objs, player_data, player_type, all_ro
                 break_next = False
             prev_year = row["Year"]
 
-            matching_rows = handle_streak_game_rows(i, player_type, stat_objs, all_rows, only_seasons, is_formula)
+            matching_rows = handle_streak_game_rows(i, player_data, player_type, stat_objs, all_rows, only_seasons, is_formula)
             if matching_rows:
                 if not stat_quals:
                     found_match = False
@@ -20277,7 +20284,7 @@ def handle_max_streak_calc(new_rows, stat_objs, player_data, player_type, all_ro
                         if not streak_length in all_streak_obj:
                             all_streak_obj[streak_length] = []
                         all_streak_obj[streak_length].append(matching_rows)
-                elif valid_matching_rows(matching_rows, stat_quals, player_type):
+                elif valid_matching_rows(matching_rows, stat_quals, player_type, player_data):
                     found_match = False
                     for key in all_streak_obj:
                         for old_rows in all_streak_obj[key]:
@@ -20299,7 +20306,7 @@ def handle_max_streak_calc(new_rows, stat_objs, player_data, player_type, all_ro
     elif qual_type == "Seasons" or qual_type == "Seasons-Start" or qual_type == "Seasons-End":
         seasons = sorted(list(set([row["Year"] for row in all_rows])))
         for i in range(len(seasons)):
-            matching_rows = handle_streak_season_rows(i, seasons, player_type, stat_objs, all_rows)
+            matching_rows = handle_streak_season_rows(i, seasons, player_data, player_type, stat_objs, all_rows)
             if matching_rows:
                 if not stat_quals:
                     found_match = False
@@ -20315,7 +20322,7 @@ def handle_max_streak_calc(new_rows, stat_objs, player_data, player_type, all_ro
                     if not streak_length in all_streak_obj:
                         all_streak_obj[streak_length] = []
                     all_streak_obj[streak_length].append(matching_rows)
-                elif valid_matching_rows(matching_rows, stat_quals, player_type):
+                elif valid_matching_rows(matching_rows, stat_quals, player_type, player_data):
                     found_match = False
                     for key in all_streak_obj:
                         for old_rows in all_streak_obj[key]:
@@ -20347,7 +20354,7 @@ def handle_max_streak_calc(new_rows, stat_objs, player_data, player_type, all_ro
                     break_next = False
                 prev_year = row["Year"]
 
-                matching_rows = handle_streak_game_rows(i, player_type, stat_objs, team_rows, only_seasons, False)
+                matching_rows = handle_streak_game_rows(i, player_data, player_type, stat_objs, team_rows, only_seasons, False)
                 if matching_rows:
                     if not stat_quals:
                         found_match = False
@@ -20363,7 +20370,7 @@ def handle_max_streak_calc(new_rows, stat_objs, player_data, player_type, all_ro
                             if not streak_length in all_streak_obj:
                                 all_streak_obj[streak_length] = []
                             all_streak_obj[streak_length].append(matching_rows)
-                    elif valid_matching_rows(matching_rows, stat_quals, player_type):
+                    elif valid_matching_rows(matching_rows, stat_quals, player_type, player_data):
                         found_match = False
                         for key in all_streak_obj:
                             for old_rows in all_streak_obj[key]:
@@ -20580,7 +20587,7 @@ def handle_max_stretch_calc(new_rows, stat_objs, player_data, player_type, all_r
                 break_next = False
             prev_year = row["Year"]
 
-            total_matching_rows = handle_stretch_game_rows(i, player_type, stat_objs, all_rows, only_seasons)
+            total_matching_rows = handle_stretch_game_rows(i, player_data, player_type, stat_objs, all_rows, only_seasons)
             for matching_rows in total_matching_rows:
                 if not stat_quals:
                     found_match = False
@@ -20596,7 +20603,7 @@ def handle_max_stretch_calc(new_rows, stat_objs, player_data, player_type, all_r
                         if not streak_length in all_streak_obj:
                             all_streak_obj[streak_length] = []
                         all_streak_obj[streak_length].append(matching_rows)
-                elif valid_matching_rows(matching_rows, stat_quals, player_type):
+                elif valid_matching_rows(matching_rows, stat_quals, player_type, player_data):
                     found_match = False
                     for key in all_streak_obj:
                         for old_rows in all_streak_obj[key]:
@@ -20619,7 +20626,7 @@ def handle_max_stretch_calc(new_rows, stat_objs, player_data, player_type, all_r
     elif qual_type == "Seasons" or qual_type == "Seasons-Start" or qual_type == "Seasons-End":
         seasons = sorted(list(set([row["Year"] for row in all_rows])))
         for i in range(len(seasons)):
-            total_matching_rows = handle_stretch_season_rows(i, seasons, player_type, stat_objs, all_rows)
+            total_matching_rows = handle_stretch_season_rows(i, seasons, player_data, player_type, stat_objs, all_rows)
             for matching_rows in total_matching_rows:
                 if not stat_quals:
                     found_match = False
@@ -20636,7 +20643,7 @@ def handle_max_stretch_calc(new_rows, stat_objs, player_data, player_type, all_r
                         all_streak_obj[streak_length] = []
                     if matching_rows not in all_streak_obj[streak_length]:
                         all_streak_obj[streak_length].append(matching_rows)
-                elif valid_matching_rows(matching_rows, stat_quals, player_type):
+                elif valid_matching_rows(matching_rows, stat_quals, player_type, player_data):
                     found_match = False
                     for key in all_streak_obj:
                         for old_rows in all_streak_obj[key]:
@@ -20827,14 +20834,14 @@ def handle_quick_long_calc(new_rows, stat_objs, player_data, player_type, all_ro
     if qual_type == "Games" or qual_type == "Games-Start" or qual_type == "Games-End":
         seasons = sorted(list(set([row["Year"] for row in all_rows])))
         for season in seasons:
-            matching_rows = handle_quickest_game_rows(season, player_type, stat_objs, all_rows, is_quickest)
+            matching_rows = handle_quickest_game_rows(season, player_data, player_type, stat_objs, all_rows, is_quickest)
             if matching_rows:
                 if not stat_quals:
                     streak_length = len(matching_rows)
                     if not streak_length in all_streak_obj:
                         all_streak_obj[streak_length] = []
                     all_streak_obj[streak_length].append(matching_rows)
-                elif valid_matching_rows(matching_rows, stat_quals, player_type):
+                elif valid_matching_rows(matching_rows, stat_quals, player_type, player_data):
                     streak_length = len(matching_rows)
                     if not streak_length in all_streak_obj:
                         all_streak_obj[streak_length] = []
@@ -20844,7 +20851,7 @@ def handle_quick_long_calc(new_rows, stat_objs, player_data, player_type, all_ro
                 break
     elif qual_type == "Seasons" or qual_type == "Seasons-Start" or qual_type == "Seasons-End":
         seasons = sorted(list(set([row["Year"] for row in all_rows])))
-        matching_rows = handle_quickest_season_rows(seasons, player_type, stat_objs, all_rows)
+        matching_rows = handle_quickest_season_rows(seasons, player_data, player_type, stat_objs, all_rows)
         if matching_rows:
             if not stat_quals:
                 dates = set([row["Year"] for row in matching_rows])
@@ -20852,14 +20859,14 @@ def handle_quick_long_calc(new_rows, stat_objs, player_data, player_type, all_ro
                 if not streak_length in all_streak_obj:
                     all_streak_obj[streak_length] = []
                 all_streak_obj[streak_length].append(matching_rows)
-            elif valid_matching_rows(matching_rows, stat_quals, player_type):
+            elif valid_matching_rows(matching_rows, stat_quals, player_type, player_data):
                 dates = set([row["Year"] for row in matching_rows])
                 streak_length = len(dates)
                 if not streak_length in all_streak_obj:
                     all_streak_obj[streak_length] = []
                 all_streak_obj[streak_length].append(matching_rows)
     elif qual_type == "Total Games":
-        matching_rows = handle_quickest_career_rows(player_type, stat_objs, all_rows)
+        matching_rows = handle_quickest_career_rows(player_data, player_type, stat_objs, all_rows)
         if matching_rows:
             if not stat_quals:
                 dates = set([row["Year"] for row in matching_rows])
@@ -20867,7 +20874,7 @@ def handle_quick_long_calc(new_rows, stat_objs, player_data, player_type, all_ro
                 if not streak_length in all_streak_obj:
                     all_streak_obj[streak_length] = []
                 all_streak_obj[streak_length].append(matching_rows)
-            elif valid_matching_rows(matching_rows, stat_quals, player_type):
+            elif valid_matching_rows(matching_rows, stat_quals, player_type, player_data):
                 dates = set([row["Year"] for row in matching_rows])
                 streak_length = len(dates)
                 if not streak_length in all_streak_obj:
@@ -21000,10 +21007,10 @@ def handle_quick_long_calc(new_rows, stat_objs, player_data, player_type, all_ro
 
     stat_objs[0]["explain_str"] = current_explain_strs + [stat_objs[0]["explain_str"]]
 
-def valid_matching_rows(matching_rows, stat_quals, player_type):
+def valid_matching_rows(matching_rows, stat_quals, player_type, player_data):
     stats = set()
     find_sub_stat_match(stat_quals, player_type, stats)
-    row_lower = comb_rows(matching_rows, player_type, stats=stats)
+    row_lower = comb_rows(matching_rows, player_data, player_type, stats=stats)
     for qual_object in stat_quals:
         has_match = False
         stat = qual_object["stat"]
@@ -21025,7 +21032,7 @@ def valid_matching_rows(matching_rows, stat_quals, player_type):
     
     return True
 
-def comb_rows(matching_rows, player_type, lower=True, stats=None):
+def comb_rows(matching_rows, player_data, player_type, lower=True, stats=None):
     comb_row = {}
     for header in headers[player_type["da_type"]].keys():
         if not header in formulas[player_type["da_type"]] and not header in advanced_stats["Batter"] and not header in advanced_stats["Pitcher"]:
@@ -21101,7 +21108,7 @@ def comb_rows(matching_rows, player_type, lower=True, stats=None):
     if stats == None or set(stats).intersection(formulas[player_type["da_type"]].keys()):
         for stat in formulas[player_type["da_type"]]:
             formula = formulas[player_type["da_type"]][stat]
-            value = calculate_formula(stat, player_type, formula, comb_row, matching_rows)
+            value = calculate_formula(stat, player_data, player_type, formula, comb_row, matching_rows)
             comb_row[stat] = value
 
     if stats == None or set(stats).intersection(advanced_stats[player_type["da_type"]]):
@@ -21120,7 +21127,7 @@ def comb_rows(matching_rows, player_type, lower=True, stats=None):
     else:
         return comb_row
             
-def handle_date_rows(player_type, stat, start_date, date_diff, all_rows):
+def handle_date_rows(player_data, player_type, stat, start_date, date_diff, all_rows):
     stat_value = 0
     matching_rows = []
     end_date = start_date + date_diff
@@ -21130,7 +21137,7 @@ def handle_date_rows(player_type, stat, start_date, date_diff, all_rows):
 
     stats = set()
     find_sub_sub_stat_match(stat, player_type, stats)
-    combined_row = comb_rows(matching_rows, player_type, stats=stats)
+    combined_row = comb_rows(matching_rows, player_data, player_type, stats=stats)
     if stat not in combined_row:
         for header_stat in headers[player_type["da_type"]]:
             if "display-value" in headers[player_type["da_type"]][header_stat] and headers[player_type["da_type"]][header_stat]["display-value"].lower() == stat:
@@ -21143,7 +21150,7 @@ def handle_date_rows(player_type, stat, start_date, date_diff, all_rows):
 
     return stat_value, matching_rows
 
-def handle_week_rows(player_type, stat, date, all_rows):
+def handle_week_rows(player_data, player_type, stat, date, all_rows):
     stat_value = 0
     matching_rows = []
     for row in all_rows:
@@ -21152,7 +21159,7 @@ def handle_week_rows(player_type, stat, date, all_rows):
 
     stats = set()
     find_sub_sub_stat_match(stat, player_type, stats)
-    combined_row = comb_rows(matching_rows, player_type, stats=stats)
+    combined_row = comb_rows(matching_rows, player_data, player_type, stats=stats)
     if stat not in combined_row:
         for header_stat in headers[player_type["da_type"]]:
             if "display-value" in headers[player_type["da_type"]][header_stat] and headers[player_type["da_type"]][header_stat]["display-value"].lower() == stat:
@@ -21165,7 +21172,7 @@ def handle_week_rows(player_type, stat, date, all_rows):
 
     return stat_value, matching_rows
 
-def handle_month_rows(player_type, stat, date, all_rows):
+def handle_month_rows(player_data, player_type, stat, date, all_rows):
     stat_value = 0
     matching_rows = []
     for row in all_rows:
@@ -21174,7 +21181,7 @@ def handle_month_rows(player_type, stat, date, all_rows):
 
     stats = set()
     find_sub_sub_stat_match(stat, player_type, stats)
-    combined_row = comb_rows(matching_rows, player_type, stats=stats)
+    combined_row = comb_rows(matching_rows, player_data, player_type, stats=stats)
     if stat not in combined_row:
         for header_stat in headers[player_type["da_type"]]:
             if "display-value" in headers[player_type["da_type"]][header_stat] and headers[player_type["da_type"]][header_stat]["display-value"].lower() == stat:
@@ -21187,7 +21194,7 @@ def handle_month_rows(player_type, stat, date, all_rows):
 
     return stat_value, matching_rows
 
-def handle_year_rows(player_type, stat, date, all_rows):
+def handle_year_rows(player_data, player_type, stat, date, all_rows):
     stat_value = 0
     matching_rows = []
     for row in all_rows:
@@ -21196,7 +21203,7 @@ def handle_year_rows(player_type, stat, date, all_rows):
             
     stats = set()
     find_sub_sub_stat_match(stat, player_type, stats)
-    combined_row = comb_rows(matching_rows, player_type, stats=stats)
+    combined_row = comb_rows(matching_rows, player_data, player_type, stats=stats)
     if stat not in combined_row:
         for header_stat in headers[player_type["da_type"]]:
             if "display-value" in headers[player_type["da_type"]][header_stat] and headers[player_type["da_type"]][header_stat]["display-value"].lower() == stat:
@@ -21209,7 +21216,7 @@ def handle_year_rows(player_type, stat, date, all_rows):
 
     return stat_value, matching_rows
 
-def handle_game_rows(start_index, player_type, stat, num_games, all_rows, only_seasons):
+def handle_game_rows(start_index, player_data, player_type, stat, num_games, all_rows, only_seasons):
     stat_value = 0
     matching_rows = []
     prev_year = None
@@ -21226,7 +21233,7 @@ def handle_game_rows(start_index, player_type, stat, num_games, all_rows, only_s
 
     stats = set()
     find_sub_sub_stat_match(stat, player_type, stats)
-    combined_row = comb_rows(matching_rows, player_type, stats=stats)
+    combined_row = comb_rows(matching_rows, player_data, player_type, stats=stats)
     if stat not in combined_row:
         for header_stat in headers[player_type["da_type"]]:
             if "display-value" in headers[player_type["da_type"]][header_stat] and headers[player_type["da_type"]][header_stat]["display-value"].lower() == stat:
@@ -21239,7 +21246,7 @@ def handle_game_rows(start_index, player_type, stat, num_games, all_rows, only_s
 
     return stat_value, matching_rows
 
-def handle_streak_game_rows(start_index, player_type, over_stat_objs, all_rows, only_seasons, is_formula):
+def handle_streak_game_rows(start_index, player_data, player_type, over_stat_objs, all_rows, only_seasons, is_formula):
     matching_rows = []
     prev_year = None
     stats = set()
@@ -21252,9 +21259,9 @@ def handle_streak_game_rows(start_index, player_type, over_stat_objs, all_rows, 
         prev_year = row["Year"]
         
         if is_formula:
-            row_normal = fill_row(row, player_type, lower=False)
+            row_normal = fill_row(row, player_data, player_type, lower=False)
         else:
-            row_lower = fill_row(row, player_type, stats=stats)
+            row_lower = fill_row(row, player_data, player_type, stats=stats)
         any_passed = False
         for over_stat_obj in over_stat_objs:
             all_passed = True
@@ -21262,7 +21269,7 @@ def handle_streak_game_rows(start_index, player_type, over_stat_objs, all_rows, 
                 stat = stat_obj["stat"]
                 if is_formula:
                     try:
-                        if not bool(calculate_formula("custom_formula", player_type, stat, row_normal, all_rows, safe_eval=True)):
+                        if not bool(calculate_formula("custom_formula", player_data, player_type, stat, row_normal, all_rows, safe_eval=True)):
                             all_passed = False
                             break
                     except Exception:
@@ -21288,7 +21295,7 @@ def handle_streak_game_rows(start_index, player_type, over_stat_objs, all_rows, 
             break
     return matching_rows
 
-def handle_stretch_game_rows(start_index, player_type, over_stat_objs, all_rows, only_seasons):
+def handle_stretch_game_rows(start_index, player_data, player_type, over_stat_objs, all_rows, only_seasons):
     total_matching_rows = []
 
     matching_rows = []
@@ -21302,7 +21309,7 @@ def handle_stretch_game_rows(start_index, player_type, over_stat_objs, all_rows,
         prev_year = row["Year"]
         
         matching_rows.append(row)
-        combined_row = comb_rows(matching_rows, player_type, stats=stats)
+        combined_row = comb_rows(matching_rows, player_data, player_type, stats=stats)
 
         any_passed = False
         for over_stat_obj in over_stat_objs:
@@ -21332,7 +21339,7 @@ def handle_stretch_game_rows(start_index, player_type, over_stat_objs, all_rows,
 
     return total_matching_rows
 
-def handle_quickest_game_rows(season, player_type, over_stat_objs, all_rows, is_quickest):
+def handle_quickest_game_rows(season, player_data, player_type, over_stat_objs, all_rows, is_quickest):
     matching_rows = []
 
     stats = set()
@@ -21341,7 +21348,7 @@ def handle_quickest_game_rows(season, player_type, over_stat_objs, all_rows, is_
         year = row["Year"]
         if year == season:
             matching_rows.append(row)
-            combined_row = comb_rows(matching_rows, player_type, stats=stats)
+            combined_row = comb_rows(matching_rows, player_data, player_type, stats=stats)
             any_passed = False
             for over_stat_obj in over_stat_objs:
                 all_passed = True
@@ -21367,7 +21374,7 @@ def handle_quickest_game_rows(season, player_type, over_stat_objs, all_rows, is_
     else:
         return matching_rows
 
-def handle_season_rows(start_season, end_season, player_type, stat, all_rows):
+def handle_season_rows(start_season, end_season, player_data, player_type, stat, all_rows):
     stat_value = 0
     matching_rows = []
     for row in all_rows:
@@ -21377,7 +21384,7 @@ def handle_season_rows(start_season, end_season, player_type, stat, all_rows):
 
     stats = set()
     find_sub_sub_stat_match(stat, player_type, stats)
-    combined_row = comb_rows(matching_rows, player_type, stats=stats)
+    combined_row = comb_rows(matching_rows, player_data, player_type, stats=stats)
     if stat not in combined_row:
         for header_stat in headers[player_type["da_type"]]:
             if "display-value" in headers[player_type["da_type"]][header_stat] and headers[player_type["da_type"]][header_stat]["display-value"].lower() == stat:
@@ -21390,7 +21397,7 @@ def handle_season_rows(start_season, end_season, player_type, stat, all_rows):
 
     return stat_value, matching_rows
 
-def handle_streak_season_rows(start_index, seasons, player_type, over_stat_objs, all_rows):
+def handle_streak_season_rows(start_index, seasons, player_data, player_type, over_stat_objs, all_rows):
     matching_rows = []
     stats = set()
     find_stat_match(over_stat_objs, player_type, stats, stat_name="stats")
@@ -21401,7 +21408,7 @@ def handle_streak_season_rows(start_index, seasons, player_type, over_stat_objs,
             year = row["Year"]
             if year == season:
                 season_matching_rows.append(row)
-        season_combined_row = comb_rows(season_matching_rows, player_type, stats=stats)
+        season_combined_row = comb_rows(season_matching_rows, player_data, player_type, stats=stats)
         any_passed = False
         for over_stat_obj in over_stat_objs:
             all_passed = True
@@ -21427,7 +21434,7 @@ def handle_streak_season_rows(start_index, seasons, player_type, over_stat_objs,
             break
     return matching_rows
 
-def handle_stretch_season_rows(start_index, seasons, player_type, over_stat_objs, all_rows):
+def handle_stretch_season_rows(start_index, seasons, player_data, player_type, over_stat_objs, all_rows):
     total_matching_rows = []
 
     stats = set()
@@ -21439,7 +21446,7 @@ def handle_stretch_season_rows(start_index, seasons, player_type, over_stat_objs
             year = row["Year"]
             if year == season:
                 matching_rows.append(row)
-        combined_row = comb_rows(matching_rows, player_type, stats=stats)
+        combined_row = comb_rows(matching_rows, player_data, player_type, stats=stats)
 
         any_passed = False
         for over_stat_obj in over_stat_objs:
@@ -21469,7 +21476,7 @@ def handle_stretch_season_rows(start_index, seasons, player_type, over_stat_objs
 
     return total_matching_rows
 
-def handle_quickest_season_rows(seasons, player_type, over_stat_objs, all_rows):
+def handle_quickest_season_rows(seasons, player_data, player_type, over_stat_objs, all_rows):
     matching_rows = []
     stats = set()
     find_stat_match(over_stat_objs, player_type, stats, stat_name="stats")
@@ -21478,7 +21485,7 @@ def handle_quickest_season_rows(seasons, player_type, over_stat_objs, all_rows):
             year = row["Year"]
             if year == season:
                 matching_rows.append(row)
-        season_combined_row = comb_rows(matching_rows, player_type, stats=stats)
+        season_combined_row = comb_rows(matching_rows, player_data, player_type, stats=stats)
         any_passed = False
         for over_stat_obj in over_stat_objs:
             all_passed = True
@@ -21503,13 +21510,13 @@ def handle_quickest_season_rows(seasons, player_type, over_stat_objs, all_rows):
 
     return None
 
-def handle_quickest_career_rows(player_type, over_stat_objs, all_rows):
+def handle_quickest_career_rows(player_data, player_type, over_stat_objs, all_rows):
     matching_rows = []
     stats = set()
     find_stat_match(over_stat_objs, player_type, stats, stat_name="stats")
     for row in all_rows:
         matching_rows.append(row)
-        comb_row = comb_rows(matching_rows, player_type, stats=stats)
+        comb_row = comb_rows(matching_rows, player_data, player_type, stats=stats)
         any_passed = False
         for over_stat_obj in over_stat_objs:
             all_passed = True
@@ -21534,7 +21541,7 @@ def handle_quickest_career_rows(player_type, over_stat_objs, all_rows):
 
     return None
 
-def handle_team_rows(team, row_stat, player_type, stat, all_rows):
+def handle_team_rows(team, row_stat, player_data, player_type, stat, all_rows):
     stat_value = 0
     matching_rows = []
     for row in all_rows:
@@ -21544,7 +21551,7 @@ def handle_team_rows(team, row_stat, player_type, stat, all_rows):
 
     stats = set()
     find_sub_sub_stat_match(stat, player_type, stats)
-    combined_row = comb_rows(matching_rows, player_type, stats=stats)
+    combined_row = comb_rows(matching_rows, player_data, player_type, stats=stats)
     if stat not in combined_row:
         for header_stat in headers[player_type["da_type"]]:
             if "display-value" in headers[player_type["da_type"]][header_stat] and headers[player_type["da_type"]][header_stat]["display-value"].lower() == stat:
@@ -21557,7 +21564,7 @@ def handle_team_rows(team, row_stat, player_type, stat, all_rows):
 
     return stat_value, matching_rows
             
-def fill_row(row, player_type, lower=True, stats=None):
+def fill_row(row, player_data, player_type, lower=True, stats=None):
     for header in headers[player_type["da_type"]].keys():
         if header not in row:
             if not header in formulas[player_type["da_type"]] and not header in advanced_stats["Batter"] and not header in advanced_stats["Pitcher"]:
@@ -21568,7 +21575,7 @@ def fill_row(row, player_type, lower=True, stats=None):
             if not form_stat == "TmRec":
                 if not form_stat in row:
                     formula = formulas[player_type["da_type"]][form_stat]
-                    value = calculate_formula(form_stat, player_type, formula, row, None)
+                    value = calculate_formula(form_stat, player_data, player_type, formula, row, None)
                     row[form_stat] = value
 
     if stats == None or set(stats).intersection(advanced_stats[player_type["da_type"]]):  
@@ -26733,7 +26740,7 @@ def perform_sub_mlb_inning_qualifiers(row, player_data, qualifiers, player_game_
         if "Inning Stat" in qualifiers:
             stats = set()
             find_stat_match(qualifiers["Inning Stat"], player_type, stats)
-            row_lower = fill_row(row_copy, player_type, stats=stats)
+            row_lower = fill_row(row_copy, player_data, player_type, stats=stats)
             for qual_object in qualifiers["Inning Stat"]:
                 has_match = False
                 for sub_qual_object in qual_object["values"]:
@@ -30971,7 +30978,7 @@ def handle_da_mlb_quals(row, event_name, at_bat_event, qualifiers, player_data, 
         for qual_object in qualifiers["Event Formula"]:
             formula = qual_object["values"][0]
             try:
-                has_match = bool(calculate_formula("custom_formula", player_type, formula, at_bat_event_copy, [], safe_eval=True))
+                has_match = bool(calculate_formula("custom_formula", player_data, player_type, formula, at_bat_event_copy, [], safe_eval=True))
             except Exception:
                 return False
             if qual_object["negate"]:
@@ -37383,9 +37390,19 @@ def calculate_advanced_stats(data, all_rows, player_type, time_frame):
                 data["FIP"] = math.inf
                 data["FIP-"] = math.inf
 
-def calculate_formula(stat, player_type, formula, data, all_rows, safe_eval=False):
+def calculate_formula(stat, player_data, player_type, formula, data, all_rows, safe_eval=False):
     if formula == "Special":
-        if stat == "TmW":
+        if stat == "DaysOnEarth":
+            value = 0
+            if "Birthday" in player_data:
+                if player_data["Birthday"]:
+                    value += (datetime.datetime.now().date() - player_data["Birthday"]).days + 1
+            else:
+                for birthday in player_data["stat_values"]["Birthdays"]:
+                    if birthday:
+                        value += (datetime.datetime.now().date() - birthday).days + 1
+            return value
+        elif stat == "TmW":
             return calculate_team_win_losses(data, all_rows, "W")
         elif stat == "TmL":
             return calculate_team_win_losses(data, all_rows, "L")

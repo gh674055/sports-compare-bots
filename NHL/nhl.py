@@ -271,7 +271,7 @@ headers = {
             "positive" : True,
             "display" : False
         },
-        "DyRst" : {
+        "DaysOnEarth" : {
             "positive" : True,
             "display" : False
         },
@@ -4339,7 +4339,7 @@ headers = {
             "positive" : True,
             "display" : False
         },
-        "DyRst" : {
+        "DaysOnEarth" : {
             "positive" : True,
             "display" : False
         },
@@ -5485,6 +5485,7 @@ headers = {
 
 formulas = {
     "Skater" : {
+        "DaysOnEarth" : "Special",
         "FirstStar%" : "FirstStar / GP",
         "SecondStar%" : "SecondStar / GP",
         "ThirdStar%" : "ThirdStar / GP",
@@ -5789,6 +5790,7 @@ formulas = {
         "Cup%" : "Cup / UniqueSeasons"
     },
     "Goalie" : {
+        "DaysOnEarth" : "Special",
         "FirstStar%" : "FirstStar / GP",
         "SecondStar%" : "SecondStar / GP",
         "ThirdStar%" : "ThirdStar / GP",
@@ -6245,6 +6247,7 @@ missing_player_data = {
     "DateEnd" : [],
     "YearStart" : [],
     "YearEnd" : [],
+    "Birthday" : None,
     "stat_values" : {
         "Player" : ["No Player Match!"],
         "Player/GP" : ["No Player Match!"],
@@ -11562,6 +11565,7 @@ def handle_name_threads(sub_name, parse_time_frames, index, player_type, remove_
                             "YearEnd" : subb_player_data["YearEnd"],
                             "DateStart" : subb_player_data["DateStart"],
                             "DateEnd" : subb_player_data["DateEnd"],
+                            "Birthdays" : [subb_player_data["Birthday"]],
                             "is_playoffs" : subb_player_data["is_playoffs"],
                             "Player" : [subb_player_data["Player"]],
                             "Player_Score" : [subb_player_data["Player"]],
@@ -12151,6 +12155,7 @@ def handle_the_same_games_quals(sub_name, qual_str, subbb_frames, time_frame, pl
             player_data["stat_values"]["DateEnd"] = player_data["DateEnd"]
             player_data["stat_values"]["YearStart"] = player_data["YearStart"]
             player_data["stat_values"]["YearEnd"] = player_data["YearEnd"]
+            player_data["stat_values"]["Birthdays"] = [player_data["Birthday"]]
             player_data["stat_values"]["is_playoffs"] = None
             if time_frame["playoffs"] == "Only":
                 player_data["stat_values"]["is_playoffs"] = "Only"
@@ -12529,6 +12534,7 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
     player_data["stat_values"]["DateEnd"] = []
     player_data["stat_values"]["YearStart"] = []
     player_data["stat_values"]["YearEnd"] = []
+    player_data["stat_values"]["Birthdays"] = []
     player_data["stat_values"]["Player"] = []
     player_data["stat_values"]["Search Term"] = []
     player_data["stat_values"]["Raw Player"] = ""
@@ -13021,6 +13027,7 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
         player_data["ids"].append(sub_player_data["id"])
         player_data["nhl_ids"].append(sub_player_data["nhl_id"])
         player_data["stat_values"]["Player"].append((sub_player_data["Player"] if "hide-name" not in extra_stats else "?????"))
+        player_data["stat_values"]["Birthdays"].append(sub_player_data["Birthday"])
         player_data["stat_values"]["Search Term"].append(sub_player_data["Search Term"])
         player_data["stat_values"]["LastUpdated"] = sub_player_data["LastUpdated"]
         player_data["stat_values"]["is_indv_shift_data"] = is_indv_shift_data
@@ -30844,7 +30851,17 @@ def perform_team_opponent_schedule_qualifiers(row, qualifiers):
 
 def calculate_formula(stat, player_type, formula, data, all_rows, player_data, safe_eval=False):
     if formula == "Special":
-        if stat in ("TmW", "TmL", "TmTtlL", "TmT", "TmOTL", "TmROW", "TmROL"):
+        if stat == "DaysOnEarth":
+            value = 0
+            if "Birthday" in player_data:
+                if player_data["Birthday"]:
+                    value += (datetime.datetime.now().date() - player_data["Birthday"]).days + 1
+            else:
+                for birthday in player_data["stat_values"]["Birthdays"]:
+                    if birthday:
+                        value += (datetime.datetime.now().date() - birthday).days + 1
+            return value
+        elif stat in ("TmW", "TmL", "TmTtlL", "TmT", "TmOTL", "TmROW", "TmROL"):
             return calculate_team_win_losses(data, all_rows, stat)
         elif stat == "TmRec":
             return str(data["TmW"]) + ":" + str(data["TmL"]) + ":" + str(data["TmT"] + data["TmOTL"])

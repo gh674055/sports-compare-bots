@@ -3271,7 +3271,7 @@ stat_groups = {
             "positive" : True,
             "display" : False
         },
-        "DyRst" : {
+        "DaysOnEarth" : {
             "positive" : True,
             "display" : False
         },
@@ -4968,6 +4968,7 @@ formulas = {
         }
     },
     "Shared" : {
+        "DaysOnEarth" : "Special",
         "TmW" : "Special",
         "TmL" : "Special",
         "TmT" : "Special",
@@ -5578,7 +5579,7 @@ def get_totals(specific_year, totals):
                                 
                 if (player_stats["Passing"]["Att"] / games_per_season) >= 14:
                     for standard_dev_stat in standard_dev_totals[str(year)]:
-                        standard_dev_stat_val = calculate_formula(standard_dev_stat, formulas["Passing"][standard_dev_stat], player_stats, "Passing", None, None, None)
+                        standard_dev_stat_val = calculate_formula(standard_dev_stat, formulas["Passing"][standard_dev_stat], player_stats, "Passing", None, None, None, None)
                         standard_dev_totals[str(year)][standard_dev_stat].append(standard_dev_stat_val)
 
         count = index + 1
@@ -5623,7 +5624,7 @@ def get_totals(specific_year, totals):
                     total_standard_devs[standard_dev_stat] += standard_dev_totals[str(next_year)][standard_dev_stat]
 
             for standard_dev_stat in standard_dev_stats:
-                stat_val = calculate_formula(standard_dev_stat, formulas["Passing"][standard_dev_stat], total_stats, "Passing", None, None, None)
+                stat_val = calculate_formula(standard_dev_stat, formulas["Passing"][standard_dev_stat], total_stats, "Passing", None, None, None, None)
                 totals[str(year)][standard_dev_stat] = stat_val
                 standard_dev_val = statistics.stdev(total_standard_devs[standard_dev_stat])
                 totals[str(year)]["std_" + standard_dev_stat] = standard_dev_val
@@ -5688,14 +5689,23 @@ def url_request(request, timeout=10):
             time.sleep(time_to_wait)
         logger.info("#" + str(threading.get_ident()) + "#   " + "0")
 
-def calculate_formula(stat, formula, data, header, headers, player_type, all_rows, safe_eval=False):
+def calculate_formula(stat, formula, data, header, headers, player_data, player_type, all_rows, safe_eval=False):
     if header == "Defense Per Game/Snap":
         over_header = "Defense"
     else:
         over_header = header
 
     if formula == "Special":
-        if stat == "Rate":
+        if stat == "DaysOnEarth":
+            value = 0
+            if player_data:
+                if "Birthday" in player_data:
+                    value += (datetime.datetime.now().date() - player_data["Birthday"]).days + 1
+                else:
+                    for birthday in player_data["stat_values"]["Shared"]["Birthdays"]:
+                        value += (datetime.datetime.now().date() - birthday).days + 1
+            return value
+        elif stat == "Rate":
             return calculate_passer_rating(data[header], header)
         elif stat == "Fmb%":
             return calculate_fumble_percent(data, all_rows)
