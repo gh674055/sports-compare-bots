@@ -8712,7 +8712,7 @@ def perform_nfl_game_qualifiers(row, qualifiers):
                         break
                 else:
                     for sub_stadium in venue_obj["venues"]:
-                        if stadium in sub_stadium.lower():
+                        if re.sub(r"[^A-Za-z\s]", "", stadium).strip() in re.sub(r"[^A-Za-z\s]", "", sub_stadium.lower()).strip():
                             has_match = True
                             break
                     if has_match:

@@ -5882,9 +5882,9 @@ opponent_schedule_main_url_format = "https://www.baseball-reference.com/leagues/
 sum_stats_format = "https://www.baseball-reference.com/tools/span_stats.cgi?html=1&page_id={}&table_id={}&range={}&plink=1"
 total_schedule_url = "https://www.baseball-reference.com/leagues/MLB/{}-schedule.shtml"
 team_roster_url_format = "https://statsapi.mlb.com/api/v1/teams/{}/roster?season={}&hydrate=person"
-mlb_team_schedule_url_format = "https://statsapi.mlb.com/api/v1/schedule?teamId={}&season={}&sportId=1"
-#mlb_team_schedule_url_format = "https://statsapi.mlb.com/api/v1/schedule?teamId={}&startDate={}&endDate={}&sportId=1"
-mlb_player_schedule_url_format = "https://statsapi.mlb.com/api/v1/people/{}/stats?stats=gameLog&season={}&gameType=P,R"
+mlb_team_schedule_url_format = "https://statsapi.mlb.com/api/v1/schedule?teamId={}&season={}&sportId=1&gameType=R,F,D,L,W"
+#mlb_team_schedule_url_format = "https://statsapi.mlb.com/api/v1/schedule?teamId={}&startDate={}&endDate={}&sportId=1&gameType=R,F,D,L,W"
+mlb_player_schedule_url_format = "https://statsapi.mlb.com/api/v1/people/{}/stats?stats=gameLog&season={}&gameType=R,F,D,L,W"
 mlb_leaderboard_query = "https://bdfed.stitch.mlbinfra.com/bdfed/stats/player?stitch_env=prod&&season={}&playerPool={}&sportId=1&stats=season&group={}&gameType=R&limit={}&offset={}&sortStat={}&order={}"
 mlb_leaderboard_query_no_sort = "https://bdfed.stitch.mlbinfra.com/bdfed/stats/player?stitch_env=prod&&season={}&playerPool={}&sportId=1&stats=season&group={}&gameType=R&limit={}&offset={}"
 
@@ -14285,16 +14285,16 @@ def handle_player_data(player_data, time_frame, player_type, player_page, valid_
                 new_rows.append(row_data)
         all_rows = new_rows
     
-    if "National Game" in time_frame["qualifiers"] or "Any National Game" in time_frame["qualifiers"] or "TV Network" in time_frame["qualifiers"] or "Radio Network" in time_frame["qualifiers"] or "Raw TV Network" in time_frame["qualifiers"] or "Raw Radio Network" in time_frame["qualifiers"] or "National TV Network" in time_frame["qualifiers"] or "National Raw TV Network" in time_frame["qualifiers"] or "Any National TV Network" in time_frame["qualifiers"] or "Any National Raw TV Network" in time_frame["qualifiers"] or "Current Winning Opponent" in time_frame["qualifiers"] or "Current Losing Opponent" in time_frame["qualifiers"] or "Current Tied Opponent" in time_frame["qualifiers"] or "Current Winning Or Tied Opponent" in time_frame["qualifiers"] or "Current Losing Or Tied Opponent" in time_frame["qualifiers"] or "Current Winning Team" in time_frame["qualifiers"] or "Current Losing Team" in time_frame["qualifiers"] or "Current Tied Team" in time_frame["qualifiers"] or "Current Winning Or Tied Team" in time_frame["qualifiers"] or "Current Losing Or Tied Team" in time_frame["qualifiers"] or "Current Team Win Percentage" in time_frame["qualifiers"] or "Current Opponent Win Percentage" in time_frame["qualifiers"] or "Current Team Wins" in time_frame["qualifiers"] or "Current Team Losses" in time_frame["qualifiers"] or "Current Opponent Wins" in time_frame["qualifiers"] or "Current Opponent Losses" in time_frame["qualifiers"] or "Current Team Games Over 500" in time_frame["qualifiers"] or "Current Opponent Games Over 500" in time_frame["qualifiers"]:
+    if "National Game" in time_frame["qualifiers"] or "Any National Game" in time_frame["qualifiers"] or "TV Network" in time_frame["qualifiers"] or "Radio Network" in time_frame["qualifiers"] or "Raw TV Network" in time_frame["qualifiers"] or "Raw Radio Network" in time_frame["qualifiers"] or "National TV Network" in time_frame["qualifiers"] or "National Raw TV Network" in time_frame["qualifiers"] or "Any National TV Network" in time_frame["qualifiers"] or "Any National Raw TV Network" in time_frame["qualifiers"] or "Current Winning Opponent" in time_frame["qualifiers"] or "Current Losing Opponent" in time_frame["qualifiers"] or "Current Tied Opponent" in time_frame["qualifiers"] or "Current Winning Or Tied Opponent" in time_frame["qualifiers"] or "Current Losing Or Tied Opponent" in time_frame["qualifiers"] or "Current Winning Team" in time_frame["qualifiers"] or "Current Losing Team" in time_frame["qualifiers"] or "Current Tied Team" in time_frame["qualifiers"] or "Current Winning Or Tied Team" in time_frame["qualifiers"] or "Current Losing Or Tied Team" in time_frame["qualifiers"] or "Current Team Win Percentage" in time_frame["qualifiers"] or "Current Opponent Win Percentage" in time_frame["qualifiers"] or "Current Team Wins" in time_frame["qualifiers"] or "Current Team Losses" in time_frame["qualifiers"] or "Current Opponent Wins" in time_frame["qualifiers"] or "Current Opponent Losses" in time_frame["qualifiers"] or "Current Team Games Over 500" in time_frame["qualifiers"] or "Current Opponent Games Over 500" in time_frame["qualifiers"] or "Stadium" in time_frame["qualifiers"] or "Exact Stadium" in time_frame["qualifiers"] or "Start Time" in time_frame["qualifiers"] or "Exact City" in time_frame["qualifiers"] or "City" in time_frame["qualifiers"] or "Exact State" in time_frame["qualifiers"] or "State" in time_frame["qualifiers"] or "Exact Country" in time_frame["qualifiers"] or "Country" in time_frame["qualifiers"] or "Surface" in time_frame["qualifiers"] or "Condition" in time_frame["qualifiers"] or "Temperature" in time_frame["qualifiers"] or "Wind" in time_frame["qualifiers"] or "Umpire" in time_frame["qualifiers"] or "Home Plate Umpire" in time_frame["qualifiers"] or "Time Zone" in time_frame["qualifiers"] or "Exact Time Zone" in time_frame["qualifiers"] or "Local Start Time" in time_frame["qualifiers"]:
         all_rows, missing_games = handle_mlb_schedule_stats(all_rows, time_frame["qualifiers"], player_data, player_type, missing_games, extra_stats)
 
     if "Facing Stat Rank" in time_frame["qualifiers"] or "Facing League Stat Rank" in time_frame["qualifiers"] or "Facing AL Stat Rank" in time_frame["qualifiers"] or "Facing NL Stat Rank" in time_frame["qualifiers"] or "Facing Stat Percent" in time_frame["qualifiers"] or "Facing League Stat Percent" in time_frame["qualifiers"] or "Facing AL Stat Percent" in time_frame["qualifiers"] or "Facing NL Stat Percent" in time_frame["qualifiers"] or "Facing Stat" in time_frame["qualifiers"] or "Facing AL Stat" in time_frame["qualifiers"] or "Facing NL Stat" in time_frame["qualifiers"] or "Batting In Front Of Stat Rank" in time_frame["qualifiers"] or "Batting In Front Of League Stat Rank" in time_frame["qualifiers"] or "Batting In Front Of AL Stat Rank" in time_frame["qualifiers"] or "Batting In Front Of NL Stat Rank" in time_frame["qualifiers"] or "Batting In Front Of Stat Percent" in time_frame["qualifiers"] or "Batting In Front Of League Stat Percent" in time_frame["qualifiers"] or "Batting In Front Of AL Stat Percent" in time_frame["qualifiers"] or "Batting In Front Of NL Stat Percent" in time_frame["qualifiers"] or "Batting In Front Of Stat" in time_frame["qualifiers"] or "Batting In Front Of AL Stat" in time_frame["qualifiers"] or "Batting In Front Of NL Stat" in time_frame["qualifiers"] or "Batting Behind Stat Rank" in time_frame["qualifiers"] or "Batting Behind League Stat Rank" in time_frame["qualifiers"] or "Batting Behind AL Stat Rank" in time_frame["qualifiers"] or "Batting Behind NL Stat Rank" in time_frame["qualifiers"] or "Batting Behind Stat Percent" in time_frame["qualifiers"] or "Batting Behind League Stat Percent" in time_frame["qualifiers"] or "Batting Behind AL Stat Percent" in time_frame["qualifiers"] or "Batting Behind NL Stat Percent" in time_frame["qualifiers"] or "Batting Behind Stat" in time_frame["qualifiers"] or "Batting Behind AL Stat" in time_frame["qualifiers"] or "Batting Behind NL Stat" in time_frame["qualifiers"] or "Batting Next To Stat Rank" in time_frame["qualifiers"] or "Batting Next To League Stat Rank" in time_frame["qualifiers"] or "Batting Next To AL Stat Rank" in time_frame["qualifiers"] or "Batting Next To NL Stat Rank" in time_frame["qualifiers"] or "Batting Next To Stat Percent" in time_frame["qualifiers"] or "Batting Next To League Stat Percent" in time_frame["qualifiers"] or "Batting Next To AL Stat Percent" in time_frame["qualifiers"] or "Batting Next To NL Stat Percent" in time_frame["qualifiers"] or "Batting Next To Stat" in time_frame["qualifiers"] or "Batting Next To AL Stat" in time_frame["qualifiers"] or "Batting Next To NL Stat" in time_frame["qualifiers"]:
         handle_stat_rank_stats(all_rows, time_frame["qualifiers"], player_type)
 
-    if not "hide-advanced" in extra_stats or (has_result_stat_qual or "Stadium" in time_frame["qualifiers"] or "Exact Stadium" in time_frame["qualifiers"] or "Start Time" in time_frame["qualifiers"] or "Local Start Time" in time_frame["qualifiers"] or "Game Number" in time_frame["qualifiers"] or "Exact City" in time_frame["qualifiers"] or "City" in time_frame["qualifiers"] or "Exact State" in time_frame["qualifiers"] or "State" in time_frame["qualifiers"] or "Exact Time Zone" in time_frame["qualifiers"] or "Time Zone" in time_frame["qualifiers"] or "Exact Country" in time_frame["qualifiers"] or "Country" in time_frame["qualifiers"] or "Surface" in time_frame["qualifiers"] or "Condition" in time_frame["qualifiers"] or "Temperature" in time_frame["qualifiers"] or "Wind" in time_frame["qualifiers"] or "Umpire" in time_frame["qualifiers"] or "Home Plate Umpire" in time_frame["qualifiers"] or "run-support-record" in extra_stats or "run-support" in extra_stats or "advanced-runner" in extra_stats or "exit-record" in extra_stats):
+    if not "hide-advanced" in extra_stats or (has_result_stat_qual or "Game Number" in time_frame["qualifiers"] or "Run Support" in time_frame["qualifiers"] or "run-support-record" in extra_stats or "run-support" in extra_stats or "advanced-runner" in extra_stats or "exit-record" in extra_stats):
         if ("Event Stat" in time_frame["qualifiers"] or "Event Stat Reversed" in time_frame["qualifiers"] or "Event Stats" in time_frame["qualifiers"] or "Event Stats Reversed" in time_frame["qualifiers"] or "Starting Event Stat" in time_frame["qualifiers"] or "Starting Event Stat Reversed" in time_frame["qualifiers"] or "Starting Event Stats" in time_frame["qualifiers"] or "Starting Event Stats Reversed" in time_frame["qualifiers"]):
             all_rows, missing_games = handle_mlb_game_stats_single_thread(all_rows, time_frame["qualifiers"], player_data, player_type, missing_games, extra_stats)
-        elif has_result_stat_qual or "Stadium" in time_frame["qualifiers"] or "Exact Stadium" in time_frame["qualifiers"] or "Start Time" in time_frame["qualifiers"] or "Local Start Time" in time_frame["qualifiers"] or "Game Number" in time_frame["qualifiers"] or "Exact City" in time_frame["qualifiers"] or "City" in time_frame["qualifiers"] or "Exact State" in time_frame["qualifiers"] or "State" in time_frame["qualifiers"] or "Exact Time Zone" in time_frame["qualifiers"] or "Time Zone" in time_frame["qualifiers"] or "Exact Country" in time_frame["qualifiers"] or "Country" in time_frame["qualifiers"] or "Surface" in time_frame["qualifiers"] or "Condition" in time_frame["qualifiers"] or "Temperature" in time_frame["qualifiers"] or "Wind" in time_frame["qualifiers"] or "Umpire" in time_frame["qualifiers"] or "Home Plate Umpire" in time_frame["qualifiers"] or "current-stats" in extra_stats or "run-support-record" in extra_stats or "run-support" in extra_stats or "advanced-runner" in extra_stats or "exit-record" in extra_stats:
+        elif has_result_stat_qual or "Game Number" in time_frame["qualifiers"] or "Run Support" in time_frame["qualifiers"] or "current-stats" in extra_stats or "run-support-record" in extra_stats or "run-support" in extra_stats or "advanced-runner" in extra_stats or "exit-record" in extra_stats:
             all_rows, missing_games = handle_mlb_game_stats(all_rows, time_frame["qualifiers"], player_data, player_type, missing_games, extra_stats)
 
     if time_frame["qualifiers"]:
@@ -24678,7 +24678,7 @@ def get_team_schedule(player_data, seasons, needs_reg_season, needs_playoffs, ne
                                             new_season_obj["playoffs"].append(row_data)
             
             if needs_time and is_playoffs:
-                get_mlb_game_stats(new_season_obj["playoffs"], {}, set(), player_data, False, player_type, set(), False)
+                get_mlb_game_links_schedule_links(player_data, player_type, player_data["player_link"], new_season_obj["playoffs"], {})
 
             new_season_obj["playoffs"] = sorted(new_season_obj["playoffs"], key=lambda row: row["DateTime"])
 
@@ -32832,151 +32832,6 @@ def handle_bool_count_qual(at_bat_event, qualifiers, is_after, count_str):
     return has_any_match
 
 def perform_mlb_game_qualifiers(row, qualifiers):
-    if "Stadium" in qualifiers:
-        if "Stadium" not in row or row["Stadium"] == None:
-            return False
-        
-        for qual_object in qualifiers["Stadium"]:
-            has_match = False
-            for stadium in qual_object["values"]:
-                if stadium.isdigit():
-                    if int(stadium) == row["StadiumID"]:
-                        has_match = True
-                        break
-                else:
-                    for sub_stadium in team_venues[str(row["StadiumID"])]:
-                        if stadium in sub_stadium.lower():
-                            has_match = True
-                            break
-                    if has_match:
-                        break
-            if qual_object["negate"]:
-                if has_match:
-                    return False
-            else:
-                if not has_match:
-                    return False
-        
-    if "Exact Stadium" in qualifiers:
-        if "Stadium" not in row or row["Stadium"] == None:
-            return False
-
-        for qual_object in qualifiers["Exact Stadium"]:
-            has_match = False
-            for stadium in qual_object["values"]:
-                if stadium.isdigit():
-                    if int(stadium) == row["StadiumID"]:
-                        has_match = True
-                        break
-                else:
-                    if stadium == row["Stadium"].lower():
-                        has_match = True
-                        break
-            if qual_object["negate"]:
-                if has_match:
-                    return False
-            else:
-                if not has_match:
-                    return False
-
-    if "Surface" in qualifiers:
-        if "Surface" not in row or row["Surface"] == None:
-            return False
-
-        for qual_object in qualifiers["Surface"]:
-            has_match = False
-            for stadium in qual_object["values"]:
-                if stadium == "artificial":
-                    if row["Surface"].lower() != "grass":
-                        has_match = True
-                        break
-                else:
-                    if stadium == row["Surface"].lower():
-                        has_match = True
-                        break
-            if qual_object["negate"]:
-                if has_match:
-                    return False
-            else:
-                if not has_match:
-                    return False
-    
-    if "Condition" in qualifiers:
-        if "Condition" not in row or row["Condition"] == None or row["Condition"] == "Unknown":
-            return False
-
-        for qual_object in qualifiers["Condition"]:
-            has_match = False
-            for stadium in qual_object["values"]:
-                if stadium == row["Condition"].lower():
-                    has_match = True
-                    break
-            if qual_object["negate"]:
-                if has_match:
-                    return False
-            else:
-                if not has_match:
-                    return False
-    
-    if "Umpire" in qualifiers:
-        if ("HPUmpire" not in row or row["HPUmpire"] == None) and ("1BUmpire" not in row or row["1BUmpire"] == None) and ("2BUmpire" not in row or row["2BUmpire"] == None) and ("3BUmpire" not in row or row["3BUmpire"] == None) and ("LFUmpire" not in row or row["LFUmpire"] == None) and ("RFUmpire" not in row or row["RFUmpire"] == None) and ("OtherUmpire" not in row or row["OtherUmpire"] == None):
-            return False
-
-        for qual_object in qualifiers["Umpire"]:
-            has_match = False
-            for stadium in qual_object["values"]:
-                for ump_str in ["HPUmpire", "1BUmpire", "2BUmpire", "3BUmpire", "LFUmpire", "RFUmpire", "OtherUmpire"]:
-                    if (ump_str not in row or row[ump_str] == None):
-                        continue
-                    if stadium.isdigit():
-                        if int(stadium) == row[ump_str + "ID"]:
-                            has_match = True
-                            break
-                    else:
-                        if stadium == row[ump_str].lower():
-                            has_match = True
-                            break
-            if qual_object["negate"]:
-                if has_match:
-                    return False
-            else:
-                if not has_match:
-                    return False
-    
-    if "Home Plate Umpire" in qualifiers:
-        if "HPUmpire" not in row or row["HPUmpire"] == None:
-            return False
-
-        for qual_object in qualifiers["Home Plate Umpire"]:
-            has_match = False
-            for stadium in qual_object["values"]:
-                if stadium.isdigit():
-                    if int(stadium) == row["HPUmpireID"]:
-                        has_match = True
-                        break
-                else:
-                    if stadium == row["HPUmpire"].lower():
-                        has_match = True
-                        break
-            if qual_object["negate"]:
-                if has_match:
-                    return False
-            else:
-                if not has_match:
-                    return False
-    
-    if "Temperature" in qualifiers:
-        if "Temperature" not in row or row["Temperature"] == None:
-            return False
-
-        for qual_object in qualifiers["Temperature"]:
-            if qual_object["negate"]:
-                if row["Temperature"] >= qual_object["values"]["start_val"] and row["Temperature"] <= qual_object["values"]["end_val"]:
-                    return False
-            else:
-                if not (row["Temperature"] >= qual_object["values"]["start_val"] and row["Temperature"] <= qual_object["values"]["end_val"]):
-                    return False
-    
     if "Run Support" in qualifiers:
         if "RS" not in row or row["RS"] == None:
             return False
@@ -32987,158 +32842,6 @@ def perform_mlb_game_qualifiers(row, qualifiers):
                     return False
             else:
                 if not (row["RS"] >= qual_object["values"]["start_val"] and row["RS"] <= qual_object["values"]["end_val"]):
-                    return False
-    
-    if "Wind" in qualifiers:
-        if "Wind" not in row or row["Wind"] == None:
-            return False
-
-        for qual_object in qualifiers["Wind"]:
-            if qual_object["negate"]:
-                if row["Wind"] >= qual_object["values"]["start_val"] and row["Wind"] <= qual_object["values"]["end_val"]:
-                    return False
-            else:
-                if not (row["Wind"] >= qual_object["values"]["start_val"] and row["Wind"] <= qual_object["values"]["end_val"]):
-                    return False
-    
-    if "City" in qualifiers:
-        if "City" not in row or row["City"] == None:
-            return False
-
-        for qual_object in qualifiers["City"]:
-            has_match = False
-            for stadium in qual_object["values"]:
-                if stadium in row["City"].lower():
-                    has_match = True
-                    break
-                elif not ("State" not in row or row["State"] == None) and row["State"].lower() == "ny" and row["City"].lower() in ["bronx", "flushing"]:
-                    if stadium in "new york":
-                        has_match = True
-                        break
-            if qual_object["negate"]:
-                if has_match:
-                    return False
-            else:
-                if not has_match:
-                    return False
-    
-    if "Exact City" in qualifiers:
-        if "City" not in row or row["City"] == None:
-            return False
-
-        for qual_object in qualifiers["City"]:
-            has_match = False
-            for stadium in qual_object["values"]:
-                if stadium == row["City"].lower():
-                    has_match = True
-                    break
-            if qual_object["negate"]:
-                if has_match:
-                    return False
-            else:
-                if not has_match:
-                    return False
-    
-    if "State" in qualifiers:
-        if "State" not in row or row["State"] == None:
-            return False
-
-        for qual_object in qualifiers["State"]:
-            has_match = False
-            for stadium in qual_object["values"]:
-                if stadium in row["State"].lower():
-                    has_match = True
-                    break
-            if qual_object["negate"]:
-                if has_match:
-                    return False
-            else:
-                if not has_match:
-                    return False
-    
-    if "Exact State" in qualifiers:
-        if "State" not in row or row["State"] == None:
-            return False
-
-        for qual_object in qualifiers["State"]:
-            has_match = False
-            for stadium in qual_object["values"]:
-                if stadium == row["State"].lower():
-                    has_match = True
-                    break
-            if qual_object["negate"]:
-                if has_match:
-                    return False
-            else:
-                if not has_match:
-                    return False
-    
-    if "Time Zone" in qualifiers:
-        if "TimeZone" not in row or row["TimeZone"] == None:
-            return False
-
-        for qual_object in qualifiers["Time Zone"]:
-            has_match = False
-            for stadium in qual_object["values"]:
-                if stadium in row["TimeZone"].lower().replace("_", ""):
-                    has_match = True
-                    break
-            if qual_object["negate"]:
-                if has_match:
-                    return False
-            else:
-                if not has_match:
-                    return False
-    
-    if "Exact Time Zone" in qualifiers:
-        if "TimeZone" not in row or row["TimeZone"] == None:
-            return False
-
-        for qual_object in qualifiers["Exact Time Zone"]:
-            has_match = False
-            for stadium in qual_object["values"]:
-                if stadium == row["TimeZone"].lower().replace("_", ""):
-                    has_match = True
-                    break
-            if qual_object["negate"]:
-                if has_match:
-                    return False
-            else:
-                if not has_match:
-                    return False
-    
-    if "Country" in qualifiers:
-        if "Country" not in row or row["Country"] == None:
-            return False
-
-        for qual_object in qualifiers["Country"]:
-            has_match = False
-            for stadium in qual_object["values"]:
-                if stadium in row["Country"].lower():
-                    has_match = True
-                    break
-            if qual_object["negate"]:
-                if has_match:
-                    return False
-            else:
-                if not has_match:
-                    return False
-    
-    if "Exact Country" in qualifiers:
-        if "Country" not in row or row["Country"] == None:
-            return False
-
-        for qual_object in qualifiers["Country"]:
-            has_match = False
-            for stadium in qual_object["values"]:
-                if stadium == row["Country"].lower():
-                    has_match = True
-                    break
-            if qual_object["negate"]:
-                if has_match:
-                    return False
-            else:
-                if not has_match:
                     return False
 
     if "Game Number" in qualifiers:
@@ -33151,45 +32854,6 @@ def perform_mlb_game_qualifiers(row, qualifiers):
                     return False
             else:
                 if not (row["Number"] >= qual_object["values"]["start_val"] and row["Number"] <= qual_object["values"]["end_val"]):
-                    return False
-    
-    if "Start Time" in qualifiers:
-        if "StartTime" not in row or row["StartTime"] == None:
-            return False
-
-        for qual_object in qualifiers["Start Time"]:
-            stat_val = qual_object["values"]["start_val"]
-            end_val = qual_object["values"]["end_val"]
-            event_time = row["StartTime"].astimezone(pytz.timezone(qual_object["values"]["time_zone"])).time().replace(microsecond=0)
-            if end_val < stat_val:
-                is_match = event_time >= stat_val or event_time <= end_val
-            else:
-                is_match = event_time >= stat_val and event_time <= end_val
-
-            if qual_object["negate"]:
-                if is_match:
-                    return False
-            else:
-                if not is_match:
-                    return False
-    
-    if "Local Start Time" in qualifiers:
-        if "StartTime" not in row or row["StartTime"] == None:
-            return False
-        if "TimeZoneID" not in row or row["TimeZoneID"] == None:
-            return
-            
-        event_time = timezone(player_game_info["TimeZoneID"]).localize(event_time).time().replace(microsecond=0)
-        for qual_object in qualifiers["Local Start Time"]:
-            stat_val = qual_object["values"]["start_val"]
-            end_val = qual_object["values"]["end_val"]
-
-            is_match = event_time >= stat_val and event_time <= end_val
-            if qual_object["negate"]:
-                if is_match:
-                    return False
-            else:
-                if not is_match:
                     return False
     
     return True
@@ -33750,6 +33414,342 @@ def perform_mlb_schedule_qualifiers(row, qualifiers):
                 if not (row["CurrOppLosses"] >= qual_object["values"]["start_val"] and row["CurrOppLosses"] <= qual_object["values"]["end_val"]):
                     return False
     
+    if "Wind" in qualifiers:
+        if "Wind" not in row or row["Wind"] == None:
+            return False
+
+        for qual_object in qualifiers["Wind"]:
+            if qual_object["negate"]:
+                if row["Wind"] >= qual_object["values"]["start_val"] and row["Wind"] <= qual_object["values"]["end_val"]:
+                    return False
+            else:
+                if not (row["Wind"] >= qual_object["values"]["start_val"] and row["Wind"] <= qual_object["values"]["end_val"]):
+                    return False
+    
+    if "City" in qualifiers:
+        if "City" not in row or row["City"] == None:
+            return False
+
+        for qual_object in qualifiers["City"]:
+            has_match = False
+            for stadium in qual_object["values"]:
+                if stadium in row["City"].lower():
+                    has_match = True
+                    break
+                elif not ("State" not in row or row["State"] == None) and row["State"].lower() == "ny" and row["City"].lower() in ["bronx", "flushing"]:
+                    if stadium in "new york":
+                        has_match = True
+                        break
+            if qual_object["negate"]:
+                if has_match:
+                    return False
+            else:
+                if not has_match:
+                    return False
+    
+    if "Exact City" in qualifiers:
+        if "City" not in row or row["City"] == None:
+            return False
+
+        for qual_object in qualifiers["City"]:
+            has_match = False
+            for stadium in qual_object["values"]:
+                if stadium == row["City"].lower():
+                    has_match = True
+                    break
+            if qual_object["negate"]:
+                if has_match:
+                    return False
+            else:
+                if not has_match:
+                    return False
+    
+    if "State" in qualifiers:
+        if "State" not in row or row["State"] == None:
+            return False
+
+        for qual_object in qualifiers["State"]:
+            has_match = False
+            for stadium in qual_object["values"]:
+                if stadium in row["State"].lower():
+                    has_match = True
+                    break
+            if qual_object["negate"]:
+                if has_match:
+                    return False
+            else:
+                if not has_match:
+                    return False
+    
+    if "Exact State" in qualifiers:
+        if "State" not in row or row["State"] == None:
+            return False
+
+        for qual_object in qualifiers["State"]:
+            has_match = False
+            for stadium in qual_object["values"]:
+                if stadium == row["State"].lower():
+                    has_match = True
+                    break
+            if qual_object["negate"]:
+                if has_match:
+                    return False
+            else:
+                if not has_match:
+                    return False
+    
+    if "Country" in qualifiers:
+        if "Country" not in row or row["Country"] == None:
+            return False
+
+        for qual_object in qualifiers["Country"]:
+            has_match = False
+            for stadium in qual_object["values"]:
+                if stadium in row["Country"].lower():
+                    has_match = True
+                    break
+            if qual_object["negate"]:
+                if has_match:
+                    return False
+            else:
+                if not has_match:
+                    return False
+    
+    if "Exact Country" in qualifiers:
+        if "Country" not in row or row["Country"] == None:
+            return False
+
+        for qual_object in qualifiers["Country"]:
+            has_match = False
+            for stadium in qual_object["values"]:
+                if stadium == row["Country"].lower():
+                    has_match = True
+                    break
+            if qual_object["negate"]:
+                if has_match:
+                    return False
+            else:
+                if not has_match:
+                    return False
+    
+    if "Start Time" in qualifiers:
+        if "StartTime" not in row or row["StartTime"] == None:
+            return False
+
+        for qual_object in qualifiers["Start Time"]:
+            stat_val = qual_object["values"]["start_val"]
+            end_val = qual_object["values"]["end_val"]
+            event_time = row["StartTime"].astimezone(pytz.timezone(qual_object["values"]["time_zone"])).time().replace(microsecond=0)
+            if end_val < stat_val:
+                is_match = event_time >= stat_val or event_time <= end_val
+            else:
+                is_match = event_time >= stat_val and event_time <= end_val
+
+            if qual_object["negate"]:
+                if is_match:
+                    return False
+            else:
+                if not is_match:
+                    return False
+    
+    if "Stadium" in qualifiers:
+        if "Stadium" not in row or row["Stadium"] == None:
+            return False
+        
+        for qual_object in qualifiers["Stadium"]:
+            has_match = False
+            for stadium in qual_object["values"]:
+                if stadium.isdigit():
+                    if int(stadium) == row["StadiumID"]:
+                        has_match = True
+                        break
+                else:
+                    for sub_stadium in team_venues[str(row["StadiumID"])]["values"]:
+                        if re.sub(r"[^A-Za-z\s]", "", stadium).strip() in re.sub(r"[^A-Za-z\s]", "", sub_stadium.lower()).strip():
+                            has_match = True
+                            break
+                    if has_match:
+                        break
+            if qual_object["negate"]:
+                if has_match:
+                    return False
+            else:
+                if not has_match:
+                    return False
+        
+    if "Exact Stadium" in qualifiers:
+        if "Stadium" not in row or row["Stadium"] == None:
+            return False
+
+        for qual_object in qualifiers["Exact Stadium"]:
+            has_match = False
+            for stadium in qual_object["values"]:
+                if stadium.isdigit():
+                    if int(stadium) == row["StadiumID"]:
+                        has_match = True
+                        break
+                else:
+                    if stadium == row["Stadium"].lower():
+                        has_match = True
+                        break
+            if qual_object["negate"]:
+                if has_match:
+                    return False
+            else:
+                if not has_match:
+                    return False
+
+    if "Surface" in qualifiers:
+        if "Surface" not in row or row["Surface"] == None:
+            return False
+
+        for qual_object in qualifiers["Surface"]:
+            has_match = False
+            for stadium in qual_object["values"]:
+                if stadium == "artificial":
+                    if row["Surface"].lower() != "grass":
+                        has_match = True
+                        break
+                else:
+                    if stadium == row["Surface"].lower():
+                        has_match = True
+                        break
+            if qual_object["negate"]:
+                if has_match:
+                    return False
+            else:
+                if not has_match:
+                    return False
+    
+    if "Condition" in qualifiers:
+        if "Condition" not in row or row["Condition"] == None or row["Condition"] == "Unknown":
+            return False
+
+        for qual_object in qualifiers["Condition"]:
+            has_match = False
+            for stadium in qual_object["values"]:
+                if stadium == row["Condition"].lower():
+                    has_match = True
+                    break
+            if qual_object["negate"]:
+                if has_match:
+                    return False
+            else:
+                if not has_match:
+                    return False
+    
+    if "Umpire" in qualifiers:
+        if ("HPUmpire" not in row or row["HPUmpire"] == None) and ("1BUmpire" not in row or row["1BUmpire"] == None) and ("2BUmpire" not in row or row["2BUmpire"] == None) and ("3BUmpire" not in row or row["3BUmpire"] == None) and ("LFUmpire" not in row or row["LFUmpire"] == None) and ("RFUmpire" not in row or row["RFUmpire"] == None) and ("OtherUmpire" not in row or row["OtherUmpire"] == None):
+            return False
+
+        for qual_object in qualifiers["Umpire"]:
+            has_match = False
+            for stadium in qual_object["values"]:
+                for ump_str in ["HPUmpire", "1BUmpire", "2BUmpire", "3BUmpire", "LFUmpire", "RFUmpire", "OtherUmpire"]:
+                    if (ump_str not in row or row[ump_str] == None):
+                        continue
+                    if stadium.isdigit():
+                        if int(stadium) == row[ump_str + "ID"]:
+                            has_match = True
+                            break
+                    else:
+                        if stadium == row[ump_str].lower():
+                            has_match = True
+                            break
+            if qual_object["negate"]:
+                if has_match:
+                    return False
+            else:
+                if not has_match:
+                    return False
+    
+    if "Home Plate Umpire" in qualifiers:
+        if "HPUmpire" not in row or row["HPUmpire"] == None:
+            return False
+
+        for qual_object in qualifiers["Home Plate Umpire"]:
+            has_match = False
+            for stadium in qual_object["values"]:
+                if stadium.isdigit():
+                    if int(stadium) == row["HPUmpireID"]:
+                        has_match = True
+                        break
+                else:
+                    if stadium == row["HPUmpire"].lower():
+                        has_match = True
+                        break
+            if qual_object["negate"]:
+                if has_match:
+                    return False
+            else:
+                if not has_match:
+                    return False
+    
+    if "Temperature" in qualifiers:
+        if "Temperature" not in row or row["Temperature"] == None:
+            return False
+
+        for qual_object in qualifiers["Temperature"]:
+            if qual_object["negate"]:
+                if row["Temperature"] >= qual_object["values"]["start_val"] and row["Temperature"] <= qual_object["values"]["end_val"]:
+                    return False
+            else:
+                if not (row["Temperature"] >= qual_object["values"]["start_val"] and row["Temperature"] <= qual_object["values"]["end_val"]):
+                    return False
+    
+    if "Time Zone" in qualifiers:
+        if "TimeZone" not in row or row["TimeZone"] == None:
+            return False
+
+        for qual_object in qualifiers["Time Zone"]:
+            has_match = False
+            for stadium in qual_object["values"]:
+                if stadium in row["TimeZone"].lower().replace("_", ""):
+                    has_match = True
+                    break
+            if qual_object["negate"]:
+                if has_match:
+                    return False
+            else:
+                if not has_match:
+                    return False
+    
+    if "Exact Time Zone" in qualifiers:
+        if "TimeZone" not in row or row["TimeZone"] == None:
+            return False
+
+        for qual_object in qualifiers["Exact Time Zone"]:
+            has_match = False
+            for stadium in qual_object["values"]:
+                if stadium == row["TimeZone"].lower().replace("_", ""):
+                    has_match = True
+                    break
+            if qual_object["negate"]:
+                if has_match:
+                    return False
+            else:
+                if not has_match:
+                    return False
+    
+    if "Local Start Time" in qualifiers:
+        if "StartTime" not in row or row["StartTime"] == None:
+            return False
+        if "TimeZoneID" not in row or row["TimeZoneID"] == None:
+            return
+            
+        event_time = timezone(player_game_info["TimeZoneID"]).localize(event_time).time().replace(microsecond=0)
+        for qual_object in qualifiers["Local Start Time"]:
+            stat_val = qual_object["values"]["start_val"]
+            end_val = qual_object["values"]["end_val"]
+
+            is_match = event_time >= stat_val and event_time <= end_val
+            if qual_object["negate"]:
+                if is_match:
+                    return False
+            else:
+                if not is_match:
+                    return False
+    
     return True
 
 def result_call_back(qualifiers, count_info, new_rows, player_type, player_data, needs_plays, old_row_data, extra_stats, result):
@@ -33808,7 +33808,7 @@ def handle_result_qualifiers(game_data, index, row_data, sub_missing_games, play
     if "Starting Game Event Stat" in qualifiers or "Starting Game Event Stat Reversed" in qualifiers or "Starting Game Event Stats" in qualifiers or "Starting Game Event Stats Reversed" in qualifiers:
         setup_starting_game_stats(row_data, game_data, player_type, player_data, qualifiers)
 
-    if "Game Number" in qualifiers or "Stadium" in qualifiers or "Exact Stadium" in qualifiers or "Start Time" in qualifiers or "Local Start Time" in qualifiers or "Surface" in qualifiers or "Condition" in qualifiers or "Temperature" in qualifiers or "City" in qualifiers or "Exact City" in qualifiers or "State" in qualifiers or "Exact State" in qualifiers or "Time Zone" in qualifiers or "Exact Time Zone" in qualifiers or "Country" in qualifiers or "Exact Country" in qualifiers or "Wind" in qualifiers or "Umpire" in qualifiers or "Home Plate Umpire" in qualifiers or "Run Support" in qualifiers:
+    if "Game Number" in qualifiers or "Run Support" in qualifiers:
         if not perform_mlb_game_qualifiers(row_data, qualifiers):
             return False, raw_row_data
 
@@ -33829,7 +33829,7 @@ def handle_result_qualifiers(game_data, index, row_data, sub_missing_games, play
     return True, raw_row_data
 
 def has_other_game_quals(qualifiers):
-    if "Game Number" in qualifiers or "Stadium" in qualifiers or "Exact Stadium" in qualifiers or "Start Time" in qualifiers or "Local Start Time" in qualifiers or "Surface" in qualifiers or "Condition" in qualifiers or "Temperature" in qualifiers or "City" in qualifiers or "Exact City" in qualifiers or "State" in qualifiers or "Exact State" in qualifiers or "Time Zone" in qualifiers or "Exact Time Zone" in qualifiers or "Country" in qualifiers or "Exact Country" in qualifiers or "Wind" in qualifiers or "Umpire" in qualifiers or "Home Plate Umpire" in qualifiers or "Run Support" in qualifiers:
+    if "Game Number" in qualifiers or "Run Support" in qualifiers:
         return True
 
     if "Event Stats" in qualifiers or "Event Stats Reversed" in qualifiers or "Game Event Stats" in qualifiers or "Game Event Stats Reversed" in qualifiers or "Starting Event Stats" in qualifiers or "Starting Event Stats Reversed" in qualifiers or "Starting Game Event Stats" in qualifiers or "Starting Game Event Stats Reversed" in qualifiers or "Late" in qualifiers or "Close" in qualifiers or "Batting Against" in qualifiers or "Pitching Against" in qualifiers or "Batting Against First Name" in qualifiers or "Pitching Against First Name" in qualifiers or "Batting Against Last Name" in qualifiers or "Pitching Against Last Name" in qualifiers or "Facing Stat Rank" in qualifiers or "Facing League Stat Rank" in qualifiers or "Facing AL Stat Rank" in qualifiers or "Facing NL Stat Rank" in qualifiers or "Facing Stat Percent" in qualifiers or "Facing League Stat Percent" in qualifiers or "Facing AL Stat Percent" in qualifiers or "Facing NL Stat Percent" in qualifiers or "Facing Stat" in qualifiers or "Facing AL Stat" in qualifiers or "Facing NL Stat" in qualifiers or "Batting In Front Of Stat Rank" in qualifiers or "Batting In Front Of League Stat Rank" in qualifiers or "Batting In Front Of AL Stat Rank" in qualifiers or "Batting In Front Of NL Stat Rank" in qualifiers or "Batting In Front Of Stat Percent" in qualifiers or "Batting In Front Of League Stat Percent" in qualifiers or "Batting In Front Of AL Stat Percent" in qualifiers or "Batting In Front Of NL Stat Percent" in qualifiers or "Batting In Front Of Stat" in qualifiers or "Batting In Front Of AL Stat" in qualifiers or "Batting In Front Of NL Stat" in qualifiers or "Batting Behind Stat Rank" in qualifiers or "Batting Behind League Stat Rank" in qualifiers or "Batting Behind AL Stat Rank" in qualifiers or "Batting Behind NL Stat Rank" in qualifiers or "Batting Behind Stat Percent" in qualifiers or "Batting Behind League Stat Percent" in qualifiers or "Batting Behind AL Stat Percent" in qualifiers or "Batting Behind NL Stat Percent" in qualifiers or "Batting Behind Stat" in qualifiers or "Batting Behind AL Stat" in qualifiers or "Batting Behind NL Stat" in qualifiers or "Batting Next To Stat Rank" in qualifiers or "Batting Next To League Stat Rank" in qualifiers or "Batting Next To AL Stat Rank" in qualifiers or "Batting Next To NL Stat Rank" in qualifiers or "Batting Next To Stat Percent" in qualifiers or "Batting Next To League Stat Percent" in qualifiers or "Batting Next To AL Stat Percent" in qualifiers or "Batting Next To NL Stat Percent" in qualifiers or "Batting Next To Stat" in qualifiers or "Batting Next To AL Stat" in qualifiers or "Batting Next To NL Stat" in qualifiers or "Inning Stat" in qualifiers or "Driven In" in qualifiers or "Batted In" in qualifiers or "Back To Back With" in qualifiers or "Batting Behind" in qualifiers or "Batting In Front Of" in qualifiers or "Batting Next To" in qualifiers or "Event Formula" in qualifiers or "Caught By" in qualifiers or "Stealing On" in qualifiers or "On Field With" in qualifiers or "On Field Against" in qualifiers or "Position" in qualifiers or "Hit Location" in qualifiers or "Exact Hit Location" in qualifiers or "Facing Primary Position" in qualifiers or "Facing Main Position" in qualifiers or "Facing Position" in qualifiers or "Bases Empty" in qualifiers or "Men On Base" in qualifiers or "Walk Off" in qualifiers or "Inside The Park HR" in qualifiers or "Walk Off Opportunity" in qualifiers or "Game Tying" in qualifiers or "Game Tying Opportunity" in qualifiers or "Go Ahead" in qualifiers or "Go Ahead Opportunity" in qualifiers or "Go Ahead Or Game Tying" in qualifiers or "Go Ahead Or Game Tying Opportunity" in qualifiers or "Game Winning" in qualifiers or "Tying On Deck" in qualifiers or "Winning On Deck" in qualifiers or "Tying At Bat" in qualifiers or "Winning At Bat" in qualifiers or "Tying In Scoring" in qualifiers or "Winning In Scoring" in qualifiers or "Tying On Base" in qualifiers or "Winning On Base" in qualifiers or "Last Inning" in qualifiers or "Last Out" in qualifiers or "Last Batter" in qualifiers or "Extra Innings" in qualifiers or "RISP" in qualifiers or "Event Sub Query" in qualifiers or "Or Event Sub Query" in qualifiers or "Batter First Plate Appearance" in qualifiers or "Pitcher First Batter Faced" in qualifiers or "Batter Last Plate Appearance" in qualifiers or "Pitcher Last Batter Faced" in qualifiers or "Facing Position Player" in qualifiers or "Facing Pitcher" in qualifiers or "Stealing Second" in qualifiers or "Stealing Third" in qualifiers or "Stealing Home" in qualifiers or "Bunting" in qualifiers or "Fastball" in qualifiers or "Out Of Zone" in qualifiers or "In Zone" in qualifiers or "Breaking" in qualifiers or "Offspeed" in qualifiers or "Pinch Hitting" in qualifiers or "Facing Starter" in qualifiers or "Facing Reliever" in qualifiers or "Leading Off Inning" in qualifiers or "Inning Started" in qualifiers or "Leading Off Game" in qualifiers or "Leading Off Whole Game" in qualifiers or "Swung At First Pitch" in qualifiers or "First Pitch" in qualifiers or "Batter Ahead" in qualifiers or "Even Count" in qualifiers or "Pitcher Ahead" in qualifiers or "After Batter Ahead" in qualifiers or "After Even Count" in qualifiers or "After Pitcher Ahead" in qualifiers or "Top Inning" in qualifiers or "Bottom Inning" in qualifiers or "Full Count" in qualifiers or "Man On First" in qualifiers or "Man On Second" in qualifiers or "Man On Third" in qualifiers or "Bases Loaded" in qualifiers or "Ending Outs" in qualifiers or "Outs" in qualifiers or "Outs Remaining" in qualifiers or "Swinging On Strikes" in qualifiers or "Swinging On Balls" in qualifiers or "After Swinging On Strikes" in qualifiers or "After Swinging On Balls" in qualifiers or "After Strikes" in qualifiers or "After Balls" in qualifiers or "Strikes" in qualifiers or "Balls" in qualifiers or "Runs" in qualifiers or "Play Outs" in qualifiers or "RBIs" in qualifiers or "Number Drove In" in qualifiers or "Pitch Speed" in qualifiers or "Pitch Zone" in qualifiers or "Pitch Spin" in qualifiers or "Exit Velocity" in qualifiers or "Hit Distance" in qualifiers or "Launch Angle" in qualifiers or "Inning" in qualifiers or "Inning Reversed" in qualifiers or "Scheduled Inning Reversed" in qualifiers or "Pitching Against Batting Order" in qualifiers or "Count" in qualifiers or "After Count" in qualifiers or "After Swinging On Count" in qualifiers or "Swinging On Count" in qualifiers or "Team Score" in qualifiers or "Ending Team Score" in qualifiers or "Game Pitch Count" in qualifiers or "Team Pitch Count" in qualifiers or "Pitch Count" in qualifiers or "Pitcher Batters Faced" in qualifiers or "Batter Plate Appearance" in qualifiers or "Pitcher Batters Faced Reversed" in qualifiers or "Batter Plate Appearance Reversed" in qualifiers or "Starting Pitch Count" in qualifiers or "Innings Pitched" in qualifiers or "Ending Innings Pitched" in qualifiers or "At Bat Pitch Count" in qualifiers or "Time Facing Opponent" in qualifiers or "Number Of Men On Base" in qualifiers or "Number Of Men In Scoring" in qualifiers or "Men On Base" in qualifiers or "Time Through Lineup" in qualifiers or "Opponent Score" in qualifiers or "Score Margin" in qualifiers or "Score Difference" in qualifiers or  "Ending Opponent Score" in qualifiers or "Ending Score Margin" in qualifiers or "Ending Score Difference" in qualifiers or "Facing Lefty" in qualifiers or "Facing Righty" in qualifiers or "Batting Lefty" in qualifiers or "Batting Righty" in qualifiers or "Pitching Lefty" in qualifiers or "Pitching Righty" in qualifiers or "Pitch Type" in qualifiers or "Exact Pitch Type" in qualifiers or "Hit Trajectory" in qualifiers or "Hit Hardness" in qualifiers or "Local Event Time" in qualifiers or "Event Time" in qualifiers or "Event Type" in qualifiers or "Exact Event Type" in qualifiers or "Event Description" in qualifiers or "Upcoming Player Event Type" in qualifiers or "Upcoming Exact Player Event Type" in qualifiers or "Previous Player Event Type" in qualifiers or "Previous Exact Player Event Type" in qualifiers or "Previous Event Type" in qualifiers or "Previous Exact Event Type" in qualifiers or "Previous Event Description" in qualifiers or "Upcoming Event Type" in qualifiers or "Upcoming Exact Event Type" in qualifiers or "Upcoming Event Description" in qualifiers or "Exact Event Description" in qualifiers:
@@ -33840,33 +33840,6 @@ def has_other_game_quals(qualifiers):
 def set_row_data(player_game_info, row_data, player_type):
     if not player_game_info:
         return
-    row_data["Stadium"] = player_game_info["Stadium"]
-    row_data["StadiumID"] = player_game_info["StadiumID"]
-    row_data["StartTime"] = player_game_info["StartTime"]
-    row_data["TimeZoneID"] = player_game_info["TimeZoneID"]
-    if "Time" not in row_data:
-        row_data["Time"] = player_game_info["Time"]
-    row_data["Surface"] = player_game_info["Surface"]
-    row_data["Condition"] = player_game_info["Condition"]
-    row_data["HPUmpire"] = player_game_info["HPUmpire"]
-    row_data["1BUmpire"] = player_game_info["1BUmpire"]
-    row_data["2BUmpire"] = player_game_info["2BUmpire"]
-    row_data["3BUmpire"] = player_game_info["3BUmpire"]
-    row_data["LFUmpire"] = player_game_info["LFUmpire"]
-    row_data["RFUmpire"] = player_game_info["RFUmpire"]
-    row_data["OtherUmpire"] = player_game_info["OtherUmpire"]
-    row_data["HPUmpireID"] = player_game_info["HPUmpireID"]
-    row_data["1BUmpireID"] = player_game_info["1BUmpireID"]
-    row_data["2BUmpireID"] = player_game_info["2BUmpireID"]
-    row_data["3BUmpireID"] = player_game_info["3BUmpireID"]
-    row_data["LFUmpireID"] = player_game_info["LFUmpireID"]
-    row_data["RFUmpireID"] = player_game_info["RFUmpireID"]
-    row_data["OtherUmpireID"] = player_game_info["OtherUmpireID"]
-    row_data["Temperature"] = player_game_info["Temperature"]
-    row_data["City"] = player_game_info["City"]
-    row_data["State"] = player_game_info["State"]
-    row_data["TimeZone"] = player_game_info["TimeZone"]
-    row_data["Country"] = player_game_info["Country"]
     if player_game_info["RS"] != None:
         row_data["RS"] = player_game_info["RS"]
         row_data["BQS"] = player_game_info["BQS"]
@@ -34115,6 +34088,12 @@ def get_mlb_game_links_schedule_links(player_data, player_type, player_link, all
             scheudle_url = mlb_team_schedule_url_format.format(team_id, sub_year) + "&hydrate="
             if "National Game" in qualifiers or "Any National Game" in qualifiers or "TV Network" in qualifiers or "Radio Network" in qualifiers or "Raw TV Network" in qualifiers or "Raw Radio Network" in qualifiers or "National TV Network" in qualifiers or "National Raw TV Network" in qualifiers or "Any National TV Network" in qualifiers or "Any National Raw TV Network" in qualifiers:
                 scheudle_url += "broadcasts(all),"
+            if "Surface" in qualifiers:
+                scheudle_url += "venue(fieldInfo),"
+            if "Condition" in qualifiers or "Temperature" in qualifiers or "Wind" in qualifiers:
+                scheudle_url += "weather,"
+            if "Umpire" in qualifiers or "Home Plate Umpire" in qualifiers:
+                scheudle_url += "officials,"
                 
             if scheudle_url.endswith(","):
                 scheudle_url = scheudle_url[:-1]
@@ -34134,6 +34113,15 @@ def get_mlb_game_links_schedule_links(player_data, player_type, player_link, all
             #     scheudle_url = mlb_team_schedule_url_format.format(team_id, urllib.parse.quote_plus(str(min_date)), urllib.parse.quote_plus(str(max_date))) + "&hydrate="
             #     if "National Game" in qualifiers or "Any National Game" in qualifiers or "TV Network" in qualifiers or "Radio Network" in qualifiers or "Raw TV Network" in qualifiers or "Raw Radio Network" in qualifiers or "National TV Network" in qualifiers or "National Raw TV Network" in qualifiers or "Any National TV Network" in qualifiers or "Any National Raw TV Network" in qualifiers:
             #         scheudle_url += "broadcasts(all),"
+
+            #     if "National Game" in qualifiers or "Any National Game" in qualifiers or "TV Network" in qualifiers or "Radio Network" in qualifiers or "Raw TV Network" in qualifiers or "Raw Radio Network" in qualifiers or "National TV Network" in qualifiers or "National Raw TV Network" in qualifiers or "Any National TV Network" in qualifiers or "Any National Raw TV Network" in qualifiers:
+            #         scheudle_url += "broadcasts(all),"
+            #     if "Surface" in qualifiers:
+            #         scheudle_url += "venue(fieldInfo),"
+            #     if "Condition" in qualifiers or "Temperature" in qualifiers or "Wind" in qualifiers:
+            #         scheudle_url += "weather,"
+            #     if "Umpire" in qualifiers or "Home Plate Umpire" in qualifiers:
+            #         scheudle_url += "officials,"
                     
             #     if scheudle_url.endswith(","):
             #         scheudle_url = scheudle_url[:-1]
@@ -34173,6 +34161,7 @@ def get_mlb_game_links_schedule_links(player_data, player_type, player_link, all
                         radio_networks = []
                         national_tv_networks = []
                         any_national_tv_networks = []
+
                         if "broadcasts" in game and game["broadcasts"]:
                             for broadcast in game["broadcasts"]:
                                 if "callSign" in broadcast and broadcast["callSign"]:
@@ -34234,6 +34223,58 @@ def get_mlb_game_links_schedule_links(player_data, player_type, player_link, all
                                                 elif game["teams"]["away"]["score"] < game["teams"]["home"]["score"]:
                                                     row_data["CurrTmLosses"] -= 1
                                                     row_data["CurrOppWins"] -= 1
+                                        
+                                        if game["dayNight"] == "day":
+                                            row_data["Time"] = "D"
+                                        elif game["dayNight"] == "night":
+                                            row_data["Time"] = "N"
+
+                                        if "gameDate" in game and game["gameDate"]:
+                                            row_data["StartTime"] = dateutil.parser.parse(game["gameDate"])
+
+                                        if "officials" in game:
+                                            for index, umpire_obj in enumerate(game["officials"]):
+                                                if umpire_obj["officialType"] == "Home Plate":
+                                                    row_data["HPUmpire"] = umpire_obj["official"]["fullName"]
+                                                    row_data["HPUmpireID"] = umpire_obj["official"]["id"]
+                                                elif umpire_obj["officialType"] == "First Base":
+                                                    row_data["1BUmpire"] = umpire_obj["official"]["fullName"]
+                                                    row_data["1BUmpireID"] = umpire_obj["official"]["id"]
+                                                elif umpire_obj["officialType"] == "Second Base":
+                                                    row_data["2BUmpire"] = umpire_obj["official"]["fullName"]
+                                                    row_data["2BUmpireID"] = umpire_obj["official"]["id"]
+                                                elif umpire_obj["officialType"] == "Third Base":
+                                                    row_data["3BUmpire"] = umpire_obj["official"]["fullName"]
+                                                    row_data["3BUmpireID"] = umpire_obj["official"]["id"]
+                                                elif umpire_obj["officialType"] == "Left Field":
+                                                    row_data["LFUmpire"] = umpire_obj["official"]["fullName"]
+                                                    row_data["LFUmpireID"] = umpire_obj["official"]["id"]
+                                                elif umpire_obj["officialType"] == "Right Field":
+                                                    row_data["RFUmpire"] = umpire_obj["official"]["fullName"]
+                                                    row_data["RFUmpireID"] = umpire_obj["official"]["id"]
+                                                else:
+                                                    row_data["OtherUmpire"] = umpire_obj["official"]["fullName"]
+                                                    row_data["OtherUmpireID"] = umpire_obj["official"]["id"]
+
+                                        if "weather" in game:
+                                            if "temp" in game["weather"]:
+                                                row_data["Temperature"] = int(game["weather"]["temp"])
+                                            if "wind" in game["weather"]:
+                                                row_data["Wind"] = int(game["weather"]["wind"].split()[0])
+                                            if "condition" in game["weather"]:
+                                                row_data["Condition"] = game["weather"]["condition"]
+
+                                        if "fieldInfo" in game["venue"]:
+                                            row_data["Surface"] = game["venue"]["fieldInfo"]["turfType"]
+                                        
+                                        row_data["Stadium"] = game["venue"]["name"]
+                                        row_data["StadiumID"] = game["venue"]["id"]
+                                        
+                                        row_data["City"] = team_venues[str(row_data["StadiumID"])]["City"]
+                                        row_data["State"] = team_venues[str(row_data["StadiumID"])]["State"]
+                                        row_data["Country"] = team_venues[str(row_data["StadiumID"])]["Country"]
+                                        row_data["TimeZone"] = team_venues[str(row_data["StadiumID"])]["TimeZone"]
+                                        row_data["TimeZoneID"] = team_venues[str(row_data["StadiumID"])]["TimeZoneID"]
                                     
                                         break
     
@@ -34245,32 +34286,7 @@ def get_live_game_data(row_index, player_data, row_data, player_type, qualifiers
         "pitching_events" : [],
         "pitching_run_events" : [],
         "pitch_event_to_run_event" : {},
-        "Stadium" : None,
-        "StadiumID" : None,
-        "Time" : None,
-        "Surface" : None,
-        "Condition" : None,
-        "HPUmpire" : None,
-        "1BUmpire" : None,
-        "2BUmpire" : None,
-        "3BUmpire" : None,
-        "LFUmpire" : None,
-        "RFUmpire" : None,
-        "OtherUmpire" : None,
-        "HPUmpireID" : None,
-        "1BUmpireID" : None,
-        "2BUmpireID" : None,
-        "3BUmpireID" : None,
-        "LFUmpireID" : None,
-        "RFUmpireID" : None,
-        "OtherUmpireID" : None,
-        "Temperature" : None,
-        "City" : None,
-        "State" : None,
-        "TimeZone" : None,
         "TimeZoneID" : None,
-        "StartTime" : None,
-        "Country" : None,
         "RS" : None,
         "BQS" : None,
         "IR" : None,
@@ -34330,57 +34346,7 @@ def get_live_game_data(row_index, player_data, row_data, player_type, qualifiers
     team_batting_order_map = {}
     opp_batting_order_map = {}
 
-    game_data["Stadium"] = sub_data["gameData"]["venue"]["name"]
-    game_data["StadiumID"] = sub_data["gameData"]["venue"]["id"]
-    if sub_data["gameData"]["datetime"]["dayNight"] == "day":
-        game_data["Time"] = "D"
-    elif sub_data["gameData"]["datetime"]["dayNight"] == "night":
-        game_data["Time"] = "N"
-    game_data["Surface"] = sub_data["gameData"]["venue"]["fieldInfo"]["turfType"]
-
-    if "dateTime" in sub_data["gameData"]["datetime"] and sub_data["gameData"]["datetime"]["dateTime"]:
-        game_data["StartTime"] = dateutil.parser.parse(sub_data["gameData"]["datetime"]["dateTime"])
-
-    for index, umpire_obj in enumerate(sub_data["liveData"]["boxscore"]["officials"]):
-        if umpire_obj["officialType"] == "Home Plate":
-            game_data["HPUmpire"] = umpire_obj["official"]["fullName"]
-            game_data["HPUmpireID"] = umpire_obj["official"]["id"]
-        elif umpire_obj["officialType"] == "First Base":
-            game_data["1BUmpire"] = umpire_obj["official"]["fullName"]
-            game_data["1BUmpireID"] = umpire_obj["official"]["id"]
-        elif umpire_obj["officialType"] == "Second Base":
-            game_data["2BUmpire"] = umpire_obj["official"]["fullName"]
-            game_data["2BUmpireID"] = umpire_obj["official"]["id"]
-        elif umpire_obj["officialType"] == "Third Base":
-            game_data["3BUmpire"] = umpire_obj["official"]["fullName"]
-            game_data["3BUmpireID"] = umpire_obj["official"]["id"]
-        elif umpire_obj["officialType"] == "Left Field":
-            game_data["LFUmpire"] = umpire_obj["official"]["fullName"]
-            game_data["LFUmpireID"] = umpire_obj["official"]["id"]
-        elif umpire_obj["officialType"] == "Right Field":
-            game_data["RFUmpire"] = umpire_obj["official"]["fullName"]
-            game_data["RFUmpireID"] = umpire_obj["official"]["id"]
-        else:
-            game_data["OtherUmpire"] = umpire_obj["official"]["fullName"]
-            game_data["OtherUmpireID"] = umpire_obj["official"]["id"]
-
-    if "temp" in sub_data["gameData"]["weather"]:
-        game_data["Temperature"] = int(sub_data["gameData"]["weather"]["temp"])
-    if "wind" in sub_data["gameData"]["weather"]:
-        game_data["Wind"] = int(sub_data["gameData"]["weather"]["wind"].split()[0])
-    if "condition" in sub_data["gameData"]["weather"]:
-        game_data["Condition"] = sub_data["gameData"]["weather"]["condition"]
-    
-    if "city" in sub_data["gameData"]["venue"]["location"]:
-        game_data["City"] = sub_data["gameData"]["venue"]["location"]["city"]
-    if "stateAbbrev" in sub_data["gameData"]["venue"]["location"]:
-        game_data["State"] = sub_data["gameData"]["venue"]["location"]["stateAbbrev"]
-    if "tz" in sub_data["gameData"]["venue"]["timeZone"]:
-        game_data["TimeZone"] = sub_data["gameData"]["venue"]["timeZone"]["id"]
-    if "id" in sub_data["gameData"]["venue"]["timeZone"]:
-        game_data["TimeZoneID"] = sub_data["gameData"]["venue"]["timeZone"]["id"]
-    if "country" in sub_data["gameData"]["venue"]["location"]:
-        game_data["Country"] = sub_data["gameData"]["venue"]["location"]["country"]
+    game_data["TimeZoneID"] = sub_data["gameData"]["venue"]["timeZone"]["id"]
 
     is_home_team = None
     for player in sub_data["liveData"]["boxscore"]["teams"]["away"]["players"]:

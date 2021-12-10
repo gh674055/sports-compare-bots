@@ -6463,8 +6463,8 @@ game_splits_url_format = "https://www.hockey-reference.com/players/{}/{}/gamelog
 adv_url_format = "https://www.hockey-reference.com/players/{}/{}-advanced-{}.html"
 opponent_schedule_url_format = "https://www.hockey-reference.com/leagues/NHL_{}.html"
 team_roster_url_format = "https://statsapi.web.nhl.com/api/v1/teams/{}/roster?season={}&hydrate=person"
-nhl_team_schedule_url_format = "https://statsapi.web.nhl.com/api/v1/schedule?teamId={}&season={}"
-#nhl_team_schedule_url_format = "https://statsapi.web.nhl.com/api/v1/schedule?teamId={}&startDate={}&endDate={}"
+nhl_team_schedule_url_format = "https://statsapi.web.nhl.com/api/v1/schedule?teamId={}&season={}&gameType=P,R"
+#nhl_team_schedule_url_format = "https://statsapi.web.nhl.com/api/v1/schedule?teamId={}&startDate={}&endDate={}&gameType=P,R"
 nhl_shifts_report_format = "https://api.nhle.com/stats/rest/en/shiftcharts?cayenneExp=gameId={}"
 nhl_html_shifts_report_format = "http://www.nhl.com/scores/htmlreports/{}/T{}{}.HTM"
 nhl_html_plays_report_format = "http://www.nhl.com/scores/htmlreports/{}/PL{}.HTM"
@@ -29845,7 +29845,7 @@ def perform_schedule_qualifiers(row, qualifiers):
                         has_match = True
                         break
                 else:
-                    if arena in row["Arena"].lower():
+                    if re.sub(r"[^A-Za-z\s]", "", arena).strip() in re.sub(r"[^A-Za-z\s]", "", row["Arena"].lower()).strip():
                         has_match = True
                         break
             if qual_object["negate"]:
