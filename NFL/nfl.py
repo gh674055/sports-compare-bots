@@ -1616,8 +1616,8 @@ def handle_player_string(comment, player_type, is_fantasy, last_updated, hide_ta
                                         "time_zone" : time_zone
                                     }
                                 
-                                qualifier_obj["values"]["start_val"] = qualifier_obj["values"]["start_val"].replace(microsecond=0)
-                                qualifier_obj["values"]["end_val"] = qualifier_obj["values"]["end_val"].replace(microsecond=0)
+                                qualifier_obj["values"]["start_val"] = qualifier_obj["values"]["start_val"].replace(microsecond=0).replace(second=0)
+                                qualifier_obj["values"]["end_val"] = qualifier_obj["values"]["end_val"].replace(microsecond=0).replace(second=0)
 
                             if not qual_type in qualifiers:
                                 qualifiers[qual_type] = []
@@ -2894,8 +2894,8 @@ def handle_player_string(comment, player_type, is_fantasy, last_updated, hide_ta
                                         "end_val" : end_date
                                     }
                                 
-                                qualifier_obj["values"]["start_val"] = qualifier_obj["values"]["start_val"].replace(microsecond=0)
-                                qualifier_obj["values"]["end_val"] = qualifier_obj["values"]["end_val"].replace(microsecond=0)
+                                qualifier_obj["values"]["start_val"] = qualifier_obj["values"]["start_val"].replace(microsecond=0).replace(second=0)
+                                qualifier_obj["values"]["end_val"] = qualifier_obj["values"]["end_val"].replace(microsecond=0).replace(second=0)
                             elif qualifier_str.startswith("m:") or qualifier_str.startswith("month:") or re.match(all_months_re, qualifier_str):
                                 qualifier_obj["values"] = []
 
@@ -7090,7 +7090,7 @@ def determine_raw_str(subbb_frame):
                     if start_time == end_time:
                         qual_str += start_time.strftime("%I:%M:%S%p")
                     else:
-                        qual_str += start_time.strftime("%I:%M:%S%p") + " to " + end_time.strftime("%I:%M:%S%p")
+                        qual_str += start_time.strftime("%I:%M%p") + " to " + end_time.strftime("%I:%M%p")
                     qual_str += " " + qual_obj["values"]["time_zone"]
                 elif qualifier == "Local Event Time" or qualifier == "Local Start Time":
                     if not sub_sub_first:
@@ -7104,9 +7104,9 @@ def determine_raw_str(subbb_frame):
                     end_time = qual_obj["values"]["end_val"]
 
                     if start_time == end_time:
-                        qual_str += start_time.strftime("%I:%M:%S%p")
+                        qual_str += start_time.strftime("%I:%M%p")
                     else:
-                        qual_str += start_time.strftime("%I:%M:%S%p") + " to " + end_time.strftime("%I:%M:%S%p")
+                        qual_str += start_time.strftime("%I:%M%p") + " to " + end_time.strftime("%I:%M%p")
                 elif qualifier == "Age" or qualifier == "Season Age":
                     if not sub_sub_first:
                         qual_str += " + "
@@ -9335,7 +9335,7 @@ def perform_nfl_game_qualifiers(row, qualifiers):
         
         tz = dateutil.tz.tzoffset("IST", tz_offset)
             
-        event_time = row["Shared"]["StartTime"].astimezone(tz).time().replace(microsecond=0)
+        event_time = row["Shared"]["StartTime"].astimezone(tz).time().replace(microsecond=0).replace(second=0)
         for qual_object in qualifiers["Local Start Time"]:
             stat_val = qual_object["values"]["start_val"]
             end_val = qual_object["values"]["end_val"]
@@ -17446,7 +17446,7 @@ def perform_schedule_qualifiers(row, qualifiers):
         for qual_object in qualifiers["Start Time"]:
             stat_val = qual_object["values"]["start_val"]
             end_val = qual_object["values"]["end_val"]
-            event_time = row["Shared"]["StartTime"].astimezone(pytz.timezone(qual_object["values"]["time_zone"])).time().replace(microsecond=0)
+            event_time = row["Shared"]["StartTime"].astimezone(pytz.timezone(qual_object["values"]["time_zone"])).time().replace(microsecond=0).replace(second=0)
             if end_val < stat_val:
                 is_match = event_time >= stat_val or event_time <= end_val
             else:
