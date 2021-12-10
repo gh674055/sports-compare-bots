@@ -14198,13 +14198,13 @@ def handle_player_data(player_data, time_frame, player_type, player_page, valid_
 
     if not is_game and time_frame["playoffs"] != "Only" and player_type["da_type"] != "Batter":
         handle_missing_game_data(all_rows, player_data, player_type, time_frame, valid_years)
-        
+            
     if not is_game:
         handle_missing_reg_rows(player_page, player_data, all_rows, player_type, time_frame)
-
+    
     if not is_game_page:
         handle_missing_playoff_rows(player_page, player_data, valid_years, all_rows, player_type, time_frame)
-
+    
     has_result_stat_qual = False
     for qualifier in time_frame["qualifiers"]:
         if "Season" not in qualifier and "State" not in qualifier and "Facing" not in qualifier and "Event Stat" not in qualifier and ("Stat" in qualifier or "Streak" in qualifier or "Stretch" in qualifier or ("Formula" in qualifier and qualifier != "Event Formula") or "Quickest" in qualifier or "Slowest" in qualifier):
@@ -15579,6 +15579,7 @@ def handle_missing_reg_rows(player_page, player_data, all_rows, player_type, tim
         else:
             table_names.extend(["batting_postseason"]) if player_type["da_type"] != "Batter" else table_names.extend(["pitching_postseason"])
 
+
     seasons = set([row["Year"] for row in all_rows])
     comments = None
     previous_headers = set()
@@ -15613,7 +15614,7 @@ def handle_missing_reg_rows(player_page, player_data, all_rows, player_type, tim
                 elif row.get("class") and "partial_table" in row.get("class") and not "spacer" in row.get("class"):
                     match = True
                 
-                if match and row.parent.name != "thead" and row.parent.name != "tfoot":
+                if match or (table_name.endswith("postseason") and not row.get("class")) and row.parent.name != "thead" and row.parent.name != "tfoot":
                     row_data = parse_row(row, time_frame, None, False, player_type, header_values, previous_headers, 0, table_name)
                     
                     if not row_data:
