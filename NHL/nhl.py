@@ -11268,6 +11268,9 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
     if not player_type["da_type"]:
         player_type["da_type"] = get_init_type(names, parse_time_frames)
 
+    if player_type["da_type"]["type"] == "Skater" and has_different_types(names, parse_time_frames):
+        extra_stats.add("current-stats")
+
     handle_against_qual(names, parse_time_frames, comment_obj, extra_stats)
     handle_same_games_qual(names, player_type, parse_time_frames, comment_obj, extra_stats)
 
@@ -11331,6 +11334,21 @@ def get_init_type(names, time_frames):
             player_id, player_page = get_player(name, time_frames[index][real_index])
             if player_id and player_page:
                 return get_player_type(player_page)
+
+def has_different_types(names, time_frames):
+    last_player_type = None
+    for index, sub_name in enumerate(names):
+        sub_names = re.split(r"(?<!\\)\+", sub_name.strip())
+        for sub_index, name in enumerate(sub_names):
+            real_index = sub_index if len(time_frames[index]) > sub_index else len(time_frames[index]) - 1
+            player_id, player_page = get_player(name, time_frames[index][real_index])
+            if player_id and player_page:
+                player_type = get_player_type(player_page)
+                if not last_player_type:
+                    last_player_type = player_type
+                if player_type != last_player_type:
+                    return True
+    return False
 
 def handle_name_threads(sub_name, parse_time_frames, index, player_type, remove_duplicates, remove_duplicate_games, extra_stats, comment_obj):
     try:
