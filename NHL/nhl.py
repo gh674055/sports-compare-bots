@@ -14120,7 +14120,7 @@ def handle_player_data(player_data, time_frame, player_type, player_page, valid_
         handle_missing_reg_rows(player_page, player_data, all_rows, player_type, time_frame, player_link)
 
     if not is_game_page:
-        handle_missing_playoff_rows(player_page, player_data, valid_years, all_rows, player_type, time_frame, player_link, is_game)
+        handle_missing_playoff_rows(player_page, player_data, valid_years, all_rows, player_type, time_frame, player_link)
 
     if is_game:
         handle_date_row_data(all_rows)
@@ -15454,7 +15454,7 @@ def handle_missing_reg_rows(player_page, player_data, all_rows, player_type, tim
         if not row_data["Year"] in seasons:
             all_rows.append({"Year" : row_data["Year"], "Date" : row_data["Date"].year, "Tm" : row_data["Tm"], "is_playoffs" : False, "fake_reg_row" : True})
 
-def handle_missing_playoff_rows(player_page, player_data, valid_years, all_rows, player_type, time_frame, player_link, is_game):
+def handle_missing_playoff_rows(player_page, player_data, valid_years, all_rows, player_type, time_frame, player_link):
     temp_rows = handle_season_stats_game(player_type, player_data, player_link, time_frame)
     fix_playoffs_data(temp_rows, time_frame)
     for row_data in temp_rows:
@@ -15462,7 +15462,7 @@ def handle_missing_playoff_rows(player_page, player_data, valid_years, all_rows,
             continue
 
         if not row_data["Year"] in valid_years:
-            all_rows.append({"Year" : row_data["Year"], "Date" : row_data["Date"].year if is_game else row_data["Date"], "Tm" : row_data["Tm"], "is_playoffs" : False, "fake_playoff_row" : True})
+            all_rows.append({"Year" : row_data["Year"], "Date" : row_data["Date"].year, "Tm" : row_data["Tm"], "is_playoffs" : False, "fake_playoff_row" : True})
             valid_years.append(row_data["Year"])
 
 def handle_hat_tricks(player_page, all_rows):
