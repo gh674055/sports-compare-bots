@@ -33737,7 +33737,7 @@ def perform_mlb_schedule_qualifiers(row, qualifiers):
         if "TimeZoneID" not in row or row["TimeZoneID"] == None:
             return
             
-        event_time = timezone(player_game_info["TimeZoneID"]).localize(event_time).time().replace(microsecond=0)
+        event_time = timezone(row["TimeZoneID"]).localize(event_time).time().replace(microsecond=0)
         for qual_object in qualifiers["Local Start Time"]:
             stat_val = qual_object["values"]["start_val"]
             end_val = qual_object["values"]["end_val"]
