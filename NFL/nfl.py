@@ -4919,7 +4919,7 @@ def handle_player_string(comment, player_type, is_fantasy, last_updated, hide_ta
                     if "Current Season Age" not in parsed_game_quals:
                         name_count += sum(len(re.split(r"(?<!\\)\+", subb_name.strip())) for subb_name in names)
                         parsed_game_quals.add("Current Season Age")
-                if "Facing Former Team" in subbbb_date["qualifiers"] or "Facing Former Franchise" in subbbb_date["qualifiers"] or "With New Team" in subbbb_date["qualifiers"] or "With New Franchise" in subbbb_date["qualifiers"] or "Game After Sub Query" in subbbb_date["qualifiers"] or "Game Before Sub Query" in subbbb_date["qualifiers"]:
+                if "Facing Former Team" in subbbb_date["qualifiers"] or "Facing Former Franchise" in subbbb_date["qualifiers"] or "With New Team" in subbbb_date["qualifiers"] or "With New Franchise" in subbbb_date["qualifiers"] or "Game After Sub Query" in subbbb_date["qualifiers"] or "Game Before Sub Query" in subbbb_date["qualifiers"] or "Games Rest" in subbbb_date["qualifiers"] or "Starts Rest" in subbbb_date["qualifiers"] or "Games In A Row" in subbbb_date["qualifiers"] or "Starts In A Row" in subbbb_date["qualifiers"] or "Game Days Rest" in subbbb_date["qualifiers"] or "Start Days Rest" in subbbb_date["qualifiers"] or "Start Days In A Row" in subbbb_date["qualifiers"] or "Game Days In A Row" in subbbb_date["qualifiers"] or "Days Rest" in subbbb_date["qualifiers"] or "Starts Days Rest" in subbbb_date["qualifiers"] or "Upcoming Days Rest" in subbbb_date["qualifiers"] or "Upcoming Starts Days Rest" in subbbb_date["qualifiers"]:
                     name_count += 1
             name_count += len(subbb_date) - 1
 
@@ -7399,7 +7399,7 @@ def handle_multi_player_data(player_id, time_frames, player_type, player_page, i
         logger.info("#" + str(threading.get_ident()) + "#   " + "Starting player " + player_id)
         if ("Facing Former Team" in time_frame["qualifiers"] or "Facing Former Franchise" in time_frame["qualifiers"] or "With New Team" in time_frame["qualifiers"] or "With New Franchise" in time_frame["qualifiers"]) and not "valid_teams_order" in player_data:
             get_team_map_info(player_data, player_type, raw_valid_teams, comment_obj)
-        if ("Game After Sub Query" in time_frame["qualifiers"] or "Game Before Sub Query" in time_frame["qualifiers"]) and not "all_games" in player_data:
+        if ("Game After Sub Query" in time_frame["qualifiers"] or "Game Before Sub Query" in time_frame["qualifiers"] or "Games Rest" in time_frame["qualifiers"] or "Starts Rest" in time_frame["qualifiers"] or "Games In A Row" in time_frame["qualifiers"] or "Starts In A Row" in time_frame["qualifiers"] or "Game Days Rest" in time_frame["qualifiers"] or "Start Days Rest" in time_frame["qualifiers"] or "Start Days In A Row" in time_frame["qualifiers"] or "Game Days In A Row" in time_frame["qualifiers"] or "Days Rest" in time_frame["qualifiers"] or "Starts Days Rest" in time_frame["qualifiers"] or "Upcoming Days Rest" in time_frame["qualifiers"] or "Upcoming Starts Days Rest" in time_frame["qualifiers"]) and not "all_games" in player_data:
             get_all_games(player_data, time_frame, player_type, comment_obj)
         row, missing_games = handle_player_data(player_data, time_frame, player_type, player_page, is_fantasy, ind_player_type, valid_teams, valid_year_teams, extra_stats)
 
@@ -8175,7 +8175,7 @@ def get_all_games(player_data, time_frame, player_type, comment_obj):
         "time_end" : datetime.date.today().year,
         "type" : "date",
         "add_type" : "add", 
-        "playoffs" : time_frame["playoffs"],
+        "playoffs" : "Include",
         "qualifiers" : {
             "Force Dates" : [{
                 "negate" : False
@@ -8199,7 +8199,7 @@ def get_all_games(player_data, time_frame, player_type, comment_obj):
     for row in sorted(sub_player_data["rows"], key=lambda row: row["Shared"]["Date"]):
         if row["Shared"]["Year"] not in player_data["all_games"]:
             player_data["all_games"][row["Shared"]["Year"]] = []
-        player_data["all_games"][row["Shared"]["Year"]].append(row["Shared"]["GameLink"])
+        player_data["all_games"][row["Shared"]["Year"]].append(row)
 
 def handle_date_row_data(all_rows):
     all_rows = sorted(all_rows, key=lambda row: row["Shared"]["Date"])
@@ -11370,10 +11370,10 @@ def perform_qualifier(player_data, player_type, ind_player_type, row, time_frame
             return False
         all_games = player_data["all_games"][row["Shared"]["Year"]]
 
-        game_index = all_games.index(row["Shared"]["GameLink"])
+        game_index = [sub_row["Shared"]["GameLink"] for sub_row in player_data["all_games"][row["Shared"]["Year"]]].index(row["Shared"]["GameLink"])
         if game_index == 0:
             return False
-        previous_game = all_games[game_index - 1]
+        previous_game = all_games[game_index - 1]["Shared"]["GameLink"]
 
         for qual_object in qualifiers["Game After Sub Query"]:
             has_match = False
@@ -11392,10 +11392,10 @@ def perform_qualifier(player_data, player_type, ind_player_type, row, time_frame
             return False
         all_games = player_data["all_games"][row["Shared"]["Year"]]
 
-        game_index = all_games.index(row["Shared"]["GameLink"])
+        game_index = [sub_row["Shared"]["GameLink"] for sub_row in player_data["all_games"][row["Shared"]["Year"]]].index(row["Shared"]["GameLink"])
         if game_index == len(all_games) - 1:
             return False
-        next_game = all_games[game_index + 1]
+        next_game = all_games[game_index + 1]["Shared"]["GameLink"]
 
         for qual_object in qualifiers["Game Before Sub Query"]:
             has_match = False
@@ -11882,12 +11882,13 @@ def perform_qualifier(player_data, player_type, ind_player_type, row, time_frame
                     return False
 
     if "Days Rest" in qualifiers:
-        for qual_object in qualifiers["Days Rest"]:
-            if not row["Shared"]["Previous Row"]:
-                days_rest = float("inf")
-            else:
-                days_rest = (row["Shared"]["Date"] - row["Shared"]["Previous Row"]["Shared"]["Date"]).days - 1
+        days_rest = float("inf")
+        for sub_data in sorted(player_data["all_games"][row["Shared"]["Year"]], key=lambda seas_row: seas_row["Shared"]["Date"], reverse=True):
+            if sub_data["Shared"]["Date"] < row["Shared"]["Date"]:
+                days_rest = (row["Shared"]["Date"] - sub_data["Shared"]["Date"]).days - 1
+                break
 
+        for qual_object in qualifiers["Days Rest"]:
             if qual_object["negate"]:
                 if days_rest >= qual_object["values"]["start_val"] and days_rest <= qual_object["values"]["end_val"]:
                     return False
@@ -11896,9 +11897,13 @@ def perform_qualifier(player_data, player_type, ind_player_type, row, time_frame
                     return False
     
     if "Starts Days Rest" in qualifiers:
-        for qual_object in qualifiers["Starts Days Rest"]:
-            days_rest = get_starts_days_rest(row, "Previous Row", row["Shared"]["Date"])
+        days_rest = float("inf")
+        for sub_data in sorted(player_data["all_games"][row["Shared"]["Year"]], key=lambda seas_row: seas_row["Shared"]["Date"], reverse=True):
+            if sub_data["Shared"]["Date"] < row["Shared"]["Date"] and sub_data["Shared"]["Start"]:
+                days_rest = (row["Shared"]["Date"] - sub_data["Shared"]["Date"]).days - 1
+                break
 
+        for qual_object in qualifiers["Starts Days Rest"]:
             if qual_object["negate"]:
                 if days_rest >= qual_object["values"]["start_val"] and days_rest <= qual_object["values"]["end_val"]:
                     return False
@@ -11907,9 +11912,13 @@ def perform_qualifier(player_data, player_type, ind_player_type, row, time_frame
                     return False
     
     if "Upcoming Starts Days Rest" in qualifiers:
-        for qual_object in qualifiers["Upcoming Starts Days Rest"]:
-            days_rest = get_starts_days_rest(row, "Upcoming Row", row["Shared"]["Date"])
+        days_rest = float("inf")
+        for sub_data in sorted(player_data["all_games"][row["Shared"]["Year"]], key=lambda seas_row: seas_row["Shared"]["Date"], reverse=False):
+            if sub_data["Shared"]["Date"] > row["Shared"]["Date"] and sub_data["Shared"]["Start"]:
+                days_rest = (row["Date"] - sub_data["Shared"]["Date"]).days - 1
+                break
 
+        for qual_object in qualifiers["Upcoming Starts Days Rest"]:
             if qual_object["negate"]:
                 if days_rest >= qual_object["values"]["start_val"] and days_rest <= qual_object["values"]["end_val"]:
                     return False
@@ -11918,17 +11927,34 @@ def perform_qualifier(player_data, player_type, ind_player_type, row, time_frame
                     return False
 
     if "Upcoming Days Rest" in qualifiers:
-        for qual_object in qualifiers["Upcoming Days Rest"]:
-            if not row["Shared"]["Upcoming Row"]:
-                days_rest = float("inf")
-            else:
-                days_rest = (row["Shared"]["Upcoming Row"]["Shared"]["Date"] - row["Shared"]["Date"]).days - 1
+        days_rest = float("inf")
+        for sub_data in sorted(player_data["all_games"][row["Shared"]["Year"]], key=lambda seas_row: seas_row["Shared"]["Date"], reverse=False):
+            if sub_dat["Shared"]["Date"] > row["Shared"]["Date"]:
+                days_rest = (row["Shared"]["Date"] - sub_data["Shared"]["Date"]).days - 1
+                break
 
+        for qual_object in qualifiers["Upcoming Days Rest"]:
             if qual_object["negate"]:
                 if days_rest >= qual_object["values"]["start_val"] and days_rest <= qual_object["values"]["end_val"]:
                     return False
             else:
                 if not (days_rest >= qual_object["values"]["start_val"] and days_rest <= qual_object["values"]["end_val"]):
+                    return False
+
+    if "Days In A Row" in qualifiers:
+        days_in_a_row = 1
+        date_to_check = row["Shared"]["Date"] - datetime.timedelta(days=1)
+        for sub_data in sorted(player_data["all_games"][row["Shared"]["Year"]], key=lambda seas_row: seas_row["Shared"]["Date"], reverse=True):
+            if sub_data["Shared"]["Date"] == date_to_check:
+                days_in_a_row += 1
+                date_to_check -= datetime.timedelta(days=1)
+
+        for qual_object in qualifiers["Days Rest"]:
+            if qual_object["negate"]:
+                if days_in_a_row >= qual_object["values"]["start_val"] and days_in_a_row <= qual_object["values"]["end_val"]:
+                    return False
+            else:
+                if not (days_in_a_row >= qual_object["values"]["start_val"] and days_in_a_row <= qual_object["values"]["end_val"]):
                     return False
 
     if "Result" in qualifiers:
@@ -12163,15 +12189,6 @@ def is_moon_match(da_date, da_moon_date):
         dt_2 = da_moon_date
     
     return da_date >= dt_1.date() and da_date <= dt_2.date()
-
-def get_starts_days_rest(row, row_str, row_date):
-    if not row["Shared"][row_str]:
-        return float("inf")
-    else:
-        if row["Shared"][row_str]["Start"]:
-            return (row_date - row["Shared"][row_str]["Shared"]["Date"]).days - 1
-        else:
-            return get_starts_days_rest(row["Shared"][row_str], row_str, row_date)
 
 def handle_max_min_data(all_rows, player_data, player_type, qualifiers):
     new_rows = []
@@ -17305,21 +17322,21 @@ def handle_schedule_stats(all_rows, qualifiers, is_playoffs):
                                     for sub_data in sorted(season_obj["regular_season"] + season_obj["playoffs"], key=lambda seas_row: seas_row["Date"], reverse=True):
                                         if sub_data["Date"] < row_data["Shared"]["Date"]:
                                             not_first_game = True
-                                            if sub_data["Date"] in [row_subbest_data["Shared"]["Date"] for row_subbest_data in all_rows]:
+                                            if sub_data["Date"] in [row_subbest_data["Shared"]["Date"] for row_subbest_data in player_data["all_games"][row_data["Shared"]["Year"]]]:
                                                 count_games_rest = False
                                             if count_games_rest:
                                                 games_rest += 1
-                                            if sub_data["Date"] in [row_subbest_data["Shared"]["Date"] for row_subbest_data in all_rows if row_subbest_data["Shared"]["Start"]]:
+                                            if sub_data["Date"] in [row_subbest_data["Shared"]["Date"] for row_subbest_data in player_data["all_games"][row_data["Shared"]["Year"]] if row_subbest_data["Shared"]["Start"]]:
                                                 count_starts_rest = False
                                             if count_starts_rest:
                                                 starts_rest += 1
 
-                                            if sub_data["Date"] not in [row_subbest_data["Shared"]["Date"] for row_subbest_data in all_rows]:
+                                            if sub_data["Date"] not in [row_subbest_data["Shared"]["Date"] for row_subbest_data in player_data["all_games"][row_data["Shared"]["Year"]]]:
                                                 count_games_rest_2 = False
                                             if count_games_rest_2:
                                                 games_in_a_row += 1
                                             if row_data["Shared"]["Start"]:
-                                                if sub_data["Date"] not in [row_subbest_data["Shared"]["Date"] for row_subbest_data in all_rows if row_subbest_data["Shared"]["Start"]]:
+                                                if sub_data["Date"] not in [row_subbest_data["Shared"]["Date"] for row_subbest_data in player_data["all_games"][row_data["Shared"]["Year"]] if row_subbest_data["Shared"]["Start"]]:
                                                     count_starts_rest_2 = False
                                                 if count_starts_rest_2:
                                                     starts_in_a_row += 1
@@ -17372,21 +17389,21 @@ def handle_schedule_stats(all_rows, qualifiers, is_playoffs):
                                     for sub_data in sorted(season_obj["regular_season"] + season_obj["playoffs"], key=lambda seas_row: seas_row["Date"], reverse=True):
                                         if sub_data["Date"] < row_data["Shared"]["Date"]:
                                             not_first_game = True
-                                            if sub_data["Date"] in [row_subbest_data["Shared"]["Date"] for row_subbest_data in all_rows]:
+                                            if sub_data["Date"] in [row_subbest_data["Shared"]["Date"] for row_subbest_data in player_data["all_games"][row_data["Shared"]["Year"]]]:
                                                 count_games_rest = False
                                             if count_games_rest:
                                                 games_rest += 1
-                                            if sub_data["Date"] in [row_subbest_data["Shared"]["Date"] for row_subbest_data in all_rows if row_subbest_data["Shared"]["Start"]]:
+                                            if sub_data["Date"] in [row_subbest_data["Shared"]["Date"] for row_subbest_data in player_data["all_games"][row_data["Shared"]["Year"]] if row_subbest_data["Shared"]["Start"]]:
                                                 count_starts_rest = False
                                             if count_starts_rest:
                                                 starts_rest += 1
 
-                                            if sub_data["Date"] not in [row_subbest_data["Shared"]["Date"] for row_subbest_data in all_rows]:
+                                            if sub_data["Date"] not in [row_subbest_data["Shared"]["Date"] for row_subbest_data in player_data["all_games"][row_data["Shared"]["Year"]]]:
                                                 count_games_rest_2 = False
                                             if count_games_rest_2:
                                                 games_in_a_row += 1
                                             if row_data["Shared"]["Start"]:
-                                                if sub_data["Date"] not in [row_subbest_data["Shared"]["Date"] for row_subbest_data in all_rows if row_subbest_data["Shared"]["Start"]]:
+                                                if sub_data["Date"] not in [row_subbest_data["Shared"]["Date"] for row_subbest_data in player_data["all_games"][row_data["Shared"]["Year"]] if row_subbest_data["Shared"]["Start"]]:
                                                     count_starts_rest_2 = False
                                                 if count_starts_rest_2:
                                                     starts_in_a_row += 1
@@ -17405,17 +17422,6 @@ def handle_schedule_stats(all_rows, qualifiers, is_playoffs):
                     row_data["Shared"]["League"] = league
                     row_data["Shared"]["Conference"] = conference
                     row_data["Shared"]["Division"] = division
-
-    if "Days In A Row" in qualifiers:
-        for row_data in all_rows:
-            if not isinstance(row_data["Shared"]["Date"], int):
-                days_in_a_row = 1
-                date_to_check = row_data["Shared"]["Date"] - datetime.timedelta(days=1)
-                for sub_data in sorted(all_rows, key=lambda seas_row: seas_row["Shared"]["Date"], reverse=True):
-                    if sub_data["Shared"]["Date"] == date_to_check:
-                        days_in_a_row += 1
-                        date_to_check -= datetime.timedelta(days=1)
-                row_data["Shared"]["DaysInARow"] = days_in_a_row
     
     new_rows = []
     for row in all_rows:
@@ -17594,15 +17600,6 @@ def perform_schedule_qualifiers(row, qualifiers):
                     return False
             else:
                 if not (row["Shared"]["StartsRest"] >= qual_object["values"]["start_val"] and row["Shared"]["StartsRest"] <= qual_object["values"]["end_val"]):
-                    return False
-    
-    if "Days In A Row" in qualifiers:
-        for qual_object in qualifiers["Days In A Row"]:
-            if qual_object["negate"]:
-                if row["Shared"]["DaysInARow"] >= qual_object["values"]["start_val"] and row["Shared"]["DaysInARow"] <= qual_object["values"]["end_val"]:
-                    return False
-            else:
-                if not (row["Shared"]["DaysInARow"] >= qual_object["values"]["start_val"] and row["Shared"]["DaysInARow"] <= qual_object["values"]["end_val"]):
                     return False
     
     if "Games In A Row" in qualifiers:
