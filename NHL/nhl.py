@@ -31534,7 +31534,7 @@ def print_player_data(player_datas, player_type, highest_vals, lowest_vals, has_
                     override_show = True
                     if "TOI" in header and not "GP_TOI" in header and not "offITOI" in header and not "x" in header and not "Shft" in header:
                         override_show = True
-                if "Assisted On" in extra_stats and ("A1" in header or "EVA" in header or "PPA" in header or "SHA" in header):
+                if "Assisted On" in extra_stats and ("A1" in header or "A2" in header or "EVA" in header or "PPA" in header or "SHA" in header):
                     override_show = True
                     if "TOI" in header and not "GP_TOI" in header and not "offITOI" in header and not "x" in header and not "Shft" in header:
                         override_show = True
@@ -31550,7 +31550,7 @@ def print_player_data(player_datas, player_type, highest_vals, lowest_vals, has_
                     override_show = True
                     if "TOI" in header and not "GP_TOI" in header and not "offITOI" in header and not "x" in header and not "Shft" in header:
                         override_show = True
-                if "scoring-stats" in extra_stats and ("EVG" in header or "PPG" in header or "SHG" in header or "A1" in header or "EVA" in header or "PPA" in header or "SHA" in header or "P1" in header or "EVP" in header or "PPP" in header or "SHP" in header):
+                if "scoring-stats" in extra_stats and ("EVG" in header or "PPG" in header or "SHG" in header or "A1" in header or "A2" in header or "EVA" in header or "PPA" in header or "SHA" in header or "P1" in header or "EVP" in header or "PPP" in header or "SHP" in header):
                     override_show = True
                 if "Hit On" in extra_stats and header in ("HIT/GP"):
                     override_show = True
@@ -31941,7 +31941,7 @@ def get_reddit_player_table(player_datas, player_type, debug_mode, original_comm
                     override_show = True
                     if "TOI" in header and not "GP_TOI" in header and not "offITOI" in header and not "x" in header and not "Shft" in header:
                         override_show = True
-                if "Assisted On" in extra_stats and ("A1" in header or "EVA" in header or "PPA" in header or "SHA" in header):
+                if "Assisted On" in extra_stats and ("A1" in header or "A2" in header or "EVA" in header or "PPA" in header or "SHA" in header):
                     override_show = True
                     if "TOI" in header and not "GP_TOI" in header and not "offITOI" in header and not "x" in header and not "Shft" in header:
                         override_show = True
@@ -31957,7 +31957,7 @@ def get_reddit_player_table(player_datas, player_type, debug_mode, original_comm
                     override_show = True
                     if "TOI" in header and not "GP_TOI" in header and not "offITOI" in header and not "x" in header and not "Shft" in header:
                         override_show = True
-                if "scoring-stats" in extra_stats and ("EVG" in header or "PPG" in header or "SHG" in header or "A1" in header or "EVA" in header or "PPA" in header or "SHA" in header or "P1" in header or "EVP" in header or "PPP" in header or "SHP" in header):
+                if "scoring-stats" in extra_stats and ("EVG" in header or "PPG" in header or "SHG" in header or "A1" in header or "A2" in header or "EVA" in header or "PPA" in header or "SHA" in header or "P1" in header or "EVP" in header or "PPP" in header or "SHP" in header):
                     override_show = True
                 if "Hit On" in extra_stats and header in ("HIT/GP"):
                     override_show = True
@@ -32726,7 +32726,7 @@ def handle_table_data(player_data, player_type, over_header, header, highest_val
         override_show = True
         if "TOI" in header and not "GP_TOI" in header and not "offITOI" in header and not "x" in header and not "Shft" in header:
             override_show = True
-    if "Assisted On" in extra_stats and ("A1" in header or "EVA" in header or "PPA" in header or "SHA" in header):
+    if "Assisted On" in extra_stats and ("A1" in header or "A2" in header or "EVA" in header or "PPA" in header or "SHA" in header):
         override_show = True
         if "TOI" in header and not "GP_TOI" in header and not "offITOI" in header and not "x" in header and not "Shft" in header:
             override_show = True
@@ -32742,7 +32742,7 @@ def handle_table_data(player_data, player_type, over_header, header, highest_val
         override_show = True
         if "TOI" in header and not "GP_TOI" in header and not "offITOI" in header and not "x" in header and not "Shft" in header:
             override_show = True
-    if "scoring-stats" in extra_stats and ("EVG" in header or "PPG" in header or "SHG" in header or "A1" in header or "EVA" in header or "PPA" in header or "SHA" in header or "P1" in header or "EVP" in header or "PPP" in header or "SHP" in header):
+    if "scoring-stats" in extra_stats and ("EVG" in header or "PPG" in header or "SHG" in header or "A1" in header or "A2" in header or "EVA" in header or "PPA" in header or "SHA" in header or "P1" in header or "EVP" in header or "PPP" in header or "SHP" in header):
         override_show = True
     if "Hit On" in extra_stats and header in ("HIT/GP"):
         override_show = True
