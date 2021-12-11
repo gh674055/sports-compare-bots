@@ -18491,7 +18491,7 @@ def set_row_data(player_game_info, row_data):
     row_data["TotalStar"] = player_game_info["FirstStar"] + player_game_info["SecondStar"] + player_game_info["ThirdStar"]
     row_data["Number"] = player_game_info["Number"]
 
-def get_game_data(index, player_data, row_data, player_id, player_type, time_frame, extra_stats):    
+def get_game_data(index, player_data, row_data, player_id, player_type, time_frame, extra_stats):
     game_data, missing_games, sub_data = setup_game_data(player_data, row_data, player_id, player_type, time_frame)
     if game_data["missing_data"]:
         if row_data["Year"] < 2000 and "Game Number" not in time_frame["qualifiers"]:
@@ -19880,7 +19880,7 @@ def get_html_play_data(scoring_plays, player_data, og_game_id, is_home, game_dat
             return []
         else:
             raise
-
+    
     if not player_page_xml.getroot():
         return []
 
@@ -20005,6 +20005,13 @@ def get_html_play_data(scoring_plays, player_data, og_game_id, is_home, game_dat
                             "zone" : zone
                         }
 
+                        if is_home_team:
+                            team_on_ice = get_on_ice(columns[7].xpath("table"), game_data["team_numbers"] if is_team else game_data["opp_numbers"], game_data["team_goalies"] if is_team else game_data["opp_goalies"])
+                            opp_on_ice = get_on_ice(columns[6].xpath("table"), game_data["opp_numbers"] if is_team else game_data["team_numbers"], game_data["opp_goalies"] if is_team else game_data["team_goalies"])
+                        else:
+                            team_on_ice = get_on_ice(columns[6].xpath("table"), game_data["team_numbers"] if is_team else game_data["opp_numbers"], game_data["team_goalies"] if is_team else game_data["opp_goalies"])
+                            opp_on_ice = get_on_ice(columns[7].xpath("table"), game_data["opp_numbers"] if is_team else game_data["team_numbers"], game_data["opp_goalies"] if is_team else game_data["team_goalies"])
+
                         if real_event_type == "Goal":
                             if is_team:
                                 if player_numbers[0] not in game_data["team_numbers"] and player_numbers[0] in game_data["opp_numbers"]:
@@ -20026,12 +20033,8 @@ def get_html_play_data(scoring_plays, player_data, og_game_id, is_home, game_dat
                                     scorer = game_data["opp_numbers"].get(player_numbers[0], -1)
 
                             if is_home_team:
-                                team_on_ice = get_on_ice(columns[7].xpath("table"), game_data["team_numbers"] if is_team else game_data["opp_numbers"], game_data["team_goalies"] if is_team else game_data["opp_goalies"])
-                                opp_on_ice = get_on_ice(columns[6].xpath("table"), game_data["opp_numbers"] if is_team else game_data["team_numbers"], game_data["opp_goalies"] if is_team else game_data["team_goalies"])
                                 home_goals += 1
                             else:
-                                team_on_ice = get_on_ice(columns[6].xpath("table"), game_data["team_numbers"] if is_team else game_data["opp_numbers"], game_data["team_goalies"] if is_team else game_data["opp_goalies"])
-                                opp_on_ice = get_on_ice(columns[7].xpath("table"), game_data["opp_numbers"] if is_team else game_data["team_numbers"], game_data["opp_goalies"] if is_team else game_data["team_goalies"])
                                 away_goals += 1
                             
                             scoring_play["about"]["goals"]["home"] = home_goals
@@ -20153,11 +20156,7 @@ def get_html_play_data(scoring_plays, player_data, og_game_id, is_home, game_dat
                                 else:
                                     shooter = game_data["opp_numbers"].get(player_numbers[0], -1)
 
-                            if is_home_team:
-                                opp_on_ice = get_on_ice(columns[6].xpath("table"), game_data["opp_numbers"] if is_team else game_data["team_numbers"], game_data["opp_goalies"] if is_team else game_data["team_goalies"])
-                            else:
-                                opp_on_ice = get_on_ice(columns[7].xpath("table"), game_data["opp_numbers"] if is_team else game_data["team_numbers"], game_data["opp_goalies"] if is_team else game_data["team_goalies"])
-
+                            goalie = None
                             if opp_on_ice["G"]:
                                 goalie_number = opp_on_ice["G"][0]
                                 if is_team:
@@ -20435,20 +20434,13 @@ def get_html_play_data(scoring_plays, player_data, og_game_id, is_home, game_dat
                             else:
                                 scoring_play["result"]["penaltySeverity"] = "Minor"
 
-                        if is_home_team:
-                            team_on_ice = get_on_ice(columns[7].xpath("table"), game_data["team_numbers"] if is_team else game_data["opp_numbers"], game_data["team_goalies"] if is_team else game_data["opp_goalies"])
-                            opp_on_ice = get_on_ice(columns[6].xpath("table"), game_data["opp_numbers"] if is_team else game_data["team_numbers"], game_data["opp_goalies"] if is_team else game_data["team_goalies"])
-                        else:
-                            team_on_ice = get_on_ice(columns[6].xpath("table"), game_data["team_numbers"] if is_team else game_data["opp_numbers"], game_data["team_goalies"] if is_team else game_data["opp_goalies"])
-                            opp_on_ice = get_on_ice(columns[7].xpath("table"), game_data["opp_numbers"] if is_team else game_data["team_numbers"], game_data["opp_goalies"] if is_team else game_data["team_goalies"])
 
-
-                        if is_home_team:
-                            scoring_play["team_on_ice_pos"] = get_on_ice_pos(columns[7].xpath("table"), game_data["team_numbers"] if is_team else game_data["opp_numbers"])
-                            scoring_play["opp_on_ice_pos"] = get_on_ice_pos(columns[6].xpath("table"), game_data["opp_numbers"] if is_team else game_data["team_numbers"])
-                        else:
-                            scoring_play["team_on_ice_pos"] = get_on_ice_pos(columns[6].xpath("table"), game_data["team_numbers"] if is_team else game_data["opp_numbers"])
-                            scoring_play["opp_on_ice_pos"] = get_on_ice_pos(columns[7].xpath("table"), game_data["opp_numbers"] if is_team else game_data["team_numbers"])
+                        # if is_home_team:
+                        #     scoring_play["team_on_ice_pos"] = get_on_ice_pos(columns[7].xpath("table"), game_data["team_numbers"] if is_team else game_data["opp_numbers"])
+                        #     scoring_play["opp_on_ice_pos"] = get_on_ice_pos(columns[6].xpath("table"), game_data["opp_numbers"] if is_team else game_data["team_numbers"])
+                        # else:
+                        #     scoring_play["team_on_ice_pos"] = get_on_ice_pos(columns[6].xpath("table"), game_data["team_numbers"] if is_team else game_data["opp_numbers"])
+                        #     scoring_play["opp_on_ice_pos"] = get_on_ice_pos(columns[7].xpath("table"), game_data["opp_numbers"] if is_team else game_data["team_numbers"])
 
                         scoring_play["team_on_ice"] = []
                         for pos in team_on_ice:
@@ -20472,9 +20464,9 @@ def get_html_play_data(scoring_plays, player_data, og_game_id, is_home, game_dat
                             scoring_play["opp_on_ice"] = scoring_play["team_on_ice"]
                             scoring_play["team_on_ice"] = temp_array
 
-                            temp_array = scoring_play["opp_on_ice_pos"]
-                            scoring_play["opp_on_ice_pos"] = scoring_play["team_on_ice_pos"]
-                            scoring_play["team_on_ice_pos"] = temp_array
+                            # temp_array = scoring_play["opp_on_ice_pos"]
+                            # scoring_play["opp_on_ice_pos"] = scoring_play["team_on_ice_pos"]
+                            # scoring_play["team_on_ice_pos"] = temp_array
 
                         if len(scoring_play["team_on_ice"]) > 1 and len(scoring_play["opp_on_ice"]) > 1:
                             if len(scoring_play["team_on_ice"]) > len(scoring_play["opp_on_ice"]):
@@ -20492,7 +20484,7 @@ def get_html_play_data(scoring_plays, player_data, og_game_id, is_home, game_dat
                                 if sub_scoring_play["result"]["event"] == real_event_type and int(sub_scoring_play["about"]["period"]) == int(scoring_play["about"]["period"]) and start_time_to_str(sub_scoring_play["about"]["periodTime"]) == start_time_to_str(scoring_play["about"]["periodTime"]):
                                     sub_scoring_play["team_on_ice"] = scoring_play["team_on_ice"]
                                     sub_scoring_play["opp_on_ice"] = scoring_play["opp_on_ice"]
-                                    sub_scoring_play["team_on_ice_pos"] = scoring_play["team_on_ice_pos"]
+                                    #sub_scoring_play["team_on_ice_pos"] = scoring_play["team_on_ice_pos"]
                                     sub_scoring_play["opp_on_ice_pos"] = scoring_play["opp_on_ice_pos"]
                                     sub_scoring_play["zone"] = scoring_play["zone"]
                                     if real_event_type != "Goal":
@@ -21696,23 +21688,17 @@ def get_on_ice(table, numbers, goalies):
     if not table:
         return on_ice_map
     table = table[0]
-    row = table.xpath("tr")
-    if row:
-        row = row[0]
-        columns = row.xpath("td")
-        for column in columns:
-            sub_table = column.xpath("table")
-            if sub_table:
-                sub_table = sub_table[0]
-                sub_rows = sub_table.xpath("tr")
-                number = str(sub_rows[0].text_content()).strip()
-                position = str(sub_rows[1].text_content()).strip()
-                player_id = numbers.get(number, -1)
-                if player_id:
-                    if player_id in goalies or position == "G":
-                        on_ice_map["G"].append(number)
-                    else:
-                        on_ice_map["S"].append(number)
+    tables = table.xpath(".//table")
+    for table in tables:
+        sub_rows = table.xpath(".//tr")
+        number = str(sub_rows[0].text_content()).strip()
+        position = str(sub_rows[1].text_content()).strip()
+        player_id = numbers.get(number, -1)
+        if player_id:
+            if player_id in goalies or position == "G":
+                on_ice_map["G"].append(number)
+            else:
+                on_ice_map["S"].append(number)
     return on_ice_map
 
 def get_on_ice_pos(table, numbers):
@@ -21726,22 +21712,17 @@ def get_on_ice_pos(table, numbers):
     if not table:
         return on_ice_map
     table = table[0]
-    row = table.xpath("tr")
-    if row:
-        row = row[0]
-        columns = row.xpath("td")
-        for column in columns:
-            sub_table = column.xpath("table")
-            if sub_table:
-                sub_table = sub_table[0]
-                sub_rows = sub_table.xpath("tr")
-                number = str(sub_rows[0].text_content()).strip()
-                position = str(sub_rows[1].text_content()).strip()
-                if position in ["L", "R"]:
-                    position += "W"
-                player_id = numbers.get(number, -1)
-                if player_id:
-                    on_ice_map[position].append(player_id)
+    tables = table.xpath(".//table")
+    for table in tables:
+        sub_rows = table.xpath(".//tr")
+        number = str(sub_rows[0].text_content()).strip()
+        position = str(sub_rows[1].text_content()).strip()
+        player_id = numbers.get(number, -1)
+        if player_id:
+            if player_id in goalies or position == "G":
+                on_ice_map["G"].append(number)
+            else:
+                on_ice_map["S"].append(number)
     return on_ice_map
 
 
