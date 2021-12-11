@@ -8260,11 +8260,13 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                             elif qualifier_str == "penalty-shot":
                                 qual_type = "Penalty Shot"
                                 extra_stats.add("penalty-shot")
-                                extra_stats.add("current-stats")
+                                if qualifier_obj["negate"]:
+                                    extra_stats.add("current-stats")
                             elif qualifier_str == "shootout":
                                 qual_type = "Shootout"
                                 extra_stats.add("shootout")
-                                extra_stats.add("current-stats")
+                                if qualifier_obj["negate"]:
+                                    continue
                             elif qualifier_str == "overtime":
                                 qual_type = "Overtime"
                                 extra_stats.add("current-stats")
@@ -14188,18 +14190,6 @@ def handle_player_data(player_data, time_frame, player_type, player_page, valid_
     if "Winning Opponent" in time_frame["qualifiers"] or "Losing Opponent" in time_frame["qualifiers"] or "Tied Opponent" in time_frame["qualifiers"] or "Winning Or Tied Opponent" in time_frame["qualifiers"] or "Losing Or Tied Opponent" in time_frame["qualifiers"] or "Playoff Opponent" in time_frame["qualifiers"] or "Cup Winner Opponent" in time_frame["qualifiers"] or "Conference Winner Opponent" in time_frame["qualifiers"] or "Opponent Goals Rank" in time_frame["qualifiers"] or "Opponent Goals Allowed Rank" in time_frame["qualifiers"] or "Opponent Win Percentage" in time_frame["qualifiers"] or "Opponent Points Percentage" in time_frame["qualifiers"] or "Winning Team" in time_frame["qualifiers"] or "Losing Team" in time_frame["qualifiers"] or "Tied Team" in time_frame["qualifiers"] or "Winning Or Tied Team" in time_frame["qualifiers"] or "Losing Or Tied Team" in time_frame["qualifiers"] or "Playoff Team" in time_frame["qualifiers"] or "Cup Winner Team" in time_frame["qualifiers"] or "Conference Winner Team" in time_frame["qualifiers"] or "Team Goals Rank" in time_frame["qualifiers"] or "Team Goals Allowed Rank" in time_frame["qualifiers"] or "Team Win Percentage" in time_frame["qualifiers"] or "Team Points Percentage" in time_frame["qualifiers"] or "Team Wins" in time_frame["qualifiers"] or "Team Losses" in time_frame["qualifiers"] or "Team Ties" in time_frame["qualifiers"] or "Team Points" in time_frame["qualifiers"] or "Opponent Wins" in time_frame["qualifiers"] or "Opponent Losses" in time_frame["qualifiers"] or "Opponent Ties" in time_frame["qualifiers"] or "Opponent Points" in time_frame["qualifiers"] or "Team Conference" in time_frame["qualifiers"] or "Team Division" in time_frame["qualifiers"] or "Opponent Conference" in time_frame["qualifiers"] or "Opponent Division" in time_frame["qualifiers"] or "Interconference" in time_frame["qualifiers"] or "Intraconference" in time_frame["qualifiers"] or "Intradivision" in time_frame["qualifiers"] or "Interdivision" in time_frame["qualifiers"] or "Team Standings Rank" in time_frame["qualifiers"] or "Opponent Standings Rank" in time_frame["qualifiers"] or "Team Games Over 500" in time_frame["qualifiers"] or "Opponent Games Over 500" in time_frame["qualifiers"]:
         all_rows = handle_opponent_schedule_stats(all_rows, time_frame["qualifiers"])
 
-    has_neg_qual = False
-    if "Shootout" in time_frame["qualifiers"]:
-        for qual_obj in time_frame["qualifiers"]["Shootout"]:
-            if qual_obj["negate"]:
-                has_neg_qual = True
-                break
-    if not has_neg_qual and "Penalty Shot" in time_frame["qualifiers"]:
-        for qual_obj in time_frame["qualifiers"]["Penalty Shot"]:
-            if qual_obj["negate"]:
-                has_neg_qual = True
-                break
-
     if "Intraleague" in time_frame["qualifiers"] or "Interleague" in time_frame["qualifiers"] or "Intraconference" in time_frame["qualifiers"]  or "Interconference" in time_frame["qualifiers"] or "Intradivision" in time_frame["qualifiers"] or "Interdivision" in time_frame["qualifiers"]:
         new_rows = []
         for row in all_rows:
@@ -15197,11 +15187,20 @@ def handle_live_stats(player_type, player_data, player_link, time_frame, all_row
 
     temp_extra_stats = set()
     temp_extra_stats.add("current-stats")
-    game_data, sub_row_data, sub_missing_games = get_game_data(0, player_data, row_data, player_id, player_type, {"qualifiers" : {}}, temp_extra_stats)
+
+    qualifiers = {}
+    if "Penalty Shot" in time_frame["qualifiers"]:
+        qualifiers["Penalty Shot"] = time_frame["qualifiers"]["Penalty Shot"]
+        row_data["is_pen_shot"] = 1
+    if "Shootout" in time_frame["qualifiers"]:
+        qualifiers["Shootout"] = time_frame["qualifiers"]["Shootout"]
+        row_data["is_shootout_shot"] = 1
+
+    game_data, sub_row_data, sub_missing_games = get_game_data(0, player_data, row_data, player_id, player_type, {"qualifiers" : qualifiers}, temp_extra_stats)
     if sub_missing_games:
         missing_games.append("[" + str(row_data["Date"]) + "](" + "https://www.nhl.com/gamecenter/" + str(row_data["NHLGameLink"]) + ")")
     shift_data = game_data["shift_data"]
-    perform_sub_nhl_game_qualifiers(row_data, {}, game_data, player_type, player_link, [], -1, True)
+    perform_sub_nhl_game_qualifiers(row_data, qualifiers, game_data, player_type, player_link, [], -1, True)
     if game_data["missing_toi"]:
         missing_toi.append("[" + str(row_data["Date"]) + "](" + "https://www.nhl.com/gamecenter/" + str(row_data["NHLGameLink"]) + ")")
 
@@ -15279,6 +15278,7 @@ def handle_live_stats(player_type, player_data, player_link, time_frame, all_row
                 else:
                     row_data["ND"] = 1
     
+
     
     row_data["Team Score"] = sub_data["liveData"]["linescore"]["teams"][team_str]["goals"]
     row_data["Opponent Score"] = sub_data["liveData"]["linescore"]["teams"][opp_team_str]["goals"]
@@ -17302,6 +17302,7 @@ def perform_sub_nhl_period_qualifiers(row, qualifiers, player_game_info, player_
         "assist",
         "goal_against",
         "save_against",
+        "missed_shot_against",
         "shot",
         "missed_shot",
         "blocked_shot",
@@ -18100,6 +18101,7 @@ def determine_stat_value(player_game_info, all_events, qualifiers, og_row, playe
     penalty_stats = ["PIM", "PEN", "PenDrawn", "Minor", "Major", "Misconduct", "GameMisconduct", "Match", "Fight"]
     goal_against_stats = ["GA", "SA", "EVGA", "EVSH", "PPGA", "PPSH", "SHGA", "SHSH"]
     save_against_stats = ["SV", "SA", "EVSH", "PPSH", "SHGA"]
+    missed_shot_against_stats = ["SV", "SA"]
     toi_stats = ["TOI", "EVTOI", "PPTOI", "SHTOI", "TOI_5v5"]
 
     if count_misses:
@@ -18324,6 +18326,12 @@ def determine_stat_value(player_game_info, all_events, qualifiers, og_row, playe
                             row["PPSH"] += 1
                         row["SV"] += 1
                         row["SA"] += 1
+            if stat in missed_shot_against_stats:
+                if count_misses:
+                    if goal_event["event_name"] == "missed_shot_against":
+                        if determine_event_match(goal_event, "missed_shot_against", qualifiers, player_game_info, og_row):
+                            row["SV"] += 1
+                            row["SA"] += 1
 
         if stat in toi_stats:
             if goal_event["event_name"] == "shift_events":
@@ -18861,15 +18869,32 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
             next_shot_penalty_shot = False
         elif scoring_play["result"]["event"] == "Missed Shot":
             player_shot = False
+            goalie = None
+            player_saved = False
+            scorer = None
             for score_player in scoring_play["players"]:
                 if score_player["playerType"] == "Shooter":
                     if score_player["player"]["id"] == player_id or score_player["player"]["id"] == player_data["id"]:
                         player_shot = True
+                    else:
+                        scorer = score_player["player"]["id"]
+                elif score_player["playerType"] == "Goalie" or score_player["playerType"] == "Unknown":
+                    if score_player["player"]["id"] == player_id or score_player["player"]["id"] == player_data["id"]:
+                        player_saved = True
+                    else:
+                        goalie = score_player["player"]["id"]
             
             if player_shot:
                 game_data["missed_shot"].append({**shared_data , **{
+                    "goalie" : goalie,
                     "penaltyShot" : next_shot_penalty_shot,
-                    "description" : scoring_play["result"]["description"] if "description" in scoring_play["result"] else ""
+                    "oppSide" : None if (not goalie or goalie not in game_data["player_side_map"]) else game_data["player_side_map"][goalie]
+                }})
+            elif player_saved:
+                game_data["missed_shot_against"].append({**shared_data , **{
+                    "scorer" : scorer,
+                    "penaltyShot" : next_shot_penalty_shot,
+                    "oppSide" : None if scorer not in game_data["player_side_map"] else game_data["player_side_map"][scorer]
                 }})
 
             if is_player_on_ice(game_data["shift_data"], team_on_ice, opp_on_ice, scoring_play["about"]["period"], period_time, player_id, True):
@@ -19122,6 +19147,7 @@ def setup_game_data(player_data, row_data, player_id, player_type, time_frame):
         "assist" : [],
         "goal_against" : [],
         "save_against" : [],
+        "missed_shot_against" : [],
         "shot" : [],
         "missed_shot" : [],
         "blocked_shot" : [],
@@ -19203,7 +19229,10 @@ def setup_game_data(player_data, row_data, player_id, player_type, time_frame):
 
     for period in sub_data["liveData"]["linescore"]["periods"]:
         game_data["periods"].append(period["num"])
-
+    
+    if game_data["is_shootout"] and not len(game_data["periods"]) == 5:
+        game_data["periods"].append(5)
+    
     for player in sub_data["liveData"]["boxscore"]["teams"][game_data["team_str"]]["players"]:
         player = sub_data["liveData"]["boxscore"]["teams"][game_data["team_str"]]["players"][player]
         if player["position"]["code"] == "G":
@@ -19306,6 +19335,7 @@ def setup_href_game_data(player_data, row_data, player_id, player_type, time_fra
         "assist" : [],
         "goal_against" : [],
         "save_against" : [],
+        "missed_shot_against" : [],
         "shot" : [],
         "missed_shot" : [],
         "blocked_shot" : [],
@@ -20002,7 +20032,7 @@ def get_html_play_data(scoring_plays, player_data, og_game_id, is_home, game_dat
                                 if team_goal == game_winner:
                                     scoring_play["result"]["gameWinningGoal"] = True
                                 team_goal += 1                                
-                        elif real_event_type == "Shot":
+                        elif real_event_type == "Shot" or real_event_type == "Missed Shot":
                             if not player_numbers:
                                 player_numbers.append(re.search(r"\d+", description_string).group(0))
                             if is_team:
@@ -20671,7 +20701,7 @@ def get_old_html_play_data(scoring_plays, player_data, og_game_id, is_home, game
                     if team_goal == game_winner:
                         scoring_play["result"]["gameWinningGoal"] = True
                     team_goal += 1                  
-            elif real_event_type == "Shot":
+            elif real_event_type == "Shot" or real_event_type == "Missed Shot":
                 if not player_numbers:
                     player_numbers.append(re.search(r"\d+", description_string).group(0))
                 if is_team:
@@ -21707,10 +21737,10 @@ def perform_sub_nhl_game_qualifiers(row, qualifiers, player_game_info, player_ty
             has_match = False
             for period in player_game_info["periods"]:
                 if qual_object["negate"]:
-                    if not (period == 5 and player_game_info["is_shootout"]):
+                    if not player_game_info["is_shootout"]:
                         has_match = True
                 else:
-                    if period == 5 and not player_game_info["is_shootout"]:
+                    if player_game_info["is_shootout"]:
                         has_match = True
 
             if not has_match:
@@ -22013,6 +22043,12 @@ def perform_metadata_quals(qualifiers, player_type, row, player_game_info, nhl_p
                     row["PPSH"] += 1
                 row["SV"] += 1
                 row["SA"] += 1
+        if count_misses:
+            for goal_event in player_game_info["missed_shot_against"]:
+                if goal_event["event_name"] == "missed_shot_against":
+                    if perform_metadata_qual("missed_shot_against", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], skip_career_events=skip_career_events):
+                        row["SV"] += 1
+                        row["SA"] += 1
         for goal_event in player_game_info["all_team_goals"]:
             if perform_metadata_qual("all_team_goals", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], skip_career_events=skip_career_events):
                 row["GF"] += 1
@@ -24567,19 +24603,13 @@ def perform_qualifier(player_data, player_type, row, time_frame, all_rows):
     
     if "Penalty Shot" in qualifiers:
         for qual_object in qualifiers["Penalty Shot"]:   
-            if qual_object["negate"]:
-                if ("is_pen_shot" in row and row["is_pen_shot"]):
-                    return False
-            else:
+            if not qual_object["negate"]:
                 if not ("is_pen_shot" in row and row["is_pen_shot"]):
                     return False
     
     if "Shootout" in qualifiers:
         for qual_object in qualifiers["Shootout"]:   
-            if qual_object["negate"]:
-                if ("is_shootout_shot" in row and row["is_shootout_shot"]):
-                    return False
-            else:
+            if not qual_object["negate"]:
                 if not ("is_shootout_shot" in row and row["is_shootout_shot"]):
                     return False
     
@@ -32841,7 +32871,10 @@ def is_against_header(header, extra_stats, player_type, has_toi_stats):
                 return header not in ("G", "S", "S%")
         else:
             if "shootout" in extra_stats:
-                return header not in ("GP", "W", "L", "PTS%", "GA", "SV", "SA", "SV%")
+                if has_against_quals_no_so(extra_stats):
+                    return header not in ("GP", "GA", "SV", "SA", "SV%")
+                else:
+                    return header not in ("GP", "W", "L", "PTS%", "GA", "SV", "SA", "SV%")
             else:
                 return header not in ("GP", "GA", "SV", "SA", "SV%")
 
