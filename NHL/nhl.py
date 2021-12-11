@@ -22726,19 +22726,19 @@ def perform_metadata_qual(event_name, goal_event, qualifiers, player_game_info, 
             "y" : 0,
             "r" : 15
         },{
-            "x" : 69,
+            "x" : 57,
             "y" : 22,
             "r" : 15
         },{
-            "x" : 69,
+            "x" : 57,
             "y" : -22,
             "r" : 15
         },{
-            "x" : -69,
+            "x" : -57,
             "y" : 22,
             "r" : 15
         },{
-            "x" : -69,
+            "x" : -57,
             "y" : -22,
             "r" : 15
         }]
@@ -22748,12 +22748,12 @@ def perform_metadata_qual(event_name, goal_event, qualifiers, player_game_info, 
     
     if "Goalie Circle" in qualifiers:            
         circle_coordinates = [{
-            "x" : 0,
-            "y" : 89,
+            "x" : 89,
+            "y" : 0,
             "r" : 6
         },{
-            "x" : 0,
-            "y" : -89,
+            "x" : -89,
+            "y" : 0,
             "r" : 6
         }]
 
