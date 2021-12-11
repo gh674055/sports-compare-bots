@@ -15200,7 +15200,10 @@ def handle_live_stats(player_type, player_data, player_link, time_frame, all_row
     if sub_missing_games:
         missing_games.append("[" + str(row_data["Date"]) + "](" + "https://www.nhl.com/gamecenter/" + str(row_data["NHLGameLink"]) + ")")
     shift_data = game_data["shift_data"]
-    perform_sub_nhl_game_qualifiers(row_data, qualifiers, game_data, player_type, player_link, [], -1, True)
+    has_match = perform_sub_nhl_game_qualifiers(row_data, qualifiers, game_data, player_type, player_link, [], -1, True)[0]
+    if not has_match:
+        return all_rows
+
     if game_data["missing_toi"]:
         missing_toi.append("[" + str(row_data["Date"]) + "](" + "https://www.nhl.com/gamecenter/" + str(row_data["NHLGameLink"]) + ")")
 
@@ -15277,9 +15280,7 @@ def handle_live_stats(player_type, player_data, player_link, time_frame, all_row
                     row_data["TtlL"] = 1
                 else:
                     row_data["ND"] = 1
-    
-
-    
+                    
     row_data["Team Score"] = sub_data["liveData"]["linescore"]["teams"][team_str]["goals"]
     row_data["Opponent Score"] = sub_data["liveData"]["linescore"]["teams"][opp_team_str]["goals"]
     row_data["Team Goals"] = row_data["Team Score"]
