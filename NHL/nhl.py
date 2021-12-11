@@ -31550,7 +31550,7 @@ def print_player_data(player_datas, player_type, highest_vals, lowest_vals, has_
                     override_show = True
                     if "TOI" in header and not "GP_TOI" in header and not "offITOI" in header and not "x" in header and not "Shft" in header:
                         override_show = True
-                if "scoring-stats" in extra_stats and ("EVG" in header or "PPG" in header or "SHG" in header or "A1" in header or "A2" in header or "EVA" in header or "PPA" in header or "SHA" in header or "P1" in header or "EVP" in header or "PPP" in header or "SHP" in header):
+                if "scoring-stats" in extra_stats and ("EVG" in header or "PPG" in header or "SHG" in header or "A1" in header or "EVA" in header or "PPA" in header or "SHA" in header or "P1" in header or "EVP" in header or "PPP" in header or "SHP" in header):
                     override_show = True
                 if "Hit On" in extra_stats and header in ("HIT/GP"):
                     override_show = True
@@ -31957,7 +31957,7 @@ def get_reddit_player_table(player_datas, player_type, debug_mode, original_comm
                     override_show = True
                     if "TOI" in header and not "GP_TOI" in header and not "offITOI" in header and not "x" in header and not "Shft" in header:
                         override_show = True
-                if "scoring-stats" in extra_stats and ("EVG" in header or "PPG" in header or "SHG" in header or "A1" in header or "A2" in header or "EVA" in header or "PPA" in header or "SHA" in header or "P1" in header or "EVP" in header or "PPP" in header or "SHP" in header):
+                if "scoring-stats" in extra_stats and ("EVG" in header or "PPG" in header or "SHG" in header or "A1" in header or "EVA" in header or "PPA" in header or "SHA" in header or "P1" in header or "EVP" in header or "PPP" in header or "SHP" in header):
                     override_show = True
                 if "Hit On" in extra_stats and header in ("HIT/GP"):
                     override_show = True
@@ -32742,7 +32742,7 @@ def handle_table_data(player_data, player_type, over_header, header, highest_val
         override_show = True
         if "TOI" in header and not "GP_TOI" in header and not "offITOI" in header and not "x" in header and not "Shft" in header:
             override_show = True
-    if "scoring-stats" in extra_stats and ("EVG" in header or "PPG" in header or "SHG" in header or "A1" in header or "A2" in header or "EVA" in header or "PPA" in header or "SHA" in header or "P1" in header or "EVP" in header or "PPP" in header or "SHP" in header):
+    if "scoring-stats" in extra_stats and ("EVG" in header or "PPG" in header or "SHG" in header or "A1" in header or "EVA" in header or "PPA" in header or "SHA" in header or "P1" in header or "EVP" in header or "PPP" in header or "SHP" in header):
         override_show = True
     if "Hit On" in extra_stats and header in ("HIT/GP"):
         override_show = True
@@ -33072,7 +33072,7 @@ def is_against_header(header, extra_stats, player_type, has_toi_stats):
         return header not in ("G", "G_5v5",  "Shft", "Shft/GP", "TOI/Shft", "OTG", "EVTOI",  "PPTOI",  "SHTOI", "TOI_5v5", "EVTOI/GP",  "PPTOI/GP",  "SHTOI/GP", "TOI/GP_5v5", "GWG", "1stG", "HAT", "ENG", "EVG", "AdjG", "PPG", "SHG", "G/GP", "EVG/GP", "PPG/GP", "SHG/GP", "G/GP", "G/60M", "EVG/60M", "PPG/60M", "SHG/60M", "G/60M_5v5")
         #return header not in ("G", "G_5v5", "OTG", "TOI/GP_5v5", "GWG", "1stG", "HAT", "ENG", "EVG", "AdjG", "PPG", "SHG", "G/GP", "EVG/GP", "PPG/GP", "SHG/GP", "G/GP", "G/60M", "G/60M_5v5")
     if "Assisted On" in extra_stats:
-        return header not in ("A", "A/GP", "A/60M", "Shft", "Shft/GP", "TOI/Shft", "EVTOI",  "PPTOI",  "SHTOI", "TOI_5v5", "EVTOI/GP",  "PPTOI/GP",  "SHTOI/GP", "TOI/GP_5v5", "ENA", "A1", "A1%", "A1/GP", "A1/60M", "A_5v5", "A/60M_5v5", "A1_5v5", "A1%_5v5", "A1/60M_5v5", "AdjA", "EVA", "EVA/GP", "EVA/60M", "EVA1", "EVA1/60M", "EVA1%", "EVA1/GP", "SHA", "SHA/GP", "SHA/60M", "SHA1", "SHA1/60M", "SHA1%", "SHA1/GP", "PPA", "PPA/GP", "PPA/60M", "PPA1", "PPA1/60M", "PPA1%", "PPA1/GP")
+        return header not in ("A", "A/GP", "A/60M", "Shft", "Shft/GP", "TOI/Shft", "EVTOI",  "PPTOI",  "SHTOI", "TOI_5v5", "EVTOI/GP",  "PPTOI/GP",  "SHTOI/GP", "TOI/GP_5v5", "ENA", "A1", "A2", "A1%", "A1/GP", "A1/60M", "A2/GP", "A2/60M", "A_5v5", "A/60M_5v5", "A1_5v5", "A1%_5v5", "A1/60M_5v5", "A2_5v5", "A2/60M_5v5", "AdjA", "EVA", "EVA/GP", "EVA/60M", "EVA1", "EVA1/60M", "EVA1%", "EVA1/GP", "EVA2", "EVA2/60M", "EVA2/GP", "SHA", "SHA/GP", "SHA/60M", "SHA1", "SHA1/60M", "SHA1%", "SHA1/GP", "SHA2", "SHA2/60M", "SHA2/GP", "PPA", "PPA/GP", "PPA/60M", "PPA1", "PPA1/60M", "PPA1%", "PPA1/GP", "PPA2", "PPA2/60M", "PPA2/GP")
         #return header not in ("A", "A/GP", "A/60M", "TOI/GP_5v5", "A1", "A1%", "A1/GP", "A1/60M", "A_5v5", "A/60M_5v5", "A1_5v5", "A1%_5v5", "A1/60M_5v5", "AdjA", "EVA", "EVA/GP", "EVA1", "EVA1%", "EVA1/GP", "SHA", "SHA/GP", "SHA1", "SHA1%", "SHA1/GP", "PPA", "PPA/GP", "PPA1", "PPA1%", "PPA1/GP")
     if "Points On" in extra_stats:
         #return header not in ("P", "P/GP", "P/60M", "TOI/GP_5v5", "P_5v5", "P/60M_5v5", "AdjP", "EVP", "EVP/GP", "EVP/60M", "SHP", "SHP/GP", "PPP", "PPP/GP")
