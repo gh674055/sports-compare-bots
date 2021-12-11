@@ -6026,7 +6026,6 @@ qualifier_map = {
     "Absolute Coordinates" : {},
     "Absolute X Coordinate" : {},
     "Absolute Y Coordinate" : {},
-    "Exact Coordinates" : {},
     "Period Time" : {},
     "Period Time Remaining" : {},
     "National Game" : {},
@@ -8901,7 +8900,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                     extra_stats.add("current-stats")
                                 
                                 qual_obj = {}
-                                split_vals = re.split(r"(?<!\\)(?<!^)\,", re.split(r"(?<!\\)" + qual_str, qualifier_str, 1)[1], 1)
+                                split_vals = re.split(r"(?<!\\)(?<!^)\;", re.split(r"(?<!\\)" + qual_str, qualifier_str, 1)[1], 1)
 
                                 x_coord = split_vals[0]
                                 y_coord = split_vals[1]
@@ -23241,6 +23240,17 @@ def perform_sub_metadata_qual(event, attr_str, qualifiers, player_game_info, yea
 def perform_coordinates_qual(event, qualifiers, is_raw, is_absolute):
     if "x_coord" not in event or event["x_coord"] == None:
         return False
+    
+    if is_raw:
+        x_val = event["raw_x_coord"]
+        y_val = event["raw_y_coord"]
+    else:
+        x_val = event["x_coord"]
+        y_val = event["y_coord"]
+    
+    if is_absolute:
+        x_val = abs(x_val)
+        y_val = abs(y_val)
         
     for qual_object in qualifiers:
         stat_val_x = qual_object["values"]["x_coord"]["start_val"]
@@ -23248,22 +23258,11 @@ def perform_coordinates_qual(event, qualifiers, is_raw, is_absolute):
         end_val_x = qual_object["values"]["x_coord"]["end_val"]
         end_val_y = qual_object["values"]["y_coord"]["end_val"]
 
-        if is_raw:
-            x_val = event["raw_x_coord"]
-            y_val = event["raw_y_coord"]
-        else:
-            x_val = event["x_coord"]
-            y_val = event["y_coord"]
-        
-        if is_absolute:
-            x_val = abs(x_val)
-            y_val = abs(y_val)
-
         if qual_object["negate"]:
             if ((x_val >= stat_val_x and x_val <= end_val_x) and (y_val >= stat_val_y and y_val <= end_val_y)):
                 return False
         else:
-            if not (x_val >= stat_val_x and x_val <= end_val_x) and (y_val >= stat_val_y and y_val <= end_val_y):
+            if not ((x_val >= stat_val_x and x_val <= end_val_x) and (y_val >= stat_val_y and y_val <= end_val_y)):
                 return False
     
     return True
@@ -23271,24 +23270,24 @@ def perform_coordinates_qual(event, qualifiers, is_raw, is_absolute):
 def perform_side_coordinates_qual(event, qualifiers, is_x, is_raw, is_absolute):
     if "x_coord" not in event or event["x_coord"] == None:
         return False
-        
+
+    if is_raw:
+        if is_x:
+            val_to_use = event["raw_x_coord"]
+        else:
+            val_to_use = event["raw_y_coord"]
+    else:
+        if is_x:
+            val_to_use = event["x_coord"]
+        else:
+            val_to_use = event["y_coord"]
+    
+    if is_absolute:
+        val_to_use = abs(val_to_use)
+
     for qual_object in qualifiers:
         start_val = qual_object["values"]["start_val"]
         end_val = qual_object["values"]["end_val"]
-
-        if is_raw:
-            if is_x:
-                val_to_use = event["raw_x_coord"]
-            else:
-                val_to_use = event["raw_y_coord"]
-        else:
-            if is_x:
-                val_to_use = event["x_coord"]
-            else:
-                val_to_use = event["y_coord"]
-        
-        if is_absolute:
-            val_to_use = abs(val_to_use)
 
         if qual_object["negate"]:
             if (val_to_use >= start_val and val_to_use <= end_val):
