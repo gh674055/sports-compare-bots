@@ -7363,7 +7363,13 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 extra_stats.add(m.group(1))
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
                         
-                        last_match = re.finditer(r"\b(hide(?: |-)?table)\(.+?\)", time_frame)
+                        last_match = re.finditer(r"\b(show(?: |-)?only(?: |-)?table:)\(.+?\)", time_frame)
+                        for m in last_match:
+                            for stat in re.split(r"(?<!\\)\-", re.split(r"(?<!\\)" + m.group(1), m.group(0))[1].strip("()")):
+                                extra_stats.add("show-only-table-" + stat.strip())
+                            time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
+                        
+                        last_match = re.finditer(r"\b(hide(?: |-)?table:)\(.+?\)", time_frame)
                         for m in last_match:
                             for stat in re.split(r"(?<!\\)\-", re.split(r"(?<!\\)" + m.group(1), m.group(0))[1].strip("()")):
                                 extra_stats.add("hide-table-" + stat.strip())
@@ -7397,25 +7403,39 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                             extra_stats.add(m.group(1) + "-" + str(ordinal_to_number(m.group(2))))
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
                         
-                        last_match = re.finditer(r"\bshow(?: |-)?(record|score|goal|year|seasons-leading|season|date|per-game|game|adjusted|advanced|relative|missing-game|missing-toi|best-season|worst-season|ng|team|franchise|number|fight|penaltie|penalty|award|toi|shot|shift|star|play|nhl-link)s?\b", time_frame)
+                        last_match = re.finditer(r"\bshow(?: |-)?(only(?: |-)?)?(record|score|goal|year|seasons-leading|season|date|per-game|game|adjusted|advanced|relative|missing-game|missing-toi|best-season|worst-season|ng|team|franchise|number|fight|penaltie|penalty|award|toi|shot|shift|star|play|nhl-link)s?\b", time_frame)
                         for m in last_match:
-                            if "penalt" in m.group(1) or m.group(1) == "fight":
+                            if "penalt" in m.group(2) or m.group(2) == "fight":
                                 extra_stats.add("penalties")
                                 player_type["da_type"] = {
                                     "type" : "Skater"
                                 }
-                            elif m.group(1) == "season":
+                            elif m.group(2) == "season":
                                 extra_stats.add("year")
                             else:
-                                extra_stats.add(m.group(1))
-                                if m.group(1) == "play":
+                                extra_stats.add(m.group(2))
+                                if m.group(2) == "play":
                                     extra_stats.add("current-stats")
-                                elif m.group(1) == "advanced" or m.group(1) == "relative":
+                                elif m.group(2) == "advanced" or m.group(2) == "relative":
                                     extra_stats.add("current-stats")
-                                elif m.group(1) == "shift":
+                                elif m.group(2) == "shift":
                                     extra_stats.add("current-stats")
-                                elif m.group(1) == "goal":
+                                elif m.group(2) == "goal":
                                     extra_stats.add("score")
+
+                            if m.group(1):
+                                if m.group(2) == "record":
+                                    for header in ("TmRec", "TmRORec", "TmPTS", "TmPTS%", "TmW/L%", "TmROW/L%"):
+                                        extra_stats.add("show-only-stat-" + header.lower())
+                                elif m.group(2) == "star":
+                                    for header in  ("FirstStar", "SecondStar", "ThirdStar", "TotalStar", "FirstStar%", "SecondStar%", "ThirdStar%", "TotalStar%"):
+                                        extra_stats.add("show-only-stat-" + header.lower())
+                                elif m.group(2) == "score" or m.group(2) == "goal":
+                                    for header in ("TmG", "OppG", "TtlG", "GDiff", "TmG/GP", "OppG/GP", "TtlG/GP", "GDiff/GP"):
+                                        extra_stats.add("show-only-stat-" + header.lower())
+                                elif "penalt" in m.group(2) or m.group(2) == "fight":
+                                    extra_stats.add("show-only-table-penalty")
+
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
                                                 
                         last_match = re.finditer(r"\bhide(?: |-)?(name|year|season|date|query|queries|advanced)s?\b", time_frame)
@@ -7431,6 +7451,13 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                         last_match = re.finditer(r"\b(show(?: |-)?stat:)\(.+?\)", time_frame)
                         for m in last_match:
                             for stat in re.split(r"(?<!\\)\-", re.split(r"(?<!\\)" + m.group(1), m.group(0))[1].strip("()")):
+                                extra_stats.add("show-stat-" + stat.strip())
+                            time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
+                        
+                        last_match = re.finditer(r"\b(show(?: |-)?only(?: |-)?stat:)\(.+?\)", time_frame)
+                        for m in last_match:
+                            for stat in re.split(r"(?<!\\)\-", re.split(r"(?<!\\)" + m.group(1), m.group(0))[1].strip("()")):
+                                extra_stats.add("show-only-stat-" + stat.strip())
                                 extra_stats.add("show-stat-" + stat.strip())
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
 
@@ -31491,6 +31518,10 @@ def print_player_data(player_datas, player_type, highest_vals, lowest_vals, has_
             break
 
     for over_header in all_headers:
+        for extra_stat in extra_stats:
+            if extra_stat.startswith("show-only-table-"):
+                if "show-only-table-" + over_header.lower() not in extra_stats:
+                    continue
         if "hide-table-" + over_header.lower() in extra_stats:
             continue
         if over_header.startswith("5v5") and "hide-table-5v5" in extra_stats:
@@ -31503,16 +31534,26 @@ def print_player_data(player_datas, player_type, highest_vals, lowest_vals, has_
             table = PrettyTable()
             field_names = []
             for header in all_headers[over_header]:
-                if "hide-stat-" + header.lower() in extra_stats:
+                if "hide-stat-" + header.lower() in extra_stats or "hide-stat-" + over_header + ">" + header.lower() in extra_stats:
                     continue
                 if "display-value" in all_headers[over_header][header] and all_headers[over_header][header]["display-value"]:
-                    if "hide-stat-" + all_headers[over_header][header]["display-value"].lower() in extra_stats:
+                    if "hide-stat-" + all_headers[over_header][header]["display-value"].lower() in extra_stats or "hide-stat-" + over_header + ">" + all_headers[over_header][header]["display-value"].lower() in extra_stats:
                         continue
+                for extra_stat in extra_stats:
+                    if extra_stat.startswith("show-only-stat-"):
+                        if not ("show-only-stat-" + header.lower() in extra_stats or "show-only-stat-" + over_header + ">" + header.lower() in extra_stats or "show-stat-" + header.lower() in extra_stats or "show-stat-" + over_header + ">" + header.lower() in extra_stats):
+                            if "display-value" in all_headers[over_header][header] and all_headers[over_header][header]["display-value"]:
+                                if not ("show-only-stat-" + all_headers[over_header][header]["display-value"].lower() in extra_stats or "show-only-stat-" + over_header + ">" + all_headers[over_header][header]["display-value"].lower() in extra_stats or "show-stat-" + all_headers[over_header][header]["display-value"].lower() in extra_stats or "show-stat-" + over_header + ">" + all_headers[over_header][header]["display-value"].lower() in extra_stats):
+                                    if not header.startswith("Player") and header != "GP" and not header.startswith("GP/") and not header.startswith("GP_") and header != "GS" and not header.startswith("GS/") and not header.startswith("GS_") and header != "GP/Yr" and header != "GS/Yr" and header != "TOI/Yr" and header != "Seasons":
+                                        continue
+                            else:
+                                if not header.startswith("Player") and header != "GP" and not header.startswith("GP/") and not header.startswith("GP_") and header != "GS" and not header.startswith("GS/") and not header.startswith("GS_") and header != "GP/Yr" and header != "GS/Yr" and header != "TOI/Yr" and header != "Seasons":
+                                    continue
                 override_show = False
-                if "show-stat-" + header.lower() in extra_stats:
+                if "show-stat-" + header.lower() in extra_stats or "show-stat-" + over_header + ">" + header.lower() in extra_stats:
                     override_show = True
                 if "display-value" in all_headers[over_header][header] and all_headers[over_header][header]["display-value"]:
-                    if "show-stat-" + all_headers[over_header][header]["display-value"].lower() in extra_stats:
+                    if "show-stat-" + all_headers[over_header][header]["display-value"].lower() in extra_stats or "show-stat-" + over_header + ">" + all_headers[over_header][header]["display-value"].lower() in extra_stats:
                         override_show = True
                 if header in ("TmRec", "TmRORec", "TmPTS", "TmPTS%", "TmW/L%", "TmROW/L%") and "record" in extra_stats:
                     if header == "TmPTS" or header == "TmPTS%" or header == "TmRORec" or header == "TmROW/L%":
@@ -31876,6 +31917,10 @@ def get_reddit_player_table(player_datas, player_type, debug_mode, original_comm
             break
 
     for over_header in all_headers:
+        for extra_stat in extra_stats:
+            if extra_stat.startswith("show-only-table-"):
+                if "show-only-table-" + over_header.lower() not in extra_stats:
+                    continue
         if "hide-table-" + over_header.lower() in extra_stats:
             continue
         if over_header.startswith("5v5") and "hide-table-5v5" in extra_stats:
@@ -31910,16 +31955,26 @@ def get_reddit_player_table(player_datas, player_type, debug_mode, original_comm
 
             field_names = []
             for header in all_headers[over_header]:
-                if "hide-stat-" + header.lower() in extra_stats:
+                if "hide-stat-" + header.lower() in extra_stats or "hide-stat-" + over_header + ">" + header.lower() in extra_stats:
                     continue
                 if "display-value" in all_headers[over_header][header] and all_headers[over_header][header]["display-value"]:
-                    if "hide-stat-" + all_headers[over_header][header]["display-value"].lower() in extra_stats:
+                    if "hide-stat-" + all_headers[over_header][header]["display-value"].lower() in extra_stats or "hide-stat-" + over_header + ">" + all_headers[over_header][header]["display-value"].lower() in extra_stats:
                         continue
+                for extra_stat in extra_stats:
+                    if extra_stat.startswith("show-only-stat-"):
+                        if not ("show-only-stat-" + header.lower() in extra_stats or "show-only-stat-" + over_header + ">" + header.lower() in extra_stats or "show-stat-" + header.lower() in extra_stats or "show-stat-" + over_header + ">" + header.lower() in extra_stats):
+                            if "display-value" in all_headers[over_header][header] and all_headers[over_header][header]["display-value"]:
+                                if not ("show-only-stat-" + all_headers[over_header][header]["display-value"].lower() in extra_stats or "show-only-stat-" + over_header + ">" + all_headers[over_header][header]["display-value"].lower() in extra_stats or "show-stat-" + all_headers[over_header][header]["display-value"].lower() in extra_stats or "show-stat-" + over_header + ">" + all_headers[over_header][header]["display-value"].lower() in extra_stats):
+                                    if not header.startswith("Player") and header != "GP" and not header.startswith("GP/") and not header.startswith("GP_") and header != "GS" and not header.startswith("GS/") and not header.startswith("GS_") and header != "GP/Yr" and header != "GS/Yr" and header != "TOI/Yr" and header != "Seasons":
+                                        continue
+                            else:
+                                if not header.startswith("Player") and header != "GP" and not header.startswith("GP/") and not header.startswith("GP_") and header != "GS" and not header.startswith("GS/") and not header.startswith("GS_") and header != "GP/Yr" and header != "GS/Yr" and header != "TOI/Yr" and header != "Seasons":
+                                    continue
                 override_show = False
-                if "show-stat-" + header.lower() in extra_stats:
+                if "show-stat-" + header.lower() in extra_stats or "show-stat-" + over_header + ">" + header.lower() in extra_stats:
                     override_show = True
                 if "display-value" in all_headers[over_header][header] and all_headers[over_header][header]["display-value"]:
-                    if "show-stat-" + all_headers[over_header][header]["display-value"].lower() in extra_stats:
+                    if "show-stat-" + all_headers[over_header][header]["display-value"].lower() in extra_stats or "show-stat-" + over_header + ">" + all_headers[over_header][header]["display-value"].lower() in extra_stats:
                         override_show = True
                 if header in ("TmRec", "TmRORec", "TmPTS", "TmPTS%", "TmW/L%", "TmROW/L%") and "record" in extra_stats:
                     if header == "TmPTS" or header == "TmPTS%" or header == "TmRORec" or header == "TmROW/L%":
@@ -32691,20 +32746,34 @@ def parse_flag(flag):
     return None
 
 def handle_table_data(player_data, player_type, over_header, header, highest_vals, lowest_vals, index, has_season_stats, has_playoffs, has_non_playoffs, has_toi_stats, for_reddit, extra_stats):
+    for extra_stat in extra_stats:
+        if extra_stat.startswith("show-only-table-"):
+            if "show-only-table-" + over_header.lower() not in extra_stats:
+                return None
     if "hide-table-" + over_header.lower() in extra_stats:
         return None
     if over_header.startswith("5v5") and "hide-table-5v5" in extra_stats:
         return None
-    if "hide-stat-" + header.lower() in extra_stats:
+    if "hide-stat-" + header.lower() in extra_stats or "hide-stat-" + over_header + ">" + header.lower() in extra_stats:
         return None
     if "display-value" in headers[player_type["da_type"]["type"]][header] and headers[player_type["da_type"]["type"]][header]["display-value"]:
-        if "hide-stat-" +headers[player_type["da_type"]["type"]][header]["display-value"].lower() in extra_stats:
+        if "hide-stat-" + headers[player_type["da_type"]["type"]][header]["display-value"].lower() in extra_stats or "hide-stat-" + over_header + ">" + headers[player_type["da_type"]["type"]][header]["display-value"].lower() in extra_stats:
             return None
+    for extra_stat in extra_stats:
+        if extra_stat.startswith("show-only-stat-"):
+            if not ("show-only-stat-" + header.lower() in extra_stats or "show-only-stat-" + over_header + ">" + header.lower() in extra_stats or "show-stat-" + header.lower() in extra_stats or "show-stat-" + over_header + ">" + header.lower() in extra_stats):
+                if "display-value" in headers[player_type["da_type"]["type"]][header] and headers[player_type["da_type"]["type"]][header]["display-value"]:
+                    if not ("show-only-stat-" + headers[player_type["da_type"]["type"]][header]["display-value"].lower() in extra_stats or "show-only-stat-" + over_header + ">" + headers[player_type["da_type"]["type"]][header]["display-value"].lower() in extra_stats or "show-stat-" + headers[player_type["da_type"]["type"]][header]["display-value"].lower() in extra_stats or "show-stat-" + over_header + ">" + headers[player_type["da_type"]["type"]][header]["display-value"].lower() in extra_stats):
+                        if not header.startswith("Player") and header != "GP" and not header.startswith("GP/") and not header.startswith("GP_") and header != "GS" and not header.startswith("GS/") and not header.startswith("GS_") and header != "GP/Yr" and header != "GS/Yr" and header != "TOI/Yr" and header != "Seasons":
+                            return None
+                else:
+                    if not header.startswith("Player") and header != "GP" and not header.startswith("GP/") and not header.startswith("GP_") and header != "GS" and not header.startswith("GS/") and not header.startswith("GS_") and header != "GP/Yr" and header != "GS/Yr" and header != "TOI/Yr" and header != "Seasons":
+                        return None
     override_show = False
-    if "show-stat-" + header.lower() in extra_stats:
+    if "show-stat-" + header.lower() in extra_stats or "show-stat-" + over_header + ">" + header.lower() in extra_stats:
         override_show = True
     if "display-value" in headers[player_type["da_type"]["type"]][header] and headers[player_type["da_type"]["type"]][header]["display-value"]:
-        if "show-stat-" + headers[player_type["da_type"]["type"]][header]["display-value"].lower() in extra_stats:
+        if "show-stat-" + headers[player_type["da_type"]["type"]][header]["display-value"].lower() in extra_stats or "show-stat-" + over_header + ">" + headers[player_type["da_type"]["type"]][header]["display-value"].lower() in extra_stats:
             override_show = True
     if header in ("TmRec", "TmRORec", "TmPTS", "TmPTS%", "TmW/L%", "TmROW/L%") and "record" in extra_stats:
         if header == "TmPTS" or header == "TmPTS%" or header == "TmRORec" or header == "TmROW/L%":
@@ -32827,7 +32896,7 @@ def handle_table_data(player_data, player_type, over_header, header, highest_val
         if seasons_leading and header not in div_id_to_stat[player_type["da_type"]["type"]].values() and not header.startswith("Player") and not header == "Seasons":
             return "N/A"
 
-        if is_against_header(header, extra_stats, player_type, has_toi_stats):
+        if is_against_header(header, over_header, extra_stats, player_type, has_toi_stats):
             return "N/A"
         
         if player_type["da_type"]["type"] == "Skater" and not has_against_quals(extra_stats):
@@ -33016,14 +33085,14 @@ def has_coordinate_quals(qualifiers):
 def has_time_quals(qualifiers):
     return "Event Time" in qualifiers
 
-def is_against_header(header, extra_stats, player_type, has_toi_stats):
+def is_against_header(header, over_header, extra_stats, player_type, has_toi_stats):
     if not has_against_quals(extra_stats):
         return False
 
     if header.startswith("Player"):
         return False
 
-    if "show-stat-" + header.lower() in extra_stats:
+    if "show-stat-" + header.lower() in extra_stats or "show-stat-" + over_header + ">" + header.lower() in extra_stats:
         return False
     
     if "shootout" in extra_stats or "penalty-shot" in extra_stats:
