@@ -6826,6 +6826,16 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 elif m.group(2) == "score":
                                     for header in ("TmScore", "OppScore", "TtlScore", "ScoreDiff", "TmScore/G", "OppScore/G", "TtlScore/G", "ScoreDiff/G"):
                                         extra_stats.add("show-only-stat-" + header.lower())
+                                elif m.group(2) == "statcast":
+                                    for header in ("Chase%", "EV", "Spin", "MPH", "HardHit%", "SwtSpt%", "LA", "HitDist", "PutAway%", "Whiff%"):
+                                        extra_stats.add("show-only-stat-" + header.lower())
+                                elif m.group(2) == "run-support":
+                                    for header in ("RS9", "RS"):
+                                        extra_stats.add("show-only-stat-" + header.lower())
+                                elif m.group(2) == "advanced-runner":
+                                    for header in ("BQS", "IS", "IR", "IS%"):
+                                        extra_stats.add("show-only-stat-" + header.lower())
+                        override_show = True
 
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
 
@@ -38421,7 +38431,7 @@ def print_player_data(player_datas, player_type, highest_vals, lowest_vals, has_
                 if "statcast" in extra_stats:
                     if header == "Chase%" or header == "EV" or header == "Spin" or header == "MPH" or header == "HardHit%" or header == "SwtSpt%" or header == "LA" or header == "HitDist" or header == "PutAway%" or header == "Whiff%":
                         override_show = True
-                if "run-support" in extra_stats or "run-support-record" in extra_stats or "exit-record" in extra_stats or "advanced-runner" in extra_stats:
+                if "run-support" in extra_stats:
                     if header == "RS9" or header == "RS":
                         override_show = True
                 if "advanced-runner" in extra_stats:
@@ -38721,7 +38731,7 @@ def get_reddit_player_table(player_datas, player_type, debug_mode, original_comm
                 if "statcast" in extra_stats:
                     if header == "Chase%" or header == "EV" or header == "Spin" or header == "MPH" or header == "HardHit%" or header == "SwtSpt%" or header == "LA" or header == "HitDist" or header == "PutAway%" or header == "Whiff%":
                         override_show = True
-                if "run-support" in extra_stats or "run-support-record" in extra_stats or "exit-record" in extra_stats or "advanced-runner" in extra_stats:
+                if "run-support" in extra_stats:
                     if header == "RS9" or header == "RS":
                         override_show = True
                 if "advanced-runner" in extra_stats:
@@ -39432,7 +39442,7 @@ def handle_table_data(over_header, player_data, player_datas, player_type, heade
     if "statcast" in extra_stats:
         if header == "Chase%" or header == "EV" or header == "Spin" or header == "MPH" or header == "HardHit%" or header == "SwtSpt%" or header == "LA" or header == "HitDist" or header == "PutAway%" or header == "Whiff%":
             override_show = True
-    if "run-support" in extra_stats or "run-support-record" in extra_stats or "exit-record" in extra_stats or "advanced-runner" in extra_stats:
+    if "run-support" in extra_stats:
         if header == "RS9" or header == "RS":
             override_show = True
     if "advanced-runner" in extra_stats:
