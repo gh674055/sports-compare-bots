@@ -6811,7 +6811,10 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 player_type["da_type"] = "Pitcher"
                                 if "run-support" in m.group(1):
                                     extra_stats.add("score")
-
+                            elif m.group(2) == "game-count":
+                                extra_stats.add("show-only-stat-g")
+                                extra_stats.add("show-only-stat-gs")
+                                extra_stats.add("show-only-table-standard")
                 
                             if m.group(1):
                                 if m.group(2) == "record":
@@ -6835,10 +6838,6 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 elif m.group(2) == "advanced-runner":
                                     for header in ("BQS", "IS", "IR", "IS%"):
                                         extra_stats.add("show-only-stat-" + header.lower())
-                                elif m.group(2) == "game-count":
-                                    extra_stats.add("show-only-stat-g")
-                                    extra_stats.add("show-only-stat-gs")
-                                    extra_stats.add("show-only-table-standard")
 
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
 
@@ -38326,6 +38325,11 @@ def print_player_data(player_datas, player_type, highest_vals, lowest_vals, has_
                             if (over_header != "Awards/Honors" or seasons_leading) or (ordinal_to_number(value) or "award" in extra_stats):
                                 has_table_match = True
                                 break
+                        else:
+                            if ("show-only-stat-" + header.lower() in extra_stats or "show-only-stat-" + over_header + ">" + header.lower() in extra_stats or "show-stat-" + header.lower() in extra_stats or "show-stat-" + over_header + ">" + header.lower() in extra_stats):
+                                if (over_header != "Awards/Honors" or seasons_leading) or (ordinal_to_number(value) or "award" in extra_stats):
+                                    has_table_match = True
+                                    break
                 if not has_header_match:
                     if not over_header in headers_to_skip:
                         headers_to_skip[over_header] = set()
@@ -38569,13 +38573,18 @@ def get_reddit_player_table(player_datas, player_type, debug_mode, original_comm
                             if (over_header != "Awards/Honors" or seasons_leading) or (ordinal_to_number(value) or "award" in extra_stats):
                                 has_table_match = True
                                 break
+                        else:
+                            if ("show-only-stat-" + header.lower() in extra_stats or "show-only-stat-" + over_header + ">" + header.lower() in extra_stats or "show-stat-" + header.lower() in extra_stats or "show-stat-" + over_header + ">" + header.lower() in extra_stats):
+                                if (over_header != "Awards/Honors" or seasons_leading) or (ordinal_to_number(value) or "award" in extra_stats):
+                                    has_table_match = True
+                                    break
                 if not has_header_match:
                     if not over_header in headers_to_skip:
                         headers_to_skip[over_header] = set()
                     headers_to_skip[over_header].add(header)
         if not has_table_match:
             tables_to_skip.add(over_header)
-    
+        
     if player_type["da_type"] == "Batter":
         has_season_pitch_stats = False
         for player_data in player_datas:
@@ -38678,6 +38687,7 @@ def get_reddit_player_table(player_datas, player_type, debug_mode, original_comm
                 
     table_str = ranges_str + "\n\n---\n"
 
+    
     for over_header in all_headers:
         for extra_stat in extra_stats:
             if extra_stat.startswith("show-only-table-"):

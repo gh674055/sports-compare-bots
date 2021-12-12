@@ -7422,6 +7422,10 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                     extra_stats.add("current-stats")
                                 elif m.group(2) == "goal":
                                     extra_stats.add("score")
+                                elif m.group(2) == "game-count":
+                                    extra_stats.add("show-only-stat-gp")
+                                    extra_stats.add("show-only-stat-gs")
+                                    extra_stats.add("show-only-table-standard")
 
                             if m.group(1):
                                 if m.group(2) == "record":
@@ -7435,10 +7439,6 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                         extra_stats.add("show-only-stat-" + header.lower())
                                 elif "penalt" in m.group(2) or m.group(2) == "fight":
                                     extra_stats.add("show-only-table-penalty")
-                                elif m.group(2) == "game-count":
-                                    extra_stats.add("show-only-stat-gp")
-                                    extra_stats.add("show-only-stat-gs")
-                                    extra_stats.add("show-only-table-standard")
 
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
                                                 
@@ -31487,6 +31487,11 @@ def print_player_data(player_datas, player_type, highest_vals, lowest_vals, has_
                             if (over_header != "Awards/Honors" or seasons_leading) or (ordinal_to_number(value) or "award" in extra_stats):
                                 has_table_match = True
                                 break
+                        else:
+                            if ("show-only-stat-" + header.lower() in extra_stats or "show-only-stat-" + over_header + ">" + header.lower() in extra_stats or "show-stat-" + header.lower() in extra_stats or "show-stat-" + over_header + ">" + header.lower() in extra_stats):
+                                if (over_header != "Awards/Honors" or seasons_leading) or (ordinal_to_number(value) or "award" in extra_stats):
+                                    has_table_match = True
+                                    break
                 if not has_header_match:
                     if not over_header in headers_to_skip:
                         headers_to_skip[over_header] = set()
@@ -31831,6 +31836,11 @@ def get_reddit_player_table(player_datas, player_type, debug_mode, original_comm
                             if (over_header != "Awards/Honors" or seasons_leading) or (ordinal_to_number(value) or "award" in extra_stats):
                                 has_table_match = True
                                 break
+                        else:
+                            if ("show-only-stat-" + header.lower() in extra_stats or "show-only-stat-" + over_header + ">" + header.lower() in extra_stats or "show-stat-" + header.lower() in extra_stats or "show-stat-" + over_header + ">" + header.lower() in extra_stats):
+                                if (over_header != "Awards/Honors" or seasons_leading) or (ordinal_to_number(value) or "award" in extra_stats):
+                                    has_table_match = True
+                                    break
                 if not has_header_match:
                     if not over_header in headers_to_skip:
                         headers_to_skip[over_header] = set()
