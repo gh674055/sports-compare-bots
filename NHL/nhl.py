@@ -23981,7 +23981,7 @@ def handle_awards(player_page, player_data, player_type, time_frame, years_to_sk
                             if not has_row_match:
                                 if not award_stat in row:
                                     row[award_stat] = 0.0
-                                row[award_stat] += manual_awards_map[player_data["id"]][player_type["da_type"]][row["Year"]][award_stat]
+                                row[award_stat] += manual_awards_map[player_data["id"]][player_type["da_type"]["type"]][row["Year"]][award_stat]
 
 def handle_leading_seasons(player_page, player_data, player_type, time_frame, years_to_skip, all_rows, seasons_leading_start, seasons_leading_end):   
     if player_type["da_type"]["type"]:
@@ -27819,12 +27819,11 @@ def comb_rows(matching_rows, player_data, player_type, lower=True, stats=None):
 
     if stats == None or header in stats or set(stats).intersection(advanced_stats):
         calculate_advanced_stats(comb_row, matching_rows, player_type["da_type"]["type"], player_type["da_type"]["position"], player_data)
-    
-    if stats == None or header in stats or set(stats).intersection(formulas[player_type["da_type"]["type"]].keys()):
-        for stat in formulas[player_type["da_type"]["type"]]:
-            formula = formulas[player_type["da_type"]["type"]][stat]
-            value = calculate_formula(stat, player_type, formula, comb_row, matching_rows, player_data)
-            comb_row[stat] = value
+
+    if stats == None or set(stats).intersection(formulas[player_type["da_type"]["type"]].keys()):
+        for stat in stats:
+            if stat in formulas[player_type["da_type"]["type"]]:
+                calculate_recursive_formula(stat, player_data, player_type, comb_row, matching_rows)
 
     headers_to_remove = set()
     for header in comb_row:
@@ -27838,6 +27837,15 @@ def comb_rows(matching_rows, player_data, player_type, lower=True, stats=None):
         return {key.lower(): value for key, value in comb_row.items()}
     else:
         return comb_row
+
+def calculate_recursive_formula(stat, player_data, player_type, comb_row, matching_rows):
+    formula = formulas[player_type["da_type"]["type"]][stat]
+    for header_stat in formulas[player_type["da_type"]["type"]]:
+        if header_stat == stat:
+            break
+        if re.search(r"(?:(?<![\w+])(?=[\w+])|(?<=[\w+])(?![\w+]))" + re.escape(header_stat.lower()) + r"(?:(?<![\w+])(?=[\w+])|(?<=[\w+])(?![\w+]))", formula.lower()):
+            calculate_recursive_formula(header_stat, player_data, player_type, comb_row, matching_rows)
+    comb_row[stat] = calculate_formula(stat, player_type, formula, comb_row, matching_rows, player_data)
 
 def handle_date_rows(player_data, player_type, stat, start_date, date_diff, all_rows):
     stat_value = 0
@@ -28293,12 +28301,9 @@ def fill_row(row, player_data, player_type, lower=True, stats=None):
             calculate_advanced_stats(row, [row], player_type["da_type"]["type"], player_type["da_type"]["position"], player_data)
     
     if stats == None or set(stats).intersection(formulas[player_type["da_type"]["type"]].keys()):
-        for form_stat in formulas[player_type["da_type"]["type"]]:
-            if not form_stat == "TmRec" and not form_stat == "TmRORec":
-                if not form_stat in row:
-                    formula = formulas[player_type["da_type"]["type"]][form_stat]
-                    value = calculate_formula(form_stat, player_type, formula, row, None, player_data)
-                    row[form_stat] = value
+        for stat in stats:
+            if stat in formulas[player_type["da_type"]["type"]]:
+                calculate_recursive_formula(stat, player_data, player_type, row, None)
 
     headers_to_remove = set()
     for header in row:

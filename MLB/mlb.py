@@ -19074,7 +19074,7 @@ def handle_max_min_data(all_rows, player_data, player_type, qualifiers, extra_st
                     "stat_obj" : stat_obj,
                     "values" : sorted(min_stats, key=lambda stat:(stat["value"], -stat["index"]))[start_level:end_level],
                     "negate" : qual_object["negate"]
-                }) 
+                })
 
     da_min_stats = set()
     if "Max Stat" in qualifiers:
@@ -21308,10 +21308,9 @@ def comb_rows(matching_rows, player_data, player_type, lower=True, stats=None):
             comb_row["Inn"] += 1
 
     if stats == None or set(stats).intersection(formulas[player_type["da_type"]].keys()):
-        for stat in formulas[player_type["da_type"]]:
-            formula = formulas[player_type["da_type"]][stat]
-            value = calculate_formula(stat, player_data, player_type, formula, comb_row, matching_rows)
-            comb_row[stat] = value
+        for stat in stats:
+            if stat in formulas[player_type["da_type"]]:
+                calculate_recursive_formula(stat, player_data, player_type, comb_row, matching_rows)
 
     if stats == None or set(stats).intersection(advanced_stats[player_type["da_type"]]):
         calculate_advanced_stats(comb_row, matching_rows, player_type, {"qualifiers" : {}})
@@ -21328,6 +21327,15 @@ def comb_rows(matching_rows, player_data, player_type, lower=True, stats=None):
         return {key.lower(): value for key, value in comb_row.items()}
     else:
         return comb_row
+    
+def calculate_recursive_formula(stat, player_data, player_type, comb_row, matching_rows):
+    formula = formulas[player_type["da_type"]][stat]
+    for header_stat in formulas[player_type["da_type"]]:
+        if header_stat == stat:
+            break
+        if re.search(r"(?:(?<![\w+])(?=[\w+])|(?<=[\w+])(?![\w+]))" + re.escape(header_stat.lower()) + r"(?:(?<![\w+])(?=[\w+])|(?<=[\w+])(?![\w+]))", formula.lower()):
+            calculate_recursive_formula(header_stat, player_data, player_type, comb_row, matching_rows)
+    comb_row[stat] = calculate_formula(stat, player_data, player_type, formula, comb_row, matching_rows)
             
 def handle_date_rows(player_data, player_type, stat, start_date, date_diff, all_rows):
     stat_value = 0
@@ -21771,14 +21779,11 @@ def fill_row(row, player_data, player_type, lower=True, stats=None):
         if header not in row:
             if not header in formulas[player_type["da_type"]] and not header in advanced_stats["Batter"] and not header in advanced_stats["Pitcher"]:
                 row[header] = 0.0
-
+    
     if stats == None or set(stats).intersection(formulas[player_type["da_type"]].keys()):
-        for form_stat in formulas[player_type["da_type"]]:
-            if not form_stat == "TmRec":
-                if not form_stat in row:
-                    formula = formulas[player_type["da_type"]][form_stat]
-                    value = calculate_formula(form_stat, player_data, player_type, formula, row, None)
-                    row[form_stat] = value
+        for stat in stats:
+            if stat in formulas[player_type["da_type"]]:
+                calculate_recursive_formula(stat, player_data, player_type, row, None)
 
     if stats == None or set(stats).intersection(advanced_stats[player_type["da_type"]]):  
         missing_advanced = False

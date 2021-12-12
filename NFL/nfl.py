@@ -14780,19 +14780,16 @@ def comb_rows(matching_rows, player_data, player_type, lower=True, stats=None):
         comb_row["Scrimmage/All Purpose"]["APTD"] = aptd
 
     if stats == None or "Shared" in stats:
-        for stat in get_constant_data.formulas["Shared"]:
+        for stat in stats["Shared"]:
             if stats == None or set(stats["Shared"]).intersection(get_constant_data.formulas["Shared"].keys()):
-                formula = get_constant_data.formulas["Shared"][stat]
-                value = get_constant_data.calculate_formula(stat, formula, comb_row, "Shared", headers, player_data, player_type, matching_rows)
-                comb_row["Shared"][stat] = value
+                if stat in get_constant_data.formulas["Shared"]:
+                    calculate_recursive_formula("Shared", stat, player_data, player_type, comb_row, matching_rows)
     for over_header in headers[player_type["da_type"]]:
         if stats == None or over_header in stats:
-            if over_header != "Fantasy":
-                for stat in get_constant_data.formulas[over_header]:
-                    if stats == None or set(stats[over_header]).intersection(get_constant_data.formulas[over_header].keys()):
-                        formula = get_constant_data.formulas[over_header][stat]
-                        value = get_constant_data.calculate_formula(stat, formula, comb_row, over_header, headers, player_data, player_type, matching_rows)
-                        comb_row[over_header][stat] = value
+            if stats == None or set(stats[over_header]).intersection(get_constant_data.formulas[over_header].keys()):
+                for stat in stats[over_header]:
+                    if stat in get_constant_data.formulas[over_header]:
+                        calculate_recursive_formula(over_header, stat, player_data, player_type, comb_row, matching_rows)
 
     if "Fantasy" in comb_row:
         for stat in list(comb_row["Fantasy"]):
@@ -14844,6 +14841,15 @@ def comb_rows(matching_rows, player_data, player_type, lower=True, stats=None):
         return {key.lower(): value for key, value in comb_row.items()}
     else:
         return comb_row
+
+def calculate_recursive_formula(over_header, stat, player_data, player_type, comb_row, matching_rows):
+    formula = get_constant_data.formulas[over_header][stat]
+    for header_stat in get_constant_data.formulas[over_header]:
+        if header_stat == stat:
+            break
+        if re.search(r"(?:(?<![\w+])(?=[\w+])|(?<=[\w+])(?![\w+]))" + re.escape(header_stat.lower()) + r"(?:(?<![\w+])(?=[\w+])|(?<=[\w+])(?![\w+]))", formula.lower()):
+            calculate_recursive_formula(over_header, stat, player_data, player_type, comb_row, matching_rows)
+    comb_row[over_header][stat] = get_constant_data.calculate_formula(stat, formula, comb_row, over_header, headers, player_data, player_type, matching_rows)
 
 def handle_date_rows(player_data, player_type, stat, the_over_stat, start_date, date_diff, all_rows):
     stat_value = 0
@@ -15772,22 +15778,18 @@ def fill_row(row, player_data, player_type, lower=True, stats=None):
         row["Scrimmage/All Purpose"]["TD"] = tds
         row["Scrimmage/All Purpose"]["APYds"] = apyds
         row["Scrimmage/All Purpose"]["APTD"] = aptd
-
+    
     if stats == None or "Shared" in stats:
-        for formula_stat in get_constant_data.formulas["Shared"]:
-            if stats == None or set(stats["Shared"]).intersection(get_constant_data.formulas["Shared"].keys()):
-                formula = get_constant_data.formulas["Shared"][formula_stat]
-                value = get_constant_data.calculate_formula(formula_stat, formula, row, "Shared", headers, player_data, player_type, None)
-                row["Shared"][formula_stat] = value
+        if stats == None or set(stats["Shared"]).intersection(get_constant_data.formulas["Shared"].keys()):
+            for stat in stats["Shared"]:
+                if stat in get_constant_data.formulas["Shared"]:
+                    calculate_recursive_formula("Shared", stat, player_data, player_type, row, None)
     for over_header in headers[player_type["da_type"]]:
         if stats == None or over_header in stats:
-            if over_header != "Fantasy":
-                for formula_stat in get_constant_data.formulas[over_header]:
-                    if stats == None or set(stats[over_header]).intersection(get_constant_data.formulas[over_header].keys()):
-                        if not formula_stat in row[over_header]:
-                            formula = get_constant_data.formulas[over_header][formula_stat]
-                            value = get_constant_data.calculate_formula(formula_stat, formula, row, over_header, player_data, player_type, headers, None)
-                            row[over_header][formula_stat] = value
+            if stats == None or set(stats[over_header]).intersection(get_constant_data.formulas[over_header].keys()):
+                for stat in stats[over_header]:
+                    if stat in get_constant_data.formulas[over_header]:
+                        calculate_recursive_formula(over_header, stat, player_data, player_type, row, None)
 
     if "Fantasy" in row and "STD/G" not in row["Fantasy"]:
         for fantasy_stat in list(row["Fantasy"]):
