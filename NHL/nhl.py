@@ -23341,6 +23341,8 @@ def perform_sub_metadata_qual(event, attr_str, qualifiers, player_game_info, yea
                 if not is_match:
                     return False
     elif attr_str == "exactPenaltyType" or attr_str == "exactPenaltySeverity" or attr_str == "exactShotType":
+        attr_str = attr_str[5:]
+        attr_str = attr_str[0].lower() + attr_str[1:]
         if attr_str not in event or not event[attr_str]:
             return False
 
