@@ -31700,10 +31700,7 @@ def print_player_data(player_datas, player_type, highest_vals, lowest_vals, has_
                     display_over_header = "Per 60 Minutes (Avail since 2007-2008)"
 
             if debug_mode:
-                if len(all_headers) > 1:
-                    logger.info("#" + str(threading.get_ident()) + "#   " + display_over_header + "\n\n" + str(table))
-                else:
-                    logger.info("#" + str(threading.get_ident()) + "#   " + str(table))
+                logger.info("#" + str(threading.get_ident()) + "#   " + str(table))
 
             html_info["tables"].append({
                 "title" : display_over_header,
@@ -31930,28 +31927,27 @@ def get_reddit_player_table(player_datas, player_type, debug_mode, original_comm
                 continue
 
         if all_headers[over_header]:
-            if len(all_headers) > 1:
-                display_over_header = over_header
-                if display_over_header == "Advanced":
-                    if player_type["da_type"]["type"] == "Skater":
-                        if not has_against_quals_no_so(extra_stats):
-                            if has_season_stats and has_non_playoffs:
-                                display_over_header = "Advanced (Most stats avail since 2009-2010, xG per Hockey Reference)"
-                            else:
-                                display_over_header = "Advanced (Most stats avail since 2009-2010)"
-                    else:
+            display_over_header = over_header
+            if display_over_header == "Advanced":
+                if player_type["da_type"]["type"] == "Skater":
+                    if not has_against_quals_no_so(extra_stats):
                         if has_season_stats and has_non_playoffs:
-                            display_over_header = "Situational/Advanced (Even Strength/Hockey Reference, avail since 2016-2017)"
+                            display_over_header = "Advanced (Most stats avail since 2009-2010, xG per Hockey Reference)"
                         else:
-                            display_over_header = "Situational"
-                elif display_over_header == "5v5 (Avail since 2009-2010)":
-                    if has_against_quals_no_so(extra_stats):
-                        display_over_header = "5v5"
-                elif display_over_header == "Per Game/60 Minutes":
-                    if has_against_quals_no_so(extra_stats) and not "per-game" in extra_stats:
-                        display_over_header = "Per 60 Minutes (Avail since 2007-2008)"
+                            display_over_header = "Advanced (Most stats avail since 2009-2010)"
+                else:
+                    if has_season_stats and has_non_playoffs:
+                        display_over_header = "Situational/Advanced (Even Strength/Hockey Reference, avail since 2016-2017)"
+                    else:
+                        display_over_header = "Situational"
+            elif display_over_header == "5v5 (Avail since 2009-2010)":
+                if has_against_quals_no_so(extra_stats):
+                    display_over_header = "5v5"
+            elif display_over_header == "Per Game/60 Minutes":
+                if has_against_quals_no_so(extra_stats) and not "per-game" in extra_stats:
+                    display_over_header = "Per 60 Minutes (Avail since 2007-2008)"
 
-                table_str += "**" + display_over_header + "**\n\n"
+            table_str += "**" + display_over_header + "**\n\n"
 
             field_names = []
             for header in all_headers[over_header]:

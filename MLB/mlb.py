@@ -38464,10 +38464,7 @@ def print_player_data(player_datas, player_type, highest_vals, lowest_vals, has_
                     rows.append(values)
 
             if debug_mode:
-                if len(all_headers) > 1:
-                    logger.info("#" + str(threading.get_ident()) + "#   " + over_header + "\n\n" + str(table))
-                else:
-                    logger.info("#" + str(threading.get_ident()) + "#   " + str(table))
+                logger.info("#" + str(threading.get_ident()) + "#   " + str(table))
             
             html_info["tables"].append({
                 "title" : over_header,
@@ -38686,8 +38683,7 @@ def get_reddit_player_table(player_datas, player_type, debug_mode, original_comm
         if "hide-table-" + over_header.lower() in extra_stats:
             continue
         if all_headers[over_header]:
-            if len(all_headers) > 1:
-                table_str += "**" + over_header + "**\n\n"
+            table_str += "**" + over_header + "**\n\n"
 
             field_names = []
             for header in all_headers[over_header]:
