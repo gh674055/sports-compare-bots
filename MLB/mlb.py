@@ -6835,7 +6835,6 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 elif m.group(2) == "advanced-runner":
                                     for header in ("BQS", "IS", "IR", "IS%"):
                                         extra_stats.add("show-only-stat-" + header.lower())
-                        override_show = True
 
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
 
@@ -38464,7 +38463,7 @@ def print_player_data(player_datas, player_type, highest_vals, lowest_vals, has_
                     rows.append(values)
 
             if debug_mode:
-                logger.info("#" + str(threading.get_ident()) + "#   " + str(table))
+                logger.info("#" + str(threading.get_ident()) + "#   " + over_header + "\n\n" + str(table))
             
             html_info["tables"].append({
                 "title" : over_header,

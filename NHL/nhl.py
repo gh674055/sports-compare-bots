@@ -31700,7 +31700,7 @@ def print_player_data(player_datas, player_type, highest_vals, lowest_vals, has_
                     display_over_header = "Per 60 Minutes (Avail since 2007-2008)"
 
             if debug_mode:
-                logger.info("#" + str(threading.get_ident()) + "#   " + str(table))
+                logger.info("#" + str(threading.get_ident()) + "#   " + over_header + "\n\n" + str(table))
 
             html_info["tables"].append({
                 "title" : display_over_header,
