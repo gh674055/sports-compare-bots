@@ -1675,7 +1675,7 @@ def handle_player_string(comment, player_type, is_fantasy, last_updated, hide_ta
                             extra_stats.add(m.group(1) + "-" + str(ordinal_to_number(m.group(2))))
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
                         
-                        last_match = re.finditer(r"\bshow(?: |-)?(only(?: |-)?)?(ats-record|ou-record|record|score|year|seasons-leading|season|date|game|best-season|worst-season|team|franchise|number|award|play)s?\b", time_frame)
+                        last_match = re.finditer(r"\bshow(?: |-)?(only(?: |-)?)?(ats-record|ou-record|record|score|year|game-count|seasons-leading|season|date|game|best-season|worst-season|team|franchise|number|award|play)s?\b", time_frame)
                         for m in last_match:
                             extra_stats.add(m.group(2))
                             if m.group(2) == "play":
