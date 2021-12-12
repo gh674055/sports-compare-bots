@@ -33064,6 +33064,10 @@ def is_against_header(header, extra_stats, player_type, has_toi_stats):
     
     if "type" in headers[player_type["da_type"]["type"]][header] and (headers[player_type["da_type"]["type"]][header]["type"] == "5v5") and "strength" in extra_stats:
         return True
+    
+    if "Adj" in header:
+        if "adjusted" not in extra_stats:
+            return True
 
     if "Shot On" in extra_stats or ("Shot" in extra_stats and player_type["da_type"]["type"] == "Skater"):
         return header not in ("G", "G_5v5", "Shft", "Shft/GP", "TOI/Shft", "OTG", "EVTOI",  "PPTOI",  "SHTOI", "TOI_5v5", "EVTOI/GP",  "PPTOI/GP",  "SHTOI/GP", "TOI/GP_5v5", "GWG", "1stG", "HAT", "EVG", "AdjG", "PPG", "SHG", "S", "S%", "S_5v5", "S%_5v5", "G/GP", "EVG/GP", "PPG/GP", "SHG/GP", "S/GP", "G/60M", "EVG/60M", "PPG/60M", "SHG/60M", "S/60M",  "G/60M_5v5", "S/60M_5v5")
@@ -33101,9 +33105,6 @@ def is_against_header(header, extra_stats, player_type, has_toi_stats):
                 return True
             if "type" in headers[player_type["da_type"]["type"]][header] and (headers[player_type["da_type"]["type"]][header]["type"] == "Advanced") and ("S%" in header or "EV" in header or "Post" in header):
                 if ("shot" not in extra_stats or not ("S%" in header)):
-                    return True
-            if "Adj" in header:
-                if "adjusted" not in extra_stats:
                     return True
         else:
             if header == "TOI/GP":
