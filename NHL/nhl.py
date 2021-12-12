@@ -23351,7 +23351,7 @@ def perform_sub_metadata_qual(event, attr_str, qualifiers, player_game_info, yea
         for qual_object in qualifiers:
             has_match = False
             for value in qual_object["values"]:
-                if re.sub(r"[^A-Za-z\s]", "", str_value.lower()).strip() in re.sub(r"[^A-Za-z\s]", "", value.lower()).strip():
+                if re.sub(r"[^A-Za-z\s]", "", value.lower()).strip() == re.sub(r"[^A-Za-z\s]", "", str_value.lower()).strip():
                     has_match = True
             if qual_object["negate"]:
                 if has_match:
@@ -23368,7 +23368,7 @@ def perform_sub_metadata_qual(event, attr_str, qualifiers, player_game_info, yea
         for qual_object in qualifiers:
             has_match = False
             for value in qual_object["values"]:
-                if re.sub(r"[^A-Za-z\s]", "", str_value.lower()).strip() == re.sub(r"[^A-Za-z\s]", "", value.lower().strip()):
+                if re.sub(r"[^A-Za-z\s]", "", value.lower().strip()) in re.sub(r"[^A-Za-z\s]", "", str_value.lower()).strip():
                     has_match = True
             if qual_object["negate"]:
                 if has_match:
