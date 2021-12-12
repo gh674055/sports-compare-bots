@@ -1685,7 +1685,7 @@ def handle_player_string(comment, player_type, is_fantasy, last_updated, hide_ta
                             elif m.group(2) == "game-count":
                                 extra_stats.add("show-only-stat-g")
                                 extra_stats.add("show-only-stat-gs")
-                                extra_stats.add("show-only-table-1")
+                                extra_stats.add("show-only-table-0")
 
                             if m.group(1):
                                 if m.group(2) == "record":
@@ -19990,6 +19990,8 @@ def print_player_data(player_datas, player_type, highest_vals, lowest_vals, has_
     headers_to_skip = {}
     for header_index, over_header in enumerate((list(headers[player_type["da_type"]]) + ["Shared"])):
         has_table_match = False
+        if over_header == "Shared":
+            header_index = 0
         if over_header == "Shared" or headers[player_type["da_type"]][over_header]:
             for header in get_constant_data.stat_groups[over_header]:
                 has_header_match = False
@@ -20014,11 +20016,12 @@ def print_player_data(player_datas, player_type, highest_vals, lowest_vals, has_
             tables_to_skip.add(over_header)
     
     for header_index, over_header in enumerate(headers[player_type["da_type"]]):
-        for extra_stat in extra_stats:
-            if extra_stat.startswith("show-only-table-"):
-                if "show-only-table-" + over_header.lower() not in extra_stats and "show-only-table-" + str(header_index) not in extra_stats:
-                    continue
-        if "hide-table-" + over_header.lower() in extra_stats or "hide-table-" + str(header_index) in extra_stats:
+        if over_header != "Shared":
+            for extra_stat in extra_stats:
+                if extra_stat.startswith("show-only-table-"):
+                    if "show-only-table-" + over_header.lower() not in extra_stats and "show-only-table-" + str(header_index) not in extra_stats:
+                        continue
+        if "hide-table-" + over_header.lower() in extra_stats or ("hide-table-" + str(header_index) in extra_stats and over_header != "Shared"):
             continue
         if over_header.startswith("Advanced") and "hide-table-advanced" in extra_stats:
             continue
@@ -20329,6 +20332,8 @@ def get_reddit_player_table(player_datas, player_type, is_fantasy, debug_mode, o
     headers_to_skip = {}
     for header_index, over_header in enumerate((list(headers[player_type["da_type"]]) + ["Shared"])):
         has_table_match = False
+        if over_header == "Shared":
+            header_index = 0
         if over_header == "Shared" or headers[player_type["da_type"]][over_header]:
             for header in get_constant_data.stat_groups[over_header]:
                 has_header_match = False
@@ -20353,11 +20358,12 @@ def get_reddit_player_table(player_datas, player_type, is_fantasy, debug_mode, o
             tables_to_skip.add(over_header)
 
     for header_index, over_header in enumerate(headers[player_type["da_type"]]):
-        for extra_stat in extra_stats:
-            if extra_stat.startswith("show-only-table-"):
-                if "show-only-table-" + over_header.lower() not in extra_stats and "show-only-table-" + str(header_index) not in extra_stats:
-                    continue
-        if "hide-table-" + over_header.lower() in extra_stats or "hide-table-" + str(header_index) in extra_stats:
+        if over_header != "Shared":
+            for extra_stat in extra_stats:
+                if extra_stat.startswith("show-only-table-"):
+                    if "show-only-table-" + over_header.lower() not in extra_stats and "show-only-table-" + str(header_index) not in extra_stats:
+                        continue
+        if "hide-table-" + over_header.lower() in extra_stats or ("hide-table-" + str(header_index) in extra_stats and over_header != "Shared"):
             continue
         if over_header.startswith("Advanced") and "hide-table-advanced" in extra_stats:
             continue
@@ -21136,11 +21142,12 @@ def create_table_html(html_info, player_datas, original_comment, last_updated, c
         shutil.rmtree(dirpath)
 
 def handle_table_data(player_data, player_type, header, over_header, highest_vals, lowest_vals, index, has_non_playoffs, for_reddit, is_fantasy, header_index, error_getting_adj, extra_stats):
-    for extra_stat in extra_stats:
-        if extra_stat.startswith("show-only-table-"):
-            if "show-only-table-" + over_header.lower() not in extra_stats and "show-only-table-" + str(header_index) not in extra_stats:
-                return None
-    if "hide-table-" + over_header.lower() in extra_stats or "hide-table-" + str(header_index) in extra_stats:
+    if over_header != "Shared":
+        for extra_stat in extra_stats:
+            if extra_stat.startswith("show-only-table-"):
+                if "show-only-table-" + over_header.lower() not in extra_stats and "show-only-table-" + str(header_index) not in extra_stats:
+                    return None
+    if "hide-table-" + over_header.lower() in extra_stats or ("hide-table-" + str(header_index) in extra_stats and over_header != "Shared"):
         return None
     if over_header.startswith("Advanced") and "hide-table-advanced" in extra_stats:
         return None
@@ -21153,7 +21160,7 @@ def handle_table_data(player_data, player_type, header, over_header, highest_val
             if not ("show-only-stat-" + header.lower() in extra_stats or "show-only-stat-" + over_header + ">" + header.lower() in extra_stats or "show-stat-" + header.lower() in extra_stats or "show-stat-" + over_header + ">" + header.lower() in extra_stats):
                 if header != "Player" and header != "G" and header != "GS" and header != "G/Yr" and header != "GS/Yr" and header != "Seasons":
                     return None
-
+    
     seasons_leading = 0
     for extra_stat in extra_stats:
         if extra_stat.startswith("seasons-leading"):
