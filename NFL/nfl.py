@@ -1693,9 +1693,13 @@ def handle_player_string(comment, player_type, is_fantasy, last_updated, hide_ta
                                 elif m.group(2) == "ou-record":
                                     for header in ("O/U TmRec", "O/U TmW/L%"):
                                         extra_stats.add("show-only-stat-" + header.lower())
-                                elif header in () and m.group(2) == "score":
+                                elif m.group(2) == "score":
                                     for header in ("TmScore", "OppScore", "TtlScore", "ScoreDiff", "TmScore/G", "OppScore/G", "TtlScore/G", "ScoreDiff/G"):
                                         extra_stats.add("show-only-stat-" + header.lower())
+                                elif m.group(2) == "game-count":
+                                    extra_stats.add("show-only-stat-g")
+                                    extra_stats.add("show-only-stat-gs")
+                                    extra_stats.add("show-only-table-1")
 
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
                         
@@ -19990,7 +19994,7 @@ def print_player_data(player_datas, player_type, highest_vals, lowest_vals, has_
             for header in get_constant_data.stat_groups[over_header]:
                 has_header_match = False
                 for index, player_data in enumerate(player_datas):
-                    value = handle_table_data(player_data, player_type, header, over_header, highest_vals, lowest_vals, index, has_non_playoffs, True, is_fantasy, 0, error_getting_adj, extra_stats)
+                    value = handle_table_data(player_data, player_type, header, over_header, highest_vals, lowest_vals, index, has_non_playoffs, True, is_fantasy, header_index, error_getting_adj, extra_stats)
                     if value != "N/A" and value != None:
                         has_header_match = True
                         if header != "Player" and header != "G" and header != "GS" and header != "G/Yr" and header != "GS/Yr" and header != "Seasons":
@@ -20007,9 +20011,9 @@ def print_player_data(player_datas, player_type, highest_vals, lowest_vals, has_
     for header_index, over_header in enumerate(headers[player_type["da_type"]]):
         for extra_stat in extra_stats:
             if extra_stat.startswith("show-only-table-"):
-                if "show-only-table-" + over_header.lower() not in extra_stats:
+                if "show-only-table-" + over_header.lower() not in extra_stats and "show-only-table-" + str(header_index) not in extra_stats:
                     continue
-        if "hide-table-" + over_header.lower() in extra_stats:
+        if "hide-table-" + over_header.lower() in extra_stats or "hide-table-" + str(header_index) in extra_stats:
             continue
         if over_header.startswith("Advanced") and "hide-table-advanced" in extra_stats:
             continue
@@ -20324,7 +20328,7 @@ def get_reddit_player_table(player_datas, player_type, is_fantasy, debug_mode, o
             for header in get_constant_data.stat_groups[over_header]:
                 has_header_match = False
                 for index, player_data in enumerate(player_datas):
-                    value = handle_table_data(player_data, player_type, header, over_header, highest_vals, lowest_vals, index, has_non_playoffs, True, is_fantasy, 0, error_getting_adj, extra_stats)
+                    value = handle_table_data(player_data, player_type, header, over_header, highest_vals, lowest_vals, index, has_non_playoffs, True, is_fantasy, header_index, error_getting_adj, extra_stats)
                     if value != "N/A" and value != None:
                         has_header_match = True
                         if header != "Player" and header != "G" and header != "GS" and header != "G/Yr" and header != "GS/Yr" and header != "Seasons":
@@ -20341,9 +20345,9 @@ def get_reddit_player_table(player_datas, player_type, is_fantasy, debug_mode, o
     for header_index, over_header in enumerate(headers[player_type["da_type"]]):
         for extra_stat in extra_stats:
             if extra_stat.startswith("show-only-table-"):
-                if "show-only-table-" + over_header.lower() not in extra_stats:
+                if "show-only-table-" + over_header.lower() not in extra_stats and "show-only-table-" + str(header_index) not in extra_stats:
                     continue
-        if "hide-table-" + over_header.lower() in extra_stats:
+        if "hide-table-" + over_header.lower() in extra_stats or "hide-table-" + str(header_index) in extra_stats:
             continue
         if over_header.startswith("Advanced") and "hide-table-advanced" in extra_stats:
             continue
@@ -21124,9 +21128,9 @@ def create_table_html(html_info, player_datas, original_comment, last_updated, c
 def handle_table_data(player_data, player_type, header, over_header, highest_vals, lowest_vals, index, has_non_playoffs, for_reddit, is_fantasy, header_index, error_getting_adj, extra_stats):
     for extra_stat in extra_stats:
         if extra_stat.startswith("show-only-table-"):
-            if "show-only-table-" + over_header.lower() not in extra_stats:
+            if "show-only-table-" + over_header.lower() not in extra_stats and "show-only-table-" + str(header_index) not in extra_stats:
                 return None
-    if "hide-table-" + over_header.lower() in extra_stats:
+    if "hide-table-" + over_header.lower() in extra_stats or "hide-table-" + str(header_index) in extra_stats:
         return None
     if over_header.startswith("Advanced") and "hide-table-advanced" in extra_stats:
         return None
