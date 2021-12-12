@@ -30702,9 +30702,9 @@ def handle_da_mlb_quals(row, event_name, at_bat_event, qualifiers, player_data, 
         qual_str = None
         if (event_name == "pitching_events" or event_name == "pitching_run_events"):
             if at_bat_event["pitching_righty"]:
-                qual_str = "batting_lefty"
-            elif at_bat_event["pitching_lefty"]:
                 qual_str = "batting_righty"
+            elif at_bat_event["pitching_lefty"]:
+                qual_str = "batting_lefty"
         else:
             if at_bat_event["batting_righty"]:
                 qual_str = "pitching_lefty"
