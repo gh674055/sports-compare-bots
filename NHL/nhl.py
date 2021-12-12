@@ -7438,7 +7438,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 elif m.group(2) == "game-count":
                                     extra_stats.add("show-only-stat-gp")
                                     extra_stats.add("show-only-stat-gs")
-                                    extra_stats.add("show-only-table-1")
+                                    extra_stats.add("show-only-table-standard")
 
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
                                                 
@@ -11783,7 +11783,7 @@ def calculate_best(player_data, player_datas, player_type, extra_stats, is_best)
     has_toi_stats = True
     for index, sub_player_datas in enumerate(player_datas):
         if "all_rows" in player_data["stat_values"] and len(player_data["stat_values"]["all_rows"]):
-            value = handle_table_data(sub_player_datas, player_type, "Per Game/60 Minutes", "TOI/GP", {}, {}, index, 1, has_season_stats, has_playoffs, has_non_playoffs, True, True, extra_stats)
+            value = handle_table_data(sub_player_datas, player_type, "Per Game/60 Minutes", "TOI/GP", {}, {}, index, has_season_stats, has_playoffs, has_non_playoffs, True, True, extra_stats)
             if value == "N/A" or value == None:
                 has_toi_stats = False
                 break
@@ -31444,11 +31444,11 @@ def print_player_data(player_datas, player_type, highest_vals, lowest_vals, has_
                     if sub_player_pos != "G":
                         if sub_player_pos == "D" or sub_player_pos == "LHD" or sub_player_pos == "RHD":
                             if player_type["da_type"]["type"] == "Skater":
-                                if handle_table_data(player_data, player_type, "Awards/Honors", "Norris", highest_vals, lowest_vals, index, header_index, has_season_stats, has_playoffs, has_non_playoffs, has_toi_stats, True, extra_stats) != "N/A":
+                                if handle_table_data(player_data, player_type, "Awards/Honors", "Norris", highest_vals, lowest_vals, index, has_season_stats, has_playoffs, has_non_playoffs, has_toi_stats, True, extra_stats) != "N/A":
                                     show_norris = True
                         elif sub_player_pos != "G":
                             if player_type["da_type"]["type"] == "Skater":
-                                if handle_table_data(player_data, player_type, "Awards/Honors", "Selke", highest_vals, lowest_vals, index, header_index, has_season_stats, has_playoffs, has_non_playoffs, has_toi_stats, True, extra_stats) != "N/A":
+                                if handle_table_data(player_data, player_type, "Awards/Honors", "Selke", highest_vals, lowest_vals, index, has_season_stats, has_playoffs, has_non_playoffs, has_toi_stats, True, extra_stats) != "N/A":
                                     show_selke = True
         
         if has_award_stats:
@@ -31474,13 +31474,13 @@ def print_player_data(player_datas, player_type, highest_vals, lowest_vals, has_
     
     tables_to_skip = set()
     headers_to_skip = {}
-    for header_index, over_header in enumerate(all_headers):
+    for over_header in all_headers:
         has_table_match = False
         if all_headers[over_header]:
             for header in all_headers[over_header]:
                 has_header_match = False
                 for index, player_data in enumerate(player_datas):
-                    value = handle_table_data(player_data, player_type, over_header, header, highest_vals, lowest_vals, index, header_index, has_season_stats, has_playoffs, has_non_playoffs, has_toi_stats, True, extra_stats)
+                    value = handle_table_data(player_data, player_type, over_header, header, highest_vals, lowest_vals, index, has_season_stats, has_playoffs, has_non_playoffs, has_toi_stats, True, extra_stats)
                     if value != "N/A" and value != None:
                         has_header_match = True
                         if not header.startswith("Player") and header != "GP" and not header.startswith("GP/") and not header.startswith("GP_") and header != "GS" and not header.startswith("GS/") and not header.startswith("GS_") and header != "GP/Yr" and header != "GS/Yr" and header != "TOI/Yr" and header != "Seasons":
@@ -31521,12 +31521,12 @@ def print_player_data(player_datas, player_type, highest_vals, lowest_vals, has_
             error_getting_adv = True
             break
 
-    for header_index, over_header in enumerate(all_headers):
+    for over_header in all_headers:
         for extra_stat in extra_stats:
             if extra_stat.startswith("show-only-table-"):
-                if "show-only-table-" + over_header.lower() not in extra_stats and "show-only-table-" + str(header_index) not in extra_stats:
+                if "show-only-table-" + over_header.lower() not in extra_stats:
                     continue
-        if "hide-table-" + over_header.lower() in extra_stats or "hide-table-" + str(header_index) in extra_stats:
+        if "hide-table-" + over_header.lower() in extra_stats:
             continue
         if over_header.startswith("5v5") and "hide-table-5v5" in extra_stats:
             continue
@@ -31677,7 +31677,7 @@ def print_player_data(player_datas, player_type, highest_vals, lowest_vals, has_
                 if "all_rows" in player_data["stat_values"] and len(player_data["stat_values"]["all_rows"]):
                     values = []
                     for header in all_headers[over_header]:
-                        value = handle_table_data(player_data, player_type, over_header, header, highest_vals, lowest_vals, index, header_index, has_season_stats, has_playoffs, has_non_playoffs, has_toi_stats, False, extra_stats)
+                        value = handle_table_data(player_data, player_type, over_header, header, highest_vals, lowest_vals, index, has_season_stats, has_playoffs, has_non_playoffs, has_toi_stats, False, extra_stats)
                         if value:
                             values.append(value)
                     table.add_row(values)
@@ -31732,7 +31732,7 @@ def get_reddit_player_table(player_datas, player_type, debug_mode, original_comm
     if player_type["da_type"]["type"] == "Skater":
         for index, player_data in enumerate(player_datas):
             if "all_rows" in player_data["stat_values"] and len(player_data["stat_values"]["all_rows"]):
-                value = handle_table_data(player_data, player_type, "Per Game/60 Minutes", "TOI/GP", {}, {}, index, header_index, has_season_stats, has_playoffs, has_non_playoffs, True, True, extra_stats)
+                value = handle_table_data(player_data, player_type, "Per Game/60 Minutes", "TOI/GP", {}, {}, index, has_season_stats, has_playoffs, has_non_playoffs, True, True, extra_stats)
                 if value == "N/A" or value == None:
                     has_toi_stats = False
                     break
@@ -31788,11 +31788,11 @@ def get_reddit_player_table(player_datas, player_type, debug_mode, original_comm
                     if sub_player_pos != "G":
                         if sub_player_pos == "D" or sub_player_pos == "LHD" or sub_player_pos == "RHD":
                             if player_type["da_type"]["type"] == "Skater":
-                                if handle_table_data(player_data, player_type, "Awards/Honors", "Norris", highest_vals, lowest_vals, index, header_index, has_season_stats, has_playoffs, has_non_playoffs, has_toi_stats, True, extra_stats) != "N/A":
+                                if handle_table_data(player_data, player_type, "Awards/Honors", "Norris", highest_vals, lowest_vals, index, has_season_stats, has_playoffs, has_non_playoffs, has_toi_stats, True, extra_stats) != "N/A":
                                     show_norris = True
                         elif sub_player_pos != "G":
                             if player_type["da_type"]["type"] == "Skater":
-                                if handle_table_data(player_data, player_type, "Awards/Honors", "Selke", highest_vals, lowest_vals, index, header_index, has_season_stats, has_playoffs, has_non_playoffs, has_toi_stats, True, extra_stats) != "N/A":
+                                if handle_table_data(player_data, player_type, "Awards/Honors", "Selke", highest_vals, lowest_vals, index, has_season_stats, has_playoffs, has_non_playoffs, has_toi_stats, True, extra_stats) != "N/A":
                                     show_selke = True
         
         if has_award_stats:
@@ -31818,13 +31818,13 @@ def get_reddit_player_table(player_datas, player_type, debug_mode, original_comm
     
     tables_to_skip = set()
     headers_to_skip = {}
-    for header_index, over_header in enumerate(all_headers):
+    for over_header in all_headers:
         has_table_match = False
         if all_headers[over_header]:
             for header in all_headers[over_header]:
                 has_header_match = False
                 for index, player_data in enumerate(player_datas):
-                    value = handle_table_data(player_data, player_type, over_header, header, highest_vals, lowest_vals, index, header_index, has_season_stats, has_playoffs, has_non_playoffs, has_toi_stats, True, extra_stats)
+                    value = handle_table_data(player_data, player_type, over_header, header, highest_vals, lowest_vals, index, has_season_stats, has_playoffs, has_non_playoffs, has_toi_stats, True, extra_stats)
                     if value != "N/A" and value != None:
                         has_header_match = True
                         if not header.startswith("Player") and header != "GP" and not header.startswith("GP/") and not header.startswith("GP_") and header != "GS" and not header.startswith("GS/") and not header.startswith("GS_") and header != "GP/Yr" and header != "GS/Yr" and header != "TOI/Yr" and header != "Seasons":
@@ -31917,12 +31917,12 @@ def get_reddit_player_table(player_datas, player_type, debug_mode, original_comm
             error_getting_adv = True
             break
 
-    for header_index, over_header in enumerate(all_headers):
+    for over_header in all_headers:
         for extra_stat in extra_stats:
             if extra_stat.startswith("show-only-table-"):
-                if "show-only-table-" + over_header.lower() not in extra_stats and "show-only-table-" + str(header_index) not in extra_stats:
+                if "show-only-table-" + over_header.lower() not in extra_stats:
                     continue
-        if "hide-table-" + over_header.lower() in extra_stats or "hide-table-" + str(header_index) in extra_stats:
+        if "hide-table-" + over_header.lower() in extra_stats:
             continue
         if over_header.startswith("5v5") and "hide-table-5v5" in extra_stats:
             continue
@@ -32103,7 +32103,7 @@ def get_reddit_player_table(player_datas, player_type, debug_mode, original_comm
                 if "all_rows" in player_data["stat_values"] and len(player_data["stat_values"]["all_rows"]):
                     values = []
                     for header in all_headers[over_header]:
-                        value = handle_table_data(player_data, player_type, over_header, header, highest_vals, lowest_vals, index, header_index, has_season_stats, has_playoffs, has_non_playoffs, has_toi_stats, True, extra_stats)
+                        value = handle_table_data(player_data, player_type, over_header, header, highest_vals, lowest_vals, index, has_season_stats, has_playoffs, has_non_playoffs, has_toi_stats, True, extra_stats)
                         if value:
                             values.append(value)
                     table_str += "|".join(values) + "\n"
@@ -32171,7 +32171,7 @@ def calculate_highest_lowest_vals(player_datas, player_type, has_non_playoffs, h
                     if not ("Seasons" in player_data["stat_values"] and player_data["stat_values"]["Seasons"]):
                         continue
                     
-                if header in player_data["stat_values"] and handle_table_data(player_data, player_type, over_header, header, highest_vals, lowest_vals, index, header_index, has_season_stats, has_playoffs, has_non_playoffs, has_toi_stats, True, extra_stats) != "N/A":
+                if header in player_data["stat_values"] and handle_table_data(player_data, player_type, over_header, header, highest_vals, lowest_vals, index, has_season_stats, has_playoffs, has_non_playoffs, has_toi_stats, True, extra_stats) != "N/A":
                     value = player_data["stat_values"][header]
                     original_value = value
 
@@ -32242,7 +32242,7 @@ def calculate_highest_lowest_vals(player_datas, player_type, has_non_playoffs, h
                     if not ("Seasons" in player_data["stat_values"] and player_data["stat_values"]["Seasons"]):
                         continue
                     
-                if header in player_data["stat_values"] and handle_table_data(player_data, player_type, over_header, header, highest_vals, lowest_vals, index, header_index, has_season_stats, has_playoffs, has_non_playoffs, has_toi_stats, True, extra_stats) != "N/A":
+                if header in player_data["stat_values"] and handle_table_data(player_data, player_type, over_header, header, highest_vals, lowest_vals, index, has_season_stats, has_playoffs, has_non_playoffs, has_toi_stats, True, extra_stats) != "N/A":
                     value = player_data["stat_values"][header]
                     original_value = value
                     
@@ -32745,12 +32745,12 @@ def parse_flag(flag):
                                 return rule.declarations[0].value[0].value
     return None
 
-def handle_table_data(player_data, player_type, over_header, header, highest_vals, lowest_vals, index, header_index, has_season_stats, has_playoffs, has_non_playoffs, has_toi_stats, for_reddit, extra_stats):
+def handle_table_data(player_data, player_type, over_header, header, highest_vals, lowest_vals, index, has_season_stats, has_playoffs, has_non_playoffs, has_toi_stats, for_reddit, extra_stats):
     for extra_stat in extra_stats:
         if extra_stat.startswith("show-only-table-"):
-            if "show-only-table-" + over_header.lower() not in extra_stats and "show-only-table-" + str(header_index) not in extra_stats:
+            if "show-only-table-" + over_header.lower() not in extra_stats:
                 return None
-    if "hide-table-" + over_header.lower() in extra_stats or "hide-table-" + str(header_index) in extra_stats:
+    if "hide-table-" + over_header.lower() in extra_stats:
         return None
     if over_header.startswith("5v5") and "hide-table-5v5" in extra_stats:
         return None

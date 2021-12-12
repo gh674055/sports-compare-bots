@@ -6838,7 +6838,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 elif m.group(2) == "game-count":
                                     extra_stats.add("show-only-stat-g")
                                     extra_stats.add("show-only-stat-gs")
-                                    extra_stats.add("show-only-table-1")
+                                    extra_stats.add("show-only-table-standard")
 
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
 
@@ -38310,13 +38310,13 @@ def print_player_data(player_datas, player_type, highest_vals, lowest_vals, has_
     
     tables_to_skip = set()
     headers_to_skip = {}
-    for header_index, over_header in enumerate(all_headers):
+    for over_header in all_headers:
         has_table_match = False
         if all_headers[over_header]:
             for header in all_headers[over_header]:
                 has_header_match = False
                 for index, player_data in enumerate(player_datas):
-                    value = handle_table_data(over_header, player_data, player_datas, player_type, header, highest_vals, lowest_vals, index, header_index, has_non_playoffs, True, extra_stats)
+                    value = handle_table_data(over_header, player_data, player_datas, player_type, header, highest_vals, lowest_vals, index, has_non_playoffs, True, extra_stats)
                     if value != "N/A" and value != None:
                         if header != "BatBInk" and header != "BatGInk" and header != "PitchBInk" and header != "PitchGInk":
                             has_header_match = True
@@ -38383,12 +38383,12 @@ def print_player_data(player_datas, player_type, highest_vals, lowest_vals, has_
         if over_header in all_headers:
             del all_headers[over_header]
 
-    for header_index, over_header in enumerate(all_headers):
+    for over_header in all_headers:
         for extra_stat in extra_stats:
             if extra_stat.startswith("show-only-table-"):
-                if "show-only-table-" + over_header.lower() not in extra_stats and "show-only-table-" + str(header_index) not in extra_stats:
+                if "show-only-table-" + over_header.lower() not in extra_stats:
                     continue
-        if "hide-table-" + over_header.lower() in extra_stats or "hide-table-" + str(header_index) in extra_stats:
+        if "hide-table-" + over_header.lower() in extra_stats:
             continue
         if all_headers[over_header]:
             table = PrettyTable()
@@ -38460,7 +38460,7 @@ def print_player_data(player_datas, player_type, highest_vals, lowest_vals, has_
                 if "all_rows" in player_data["stat_values"] and len(player_data["stat_values"]["all_rows"]):
                     values = []
                     for header in all_headers[over_header]:
-                        value = handle_table_data(over_header, player_data, player_datas, player_type, header, highest_vals, lowest_vals, index, header_index, has_non_playoffs, False, extra_stats)
+                        value = handle_table_data(over_header, player_data, player_datas, player_type, header, highest_vals, lowest_vals, index, has_non_playoffs, False, extra_stats)
                         if value:
                             values.append(value)
                     table.add_row(values)
@@ -38553,13 +38553,13 @@ def get_reddit_player_table(player_datas, player_type, debug_mode, original_comm
     
     tables_to_skip = set()
     headers_to_skip = {}
-    for header_index, over_header in enumerate(all_headers):
+    for over_header in all_headers:
         has_table_match = False
         if all_headers[over_header]:
             for header in all_headers[over_header]:
                 has_header_match = False
                 for index, player_data in enumerate(player_datas):
-                    value = handle_table_data(over_header, player_data, player_datas, player_type, header, highest_vals, lowest_vals, index, header_index, has_non_playoffs, True, extra_stats)
+                    value = handle_table_data(over_header, player_data, player_datas, player_type, header, highest_vals, lowest_vals, index, has_non_playoffs, True, extra_stats)
                     if value != "N/A" and value != None:
                         if header != "BatBInk" and header != "BatGInk" and header != "PitchBInk" and header != "PitchGInk":
                             has_header_match = True
@@ -38678,12 +38678,12 @@ def get_reddit_player_table(player_datas, player_type, debug_mode, original_comm
                 
     table_str = ranges_str + "\n\n---\n"
 
-    for header_index, over_header in enumerate(all_headers):
+    for over_header in all_headers:
         for extra_stat in extra_stats:
             if extra_stat.startswith("show-only-table-"):
-                if "show-only-table-" + over_header.lower() not in extra_stats and "show-only-table-" + str(header_index) not in extra_stats:
+                if "show-only-table-" + over_header.lower() not in extra_stats:
                     continue
-        if "hide-table-" + over_header.lower() in extra_stats or "hide-table-" + str(header_index) in extra_stats:
+        if "hide-table-" + over_header.lower() in extra_stats:
             continue
         if all_headers[over_header]:
             table_str += "**" + over_header + "**\n\n"
@@ -38758,7 +38758,7 @@ def get_reddit_player_table(player_datas, player_type, debug_mode, original_comm
                 if "all_rows" in player_data["stat_values"] and len(player_data["stat_values"]["all_rows"]):
                     values = []
                     for header in all_headers[over_header]:
-                        value = handle_table_data(over_header, player_data, player_datas, player_type, header, highest_vals, lowest_vals, index, header_index, has_non_playoffs, True, extra_stats)
+                        value = handle_table_data(over_header, player_data, player_datas, player_type, header, highest_vals, lowest_vals, index, has_non_playoffs, True, extra_stats)
                         if value:
                             values.append(value)
                     table_str += "|".join(values) + "\n"
@@ -38813,7 +38813,7 @@ def calculate_highest_lowest_vals(player_datas, player_type, has_non_playoffs, s
                     if not ("Seasons" in player_data["stat_values"] and player_data["stat_values"]["Seasons"]):
                         continue
 
-                if header in player_data["stat_values"] and handle_table_data(over_header, player_data, player_datas, player_type, header, highest_vals, lowest_vals, index, header_index, has_non_playoffs, True, extra_stats) != "N/A":
+                if header in player_data["stat_values"] and handle_table_data(over_header, player_data, player_datas, player_type, header, highest_vals, lowest_vals, index, has_non_playoffs, True, extra_stats) != "N/A":
                     value = player_data["stat_values"][header]
                     original_value = value
 
@@ -38872,7 +38872,7 @@ def calculate_highest_lowest_vals(player_datas, player_type, has_non_playoffs, s
                     if not ("Seasons" in player_data["stat_values"] and player_data["stat_values"]["Seasons"]):
                         continue
                 
-                if header in player_data["stat_values"] and handle_table_data(over_header, player_data, player_datas, player_type, header, highest_vals, lowest_vals, index, header_index, has_non_playoffs, True, extra_stats) != "N/A":
+                if header in player_data["stat_values"] and handle_table_data(over_header, player_data, player_datas, player_type, header, highest_vals, lowest_vals, index, has_non_playoffs, True, extra_stats) != "N/A":
                     value = player_data["stat_values"][header]
                     original_value = value
 
@@ -39396,12 +39396,12 @@ def parse_flag(flag):
                                 return rule.declarations[0].value[0].value
     return None
 
-def handle_table_data(over_header, player_data, player_datas, player_type, header, highest_vals, lowest_vals, index, header_index, has_non_playoffs, for_reddit, extra_stats):
+def handle_table_data(over_header, player_data, player_datas, player_type, header, highest_vals, lowest_vals, index, has_non_playoffs, for_reddit, extra_stats):
     for extra_stat in extra_stats:
         if extra_stat.startswith("show-only-table-"):
-            if "show-only-table-" + over_header.lower() not in extra_stats and "show-only-table-" + str(header_index) not in extra_stats:
+            if "show-only-table-" + over_header.lower() not in extra_stats:
                 return None
-    if "hide-table-" + over_header.lower() in extra_stats or "hide-table-" + str(header_index) in extra_stats:
+    if "hide-table-" + over_header.lower() in extra_stats:
         return None
     if "hide-stat-" + header.lower() in extra_stats or "hide-stat-" + over_header + ">" + header.lower() in extra_stats:
         return None
