@@ -5182,6 +5182,7 @@ qualifier_map = {
     "Playing Same Date" : {},
     "Thrown To" : {},
     "Result" : {},
+    "Overtime Result" : {},
     "Team Score" : {},
     "Opponent Score" : {},
     "Score Margin" : {},
