@@ -23162,19 +23162,19 @@ def perform_metadata_qual(event_name, goal_event, qualifiers, player_game_info, 
             "y" : 0,
             "r" : 15
         },{
-            "x" : 57,
+            "x" : 69,
             "y" : 22,
             "r" : 15
         },{
-            "x" : 57,
+            "x" : 69,
             "y" : -22,
             "r" : 15
         },{
-            "x" : -57,
+            "x" : -69,
             "y" : 22,
             "r" : 15
         },{
-            "x" : -57,
+            "x" : -69,
             "y" : -22,
             "r" : 15
         }]
