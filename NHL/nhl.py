@@ -22321,10 +22321,11 @@ def perform_metadata_quals(qualifiers, player_type, row, player_game_info, nhl_p
                 if goal_event["player_penalty"]:
                     row["PEN"] += 1
                     row["PIM"] += goal_event["penalty_minutes"]
-                    if goal_event["penaltySeverity"] == "Bench Minor":
-                        row["Minor"] += 1
-                    else:
-                        row[goal_event["penaltySeverity"]] += 1
+                    if "penaltySeverity" in goal_event:
+                        if goal_event["penaltySeverity"] == "Bench Minor":
+                            row["Minor"] += 1
+                        else:
+                            row[goal_event["penaltySeverity"]] += 1
                 else:
                     row["PenDrawn"] += 1
                 if "penaltyType" in goal_event and goal_event["penaltyType"] == "Fighting":
