@@ -19766,19 +19766,19 @@ def get_html_time_zone(og_game_id, game_data):
         },
         "CEST" : {
             "offset" : 2,
-            "raw" : "EUT"
+            "raw" : "CET"
         },
         "CET" : {
             "offset" : 1,
-            "raw" : "EUT"
+            "raw" : "CET"
         },
         "BST" : {
             "offset" : 1,
-            "raw" : "GMT",
+            "raw" : "GMT"
         },
         "GMT" : {
             "offset" : 0,
-            "raw" : "GMT",
+            "raw" : "GMT"
         },
     }
 
@@ -19797,6 +19797,15 @@ def get_html_time_zone(og_game_id, game_data):
                 game_data["TimeZoneOffset"] = time_zones[last_match.group(1).upper()]["offset"]
                 game_data["TimeZoneRaw"] = time_zones[last_match.group(1).upper()]["raw"]
                 break
+    
+        if not game_data["TimeZoneID"]:
+            for game_info_row in game_info_rows:
+                last_match = re.search(r"start\s:\s+(\w+)", str(game_info_row.text_content()).lower().strip())
+                if last_match:
+                    game_data["TimeZoneID"] = last_match.group(1).upper()
+                    game_data["TimeZoneOffset"] = time_zones[last_match.group(1).upper()]["offset"]
+                    game_data["TimeZoneRaw"] = time_zones[last_match.group(1).upper()]["raw"]
+                    break
     else:
         center = player_page_xml.xpath("body//center")[1]
         pot_text_rows = str(center.text_content().lower().strip()).split("\n")
@@ -19805,7 +19814,7 @@ def get_html_time_zone(og_game_id, game_data):
             if last_match:
                 game_data["TimeZoneRaw"] = last_match.group(1).upper()
                 break
-
+            
 def is_player_on_ice(shift_data, team_on_ice, opp_on_ice, period, period_time, player_id, is_team, is_faceoff=False):
     if is_team and team_on_ice:
         return player_id in team_on_ice
