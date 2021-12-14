@@ -8558,7 +8558,7 @@ def get_game_data(index, player_data, row_data, qualifiers, extra_stats):
         game_data["CurrOppWins"] = home_team_wins
         game_data["CurrOppLosses"] = home_team_losses
         game_data["CurrOppTies"] = home_team_ties
-
+    
     scorebox_info = scor_divs[2]
     scorebox_divs = scorebox_info.xpath("./div")
     for scorebox_div in scorebox_divs:
@@ -8632,7 +8632,7 @@ def get_game_data(index, player_data, row_data, qualifiers, extra_stats):
     if not play_by_play:
         if "Quarter" in qualifiers or "Down" in qualifiers or "Down Distance" in qualifiers or "Field Position" in qualifiers or "Quarter Time" in qualifiers or "Quarter Time Remaining" in qualifiers or "Pass Distance" in qualifiers or "Pass Direction" in qualifiers or "Overtime" in qualifiers or "RedZone" in qualifiers or "Current Team Score" in qualifiers or "Current Opponent Score" in qualifiers or "Current Score Margin" in qualifiers or "Current Score Difference" in qualifiers or "Thrown To" in qualifiers or "current-stats" in extra_stats:
             missing_games = True
-        game_data["missing_data"] = True
+            game_data["missing_data"] = True
     else:
         previous_team_points = 0
         preavious_opp_points = 0
