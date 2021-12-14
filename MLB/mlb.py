@@ -39242,14 +39242,14 @@ def create_table_html(html_info, player_datas, player_type, original_comment, la
 
         has_value = "Defense" in [table["title"].split("/")[0] for table in html_info["tables"]]
 
-        for table in html_info["tables"]:
+        for tab_index, table in enumerate(html_info["tables"]):
             div_tag = soup.new_tag("div")
             table_tag = soup.new_tag("table")
             caption_tag = soup.new_tag("caption")
             t_head_tag = soup.new_tag("thead")
             t_body_tag = soup.new_tag("tbody")
 
-            if table["title"] == "Standard":
+            if tab_index == 0:
                 caption_span_1 = soup.new_tag("span")
                 caption_span_1.string = table["title"]
                 caption_tag.append(caption_span_1)
