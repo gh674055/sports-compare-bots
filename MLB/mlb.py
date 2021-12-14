@@ -6792,7 +6792,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                             extra_stats.add(m.group(1) + "-" + str(ordinal_to_number(m.group(2))))
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
                         
-                        last_match = re.finditer(r"\bshow(?: |-)?(only(?: |-)?)?(record|score|year|game-count|seasons-leading|season|date|per-game|game|play|run-support|run-support-record|exit-record|statcast|advanced-runner|advanced|best-season|worst-season|team|franchise|number|award|live|driven-in|mlb-link)s?\b", time_frame)
+                        last_match = re.finditer(r"\bshow(?: |-)?(only(?: |-)?)?(pitcher-record|record|score|year|game-count|seasons-leading|season|date|per-game|game|play|run-support|run-support-record|exit-record|statcast|advanced-runner|advanced|best-season|worst-season|team|franchise|number|award|live|driven-in|mlb-link)s?\b", time_frame)
                         for m in last_match:
                             extra_stats.add(m.group(2))
                             if m.group(2) == "play":
@@ -6815,6 +6815,23 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 extra_stats.add("show-only-stat-g")
                                 extra_stats.add("show-only-stat-gs")
                                 extra_stats.add("show-only-table-standard")
+                            elif m.group(2) == "pitcher-record":
+                                extra_stats.add("show-only-stat-w")
+                                extra_stats.add("show-only-stat-l")
+                                extra_stats.add("show-only-stat-w/l%")
+                                extra_stats.add("show-only-stat-sho")
+                                extra_stats.add("show-only-stat-sho%")
+                                extra_stats.add("show-only-stat-qs")
+                                extra_stats.add("show-only-stat-qs%")
+                                extra_stats.add("show-only-stat-cg")
+                                extra_stats.add("show-only-stat-cg%")
+                                extra_stats.add("show-only-stat-nohit")
+                                extra_stats.add("show-only-stat-prfct")
+                                extra_stats.add("show-only-stat-sv")
+                                extra_stats.add("show-only-stat-bsv")
+                                extra_stats.add("show-only-stat-sv%")
+                                extra_stats.add("show-only-stat-hld")
+                                player_type["da_type"] = "Pitcher"
                 
                             if m.group(1):
                                 if m.group(2) == "record":

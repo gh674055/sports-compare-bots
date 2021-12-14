@@ -7408,7 +7408,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                             extra_stats.add(m.group(1) + "-" + str(ordinal_to_number(m.group(2))))
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
                         
-                        last_match = re.finditer(r"\bshow(?: |-)?(only(?: |-)?)?(record|score|goal|year|game-count|seasons-leading|season|date|per-game|game|adjusted|advanced|relative|missing-game|missing-toi|best-season|worst-season|ng|team|franchise|number|fight|penaltie|penalty|award|toi|shot|shift|star|play|nhl-link)s?\b", time_frame)
+                        last_match = re.finditer(r"\bshow(?: |-)?(only(?: |-)?)?(goalie-record|record|score|goal|year|game-count|seasons-leading|season|date|per-game|game|adjusted|advanced|relative|missing-game|missing-toi|best-season|worst-season|ng|team|franchise|number|fight|penaltie|penalty|award|toi|shot|shift|star|play|nhl-link)s?\b", time_frame)
                         for m in last_match:
                             if "penalt" in m.group(2) or m.group(2) == "fight":
                                 extra_stats.add("penalties")
@@ -7431,6 +7431,26 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                     extra_stats.add("show-only-stat-gp")
                                     extra_stats.add("show-only-stat-gs")
                                     extra_stats.add("show-only-table-standard")
+                                elif m.group(2) == "goalie-record":
+                                    extra_stats.add("show-only-stat-w")
+                                    extra_stats.add("show-only-stat-l")
+                                    extra_stats.add("show-only-stat-t")
+                                    extra_stats.add("show-only-stat-otl")
+                                    extra_stats.add("show-only-stat-pts%")
+                                    extra_stats.add("show-only-stat-row")
+                                    extra_stats.add("show-only-stat-rol")
+                                    extra_stats.add("show-only-stat-row/l%")
+                                    extra_stats.add("show-only-stat-so")
+                                    extra_stats.add("show-only-stat-so%")
+                                    extra_stats.add("show-only-stat-qs")
+                                    extra_stats.add("show-only-stat-qs%")
+                                    extra_stats.add("show-only-stat-rbs")
+                                    extra_stats.add("show-only-stat-rbs%")
+                                    extra_stats.add("show-only-stat-cg")
+                                    extra_stats.add("show-only-stat-cg%")
+                                    player_type["da_type"] = {
+                                        "type" : "Goalie"
+                                    }
 
                             if m.group(1):
                                 if m.group(2) == "record":

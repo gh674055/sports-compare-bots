@@ -1690,6 +1690,7 @@ def handle_player_string(comment, player_type, is_fantasy, last_updated, hide_ta
                                 extra_stats.add("show-only-stat-rec")
                                 extra_stats.add("show-only-stat-rec/17g")
                                 extra_stats.add("show-only-stat-w/l%")
+                                player_type["da_type"] = "QB"
 
                             if m.group(1):
                                 if m.group(2) == "record":
