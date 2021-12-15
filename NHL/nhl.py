@@ -1784,34 +1784,6 @@ headers = {
                 "game" : 2009
             }
         },
-        "OZFO/60M" : {
-            "positive" : True,
-            "round" : 2,
-            "type" : "Advanced",
-            "valid_since" : {
-                "season" : 1997,
-                "game" : 1997
-            }
-        },
-        "NZFO/60M" : {
-            "positive" : True,
-            "round" : 2,
-            "type" : "Advanced",
-            "display" : False,
-            "valid_since" : {
-                "season" : 1997,
-                "game" : 1997
-            }
-        },
-        "DZFO/60M" : {
-            "positive" : True,
-            "round" : 2,
-            "type" : "Advanced",
-            "valid_since" : {
-                "season" : 1997,
-                "game" : 1997
-            }
-        },
         "OZFOW" : {
             "positive" : True,
             "display" : False,
@@ -1919,6 +1891,34 @@ headers = {
             "valid_since" : {
                 "season" : 2009,
                 "game" : 2009
+            }
+        },
+        "OZFO/60M" : {
+            "positive" : True,
+            "round" : 2,
+            "type" : "Advanced",
+            "valid_since" : {
+                "season" : 1997,
+                "game" : 1997
+            }
+        },
+        "NZFO/60M" : {
+            "positive" : True,
+            "round" : 2,
+            "type" : "Advanced",
+            "display" : False,
+            "valid_since" : {
+                "season" : 1997,
+                "game" : 1997
+            }
+        },
+        "DZFO/60M" : {
+            "positive" : True,
+            "round" : 2,
+            "type" : "Advanced",
+            "valid_since" : {
+                "season" : 1997,
+                "game" : 1997
             }
         },
         "GC/GP" : {
