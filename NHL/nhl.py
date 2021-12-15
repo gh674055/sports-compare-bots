@@ -1902,6 +1902,15 @@ headers = {
                 "game" : 1997
             }
         },
+        "OZFOW/60M" : {
+            "positive" : True,
+            "round" : 2,
+            "type" : "Advanced",
+            "valid_since" : {
+                "season" : 1997,
+                "game" : 1997
+            }
+        },
         "NZFO/60M" : {
             "positive" : True,
             "round" : 2,
@@ -1912,7 +1921,26 @@ headers = {
                 "game" : 1997
             }
         },
+        "NZFOW/60M" : {
+            "positive" : True,
+            "round" : 2,
+            "type" : "Advanced",
+            "display" : False,
+            "valid_since" : {
+                "season" : 1997,
+                "game" : 1997
+            }
+        },
         "DZFO/60M" : {
+            "positive" : True,
+            "round" : 2,
+            "type" : "Advanced",
+            "valid_since" : {
+                "season" : 1997,
+                "game" : 1997
+            }
+        },
+        "DZFOW/60M" : {
             "positive" : True,
             "round" : 2,
             "type" : "Advanced",
@@ -5608,6 +5636,9 @@ formulas = {
         "OZFO/60M" : "OZFO / (TOI / 3600)",
         "DZFO/60M" : "DZFO / (TOI / 3600)",
         "NZFO/60M" : "NZFO / (TOI / 3600)",
+        "OZFOW/60M" : "OZFOW / (TOI / 3600)",
+        "DZFOW/60M" : "DZFOW / (TOI / 3600)",
+        "NZFOW/60M" : "NZFOW / (TOI / 3600)",
         "FOW/GP" : "FOW / GP",
         "FO/GP" : "FO / GP",
         "FO/82GP" : "FO / (GP / 82)",
@@ -34211,7 +34242,7 @@ def is_against_header(header, over_header, extra_stats, player_type, has_toi_sta
         else:
             return not ("type" in headers[player_type["da_type"]["type"]][header] and headers[player_type["da_type"]["type"]][header]["type"] == "Penalty")
     if "Faceoff Against" in extra_stats:
-        return header not in ("FO", "FOW", "FO%", "OZFO", "OZFOW", "OZFO%", "DZFO", "DZFOW", "DZFO%", "FO/GP", "FOW/GP", "FO/60M", "FOW/60M", "OZFO/60M", "DZFO/60M")
+        return header not in ("FO", "FOW", "FO%", "OZFO", "OZFOW", "OZFO%", "DZFO", "DZFOW", "DZFO%", "FO/GP", "FOW/GP", "FO/60M", "FOW/60M", "OZFO/60M", "DZFO/60M", "OZFOW/60M", "DZFOW/60M")
     if "Fight Against" in extra_stats:
         return header not in ("Fight", "Fight/GP", "Fight/60M")
     if "Shot By" in extra_stats or ("Shot" in extra_stats and player_type["da_type"]["type"] != "Skater"):
@@ -34245,10 +34276,10 @@ def is_invalid_stat(stat, player_type, data, count_inconsistent, player_data):
             header_shift_stats = ["Shft", "Shft/GP", "TOI/Shft"]
             report_2_stats = ["PenDrawn", "NetPEN", "Post/Bar", "CF", "CA", "CFPer", "CF/60M", "CA/60M", "FF", "FA", "FFPer", "SF/60M", "SA/60M", "SFPer", "CFRelPer", "FFRelPer", "SFRelPer", "FF/60M", "FA/60M", "offICF", "offICA", "offIFF", "offIFA", "offISF", "offISA", "offICA/60M", "offIFF/60M" , "offISA/60M", "offICF/60M", "offIFA/60M", "offISF/60M", "offIC/60M", "offIF/60M", "offIS/60M", "CFRel/60M", "FFRel/60M", "SFRel/60M", "CARel/60M", "FARel/60M", "SARel/60M", "OZ%", "oiSPer", "oiSVPer", "PDO", "oiSRelPer", "oiSVRelPer", "PDORel", "TSA", "TSM", "TSB", "TSA/GP", "TSB/GP", "TSM/GP", "TS%", "SThr%"]
             report_3_stats = ["TK", "GV", "TK/GV", "HIT", "HITTkn", "BLK"]
-            strength_stats = ["PEN", "PEN/GP", "PIM", "PIM/GP", "OZFO%", "DZFO%", "OZFO/60M", "DZFO/60M", "FOW/GP", "FO/GP", "FOW", "FO", "FO%"]
+            strength_stats = ["PEN", "PEN/GP", "PIM", "PIM/GP", "OZFO%", "DZFO%", "OZFO/60M", "DZFO/60M", "OZFOW/60M", "DZFOW/60M", "FOW/GP", "FO/GP", "FOW", "FO", "FO%"]
             shot_on_stats = ["S", "S%", "S/GP"]
             shot_on_on_stats = ["S", "S%", "S/GP"]
-            report_stats = ["OZFO%", "DZFO%", "OZFO/60M", "DZFO/60M", "FOW/GP", "FO/GP", "FOW", "FO", "FO%", "S", "S%", "S/GP"]
+            report_stats = ["OZFO%", "DZFO%", "OZFO/60M", "DZFO/60M",  "OZFOW/60M", "DZFOW/60M","FOW/GP", "FO/GP", "FOW", "FO", "FO%", "S", "S%", "S/GP"]
             game_report_stats = ["PlusMinus", "GF", "EVGF", "GA", "EVGA", "IGP", "EVIGP", "IPP", "EVIPP", "GF%", "EVGF%", "GF/60M", "GA/60M", "GFRelPer", "offIGF", "offIGA", "offIGF/60M", "offIGA/60M", "GFRel/60M", "offIG/60M", "GARel/60M"]
             header_indv_shift_stats = ["CF", "CA", "CFPer", "CF/60M", "CA/60M", "FF", "FA", "FFPer", "SF/60M", "SA/60M", "SFPer", "FF/60M", "FA/60M", "offIGF", "offIGA", "offICF", "offICA", "offIFF", "offIFA", "offISF", "offISA", "offIGF/60M", "offICA/60M", "offIFF/60M" , "offISA/60M", "offIGA/60M", "offICF/60M", "offIFA/60M", "offISF/60M", "offIG/60M", "offIC/60M", "offIF/60M", "offIS/60M", "GFRel/60M", "CFRel/60M", "FFRel/60M", "SFRel/60M", "GARel/60M", "CARel/60M", "FARel/60M", "SARel/60M", "CFRelPer", "FFRelPer", "GFRelPer", "SFRelPer", "oiSPer", "oiSVPer", "PDO", "oiSRelPer", "oiSVRelPer", "PDORel", "OZ%", "TSA", "TSM", "TSB", "TSA/GP", "TSA/60M", "TSB/GP", "TSB/60M", "TSM/GP", "TSM/60M", "TS%", "SThr%"]
         else:
