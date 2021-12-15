@@ -19689,15 +19689,15 @@ def setup_game_data(player_data, row_data, player_id, player_type, time_frame):
         for index, umpire_obj in enumerate(sub_data["liveData"]["boxscore"]["officials"]):
             if umpire_obj["officialType"] == "Referee":
                 game_data["Referee"] = umpire_obj["official"]["fullName"]
-                if "id" in umpire_obj["official"]["id"]:
+                if "id" in umpire_obj["official"]:
                     game_data["RefereeID"] = umpire_obj["official"]["id"]
             elif umpire_obj["officialType"] == "Linesman":
                 game_data["Linesman"] = umpire_obj["official"]["fullName"]
-                if "id" in umpire_obj["official"]["id"]:
+                if "id" in umpire_obj["official"]:
                     game_data["LinesmanID"] = umpire_obj["official"]["id"]
             else:
                 game_data["OtherOfficial"] = umpire_obj["official"]["fullName"]
-                if "id" in umpire_obj["official"]["id"]:
+                if "id" in umpire_obj["official"]:
                     game_data["OtherOfficialID"] = umpire_obj["official"]["id"]
 
     if "coaches" in sub_data["liveData"]["boxscore"]["teams"][team_str]:
