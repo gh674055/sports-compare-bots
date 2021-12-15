@@ -8944,7 +8944,7 @@ def perform_nfl_game_qualifiers(row, qualifiers):
         venue_obj = team_venues[row["Shared"]["StadiumID"]]
         val_to_check = venue_obj["city"]
 
-        for qual_object in qualifiers["Shared"]["City"]:
+        for qual_object in qualifiers["Exact City"]:
             has_match = False
             for stadium in qual_object["values"]:
                 if stadium == val_to_check.lower():
@@ -8984,7 +8984,7 @@ def perform_nfl_game_qualifiers(row, qualifiers):
         venue_obj = team_venues[row["Shared"]["StadiumID"]]
         val_to_check = venue_obj["state"]
 
-        for qual_object in qualifiers["Shared"]["State"]:
+        for qual_object in qualifiers["Exact State"]:
             has_match = False
             for stadium in qual_object["values"]:
                 if stadium == val_to_check.lower():
@@ -9024,7 +9024,7 @@ def perform_nfl_game_qualifiers(row, qualifiers):
         venue_obj = team_venues[row["Shared"]["StadiumID"]]
         val_to_check = venue_obj["time_zone"]
 
-        for qual_object in qualifiers["Shared"]["Time Zone"]:
+        for qual_object in qualifiers["Exact Time Zone"]:
             has_match = False
             for stadium in qual_object["values"]:
                 if stadium == val_to_check.lower().replace("_", ""):
@@ -9064,7 +9064,7 @@ def perform_nfl_game_qualifiers(row, qualifiers):
         venue_obj = team_venues[row["Shared"]["StadiumID"]]
         val_to_check = venue_obj["country"]
 
-        for qual_object in qualifiers["Shared"]["Country"]:
+        for qual_object in qualifiers["Exact Country"]:
             has_match = False
             for stadium in qual_object["values"]:
                 if stadium == val_to_check.lower():
@@ -9455,8 +9455,6 @@ def perform_nfl_game_qualifiers(row, qualifiers):
             else:
                 if not is_match:
                     return False
-    
-    return True
     
     return True
 

@@ -1,0 +1,1406 @@
+{
+    "ak-sar-ben-coliseum": {
+        "city": "Omaha",
+        "country": "USA",
+        "state": "NE",
+        "time_zone": "America/Chicago",
+        "venues": [
+            "Ak-Sar-Ben Coliseum"
+        ]
+    },
+    "amalie-arena": {
+        "city": "Tampa",
+        "country": "USA",
+        "state": "FL",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Amalie Arena",
+            "Ice Palace",
+            "St. Pete Times Forum",
+            "Tampa Bay Times Forum",
+            "O-Rena"
+        ]
+    },
+    "america-west-arena": {
+        "city": "Phoenix",
+        "country": "USA",
+        "state": "AZ",
+        "time_zone": "America/Phoenix",
+        "venues": [
+            "America West Arena"
+        ]
+    },
+    "american-airlines-center": {
+        "city": "Dallas",
+        "country": "USA",
+        "state": "TX",
+        "time_zone": "America/Chicago",
+        "venues": [
+            "American Airlines Center"
+        ]
+    },
+    "arco-arena": {
+        "city": "Sacramento",
+        "country": "USA",
+        "state": "CA",
+        "time_zone": "America/Los_Angeles",
+        "venues": [
+            "ARCO Arena"
+        ]
+    },
+    "arizona-veterans-memorial-coliseum": {
+        "city": "Phoenix",
+        "country": "USA",
+        "state": "AZ",
+        "time_zone": "America/Phoenix",
+        "venues": [
+            "Arizona Veterans Memorial Coliseum"
+        ]
+    },
+    "barclays-center": {
+        "city": "Brooklyn",
+        "country": "USA",
+        "state": "NY",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Barclays Center"
+        ]
+    },
+    "barton-street-arena": {
+        "city": "Hamilton",
+        "country": "Canada",
+        "state": "ON",
+        "time_zone": "America/Toronto",
+        "venues": [
+            "Barton Street Arena"
+        ]
+    },
+    "bbt-center": {
+        "city": "Sunrise",
+        "country": "USA",
+        "state": "FL",
+        "time_zone": "America/New_York",
+        "venues": [
+            "BankAtlantic Center",
+            "BB&T Center",
+            "National Car Rental Center",
+            "Office Depot Center",
+            "FLA Live Arena"
+        ]
+    },
+    "bc-place": {
+        "city": "Vancouver",
+        "country": "Canada",
+        "state": "BC",
+        "time_zone": "America/Vancouver",
+        "venues": [
+            "BC Place"
+        ]
+    },
+    "bell-centre": {
+        "city": "Montreal",
+        "country": "Canada",
+        "state": "QC",
+        "time_zone": "America/Toronto",
+        "venues": [
+            "Centre Bell",
+            "Centre Molson"
+        ]
+    },
+    "blue-cross-arena": {
+        "city": "Rochester",
+        "country": "USA",
+        "state": "NY",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Blue Cross Arena"
+        ]
+    },
+    "bmo-field": {
+        "city": "Toronto",
+        "country": "Canada",
+        "state": "ON",
+        "time_zone": "America/Toronto",
+        "venues": [
+            "BMO Field",
+            "Exhibition Stadium"
+        ]
+    },
+    "boardwalk-hall": {
+        "city": "Atlantic City",
+        "country": "USA",
+        "state": "NJ",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Atlantic City Auditorium"
+        ]
+    },
+    "boston-arena": {
+        "city": "Boston",
+        "country": "USA",
+        "state": "MA",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Boston Arena"
+        ]
+    },
+    "boston-garden": {
+        "city": "Boston",
+        "country": "USA",
+        "state": "MA",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Boston Garden"
+        ]
+    },
+    "bradley-center": {
+        "city": "Milwaukee",
+        "country": "USA",
+        "state": "WI",
+        "time_zone": "America/Chicago",
+        "venues": [
+            "Bradley Center"
+        ]
+    },
+    "bridgestone-arena": {
+        "city": "Nashville",
+        "country": "USA",
+        "state": "TN",
+        "time_zone": "America/Chicago",
+        "venues": [
+            "Bridgestone Arena",
+            "Gaylord Entertainment Center",
+            "Nashville Arena",
+            "Sommet Center"
+        ]
+    },
+    "buffalo-memorial-auditorium": {
+        "city": "Buffalo",
+        "country": "USA",
+        "state": "NY",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Buffalo Memorial Auditorium"
+        ]
+    },
+    "busch-stadium": {
+        "city": "St. Louis",
+        "country": "USA",
+        "state": "MO",
+        "time_zone": "America/Chicago",
+        "venues": [
+            "Busch Stadium"
+        ]
+    },
+    "canada-life-centre": {
+        "city": "Winnipeg",
+        "country": "Canada",
+        "state": "MB",
+        "time_zone": "America/Winnipeg",
+        "venues": [
+            "Bell MTS Place",
+            "Canada Life Centre",
+            "MTS Centre"
+        ]
+    },
+    "canadian-tire-centre": {
+        "city": "Ottawa",
+        "country": "Canada",
+        "state": "ON",
+        "time_zone": "America/Toronto",
+        "venues": [
+            "Canadian Tire Centre",
+            "Corel Centre",
+            "Scotiabank Place",
+            "The Palladium"
+        ]
+    },
+    "capital-one-arena": {
+        "city": "Washington",
+        "country": "USA",
+        "state": "DC",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Capital One Arena",
+            "MCI Center",
+            "Verizon Center"
+        ]
+    },
+    "carver-arena": {
+        "city": "Peoria",
+        "country": "USA",
+        "state": "IL",
+        "time_zone": "America/Chicago",
+        "venues": [
+            "Carver Arena"
+        ]
+    },
+    "chicago-coliseum": {
+        "city": "Chicago",
+        "country": "USA",
+        "state": "IL",
+        "time_zone": "America/Chicago",
+        "venues": [
+            "Chicago Coliseum"
+        ]
+    },
+    "chicago-stadium": {
+        "city": "Chicago",
+        "country": "USA",
+        "state": "IL",
+        "time_zone": "America/Chicago",
+        "venues": [
+            "Chicago Stadium"
+        ]
+    },
+    "citi-field": {
+        "city": "Queens",
+        "country": "USA",
+        "state": "NY",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Citi Field"
+        ]
+    },
+    "citizens-bank-park": {
+        "city": "Philadelphia",
+        "country": "USA",
+        "state": "PA",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Citizens Bank Park"
+        ]
+    },
+    "civic-centre-arena": {
+        "city": "Ottawa",
+        "country": "Canada",
+        "state": "ON",
+        "time_zone": "America/Toronto",
+        "venues": [
+            "Ottawa Civic Centre"
+        ]
+    },
+    "climate-pledge-arena": {
+        "city": "Seattle",
+        "country": "USA",
+        "state": "WA",
+        "time_zone": "America/Los_Angeles",
+        "venues": [
+            "Climate Pledge Arena"
+        ]
+    },
+    "coliseum-at-richfield": {
+        "city": "Richfield",
+        "country": "USA",
+        "state": "OH",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Richfield Coliseum"
+        ]
+    },
+    "commonwealth-stadium": {
+        "city": "Edmonton",
+        "country": "Canada",
+        "state": "AB",
+        "time_zone": "America/Edmonton",
+        "venues": [
+            "Commonwealth Stadium",
+            "Commonwealth Stadium, Edmonton"
+        ]
+    },
+    "continental-airlines-arena": {
+        "city": "East Rutherford",
+        "country": "USA",
+        "state": "NJ",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Brendan Byrne Arena",
+            "Continental Airlines Arena"
+        ]
+    },
+    "coors-field": {
+        "city": "Denver",
+        "country": "USA",
+        "state": "CO",
+        "time_zone": "America/Denver",
+        "venues": [
+            "Coors Field"
+        ]
+    },
+    "copps-coliseum": {
+        "city": "Hamilton",
+        "country": "Canada",
+        "state": "ON",
+        "time_zone": "America/Toronto",
+        "venues": [
+            "Copps Coliseum"
+        ]
+    },
+    "corestates-spectrum": {
+        "city": "Philadelphia",
+        "country": "USA",
+        "state": "PA",
+        "time_zone": "America/New_York",
+        "venues": [
+            "CoreStates Spectrum",
+            "Spectrum"
+        ]
+    },
+    "cotton-bowl": {
+        "city": "Dallas",
+        "country": "USA",
+        "state": "TX",
+        "time_zone": "America/Chicago",
+        "venues": [
+            "Cotton Bowl Stadium"
+        ]
+    },
+    "cow-palace": {
+        "city": "Daly City",
+        "country": "USA",
+        "state": "CA",
+        "time_zone": "America/Los_Angeles",
+        "venues": [
+            "Cow Palace"
+        ]
+    },
+    "denman-arena": {
+        "city": "Vancouver",
+        "country": "Canada",
+        "state": "BC",
+        "time_zone": "America/Vancouver",
+        "venues": [
+            "Denman Arena"
+        ]
+    },
+    "detroit-olympia": {
+        "city": "Detroit",
+        "country": "USA",
+        "state": "MI",
+        "time_zone": "America/Detroit",
+        "venues": [
+            "Detroit Olympia"
+        ]
+    },
+    "dodger-stadium": {
+        "city": "Los Angeles",
+        "country": "USA",
+        "state": "CA",
+        "time_zone": "America/Los_Angeles",
+        "venues": [
+            "Dodger Stadium"
+        ]
+    },
+    "duquesne-gardens": {
+        "city": "Pittsburgh",
+        "country": "USA",
+        "state": "PA",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Duquesne Gardens"
+        ]
+    },
+    "edgewood-tahoe-resort": {
+        "city": "Stateline",
+        "country": "USA",
+        "state": "NV",
+        "time_zone": "America/Los_Angeles",
+        "venues": [
+            "Edgewood Tahoe Resort"
+        ]
+    },
+    "enterprise-center": {
+        "city": "St. Louis",
+        "country": "USA",
+        "state": "MO",
+        "time_zone": "America/Chicago",
+        "venues": [
+            "Enterprise Center",
+            "Kiel Center",
+            "Savvis Center",
+            "Scottrade Center"
+        ]
+    },
+    "ericsson-globe-arena": {
+        "city": "Stockholm",
+        "country": "Sweden",
+        "state": "Stockholm",
+        "time_zone": "Europe/Stockholm",
+        "venues": [
+            "Ericsson Globe",
+            "Ericsson Globe Arena",
+            "Stockholm Globe Arena",
+            "Globe Arena"
+        ]
+    },
+    "expo-hall": {
+        "city": "Tampa",
+        "country": "USA",
+        "state": "FL",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Expo Hall"
+        ]
+    },
+    "fairgrounds-coliseum": {
+        "city": "Indianapolis",
+        "country": "USA",
+        "state": "IN",
+        "time_zone": "America/Indiana/Indianapolis",
+        "venues": [
+            "Indiana State Fairgrounds Coliseum"
+        ]
+    },
+    "falcon-stadium": {
+        "city": "Colorado Springs",
+        "country": "USA",
+        "state": "CO",
+        "time_zone": "America/Denver",
+        "venues": [
+            "Falcon Stadium"
+        ]
+    },
+    "fenway-park": {
+        "city": "Boston",
+        "country": "USA",
+        "state": "MA",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Fenway Park"
+        ]
+    },
+    "galt-arena-gardens": {
+        "city": "Cambridge",
+        "country": "Canada",
+        "state": "ON",
+        "time_zone": "America/Toronto",
+        "venues": [
+            "Galt Arena Gardens"
+        ]
+    },
+    "gila-river-arena": {
+        "city": "Glendale",
+        "country": "USA",
+        "state": "AZ",
+        "time_zone": "America/Phoenix",
+        "venues": [
+            "Gila River Arena",
+            "Glendale Arena",
+            "Jobing.com Arena"
+        ]
+    },
+    "gillette-stadium": {
+        "city": "Foxborough",
+        "country": "USA",
+        "state": "MA",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Gillette Stadium"
+        ]
+    },
+    "great-western-forum": {
+        "city": "Los Angeles",
+        "country": "USA",
+        "state": "CA",
+        "time_zone": "America/Los_Angeles",
+        "venues": [
+            "Great Western Forum",
+            "The Forum"
+        ]
+    },
+    "greensboro-coliseum": {
+        "city": "Greensboro",
+        "country": "USA",
+        "state": "NC",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Greensboro Coliseum"
+        ]
+    },
+    "halifax-metro-centre": {
+        "city": "Halifax",
+        "country": "Canada",
+        "state": "NS",
+        "time_zone": "America/Halifax",
+        "venues": [
+            "Halifax Metro Centre"
+        ]
+    },
+    "hartford-civic-center": {
+        "city": "Hartford",
+        "country": "USA",
+        "state": "CT",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Hartford Civic Center"
+        ]
+    },
+    "hartwall-arena": {
+        "city": "Helsinki",
+        "country": "Finland",
+        "state": "Uusimaa",
+        "time_zone": "Europe/Helsinki",
+        "venues": [
+            "Hartwall Areena",
+            "Hartwall Arena"
+        ]
+    },
+    "heinz-field": {
+        "city": "Pittsburgh",
+        "country": "USA",
+        "state": "PA",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Heinz Field"
+        ]
+    },
+    "honda-center": {
+        "city": "Anaheim",
+        "country": "USA",
+        "state": "CA",
+        "time_zone": "America/Los_Angeles",
+        "venues": [
+            "Arrowhead Pond",
+            "Honda Center"
+        ]
+    },
+    "investors-group-field": {
+        "city": "Winnipeg",
+        "country": "Canada",
+        "state": "MB",
+        "time_zone": "America/Winnipeg",
+        "venues": [
+            "Investors Group Field"
+        ]
+    },
+    "joe-louis-arena": {
+        "city": "Detroit",
+        "country": "USA",
+        "state": "MI",
+        "time_zone": "America/Detroit",
+        "venues": [
+            "Joe Louis Arena"
+        ]
+    },
+    "jubilee-arena": {
+        "city": "Montreal",
+        "country": "Canada",
+        "state": "QC",
+        "time_zone": "America/Toronto",
+        "venues": [
+            "Jubilee Rink"
+        ]
+    },
+    "kemper-arena": {
+        "city": "Kansas City",
+        "country": "USA",
+        "state": "MO",
+        "time_zone": "America/Chicago",
+        "venues": [
+            "Kemper Arena"
+        ]
+    },
+    "keybank-center": {
+        "city": "Buffalo",
+        "country": "USA",
+        "state": "NY",
+        "time_zone": "America/New_York",
+        "venues": [
+            "First Niagara Center",
+            "HSBC Arena",
+            "KeyBank Center",
+            "Marine Midland Arena"
+        ]
+    },
+    "levi's-stadium": {
+        "city": "Santa Clara",
+        "country": "USA",
+        "state": "CA",
+        "time_zone": "America/Los_Angeles",
+        "venues": [
+            "Levi's Stadium"
+        ]
+    },
+    "lincoln-financial-field": {
+        "city": "Philadelphia",
+        "country": "USA",
+        "state": "PA",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Lincoln Financial Field"
+        ]
+    },
+    "little-caesars-arena": {
+        "city": "Detroit",
+        "country": "USA",
+        "state": "MI",
+        "time_zone": "America/Detroit",
+        "venues": [
+            "Little Caesars Arena"
+        ]
+    },
+    "long-beach-convention-center": {
+        "city": "Long Beach",
+        "country": "USA",
+        "state": "CA",
+        "time_zone": "America/Los_Angeles",
+        "venues": [
+            "Long Beach Arena"
+        ]
+    },
+    "los-angeles-memorial-sports-arena": {
+        "city": "Los Angeles",
+        "country": "USA",
+        "state": "CA",
+        "time_zone": "America/Los_Angeles",
+        "venues": [
+            "Los Angeles Memorial Sports Arena"
+        ]
+    },
+    "madison-square-garden-(iii)": {
+        "city": "New York",
+        "country": "USA",
+        "state": "NY",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Madison Square Garden III"
+        ]
+    },
+    "madison-square-garden-(iv)": {
+        "city": "New York",
+        "country": "USA",
+        "state": "NY",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Madison Square Garden"
+        ]
+    },
+    "maple-leaf-gardens": {
+        "city": "Toronto",
+        "country": "Canada",
+        "state": "ON",
+        "time_zone": "America/Toronto",
+        "venues": [
+            "Maple Leaf Gardens"
+        ]
+    },
+    "market-square-arena": {
+        "city": "Indianapolis",
+        "country": "USA",
+        "state": "IN",
+        "time_zone": "America/Indiana/Indianapolis",
+        "venues": [
+            "Market Square Arena"
+        ]
+    },
+    "mcmahon-stadium": {
+        "city": "Calgary",
+        "country": "Canada",
+        "state": "AB",
+        "time_zone": "America/Edmonton",
+        "venues": [
+            "McMahon Stadium"
+        ]
+    },
+    "mcnichols-sports-arena": {
+        "city": "Denver",
+        "country": "USA",
+        "state": "CO",
+        "time_zone": "America/Denver",
+        "venues": [
+            "McNichols Sports Arena"
+        ]
+    },
+    "mellon-arena": {
+        "city": "Pittsburgh",
+        "country": "USA",
+        "state": "PA",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Mellon Arena",
+            "Civic Arena"
+        ]
+    },
+    "metropolitan-sports-center": {
+        "city": "Bloomington",
+        "country": "USA",
+        "state": "MN",
+        "time_zone": "America/Chicago",
+        "venues": [
+            "Metropolitan Sports Center",
+            "Met Center"
+        ]
+    },
+    "miami-arena": {
+        "city": "Miami",
+        "country": "USA",
+        "state": "FL",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Miami Arena"
+        ]
+    },
+    "michigan-stadium": {
+        "city": "Ann Arbor",
+        "country": "USA",
+        "state": "MI",
+        "time_zone": "America/Detroit",
+        "venues": [
+            "Michigan Stadium"
+        ]
+    },
+    "montreal-arena": {
+        "city": "Montreal",
+        "country": "Canada",
+        "state": "QC",
+        "time_zone": "America/Toronto",
+        "venues": [
+            "Westmount Arena"
+        ]
+    },
+    "montreal-forum": {
+        "city": "Montreal",
+        "country": "Canada",
+        "state": "QC",
+        "time_zone": "America/Toronto",
+        "venues": [
+            "Montreal Forum"
+        ]
+    },
+    "mosaic-stadium": {
+        "city": "Regina",
+        "country": "Canada",
+        "state": "SK",
+        "time_zone": "America/Regina",
+        "venues": [
+            "Mosaic Stadium"
+        ]
+    },
+    "mount-royal-arena": {
+        "city": "Montreal",
+        "country": "Canada",
+        "state": "QC",
+        "time_zone": "America/Toronto",
+        "venues": [
+            "Mount Royal Arena"
+        ]
+    },
+    "mutual-street-arena": {
+        "city": "Toronto",
+        "country": "Canada",
+        "state": "ON",
+        "time_zone": "America/Toronto",
+        "venues": [
+            "Mutual Street Arena"
+        ]
+    },
+    "myriad-convention-center": {
+        "city": "Oklahoma City",
+        "country": "USA",
+        "state": "OK",
+        "time_zone": "America/Chicago",
+        "venues": [
+            "Myriad Convention Center"
+        ]
+    },
+    "nassau-veterans-memorial-coliseum": {
+        "city": "Uniondale",
+        "country": "USA",
+        "state": "NY",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Nassau Veterans Memorial Coliseum",
+            "NYCB Live/Nassau Coliseum"
+        ]
+    },
+    "nationals-park": {
+        "city": "Washington",
+        "country": "USA",
+        "state": "DC",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Nationals Park"
+        ]
+    },
+    "nationwide-arena": {
+        "city": "Columbus",
+        "country": "USA",
+        "state": "OH",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Nationwide Arena"
+        ]
+    },
+    "navy-marine-corps-memorial-stadium": {
+        "city": "Annapolis",
+        "country": "USA",
+        "state": "MD",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Navy-Marine Corps Memorial Stadium"
+        ]
+    },
+    "nissan-stadium": {
+        "city": "Nashville",
+        "country": "USA",
+        "state": "TN",
+        "time_zone": "America/Chicago",
+        "venues": [
+            "Nissan Stadium"
+        ]
+    },
+    "notre-dame-stadium": {
+        "city": "Notre Dame",
+        "country": "USA",
+        "state": "IN",
+        "time_zone": "America/Indiana/Indianapolis",
+        "venues": [
+            "Notre Dame Stadium"
+        ]
+    },
+    "o2-arena": {
+        "city": "Prague",
+        "country": "Czech Republic",
+        "state": "Bohemia",
+        "time_zone": "Europe/Prague",
+        "venues": [
+            "O2 Czech Republic"
+        ]
+    },
+    "o2-world": {
+        "city": "Berlin",
+        "country": "Germany",
+        "state": "Berlin",
+        "time_zone": "Europe/Berlin",
+        "venues": [
+            "O2 Arena Berlin"
+        ]
+    },
+    "oakland-alameda-county-coliseum-arena": {
+        "city": "Oakland",
+        "country": "USA",
+        "state": "CA",
+        "time_zone": "America/Los_Angeles",
+        "venues": [
+            "Oakland-Alameda County Coliseum Arena"
+        ]
+    },
+    "omni-coliseum": {
+        "city": "Atlanta",
+        "country": "USA",
+        "state": "GA",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Omni Coliseum"
+        ]
+    },
+    "orlando-arena": {
+        "city": "Orlando",
+        "country": "USA",
+        "state": "FL",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Orlando Arena"
+        ]
+    },
+    "ottawa-auditorium": {
+        "city": "Ottawa",
+        "country": "Canada",
+        "state": "ON",
+        "time_zone": "America/Toronto",
+        "venues": [
+            "Ottawa Auditorium"
+        ]
+    },
+    "pacific-coliseum": {
+        "city": "Vancouver",
+        "country": "Canada",
+        "state": "BC",
+        "time_zone": "America/Vancouver",
+        "venues": [
+            "Pacific Coliseum"
+        ]
+    },
+    "patrick-arena": {
+        "city": "Victoria",
+        "country": "Canada",
+        "state": "BC",
+        "time_zone": "America/Vancouver",
+        "venues": [
+            "Patrick Arena"
+        ]
+    },
+    "peace-bridge-arena": {
+        "city": "Fort Erie",
+        "country": "Canada",
+        "state": "ON",
+        "time_zone": "America/Toronto",
+        "venues": [
+            "Peace Bridge Arena"
+        ]
+    },
+    "pepsi-center": {
+        "city": "Denver",
+        "country": "USA",
+        "state": "CO",
+        "time_zone": "America/Denver",
+        "venues": [
+            "Ball Arena",
+            "Pepsi Center"
+        ]
+    },
+    "philadelphia-arena": {
+        "city": "Philadelphia",
+        "country": "USA",
+        "state": "PA",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Philadelphia Arena"
+        ]
+    },
+    "philips-arena": {
+        "city": "Atlanta",
+        "country": "USA",
+        "state": "GA",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Philips Arena"
+        ]
+    },
+    "pnc-arena": {
+        "city": "Raleigh",
+        "country": "USA",
+        "state": "NC",
+        "time_zone": "America/New_York",
+        "venues": [
+            "PNC Arena",
+            "Entertainment and Sports Arena",
+            "RBC Center"
+        ]
+    },
+    "ppg-paints-arena": {
+        "city": "Pittsburgh",
+        "country": "USA",
+        "state": "PA",
+        "time_zone": "America/New_York",
+        "venues": [
+            "CONSOL Energy Center",
+            "PPG Paints Arena"
+        ]
+    },
+    "providence-civic-center": {
+        "city": "Providence",
+        "country": "USA",
+        "state": "RI",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Providence Civic Center"
+        ]
+    },
+    "prudential-center": {
+        "city": "Newark",
+        "country": "USA",
+        "state": "NJ",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Prudential Center"
+        ]
+    },
+    "quebec-arena": {
+        "city": "Quebec City",
+        "country": "Canada",
+        "state": "QC",
+        "time_zone": "America/Toronto",
+        "venues": [
+            "Quebec Arena"
+        ]
+    },
+    "quebec-coliseum": {
+        "city": "Quebec City",
+        "country": "Canada",
+        "state": "QC",
+        "time_zone": "America/Toronto",
+        "venues": [
+            "Le Colisee"
+        ]
+    },
+    "ralph-wilson-stadium": {
+        "city": "Orchard Park",
+        "country": "USA",
+        "state": "NY",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Ralph Wilson Stadium"
+        ]
+    },
+    "ralph-wilson-stadium-": {
+        "city": "Orchard Park",
+        "country": "USA",
+        "state": "NY",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Ralph Wilson Stadium "
+        ]
+    },
+    "reunion-arena": {
+        "city": "Dallas",
+        "country": "USA",
+        "state": "TX",
+        "time_zone": "America/Chicago",
+        "venues": [
+            "Reunion Arena"
+        ]
+    },
+    "rexall-place": {
+        "city": "Edmonton",
+        "country": "Canada",
+        "state": "AB",
+        "time_zone": "America/Edmonton",
+        "venues": [
+            "Edmonton Coliseum",
+            "Northlands Coliseum",
+            "Rexall Place",
+            "Skyreach Centre"
+        ]
+    },
+    "riverfront-coliseum": {
+        "city": "Cincinnati",
+        "country": "USA",
+        "state": "OH",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Riverfront Coliseum"
+        ]
+    },
+    "rogers-arena": {
+        "city": "Vancouver",
+        "country": "Canada",
+        "state": "BC",
+        "time_zone": "America/Vancouver",
+        "venues": [
+            "General Motors Place",
+            "Rogers Arena"
+        ]
+    },
+    "rogers-place": {
+        "city": "Edmonton",
+        "country": "Canada",
+        "state": "AB",
+        "time_zone": "America/Edmonton",
+        "venues": [
+            "Rogers Place"
+        ]
+    },
+    "saitama-super-arena": {
+        "city": "Saitama",
+        "country": "Japan",
+        "state": "Kanto",
+        "time_zone": "Asia/Tokyo",
+        "venues": [
+            "Saitama Super Arena"
+        ]
+    },
+    "sap-center-at-san-jose": {
+        "city": "San Jose",
+        "country": "USA",
+        "state": "CA",
+        "time_zone": "America/Los_Angeles",
+        "venues": [
+            "Compaq Center at San Jose",
+            "HP Pavilion at San Jose",
+            "San Jose Arena",
+            "SAP Center at San Jose"
+        ]
+    },
+    "saskatchewan-place": {
+        "city": "Saskatoon",
+        "country": "Canada",
+        "state": "SK",
+        "time_zone": "America/Regina",
+        "venues": [
+            "SaskPlace"
+        ]
+    },
+    "scandinavium": {
+        "city": "Gothenburg",
+        "country": "Sweden",
+        "state": "Vastra Gotaland",
+        "time_zone": "Europe/Stockholm",
+        "venues": [
+            "Scandinavium"
+        ]
+    },
+    "scotiabank-arena": {
+        "city": "Toronto",
+        "country": "Canada",
+        "state": "ON",
+        "time_zone": "America/Toronto",
+        "venues": [
+            "Air Canada Centre",
+            "Scotiabank Arena"
+        ]
+    },
+    "scotiabank-saddledome": {
+        "city": "Calgary",
+        "country": "Canada",
+        "state": "AB",
+        "time_zone": "America/Edmonton",
+        "venues": [
+            "Canadian Airlines Saddledome",
+            "Olympic Saddledome",
+            "Pengrowth Saddledome",
+            "Scotiabank Saddledome"
+        ]
+    },
+    "seattle-ice-arena": {
+        "city": "Seattle",
+        "country": "USA",
+        "state": "WA",
+        "time_zone": "America/Los_Angeles",
+        "venues": [
+            "Seattle Ice Arena"
+        ]
+    },
+    "soldier-field": {
+        "city": "Chicago",
+        "country": "USA",
+        "state": "IL",
+        "time_zone": "America/Chicago",
+        "venues": [
+            "Soldier Field"
+        ]
+    },
+    "springfield-civic-center": {
+        "city": "Springfield",
+        "country": "USA",
+        "state": "MA",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Springfield Civic Center"
+        ]
+    },
+    "st.-louis-arena": {
+        "city": "St. Louis",
+        "country": "USA",
+        "state": "MO",
+        "time_zone": "America/Chicago",
+        "venues": [
+            "St. Louis Arena",
+            "The Checkerdome"
+        ]
+    },
+    "st.-paul-auditorium": {
+        "city": "Saint Paul",
+        "country": "USA",
+        "state": "MN",
+        "time_zone": "America/Chicago",
+        "venues": [
+            "St. Paul Auditorium"
+        ]
+    },
+    "stampede-corral": {
+        "city": "Calgary",
+        "country": "Canada",
+        "state": "AB",
+        "time_zone": "America/Edmonton",
+        "venues": [
+            "Stampede Corral"
+        ]
+    },
+    "staples-center": {
+        "city": "Los Angeles",
+        "country": "USA",
+        "state": "CA",
+        "time_zone": "America/Los_Angeles",
+        "venues": [
+            "STAPLES Center"
+        ]
+    },
+    "t-mobile-arena": {
+        "city": "Paradise",
+        "country": "USA",
+        "state": "NV",
+        "time_zone": "America/Los_Angeles",
+        "venues": [
+            "T-Mobile Arena"
+        ]
+    },
+    "target-center": {
+        "city": "Minneapolis",
+        "country": "USA",
+        "state": "MN",
+        "time_zone": "America/Chicago",
+        "venues": [
+            "Target Center"
+        ]
+    },
+    "target-field": {
+        "city": "Minnesota",
+        "country": "USA",
+        "state": "MN",
+        "time_zone": "America/Chicago",
+        "venues": [
+            "Target Field"
+        ]
+    },
+    "tcf-bank-stadium": {
+        "city": "Minneapolis",
+        "country": "USA",
+        "state": "MN",
+        "time_zone": "America/Chicago",
+        "venues": [
+            "TCF Bank Stadium"
+        ]
+    },
+    "td-garden": {
+        "city": "Boston",
+        "country": "USA",
+        "state": "MA",
+        "time_zone": "America/New_York",
+        "venues": [
+            "FleetCenter",
+            "TD Banknorth Garden",
+            "TD Garden"
+        ]
+    },
+    "td-place-stadium": {
+        "city": "Ottawa",
+        "country": "Canada",
+        "state": "ON",
+        "time_zone": "America/Toronto",
+        "venues": [
+            "Lansdowne Park"
+        ]
+    },
+    "the-arena": {
+        "city": "Ottawa",
+        "country": "Canada",
+        "state": "ON",
+        "time_zone": "America/Toronto",
+        "venues": [
+            "Laurier Avenue Arena"
+        ]
+    },
+    "the-o2-arena": {
+        "city": "London",
+        "country": "United Kingdom",
+        "state": "England",
+        "time_zone": "Europe/London",
+        "venues": [
+            "O2 Arena"
+        ]
+    },
+    "thunderdome": {
+        "city": "St. Petersburg",
+        "country": "USA",
+        "state": "FL",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Thunderdome"
+        ]
+    },
+    "tim-hortons-field": {
+        "city": "Hamilton",
+        "country": "Canada",
+        "state": "ON",
+        "time_zone": "America/Toronto",
+        "venues": [
+            "Tim Hortons Field"
+        ]
+    },
+    "ubs-arena": {
+        "city": "Elmont",
+        "country": "USA",
+        "state": "NY",
+        "time_zone": "America/New_York",
+        "venues": [
+            "UBS Arena"
+        ]
+    },
+    "united-center": {
+        "city": "Chicago",
+        "country": "USA",
+        "state": "IL",
+        "time_zone": "America/Chicago",
+        "venues": [
+            "United Center"
+        ]
+    },
+    "us-airways-arena": {
+        "city": "Landover",
+        "country": "USA",
+        "state": "MD",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Capital Centre",
+            "US Airways Arena"
+        ]
+    },
+    "wells-fargo-center": {
+        "city": "Philadelphia",
+        "country": "USA",
+        "state": "PA",
+        "time_zone": "America/New_York",
+        "venues": [
+            "CoreStates Center",
+            "First Union Center",
+            "Wachovia Center",
+            "Wells Fargo Center"
+        ]
+    },
+    "windsor-arena": {
+        "city": "Windsor",
+        "country": "Canada",
+        "state": "ON",
+        "time_zone": "America/Toronto",
+        "venues": [
+            "Border Cities Arena",
+            "Windsor Arena"
+        ]
+    },
+    "winnipeg-arena": {
+        "city": "Winnipeg",
+        "country": "Canada",
+        "state": "MB",
+        "time_zone": "America/Winnipeg",
+        "venues": [
+            "Winnipeg Arena"
+        ]
+    },
+    "wrigley-field": {
+        "city": "Chicago",
+        "country": "USA",
+        "state": "IL",
+        "time_zone": "America/Chicago",
+        "venues": [
+            "Wrigley Field"
+        ]
+    },
+    "xcel-energy-center": {
+        "city": "Saint Paul",
+        "country": "USA",
+        "state": "MN",
+        "time_zone": "America/Chicago",
+        "venues": [
+            "Xcel Energy Center"
+        ]
+    },
+    "yankee-stadium": {
+        "city": "New York",
+        "country": "USA",
+        "state": "NY",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Yankee Stadium"
+        ]
+    },
+    "yoyogi-arena": {
+        "city": "Tokyo",
+        "country": "Japan",
+        "state": "Kanto",
+        "time_zone": "Asia/Tokyo",
+        "venues": [
+            "Yoyogi Arena"
+        ]
+    }
+}

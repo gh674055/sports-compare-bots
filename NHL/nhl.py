@@ -6217,8 +6217,14 @@ qualifier_map = {
     "Event Formula" : {},
     "Event Time" : {},
     "Start Time" : {},
-    "Time Zone Abbreviation" : {},
-    "Exact Time Zone Abbreviation" : {},
+    "City" : {},
+    "Exact City" : {},
+    "State" : {},
+    "Exact State" : {},
+    "Time Zone" : {},
+    "Exact Time Zone" : {},
+    "Country" : {},
+    "Exact Country" : {},
     "Local Start Time" : {},
     "Local Event Time" : {},
     "Max Streak Formula" : {},
@@ -6536,6 +6542,10 @@ with open ("manual_periods.json", "r") as file:
 outdoor_games = None
 with open ("outdoor_games.json", "r") as file:
     outdoor_games = json.load(file)
+
+team_venues = None
+with open ("team_venues.json", "r") as file:
+    team_venues = json.load(file)
     
 manual_info = {
     1987030999 : {
@@ -6929,7 +6939,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                         og_time_str = time_frame
                         qualifiers = {}
 
-                        last_match = re.finditer(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?((?:sub-query|event-sub-query|or-sub-query|or-event-sub-query|day-after-sub-query|day-before-sub-query|day-of-sub-query|game-after-sub-query|game-before-sub-query|season-sub-query|or-season-sub-query|season-after-sub-query|season-before-sub-query|exact-penalty-type|exact-penalty-severity|penalty-type|penalty-severity|w|(?:playing|starting)-with|a|(?:playing|starting)-against|(?:playing|starting)-same-game|prv-w|previous-playing-with|prv-a|previous-playing-against|upc-w|upcoming-playing-with|upc-a|upcoming-playing-against|(?:playing|starting)-same-opponents?|(?:playing|starting)-same-dates?|holidays?|dts|dates|arena|exact-arena|stadium|exact-stadium|outoor-event|exact-outoor-event|shot-on|shot-by|on-ice-with|on-ice-against|on-line-with|on-line-against|assisted-on|assisted-with|points-with|assisted-by|primary-assisted-on|primary-assisted-with|primary-points-with|primary-assisted-by|hit-on|penalty-on|faceoff-against|fight-against|fighting-against|event-time|start-time):(?<!\\)\(.*?(?<!\\)\))", time_frame)
+                        last_match = re.finditer(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?((?:sub-query|event-sub-query|or-sub-query|or-event-sub-query|day-after-sub-query|day-before-sub-query|day-of-sub-query|game-after-sub-query|game-before-sub-query|season-sub-query|or-season-sub-query|season-after-sub-query|season-before-sub-query|exact-penalty-type|exact-penalty-severity|penalty-type|penalty-severity|w|(?:playing|starting)-with|a|(?:playing|starting)-against|(?:playing|starting)-same-game|prv-w|previous-playing-with|prv-a|previous-playing-against|upc-w|upcoming-playing-with|upc-a|upcoming-playing-against|(?:playing|starting)-same-opponents?|(?:playing|starting)-same-dates?|holidays?|dts|dates|arena|exact-arena|stadium|exact-stadium|city|exact-city|country|exact-country|outoor-event|exact-outoor-event|shot-on|shot-by|on-ice-with|on-ice-against|on-line-with|on-line-against|assisted-on|assisted-with|points-with|assisted-by|primary-assisted-on|primary-assisted-with|primary-points-with|primary-assisted-by|hit-on|penalty-on|faceoff-against|fight-against|fighting-against|event-time|start-time):(?<!\\)\(.*?(?<!\\)\))", time_frame)
                         for m in last_match:
                             qualifier_obj = {}
                             negate_str = m.group(1)
@@ -7006,6 +7016,18 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                             elif qualifier_str.startswith("exact-stadium:"):
                                 qual_str = "exact-stadium:"
                                 qual_type = "Exact Arena"
+                            elif qualifier_str.startswith("city:"):
+                                qual_str = "city:"
+                                qual_type = "City"
+                            elif qualifier_str.startswith("exact-city:"):
+                                qual_str = "exact-city:"
+                                qual_type = "Exact City"
+                            elif qualifier_str.startswith("country:"):
+                                qual_str = "country:"
+                                qual_type = "Country"
+                            elif qualifier_str.startswith("exact-country:"):
+                                qual_str = "exact-country:"
+                                qual_type = "Exact Country"
                             elif qualifier_str.startswith("outoor-event:"):
                                 qual_str = "outdoor-event:"
                                 qual_type = "Outdoor Event"
@@ -8040,7 +8062,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
 
                                 time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
                         
-                        last_match = re.finditer(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?(current-season-age|first-minutes?|current-minutes?|first-shots?|current-shots?|first-periods?|current-shots?|first-games?|current-games?|first-seasons?|current-seasons?|last-minutes?|last-shots?|last-periods?|last-games?|last-seasons?|first-starts?|last-starts?|start-if-goalie|decision|current-age|rook|rookie|facing-former-franchise|facing-former-team|even-year|odd-year|interconference|intraconference|interdivision|intradivision|complete-games?|current-winning-opponents?|current-losing-opponents?|current-tied-opponents?|current-winning-or-tied-opponents?|current-losing-or-tied-opponents?|winning-opponents?|losing-opponents?|winning-or-tied-opponents?|losing-or-tied-opponents?|tied-opponents?|playoff-opponents?|cup-winner-opponent|conf-winner-opponent|current-winning-teams?|current-losing-teams?|current-tied-teams?|current-winning-or-tied-teams?|current-losing-or-tied-teams?|winning-teams?|losing-teams?|tied-teams?|winning-or-tied-teams?|losing-or-tied-teams?|playoff-teams?|cup-winner-team|conf-winner-team|penalty-shot|shootout|overtime|game-winning|offensive-zone|defensive-zone|neutral-zone|left-side|right-side|faceoff-circle|goalie-crease|goalie-circle|unassisted|even-skaters|team-goalie-pulled|opponent-goalie-pulled|more-skaters|less-skaters|power-play|short-handed|even-strength|facing-lefty|facing-righty|elimination-or-clinching|clinching-or-elimination|elimination(?:-games?)?|eliminating(?:-games?)?|clinching(?:-games?)?|clinch(?:-games?)?|winner-take-all|behind-in-series|ahead-in-series|even-in-series|(?:nhl(?: |-))?(?:finals?|championship)|stanley(?: |-)cup|stanley|cup|sc|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?(?:league|conference)(?:(?: |-)finals?|(?: |-)championship)|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?cf|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?second(?: |-)round|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?sr|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?(?:league|conference) semi-?finals?|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?cs|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?first round|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?fr|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?(?:league|conference) quarter-?finals?|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?cq|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?qr|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?qualify(?:ing|er)?(?:(?: |-)round)?|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?pr|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?play(?:-| )?in(?:(?: |-)round)?|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?rr|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?(?:round )?robin|leading(:?-in-game)?|trailing(:?-in-game)?|tied(:?(?:-in)?-game)?|force-dates|first-half|second-half|pre-all-star|post-all-star|outdoors|indoors|winter-classic|heritage-classic|stadium-series|t:[\w-]+|o:[\w-]+|m:[\w-]+|d:[\w-]+|dt:[\w-]+|exact-shot-type:[\w-]+|shot-type:[\w-]+|minor|stick-infraction|tip-in|deflected|deflection|wrist-shot|slap-shot|snap-shot|back-hand|wrap-around|team-franchise:[\w-]+|opponent-franchise:[\w-]+|franchise:[\w-]+|tf:[\w-]+|of:[\w-]+|f:[\w-]+|team:[\w-]+|opponent:[\w-]+|new-moon|waning-crescent|third-quarter|waning-gibbous|full-moon|waxing-gibbous|first-quarter|waxing-crescent|tv-network:[\w-]+|raw-tv-network:[\w-]+|national-tv-network:[\w-]+|national-raw-tv-network:[\w-]+|any-national-tv-network:[\w-]+|any-national-raw-tv-network:[\w-]+|any-us-national-game|us-national-game|any-ca-national-game|ca-national-game|any-national-game|national-game|local-event-time:[\S-]+|local-start-time:[\S-]+|time-zone-abbrev:[\w-]+|exact-time-zone-abbrev:[\w-]+|time-zone-abbreviation:[\w-]+|exact-time-zone-abbreviation:[\w-]+|month:[\w-]+|day:[\w-]+|date:[\w-]+|series-game:[\w-]+|gm:[\w-]+|game:[\w-]+|season-gm:[\w-]+|season-game:[\w-]+|season:[\w-]+|season-reversed:[\w-]+|seasons:[\w-]+|seasons-reversed:[\w-]+|crgm:[\w-]+|career-game-reversed:[\w-]+|team-game-reversed:[\w-]+|season-game-reversed:[\w-]+|game-reversed:[\w-]+|career-game:[\w-]+|tmgm:[\w-]+|team-game:[\w-]+|game-number:[\w-]+|season-number:[\w-]+|number:[\w-]+|dr:[\w-]+|starts-days-rest:[\w-]+|days-rest:[\w-]+|prv-dr:[\w-]+|previous-days-rest:[\w-]+|upc-dr:[\w-]+|upcoming-starts-days-rest:[\w-]+|upcoming-days-rest:[\w-]+|gr:[\w-]+|games-rest:[\w-]+|starts-rest:[\w-]+|prv-gr:[\w-]+|-?starts?|-?started|-?starting|-?ignore-starts?|-?ignore-started?|-?ignore-starting|previous-games-rest:[\w-]+|upc-gr:[\w-]+|upcoming-games-rest:[\w-]+|days-in-a-row:[\w-]+|games-in-a-row:[\w-]+|starts-in-a-row:[\w-]+|prv-t:[\w-]+|prv-o:[\w-]+|upc-t:[\w-]+|upc-o:[\w-]+|upcoming-same-opponent|previous-same-opponent|previous-franchise:[\w-]+|previous-team-franchise:[\w-]+|previous-opponent-franchise:[\w-]+|upcoming-franchise:[\w-]+|upcoming-team-franchise:[\w-]+|upcoming-opponent-franchise:[\w-]+|previous-team:[\w-]+|previous-opponent:[\w-]+|upcoming-team:[\w-]+|upcoming-opponent:[\w-]+|goalie-angle:[\S-]+|score:[\S-]+|final-score:[\S-]+|previous-score:[\S-]+|upcoming-score:[\S-]+|final-team-score:[\w-]+|final-opponent-score:[\w-]+|final-score-margin:[\S-]+|final-score-difference:[\S-]+|team-score:[\w-]+|opponent-score:[\w-]+|score-margin:[\S-]+|score-difference:[\S-]+|period:[\w-]+|raw-x-coordinate:[\S-]+|raw-y-coordinate:[\S-]+|raw-coordinates:[\S-]+|absolute-x-coordinate:[\w-]+|absolute-y-coordinate:[\w-]+|absolute-coordinates:[\w-]+|x-coordinate:[\S-]+|y-coordinate:[\S-]+|coordinates:[\S-]+|within-distance:[\S-]+|raw-within-distance:[\S-]+|absolute-within-distance:[\S-]+|team-skaters:[\w-]+|opponent-skaters:[\w-]+|team-players:[\w-]+|opponent-players:[\w-]+|period-time-remaining:[\S-]+|period-time:[\S-]+|season-st:[\S-]+|period-stat:[\S-]+|season-stat:[\S-]+|season-prv-st:[\S-]+|season-previous-stat:[\S-]+|season-upc-st:[\S-]+|season-upcoming-stat:[\S-]+|st:[\S-]+|stat:[\S-]+|prv-st:[\S-]+|previous-stat:[\S-]+|upc-st:[\S-]+|upcoming-stat:[\S-]+|min-st:[\S-]+|min-stat:[\S-]+|max-st:[\S-]+|max-stat:[\S-]+|totalgames-st:[\S-]+|totalgames-stat:[\S-]+|max-str:[\S-]+|max-streak:[\S-]+|max-stretch:[\S-]+|ctn-str:[\S-]+|count-streak:[\S-]+|q:[\S-]+|quickest:[\S-]+|s:[\S-]+|slowest:[\S-]+|game-event-stat:[\S-]+|game-event-stat-reversed:[\S-]+|game-event-stats:[\S-]+|game-event-stats-reversed:[\S-]+|event-stat:[\S-]+|event-stat-reversed:[\S-]+|event-stats:[\S-]+|event-stats-reversed:[\S-]+|starting-game-event-stat:[\S-]+|starting-game-event-stat-reversed:[\S-]+|starting-game-event-stats:[\S-]+|starting-game-event-stats-reversed:[\S-]+|starting-event-stat:[\S-]+|starting-event-stat-reversed:[\S-]+|starting-event-stats:[\S-]+|starting-event-stats-reversed:[\S-]+|with-new-team|with-new-franchise|summer|spring|winter|fall|autumn|away|home|road|previous-away|previous-home|previous-road|upcoming-away|upcoming-home|upcoming-road|win(?:s)?|loss(?:es)?|tie(?:es)?|w-ot|w-so|l-ot|l-so|so|ot|w|l|t|prv-w|prv-l|prv-t|prv-w-ot|prv-w-so|prv-l-ot|prv-l-so|prv-so|prv-ot|upc-w|upc-l|upc-t|upc-w-ot|upc-w-so|upc-l-ot|upc-l-so|upc-so|upc-ot|previous-win(?:s)?|previous-loss(?:es)?|previous-tie(?:es)|upcoming-win(?:s)?|upcoming-loss(?:es)?|upcoming-tie(?:es)|prv-t-w|prv-t-l|prv-t-t|prv-t-w-ot|prv-t-w-so|prv-t-l-ot|prv-t-l-so|prv-t-so|prv-t-ot|upc-t-w|upc-t-l|upc-t-t|upc-t-w-ot|upc-t-w-so|upc-t-l-ot|upc-t-l-so|upc-t-so|upc-t-ot|previous-team-win(?:s)?|previous-team-loss(?:es)?|previous-team-tie(?:es)|upcoming-team-win(?:s)?|upcoming-team-loss(?:es)?|upcoming-team-tie(?:es)|series-team-wins:[\w-]+|series-opponent-wins:[\w-]+|series-score-margin:[\S-]+|series-score-difference:[\S-]+|series-score:[\w-]+|current-team-wins:[\w-]+|current-team-losses:[\w-]+|current-team-ties:[\w-]+|current-team-points:[\w-]+|current-team-games-over-500:[\S-]+|current-opponent-wins:[\w-]+|current-opponent-losses:[\w-]+|current-opponent-ties:[\w-]+|current-opponent-points:[\w-]+|current-opponent-games-over-500:[\S-]+|team-wins:[\w-]+|team-losses:[\w-]+|team-ties:[\w-]+|team-points:[\w-]+|team-games-over-500:[\S-]+|opponent-wins:[\w-]+|opponent-losses:[\w-]+|opponent-ties:[\w-]+|opponent-points:[\w-]+|opponent-games-over-500:[\S-]+|opponent-goals?-rank:[\S-]+|opponent-standings-rank:[\S-]+|opponent-goals?-allowed-rank:[\S-]+|current-opponent-win(?:ning)?-percent:[\S-]+|opponent-win(?:ning)?-percent:[\S-]+|current-opponent-points-percent:[\S-]+|opponent-points-percent:[\S-]+|team-goals?-rank:[\S-]+|team-standings-rank:[\S-]+|team-goals?-allowed-rank:[\S-]+|years?:[\w-]+|current-team-win(?:ning)?-percent:[\S-]+|team-win(?:ning)?-percent:[\S-]+|current-team-points-percent:[\S-]+|team-points-percent:[\S-]+|early-?afternoon|late-?afternoon|morning|early|afternoon|day|night(?:time)?|late|team-conference:[\S-]+|opponent-conference:[\S-]+|team-division:[\S-]+|opponent-division:[\S-]+|birthda(?:y|te)|skat(?:(?:er)|(?:ing))|position:[\S-]+|left-wing(?:er)?|right-wing(?:er)?|center|defense(?:man)?|wing(?:er)?|forward|goalie|skater|" + all_months_re + r"|" + all_days_re + r")\b", time_frame)
+                        last_match = re.finditer(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?(current-season-age|first-minutes?|current-minutes?|first-shots?|current-shots?|first-periods?|current-shots?|first-games?|current-games?|first-seasons?|current-seasons?|last-minutes?|last-shots?|last-periods?|last-games?|last-seasons?|first-starts?|last-starts?|start-if-goalie|decision|current-age|rook|rookie|facing-former-franchise|facing-former-team|even-year|odd-year|interconference|intraconference|interdivision|intradivision|complete-games?|current-winning-opponents?|current-losing-opponents?|current-tied-opponents?|current-winning-or-tied-opponents?|current-losing-or-tied-opponents?|winning-opponents?|losing-opponents?|winning-or-tied-opponents?|losing-or-tied-opponents?|tied-opponents?|playoff-opponents?|cup-winner-opponent|conf-winner-opponent|current-winning-teams?|current-losing-teams?|current-tied-teams?|current-winning-or-tied-teams?|current-losing-or-tied-teams?|winning-teams?|losing-teams?|tied-teams?|winning-or-tied-teams?|losing-or-tied-teams?|playoff-teams?|cup-winner-team|conf-winner-team|penalty-shot|shootout|overtime|game-winning|offensive-zone|defensive-zone|neutral-zone|left-side|right-side|faceoff-circle|goalie-crease|goalie-circle|unassisted|even-skaters|team-goalie-pulled|opponent-goalie-pulled|more-skaters|less-skaters|power-play|short-handed|even-strength|facing-lefty|facing-righty|elimination-or-clinching|clinching-or-elimination|elimination(?:-games?)?|eliminating(?:-games?)?|clinching(?:-games?)?|clinch(?:-games?)?|winner-take-all|behind-in-series|ahead-in-series|even-in-series|(?:nhl(?: |-))?(?:finals?|championship)|stanley(?: |-)cup|stanley|cup|sc|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?(?:league|conference)(?:(?: |-)finals?|(?: |-)championship)|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?cf|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?second(?: |-)round|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?sr|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?(?:league|conference) semi-?finals?|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?cs|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?first round|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?fr|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?(?:league|conference) quarter-?finals?|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?cq|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?qr|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?qualify(?:ing|er)?(?:(?: |-)round)?|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?pr|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?play(?:-| )?in(?:(?: |-)round)?|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?rr|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?(?:round )?robin|leading(:?-in-game)?|trailing(:?-in-game)?|tied(:?(?:-in)?-game)?|force-dates|first-half|second-half|pre-all-star|post-all-star|outdoors|indoors|winter-classic|heritage-classic|stadium-series|t:[\w-]+|o:[\w-]+|m:[\w-]+|d:[\w-]+|dt:[\w-]+|exact-shot-type:[\w-]+|shot-type:[\w-]+|minor|stick-infraction|tip-in|deflected|deflection|wrist-shot|slap-shot|snap-shot|back-hand|wrap-around|team-franchise:[\w-]+|opponent-franchise:[\w-]+|franchise:[\w-]+|tf:[\w-]+|of:[\w-]+|f:[\w-]+|team:[\w-]+|opponent:[\w-]+|new-moon|waning-crescent|third-quarter|waning-gibbous|full-moon|waxing-gibbous|first-quarter|waxing-crescent|tv-network:[\w-]+|raw-tv-network:[\w-]+|national-tv-network:[\w-]+|national-raw-tv-network:[\w-]+|any-national-tv-network:[\w-]+|any-national-raw-tv-network:[\w-]+|any-us-national-game|us-national-game|any-ca-national-game|ca-national-game|any-national-game|national-game|local-event-time:[\S-]+|local-start-time:[\S-]+|time-zone:[\S-]+|exact-time-zone:[\S-]+|state:[\w-]+|exact-state:[\w-]+|month:[\w-]+|day:[\w-]+|date:[\w-]+|series-game:[\w-]+|gm:[\w-]+|game:[\w-]+|season-gm:[\w-]+|season-game:[\w-]+|season:[\w-]+|season-reversed:[\w-]+|seasons:[\w-]+|seasons-reversed:[\w-]+|crgm:[\w-]+|career-game-reversed:[\w-]+|team-game-reversed:[\w-]+|season-game-reversed:[\w-]+|game-reversed:[\w-]+|career-game:[\w-]+|tmgm:[\w-]+|team-game:[\w-]+|game-number:[\w-]+|season-number:[\w-]+|number:[\w-]+|dr:[\w-]+|starts-days-rest:[\w-]+|days-rest:[\w-]+|prv-dr:[\w-]+|previous-days-rest:[\w-]+|upc-dr:[\w-]+|upcoming-starts-days-rest:[\w-]+|upcoming-days-rest:[\w-]+|gr:[\w-]+|games-rest:[\w-]+|starts-rest:[\w-]+|prv-gr:[\w-]+|-?starts?|-?started|-?starting|-?ignore-starts?|-?ignore-started?|-?ignore-starting|previous-games-rest:[\w-]+|upc-gr:[\w-]+|upcoming-games-rest:[\w-]+|days-in-a-row:[\w-]+|games-in-a-row:[\w-]+|starts-in-a-row:[\w-]+|prv-t:[\w-]+|prv-o:[\w-]+|upc-t:[\w-]+|upc-o:[\w-]+|upcoming-same-opponent|previous-same-opponent|previous-franchise:[\w-]+|previous-team-franchise:[\w-]+|previous-opponent-franchise:[\w-]+|upcoming-franchise:[\w-]+|upcoming-team-franchise:[\w-]+|upcoming-opponent-franchise:[\w-]+|previous-team:[\w-]+|previous-opponent:[\w-]+|upcoming-team:[\w-]+|upcoming-opponent:[\w-]+|goalie-angle:[\S-]+|score:[\S-]+|final-score:[\S-]+|previous-score:[\S-]+|upcoming-score:[\S-]+|final-team-score:[\w-]+|final-opponent-score:[\w-]+|final-score-margin:[\S-]+|final-score-difference:[\S-]+|team-score:[\w-]+|opponent-score:[\w-]+|score-margin:[\S-]+|score-difference:[\S-]+|period:[\w-]+|raw-x-coordinate:[\S-]+|raw-y-coordinate:[\S-]+|raw-coordinates:[\S-]+|absolute-x-coordinate:[\w-]+|absolute-y-coordinate:[\w-]+|absolute-coordinates:[\w-]+|x-coordinate:[\S-]+|y-coordinate:[\S-]+|coordinates:[\S-]+|within-distance:[\S-]+|raw-within-distance:[\S-]+|absolute-within-distance:[\S-]+|team-skaters:[\w-]+|opponent-skaters:[\w-]+|team-players:[\w-]+|opponent-players:[\w-]+|period-time-remaining:[\S-]+|period-time:[\S-]+|season-st:[\S-]+|period-stat:[\S-]+|season-stat:[\S-]+|season-prv-st:[\S-]+|season-previous-stat:[\S-]+|season-upc-st:[\S-]+|season-upcoming-stat:[\S-]+|st:[\S-]+|stat:[\S-]+|prv-st:[\S-]+|previous-stat:[\S-]+|upc-st:[\S-]+|upcoming-stat:[\S-]+|min-st:[\S-]+|min-stat:[\S-]+|max-st:[\S-]+|max-stat:[\S-]+|totalgames-st:[\S-]+|totalgames-stat:[\S-]+|max-str:[\S-]+|max-streak:[\S-]+|max-stretch:[\S-]+|ctn-str:[\S-]+|count-streak:[\S-]+|q:[\S-]+|quickest:[\S-]+|s:[\S-]+|slowest:[\S-]+|game-event-stat:[\S-]+|game-event-stat-reversed:[\S-]+|game-event-stats:[\S-]+|game-event-stats-reversed:[\S-]+|event-stat:[\S-]+|event-stat-reversed:[\S-]+|event-stats:[\S-]+|event-stats-reversed:[\S-]+|starting-game-event-stat:[\S-]+|starting-game-event-stat-reversed:[\S-]+|starting-game-event-stats:[\S-]+|starting-game-event-stats-reversed:[\S-]+|starting-event-stat:[\S-]+|starting-event-stat-reversed:[\S-]+|starting-event-stats:[\S-]+|starting-event-stats-reversed:[\S-]+|with-new-team|with-new-franchise|summer|spring|winter|fall|autumn|away|home|road|previous-away|previous-home|previous-road|upcoming-away|upcoming-home|upcoming-road|win(?:s)?|loss(?:es)?|tie(?:es)?|w-ot|w-so|l-ot|l-so|so|ot|w|l|t|prv-w|prv-l|prv-t|prv-w-ot|prv-w-so|prv-l-ot|prv-l-so|prv-so|prv-ot|upc-w|upc-l|upc-t|upc-w-ot|upc-w-so|upc-l-ot|upc-l-so|upc-so|upc-ot|previous-win(?:s)?|previous-loss(?:es)?|previous-tie(?:es)|upcoming-win(?:s)?|upcoming-loss(?:es)?|upcoming-tie(?:es)|prv-t-w|prv-t-l|prv-t-t|prv-t-w-ot|prv-t-w-so|prv-t-l-ot|prv-t-l-so|prv-t-so|prv-t-ot|upc-t-w|upc-t-l|upc-t-t|upc-t-w-ot|upc-t-w-so|upc-t-l-ot|upc-t-l-so|upc-t-so|upc-t-ot|previous-team-win(?:s)?|previous-team-loss(?:es)?|previous-team-tie(?:es)|upcoming-team-win(?:s)?|upcoming-team-loss(?:es)?|upcoming-team-tie(?:es)|series-team-wins:[\w-]+|series-opponent-wins:[\w-]+|series-score-margin:[\S-]+|series-score-difference:[\S-]+|series-score:[\w-]+|current-team-wins:[\w-]+|current-team-losses:[\w-]+|current-team-ties:[\w-]+|current-team-points:[\w-]+|current-team-games-over-500:[\S-]+|current-opponent-wins:[\w-]+|current-opponent-losses:[\w-]+|current-opponent-ties:[\w-]+|current-opponent-points:[\w-]+|current-opponent-games-over-500:[\S-]+|team-wins:[\w-]+|team-losses:[\w-]+|team-ties:[\w-]+|team-points:[\w-]+|team-games-over-500:[\S-]+|opponent-wins:[\w-]+|opponent-losses:[\w-]+|opponent-ties:[\w-]+|opponent-points:[\w-]+|opponent-games-over-500:[\S-]+|opponent-goals?-rank:[\S-]+|opponent-standings-rank:[\S-]+|opponent-goals?-allowed-rank:[\S-]+|current-opponent-win(?:ning)?-percent:[\S-]+|opponent-win(?:ning)?-percent:[\S-]+|current-opponent-points-percent:[\S-]+|opponent-points-percent:[\S-]+|team-goals?-rank:[\S-]+|team-standings-rank:[\S-]+|team-goals?-allowed-rank:[\S-]+|years?:[\w-]+|current-team-win(?:ning)?-percent:[\S-]+|team-win(?:ning)?-percent:[\S-]+|current-team-points-percent:[\S-]+|team-points-percent:[\S-]+|early-?afternoon|late-?afternoon|morning|early|afternoon|day|night(?:time)?|late|team-conference:[\S-]+|opponent-conference:[\S-]+|team-division:[\S-]+|opponent-division:[\S-]+|birthda(?:y|te)|skat(?:(?:er)|(?:ing))|position:[\S-]+|left-wing(?:er)?|right-wing(?:er)?|center|defense(?:man)?|wing(?:er)?|forward|goalie|skater|" + all_months_re + r"|" + all_days_re + r")\b", time_frame)
                         for m in last_match:
                             qualifier_obj = {}
                             
@@ -9146,7 +9168,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 player_type["da_type"] = {
                                     "type" : "Goalie"
                                 }
-                            elif qualifier_str.startswith("t:") or qualifier_str.startswith("o:") or qualifier_str.startswith("team:") or qualifier_str.startswith("opponent:") or qualifier_str.startswith("franchise:") or qualifier_str.startswith("tf:") or qualifier_str.startswith("of:") or qualifier_str.startswith("f:") or qualifier_str.startswith("team-franchise:") or qualifier_str.startswith("opponent-franchise:") or qualifier_str.startswith("previous-franchise:") or qualifier_str.startswith("previous-team-franchise:") or qualifier_str.startswith("time-zone-abbreviation:") or qualifier_str.startswith("exact-time-zone-abbreviation:") or qualifier_str.startswith("time-zone-abbrev:") or qualifier_str.startswith("exact-time-zone-abbrev:") or qualifier_str.startswith("previous-opponent-franchise:") or qualifier_str.startswith("upcoming-franchise:") or qualifier_str.startswith("upcoming-team-franchise:") or qualifier_str.startswith("upcoming-opponent-franchise:") or qualifier_str.startswith("tv-network:") or qualifier_str.startswith("raw-tv-network:") or qualifier_str.startswith("prv-t:") or qualifier_str.startswith("prv-o:") or qualifier_str.startswith("previous-team:") or qualifier_str.startswith("previous-opponent:") or qualifier_str.startswith("upc-t:") or qualifier_str.startswith("upc-o:") or qualifier_str.startswith("upcoming-team:") or qualifier_str.startswith("upcoming-opponent:") or qualifier_str.startswith("team-conference:") or qualifier_str.startswith("opponent-conference:") or qualifier_str.startswith("team-division:") or qualifier_str.startswith("opponent-division:") or qualifier_str.startswith("national-tv-network:") or qualifier_str.startswith("national-raw-tv-network:") or qualifier_str.startswith("any-national-tv-network:") or qualifier_str.startswith("any-national-raw-tv-network:") or qualifier_str.startswith("position:") or qualifier_str.startswith("shot-type:") or qualifier_str.startswith("exact-shot-type:"):
+                            elif qualifier_str.startswith("t:") or qualifier_str.startswith("o:") or qualifier_str.startswith("team:") or qualifier_str.startswith("opponent:") or qualifier_str.startswith("franchise:") or qualifier_str.startswith("tf:") or qualifier_str.startswith("of:") or qualifier_str.startswith("f:") or qualifier_str.startswith("team-franchise:") or qualifier_str.startswith("opponent-franchise:") or qualifier_str.startswith("previous-franchise:") or qualifier_str.startswith("previous-team-franchise:") or qualifier_str.startswith("time-zone:") or qualifier_str.startswith("exact-time-zone:") or qualifier_str.startswith("state:") or qualifier_str.startswith("exact-state:") or qualifier_str.startswith("previous-opponent-franchise:") or qualifier_str.startswith("upcoming-franchise:") or qualifier_str.startswith("upcoming-team-franchise:") or qualifier_str.startswith("upcoming-opponent-franchise:") or qualifier_str.startswith("tv-network:") or qualifier_str.startswith("raw-tv-network:") or qualifier_str.startswith("prv-t:") or qualifier_str.startswith("prv-o:") or qualifier_str.startswith("previous-team:") or qualifier_str.startswith("previous-opponent:") or qualifier_str.startswith("upc-t:") or qualifier_str.startswith("upc-o:") or qualifier_str.startswith("upcoming-team:") or qualifier_str.startswith("upcoming-opponent:") or qualifier_str.startswith("team-conference:") or qualifier_str.startswith("opponent-conference:") or qualifier_str.startswith("team-division:") or qualifier_str.startswith("opponent-division:") or qualifier_str.startswith("national-tv-network:") or qualifier_str.startswith("national-raw-tv-network:") or qualifier_str.startswith("any-national-tv-network:") or qualifier_str.startswith("any-national-raw-tv-network:") or qualifier_str.startswith("position:") or qualifier_str.startswith("shot-type:") or qualifier_str.startswith("exact-shot-type:"):
                                 split_str = "-"
                                 if qualifier_str.startswith("t:"):
                                     qual_str = "t:"
@@ -9271,18 +9293,18 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                     }
                                     extra_stats.add("Shot")
                                     extra_stats.add("current-stats")
-                                elif qualifier_str.startswith("time-zone-abbrev:"):
-                                    qual_str = "time-zone-abbrev:"
-                                    qual_type = "Time Zone Abbreviation"
-                                elif qualifier_str.startswith("exact-time-zone-abbrev:"):
-                                    qual_str = "exact-time-zone-abbrev:"
-                                    qual_type = "Exact Time Zone Abbreviation"
-                                elif qualifier_str.startswith("time-zone-abbreviation:"):
-                                    qual_str = "time-zone-abbreviation:"
-                                    qual_type = "Time Zone Abbreviation"
-                                elif qualifier_str.startswith("exact-time-zone-abbreviation:"):
-                                    qual_str = "exact-time-zone-abbreviation:"
-                                    qual_type = "Exact Time Zone Abbreviation"
+                                elif qualifier_str.startswith("state:"):
+                                    qual_str = "state:"
+                                    qual_type = "State"
+                                elif qualifier_str.startswith("exact-state:"):
+                                    qual_str = "exact-state:"
+                                    qual_type = "Exact State"
+                                elif qualifier_str.startswith("time-zone:"):
+                                    qual_str = "time-zone:"
+                                    qual_type = "Time Zone"
+                                elif qualifier_str.startswith("exact-time-zone:"):
+                                    qual_str = "exact-time-zone:"
+                                    qual_type = "Exact Time Zone"
                                 
                                 qualifier_obj["values"] = re.split(r"(?<!\\)" + split_str, re.split(r"(?<!\\)" + qual_str, qualifier_str)[1])
 
@@ -13920,9 +13942,9 @@ def determine_raw_str(subbb_frame):
                             if sub_qualifier in qualifier_map[qualifier]:
                                 qual_str += qualifier_map[qualifier][sub_qualifier]
                             else:
-                                if qualifier == "Team" or qualifier == "Opponent" or qualifier == "TV Network" or qualifier == "Raw TV Network" or qualifier == "National TV Network" or qualifier == "National Raw TV Network" or qualifier == "Any National TV Network" or qualifier == "Any National Raw TV Network" or qualifier == "Team Franchise" or qualifier == "Opponent Franchise" or qualifier == "Previous Team" or qualifier == "Previous Team Franchise" or qualifier == "Upcoming Team Franchise" or qualifier == "Previous Opponent Franchise" or qualifier == "Upcoming Opponent Franchise" or qualifier == "Upcoming Team" or qualifier == "Previous Opponent" or qualifier == "Upcoming Opponent" or qualifier == "Formula" or qualifier == "Season Formula" or qualifier == "Event Formula" or qualifier == "Position" or qualifier == "Time Zone Abbreviation" or qualifier == "Exact Time Zone Abbreviation":
+                                if qualifier == "Team" or qualifier == "Opponent" or qualifier == "TV Network" or qualifier == "Raw TV Network" or qualifier == "National TV Network" or qualifier == "National Raw TV Network" or qualifier == "Any National TV Network" or qualifier == "Any National Raw TV Network" or qualifier == "Team Franchise" or qualifier == "Opponent Franchise" or qualifier == "Previous Team" or qualifier == "Previous Team Franchise" or qualifier == "Upcoming Team Franchise" or qualifier == "Previous Opponent Franchise" or qualifier == "Upcoming Opponent Franchise" or qualifier == "Upcoming Team" or qualifier == "Previous Opponent" or qualifier == "Upcoming Opponent" or qualifier == "Formula" or qualifier == "Season Formula" or qualifier == "Event Formula" or qualifier == "Position" or qualifier == "State" or qualifier == "Exact State" or qualifier == "Time Zone" or qualifier == "Exact Time Zone":
                                     sub_qualifier = sub_qualifier.upper()
-                                elif qualifier == "Holiday" or qualifier == "Arena" or qualifier == "Exact Arena" or qualifier == "Outdoor Event" or qualifier == "Exact Outdoor Event" or qualifier == "Penalty Type" or qualifier == "Penalty Severity" or qualifier == "Shot Type" or qualifier == "Exact Penalty Type" or qualifier == "Exact Penalty Severity" or qualifier == "Exact Shot Type" or qualifier == "Moon Phase":
+                                elif qualifier == "Holiday" or qualifier == "Arena" or qualifier == "Exact Arena" or qualifier == "City" or qualifier == "Exact City" or qualifier == "Country" or qualifier == "Exact Country" or qualifier == "Outdoor Event" or qualifier == "Exact Outdoor Event" or qualifier == "Penalty Type" or qualifier == "Penalty Severity" or qualifier == "Shot Type" or qualifier == "Exact Penalty Type" or qualifier == "Exact Penalty Severity" or qualifier == "Exact Shot Type" or qualifier == "Moon Phase":
                                     sub_qualifier = sub_qualifier.title()
                                 elif qualifier == "Team Conference" or qualifier == "Opponent Conference" or qualifier == "Team Division"  or qualifier == "Opponent Division":
                                     sub_qualifier = sub_qualifier.title()
@@ -14375,7 +14397,7 @@ def handle_player_data(player_data, time_frame, player_type, player_page, valid_
     
     has_schedule_stat_qual = False
     for qualifier in time_frame["qualifiers"]:
-        if "Season" not in qualifier and "Event Stat" not in qualifier and ("Stat" in qualifier or "Streak" in qualifier or "Stretch" in qualifier or ("Formula" in qualifier and qualifier != "Event Formula") or "Quickest" in qualifier or "Slowest" in qualifier):
+        if "Season" not in qualifier and "Event Stat" not in qualifier and "State" not in qualifier and ("Stat" in qualifier or "Streak" in qualifier or "Stretch" in qualifier or ("Formula" in qualifier and qualifier != "Event Formula") or "Quickest" in qualifier or "Slowest" in qualifier):
             for qual_object in time_frame["qualifiers"][qualifier]:
                 for sub_qual_object in qual_object["values"]:
                     if "Formula" in qualifier:
@@ -14426,7 +14448,7 @@ def handle_player_data(player_data, time_frame, player_type, player_page, valid_
             if str(year) not in all_star_games:
                 needs_half = True
 
-    if has_schedule_stat_qual or "Time" in time_frame["qualifiers"] or "Arena" in time_frame["qualifiers"] or "Exact Arena" in time_frame["qualifiers"] or "Result" in time_frame["qualifiers"] or "Previous Result" in time_frame["qualifiers"] or "Upcoming Result" in time_frame["qualifiers"] or "Elimination" in time_frame["qualifiers"] or "Clinching" in time_frame["qualifiers"] or "Elimination Or Clinching" in time_frame["qualifiers"] or "Winner Take All" in time_frame["qualifiers"] or "Ahead In Series" in time_frame["qualifiers"] or "Behind In Series" in time_frame["qualifiers"] or "Even In Series" in time_frame["qualifiers"] or "Series Team Wins" in time_frame["qualifiers"] or "Series Opponent Wins" in time_frame["qualifiers"] or "Series Score Margin" in time_frame["qualifiers"] or "Series Score Difference" in time_frame["qualifiers"] or "Round" in time_frame["qualifiers"] or "Series Game" in time_frame["qualifiers"] or "Final Team Score" in time_frame["qualifiers"] or "Final Opponent Score" in time_frame["qualifiers"] or "Final Score Margin" in time_frame["qualifiers"] or "Final Score Difference" in time_frame["qualifiers"] or "Team Game" in time_frame["qualifiers"] or "Team Game Reversed" in time_frame["qualifiers"] or "Games Rest" in time_frame["qualifiers"] or "Starts Rest" in time_frame["qualifiers"] or "Days In A Row" in time_frame["qualifiers"] or "Games In A Row" in time_frame["qualifiers"] or "Starts In A Row" in time_frame["qualifiers"] or "Previous Team Result" in time_frame["qualifiers"] or "Upcoming Team Result" in time_frame["qualifiers"] or "National Game" in time_frame["qualifiers"] or "Any National Game" in time_frame["qualifiers"] or "US National Game" in time_frame["qualifiers"] or "Any US National Game" in time_frame["qualifiers"] or "CA National Game" in time_frame["qualifiers"] or "Any CA National Game" in time_frame["qualifiers"] or "TV Network" in time_frame["qualifiers"] or "Raw TV Network" in time_frame["qualifiers"] or "National TV Network" in time_frame["qualifiers"] or "National Raw TV Network" in time_frame["qualifiers"] or "Any National TV Network" in time_frame["qualifiers"] or "Any National Raw TV Network" in time_frame["qualifiers"] or "Start Time" in time_frame["qualifiers"] or "Current Winning Opponent" in time_frame["qualifiers"] or "Current Losing Opponent" in time_frame["qualifiers"] or "Current Tied Opponent" in time_frame["qualifiers"] or "Current Winning Or Tied Opponent" in time_frame["qualifiers"] or "Current Losing Or Tied Opponent" in time_frame["qualifiers"] or "Current Winning Team" in time_frame["qualifiers"] or "Current Losing Team" in time_frame["qualifiers"] or "Current Tied Team" in time_frame["qualifiers"] or "Current Winning Or Tied Team" in time_frame["qualifiers"] or "Current Losing Or Tied Team" in time_frame["qualifiers"] or "Current Team Win Percentage" in time_frame["qualifiers"] or "Current Opponent Win Percentage" in time_frame["qualifiers"] or "Current Team Points Percentage" in time_frame["qualifiers"] or "Current Opponent Points Percentage" in time_frame["qualifiers"] or "Current Team Wins" in time_frame["qualifiers"] or "Current Team Losses" in time_frame["qualifiers"] or "Current Team Ties" in time_frame["qualifiers"] or "Current Team Points" in time_frame["qualifiers"] or "Current Opponent Wins" in time_frame["qualifiers"] or "Current Opponent Losses" in time_frame["qualifiers"] or "Current Opponent Ties" in time_frame["qualifiers"] or "Current Opponent Points" in time_frame["qualifiers"] or "Current Team Games Over 500" in time_frame["qualifiers"] or "Current Opponent Games Over 500" in time_frame["qualifiers"] or needs_half or "score" in extra_stats or "record" in extra_stats:
+    if has_schedule_stat_qual or "Time" in time_frame["qualifiers"] or "Arena" in time_frame["qualifiers"] or "Exact Arena" in time_frame["qualifiers"] or "Local Start Time" in time_frame["qualifiers"] or "Local Event Time" in time_frame["qualifiers"] or "Time Zone" in time_frame["qualifiers"]  or "Exact Time Zone" in time_frame["qualifiers"] or "City" in time_frame["qualifiers"]  or "Exact City" in time_frame["qualifiers"] or "State" in time_frame["qualifiers"]  or "Exact State" in time_frame["qualifiers"] or "Country" in time_frame["qualifiers"]  or "Exact Country" in time_frame["qualifiers"] or "Result" in time_frame["qualifiers"] or "Previous Result" in time_frame["qualifiers"] or "Upcoming Result" in time_frame["qualifiers"] or "Elimination" in time_frame["qualifiers"] or "Clinching" in time_frame["qualifiers"] or "Elimination Or Clinching" in time_frame["qualifiers"] or "Winner Take All" in time_frame["qualifiers"] or "Ahead In Series" in time_frame["qualifiers"] or "Behind In Series" in time_frame["qualifiers"] or "Even In Series" in time_frame["qualifiers"] or "Series Team Wins" in time_frame["qualifiers"] or "Series Opponent Wins" in time_frame["qualifiers"] or "Series Score Margin" in time_frame["qualifiers"] or "Series Score Difference" in time_frame["qualifiers"] or "Round" in time_frame["qualifiers"] or "Series Game" in time_frame["qualifiers"] or "Final Team Score" in time_frame["qualifiers"] or "Final Opponent Score" in time_frame["qualifiers"] or "Final Score Margin" in time_frame["qualifiers"] or "Final Score Difference" in time_frame["qualifiers"] or "Team Game" in time_frame["qualifiers"] or "Team Game Reversed" in time_frame["qualifiers"] or "Games Rest" in time_frame["qualifiers"] or "Starts Rest" in time_frame["qualifiers"] or "Days In A Row" in time_frame["qualifiers"] or "Games In A Row" in time_frame["qualifiers"] or "Starts In A Row" in time_frame["qualifiers"] or "Previous Team Result" in time_frame["qualifiers"] or "Upcoming Team Result" in time_frame["qualifiers"] or "National Game" in time_frame["qualifiers"] or "Any National Game" in time_frame["qualifiers"] or "US National Game" in time_frame["qualifiers"] or "Any US National Game" in time_frame["qualifiers"] or "CA National Game" in time_frame["qualifiers"] or "Any CA National Game" in time_frame["qualifiers"] or "TV Network" in time_frame["qualifiers"] or "Raw TV Network" in time_frame["qualifiers"] or "National TV Network" in time_frame["qualifiers"] or "National Raw TV Network" in time_frame["qualifiers"] or "Any National TV Network" in time_frame["qualifiers"] or "Any National Raw TV Network" in time_frame["qualifiers"] or "Start Time" in time_frame["qualifiers"] or "Current Winning Opponent" in time_frame["qualifiers"] or "Current Losing Opponent" in time_frame["qualifiers"] or "Current Tied Opponent" in time_frame["qualifiers"] or "Current Winning Or Tied Opponent" in time_frame["qualifiers"] or "Current Losing Or Tied Opponent" in time_frame["qualifiers"] or "Current Winning Team" in time_frame["qualifiers"] or "Current Losing Team" in time_frame["qualifiers"] or "Current Tied Team" in time_frame["qualifiers"] or "Current Winning Or Tied Team" in time_frame["qualifiers"] or "Current Losing Or Tied Team" in time_frame["qualifiers"] or "Current Team Win Percentage" in time_frame["qualifiers"] or "Current Opponent Win Percentage" in time_frame["qualifiers"] or "Current Team Points Percentage" in time_frame["qualifiers"] or "Current Opponent Points Percentage" in time_frame["qualifiers"] or "Current Team Wins" in time_frame["qualifiers"] or "Current Team Losses" in time_frame["qualifiers"] or "Current Team Ties" in time_frame["qualifiers"] or "Current Team Points" in time_frame["qualifiers"] or "Current Opponent Wins" in time_frame["qualifiers"] or "Current Opponent Losses" in time_frame["qualifiers"] or "Current Opponent Ties" in time_frame["qualifiers"] or "Current Opponent Points" in time_frame["qualifiers"] or "Current Team Games Over 500" in time_frame["qualifiers"] or "Current Opponent Games Over 500" in time_frame["qualifiers"] or needs_half or "score" in extra_stats or "record" in extra_stats:
         all_rows, missing_games = handle_schedule_stats(player_data, all_rows, time_frame["qualifiers"], time_frame["playoffs"], missing_games)
     
     if "Winning Opponent" in time_frame["qualifiers"] or "Losing Opponent" in time_frame["qualifiers"] or "Tied Opponent" in time_frame["qualifiers"] or "Winning Or Tied Opponent" in time_frame["qualifiers"] or "Losing Or Tied Opponent" in time_frame["qualifiers"] or "Playoff Opponent" in time_frame["qualifiers"] or "Cup Winner Opponent" in time_frame["qualifiers"] or "Conference Winner Opponent" in time_frame["qualifiers"] or "Opponent Goals Rank" in time_frame["qualifiers"] or "Opponent Goals Allowed Rank" in time_frame["qualifiers"] or "Opponent Win Percentage" in time_frame["qualifiers"] or "Opponent Points Percentage" in time_frame["qualifiers"] or "Winning Team" in time_frame["qualifiers"] or "Losing Team" in time_frame["qualifiers"] or "Tied Team" in time_frame["qualifiers"] or "Winning Or Tied Team" in time_frame["qualifiers"] or "Losing Or Tied Team" in time_frame["qualifiers"] or "Playoff Team" in time_frame["qualifiers"] or "Cup Winner Team" in time_frame["qualifiers"] or "Conference Winner Team" in time_frame["qualifiers"] or "Team Goals Rank" in time_frame["qualifiers"] or "Team Goals Allowed Rank" in time_frame["qualifiers"] or "Team Win Percentage" in time_frame["qualifiers"] or "Team Points Percentage" in time_frame["qualifiers"] or "Team Wins" in time_frame["qualifiers"] or "Team Losses" in time_frame["qualifiers"] or "Team Ties" in time_frame["qualifiers"] or "Team Points" in time_frame["qualifiers"] or "Opponent Wins" in time_frame["qualifiers"] or "Opponent Losses" in time_frame["qualifiers"] or "Opponent Ties" in time_frame["qualifiers"] or "Opponent Points" in time_frame["qualifiers"] or "Team Conference" in time_frame["qualifiers"] or "Team Division" in time_frame["qualifiers"] or "Opponent Conference" in time_frame["qualifiers"] or "Opponent Division" in time_frame["qualifiers"] or "Interconference" in time_frame["qualifiers"] or "Intraconference" in time_frame["qualifiers"] or "Intradivision" in time_frame["qualifiers"] or "Interdivision" in time_frame["qualifiers"] or "Team Standings Rank" in time_frame["qualifiers"] or "Opponent Standings Rank" in time_frame["qualifiers"] or "Team Games Over 500" in time_frame["qualifiers"] or "Opponent Games Over 500" in time_frame["qualifiers"]:
@@ -14446,11 +14468,11 @@ def handle_player_data(player_data, time_frame, player_type, player_page, valid_
                 new_rows.append(row_data)
         all_rows = new_rows
     
-    if not "hide-advanced" in extra_stats or ("Game Number" in time_frame["qualifiers"] or "Local Start Time" in time_frame["qualifiers"] or "Time Zone Abbreviation" in time_frame["qualifiers"]  or "Exact Time Zone Abbreviation" in time_frame["qualifiers"] or "penalties" in extra_stats or "star" in extra_stats):
+    if not "hide-advanced" in extra_stats or ("Game Number" in time_frame["qualifiers"] or "penalties" in extra_stats or "star" in extra_stats):
         if ("Event Stat" in time_frame["qualifiers"] or "Event Stat Reversed" in time_frame["qualifiers"] or "Event Stats" in time_frame["qualifiers"] or "Event Stats Reversed" in time_frame["qualifiers"] or "Starting Event Stat" in time_frame["qualifiers"] or "Starting Event Stat Reversed" in time_frame["qualifiers"] or "Starting Event Stats" in time_frame["qualifiers"] or "Starting Event Stats Reversed" in time_frame["qualifiers"]):
             all_rows, missing_games, missing_toi = handle_nhl_game_stats_single_thread(player_data, all_rows, time_frame, player_link, player_type, missing_games, missing_toi, extra_stats)
             player_data["stat_values"]["is_indv_shift_data"] = True
-        elif "Game Number" in time_frame["qualifiers"] or "Local Start Time" in time_frame["qualifiers"] or "Time Zone Abbreviation" in time_frame["qualifiers"]  or "Exact Time Zone Abbreviation" in time_frame["qualifiers"] or "penalties" in extra_stats or "star" in extra_stats or "current-stats" in extra_stats:
+        elif "Game Number" in time_frame["qualifiers"] or "penalties" in extra_stats or "star" in extra_stats or "current-stats" in extra_stats:
             all_rows, missing_games, missing_toi = handle_nhl_game_stats(player_data, all_rows, time_frame, player_link, player_type, missing_games, missing_toi, extra_stats)
             player_data["stat_values"]["is_indv_shift_data"] = True
 
@@ -16743,14 +16765,6 @@ def handle_nhl_game_stats(player_data, all_rows, time_frame, player_link, player
         for row_data in all_rows:
             if row_data["Year"] < 2010:
                 games_to_skip.add(row_data["NHLGameLink"])
-    if "Local Event Time" in time_frame["qualifiers"] or "Local Start Time" in time_frame["qualifiers"]:
-        for row_data in all_rows:
-            if row_data["Year"] < 2007:
-                games_to_skip.add(row_data["NHLGameLink"])
-    if "Time Zone Abbreviation" in time_frame["qualifiers"] or "Exact Time Zone Abbreviation":
-        for row_data in all_rows:
-            if row_data["Year"] < 2000:
-                games_to_skip.add(row_data["NHLGameLink"])
     
     all_rows = sorted(all_rows, key=lambda row: row["Date"])
     return get_nhl_game_schedule(player_data, all_rows, games_to_skip, player_link, player_type, time_frame, missing_games, missing_toi, extra_stats)
@@ -16997,14 +17011,6 @@ def handle_nhl_game_stats_single_thread(player_data, all_rows, time_frame, playe
         for row_data in all_rows:
             if row_data["Year"] < 2010:
                 games_to_skip.add(row_data["NHLGameLink"])
-    if "Local Event Time" in time_frame["qualifiers"] or "Local Start Time" in time_frame["qualifiers"]:
-        for row_data in all_rows:
-            if row_data["Year"] < 2007:
-                games_to_skip.add(row_data["NHLGameLink"])
-    if "Time Zone Abbreviation" in time_frame["qualifiers"] or "Exact Time Zone Abbreviation":
-        for row_data in all_rows:
-            if row_data["Year"] < 2000:
-                games_to_skip.add(row_data["NHLGameLink"])
 
     all_rows = sorted(all_rows, key=lambda row: row["Date"])
     return get_nhl_game_schedule_single_thread(player_data, all_rows, games_to_skip, player_link, player_type, time_frame, missing_games, missing_toi, extra_stats)
@@ -17106,10 +17112,6 @@ def get_nhl_schedule(player_data, all_rows, qualifiers):
                 row_data = {}
                 row_data["Date"] = dateutil.parser.parse(game["date"]).date()
                 row_data["Arena"] = game_data["venue"]["name"]
-                if "id" in game_data["venue"]:
-                    row_data["ArenaID"] = game_data["venue"]["id"]
-                else:
-                    row_data["ArenaID"] = None
                 game_datetime = dateutil.parser.parse(game_data["gameDate"])
                 game_datetime = game_datetime.astimezone(timezone("US/Eastern"))
                 
@@ -17508,7 +17510,7 @@ def handle_result_qualifiers(game_data, row_data, sub_missing_games, time_frame,
         setup_starting_game_stats(row_data, game_data, index, player_type, player_link, time_frame["qualifiers"])
 
     raw_row_data = row_data
-    if "Game Number" in time_frame["qualifiers"] or "Local Start Time" in time_frame["qualifiers"] or "Time Zone Abbreviation" in time_frame["qualifiers"]  or "Exact Time Zone Abbreviation" in time_frame["qualifiers"]:
+    if "Game Number" in time_frame["qualifiers"]:
         if sub_missing_games:
             if sub_missing_games:
                 count_info["missing_games"].append("[" + str(row_data["Date"]) + "](" + "https://www.nhl.com/gamecenter/" + str(row_data["NHLGameLink"]) + ")")
@@ -18650,15 +18652,11 @@ def set_row_data(player_game_info, row_data):
     row_data["ThirdStar"] = player_game_info["ThirdStar"]
     row_data["TotalStar"] = player_game_info["FirstStar"] + player_game_info["SecondStar"] + player_game_info["ThirdStar"]
     row_data["Number"] = player_game_info["Number"]
-    row_data["StartTime"] = player_game_info["StartTime"]
-    row_data["TimeZoneID"] = player_game_info["TimeZoneID"]
-    row_data["TimeZoneOffset"] = player_game_info["TimeZoneOffset"]
-    row_data["TimeZoneRaw"] = player_game_info["TimeZoneRaw"]
 
 def get_game_data(index, player_data, row_data, player_id, player_type, time_frame, extra_stats):
     game_data, missing_games, sub_data = setup_game_data(player_data, row_data, player_id, player_type, time_frame)
     if game_data["missing_data"]:
-        if row_data["Year"] < 2000 and "Game Number" not in time_frame["qualifiers"] and not "Local Start Time" in time_frame["qualifiers"] and not "Time Zone Abbreviation" in time_frame["qualifiers"] and not "Exact Time Zone Abbreviation" in time_frame["qualifiers"]:
+        if row_data["Year"] < 2000 and "Game Number" not in time_frame["qualifiers"]:
             game_data, missing_games, sub_data = setup_href_game_data(player_data, row_data, player_id, player_type, time_frame)
             if game_data["missing_data"]:
                 return game_data, row_data, missing_games
@@ -19394,10 +19392,6 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
 def setup_game_data(player_data, row_data, player_id, player_type, time_frame):
     game_data = {
         "Date" : row_data["Date"],
-        "StartTime" : None,
-        "TimeZoneID" : None,
-        "TimeZoneOffset" : None,
-        "TimeZoneRaw" : None,
         "player_type" : player_type,
         "player_id" : player_id,
         "team_skaters" : set(),
@@ -19494,11 +19488,6 @@ def setup_game_data(player_data, row_data, player_id, player_type, time_frame):
     game_data["opp_goals"] = sub_data["liveData"]["linescore"]["teams"][game_data["opp_str"]]["goals"]
     game_data["is_shootout"] = "hasShootout" in sub_data["liveData"]["linescore"] and sub_data["liveData"]["linescore"]["hasShootout"]
 
-    game_data["StartTime"] = dateutil.parser.parse(sub_data["gameData"]["datetime"]["dateTime"])
-
-    if "Local Event Time" in time_frame["qualifiers"] or "Local Start Time" in time_frame["qualifiers"] or "Time Zone Abbreviation" in time_frame["qualifiers"] or "Exact Time Zone Abbreviation" in time_frame["qualifiers"]:
-        get_html_time_zone(row_data["NHLGameLink"], game_data)
-
     for period in sub_data["liveData"]["linescore"]["periods"]:
         game_data["periods"].append(period["num"])
     
@@ -19593,10 +19582,6 @@ def setup_game_data(player_data, row_data, player_id, player_type, time_frame):
 def setup_href_game_data(player_data, row_data, player_id, player_type, time_frame):
     game_data = {
         "Date" : row_data["Date"],
-        "StartTime" : None,
-        "TimeZoneID" : None,
-        "TimeZoneOffset" : None,
-        "TimeZoneRaw" : None,
         "team_skaters" : set(),
         "team_goalies" : set(),
         "team_players" : set(),
@@ -19752,105 +19737,6 @@ def setup_href_game_data(player_data, row_data, player_id, player_type, time_fra
         game_data["periods"].append(period)
 
     return game_data, missing_games, None
-
-def get_html_time_zone(og_game_id, game_data):
-    try:
-        game_id = str(og_game_id)
-        sub_year = int(game_id[:4])
-        year_str = str(sub_year)
-        year_str += str(sub_year + 1)
-        game_id = game_id[4:]
-        request = urllib.request.Request(nhl_html_summary_report_format.format(year_str, game_id), headers=request_headers)
-        response, player_page_xml = url_request_lxml(request)
-    except urllib.error.HTTPError as err:
-        if err.status == 404:
-            return
-        else:
-            raise
-
-    time_zones = {
-        "EST" : {
-            "offset" : -5,
-            "raw" : "ET"
-        },
-        "EDT" : {
-            "offset" : -4,
-            "raw" : "ET"
-        },
-        "CST" : {
-            "offset" : -6,
-            "raw" : "CT"
-        },
-        "CDT" : {
-            "offset" : -5,
-            "raw" : "CT"
-        },
-        "MST" : {
-            "offset" : -7,
-            "raw" : "MT"
-        },
-        "MDT" : {
-            "offset" : -6,
-            "raw" : "MT"
-        },
-        "PST" : {
-            "offset" : -8,
-            "raw" : "PT"
-        },
-        "PDT" : {
-            "offset" : -7,
-            "raw" : "PT"
-        },
-        "CEST" : {
-            "offset" : 2,
-            "raw" : "CET"
-        },
-        "CET" : {
-            "offset" : 1,
-            "raw" : "CET"
-        },
-        "BST" : {
-            "offset" : 1,
-            "raw" : "GMT"
-        },
-        "GMT" : {
-            "offset" : 0,
-            "raw" : "GMT"
-        },
-    }
-
-    if not player_page_xml.getroot():
-        return
-
-    
-    game_info_table = player_page_xml.xpath("body//table[@id = 'GameInfo']")
-    if game_info_table:
-        game_info_table = game_info_table[0]
-        game_info_rows = game_info_table.xpath(".//tr")
-        for game_info_row in game_info_rows:
-            last_match = re.search(r"\d{1,2}:\d{1,2}\s+(\w+)", str(game_info_row.text_content()).lower().strip())
-            if last_match:
-                game_data["TimeZoneID"] = last_match.group(1).upper()
-                game_data["TimeZoneOffset"] = time_zones[last_match.group(1).upper()]["offset"]
-                game_data["TimeZoneRaw"] = time_zones[last_match.group(1).upper()]["raw"]
-                break
-    
-        if not game_data["TimeZoneID"]:
-            for game_info_row in game_info_rows:
-                last_match = re.search(r"start\s:\s+(\w+)", str(game_info_row.text_content()).lower().strip())
-                if last_match:
-                    game_data["TimeZoneID"] = last_match.group(1).upper()
-                    game_data["TimeZoneOffset"] = time_zones[last_match.group(1).upper()]["offset"]
-                    game_data["TimeZoneRaw"] = time_zones[last_match.group(1).upper()]["raw"]
-                    break
-    else:
-        center = player_page_xml.xpath("body//center")[1]
-        pot_text_rows = str(center.text_content().lower().strip()).split("\n")
-        for pot_text_row in pot_text_rows:
-            last_match = re.search(r"\d{1,2}:\d{1,2}\s+(?:am|pm)\s+(\w+)", pot_text_row.strip())
-            if last_match:
-                game_data["TimeZoneRaw"] = last_match.group(1).upper()
-                break
             
 def is_player_on_ice(shift_data, team_on_ice, opp_on_ice, period, period_time, player_id, is_team, is_faceoff=False):
     if is_team and team_on_ice:
@@ -22057,65 +21943,6 @@ def perform_nhl_game_qualifiers(row, qualifiers):
                 if not (row["Number"] >= qual_object["values"]["start_val"] and row["Number"] <= qual_object["values"]["end_val"]):
                     return False
     
-    if "Local Start Time" in qualifiers:
-        if "StartTime" not in row or row["StartTime"] == None:
-            return False
-        if "TimeZoneID" not in row or row["TimeZoneID"] == None or "TimeZoneOffset" not in row or row["TimeZoneOffset"] == None:
-            return False
-        
-        tz = dateutil.tz.tzoffset(row["TimeZoneID"], row["TimeZoneOffset"] * 3600)
-            
-        event_time = row["StartTime"].astimezone(tz).time().replace(microsecond=0)
-        for qual_object in qualifiers["Local Start Time"]:
-            stat_val = qual_object["values"]["start_val"]
-            end_val = qual_object["values"]["end_val"]
-
-            is_match = event_time >= stat_val and event_time <= end_val
-            if qual_object["negate"]:
-                if is_match:
-                    return False
-            else:
-                if not is_match:
-                    return False
-    
-    if "Time Zone Abbreviation" in qualifiers:
-        if "TimeZoneRaw" not in row or row["TimeZoneRaw"] == None:
-            return False
-
-        for qual_object in qualifiers["Time Zone Abbreviation"]:
-            has_match = False
-            for stadium in qual_object["values"]:
-                if "TimeZoneID" not in row or row["TimeZoneID"] == None:
-                    if stadium == row["TimeZoneRaw"].lower():
-                        has_match = True
-                        break
-                if stadium == row["TimeZoneRaw"].lower():
-                    has_match = True
-                    break
-            if qual_object["negate"]:
-                if has_match:
-                    return False
-            else:
-                if not has_match:
-                    return False
-    
-    if "Exact Time Zone Abbreviation" in qualifiers:
-        if "TimeZoneID" not in row or row["TimeZoneID"] == None:
-            return False
-
-        for qual_object in qualifiers["Exact Time Zone Abbreviation"]:
-            has_match = False
-            for stadium in qual_object["values"]:
-                if stadium == row["TimeZoneID"].lower():
-                    has_match = True
-                    break
-            if qual_object["negate"]:
-                if has_match:
-                    return False
-            else:
-                if not has_match:
-                    return False
-    
     return True
 
 def perform_sub_nhl_game_qualifiers(row, qualifiers, player_game_info, player_type, player_link, saved_row_data, index, clear_data):
@@ -23307,15 +23134,26 @@ def perform_metadata_qual(event_name, goal_event, qualifiers, player_game_info, 
     if "Local Event Time" in qualifiers:
         if "event_time" not in goal_event:
             return False
+        if "Arena" not in row or row["Arena"] == None:
+            return False
 
         event_time = goal_event["event_time"]
         if not event_time:
             return False
-            
-        if player_game_info["TimeZoneID"] == None or player_game_info["TimeZoneOffset"] == None:
-            return
 
-        tz = dateutil.tz.tzoffset(player_game_info["TimeZoneID"], player_game_info["TimeZoneOffset"] * 3600)
+        team_venue_obj = None
+        for venue_id in team_venues:
+            if row["Arena"] in team_venues[venue_id]["venues"]:
+                team_venue_obj = team_venues[venue_id]
+                break
+
+        val_to_check = team_venue_obj["time_zone"]
+
+        utc_time = row["StartTime"].astimezone(pytz.UTC).replace(tzinfo=None)
+
+        tz_offset = pytz.timezone(val_to_check).utcoffset(utc_time).seconds
+        
+        tz = dateutil.tz.tzoffset("IST", tz_offset)
             
         event_time = event_time.astimezone(tz).time().replace(microsecond=0)
         for qual_object in qualifiers["Local Event Time"]:
@@ -30130,8 +29968,7 @@ def handle_schedule_stats(player_data, all_rows, qualifiers, is_playoffs, missin
                                 "Date" : manual_info_row["Date"],
                                 "StartTime" : manual_info_row["StartTime"],
                                 "Time" : manual_info_row["Time"],
-                                "Arena" : manual_info_row["Arena"],
-                                "ArenaID" : manual_info_row["ArenaID"]
+                                "Arena" : manual_info_row["Arena"]
                             }
                             
                             if row_data["Location"]:
@@ -30221,7 +30058,6 @@ def handle_schedule_stats(player_data, all_rows, qualifiers, is_playoffs, missin
                             row_data["Time"] = data["Time"]
                             row_data["StartTime"] = data["StartTime"]
                             row_data["Arena"] = data["Arena"]
-                            row_data["ArenaID"] = data["ArenaID"]
                             row_data["Team Score"] = data["Team Score"]
                             row_data["Opponent Score"] = data["Opponent Score"]
                             row_data["Team Goals"] = data["Team Goals"]
@@ -30454,7 +30290,6 @@ def handle_schedule_stats(player_data, all_rows, qualifiers, is_playoffs, missin
                         row_data["Time"] = data["Time"]
                         row_data["StartTime"] = data["StartTime"]
                         row_data["Arena"] = data["Arena"]
-                        row_data["ArenaID"] = data["ArenaID"]
                         row_data["Team Score"] = data["Team Score"]
                         row_data["Opponent Score"] = data["Opponent Score"]
                         row_data["Team Goals"] = data["Team Goals"]
@@ -30565,19 +30400,20 @@ def perform_schedule_qualifiers(row, qualifiers):
                     return False
     
     if "Arena" in qualifiers:
-        if row["Arena"] == None:
-            return
+        if "Arena" not in row or row["Arena"] == None:
+            return False
+        
+        team_venue_obj = None
+        for venue_id in team_venues:
+            if row["Arena"] in team_venues[venue_id]["venues"]:
+                team_venue_obj = team_venues[venue_id]
+                break
+
         for qual_object in qualifiers["Arena"]:
             has_match = False
             for arena in qual_object["values"]:
-                if arena.isdigit():
-                    if row["ArenaID"] == None:
-                        return False
-                    if int(arena) == row["ArenaID"]:
-                        has_match = True
-                        break
-                else:
-                    if re.sub(r"[^A-Za-z\s]", "", arena).strip() in re.sub(r"[^A-Za-z\s]", "", row["Arena"].lower()).strip():
+                for sub_arena in team_venue_obj["venues"]:
+                    if re.sub(r"[^A-Za-z\s]", "", arena).strip() in re.sub(r"[^A-Za-z\s]", "", sub_arena.lower()).strip():
                         has_match = True
                         break
             if qual_object["negate"]:
@@ -30588,26 +30424,253 @@ def perform_schedule_qualifiers(row, qualifiers):
                     return False
         
     if "Exact Arena" in qualifiers:
-        if row["Arena"] == None:
-            return
+        if "Arena" not in row or row["Arena"] == None:
+            return False
+
         for qual_object in qualifiers["Exact Arena"]:
             has_match = False
             for arena in qual_object["values"]:
-                if arena.isdigit():
-                    if row["ArenaID"] == None:
-                        return False
-                    if int(arena) == row["ArenaID"]:
-                        has_match = True
-                        break
-                else:
-                    if arena == row["Arena"].lower():
-                        has_match = True
-                        break
+                if arena == row["Arena"].lower():
+                    has_match = True
+                    break
             if qual_object["negate"]:
                 if has_match:
                     return False
             else:
                 if not has_match:
+                    return False
+    
+    if "City" in qualifiers:
+        if "Arena" not in row or row["Arena"] == None:
+            return False
+
+        team_venue_obj = None
+        for venue_id in team_venues:
+            if row["Arena"] in team_venues[venue_id]["venues"]:
+                team_venue_obj = team_venues[venue_id]
+                break
+
+        val_to_check = team_venue_obj["city"]
+
+        for qual_object in qualifiers["City"]:
+            has_match = False
+            for stadium in qual_object["values"]:
+                if stadium in val_to_check.lower():
+                    has_match = True
+                    break
+            if qual_object["negate"]:
+                if has_match:
+                    return False
+            else:
+                if not has_match:
+                    return False
+    
+    if "Exact City" in qualifiers:
+        if "Arena" not in row or row["Arena"] == None:
+            return False
+
+        team_venue_obj = None
+        for venue_id in team_venues:
+            if row["Arena"] in team_venues[venue_id]["venues"]:
+                team_venue_obj = team_venues[venue_id]
+                break
+
+        val_to_check = team_venue_obj["city"]
+
+        for qual_object in qualifiers["Exact City"]:
+            has_match = False
+            for stadium in qual_object["values"]:
+                if stadium == val_to_check.lower():
+                    has_match = True
+                    break
+            if qual_object["negate"]:
+                if has_match:
+                    return False
+            else:
+                if not has_match:
+                    return False
+    
+    if "State" in qualifiers:
+        if "Arena" not in row or row["Arena"] == None:
+            return False
+
+        team_venue_obj = None
+        for venue_id in team_venues:
+            if row["Arena"] in team_venues[venue_id]["venues"]:
+                team_venue_obj = team_venues[venue_id]
+                break
+
+        val_to_check = team_venue_obj["state"]
+
+        for qual_object in qualifiers["State"]:
+            has_match = False
+            for stadium in qual_object["values"]:
+                if stadium in val_to_check.lower():
+                    has_match = True
+                    break
+            if qual_object["negate"]:
+                if has_match:
+                    return False
+            else:
+                if not has_match:
+                    return False
+    
+    if "Exact State" in qualifiers:
+        if "Arena" not in row or row["Arena"] == None:
+            return False
+
+        team_venue_obj = None
+        for venue_id in team_venues:
+            if row["Arena"] in team_venues[venue_id]["venues"]:
+                team_venue_obj = team_venues[venue_id]
+                break
+
+        val_to_check = team_venue_obj["state"]
+
+        for qual_object in qualifiers["Exact State"]:
+            has_match = False
+            for stadium in qual_object["values"]:
+                if stadium == val_to_check.lower():
+                    has_match = True
+                    break
+            if qual_object["negate"]:
+                if has_match:
+                    return False
+            else:
+                if not has_match:
+                    return False
+    
+    if "Time Zone" in qualifiers:
+        if "Arena" not in row or row["Arena"] == None:
+            return False
+
+        team_venue_obj = None
+        for venue_id in team_venues:
+            if row["Arena"] in team_venues[venue_id]["venues"]:
+                team_venue_obj = team_venues[venue_id]
+                break
+
+        val_to_check = team_venue_obj["time_zone"]
+
+        for qual_object in qualifiers["Time Zone"]:
+            has_match = False
+            for stadium in qual_object["values"]:
+                if stadium in val_to_check.lower().replace("_", ""):
+                    has_match = True
+                    break
+            if qual_object["negate"]:
+                if has_match:
+                    return False
+            else:
+                if not has_match:
+                    return False
+    
+    if "Exact Time Zone" in qualifiers:
+        if "Arena" not in row or row["Arena"] == None:
+            return False
+
+        team_venue_obj = None
+        for venue_id in team_venues:
+            if row["Arena"] in team_venues[venue_id]["venues"]:
+                team_venue_obj = team_venues[venue_id]
+                break
+
+        val_to_check = team_venue_obj["time_zone"]
+
+        for qual_object in qualifiers["Exact Time Zone"]:
+            has_match = False
+            for stadium in qual_object["values"]:
+                if stadium == val_to_check.lower().replace("_", ""):
+                    has_match = True
+                    break
+            if qual_object["negate"]:
+                if has_match:
+                    return False
+            else:
+                if not has_match:
+                    return False
+    
+    if "Country" in qualifiers:
+        if "Arena" not in row or row["Arena"] == None:
+            return False
+
+        team_venue_obj = None
+        for venue_id in team_venues:
+            if row["Arena"] in team_venues[venue_id]["venues"]:
+                team_venue_obj = team_venues[venue_id]
+                break
+
+        val_to_check = team_venue_obj["country"]
+
+        for qual_object in qualifiers["Country"]:
+            has_match = False
+            for stadium in qual_object["values"]:
+                if stadium in val_to_check.lower():
+                    has_match = True
+                    break
+            if qual_object["negate"]:
+                if has_match:
+                    return False
+            else:
+                if not has_match:
+                    return False
+    
+    if "Exact Country" in qualifiers:
+        if "Arena" not in row or row["Arena"] == None:
+            return False
+
+        team_venue_obj = None
+        for venue_id in team_venues:
+            if row["Arena"] in team_venues[venue_id]["venues"]:
+                team_venue_obj = team_venues[venue_id]
+                break
+
+        val_to_check = team_venue_obj["country"]
+
+        for qual_object in qualifiers["Exact Country"]:
+            has_match = False
+            for stadium in qual_object["values"]:
+                if stadium == val_to_check.lower():
+                    has_match = True
+                    break
+            if qual_object["negate"]:
+                if has_match:
+                    return False
+            else:
+                if not has_match:
+                    return False
+    
+    if "Local Start Time" in qualifiers:
+        if "StartTime" not in row or row["StartTime"] == None:
+            return False
+        if "Arena" not in row or row["Arena"] == None:
+            return False
+
+        team_venue_obj = None
+        for venue_id in team_venues:
+            if row["Arena"] in team_venues[venue_id]["venues"]:
+                team_venue_obj = team_venues[venue_id]
+                break
+
+        val_to_check = team_venue_obj["time_zone"]
+
+        utc_time = row["StartTime"].astimezone(pytz.UTC).replace(tzinfo=None)
+
+        tz_offset = pytz.timezone(val_to_check).utcoffset(utc_time).seconds
+        
+        tz = dateutil.tz.tzoffset("IST", tz_offset)
+            
+        event_time = row["StartTime"].astimezone(tz).time().replace(microsecond=0).replace(second=0)
+        for qual_object in qualifiers["Local Start Time"]:
+            stat_val = qual_object["values"]["start_val"]
+            end_val = qual_object["values"]["end_val"]
+
+            is_match = event_time >= stat_val and event_time <= end_val
+            if qual_object["negate"]:
+                if is_match:
+                    return False
+            else:
+                if not is_match:
                     return False
                     
     if "Series Game" in qualifiers:

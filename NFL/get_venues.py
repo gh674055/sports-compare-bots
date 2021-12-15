@@ -114,6 +114,9 @@ def main():
                                     venues.append(venue_name)
                             break
 
+                    if not city or not state or not country or not time_zone or not venues:
+                        print("Invalid arena " + venue_ids)
+
                     team_venues[venue_id] = {
                         "city" : city,
                         "state" : state,
