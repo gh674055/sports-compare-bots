@@ -41,6 +41,7 @@ def main():
     team_abr = {}
     team_name_info = {}
     team_main_abbr = {}
+    team_venue_history = {}
 
     request = urllib.request.Request(hockeyref_team_ids_url, headers=request_headers)
     try:
@@ -72,6 +73,7 @@ def main():
                         team_link = row.find("th", {"data-stat" : "franch_name"}).find("a")
                         if team_link:
                             overall_team_abbr = team_link["href"].split("/")[2].upper()
+                            print(overall_team_abbr)
                             team_abbr = team_link["href"].split("/")[2].upper()
                             request = urllib.request.Request("https://www.hockey-reference.com" + team_link["href"], headers=request_headers)
                             try:
@@ -96,7 +98,8 @@ def main():
                                     if not sub_row.get("class") or not "thead" in sub_row.get("class"):
                                         sub_team_row = sub_row.find("td", {"data-stat" : "team_name"})
                                         if sub_team_row:
-                                            sub_team_row_abbr = sub_team_row.find("a")["href"].split("/")[2].upper()
+                                            sub_team_row_link = sub_team_row.find("a")["href"]
+                                            sub_team_row_abbr = sub_team_row_link.split("/")[2].upper()
                                             sub_team_row_name = sub_team_row.find(text=True)
                                             if sub_team_row_name in manual_mappings:
                                                 sub_team_row_name = manual_mappings[sub_team_row_name]
@@ -120,6 +123,32 @@ def main():
                                                 team_name_info[sub_team_row_name][sub_team_row_abbr] = []
                                             if sub_team_row_year not in team_name_info[sub_team_row_name][sub_team_row_abbr]:
                                                 team_name_info[sub_team_row_name][sub_team_row_abbr].append(sub_team_row_year)
+                                            
+
+                                            request = urllib.request.Request("https://www.hockey-reference.com" + sub_team_row_link, headers=request_headers)
+                                            try:
+                                                response = url_request(request)
+                                            except urllib.error.HTTPError:
+                                                raise
+
+                                            sub_sub_player_page = BeautifulSoup(response, "html.parser")
+
+                                            team_info_dir = sub_sub_player_page.find("div", {"id" : "meta"})
+                                            if team_info_dir:
+                                                stadium_item = team_info_dir.find("strong", text="Primary Arena:")
+                                                if stadium_item:
+                                                    stadium_parent = stadium_item.parent
+                                                    if stadium_parent:
+                                                        stadium_link = stadium_parent.find("a")
+                                                        if stadium_link:
+                                                            stadium_id = stadium_link["href"].split("/")[2][:-5]
+                                                            
+                                                            if overall_team_abbr not in team_venue_history:
+                                                                team_venue_history[overall_team_abbr] = {}
+                                                            if stadium_id not in team_venue_history[overall_team_abbr]:
+                                                                team_venue_history[overall_team_abbr][stadium_id] = []
+                                                            if sub_team_row_year not in team_venue_history[overall_team_abbr][stadium_id]:
+                                                                team_venue_history[overall_team_abbr][stadium_id].append(sub_team_row_year)
 
     for id_val in range(1, 102):
         request = urllib.request.Request(awards_url_format.format(id_val), headers=request_headers)
@@ -153,6 +182,9 @@ def main():
 
     with open("team_main_abbr.json", "w") as file:
         file.write(json.dumps(team_main_abbr, indent=4, sort_keys=True))
+
+    with open("team_venue_history.json", "w") as file:
+        file.write(json.dumps(team_venue_history, indent=4, sort_keys=True))
 
 def url_request(request):
     failed_counter = 0

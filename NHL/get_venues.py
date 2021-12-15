@@ -330,7 +330,7 @@ def main():
             data = json.load(response)
             for date in data["dates"]:
                 for game in date["games"]:
-                    team_name = unidecode.unidecode(game["venue"]["name"])
+                    team_name = unidecode.unidecode(game["venue"]["name"]).strip()
 
                     if team_name not in parsed_venues:
                         has_one_match = False

@@ -1034,6 +1034,10 @@ team_venues = None
 with open ("team_venues.json", "r") as file:
     team_venues = json.load(file)
 
+team_venue_history = None
+with open ("team_venue_history.json", "r") as file:
+    team_venue_history = json.load(file)
+
 ssl._create_default_https_context = ssl._create_unverified_context
 
 def main():
@@ -1369,7 +1373,7 @@ def handle_player_string(comment, player_type, is_fantasy, last_updated, hide_ta
                         og_time_str = time_frame
                         qualifiers = {}
 
-                        last_match = re.finditer(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?((?:sub-query|day-after-sub-query|or-sub-query|day-before-sub-query|day-of-sub-query|game-after-sub-query|game-before-sub-query|season-sub-query|or-season-sub-query|season-after-sub-query|season-before-sub-query|w|(?:playing|starting)-with|a|(?:playing|starting)-against|(?:playing|starting)-same-game|prv-w|previous-playing-with|prv-a|previous-playing-against|upc-w|upcoming-playing-with|upc-a|upcoming-playing-against|(?:playing|starting)-same-opponents?|(?:playing|starting)-same-dates?|holidays?|dts|dates|stadium|exact-stadium|arena|exact-arena|city|exact-city|country|exact-country|surface|roof|thrown-to|injury|start-time):(?<!\\)\(.*?(?<!\\)\))", time_frame)
+                        last_match = re.finditer(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?((?:sub-query|day-after-sub-query|or-sub-query|day-before-sub-query|day-of-sub-query|game-after-sub-query|game-before-sub-query|season-sub-query|or-season-sub-query|season-after-sub-query|season-before-sub-query|w|(?:playing|starting)-with|a|(?:playing|starting)-against|(?:playing|starting)-same-game|prv-w|previous-playing-with|prv-a|previous-playing-against|upc-w|upcoming-playing-with|upc-a|upcoming-playing-against|(?:playing|starting)-same-opponents?|(?:playing|starting)-same-dates?|holidays?|dts|dates|stadium|exact-stadium|arena|exact-arena|opponent-city|opponent-exact-city|opponent-country|opponent-exact-country|team-city|team-exact-city|team-country|team-exact-country|city|exact-city|country|exact-country|surface|roof|thrown-to|injury|start-time):(?<!\\)\(.*?(?<!\\)\))", time_frame)
                         for m in last_match:
                             qualifier_obj = {}
                             negate_str = m.group(1)
@@ -1386,7 +1390,7 @@ def handle_player_string(comment, player_type, is_fantasy, last_updated, hide_ta
                                     "negate" : False
                                 })
 
-                            if qualifier_str.startswith("sub-query:") or qualifier_str.startswith("or-sub-query:") or qualifier_str.startswith("day-after-sub-query:") or qualifier_str.startswith("day-before-sub-query:") or qualifier_str.startswith("day-of-sub-query:") or qualifier_str.startswith("game-after-sub-query:") or qualifier_str.startswith("game-before-sub-query:") or qualifier_str.startswith("season-sub-query:") or qualifier_str.startswith("or-season-sub-query:") or qualifier_str.startswith("season-after-sub-query:") or qualifier_str.startswith("season-before-sub-query:") or qualifier_str.startswith("w:") or qualifier_str.startswith("playing-with:") or qualifier_str.startswith("playing-same-game:") or qualifier_str.startswith("starting-same-game:") or qualifier_str.startswith("a:") or qualifier_str.startswith("playing-against:") or qualifier_str.startswith("prv-w:") or qualifier_str.startswith("previous-playing-with:") or qualifier_str.startswith("prv-a:") or qualifier_str.startswith("previous-playing-against:") or qualifier_str.startswith("upc-w:") or qualifier_str.startswith("upcoming-playing-with:") or qualifier_str.startswith("upc-a:") or qualifier_str.startswith("upcoming-playing-against:") or qualifier_str.startswith("playing-same-opponent:")  or qualifier_str.startswith("playing-same-opponents:") or qualifier_str.startswith("playing-same-date:") or qualifier_str.startswith("playing-same-dates:") or qualifier_str.startswith("holiday:") or qualifier_str.startswith("holidays:") or qualifier_str.startswith("dts:") or qualifier_str.startswith("dates:") or qualifier_str.startswith("injury:") or qualifier_str.startswith("stadium:") or qualifier_str.startswith("exact-stadium:") or qualifier_str.startswith("arena:") or qualifier_str.startswith("exact-arena:") or qualifier_str.startswith("city:") or qualifier_str.startswith("exact-city:") or qualifier_str.startswith("country:") or qualifier_str.startswith("exact-country:") or qualifier_str.startswith("surface:") or qualifier_str.startswith("roof:") or qualifier_str.startswith("thrown-to:"):
+                            if qualifier_str.startswith("sub-query:") or qualifier_str.startswith("or-sub-query:") or qualifier_str.startswith("day-after-sub-query:") or qualifier_str.startswith("day-before-sub-query:") or qualifier_str.startswith("day-of-sub-query:") or qualifier_str.startswith("game-after-sub-query:") or qualifier_str.startswith("game-before-sub-query:") or qualifier_str.startswith("season-sub-query:") or qualifier_str.startswith("or-season-sub-query:") or qualifier_str.startswith("season-after-sub-query:") or qualifier_str.startswith("season-before-sub-query:") or qualifier_str.startswith("w:") or qualifier_str.startswith("playing-with:") or qualifier_str.startswith("playing-same-game:") or qualifier_str.startswith("starting-same-game:") or qualifier_str.startswith("a:") or qualifier_str.startswith("playing-against:") or qualifier_str.startswith("prv-w:") or qualifier_str.startswith("previous-playing-with:") or qualifier_str.startswith("prv-a:") or qualifier_str.startswith("previous-playing-against:") or qualifier_str.startswith("upc-w:") or qualifier_str.startswith("upcoming-playing-with:") or qualifier_str.startswith("upc-a:") or qualifier_str.startswith("upcoming-playing-against:") or qualifier_str.startswith("playing-same-opponent:")  or qualifier_str.startswith("playing-same-opponents:") or qualifier_str.startswith("playing-same-date:") or qualifier_str.startswith("playing-same-dates:") or qualifier_str.startswith("holiday:") or qualifier_str.startswith("holidays:") or qualifier_str.startswith("dts:") or qualifier_str.startswith("dates:") or qualifier_str.startswith("injury:") or qualifier_str.startswith("stadium:") or qualifier_str.startswith("exact-stadium:") or qualifier_str.startswith("arena:") or qualifier_str.startswith("exact-arena:") or qualifier_str.startswith("city:") or qualifier_str.startswith("exact-city:") or qualifier_str.startswith("country:") or qualifier_str.startswith("exact-country:") or qualifier_str.startswith("team-city:") or qualifier_str.startswith("team-exact-city:") or qualifier_str.startswith("team-country:") or qualifier_str.startswith("team-exact-country:") or qualifier_str.startswith("opponent-city:") or qualifier_str.startswith("opponent-exact-city:") or qualifier_str.startswith("opponent-country:") or qualifier_str.startswith("opponent-exact-country:") or qualifier_str.startswith("surface:") or qualifier_str.startswith("roof:") or qualifier_str.startswith("thrown-to:"):
                                 if qualifier_str.startswith("w:"):
                                     qual_str = "w:"
                                     qual_type = "Playing With"
@@ -1463,6 +1467,30 @@ def handle_player_string(comment, player_type, is_fantasy, last_updated, hide_ta
                                 elif qualifier_str.startswith("exact-country:"):
                                     qual_str = "exact-country:"
                                     qual_type = "Exact Country"
+                                elif qualifier_str.startswith("team-city:"):
+                                    qual_str = "team-city:"
+                                    qual_type = "Team City"
+                                elif qualifier_str.startswith("team-exact-city:"):
+                                    qual_str = "team-exact-city:"
+                                    qual_type = "Team Exact City"
+                                elif qualifier_str.startswith("team-country:"):
+                                    qual_str = "team-country:"
+                                    qual_type = "Team Country"
+                                elif qualifier_str.startswith("team-exact-country:"):
+                                    qual_str = "team-exact-country:"
+                                    qual_type = "Team Exact Country"
+                                elif qualifier_str.startswith("opponent-city:"):
+                                    qual_str = "opponent-city:"
+                                    qual_type = "Opponent City"
+                                elif qualifier_str.startswith("opponent-exact-city:"):
+                                    qual_str = "opponent-exact-city:"
+                                    qual_type = "Opponent Exact City"
+                                elif qualifier_str.startswith("opponent-country:"):
+                                    qual_str = "opponent-country:"
+                                    qual_type = "Opponent Country"
+                                elif qualifier_str.startswith("opponent-exact-country:"):
+                                    qual_str = "opponent-exact-country:"
+                                    qual_type = "Opponent Exact Country"
                                 elif qualifier_str.startswith("surface:"):
                                     qual_str = "surface:"
                                     qual_type = "Surface"
@@ -2128,7 +2156,7 @@ def handle_player_string(comment, player_type, is_fantasy, last_updated, hide_ta
 
                                 time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
 
-                        last_match = re.finditer(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?(current-season-age|first-games?|current-games?|first-seasons?|current-seasons?|last-games?|last-seasons?|first-starts?|last-starts?|current-age|rookie|facing-former-franchise|facing-former-team|rook|interleague|intraleague|interconference|intraconference|interdivision|intradivision|first-half|second-half|leading(:?-in-game)?|trailing(:?-in-game)?|tied(:?(?:-in)?-game)?|force-dates|even-year|odd-year|current-winning-opponents?|current-losing-opponents?|current-tied-opponents?|current-winning-or-tied-opponents?|current-losing-or-tied-opponents?|winning-opponents?|losing-opponents?|tied-opponents?|winning-or-tied-opponents?|losing-or-tied-opponents?|playoff-opponents?|champ-winner-opponent|conf-winner-opponent|division-winner-opponents?|current-winning-teams?|current-losing-teams?|current-tied-teams?|current-winning-or-tied-teams?|current-losing-or-tied-teams?|winning-teams?|losing-teams?|tied-teams?|winning-or-tied-teams?|losing-or-tied-teams?|playoff-teams?|champ-winner-team|conf-winner-team|division-winner-teams?|national-game|t:[\w-]+|o:[\w-]+|m:[\w-]+|d:[\w-]+|dt:[\w-]+|wk:\w+(?:-\w+)?|week:\w+(?:-\w+)?|team-franchise:[\w-]+|opponent-franchise:[\w-]+|franchise:[\w-]+|tf:[\w-]+|of:[\w-]+|f:[\w-]+|team:[\w-]+|opponent:[\w-]+|time-zone:[\S-]+|exact-time-zone:[\S-]+|state:[\w-]+|exact-state:[\w-]+|month:[\w-]+|short|middle|long|deep|right|left|middle|center|overtime-result|overtime|redzone|day:[\w-]+|date:[\w-]+|gm:[\w-]+|game:[\w-]+|season-gm:[\w-]+|season-game:[\w-]+|season:[\w-]+|seasons:[\w-]+|local-start-time:[\S-]+|seasons-reversed:[\w-]+|quarter:[\w-]+|down:[\w-]+|down-distance:[\w-]+|field-position:[\w-]+|quarter-time:[\S-]+|quarter-time-remaining:[\S-]+|current-team-score:[\w-]+|current-opponent-score:[\w-]+|current-score-margin:[\S-]+|current-score-difference:[\S-]+|season-reversed:[\w-]+|crgm:[\w-]+|career-game-reversed:[\w-]+|team-game-reversed:[\w-]+|season-game-reversed:[\w-]+|game-reversed:[\w-]+|career-game:[\w-]+|tmgm:[\w-]+|team-game:[\w-]+|number:[\w-]+|dr:[\w-]+|starts-days-rest:[\w-]+|days-rest:[\w-]+|prv-dr:[\w-]+|previous-days-rest:[\w-]+|upc-dr:[\w-]+|upcoming-starts-days-rest:[\w-]+|upcoming-days-rest:[\w-]+|gr:[\w-]+|games-rest:[\w-]+|starts-rest:[\w-]+|prv-gr:[\w-]+|previous-games-rest:[\w-]+|upc-gr:[\w-]+|upcoming-games-rest:[\w-]+|days-in-a-row:[\w-]+|games-in-a-row:[\w-]+|starts-in-a-row:[\w-]+|prv-t:[\w-]+|prv-o:[\w-]+|upc-t:[\w-]+|upc-o:[\w-]+|upcoming-same-opponent|previous-same-opponent|previous-franchise:[\w-]+|previous-team-franchise:[\w-]+|previous-opponent-franchise:[\w-]+|upcoming-franchise:[\w-]+|upcoming-team-franchise:[\w-]+|upcoming-opponent-franchise:[\w-]+|previous-team:[\w-]+|previous-opponent:[\w-]+|upcoming-team:[\w-]+|upcoming-opponent:[\w-]+|season-st:[\S-]+|season-stat:[\S-]+|season-prv-st:[\S-]+|season-previous-stat:[\S-]+|season-upc-st:[\S-]+|season-upcoming-stat:[\S-]+|st:[\S-]+|stat:[\S-]+|prv-st:[\S-]+|previous-stat:[\S-]+|upc-st:[\S-]+|upcoming-stat:[\S-]+|min-st:[\S-]+|min-stat:[\S-]+|max-st:[\S-]+|max-stat:[\S-]+|totalgames-st:[\S-]+|totalgames-stat:[\S-]+|max-str:[\S-]+|max-streak:[\S-]+|max-stretch:[\S-]+|ctn-str:[\S-]+|count-streak:[\S-]+|q:[\S-]+|quickest:[\S-]+|s:[\S-]+|slowest:[\S-]+|champ(?:ionship)?(?:s)?|ch|super(?: |-)?bowl(?:s)?(:?[\w-]+)?|sb(:?[\w-]+)?|league(?: |-)champ(?:ionship)?(?:s)?|lc|(?:(?:(?:american|afc|national|nfc)(?:(?: |-)league)?)(?: |-)?)?conf(?:erence)?((?: |-)champ(?:ionship)?(?:s)?)?|(?:(?:(?:american|afc|national|nfc)(?:(?: |-)league)?)(?: |-)?)?(?:conf(?:erence)?(?: |-))?(champ(?:ionship)?(?:s)?)|(?:(?:(?:american|afc|national|nfc)(?:(?: |-)league)?)(?: |-)?)?cc|(?:(?:(?:american|afc|national|nfc)(?:(?: |-)league)?)(?: |-)?)c|(?:(?:(?:american|afc|national|nfc)(?:(?: |-)league)?)(?: |-)?)?division(?:al)(?:(?: |-)round(?:s)?)?|(?:(?:(?:american|afc|national|nfc)(?:(?: |-)league)?)(?: |-)?)?dr|(?:(?:(?:american|afc|national|nfc)(?:(?: |-)league)?)(?: |-)?)?wild card(?:(?: |-)round(?:s)?)?|(?:(?:(?:american|afc|national|nfc)(?:(?: |-)league)?)(?: |-)?)?wc|with-new-team|with-new-franchise|summer|spring|winter|fall|autumn|away|home|road|neutral|previous-away|previous-home|previous-road|previous-neutral|upcoming-away|upcoming-home|upcoming-road|upcoming-neutral|new-moon|waning-crescent|third-quarter|waning-gibbous|full-moon|waxing-gibbous|first-quarter|waxing-crescent|outdoors|dome|retroof|retroof-closed|retroof-open|grass|artificial|team-after-bye|team-before-bye|team-after-playoffs-bye|team-before-playoffs-bye|team-game-after-bye|team-game-before-bye|team-had-bye|opponent-after-bye|opponent-before-bye|opponent-after-playoffs-bye|opponent-before-playoffs-bye|opponent-game-after-bye|opponent-game-before-bye|opponent-had-bye|after-bye|before-bye|after-playoffs-bye|before-playoffs-bye|game-after-bye|game-before-bye|had-bye|underdogs?|favorites?|probable|questionable|doubtful|injured|start-if-qb|-?starts?|-?started|-?starting|-?ignore-starts?|-?ignore-started?|-?ignore-starting|win(?:s)?|loss(?:es)?|tie(?:s)?|w|l|t|prv-w|prv-l|prv-t|upc-w|upc-l|upc-t|previous-win(?:s)?|previous-loss(?:es)?|previous-tie(?:s)?|upcoming-win(?:s)?|upcoming-loss(?:es)?|upcoming-tie(?:s)?|team-score:[\w-]+|opponent-score:[\w-]+|score-margin:[\S-]+|score-difference:[\S-]+|spread:[\S-]+|over-under:[\w-]+|spread-margin:[\S-]+|over-under-margin:[\S-]+|previous-team-score:[\w-]+|previous-opponent-score:[\w-]+|previous-score-margin:[\S-]+|previous-score-difference:[\S-]+|upcoming-team-score:[\w-]+|upcoming-opponent-score:[\w-]+|upcoming-score-margin:[\S-]+|upcoming-score-difference:[\S-]+|humidity:[\w-]+|wind:[\w-]+|wind-chill:[\w-]+|temperature:[\w-]+|current-team-wins:[\w-]+|current-team-losses:[\w-]+|current-team-ties:[\w-]+|current-team-games-over-500:[\S-]+|current-opponent-wins:[\w-]+|current-opponent-losses:[\w-]+|current-opponent-games-over-500:[\S-]+|current-opponent-ties:[\w-]+|team-wins:[\w-]+|team-losses:[\w-]+|team-ties:[\w-]+|team-games-over-500:[\S-]+|opponent-wins:[\w-]+|opponent-losses:[\w-]+|opponent-ties:[\w-]+|opponent-games-over-500:[\S-]+|opponent-points-rank:[\S-]+|opponent-points-allowed-rank:[\S-]+|opponent-yards-rank:[\S-]+|opponent-yards-allowed-rank:[\S-]+|opponent-yds-rank:[\S-]+|opponent-yds-allowed-rank:[\S-]+|opponent-pass-tds?-rank:[\S-]+|opponent-pass-tds?-allowed-rank:[\S-]+|opponent-pass-yards-rank:[\S-]+|opponent-pass-yards-allowed-rank:[\S-]+|opponent-pass-yds-rank:[\S-]+|opponent-pass-yds-allowed-rank:[\S-]+|opponent-rush-tds?-rank:[\S-]+|opponent-rush-tds?-allowed-rank:[\S-]+|opponent-rush-yards-rank:[\S-]+|opponent-rush-yards-allowed-rank:[\S-]+|opponent-rush-yds-rank:[\S-]+|opponent-rush-yds-allowed-rank:[\S-]+|opponent-any/a-rank:[\S-]+|opponent-any/a-allowed-rank:[\S-]+|opponent-pass(?:er)?-rat(?:e|ing)-rank:[\S-]+|opponent-pass(?:er)?-rat(?:e|ing)-allowed-rank:[\S-]+|opponent-fantasy-qb-rank:[\S-]+|opponent-fantasy-(?:rb|hb)-rank:[\S-]+|opponent-fantasy-wr-rank:[\S-]+|opponent-fantasy-te-rank:[\S-]+|current-team-win(?:ning)?-percent:[\S-]+|team-win(?:ning)?-percent:[\S-]+|current-opponent-win(?:ning)?-percent:[\S-]+|opponent-win(?:ning)?-percent:[\S-]+|team-points-rank:[\S-]+|team-points-allowed-rank:[\S-]+|team-yards-rank:[\S-]+|team-yards-allowed-rank:[\S-]+|team-yds-rank:[\S-]+|team-yds-allowed-rank:[\S-]+|team-pass-tds?-rank:[\S-]+|team-pass-tds?-allowed-rank:[\S-]+|team-pass-yards-rank:[\S-]+|team-pass-yards-allowed-rank:[\S-]+|team-pass-yds-rank:[\S-]+|team-pass-yds-allowed-rank:[\S-]+|team-rush-tds?-rank:[\S-]+|team-rush-tds?-allowed-rank:[\S-]+|team-rush-yards-rank:[\S-]+|team-rush-yards-allowed-rank:[\S-]+|team-rush-yds-rank:[\S-]+|team-rush-yds-allowed-rank:[\S-]+|team-any/a-rank:[\S-]+|team-any/a-allowed-rank:[\S-]+|team-pass(?:er)?-rat(?:e|ing)-rank:[\S-]+|team-pass(?:er)?-rat(?:e|ing)-allowed-rank:[\S-]+|team-fantasy-qb-rank:[\S-]+|team-fantasy-(?:rb|hb)-rank:[\S-]+|team-fantasy-wr-rank:[\S-]+|team-fantasy-te-rank:[\S-]+|team-win(?:ning)?-percent:[\S-]+|years?:[\w-]+|early-?afternoon|late-?afternoon|morning|early|afternoon|day|night(?:time)?|late|team-league:[\w-]+|opponent-league:[\w-]+|team-conference:[\S-]+|opponent-conference:[\S-]+|team-division:[\S-]+|opponent-division:[\S-]+|birthda(?:y|te)|defense|" + all_months_re + r"|"  + all_days_re + r"|" + "|".join([pos.lower() for pos in headers]) + r")\b", time_frame)
+                        last_match = re.finditer(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?(current-season-age|first-games?|current-games?|first-seasons?|current-seasons?|last-games?|last-seasons?|first-starts?|last-starts?|current-age|rookie|facing-former-franchise|facing-former-team|rook|interleague|intraleague|interconference|intraconference|interdivision|intradivision|first-half|second-half|leading(:?-in-game)?|trailing(:?-in-game)?|tied(:?(?:-in)?-game)?|force-dates|even-year|odd-year|current-winning-opponents?|current-losing-opponents?|current-tied-opponents?|current-winning-or-tied-opponents?|current-losing-or-tied-opponents?|winning-opponents?|losing-opponents?|tied-opponents?|winning-or-tied-opponents?|losing-or-tied-opponents?|playoff-opponents?|champ-winner-opponent|conf-winner-opponent|division-winner-opponents?|current-winning-teams?|current-losing-teams?|current-tied-teams?|current-winning-or-tied-teams?|current-losing-or-tied-teams?|winning-teams?|losing-teams?|tied-teams?|winning-or-tied-teams?|losing-or-tied-teams?|playoff-teams?|champ-winner-team|conf-winner-team|division-winner-teams?|national-game|t:[\w-]+|o:[\w-]+|m:[\w-]+|d:[\w-]+|dt:[\w-]+|wk:\w+(?:-\w+)?|week:\w+(?:-\w+)?|team-franchise:[\w-]+|opponent-franchise:[\w-]+|franchise:[\w-]+|tf:[\w-]+|of:[\w-]+|f:[\w-]+|team:[\w-]+|opponent:[\w-]+|time-zone:[\S-]+|exact-time-zone:[\S-]+|state:[\w-]+|exact-state:[\w-]+|team-time-zone:[\S-]+|team-exact-time-zone:[\S-]+|team-state:[\w-]+|team-exact-state:[\w-]+|opponent-time-zone:[\S-]+|opponent-exact-time-zone:[\S-]+|opponent-state:[\w-]+|opponent-exact-state:[\w-]+|month:[\w-]+|short|middle|long|deep|right|left|middle|center|overtime-result|overtime|redzone|day:[\w-]+|date:[\w-]+|gm:[\w-]+|game:[\w-]+|season-gm:[\w-]+|season-game:[\w-]+|season:[\w-]+|seasons:[\w-]+|local-start-time:[\S-]+|seasons-reversed:[\w-]+|quarter:[\w-]+|down:[\w-]+|down-distance:[\w-]+|field-position:[\w-]+|quarter-time:[\S-]+|quarter-time-remaining:[\S-]+|current-team-score:[\w-]+|current-opponent-score:[\w-]+|current-score-margin:[\S-]+|current-score-difference:[\S-]+|season-reversed:[\w-]+|crgm:[\w-]+|career-game-reversed:[\w-]+|team-game-reversed:[\w-]+|season-game-reversed:[\w-]+|game-reversed:[\w-]+|career-game:[\w-]+|tmgm:[\w-]+|team-game:[\w-]+|number:[\w-]+|dr:[\w-]+|starts-days-rest:[\w-]+|days-rest:[\w-]+|prv-dr:[\w-]+|previous-days-rest:[\w-]+|upc-dr:[\w-]+|upcoming-starts-days-rest:[\w-]+|upcoming-days-rest:[\w-]+|gr:[\w-]+|games-rest:[\w-]+|starts-rest:[\w-]+|prv-gr:[\w-]+|previous-games-rest:[\w-]+|upc-gr:[\w-]+|upcoming-games-rest:[\w-]+|days-in-a-row:[\w-]+|games-in-a-row:[\w-]+|starts-in-a-row:[\w-]+|prv-t:[\w-]+|prv-o:[\w-]+|upc-t:[\w-]+|upc-o:[\w-]+|upcoming-same-opponent|previous-same-opponent|previous-franchise:[\w-]+|previous-team-franchise:[\w-]+|previous-opponent-franchise:[\w-]+|upcoming-franchise:[\w-]+|upcoming-team-franchise:[\w-]+|upcoming-opponent-franchise:[\w-]+|previous-team:[\w-]+|previous-opponent:[\w-]+|upcoming-team:[\w-]+|upcoming-opponent:[\w-]+|season-st:[\S-]+|season-stat:[\S-]+|season-prv-st:[\S-]+|season-previous-stat:[\S-]+|season-upc-st:[\S-]+|season-upcoming-stat:[\S-]+|st:[\S-]+|stat:[\S-]+|prv-st:[\S-]+|previous-stat:[\S-]+|upc-st:[\S-]+|upcoming-stat:[\S-]+|min-st:[\S-]+|min-stat:[\S-]+|max-st:[\S-]+|max-stat:[\S-]+|totalgames-st:[\S-]+|totalgames-stat:[\S-]+|max-str:[\S-]+|max-streak:[\S-]+|max-stretch:[\S-]+|ctn-str:[\S-]+|count-streak:[\S-]+|q:[\S-]+|quickest:[\S-]+|s:[\S-]+|slowest:[\S-]+|champ(?:ionship)?(?:s)?|ch|super(?: |-)?bowl(?:s)?(:?[\w-]+)?|sb(:?[\w-]+)?|league(?: |-)champ(?:ionship)?(?:s)?|lc|(?:(?:(?:american|afc|national|nfc)(?:(?: |-)league)?)(?: |-)?)?conf(?:erence)?((?: |-)champ(?:ionship)?(?:s)?)?|(?:(?:(?:american|afc|national|nfc)(?:(?: |-)league)?)(?: |-)?)?(?:conf(?:erence)?(?: |-))?(champ(?:ionship)?(?:s)?)|(?:(?:(?:american|afc|national|nfc)(?:(?: |-)league)?)(?: |-)?)?cc|(?:(?:(?:american|afc|national|nfc)(?:(?: |-)league)?)(?: |-)?)c|(?:(?:(?:american|afc|national|nfc)(?:(?: |-)league)?)(?: |-)?)?division(?:al)(?:(?: |-)round(?:s)?)?|(?:(?:(?:american|afc|national|nfc)(?:(?: |-)league)?)(?: |-)?)?dr|(?:(?:(?:american|afc|national|nfc)(?:(?: |-)league)?)(?: |-)?)?wild card(?:(?: |-)round(?:s)?)?|(?:(?:(?:american|afc|national|nfc)(?:(?: |-)league)?)(?: |-)?)?wc|with-new-team|with-new-franchise|summer|spring|winter|fall|autumn|away|home|road|neutral|previous-away|previous-home|previous-road|previous-neutral|upcoming-away|upcoming-home|upcoming-road|upcoming-neutral|new-moon|waning-crescent|third-quarter|waning-gibbous|full-moon|waxing-gibbous|first-quarter|waxing-crescent|outdoors|dome|retroof|retroof-closed|retroof-open|grass|artificial|team-after-bye|team-before-bye|team-after-playoffs-bye|team-before-playoffs-bye|team-game-after-bye|team-game-before-bye|team-had-bye|opponent-after-bye|opponent-before-bye|opponent-after-playoffs-bye|opponent-before-playoffs-bye|opponent-game-after-bye|opponent-game-before-bye|opponent-had-bye|after-bye|before-bye|after-playoffs-bye|before-playoffs-bye|game-after-bye|game-before-bye|had-bye|underdogs?|favorites?|probable|questionable|doubtful|injured|start-if-qb|-?starts?|-?started|-?starting|-?ignore-starts?|-?ignore-started?|-?ignore-starting|win(?:s)?|loss(?:es)?|tie(?:s)?|w|l|t|prv-w|prv-l|prv-t|upc-w|upc-l|upc-t|previous-win(?:s)?|previous-loss(?:es)?|previous-tie(?:s)?|upcoming-win(?:s)?|upcoming-loss(?:es)?|upcoming-tie(?:s)?|team-score:[\w-]+|opponent-score:[\w-]+|score-margin:[\S-]+|score-difference:[\S-]+|spread:[\S-]+|over-under:[\w-]+|spread-margin:[\S-]+|over-under-margin:[\S-]+|previous-team-score:[\w-]+|previous-opponent-score:[\w-]+|previous-score-margin:[\S-]+|previous-score-difference:[\S-]+|upcoming-team-score:[\w-]+|upcoming-opponent-score:[\w-]+|upcoming-score-margin:[\S-]+|upcoming-score-difference:[\S-]+|humidity:[\w-]+|wind:[\w-]+|wind-chill:[\w-]+|temperature:[\w-]+|current-team-wins:[\w-]+|current-team-losses:[\w-]+|current-team-ties:[\w-]+|current-team-games-over-500:[\S-]+|current-opponent-wins:[\w-]+|current-opponent-losses:[\w-]+|current-opponent-games-over-500:[\S-]+|current-opponent-ties:[\w-]+|team-wins:[\w-]+|team-losses:[\w-]+|team-ties:[\w-]+|team-games-over-500:[\S-]+|opponent-wins:[\w-]+|opponent-losses:[\w-]+|opponent-ties:[\w-]+|opponent-games-over-500:[\S-]+|opponent-points-rank:[\S-]+|opponent-points-allowed-rank:[\S-]+|opponent-yards-rank:[\S-]+|opponent-yards-allowed-rank:[\S-]+|opponent-yds-rank:[\S-]+|opponent-yds-allowed-rank:[\S-]+|opponent-pass-tds?-rank:[\S-]+|opponent-pass-tds?-allowed-rank:[\S-]+|opponent-pass-yards-rank:[\S-]+|opponent-pass-yards-allowed-rank:[\S-]+|opponent-pass-yds-rank:[\S-]+|opponent-pass-yds-allowed-rank:[\S-]+|opponent-rush-tds?-rank:[\S-]+|opponent-rush-tds?-allowed-rank:[\S-]+|opponent-rush-yards-rank:[\S-]+|opponent-rush-yards-allowed-rank:[\S-]+|opponent-rush-yds-rank:[\S-]+|opponent-rush-yds-allowed-rank:[\S-]+|opponent-any/a-rank:[\S-]+|opponent-any/a-allowed-rank:[\S-]+|opponent-pass(?:er)?-rat(?:e|ing)-rank:[\S-]+|opponent-pass(?:er)?-rat(?:e|ing)-allowed-rank:[\S-]+|opponent-fantasy-qb-rank:[\S-]+|opponent-fantasy-(?:rb|hb)-rank:[\S-]+|opponent-fantasy-wr-rank:[\S-]+|opponent-fantasy-te-rank:[\S-]+|current-team-win(?:ning)?-percent:[\S-]+|team-win(?:ning)?-percent:[\S-]+|current-opponent-win(?:ning)?-percent:[\S-]+|opponent-win(?:ning)?-percent:[\S-]+|team-points-rank:[\S-]+|team-points-allowed-rank:[\S-]+|team-yards-rank:[\S-]+|team-yards-allowed-rank:[\S-]+|team-yds-rank:[\S-]+|team-yds-allowed-rank:[\S-]+|team-pass-tds?-rank:[\S-]+|team-pass-tds?-allowed-rank:[\S-]+|team-pass-yards-rank:[\S-]+|team-pass-yards-allowed-rank:[\S-]+|team-pass-yds-rank:[\S-]+|team-pass-yds-allowed-rank:[\S-]+|team-rush-tds?-rank:[\S-]+|team-rush-tds?-allowed-rank:[\S-]+|team-rush-yards-rank:[\S-]+|team-rush-yards-allowed-rank:[\S-]+|team-rush-yds-rank:[\S-]+|team-rush-yds-allowed-rank:[\S-]+|team-any/a-rank:[\S-]+|team-any/a-allowed-rank:[\S-]+|team-pass(?:er)?-rat(?:e|ing)-rank:[\S-]+|team-pass(?:er)?-rat(?:e|ing)-allowed-rank:[\S-]+|team-fantasy-qb-rank:[\S-]+|team-fantasy-(?:rb|hb)-rank:[\S-]+|team-fantasy-wr-rank:[\S-]+|team-fantasy-te-rank:[\S-]+|team-win(?:ning)?-percent:[\S-]+|years?:[\w-]+|early-?afternoon|late-?afternoon|morning|early|afternoon|day|night(?:time)?|late|team-league:[\w-]+|opponent-league:[\w-]+|team-conference:[\S-]+|opponent-conference:[\S-]+|team-division:[\S-]+|opponent-division:[\S-]+|birthda(?:y|te)|defense|" + all_months_re + r"|"  + all_days_re + r"|" + "|".join([pos.lower() for pos in headers]) + r")\b", time_frame)
                         for m in last_match:
                             qualifier_obj = {}
                             
@@ -2844,7 +2872,7 @@ def handle_player_string(comment, player_type, is_fantasy, last_updated, hide_ta
                                 player_type["da_type"] = qualifier_str.upper()
                             elif qualifier_str == "defense":
                                 player_type["da_type"] = "LB"
-                            elif qualifier_str.startswith("t:") or qualifier_str.startswith("o:") or qualifier_str.startswith("team:") or qualifier_str.startswith("opponent:") or qualifier_str.startswith("franchise:") or qualifier_str.startswith("tf:") or qualifier_str.startswith("of:") or qualifier_str.startswith("f:") or qualifier_str.startswith("team-franchise:") or qualifier_str.startswith("opponent-franchise:") or qualifier_str.startswith("previous-franchise:") or qualifier_str.startswith("previous-team-franchise:") or qualifier_str.startswith("previous-opponent-franchise:") or qualifier_str.startswith("upcoming-franchise:") or qualifier_str.startswith("upcoming-team-franchise:") or qualifier_str.startswith("upcoming-opponent-franchise:") or qualifier_str.startswith("state:") or qualifier_str.startswith("exact-state:") or qualifier_str.startswith("time-zone:") or qualifier_str.startswith("exact-time-zone:") or qualifier_str.startswith("prv-t:") or qualifier_str.startswith("prv-o:") or qualifier_str.startswith("previous-team:") or qualifier_str.startswith("previous-opponent:") or qualifier_str.startswith("upc-t:") or qualifier_str.startswith("upc-o:") or qualifier_str.startswith("upcoming-team:") or qualifier_str.startswith("upcoming-opponent:") or qualifier_str.startswith("team-league:") or qualifier_str.startswith("opponent-league:") or qualifier_str.startswith("team-conference:") or qualifier_str.startswith("opponent-conference:") or qualifier_str.startswith("team-division:")  or qualifier_str.startswith("opponent-division:"):
+                            elif qualifier_str.startswith("t:") or qualifier_str.startswith("o:") or qualifier_str.startswith("team:") or qualifier_str.startswith("opponent:") or qualifier_str.startswith("franchise:") or qualifier_str.startswith("tf:") or qualifier_str.startswith("of:") or qualifier_str.startswith("f:") or qualifier_str.startswith("team-franchise:") or qualifier_str.startswith("opponent-franchise:") or qualifier_str.startswith("previous-franchise:") or qualifier_str.startswith("previous-team-franchise:") or qualifier_str.startswith("previous-opponent-franchise:") or qualifier_str.startswith("upcoming-franchise:") or qualifier_str.startswith("upcoming-team-franchise:") or qualifier_str.startswith("upcoming-opponent-franchise:") or qualifier_str.startswith("state:") or qualifier_str.startswith("exact-state:") or qualifier_str.startswith("time-zone:") or qualifier_str.startswith("exact-time-zone:") or qualifier_str.startswith("team-state:") or qualifier_str.startswith("team-exact-state:") or qualifier_str.startswith("team-time-zone:") or qualifier_str.startswith("team-exact-time-zone:") or qualifier_str.startswith("opponent-state:") or qualifier_str.startswith("opponent-exact-state:") or qualifier_str.startswith("opponent-time-zone:") or qualifier_str.startswith("opponent-exact-time-zone:") or qualifier_str.startswith("prv-t:") or qualifier_str.startswith("prv-o:") or qualifier_str.startswith("previous-team:") or qualifier_str.startswith("previous-opponent:") or qualifier_str.startswith("upc-t:") or qualifier_str.startswith("upc-o:") or qualifier_str.startswith("upcoming-team:") or qualifier_str.startswith("upcoming-opponent:") or qualifier_str.startswith("team-league:") or qualifier_str.startswith("opponent-league:") or qualifier_str.startswith("team-conference:") or qualifier_str.startswith("opponent-conference:") or qualifier_str.startswith("team-division:")  or qualifier_str.startswith("opponent-division:"):
                                 split_str = "-"
                                 if qualifier_str.startswith("t:"):
                                     qual_str = "t:"
@@ -2950,6 +2978,30 @@ def handle_player_string(comment, player_type, is_fantasy, last_updated, hide_ta
                                 elif qualifier_str.startswith("exact-time-zone:"):
                                     qual_str = "exact-time-zone:"
                                     qual_type = "Exact Time Zone"
+                                elif qualifier_str.startswith("team-state:"):
+                                    qual_str = "team-state:"
+                                    qual_type = "Team State"
+                                elif qualifier_str.startswith("team-exact-state:"):
+                                    qual_str = "team-exact-state:"
+                                    qual_type = "Team Exact State"
+                                elif qualifier_str.startswith("team-time-zone:"):
+                                    qual_str = "team-time-zone:"
+                                    qual_type = "Team Time Zone"
+                                elif qualifier_str.startswith("team-exact-time-zone:"):
+                                    qual_str = "team-exact-time-zone:"
+                                    qual_type = "Team Exact Time Zone"
+                                elif qualifier_str.startswith("opponent-state:"):
+                                    qual_str = "opponent-state:"
+                                    qual_type = "Opponent State"
+                                elif qualifier_str.startswith("opponent-exact-state:"):
+                                    qual_str = "opponent-exact-state:"
+                                    qual_type = "Opponent Exact State"
+                                elif qualifier_str.startswith("opponent-time-zone:"):
+                                    qual_str = "opponent-time-zone:"
+                                    qual_type = "Opponent Time Zone"
+                                elif qualifier_str.startswith("opponent-exact-time-zone:"):
+                                    qual_str = "opponent-exact-time-zone:"
+                                    qual_type = "Opponent Exact Time Zone"
                                 
                                 qualifier_obj["values"] = re.split(r"(?<!\\)" + split_str, re.split(r"(?<!\\)" + qual_str, qualifier_str)[1])
                             elif qualifier_str.startswith("local-start-time:"):
@@ -7269,9 +7321,9 @@ def determine_raw_str(subbb_frame):
                             if sub_qualifier in get_constant_data.qualifier_map[qualifier]:
                                 qual_str += get_constant_data.qualifier_map[qualifier][sub_qualifier]
                             else:
-                                if qualifier == "Team" or qualifier == "Opponent" or qualifier == "Team Franchise" or qualifier == "Opponent Franchise" or qualifier == "Previous Team" or qualifier == "Upcoming Team" or qualifier == "Previous Opponent" or qualifier == "Upcoming Opponent" or qualifier == "Previous Team Franchise" or qualifier == "Upcoming Team Franchise" or qualifier == "Previous Opponent Franchise" or qualifier == "Upcoming Opponent Franchise" or qualifier == "Team League" or qualifier == "Opponent League" or qualifier == "Team Conference" or qualifier == "Opponent Conference" or qualifier == "Formula" or qualifier == "Season Formula" or qualifier == "Injury" or qualifier == "State" or qualifier == "Exact State" or qualifier == "Time Zone" or qualifier == "Exact Time Zone":
+                                if qualifier == "Team" or qualifier == "Opponent" or qualifier == "Team Franchise" or qualifier == "Opponent Franchise" or qualifier == "Previous Team" or qualifier == "Upcoming Team" or qualifier == "Previous Opponent" or qualifier == "Upcoming Opponent" or qualifier == "Previous Team Franchise" or qualifier == "Upcoming Team Franchise" or qualifier == "Previous Opponent Franchise" or qualifier == "Upcoming Opponent Franchise" or qualifier == "Team League" or qualifier == "Opponent League" or qualifier == "Team Conference" or qualifier == "Opponent Conference" or qualifier == "Formula" or qualifier == "Season Formula" or qualifier == "Injury" or qualifier == "State" or qualifier == "Exact State" or qualifier == "Time Zone" or qualifier == "Exact Time Zone" or qualifier == "Team State" or qualifier == "Team Exact State" or qualifier == "Team Time Zone" or qualifier == "Team Exact Time Zone" or qualifier == "Opponent State" or qualifier == "Opponent Exact State" or qualifier == "Opponent Time Zone" or qualifier == "Opponent Exact Time Zone":
                                     sub_qualifier = sub_qualifier.upper()
-                                elif qualifier == "Holiday" or qualifier == "Stadium" or qualifier == "Exact Stadium" or qualifier == "City" or qualifier == "Exact City" or qualifier == "Country" or qualifier == "Exact Country" or qualifier == "Surface" or qualifier == "Roof" or qualifier == "Moon Phase" or qualifier == "Pass Distance" or qualifier == "Pass Direction":
+                                elif qualifier == "Holiday" or qualifier == "Stadium" or qualifier == "Exact Stadium" or qualifier == "City" or qualifier == "Exact City" or qualifier == "Country" or qualifier == "Exact Country" or qualifier == "Team City" or qualifier == "Team Exact City" or qualifier == "Team Country" or qualifier == "Team Exact Country" or qualifier == "Opponent City" or qualifier == "Opponent Exact City" or qualifier == "Opponent Country" or qualifier == "Opponent Exact Country" or qualifier == "Surface" or qualifier == "Roof" or qualifier == "Moon Phase" or qualifier == "Pass Distance" or qualifier == "Pass Direction":
                                     sub_qualifier = sub_qualifier.title()
                                 elif qualifier == "Team Division" or qualifier == "Opponent Division":
                                     sub_qualifier_split = sub_qualifier.split("-")
@@ -7587,7 +7639,7 @@ def handle_player_data(player_data, time_frame, player_type, player_page, is_fan
     is_qual_match = False
     is_qual_match_excl_round = False
     for qualifier in time_frame["qualifiers"]:
-        if qualifier != "Team" and qualifier != "Team Franchise" and qualifier != "Team League" and qualifier != "Team Conference" and qualifier != "Team Division" and qualifier != "Rookie" and qualifier != "Max Stat" and qualifier != "Min Stat" and qualifier != "Max Streak" and qualifier != "Max Stretch" and qualifier != "Count Streak" and qualifier != "Quickest"  and qualifier != "Slowest" and qualifier != "Season Stat" and qualifier != "Season Age" and qualifier != "Season" and qualifier != "Season Reversed" and qualifier != "Season Index" and qualifier != "Season Index Reversed" and qualifier != "Previous Season Stat"  and qualifier != "Upcoming Season Stat" and qualifier != "Season Sub Query" and qualifier != "Or Season Sub Query" and qualifier != "Season Before Sub Query" and qualifier != "Season After Sub Query" and qualifier != "Winning Team" and qualifier != "Losing Team" and qualifier != "Tied Team" and qualifier !=  "Winning Or Tied Team" and qualifier !=  "Losing Or Tied Team" and qualifier != "Playoff Team" and qualifier != "Champ Winner Team" and qualifier != "Conference Winner Team" and qualifier != "Division Winner Team" and qualifier != "Team Win Percentage" and qualifier != "Team Games Over 500" and qualifier != "Team Wins" and qualifier != "Team Losses" and qualifier != "Team Ties" and qualifier != "Team Points Rank" and qualifier != "Team Points Allowed Rank" and qualifier != "Team Yards Rank" and qualifier != "Team Yards Allowed Rank" and qualifier != "Team Pass TD Rank" and qualifier != "Team Pass TD Allowed Rank" and qualifier != "Team Pass Yards Rank" and qualifier != "Team Pass Yards Allowed Rank" and qualifier != "Team ANY/A Rank" and qualifier != "Team ANY/A Allowed Rank" and qualifier != "Team Passer Rating Rank" and qualifier != "Team Passer Rating Allowed Rank" and qualifier != "Team Rush TD Rank" and qualifier != "Team Rush TD Allowed Rank" and qualifier != "Team Rush Yards Rank" and qualifier != "Team Rush Yards Allowed Rank" and qualifier != "Team Fantasy Position Rank" and qualifier != "Season Formula" and qualifier != "Team Had Bye" and qualifier != "Number" and qualifier != "Even Year" and qualifier != "Odd Year" and qualifier != "Year":
+        if qualifier != "Team" and qualifier != "Team Franchise" and qualifier != "Team League" and qualifier != "Team Conference" and qualifier != "Team Division" and qualifier != "Rookie" and qualifier != "Max Stat" and qualifier != "Min Stat" and qualifier != "Max Streak" and qualifier != "Max Stretch" and qualifier != "Count Streak" and qualifier != "Quickest"  and qualifier != "Slowest" and qualifier != "Season Stat" and qualifier != "Season Age" and qualifier != "Season" and qualifier != "Season Reversed" and qualifier != "Season Index" and qualifier != "Season Index Reversed" and qualifier != "Previous Season Stat"  and qualifier != "Upcoming Season Stat" and qualifier != "Season Sub Query" and qualifier != "Or Season Sub Query" and qualifier != "Season Before Sub Query" and qualifier != "Season After Sub Query" and qualifier != "Winning Team" and qualifier != "Losing Team" and qualifier != "Tied Team" and qualifier !=  "Winning Or Tied Team" and qualifier !=  "Losing Or Tied Team" and qualifier != "Playoff Team" and qualifier != "Champ Winner Team" and qualifier != "Conference Winner Team" and qualifier != "Division Winner Team" and qualifier != "Team Win Percentage" and qualifier != "Team Games Over 500" and qualifier != "Team Wins" and qualifier != "Team Losses" and qualifier != "Team Ties" and qualifier != "Team Points Rank" and qualifier != "Team Points Allowed Rank" and qualifier != "Team Yards Rank" and qualifier != "Team Yards Allowed Rank" and qualifier != "Team Pass TD Rank" and qualifier != "Team Pass TD Allowed Rank" and qualifier != "Team Pass Yards Rank" and qualifier != "Team Pass Yards Allowed Rank" and qualifier != "Team ANY/A Rank" and qualifier != "Team ANY/A Allowed Rank" and qualifier != "Team Passer Rating Rank" and qualifier != "Team Passer Rating Allowed Rank" and qualifier != "Team Rush TD Rank" and qualifier != "Team Rush TD Allowed Rank" and qualifier != "Team Rush Yards Rank" and qualifier != "Team Rush Yards Allowed Rank" and qualifier != "Team Fantasy Position Rank" and qualifier != "Season Formula" and qualifier != "Team Had Bye" and qualifier != "Number" and qualifier != "Even Year" and qualifier != "Odd Year" and qualifier != "Year" and qualifier != "Team City" and qualifier != "Team Exact City" and qualifier != "Team State" and qualifier != "Team Exact State" and qualifier != "Team Country" and qualifier != "Team Exact Country" and qualifier != "Team Time Zone" and qualifier != "Team Exact Time Zone":
             is_qual_match = True
             if qualifier != "Round" and qualifier != "Super Bowl":
                 is_qual_match_excl_round = True
@@ -12225,8 +12277,345 @@ def perform_qualifier(player_data, player_type, ind_player_type, row, time_frame
             else:
                 if not has_match:
                     return False
+    
+    if "Team City" in qualifiers:
+        venue_obj = determine_venue_obj(row, True)
+        if not venue_obj:
+            return False
+
+        val_to_check = venue_obj["city"]
+
+        for qual_object in qualifiers["Team City"]:
+            has_match = False
+            for stadium in qual_object["values"]:
+                if stadium in val_to_check.lower():
+                    has_match = True
+                    break
+                elif venue_obj["state"].lower() == "ny" and val_to_check.lower() in ["brooklyn", "bronx", "flushing"]:
+                    if stadium in "new york":
+                        has_match = True
+                        break
+            if qual_object["negate"]:
+                if has_match:
+                    return False
+            else:
+                if not has_match:
+                    return False
+    
+    if "Team Exact City" in qualifiers:
+        venue_obj = determine_venue_obj(row, True)
+        if not venue_obj:
+            return False
+
+        val_to_check = venue_obj["city"]
+
+        for qual_object in qualifiers["Team Exact City"]:
+            has_match = False
+            for stadium in qual_object["values"]:
+                if stadium == val_to_check.lower():
+                    has_match = True
+                    break
+            if qual_object["negate"]:
+                if has_match:
+                    return False
+            else:
+                if not has_match:
+                    return False
+    
+    if "Team State" in qualifiers:
+        venue_obj = determine_venue_obj(row, True)
+        if not venue_obj:
+            return False
+
+        val_to_check = venue_obj["state"]
+
+        for qual_object in qualifiers["Team State"]:
+            has_match = False
+            for stadium in qual_object["values"]:
+                if stadium in val_to_check.lower():
+                    has_match = True
+                    break
+            if qual_object["negate"]:
+                if has_match:
+                    return False
+            else:
+                if not has_match:
+                    return False
+    
+    if "Team Exact State" in qualifiers:
+        venue_obj = determine_venue_obj(row, True)
+        if not venue_obj:
+            return False
+
+        val_to_check = venue_obj["state"]
+
+        for qual_object in qualifiers["Team Exact State"]:
+            has_match = False
+            for stadium in qual_object["values"]:
+                if stadium == val_to_check.lower():
+                    has_match = True
+                    break
+            if qual_object["negate"]:
+                if has_match:
+                    return False
+            else:
+                if not has_match:
+                    return False
+    
+    if "Team Country" in qualifiers:
+        venue_obj = determine_venue_obj(row, True)
+        if not venue_obj:
+            return False
+
+        val_to_check = venue_obj["country"]
+
+        for qual_object in qualifiers["Team Country"]:
+            has_match = False
+            for stadium in qual_object["values"]:
+                if stadium in val_to_check.lower():
+                    has_match = True
+                    break
+            if qual_object["negate"]:
+                if has_match:
+                    return False
+            else:
+                if not has_match:
+                    return False
+    
+    if "Team Exact Country" in qualifiers:
+        venue_obj = determine_venue_obj(row, True)
+        if not venue_obj:
+            return False
+
+        val_to_check = venue_obj["country"]
+
+        for qual_object in qualifiers["Team Exact Country"]:
+            has_match = False
+            for stadium in qual_object["values"]:
+                if stadium == val_to_check.lower():
+                    has_match = True
+                    break
+            if qual_object["negate"]:
+                if has_match:
+                    return False
+            else:
+                if not has_match:
+                    return False
+    
+    if "Team Time Zone" in qualifiers:
+        venue_obj = determine_venue_obj(row, True)
+        if not venue_obj:
+            return False
+
+        val_to_check = venue_obj["time_zone"]
+
+        for qual_object in qualifiers["Team Time Zone"]:
+            has_match = False
+            for stadium in qual_object["values"]:
+                if stadium in val_to_check.lower().replace("_", ""):
+                    has_match = True
+                    break
+            if qual_object["negate"]:
+                if has_match:
+                    return False
+            else:
+                if not has_match:
+                    return False
+    
+    if "Team Exact Time Zone" in qualifiers:
+        venue_obj = determine_venue_obj(row, True)
+        if not venue_obj:
+            return False
+
+        val_to_check = venue_obj["time_zone"]
+
+        for qual_object in qualifiers["Team Exact Time Zone"]:
+            has_match = False
+            for stadium in qual_object["values"]:
+                if stadium == val_to_check.lower().replace("_", ""):
+                    has_match = True
+                    break
+            if qual_object["negate"]:
+                if has_match:
+                    return False
+            else:
+                if not has_match:
+                    return False
+    
+    if "Opponent City" in qualifiers:
+        venue_obj = determine_venue_obj(row, False)
+        if not venue_obj:
+            return False
+
+        val_to_check = venue_obj["city"]
+
+        for qual_object in qualifiers["Opponent City"]:
+            has_match = False
+            for stadium in qual_object["values"]:
+                if stadium in val_to_check.lower():
+                    has_match = True
+                    break
+                elif venue_obj["state"].lower() == "ny" and val_to_check.lower() in ["brooklyn", "bronx", "flushing"]:
+                    if stadium in "new york":
+                        has_match = True
+                        break
+            if qual_object["negate"]:
+                if has_match:
+                    return False
+            else:
+                if not has_match:
+                    return False
+    
+    if "Opponent Exact City" in qualifiers:
+        venue_obj = determine_venue_obj(row, False)
+        if not venue_obj:
+            return False
+
+        val_to_check = venue_obj["city"]
+
+        for qual_object in qualifiers["Opponent Exact City"]:
+            has_match = False
+            for stadium in qual_object["values"]:
+                if stadium == val_to_check.lower():
+                    has_match = True
+                    break
+            if qual_object["negate"]:
+                if has_match:
+                    return False
+            else:
+                if not has_match:
+                    return False
+    
+    if "Opponent State" in qualifiers:
+        venue_obj = determine_venue_obj(row, False)
+        if not venue_obj:
+            return False
+
+        val_to_check = venue_obj["state"]
+
+        for qual_object in qualifiers["Opponent State"]:
+            has_match = False
+            for stadium in qual_object["values"]:
+                if stadium in val_to_check.lower():
+                    has_match = True
+                    break
+            if qual_object["negate"]:
+                if has_match:
+                    return False
+            else:
+                if not has_match:
+                    return False
+    
+    if "Opponent Exact State" in qualifiers:
+        venue_obj = determine_venue_obj(row, False)
+        if not venue_obj:
+            return False
+
+        val_to_check = venue_obj["state"]
+
+        for qual_object in qualifiers["Opponent Exact State"]:
+            has_match = False
+            for stadium in qual_object["values"]:
+                if stadium == val_to_check.lower():
+                    has_match = True
+                    break
+            if qual_object["negate"]:
+                if has_match:
+                    return False
+            else:
+                if not has_match:
+                    return False
+    
+    if "Opponent Country" in qualifiers:
+        venue_obj = determine_venue_obj(row, False)
+        if not venue_obj:
+            return False
+
+        val_to_check = venue_obj["country"]
+
+        for qual_object in qualifiers["Opponent Country"]:
+            has_match = False
+            for stadium in qual_object["values"]:
+                if stadium in val_to_check.lower():
+                    has_match = True
+                    break
+            if qual_object["negate"]:
+                if has_match:
+                    return False
+            else:
+                if not has_match:
+                    return False
+    
+    if "Opponent Exact Country" in qualifiers:
+        venue_obj = determine_venue_obj(row, False)
+        if not venue_obj:
+            return False
+
+        val_to_check = venue_obj["country"]
+
+        for qual_object in qualifiers["Opponent Exact Country"]:
+            has_match = False
+            for stadium in qual_object["values"]:
+                if stadium == val_to_check.lower():
+                    has_match = True
+                    break
+            if qual_object["negate"]:
+                if has_match:
+                    return False
+            else:
+                if not has_match:
+                    return False
+    
+    if "Opponent Time Zone" in qualifiers:
+        venue_obj = determine_venue_obj(row, False)
+        if not venue_obj:
+            return False
+
+        val_to_check = venue_obj["time_zone"]
+
+        for qual_object in qualifiers["Opponent Time Zone"]:
+            has_match = False
+            for stadium in qual_object["values"]:
+                if stadium in val_to_check.lower().replace("_", ""):
+                    has_match = True
+                    break
+            if qual_object["negate"]:
+                if has_match:
+                    return False
+            else:
+                if not has_match:
+                    return False
+    
+    if "Opponent Exact Time Zone" in qualifiers:
+        venue_obj = determine_venue_obj(row, False)
+        if not venue_obj:
+            return False
+            
+        val_to_check = venue_obj["time_zone"]
+
+        for qual_object in qualifiers["Opponent Exact Time Zone"]:
+            has_match = False
+            for stadium in qual_object["values"]:
+                if stadium == val_to_check.lower().replace("_", ""):
+                    has_match = True
+                    break
+            if qual_object["negate"]:
+                if has_match:
+                    return False
+            else:
+                if not has_match:
+                    return False
 
     return True
+
+def determine_venue_obj(row, is_team):
+    team_id = row["Shared"]["RawTm" if is_team else "RawOpponent"].upper()
+
+    if team_id in team_venue_history:
+        for pot_team_venue in team_venue_history[team_id]:
+            for stadium_id in team_venue_history[team_id]:
+                if row["Shared"]["Year"] in team_venue_history[team_id][stadium_id]:
+                    return team_venues[str(stadium_id)]
 
 def human_moon(date):
     date = datetime.datetime(year=date.year, month=date.month, day=date.day, hour=19, minute=0, second=0)
@@ -17301,7 +17690,7 @@ def handle_playoffs_data(all_rows, player_data, player_type, ind_player_type, pl
 
     is_qual_match = False
     for qualifier in time_frame["qualifiers"]:
-        if qualifier != "Team" and qualifier != "Team Franchise" and qualifier != "Team League" and qualifier != "Team Conference" and qualifier != "Team Division" and qualifier != "Rookie" and qualifier != "Max Stat" and qualifier != "Min Stat" and qualifier != "Max Streak" and qualifier != "Max Stretch" and qualifier != "Count Streak" and qualifier != "Quickest"  and qualifier != "Slowest" and qualifier != "Season Stat" and qualifier != "Season Age" and qualifier != "Season" and qualifier != "Season Reversed" and qualifier != "Season Index" and qualifier != "Season Index Reversed" and qualifier != "Previous Season Stat"  and qualifier != "Upcoming Season Stat" and qualifier != "Season Sub Query" and qualifier != "Or Season Sub Query" and qualifier != "Season Before Sub Query" and qualifier != "Season After Sub Query" and qualifier != "Winning Team" and qualifier != "Losing Team" and qualifier != "Tied Team" and qualifier !=  "Winning Or Tied Team" and qualifier !=  "Losing Or Tied Team" and qualifier != "Playoff Team" and qualifier != "Champ Winner Team" and qualifier != "Conference Winner Team" and qualifier != "Division Winner Team" and qualifier != "Team Win Percentage" and qualifier != "Team Games Over 500" and qualifier != "Team Wins" and qualifier != "Team Losses" and qualifier != "Team Ties" and qualifier != "Team Points Rank" and qualifier != "Team Points Allowed Rank" and qualifier != "Team Yards Rank" and qualifier != "Team Yards Allowed Rank" and qualifier != "Team Pass TD Rank" and qualifier != "Team Pass TD Allowed Rank" and qualifier != "Team Pass Yards Rank" and qualifier != "Team Pass Yards Allowed Rank" and qualifier != "Team ANY/A Rank" and qualifier != "Team ANY/A Allowed Rank" and qualifier != "Team Passer Rating Rank" and qualifier != "Team Passer Rating Allowed Rank" and qualifier != "Team Rush TD Rank" and qualifier != "Team Rush TD Allowed Rank" and qualifier != "Team Rush Yards Rank" and qualifier != "Team Rush Yards Allowed Rank" and qualifier != "Team Fantasy Position Rank" and qualifier != "Season Formula" and qualifier != "Team Had Bye" and qualifier != "Number" and qualifier != "Even Year" and qualifier != "Odd Year" and qualifier != "Year":
+        if qualifier != "Team" and qualifier != "Team Franchise" and qualifier != "Team League" and qualifier != "Team Conference" and qualifier != "Team Division" and qualifier != "Rookie" and qualifier != "Max Stat" and qualifier != "Min Stat" and qualifier != "Max Streak" and qualifier != "Max Stretch" and qualifier != "Count Streak" and qualifier != "Quickest"  and qualifier != "Slowest" and qualifier != "Season Stat" and qualifier != "Season Age" and qualifier != "Season" and qualifier != "Season Reversed" and qualifier != "Season Index" and qualifier != "Season Index Reversed" and qualifier != "Previous Season Stat"  and qualifier != "Upcoming Season Stat" and qualifier != "Season Sub Query" and qualifier != "Or Season Sub Query" and qualifier != "Season Before Sub Query" and qualifier != "Season After Sub Query" and qualifier != "Winning Team" and qualifier != "Losing Team" and qualifier != "Tied Team" and qualifier !=  "Winning Or Tied Team" and qualifier !=  "Losing Or Tied Team" and qualifier != "Playoff Team" and qualifier != "Champ Winner Team" and qualifier != "Conference Winner Team" and qualifier != "Division Winner Team" and qualifier != "Team Win Percentage" and qualifier != "Team Games Over 500" and qualifier != "Team Wins" and qualifier != "Team Losses" and qualifier != "Team Ties" and qualifier != "Team Points Rank" and qualifier != "Team Points Allowed Rank" and qualifier != "Team Yards Rank" and qualifier != "Team Yards Allowed Rank" and qualifier != "Team Pass TD Rank" and qualifier != "Team Pass TD Allowed Rank" and qualifier != "Team Pass Yards Rank" and qualifier != "Team Pass Yards Allowed Rank" and qualifier != "Team ANY/A Rank" and qualifier != "Team ANY/A Allowed Rank" and qualifier != "Team Passer Rating Rank" and qualifier != "Team Passer Rating Allowed Rank" and qualifier != "Team Rush TD Rank" and qualifier != "Team Rush TD Allowed Rank" and qualifier != "Team Rush Yards Rank" and qualifier != "Team Rush Yards Allowed Rank" and qualifier != "Team Fantasy Position Rank" and qualifier != "Season Formula" and qualifier != "Team Had Bye" and qualifier != "Number" and qualifier != "Even Year" and qualifier != "Odd Year" and qualifier != "Year" and qualifier != "Team City" and qualifier != "Team Exact City" and qualifier != "Team State" and qualifier != "Team Exact State" and qualifier != "Team Country" and qualifier != "Team Exact Country" and qualifier != "Team Time Zone" and qualifier != "Team Exact Time Zone":
             is_qual_match = True
         elif qualifier == "Max Stat" or qualifier == "Min Stat" or qualifier == "Max Streak" or qualifier == "Max Stretch" or qualifier == "Count Streak" or qualifier == "Quickest" or qualifier == "Slowest":
             for qual_object in time_frame["qualifiers"][qualifier]:

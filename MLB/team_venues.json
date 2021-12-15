@@ -1,11 +1,9 @@
 {
     "1": {
-        "City": "Anaheim",
-        "Country": "USA",
-        "State": "CA",
-        "TimeZone": "America/Los_Angeles",
-        "TimeZoneID": "PST",
-        "TimeZoneOffset": -8,
+        "city": "Anaheim",
+        "country": "USA",
+        "state": "CA",
+        "time_zone": "America/Los_Angeles",
         "values": [
             "Anaheim Stadium",
             "Edison International Field",
@@ -14,12 +12,10 @@
         ]
     },
     "10": {
-        "City": "Oakland",
-        "Country": "USA",
-        "State": "CA",
-        "TimeZone": "America/Los_Angeles",
-        "TimeZoneID": "PST",
-        "TimeZoneOffset": -8,
+        "city": "Oakland",
+        "country": "USA",
+        "state": "CA",
+        "time_zone": "America/Los_Angeles",
         "values": [
             "Oakland-Alameda County Coliseum",
             "Network Associates Coliseum",
@@ -29,34 +25,28 @@
         ]
     },
     "11": {
-        "City": "Seattle",
-        "Country": "USA",
-        "State": "WA",
-        "TimeZone": "America/Los_Angeles",
-        "TimeZoneID": "PST",
-        "TimeZoneOffset": -8,
+        "city": "Seattle",
+        "country": "USA",
+        "state": "WA",
+        "time_zone": "America/Los_Angeles",
         "values": [
             "The Kingdome"
         ]
     },
     "12": {
-        "City": "St. Petersburg",
-        "Country": "USA",
-        "State": "FL",
-        "TimeZone": "America/New_York",
-        "TimeZoneID": "EST",
-        "TimeZoneOffset": -5,
+        "city": "St. Petersburg",
+        "country": "USA",
+        "state": "FL",
+        "time_zone": "America/New_York",
         "values": [
             "Tropicana Field"
         ]
     },
     "13": {
-        "City": "Arlington",
-        "Country": "USA",
-        "State": "TX",
-        "TimeZone": "America/Chicago",
-        "TimeZoneID": "CST",
-        "TimeZoneOffset": -6,
+        "city": "Arlington",
+        "country": "USA",
+        "state": "TX",
+        "time_zone": "America/Chicago",
         "values": [
             "The Ballpark at Arlington",
             "Ameriquest Field",
@@ -65,47 +55,39 @@
         ]
     },
     "14": {
-        "City": "Toronto",
-        "Country": "Canada",
-        "State": "ON",
-        "TimeZone": "America/Toronto",
-        "TimeZoneID": "EST",
-        "TimeZoneOffset": -5,
+        "city": "Toronto",
+        "country": "Canada",
+        "state": "ON",
+        "time_zone": "America/Toronto",
         "values": [
             "SkyDome",
             "Rogers Centre"
         ]
     },
     "15": {
-        "City": "Phoenix",
-        "Country": "USA",
-        "State": "AZ",
-        "TimeZone": "America/Phoenix",
-        "TimeZoneID": "MST",
-        "TimeZoneOffset": -7,
+        "city": "Phoenix",
+        "country": "USA",
+        "state": "AZ",
+        "time_zone": "America/Phoenix",
         "values": [
             "Bank One Ballpark",
             "Chase Field"
         ]
     },
     "16": {
-        "City": "Atlanta",
-        "Country": "USA",
-        "State": "GA",
-        "TimeZone": "America/New_York",
-        "TimeZoneID": "EST",
-        "TimeZoneOffset": -5,
+        "city": "Atlanta",
+        "country": "USA",
+        "state": "GA",
+        "time_zone": "America/New_York",
         "values": [
             "Turner Field"
         ]
     },
     "17": {
-        "City": "Chicago",
-        "Country": "USA",
-        "State": "IL",
-        "TimeZone": "America/Chicago",
-        "TimeZoneID": "CST",
-        "TimeZoneOffset": -6,
+        "city": "Chicago",
+        "country": "USA",
+        "state": "IL",
+        "time_zone": "America/Chicago",
         "values": [
             "Weeghman Park",
             "Cubs Park",
@@ -113,46 +95,38 @@
         ]
     },
     "18": {
-        "City": "Cincinnati",
-        "Country": "USA",
-        "State": "OH",
-        "TimeZone": "America/New_York",
-        "TimeZoneID": "EST",
-        "TimeZoneOffset": -5,
+        "city": "Cincinnati",
+        "country": "USA",
+        "state": "OH",
+        "time_zone": "America/New_York",
         "values": [
             "Riverfront Stadium",
             "Cinergy Field"
         ]
     },
     "19": {
-        "City": "Denver",
-        "Country": "USA",
-        "State": "CO",
-        "TimeZone": "America/Denver",
-        "TimeZoneID": "MST",
-        "TimeZoneOffset": -7,
+        "city": "Denver",
+        "country": "USA",
+        "state": "CO",
+        "time_zone": "America/Denver",
         "values": [
             "Coors Field"
         ]
     },
     "2": {
-        "City": "Baltimore",
-        "Country": "USA",
-        "State": "MD",
-        "TimeZone": "America/New_York",
-        "TimeZoneID": "EST",
-        "TimeZoneOffset": -5,
+        "city": "Baltimore",
+        "country": "USA",
+        "state": "MD",
+        "time_zone": "America/New_York",
         "values": [
             "Oriole Park at Camden Yards"
         ]
     },
     "20": {
-        "City": "Miami",
-        "Country": "USA",
-        "State": "FL",
-        "TimeZone": "America/New_York",
-        "TimeZoneID": "EST",
-        "TimeZoneOffset": -5,
+        "city": "Miami",
+        "country": "USA",
+        "state": "FL",
+        "time_zone": "America/New_York",
         "values": [
             "Joe Robbie Stadium",
             "Pro Player Stadium",
@@ -162,45 +136,37 @@
         ]
     },
     "21": {
-        "City": "Houston",
-        "Country": "USA",
-        "State": "TX",
-        "TimeZone": "America/Chicago",
-        "TimeZoneID": "CST",
-        "TimeZoneOffset": -6,
+        "city": "Houston",
+        "country": "USA",
+        "state": "TX",
+        "time_zone": "America/Chicago",
         "values": [
             "Astrodome"
         ]
     },
     "22": {
-        "City": "Los Angeles",
-        "Country": "USA",
-        "State": "CA",
-        "TimeZone": "America/Los_Angeles",
-        "TimeZoneID": "PST",
-        "TimeZoneOffset": -8,
+        "city": "Los Angeles",
+        "country": "USA",
+        "state": "CA",
+        "time_zone": "America/Los_Angeles",
         "values": [
             "Dodger Stadium"
         ]
     },
     "23": {
-        "City": "Milwaukee",
-        "Country": "USA",
-        "State": "WI",
-        "TimeZone": "America/Chicago",
-        "TimeZoneID": "CST",
-        "TimeZoneOffset": -6,
+        "city": "Milwaukee",
+        "country": "USA",
+        "state": "WI",
+        "time_zone": "America/Chicago",
         "values": [
             "Milwaukee County Stadium"
         ]
     },
     "2392": {
-        "City": "Houston",
-        "Country": "USA",
-        "State": "TX",
-        "TimeZone": "America/Chicago",
-        "TimeZoneID": "CST",
-        "TimeZoneOffset": -6,
+        "city": "Houston",
+        "country": "USA",
+        "state": "TX",
+        "time_zone": "America/Chicago",
         "values": [
             "Enron Field",
             "Astros Field",
@@ -208,23 +174,19 @@
         ]
     },
     "2394": {
-        "City": "Detroit",
-        "Country": "USA",
-        "State": "MI",
-        "TimeZone": "America/Detroit",
-        "TimeZoneID": "EST",
-        "TimeZoneOffset": -5,
+        "city": "Detroit",
+        "country": "USA",
+        "state": "MI",
+        "time_zone": "America/Detroit",
         "values": [
             "Comerica Park"
         ]
     },
     "2395": {
-        "City": "San Francisco",
-        "Country": "USA",
-        "State": "CA",
-        "TimeZone": "America/Los_Angeles",
-        "TimeZoneID": "PST",
-        "TimeZoneOffset": -8,
+        "city": "San Francisco",
+        "country": "USA",
+        "state": "CA",
+        "time_zone": "America/Los_Angeles",
         "values": [
             "PacBell Park",
             "SBC Park",
@@ -233,191 +195,157 @@
         ]
     },
     "2397": {
-        "City": "Bunkyo City",
-        "Country": "Japan",
-        "State": "JP",
-        "TimeZone": "Asia/Tokyo",
-        "TimeZoneID": "JST",
-        "TimeZoneOffset": 9,
+        "city": "Bunkyo City",
+        "country": "Japan",
+        "state": "JP",
+        "time_zone": "Asia/Tokyo",
         "values": [
             "Tokyo Dome"
         ]
     },
     "24": {
-        "City": "Montreal",
-        "Country": "Canada",
-        "State": "QB",
-        "TimeZone": "America/Toronto",
-        "TimeZoneID": "EST",
-        "TimeZoneOffset": -5,
+        "city": "Montreal",
+        "country": "Canada",
+        "state": "QB",
+        "time_zone": "America/Toronto",
         "values": [
             "Olympic Stadium"
         ]
     },
     "25": {
-        "City": "Flushing",
-        "Country": "USA",
-        "State": "NY",
-        "TimeZone": "America/New_York",
-        "TimeZoneID": "EST",
-        "TimeZoneOffset": -5,
+        "city": "Flushing",
+        "country": "USA",
+        "state": "NY",
+        "time_zone": "America/New_York",
         "values": [
             "Shea Stadium"
         ]
     },
     "2503": {
-        "City": "Las Vegas",
-        "Country": "USA",
-        "State": "NV",
-        "TimeZone": "America/Los_Angeles",
-        "TimeZoneID": "PST",
-        "TimeZoneOffset": -8,
+        "city": "Las Vegas",
+        "country": "USA",
+        "state": "NV",
+        "time_zone": "America/Los_Angeles",
         "values": [
             "Cashman Field"
         ]
     },
     "2504": {
-        "City": "Lake Buena Vista",
-        "Country": "USA",
-        "State": "FL",
-        "TimeZone": "America/New_York",
-        "TimeZoneID": "EST",
-        "TimeZoneOffset": -5,
+        "city": "Lake Buena Vista",
+        "country": "USA",
+        "state": "FL",
+        "time_zone": "America/New_York",
         "values": [
             "Disney's Wide World of Sports",
             "Champion Stadium"
         ]
     },
     "2535": {
-        "City": "San Juan",
-        "Country": "Puerto Rico",
-        "State": "PR",
-        "TimeZone": "America/Puerto_Rico",
-        "TimeZoneID": "AST",
-        "TimeZoneOffset": -4,
+        "city": "San Juan",
+        "country": "Puerto Rico",
+        "state": "PR",
+        "time_zone": "America/Puerto_Rico",
         "values": [
             "Hiram Bithorn Stadium"
         ]
     },
     "2536": {
-        "City": "Dunedin",
-        "Country": "USA",
-        "State": "FL",
-        "TimeZone": "America/New_York",
-        "TimeZoneID": "EST",
-        "TimeZoneOffset": -5,
+        "city": "Dunedin",
+        "country": "USA",
+        "state": "FL",
+        "time_zone": "America/New_York",
         "values": [
             "TD Ballpark"
         ]
     },
     "26": {
-        "City": "Philadelphia",
-        "Country": "USA",
-        "State": "PA",
-        "TimeZone": "America/New_York",
-        "TimeZoneID": "EST",
-        "TimeZoneOffset": -5,
+        "city": "Philadelphia",
+        "country": "USA",
+        "state": "PA",
+        "time_zone": "America/New_York",
         "values": [
             "Veterans Stadium"
         ]
     },
     "2602": {
-        "City": "Cincinnati",
-        "Country": "USA",
-        "State": "OH",
-        "TimeZone": "America/New_York",
-        "TimeZoneID": "EST",
-        "TimeZoneOffset": -5,
+        "city": "Cincinnati",
+        "country": "USA",
+        "state": "OH",
+        "time_zone": "America/New_York",
         "values": [
             "Great American Ball Park"
         ]
     },
     "2680": {
-        "City": "San Diego",
-        "Country": "USA",
-        "State": "CA",
-        "TimeZone": "America/Los_Angeles",
-        "TimeZoneID": "PST",
-        "TimeZoneOffset": -8,
+        "city": "San Diego",
+        "country": "USA",
+        "state": "CA",
+        "time_zone": "America/Los_Angeles",
         "values": [
             "PETCO Park",
             "Petco Park"
         ]
     },
     "2681": {
-        "City": "Philadelphia",
-        "Country": "USA",
-        "State": "PA",
-        "TimeZone": "America/New_York",
-        "TimeZoneID": "EST",
-        "TimeZoneOffset": -5,
+        "city": "Philadelphia",
+        "country": "USA",
+        "state": "PA",
+        "time_zone": "America/New_York",
         "values": [
             "Citizens Bank Park"
         ]
     },
     "27": {
-        "City": "Pittsburgh",
-        "Country": "USA",
-        "State": "PA",
-        "TimeZone": "America/New_York",
-        "TimeZoneID": "EST",
-        "TimeZoneOffset": -5,
+        "city": "Pittsburgh",
+        "country": "USA",
+        "state": "PA",
+        "time_zone": "America/New_York",
         "values": [
             "Three Rivers Stadium"
         ]
     },
     "2701": {
-        "City": "Monterrey",
-        "Country": "Mexico",
-        "State": "MX",
-        "TimeZone": "America/Monterrey",
-        "TimeZoneID": "CST",
-        "TimeZoneOffset": -6,
+        "city": "Monterrey",
+        "country": "Mexico",
+        "state": "MX",
+        "time_zone": "America/Monterrey",
         "values": [
             "Estadio de Beisbol Monterrey"
         ]
     },
     "2721": {
-        "City": "Washington",
-        "Country": "USA",
-        "State": "DC",
-        "TimeZone": "America/New_York",
-        "TimeZoneID": "EST",
-        "TimeZoneOffset": -5,
+        "city": "Washington",
+        "country": "USA",
+        "state": "DC",
+        "time_zone": "America/New_York",
         "values": [
             "D.C. Stadium",
             "Robert F. Kennedy Memorial Stadium"
         ]
     },
     "2735": {
-        "City": "Williamsport",
-        "Country": "USA",
-        "State": "PA",
-        "TimeZone": "America/New_York",
-        "TimeZoneID": "EST",
-        "TimeZoneOffset": -5,
+        "city": "Williamsport",
+        "country": "USA",
+        "state": "PA",
+        "time_zone": "America/New_York",
         "values": [
             "BB&T Ballpark"
         ]
     },
     "2756": {
-        "City": "Buffalo",
-        "Country": "USA",
-        "State": "NY",
-        "TimeZone": "America/New_York",
-        "TimeZoneID": "EST",
-        "TimeZoneOffset": -5,
+        "city": "Buffalo",
+        "country": "USA",
+        "state": "NY",
+        "time_zone": "America/New_York",
         "values": [
             "Sahlen Field"
         ]
     },
     "28": {
-        "City": "San Diego",
-        "Country": "USA",
-        "State": "CA",
-        "TimeZone": "America/Los_Angeles",
-        "TimeZoneID": "PST",
-        "TimeZoneOffset": -8,
+        "city": "San Diego",
+        "country": "USA",
+        "state": "CA",
+        "time_zone": "America/Los_Angeles",
         "values": [
             "San Diego Stadium",
             "Jack Murphy Stadium",
@@ -425,745 +353,611 @@
         ]
     },
     "2889": {
-        "City": "St. Louis",
-        "Country": "USA",
-        "State": "MO",
-        "TimeZone": "America/Chicago",
-        "TimeZoneID": "CST",
-        "TimeZoneOffset": -6,
+        "city": "St. Louis",
+        "country": "USA",
+        "state": "MO",
+        "time_zone": "America/Chicago",
         "values": [
             "Busch Stadium"
         ]
     },
     "29": {
-        "City": "San Francisco",
-        "Country": "USA",
-        "State": "CA",
-        "TimeZone": "America/Los_Angeles",
-        "TimeZoneID": "PST",
-        "TimeZoneOffset": -8,
+        "city": "San Francisco",
+        "country": "USA",
+        "state": "CA",
+        "time_zone": "America/Los_Angeles",
         "values": [
             "Candlestick Park",
             "3Com Park at Candlestick Point"
         ]
     },
     "3": {
-        "City": "Boston",
-        "Country": "USA",
-        "State": "MA",
-        "TimeZone": "America/New_York",
-        "TimeZoneID": "EST",
-        "TimeZoneOffset": -5,
+        "city": "Boston",
+        "country": "USA",
+        "state": "MA",
+        "time_zone": "America/New_York",
         "values": [
             "Fenway Park"
         ]
     },
     "30": {
-        "City": "St. Louis",
-        "Country": "USA",
-        "State": "MO",
-        "TimeZone": "America/Chicago",
-        "TimeZoneID": "CST",
-        "TimeZoneOffset": -6,
+        "city": "St. Louis",
+        "country": "USA",
+        "state": "MO",
+        "time_zone": "America/Chicago",
         "values": [
             "Busch Stadium"
         ]
     },
     "31": {
-        "City": "Pittsburgh",
-        "Country": "USA",
-        "State": "PA",
-        "TimeZone": "America/New_York",
-        "TimeZoneID": "EST",
-        "TimeZoneOffset": -5,
+        "city": "Pittsburgh",
+        "country": "USA",
+        "state": "PA",
+        "time_zone": "America/New_York",
         "values": [
             "PNC Park"
         ]
     },
     "3109": {
-        "City": "Washington",
-        "Country": "USA",
-        "State": "DC",
-        "TimeZone": "America/New_York",
-        "TimeZoneID": "EST",
-        "TimeZoneOffset": -5,
+        "city": "Washington",
+        "country": "USA",
+        "state": "DC",
+        "time_zone": "America/New_York",
         "values": [
             "League Park"
         ]
     },
     "3110": {
-        "City": "Washington",
-        "Country": "USA",
-        "State": "DC",
-        "TimeZone": "America/New_York",
-        "TimeZoneID": "EST",
-        "TimeZoneOffset": -5,
+        "city": "Washington",
+        "country": "USA",
+        "state": "DC",
+        "time_zone": "America/New_York",
         "values": [
             "League Park"
         ]
     },
     "3111": {
-        "City": "Arlington",
-        "Country": "USA",
-        "State": "TX",
-        "TimeZone": "America/Chicago",
-        "TimeZoneID": "CST",
-        "TimeZoneOffset": -6,
+        "city": "Arlington",
+        "country": "USA",
+        "state": "TX",
+        "time_zone": "America/Chicago",
         "values": [
             "Arlington Stadium"
         ]
     },
     "3112": {
-        "City": "Atlanta",
-        "Country": "USA",
-        "State": "GA",
-        "TimeZone": "America/New_York",
-        "TimeZoneID": "EST",
-        "TimeZoneOffset": -5,
+        "city": "Atlanta",
+        "country": "USA",
+        "state": "GA",
+        "time_zone": "America/New_York",
         "values": [
             "Atlanta Stadium",
             "Atlanta-Fulton County Stadium"
         ]
     },
     "3113": {
-        "City": "Philadelphia",
-        "Country": "USA",
-        "State": "PA",
-        "TimeZone": "America/New_York",
-        "TimeZoneID": "EST",
-        "TimeZoneOffset": -5,
+        "city": "Philadelphia",
+        "country": "USA",
+        "state": "PA",
+        "time_zone": "America/New_York",
         "values": [
             "Baker Bowl"
         ]
     },
     "3114": {
-        "City": "Detroit",
-        "Country": "USA",
-        "State": "MI",
-        "TimeZone": "America/Detroit",
-        "TimeZoneID": "EST",
-        "TimeZoneOffset": -5,
+        "city": "Detroit",
+        "country": "USA",
+        "state": "MI",
+        "time_zone": "America/Detroit",
         "values": [
             "Bennett Park"
         ]
     },
     "3115": {
-        "City": "Boston",
-        "Country": "USA",
-        "State": "MA",
-        "TimeZone": "America/New_York",
-        "TimeZoneID": "EST",
-        "TimeZoneOffset": -5,
+        "city": "Boston",
+        "country": "USA",
+        "state": "MA",
+        "time_zone": "America/New_York",
         "values": [
             "Braves Field"
         ]
     },
     "3116": {
-        "City": "Cleveland",
-        "Country": "USA",
-        "State": "OH",
-        "TimeZone": "America/New_York",
-        "TimeZoneID": "EST",
-        "TimeZoneOffset": -5,
+        "city": "Cleveland",
+        "country": "USA",
+        "state": "OH",
+        "time_zone": "America/New_York",
         "values": [
             "Cleveland Municipal Stadium"
         ]
     },
     "3117": {
-        "City": "Houston",
-        "Country": "USA",
-        "State": "TX",
-        "TimeZone": "America/Chicago",
-        "TimeZoneID": "CST",
-        "TimeZoneOffset": -6,
+        "city": "Houston",
+        "country": "USA",
+        "state": "TX",
+        "time_zone": "America/Chicago",
         "values": [
             "Colt Stadium"
         ]
     },
     "3118": {
-        "City": "Philadelphia",
-        "Country": "USA",
-        "State": "PA",
-        "TimeZone": "America/New_York",
-        "TimeZoneID": "EST",
-        "TimeZoneOffset": -5,
+        "city": "Philadelphia",
+        "country": "USA",
+        "state": "PA",
+        "time_zone": "America/New_York",
         "values": [
             "Columbia Park"
         ]
     },
     "3119": {
-        "City": "Chicago",
-        "Country": "USA",
-        "State": "IL",
-        "TimeZone": "America/Chicago",
-        "TimeZoneID": "CST",
-        "TimeZoneOffset": -6,
+        "city": "Chicago",
+        "country": "USA",
+        "state": "IL",
+        "time_zone": "America/Chicago",
         "values": [
             "Comiskey Park"
         ]
     },
     "3120": {
-        "City": "Cincinnati",
-        "Country": "USA",
-        "State": "OH",
-        "TimeZone": "America/New_York",
-        "TimeZoneID": "EST",
-        "TimeZoneOffset": -5,
+        "city": "Cincinnati",
+        "country": "USA",
+        "state": "OH",
+        "time_zone": "America/New_York",
         "values": [
             "Redland Field",
             "Crosley Field"
         ]
     },
     "3121": {
-        "City": "Brooklyn",
-        "Country": "USA",
-        "State": "NY",
-        "TimeZone": "America/New_York",
-        "TimeZoneID": "EST",
-        "TimeZoneOffset": -5,
+        "city": "Brooklyn",
+        "country": "USA",
+        "state": "NY",
+        "time_zone": "America/New_York",
         "values": [
             "Ebbets Field"
         ]
     },
     "3123": {
-        "City": "Toronto",
-        "Country": "USA",
-        "State": "ON",
-        "TimeZone": "America/Toronto",
-        "TimeZoneID": "EST",
-        "TimeZoneOffset": -5,
+        "city": "Toronto",
+        "country": "USA",
+        "state": "ON",
+        "time_zone": "America/Toronto",
         "values": [
             "Exhibition Stadium"
         ]
     },
     "3124": {
-        "City": "Pittsburgh",
-        "Country": "USA",
-        "State": "PA",
-        "TimeZone": "America/New_York",
-        "TimeZoneID": "EST",
-        "TimeZoneOffset": -5,
+        "city": "Pittsburgh",
+        "country": "USA",
+        "state": "PA",
+        "time_zone": "America/New_York",
         "values": [
             "Exposition Park"
         ]
     },
     "3125": {
-        "City": "Pittsburgh",
-        "Country": "USA",
-        "State": "PA",
-        "TimeZone": "America/New_York",
-        "TimeZoneID": "EST",
-        "TimeZoneOffset": -5,
+        "city": "Pittsburgh",
+        "country": "USA",
+        "state": "PA",
+        "time_zone": "America/New_York",
         "values": [
             "Forbes Field"
         ]
     },
     "3126": {
-        "City": "Washington",
-        "Country": "USA",
-        "State": "DC",
-        "TimeZone": "America/New_York",
-        "TimeZoneID": "EST",
-        "TimeZoneOffset": -5,
+        "city": "Washington",
+        "country": "USA",
+        "state": "DC",
+        "time_zone": "America/New_York",
         "values": [
             "National Park",
             "Griffith Stadium"
         ]
     },
     "3127": {
-        "City": "New York",
-        "Country": "USA",
-        "State": "NY",
-        "TimeZone": "America/New_York",
-        "TimeZoneID": "EST",
-        "TimeZoneOffset": -5,
+        "city": "New York",
+        "country": "USA",
+        "state": "NY",
+        "time_zone": "America/New_York",
         "values": [
             "Hilltop Park"
         ]
     },
     "3128": {
-        "City": "Boston",
-        "Country": "USA",
-        "State": "MA",
-        "TimeZone": "America/New_York",
-        "TimeZoneID": "EST",
-        "TimeZoneOffset": -5,
+        "city": "Boston",
+        "country": "USA",
+        "state": "MA",
+        "time_zone": "America/New_York",
         "values": [
             "Huntington Avenue Grounds"
         ]
     },
     "3129": {
-        "City": "Montreal",
-        "Country": "USA",
-        "State": "QB",
-        "TimeZone": "America/Toronto",
-        "TimeZoneID": "EST",
-        "TimeZoneOffset": -5,
+        "city": "Montreal",
+        "country": "USA",
+        "state": "QB",
+        "time_zone": "America/Toronto",
         "values": [
             "Jarry Park"
         ]
     },
     "3131": {
-        "City": "Cleveland",
-        "Country": "USA",
-        "State": "OH",
-        "TimeZone": "America/New_York",
-        "TimeZoneID": "EST",
-        "TimeZoneOffset": -5,
+        "city": "Cleveland",
+        "country": "USA",
+        "state": "OH",
+        "time_zone": "America/New_York",
         "values": [
             "League Park",
             "Dunn Field"
         ]
     },
     "3132": {
-        "City": "Milwaukee",
-        "Country": "USA",
-        "State": "WI",
-        "TimeZone": "America/Chicago",
-        "TimeZoneID": "CST",
-        "TimeZoneOffset": -6,
+        "city": "Milwaukee",
+        "country": "USA",
+        "state": "WI",
+        "time_zone": "America/Chicago",
         "values": [
             "Lloyd Street Grounds"
         ]
     },
     "3133": {
-        "City": "Los Angeles",
-        "Country": "USA",
-        "State": "CA",
-        "TimeZone": "America/Los_Angeles",
-        "TimeZoneID": "PST",
-        "TimeZoneOffset": -8,
+        "city": "Los Angeles",
+        "country": "USA",
+        "state": "CA",
+        "time_zone": "America/Los_Angeles",
         "values": [
             "Los Angeles Memorial Coliseum"
         ]
     },
     "3134": {
-        "City": "Baltimore",
-        "Country": "USA",
-        "State": "MD",
-        "TimeZone": "America/New_York",
-        "TimeZoneID": "EST",
-        "TimeZoneOffset": -5,
+        "city": "Baltimore",
+        "country": "USA",
+        "state": "MD",
+        "time_zone": "America/New_York",
         "values": [
             "Memorial Stadium"
         ]
     },
     "3135": {
-        "City": "Bloomington ",
-        "Country": "USA",
-        "State": "MI",
-        "TimeZone": "America/Chicago",
-        "TimeZoneID": "CST",
-        "TimeZoneOffset": -6,
+        "city": "Bloomington ",
+        "country": "USA",
+        "state": "MI",
+        "time_zone": "America/Chicago",
         "values": [
             "Metropolitan Stadium"
         ]
     },
     "3136": {
-        "City": "Denver",
-        "Country": "USA",
-        "State": "CO",
-        "TimeZone": "America/Denver",
-        "TimeZoneID": "MST",
-        "TimeZoneOffset": -7,
+        "city": "Denver",
+        "country": "USA",
+        "state": "CO",
+        "time_zone": "America/Denver",
         "values": [
             "Mile High Stadium"
         ]
     },
     "3137": {
-        "City": "Kansas City",
-        "Country": "USA",
-        "State": "MO",
-        "TimeZone": "America/Chicago",
-        "TimeZoneID": "CST",
-        "TimeZoneOffset": -6,
+        "city": "Kansas City",
+        "country": "USA",
+        "state": "MO",
+        "time_zone": "America/Chicago",
         "values": [
             "Municipal Stadium"
         ]
     },
     "3138": {
-        "City": "Cincinnati",
-        "Country": "USA",
-        "State": "OH",
-        "TimeZone": "America/New_York",
-        "TimeZoneID": "EST",
-        "TimeZoneOffset": -5,
+        "city": "Cincinnati",
+        "country": "USA",
+        "state": "OH",
+        "time_zone": "America/New_York",
         "values": [
             "Palace of the Fans"
         ]
     },
     "3139": {
-        "City": "New York",
-        "Country": "USA",
-        "State": "NY",
-        "TimeZone": "America/New_York",
-        "TimeZoneID": "EST",
-        "TimeZoneOffset": -5,
+        "city": "New York",
+        "country": "USA",
+        "state": "NY",
+        "time_zone": "America/New_York",
         "values": [
             "Polo Grounds"
         ]
     },
     "3140": {
-        "City": "New York",
-        "Country": "USA",
-        "State": "NY",
-        "TimeZone": "America/New_York",
-        "TimeZoneID": "EST",
-        "TimeZoneOffset": -5,
+        "city": "New York",
+        "country": "USA",
+        "state": "NY",
+        "time_zone": "America/New_York",
         "values": [
             "Polo Grounds"
         ]
     },
     "3141": {
-        "City": "St. Louis",
-        "Country": "USA",
-        "State": "MO",
-        "TimeZone": "America/Chicago",
-        "TimeZoneID": "CST",
-        "TimeZoneOffset": -6,
+        "city": "St. Louis",
+        "country": "USA",
+        "state": "MO",
+        "time_zone": "America/Chicago",
         "values": [
             "Robison Field"
         ]
     },
     "3142": {
-        "City": "San Francisco  ",
-        "Country": "USA",
-        "State": "CA",
-        "TimeZone": "America/Los_Angeles",
-        "TimeZoneID": "PST",
-        "TimeZoneOffset": -8,
+        "city": "San Francisco  ",
+        "country": "USA",
+        "state": "CA",
+        "time_zone": "America/Los_Angeles",
         "values": [
             "Seals Stadium"
         ]
     },
     "3143": {
-        "City": "Philadelphia",
-        "Country": "USA",
-        "State": "PA",
-        "TimeZone": "America/New_York",
-        "TimeZoneID": "EST",
-        "TimeZoneOffset": -5,
+        "city": "Philadelphia",
+        "country": "USA",
+        "state": "PA",
+        "time_zone": "America/New_York",
         "values": [
             "Shibe Park",
             "Connie Mack Stadium"
         ]
     },
     "3144": {
-        "City": "Boston",
-        "Country": "USA",
-        "State": "MA",
-        "TimeZone": "America/Los_Angeles",
-        "TimeZoneID": "PST",
-        "TimeZoneOffset": -8,
+        "city": "Boston",
+        "country": "USA",
+        "state": "MA",
+        "time_zone": "America/Los_Angeles",
         "values": [
             "Sicks Stadium"
         ]
     },
     "3147": {
-        "City": "Boston",
-        "Country": "USA",
-        "State": "MA",
-        "TimeZone": "America/New_York",
-        "TimeZoneID": "EST",
-        "TimeZoneOffset": -5,
+        "city": "Boston",
+        "country": "USA",
+        "state": "MA",
+        "time_zone": "America/New_York",
         "values": [
             "South End Grounds"
         ]
     },
     "3148": {
-        "City": "Chicago",
-        "Country": "USA",
-        "State": "IL",
-        "TimeZone": "America/Chicago",
-        "TimeZoneID": "CST",
-        "TimeZoneOffset": -6,
+        "city": "Chicago",
+        "country": "USA",
+        "state": "IL",
+        "time_zone": "America/Chicago",
         "values": [
-            "South Side Park "
+            "South Side Park"
         ]
     },
     "3149": {
-        "City": "St. Louis",
-        "Country": "USA",
-        "State": "MO",
-        "TimeZone": "America/Chicago",
-        "TimeZoneID": "CST",
-        "TimeZoneOffset": -6,
+        "city": "St. Louis",
+        "country": "USA",
+        "state": "MO",
+        "time_zone": "America/Chicago",
         "values": [
             "Sportsman's Park"
         ]
     },
     "3150": {
-        "City": "Brooklyn",
-        "Country": "USA",
-        "State": "NY",
-        "TimeZone": "America/New_York",
-        "TimeZoneID": "EST",
-        "TimeZoneOffset": -5,
+        "city": "Brooklyn",
+        "country": "USA",
+        "state": "NY",
+        "time_zone": "America/New_York",
         "values": [
-            "Washington Park "
+            "Washington Park"
         ]
     },
     "3153": {
-        "City": "Los Angeles",
-        "Country": "USA",
-        "State": "CA",
-        "TimeZone": "America/Los_Angeles",
-        "TimeZoneID": "PST",
-        "TimeZoneOffset": -8,
+        "city": "Los Angeles",
+        "country": "USA",
+        "state": "CA",
+        "time_zone": "America/Los_Angeles",
         "values": [
             "Wrigley Field"
         ]
     },
     "3154": {
-        "City": "Honolulu",
-        "Country": "USA",
-        "State": "HI",
-        "TimeZone": "Pacific/Honolulu",
-        "TimeZoneID": "HST",
-        "TimeZoneOffset": -10,
+        "city": "Honolulu",
+        "country": "USA",
+        "state": "HI",
+        "time_zone": "Pacific/Honolulu",
         "values": [
             "Aloha Stadium"
         ]
     },
     "3155": {
-        "City": "Toledo",
-        "Country": "USA",
-        "State": "OH",
-        "TimeZone": "America/New_York",
-        "TimeZoneID": "EST",
-        "TimeZoneOffset": -5,
+        "city": "Toledo",
+        "country": "USA",
+        "state": "OH",
+        "time_zone": "America/New_York",
         "values": [
             "Armory Park"
         ]
     },
     "3156": {
-        "City": "Detroit",
-        "Country": "USA",
-        "State": "MI",
-        "TimeZone": "America/Detroit",
-        "TimeZoneID": "EST",
-        "TimeZoneOffset": -5,
+        "city": "Detroit",
+        "country": "USA",
+        "state": "MI",
+        "time_zone": "America/Detroit",
         "values": [
             "Burns Park"
         ]
     },
     "3157": {
-        "City": "Dayton",
-        "Country": "USA",
-        "State": "OH",
-        "TimeZone": "America/New_York",
-        "TimeZoneID": "EST",
-        "TimeZoneOffset": -5,
+        "city": "Dayton",
+        "country": "USA",
+        "state": "OH",
+        "time_zone": "America/New_York",
         "values": [
             "Fairview Park"
         ]
     },
     "3158": {
-        "City": "Fort Wayne",
-        "Country": "USA",
-        "State": "IN",
-        "TimeZone": "America/Indiana/Indianapolis",
-        "TimeZoneID": "EST",
-        "TimeZoneOffset": -5,
+        "city": "Fort Wayne",
+        "country": "USA",
+        "state": "IN",
+        "time_zone": "America/Indiana/Indianapolis",
         "values": [
             "Jailhouse Flats"
         ]
     },
     "3159": {
-        "City": "Cleveland",
-        "Country": "USA",
-        "State": "OH",
-        "TimeZone": "America/New_York",
-        "TimeZoneID": "EST",
-        "TimeZoneOffset": -5,
+        "city": "Cleveland",
+        "country": "USA",
+        "state": "OH",
+        "time_zone": "America/New_York",
         "values": [
             "League Park"
         ]
     },
     "3160": {
-        "City": "Cincinnati",
-        "Country": "USA",
-        "State": "OH",
-        "TimeZone": "America/New_York",
-        "TimeZoneID": "EST",
-        "TimeZoneOffset": -5,
+        "city": "Cincinnati",
+        "country": "USA",
+        "state": "OH",
+        "time_zone": "America/New_York",
         "values": [
             "League Park"
         ]
     },
     "3161": {
-        "City": "Canton",
-        "Country": "USA",
-        "State": "OH",
-        "TimeZone": "America/New_York",
-        "TimeZoneID": "EST",
-        "TimeZoneOffset": -5,
+        "city": "Canton",
+        "country": "USA",
+        "state": "OH",
+        "time_zone": "America/New_York",
         "values": [
             "Mahaffey Park"
         ]
     },
     "3162": {
-        "City": "Columbus",
-        "Country": "USA",
-        "State": "OH",
-        "TimeZone": "America/New_York",
-        "TimeZoneID": "EST",
-        "TimeZoneOffset": -5,
+        "city": "Columbus",
+        "country": "USA",
+        "state": "OH",
+        "time_zone": "America/New_York",
         "values": [
             "Neil Park"
         ]
     },
     "3163": {
-        "City": "Columbus",
-        "Country": "USA",
-        "State": "OH",
-        "TimeZone": "America/New_York",
-        "TimeZoneID": "EST",
-        "TimeZoneOffset": -5,
+        "city": "Columbus",
+        "country": "USA",
+        "state": "OH",
+        "time_zone": "America/New_York",
         "values": [
             "Neil Park"
         ]
     },
     "3164": {
-        "City": "Baltimore",
-        "Country": "USA",
-        "State": "MD",
-        "TimeZone": "America/New_York",
-        "TimeZoneID": "EST",
-        "TimeZoneOffset": -5,
+        "city": "Baltimore",
+        "country": "USA",
+        "state": "MD",
+        "time_zone": "America/New_York",
         "values": [
             "Oriole Park"
         ]
     },
     "3165": {
-        "City": "Grand Rapids",
-        "Country": "USA",
-        "State": "MI",
-        "TimeZone": "America/Detroit",
-        "TimeZoneID": "EST",
-        "TimeZoneOffset": -5,
+        "city": "Grand Rapids",
+        "country": "USA",
+        "state": "MI",
+        "time_zone": "America/Detroit",
         "values": [
             "Ramona Park"
         ]
     },
     "3166": {
-        "City": "Warwick",
-        "Country": "USA",
-        "State": "RI",
-        "TimeZone": "America/New_York",
-        "TimeZoneID": "EST",
-        "TimeZoneOffset": -5,
+        "city": "Warwick",
+        "country": "USA",
+        "state": "RI",
+        "time_zone": "America/New_York",
         "values": [
             "Rocky Point Park"
         ]
     },
     "3167": {
-        "City": "St. Louis",
-        "Country": "USA",
-        "State": "MO",
-        "TimeZone": "America/New_York",
-        "TimeZoneID": "EST",
-        "TimeZoneOffset": -5,
+        "city": "St. Louis",
+        "country": "USA",
+        "state": "MO",
+        "time_zone": "America/New_York",
         "values": [
             "Roosevelt Stadium"
         ]
     },
     "3168": {
-        "City": "St. Louis",
-        "Country": "USA",
-        "State": "MO",
-        "TimeZone": "America/Chicago",
-        "TimeZoneID": "CST",
-        "TimeZoneOffset": -6,
+        "city": "St. Louis",
+        "country": "USA",
+        "state": "MO",
+        "time_zone": "America/Chicago",
         "values": [
             "Sportsman's Park"
         ]
     },
     "3169": {
-        "City": "Chicago",
-        "Country": "USA",
-        "State": "IL",
-        "TimeZone": "America/Chicago",
-        "TimeZoneID": "CST",
-        "TimeZoneOffset": -6,
+        "city": "Chicago",
+        "country": "USA",
+        "state": "IL",
+        "time_zone": "America/Chicago",
         "values": [
             "West Side Park"
         ]
     },
     "3170": {
-        "City": "Newark",
-        "Country": "USA",
-        "State": "NJ",
-        "TimeZone": "America/New_York",
-        "TimeZoneID": "EST",
-        "TimeZoneOffset": -5,
+        "city": "Newark",
+        "country": "USA",
+        "state": "NJ",
+        "time_zone": "America/New_York",
         "values": [
             "Wiedenmeyer's Park"
         ]
     },
     "32": {
-        "City": "Milwaukee",
-        "Country": "USA",
-        "State": "WI",
-        "TimeZone": "America/Chicago",
-        "TimeZoneID": "CST",
-        "TimeZoneOffset": -6,
+        "city": "Milwaukee",
+        "country": "USA",
+        "state": "WI",
+        "time_zone": "America/Chicago",
         "values": [
             "Miller Park",
             "American Family Field"
         ]
     },
     "3289": {
-        "City": "Flushing",
-        "Country": "USA",
-        "State": "NY",
-        "TimeZone": "America/New_York",
-        "TimeZoneID": "EST",
-        "TimeZoneOffset": -5,
+        "city": "Flushing",
+        "country": "USA",
+        "state": "NY",
+        "time_zone": "America/New_York",
         "values": [
             "Citi Field"
         ]
     },
     "3309": {
-        "City": "Washington",
-        "Country": "USA",
-        "State": "DC",
-        "TimeZone": "America/New_York",
-        "TimeZoneID": "EST",
-        "TimeZoneOffset": -5,
+        "city": "Washington",
+        "country": "USA",
+        "state": "DC",
+        "time_zone": "America/New_York",
         "values": [
             "Nationals Park"
         ]
     },
     "3312": {
-        "City": "Minneapolis",
-        "Country": "USA",
-        "State": "MN",
-        "TimeZone": "America/Chicago",
-        "TimeZoneID": "CST",
-        "TimeZoneOffset": -6,
+        "city": "Minneapolis",
+        "country": "USA",
+        "state": "MN",
+        "time_zone": "America/Chicago",
         "values": [
             "Target Field"
         ]
     },
     "3313": {
-        "City": "Bronx",
-        "Country": "USA",
-        "State": "NY",
-        "TimeZone": "America/New_York",
-        "TimeZoneID": "EST",
-        "TimeZoneOffset": -5,
+        "city": "Bronx",
+        "country": "USA",
+        "state": "NY",
+        "time_zone": "America/New_York",
         "values": [
             "Yankee Stadium"
         ]
     },
     "4": {
-        "City": "Chicago",
-        "Country": "USA",
-        "State": "IL",
-        "TimeZone": "America/Chicago",
-        "TimeZoneID": "CST",
-        "TimeZoneOffset": -6,
+        "city": "Chicago",
+        "country": "USA",
+        "state": "IL",
+        "time_zone": "America/Chicago",
         "values": [
             "Comiskey Park",
             "U.S. Cellular Field",
@@ -1171,125 +965,103 @@
         ]
     },
     "401": {
-        "City": "United States",
-        "Country": "USA",
-        "State": null,
-        "TimeZone": "America/New_York",
-        "TimeZoneID": "EST",
-        "TimeZoneOffset": -5,
+        "city": "United States",
+        "country": "USA",
+        "state": null,
+        "time_zone": "America/New_York",
         "values": [
             "Generic"
         ]
     },
     "4169": {
-        "City": "Miami",
-        "Country": "USA",
-        "State": "FL",
-        "TimeZone": "America/New_York",
-        "TimeZoneID": "EST",
-        "TimeZoneOffset": -5,
+        "city": "Miami",
+        "country": "USA",
+        "state": "FL",
+        "time_zone": "America/New_York",
         "values": [
             "Marlins Park",
             "loanDepot park"
         ]
     },
     "4589": {
-        "City": "Sydney",
-        "Country": "Australia",
-        "State": null,
-        "TimeZone": "Australia/Sydney",
-        "TimeZoneID": "AEDT",
-        "TimeZoneOffset": 11,
+        "city": "Sydney",
+        "country": "Australia",
+        "state": null,
+        "time_zone": "Australia/Sydney",
         "values": [
             "Sydney Cricket Ground"
         ]
     },
     "4705": {
-        "City": "Atlanta",
-        "Country": "USA",
-        "State": "GA",
-        "TimeZone": "America/New_York",
-        "TimeZoneID": "EST",
-        "TimeZoneOffset": -5,
+        "city": "Atlanta",
+        "country": "USA",
+        "state": "GA",
+        "time_zone": "America/New_York",
         "values": [
             "SunTrust Park",
             "Truist Park"
         ]
     },
     "5": {
-        "City": "Cleveland",
-        "Country": "USA",
-        "State": "OH",
-        "TimeZone": "America/New_York",
-        "TimeZoneID": "EST",
-        "TimeZoneOffset": -5,
+        "city": "Cleveland",
+        "country": "USA",
+        "state": "OH",
+        "time_zone": "America/New_York",
         "values": [
             "Jacobs Field",
             "Progressive Field"
         ]
     },
     "5010": {
-        "City": "Fort Bragg",
-        "Country": "USA",
-        "State": "NC",
-        "TimeZone": "America/New_York",
-        "TimeZoneID": "EST",
-        "TimeZoneOffset": -5,
+        "city": "Fort Bragg",
+        "country": "USA",
+        "state": "NC",
+        "time_zone": "America/New_York",
         "values": [
             "Fort Bragg Field"
         ]
     },
     "5325": {
-        "City": "Arlington",
-        "Country": "USA",
-        "State": "TX",
-        "TimeZone": "America/Chicago",
-        "TimeZoneID": "CST",
-        "TimeZoneOffset": -6,
+        "city": "Arlington",
+        "country": "USA",
+        "state": "TX",
+        "time_zone": "America/Chicago",
         "values": [
             "Globe Life Field"
         ]
     },
     "5365": {
-        "City": "Omaha",
-        "Country": "USA",
-        "State": "NE",
-        "TimeZone": "America/Chicago",
-        "TimeZoneID": "CST",
-        "TimeZoneOffset": -6,
+        "city": "Omaha",
+        "country": "USA",
+        "state": "NE",
+        "time_zone": "America/Chicago",
         "values": [
             "TD Ameritrade Park"
         ]
     },
     "5381": {
-        "City": "London",
-        "Country": "United Kingdom",
-        "State": null,
-        "TimeZone": "Europe/London",
-        "TimeZoneID": "GMT",
-        "TimeZoneOffset": 0,
+        "city": "London",
+        "country": "United Kingdom",
+        "state": null,
+        "time_zone": "Europe/London",
         "values": [
             "London Stadium"
         ]
     },
     "5445": {
-        "City": "Dyersville",
-        "Country": "USA",
-        "State": "IA",
-        "TimeZone": "America/Chicago",
-        "TimeZoneID": "CST",
-        "TimeZoneOffset": -6,
+        "city": "Dyersville",
+        "country": "USA",
+        "state": "IA",
+        "time_zone": "America/Chicago",
         "values": [
             "Field of Dreams"
         ]
     },
     "6": {
-        "City": "Detroit",
-        "Country": "USA",
-        "State": "MI",
-        "TimeZone": "America/Detroit",
-        "TimeZoneID": "EST",
-        "TimeZoneOffset": -5,
+        "city": "Detroit",
+        "country": "USA",
+        "state": "MI",
+        "time_zone": "America/Detroit",
         "values": [
             "Navin Field",
             "Briggs Stadium",
@@ -1297,47 +1069,39 @@
         ]
     },
     "680": {
-        "City": "Seattle",
-        "Country": "USA",
-        "State": "WA",
-        "TimeZone": "America/Los_Angeles",
-        "TimeZoneID": "PST",
-        "TimeZoneOffset": -8,
+        "city": "Seattle",
+        "country": "USA",
+        "state": "WA",
+        "time_zone": "America/Los_Angeles",
         "values": [
             "Safeco Field",
             "T-Mobile Park"
         ]
     },
     "7": {
-        "City": "Kansas City",
-        "Country": "USA",
-        "State": "MO",
-        "TimeZone": "America/Chicago",
-        "TimeZoneID": "CST",
-        "TimeZoneOffset": -6,
+        "city": "Kansas City",
+        "country": "USA",
+        "state": "MO",
+        "time_zone": "America/Chicago",
         "values": [
             "Royals Stadium",
             "Kauffman Stadium"
         ]
     },
     "8": {
-        "City": "Minneapolis",
-        "Country": "USA",
-        "State": "MN",
-        "TimeZone": "America/Chicago",
-        "TimeZoneID": "CST",
-        "TimeZoneOffset": -6,
+        "city": "Minneapolis",
+        "country": "USA",
+        "state": "MN",
+        "time_zone": "America/Chicago",
         "values": [
             "Hubert H. Humphrey Metrodome"
         ]
     },
     "9": {
-        "City": "Bronx",
-        "Country": "USA",
-        "State": "NY",
-        "TimeZone": "America/New_York",
-        "TimeZoneID": "EST",
-        "TimeZoneOffset": -5,
+        "city": "Bronx",
+        "country": "USA",
+        "state": "NY",
+        "time_zone": "America/New_York",
         "values": [
             "Yankee Stadium"
         ]

@@ -59,7 +59,7 @@ def main():
         data = json.load(response)
         for date in data["dates"]:
             for game in date["games"]:
-                team_name = unidecode.unidecode(game["venue"]["name"])
+                team_name = unidecode.unidecode(game["venue"]["name"]).strip()
                 venue_id = str(game["venue"]["id"])
 
                 if venue_id not in team_venues:
@@ -69,12 +69,10 @@ def main():
 
                     team_venues[venue_id] = {
                         "values" : [],
-                        "City" : sub_data["gameData"]["venue"]["location"]["city"] if "city" in sub_data["gameData"]["venue"]["location"] else None,
-                        "State" : sub_data["gameData"]["venue"]["location"]["stateAbbrev"] if "stateAbbrev" in sub_data["gameData"]["venue"]["location"] else None,
-                        "Country" : sub_data["gameData"]["venue"]["location"]["country"] if "country" in sub_data["gameData"]["venue"]["location"] else None,
-                        "TimeZoneID" : sub_data["gameData"]["venue"]["timeZone"]["tz"],
-                        "TimeZoneOffset" : sub_data["gameData"]["venue"]["timeZone"]["offset"],
-                        "TimeZone" : sub_data["gameData"]["venue"]["timeZone"]["id"]
+                        "city" : sub_data["gameData"]["venue"]["location"]["city"] if "city" in sub_data["gameData"]["venue"]["location"] else None,
+                        "state" : sub_data["gameData"]["venue"]["location"]["stateAbbrev"] if "stateAbbrev" in sub_data["gameData"]["venue"]["location"] else None,
+                        "country" : sub_data["gameData"]["venue"]["location"]["country"] if "country" in sub_data["gameData"]["venue"]["location"] else None,
+                        "time_zone" : sub_data["gameData"]["venue"]["timeZone"]["id"]
                     }
                 if team_name not in team_venues[venue_id]["values"]:
                     team_venues[venue_id]["values"].append(team_name)

@@ -87,6 +87,7 @@ def main():
     team_name_info = {}
     teams_to_league = {}
     team_main_abbr = {}
+    team_venue_history = {}
 
     for league in leagues_to_id:
         team_info[leagues_to_id[league]] = {}
@@ -227,7 +228,8 @@ def main():
                 raise
 
         data = json.load(response)
-        for team in data["teams"]:
+        last_season = None
+        for index, team in enumerate(data["teams"]):
             if team["sport"]["id"] == 1 and "name" in team["league"]:
                 team_str = unidecode.unidecode(team["name"])
                 league = leagues_to_id[team["league"]["name"]]
@@ -276,6 +278,32 @@ def main():
                         continue
                 team_info[league][team_str] = id_val
                 team_abr[league][abbr] = team_str
+
+                season = team["season"]
+
+                if id_val not in team_venue_history:
+                     team_venue_history[id_val] = []
+
+                if last_season == None:
+                    team_venue_history[id_val].append({
+                        "start_year" : season,
+                        "end_year" : None,
+                        "venue" : team["venue"]["id"]
+                    })
+                elif index == len(data["teams"]) - 1:
+                     team_venue_history[id_val].append({
+                        "start_year" : None,
+                        "end_year" : last_season - 1,
+                        "venue" : team["venue"]["id"]
+                    })
+                else:
+                    team_venue_history[id_val].append({
+                        "start_year" : season,
+                        "end_year" : last_season - 1,
+                        "venue" : team["venue"]["id"]
+                    })
+                
+                last_season = season
     
     for id_val in range(1, 806):
         request = urllib.request.Request(mlb_teams_url_format_2.format(id_val), headers=request_headers)
@@ -346,6 +374,9 @@ def main():
 
     with open("team_main_abbr.json", "w") as file:
         file.write(json.dumps(team_main_abbr, indent=4, sort_keys=True))
+
+    with open("team_venue_history.json", "w") as file:
+        file.write(json.dumps(team_venue_history, indent=4, sort_keys=True))
 
 def url_request(request):
     failed_counter = 0
