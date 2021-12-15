@@ -19551,12 +19551,12 @@ def setup_game_data(player_data, row_data, player_id, player_type, time_frame):
         "shift_events" : [],
         "oi_shift_events" : [],
         "player_side_map" : {},
-        "Referee" : None,
-        "RefereeID" : None,
-        "Linesman" : None,
-        "LinesmanID" : None,
-        "OtherOfficial" : None,
-        "OtherOfficialID" : None,
+        "Referee" : [],
+        "RefereeID" : [],
+        "Linesman" : [],
+        "LinesmanID" : [],
+        "OtherOfficial" : [],
+        "OtherOfficialID" : [],
         "TmHeadCoach" : None,
         "OppHeadCoach" : None
     }
@@ -19688,17 +19688,17 @@ def setup_game_data(player_data, row_data, player_id, player_type, time_frame):
     if "officials" in sub_data["liveData"]["boxscore"]:
         for index, umpire_obj in enumerate(sub_data["liveData"]["boxscore"]["officials"]):
             if umpire_obj["officialType"] == "Referee":
-                game_data["Referee"] = umpire_obj["official"]["fullName"]
+                game_data["Referee"].append(umpire_obj["official"]["fullName"])
                 if "id" in umpire_obj["official"]:
-                    game_data["RefereeID"] = umpire_obj["official"]["id"]
+                    game_data["RefereeID"].append(umpire_obj["official"]["id"])
             elif umpire_obj["officialType"] == "Linesman":
-                game_data["Linesman"] = umpire_obj["official"]["fullName"]
+                game_data["Linesman"].append(umpire_obj["official"]["fullName"])
                 if "id" in umpire_obj["official"]:
-                    game_data["LinesmanID"] = umpire_obj["official"]["id"]
+                    game_data["LinesmanID"].append(umpire_obj["official"]["id"])
             else:
-                game_data["OtherOfficial"] = umpire_obj["official"]["fullName"]
+                game_data["OtherOfficial"].append(umpire_obj["official"]["fullName"])
                 if "id" in umpire_obj["official"]:
-                    game_data["OtherOfficialID"] = umpire_obj["official"]["id"]
+                    game_data["OtherOfficialID"].append(umpire_obj["official"]["id"])
 
     if "coaches" in sub_data["liveData"]["boxscore"]["teams"][team_str]:
         for coach in sub_data["liveData"]["boxscore"]["teams"][team_str]["coaches"]:
@@ -19770,12 +19770,12 @@ def setup_href_game_data(player_data, row_data, player_id, player_type, time_fra
         "is_shootout" : False,
         "period_length" : {},
         "shift_data" : {},
-        "Referee" : None,
-        "RefereeID" : None,
-        "Linesman" : None,
-        "LinesmanID" : None,
-        "OtherOfficial" : None,
-        "OtherOfficialID" : None,
+        "Referee" : [],
+        "RefereeID" : [],
+        "Linesman" : [],
+        "LinesmanID" : [],
+        "OtherOfficial" : [],
+        "OtherOfficialID" : [],
         "TmHeadCoach" : None,
         "OppHeadCoach" : None
     }
@@ -22085,25 +22085,27 @@ def perform_nhl_game_qualifiers(row, qualifiers):
                     return False
     
     if "Official" in qualifiers:
-        if ("Referee" not in row or row["Referee"] == None) and ("Linesman" not in row or row["Linesman"] == None) and ("OtherOfficial" not in row or row["OtherOfficial"] == None):
+        if ("Referee" not in row or not row["Referee"]) and ("Linesman" not in row or not row["Linesman"]) and ("OtherOfficial" not in row or not row["OtherOfficial"]):
             return False
 
         for qual_object in qualifiers["Official"]:
             has_match = False
             for stadium in qual_object["values"]:
                 for ump_str in ["Referee", "Linesman", "OtherOfficial"]:
-                    if (ump_str not in row or row[ump_str] == None):
+                    if (ump_str not in row or not row[ump_str]):
                         continue
                     if stadium.isdigit():
-                        if (ump_str + "ID" not in row or row[ump_str + "ID"] == None):
+                        if (ump_str + "ID" not in row or not row[ump_str + "ID"]):
                             return False
-                        if int(stadium) == row[ump_str + "ID"]:
-                            has_match = True
-                            break
+                        for ump_value in row[ump_str + "ID"]:
+                            if int(stadium) == ump_value:
+                                has_match = True
+                                break
                     else:
-                        if stadium == row[ump_str].lower():
-                            has_match = True
-                            break
+                        for ump_value in row[ump_str]:
+                            if stadium == ump_value.lower():
+                                has_match = True
+                                break
             if qual_object["negate"]:
                 if has_match:
                     return False
@@ -22112,25 +22114,27 @@ def perform_nhl_game_qualifiers(row, qualifiers):
                     return False
         
     if "Referee" in qualifiers:
-        if ("Referee" not in row or row["Referee"] == None):
+        if ("Referee" not in row or not row["Referee"]):
             return False
 
         for qual_object in qualifiers["Referee"]:
             has_match = False
             for stadium in qual_object["values"]:
                 for ump_str in ["Referee"]:
-                    if (ump_str not in row or row[ump_str] == None):
+                    if (ump_str not in row or not row[ump_str]):
                         continue
                     if stadium.isdigit():
-                        if (ump_str + "ID" not in row or row[ump_str + "ID"] == None):
+                        if (ump_str + "ID" not in row or not row[ump_str + "ID"]):
                             return False
-                        if int(stadium) == row[ump_str + "ID"]:
-                            has_match = True
-                            break
+                        for ump_value in row[ump_str + "ID"]:
+                            if int(stadium) == ump_value:
+                                has_match = True
+                                break
                     else:
-                        if stadium == row[ump_str].lower():
-                            has_match = True
-                            break
+                        for ump_value in row[ump_str]:
+                            if stadium == ump_value.lower():
+                                has_match = True
+                                break
             if qual_object["negate"]:
                 if has_match:
                     return False
@@ -22139,25 +22143,27 @@ def perform_nhl_game_qualifiers(row, qualifiers):
                     return False
     
     if "Linesman" in qualifiers:
-        if ("Linesman" not in row or row["Linesman"] == None):
+        if ("Linesman" not in row or not row["Linesman"]):
             return False
 
         for qual_object in qualifiers["Linesman"]:
             has_match = False
             for stadium in qual_object["values"]:
                 for ump_str in ["Linesman"]:
-                    if (ump_str not in row or row[ump_str] == None):
+                    if (ump_str not in row or not row[ump_str]):
                         continue
                     if stadium.isdigit():
-                        if (ump_str + "ID" not in row or row[ump_str + "ID"] == None):
+                        if (ump_str + "ID" not in row or not row[ump_str + "ID"]):
                             return False
-                        if int(stadium) == row[ump_str + "ID"]:
-                            has_match = True
-                            break
+                        for ump_value in row[ump_str + "ID"]:
+                            if int(stadium) == ump_value:
+                                has_match = True
+                                break
                     else:
-                        if stadium == row[ump_str].lower():
-                            has_match = True
-                            break
+                        for ump_value in row[ump_str]:
+                            if stadium == ump_value.lower():
+                                has_match = True
+                                break
             if qual_object["negate"]:
                 if has_match:
                     return False
