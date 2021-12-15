@@ -19689,13 +19689,16 @@ def setup_game_data(player_data, row_data, player_id, player_type, time_frame):
         for index, umpire_obj in enumerate(sub_data["liveData"]["boxscore"]["officials"]):
             if umpire_obj["officialType"] == "Referee":
                 game_data["Referee"] = umpire_obj["official"]["fullName"]
-                game_data["RefereeID"] = umpire_obj["official"]["id"]
+                if "id" in umpire_obj["official"]["id"]:
+                    game_data["RefereeID"] = umpire_obj["official"]["id"]
             elif umpire_obj["officialType"] == "Linesman":
                 game_data["Linesman"] = umpire_obj["official"]["fullName"]
-                game_data["LinesmanID"] = umpire_obj["official"]["id"]
+                if "id" in umpire_obj["official"]["id"]:
+                    game_data["LinesmanID"] = umpire_obj["official"]["id"]
             else:
                 game_data["OtherOfficial"] = umpire_obj["official"]["fullName"]
-                game_data["OtherOfficialID"] = umpire_obj["official"]["id"]
+                if "id" in umpire_obj["official"]["id"]:
+                    game_data["OtherOfficialID"] = umpire_obj["official"]["id"]
 
     if "coaches" in sub_data["liveData"]["boxscore"]["teams"][team_str]:
         for coach in sub_data["liveData"]["boxscore"]["teams"][team_str]["coaches"]:
@@ -22092,6 +22095,8 @@ def perform_nhl_game_qualifiers(row, qualifiers):
                     if (ump_str not in row or row[ump_str] == None):
                         continue
                     if stadium.isdigit():
+                        if (ump_str + "ID" not in row or row[ump_str + "ID"] == None):
+                            return False
                         if int(stadium) == row[ump_str + "ID"]:
                             has_match = True
                             break
@@ -22117,6 +22122,8 @@ def perform_nhl_game_qualifiers(row, qualifiers):
                     if (ump_str not in row or row[ump_str] == None):
                         continue
                     if stadium.isdigit():
+                        if (ump_str + "ID" not in row or row[ump_str + "ID"] == None):
+                            return False
                         if int(stadium) == row[ump_str + "ID"]:
                             has_match = True
                             break
@@ -22142,6 +22149,8 @@ def perform_nhl_game_qualifiers(row, qualifiers):
                     if (ump_str not in row or row[ump_str] == None):
                         continue
                     if stadium.isdigit():
+                        if (ump_str + "ID" not in row or row[ump_str + "ID"] == None):
+                            return False
                         if int(stadium) == row[ump_str + "ID"]:
                             has_match = True
                             break
