@@ -31284,12 +31284,10 @@ def handle_da_mlb_quals(row, event_name, at_bat_event, qualifiers, player_data, 
         event_time = at_bat_event["event_time"]
         if not event_time:
             return
-        if player_game_info["TimeZoneID"] == None or player_game_info["TimeZoneOffset"] == None:
+        if player_game_info["TimeZone"] == None:
             return
 
-        tz = dateutil.tz.tzoffset(player_game_info["TimeZoneID"], player_game_info["TimeZoneOffset"] * 3600)
-            
-        event_time = event_time.astimezone(tz).time().replace(microsecond=0)
+        event_time = event_time.astimezone(pytz.timezone(player_game_info["TimeZone"])).time().replace(microsecond=0)
         for qual_object in qualifiers["Local Event Time"]:
             stat_val = qual_object["values"]["start_val"]
             end_val = qual_object["values"]["end_val"]
@@ -34184,12 +34182,11 @@ def perform_mlb_schedule_qualifiers(row, qualifiers):
     if "Local Start Time" in qualifiers:
         if "StartTime" not in row or row["StartTime"] == None:
             return False
-        if "TimeZoneID" not in row or row["TimeZoneID"] == None or "TimeZoneOffset" not in row or row["TimeZoneOffset"] == None:
+        if "TimeZone" not in row or row["TimeZone"] == None:
             return False
-        
-        tz = dateutil.tz.tzoffset(row["TimeZoneID"], row["TimeZoneOffset"] * 3600)
-            
-        event_time = row["StartTime"].astimezone(tz).time().replace(microsecond=0)
+
+        tz_offset = pytz.timezone(row["TimeZone"])            
+        event_time = row["StartTime"].astimezone(tz_offset).time().replace(microsecond=0).replace(second=0)
         for qual_object in qualifiers["Local Start Time"]:
             stat_val = qual_object["values"]["start_val"]
             end_val = qual_object["values"]["end_val"]
@@ -34739,6 +34736,7 @@ def get_live_game_data(row_index, player_data, row_data, player_type, qualifiers
         "pitching_events" : [],
         "pitching_run_events" : [],
         "pitch_event_to_run_event" : {},
+        "TimeZone" : None,
         "TimeZoneID" : None,
         "TimeZoneOffset" : None,
         "RS" : None,
@@ -34800,6 +34798,7 @@ def get_live_game_data(row_index, player_data, row_data, player_type, qualifiers
     team_batting_order_map = {}
     opp_batting_order_map = {}
 
+    game_data["TimeZone"] = sub_data["gameData"]["venue"]["timeZone"]["id"]
     game_data["TimeZoneID"] = sub_data["gameData"]["venue"]["timeZone"]["tz"]
     game_data["TimeZoneOffset"] = sub_data["gameData"]["venue"]["timeZone"]["offset"]
 

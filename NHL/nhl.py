@@ -23149,13 +23149,7 @@ def perform_metadata_qual(event_name, goal_event, qualifiers, player_game_info, 
 
         val_to_check = team_venue_obj["time_zone"]
 
-        utc_time = row["StartTime"].astimezone(pytz.UTC).replace(tzinfo=None)
-
-        tz_offset = pytz.timezone(val_to_check).utcoffset(utc_time).seconds
-        
-        tz = dateutil.tz.tzoffset("IST", tz_offset)
-            
-        event_time = event_time.astimezone(tz).time().replace(microsecond=0)
+        event_time = event_time.astimezone(pytz.timezone(val_to_check)).time().replace(microsecond=0)
         for qual_object in qualifiers["Local Event Time"]:
             stat_val = qual_object["values"]["start_val"]
             end_val = qual_object["values"]["end_val"]
@@ -30654,13 +30648,7 @@ def perform_schedule_qualifiers(row, qualifiers):
 
         val_to_check = team_venue_obj["time_zone"]
 
-        utc_time = row["StartTime"].astimezone(pytz.UTC).replace(tzinfo=None)
-
-        tz_offset = pytz.timezone(val_to_check).utcoffset(utc_time).seconds
-        
-        tz = dateutil.tz.tzoffset("IST", tz_offset)
-            
-        event_time = row["StartTime"].astimezone(tz).time().replace(microsecond=0).replace(second=0)
+        event_time = row["StartTime"].astimezone(pytz.timezone(val_to_check)).time().replace(microsecond=0).replace(second=0)
         for qual_object in qualifiers["Local Start Time"]:
             stat_val = qual_object["values"]["start_val"]
             end_val = qual_object["values"]["end_val"]

@@ -7196,7 +7196,7 @@ def determine_raw_str(subbb_frame):
                     else:
                         qual_str += start_time.strftime("%I:%M%p") + " to " + end_time.strftime("%I:%M%p")
                     qual_str += " " + qual_obj["values"]["time_zone"]
-                elif qualifier == "Local Event Time" or qualifier == "Local Start Time":
+                elif qualifier == "Local Start Time":
                     if not sub_sub_first:
                         qual_str += " + "
                     else:
@@ -9437,13 +9437,8 @@ def perform_nfl_game_qualifiers(row, qualifiers):
 
         venue_obj = team_venues[row["Shared"]["StadiumID"]]
         val_to_check = venue_obj["time_zone"]
-        utc_time = row["Shared"]["StartTime"].astimezone(pytz.UTC).replace(tzinfo=None)
-
-        tz_offset = pytz.timezone(val_to_check).utcoffset(utc_time).seconds
         
-        tz = dateutil.tz.tzoffset("IST", tz_offset)
-            
-        event_time = row["Shared"]["StartTime"].astimezone(tz).time().replace(microsecond=0).replace(second=0)
+        event_time = row["Shared"]["StartTime"].astimezone(pytz.timezone(val_to_check)).time().replace(microsecond=0).replace(second=0)
         for qual_object in qualifiers["Local Start Time"]:
             stat_val = qual_object["values"]["start_val"]
             end_val = qual_object["values"]["end_val"]
