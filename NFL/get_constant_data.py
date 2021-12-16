@@ -542,7 +542,7 @@ stat_groups = {
                 "game" : 2018
             }
         },
-        "CAY-RAW": {
+        "CAYRAW": {
             "positive" : True,
             "display" : False,
             "valid_since" : {
@@ -558,7 +558,7 @@ stat_groups = {
                 "game" : 2018
             }
         },
-        "IAY-RAW": {
+        "IAYRAW": {
             "positive" : True,
             "display" : False,
             "valid_since" : {
@@ -582,7 +582,7 @@ stat_groups = {
                 "game" : 2018
             }
         },
-        "YAC-RAW": {
+        "YACRAW": {
             "positive" : True,
             "display" : False,
             "valid_since" : {
@@ -1757,7 +1757,7 @@ stat_groups = {
         "Int TD": {
             "positive" : True
         },
-        "Ttl TD" : {
+        "TtlTD" : {
             "positive" : True
         },
         "PD": {
@@ -4685,10 +4685,10 @@ formulas = {
         "Pass1D%" : "Special",
         "Rush1D%" : "Special",
         "Rec1D%" : "Special",
-        "CAY" : "CAY-RAW / Cmp",
-        "IAY" : "IAY-RAW / Att",
+        "CAY" : "CAYRAW / Cmp",
+        "IAY" : "IAYRAW / Att",
         "AYD" : "CAY - IAY",
-        "YAC" : "YAC-RAW / Cmp",
+        "YAC" : "YACRAW / Cmp",
         "OnTgt%" : "OnTgt / (Att - ThAwyTgt - SpikesTgt)",
         "BadTh%" : "BadTh / (Att - ThAwy - Spikes)",
         "Drop%" : "Drops / (Att - ThAwy - Spikes)",
@@ -4795,7 +4795,7 @@ formulas = {
         "APTD/17G" : "APTD / (G / 17)",
     },
     "Defense" : {
-        "Ttl TD" : "Special"
+        "TtlTD" : "Special"
     },
     "Defense Per Game/Snap" : {
         "Int/17" : "Int / (G / 17)",
@@ -4822,7 +4822,7 @@ formulas = {
         "QBHits" : "QBHits / G",
         "QBHits/17" : "QBHits / (G / 17)",
         "QBHit%" : "QBHits / DefSnp",
-        "TD/17" : "Ttl TD / (G / 17)"
+        "TD/17" : "TtlTD / (G / 17)"
     },
     "Advanced/Defense" : {
         "MTckl%" : "MissTckl / (MissTckl + Comb)",
@@ -4885,11 +4885,11 @@ formulas = {
     },
     "Advanced/Kicking" : {
         "Lng" : "MAX",
-        "FG%:0-19" : "FGM:0-19 / FGA:0-19",
-        "FG%:20-29" : "FGM:20-29 / FGA:20-29",
-        "FG%:30-39" : "FGM:30-39 / FGA:30-39",
-        "FG%:40-49" : "FGM:40-49 / FGA:40-49",
-        "FG%:50+" : "FGM:50+ / FGA:50+",
+        "FG%:0-19" : "Special",
+        "FG%:20-29" : "Special",
+        "FG%:30-39" : "Special",
+        "FG%:40-49" : "Special",
+        "FG%:50+" : "Special",
         "KOAvg" : "KOYds / KO",
         "TB%" : "TB / KO"
     },
@@ -4964,7 +4964,7 @@ formulas = {
             "PPR" : "STD"
         },
         "Defense" :  {
-            "STD" : "(6 * Ttl TD)"
+            "STD" : "(6 * TtlTD)"
         }
     },
     "Shared" : {
@@ -5737,6 +5737,31 @@ def calculate_formula(stat, formula, data, header, headers, player_data, player_
                         else:
                             value += (datetime.datetime.now().date() - birthday).days
             return value
+        elif stat == "FG%:0-19":
+            if data[header]["FGA:0-19"]:
+                return data[header]["FGM:0-19"] / data[header]["FGA:0-19"]
+            else:
+                return 0
+        elif stat == "FG%:20-29":
+            if data[header]["FGA:20-29"]:
+                return data[header]["FGM:20-29"] / data[header]["FGA:20-29"]
+            else:
+                return 0
+        elif stat == "FG%:30-39":
+            if data[header]["FGA:30-39"]:
+                return data[header]["FGM:30-39"] / data[header]["FGA:30-39"]
+            else:
+                return 0
+        elif stat == "FG%:40-49":
+            if data[header]["FGA:40-49"]:
+                return data[header]["FGM:40-49"] / data[header]["FGA:40-49"]
+            else:
+                return 0
+        elif stat == "FG%:50+":
+            if data[header]["FGA:50+"]:
+                return data[header]["FGM:50+"] / data[header]["FGA:50+"]
+            else:
+                return 0
         elif stat == "Rate":
             return calculate_passer_rating(data[header], header)
         elif stat == "Fmb%":
@@ -5771,14 +5796,17 @@ def calculate_formula(stat, formula, data, header, headers, player_data, player_
                         total_tnv += row["Rushing"]["FmbLst"]
             return total_tnv
         elif stat == "TtlTD":
-            total_td = 0
-            if "Passing" in data:
-                total_td += data["Passing"]["TD"]
-            if "Rushing" in data:
-                total_td += data["Rushing"]["TD"]
-            if "Receiving" in data:
-                total_td += data["Receiving"]["TD"]
-            return total_td
+            if header == "Era Adjusted Passing":
+                total_td = 0
+                if "Passing" in data:
+                    total_td += data["Passing"]["TD"]
+                if "Rushing" in data:
+                    total_td += data["Rushing"]["TD"]
+                if "Receiving" in data:
+                    total_td += data["Receiving"]["TD"]
+                return total_td
+            else:
+                return data["Defense"]["FR TD"] + data["Defense"]["Int TD"]
         elif stat == "TtlTDTnv":
             total_td = 0
             all_rows = [data] if not all_rows else all_rows
@@ -5791,8 +5819,6 @@ def calculate_formula(stat, formula, data, header, headers, player_data, player_
                     if "Receiving" in row and "TD" in row["Receiving"]:
                         total_td += row["Receiving"]["TD"]
             return total_td
-        elif stat == "Ttl TD":
-            return data["Defense"]["FR TD"] + data["Defense"]["Int TD"]
         elif stat == "TD%" or stat == "TtlTD%":
             total_attempts = 0
             if "Passing" in data:
@@ -5847,6 +5873,8 @@ def calculate_formula(stat, formula, data, header, headers, player_data, player_
         earliest_invalid_date = None
         formula = formula.lower()
 
+        formula_matches = list(re.finditer(r"(?:(?:[A-Za-z_:~])\d?|\d?(?:[A-Za-z_:~]))+", formula))
+
         if all_rows:
             if is_invalid_stat(header, stat, data, False) == float("inf"):
                 earliest_invalid_date = float("inf")
@@ -5855,19 +5883,19 @@ def calculate_formula(stat, formula, data, header, headers, player_data, player_
                     for over_header in headers[player_type["da_type"]]:
                         if over_header != "Shared":
                             for sub_stat in data[over_header]:
-                                temp_earliest_invalid_date = calculate_earliest_invalid_date(sub_stat, over_header, data, formula, earliest_invalid_date, stat)
+                                temp_earliest_invalid_date = calculate_earliest_invalid_date(sub_stat, over_header, data, formula, earliest_invalid_date, stat, formula_matches)
                                 if temp_earliest_invalid_date:
                                     earliest_invalid_date = temp_earliest_invalid_date
                 else:
                     for sub_stat in data[over_header]:
-                        temp_earliest_invalid_date = calculate_earliest_invalid_date(sub_stat, over_header, data, formula, earliest_invalid_date, stat)
+                        temp_earliest_invalid_date = calculate_earliest_invalid_date(sub_stat, over_header, data, formula, earliest_invalid_date, stat, formula_matches)
                         if temp_earliest_invalid_date:
                             earliest_invalid_date = temp_earliest_invalid_date
 
                 if "Shared" in data:
                     for sub_stat in data["Shared"]:
                         if stat == "custom_formula" or (sub_stat != "Tm" and sub_stat != "RawTm" and sub_stat != "RawOpponent" and sub_stat != "Result" and sub_stat != "is_playoffs" and (not sub_stat in qualifier_map or sub_stat == "Team Score" or sub_stat == "Opponent Score")):
-                            temp_earliest_invalid_date = calculate_earliest_invalid_date(sub_stat, "Shared", data, formula, earliest_invalid_date, stat)
+                            temp_earliest_invalid_date = calculate_earliest_invalid_date(sub_stat, "Shared", data, formula, earliest_invalid_date, stat, formula_matches)
                             if temp_earliest_invalid_date:
                                 earliest_invalid_date = temp_earliest_invalid_date
 
@@ -5875,15 +5903,15 @@ def calculate_formula(stat, formula, data, header, headers, player_data, player_
             for over_header in headers[player_type["da_type"]]:
                 if over_header != "Shared":
                     for sub_stat in data[over_header]:
-                        formula = replace_formula(data, over_header, sub_stat, formula, all_rows, earliest_invalid_date, stat)
+                        formula, formula_matches = replace_formula(data, over_header, sub_stat, formula, all_rows, earliest_invalid_date, stat, formula_matches)
         else:
             for sub_stat in data[over_header]:
-                formula = replace_formula(data, over_header, sub_stat, formula, all_rows, earliest_invalid_date, stat)
+                formula, formula_matches = replace_formula(data, over_header, sub_stat, formula, all_rows, earliest_invalid_date, stat, formula_matches)
 
         if "Shared" in data:
             for sub_stat in data["Shared"]:
                 if stat == "custom_formula" or (sub_stat != "Tm" and sub_stat != "RawTm" and sub_stat != "RawOpponent" and sub_stat != "Result" and sub_stat != "is_playoffs" and (not sub_stat in qualifier_map or sub_stat == "Team Score" or sub_stat == "Opponent Score")):
-                    formula = replace_formula(data, "Shared", sub_stat, formula, all_rows, earliest_invalid_date, stat)
+                    formula, formula_matches = replace_formula(data, "Shared", sub_stat, formula, all_rows, earliest_invalid_date, stat, formula_matches)
 
         try:
             if safe_eval:
@@ -6021,7 +6049,7 @@ def calculate_team_win_losses(data, all_rows, result):
             result_count += 1
     return result_count
 
-def calculate_earliest_invalid_date(stat, header, data, formula, earliest_invalid_date, real_stat):
+def calculate_earliest_invalid_date(stat, header, data, formula, earliest_invalid_date, real_stat, formula_matches):
     if real_stat == "custom_formula":
         if header in data and stat in data[header]:
             header_match = r"(?:" + header.lower() + r")"
@@ -6029,24 +6057,39 @@ def calculate_earliest_invalid_date(stat, header, data, formula, earliest_invali
                 header_match = r"(?:era adjusted passing|total)"
             elif header == "Scrimmage/All Purpose":
                 header_match = r"(?:scrimmage/all purpose|scrimmage)"
-            if re.search(r"(?:(?<![\w~+])(?=[\w~+])|(?<=[\w~+])(?![\w~+]))" + header_match + r"~" + re.escape(stat.lower()) + r"(?:(?<![\w~+])(?=[\w~+])|(?<=[\w~+])(?![\w~+]))", formula):
+            has_match = False
+            for formula_match in formula_matches:
+                if formula_match.group() == header_match + "~" + stat.lower():
+                    has_match = True
+                    break
+            if has_match:
                 invalid_date = is_invalid_stat(header, stat, data, False)
                 if invalid_date:
                     if not earliest_invalid_date or invalid_date > earliest_invalid_date:
                         return invalid_date
-            elif re.search(r"(?:(?<![\w~+])(?=[\w~+])|(?<=[\w~+])(?![\w~+]))" + re.escape(stat.lower()) + r"(?:(?<![\w~+])(?=[\w~+])|(?<=[\w~+])(?![\w~+]))", formula):
-                invalid_date = is_invalid_stat(header, stat, data, False)
-                if invalid_date:
-                    if not earliest_invalid_date or invalid_date > earliest_invalid_date:
-                        return invalid_date
+            else:
+                for formula_match in formula_matches:
+                    if formula_match.group() == stat.lower():
+                        has_match = True
+                        break
+                if has_match:
+                    invalid_date = is_invalid_stat(header, stat, data, False)
+                    if invalid_date:
+                        if not earliest_invalid_date or invalid_date > earliest_invalid_date:
+                            return invalid_date
     else:
-        if re.search(r"(?:(?<![\w+])(?=[\w+])|(?<=[\w+])(?![\w+]))" + re.escape(stat.lower()) + r"(?:(?<![\w+])(?=[\w+])|(?<=[\w+])(?![\w+]))", formula):
+        has_match = False
+        for formula_match in formula_matches:
+            if formula_match.group() == stat.lower():
+                has_match = True
+                break
+        if has_match:
             invalid_date = is_invalid_stat(header, stat, data, False)
             if invalid_date:
                 if not earliest_invalid_date or invalid_date > earliest_invalid_date:
                     return invalid_date
 
-def replace_formula(data, header, stat, formula, all_rows, earliest_invalid_date, real_stat):
+def replace_formula(data, header, stat, formula, all_rows, earliest_invalid_date, real_stat, formula_matches):
     if real_stat == "custom_formula":
         if header in data and stat in data[header]:
             value = data[header][stat]
@@ -6058,17 +6101,29 @@ def replace_formula(data, header, stat, formula, all_rows, earliest_invalid_date
                 header_match = r"(?:era adjusted passing|total)"
             elif header == "Scrimmage/All Purpose":
                 header_match = r"(?:scrimmage/all purpose|scrimmage)"
-            formula, num_subs = re.subn(r"(?:(?<![\w~+])(?=[\w~+])|(?<=[\w~+])(?![\w~+]))" + header_match + r"~" + re.escape(stat.lower()) + r"(?:(?<![\w~+])(?=[\w~+])|(?<=[\w~+])(?![\w~+]))", str(value), formula)
-            if not num_subs:
-                formula = re.sub(r"(?:(?<![\w~+])(?=[\w~+])|(?<=[\w~+])(?![\w~+]))" + re.escape(stat.lower()) + r"(?:(?<![\w~+])(?=[\w~+])|(?<=[\w~+])(?![\w~+]))", str(value).lower(), formula)
-        return formula
+
+            old_formula = formulas
+            formula, formula_matches = perform_replacement(formula_matches, header_match + "~" + stat.lower(), str(value), formula)
+            if old_formula == formula:
+                formula, formula_matches = perform_replacement(formula_matches, stat.lower(), str(value), formula)
+        return formula, formula_matches
     else:
         value = data[header][stat]
         if isinstance(value, (int, float)):
             value = calculate_valid_value(stat, header, value, earliest_invalid_date, all_rows)
-            return re.sub(r"(?:(?<![\w+])(?=[\w+])|(?<=[\w+])(?![\w+]))" + re.escape(stat.lower()) + r"(?:(?<![\w+])(?=[\w+])|(?<=[\w+])(?![\w+]))", str(value).lower(), formula)
+            return perform_replacement(formula_matches, stat.lower(), str(value), formula)
         else:
-            return formula
+            return formula, formula_matches
+
+def perform_replacement(formula_matches, stat, value, formula):
+    for formula_match in formula_matches:
+        if formula_match.group() == stat:
+            span = formula_match.span()
+            formula = formula[:span[0]] + value + formula[span[1]:]
+            formula_matches = list(re.finditer(r"(?:(?:[A-Za-z_:~])\d?|\d?(?:[A-Za-z_:~]))+", formula))
+            return perform_replacement(formula_matches, stat, value, formula)
+    
+    return formula, formula_matches
             
 def calculate_valid_value(stat, header, value, earliest_invalid_date, all_rows):
     if not earliest_invalid_date:

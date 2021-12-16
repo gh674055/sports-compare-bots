@@ -10939,6 +10939,7 @@ def perform_post_qualifier(player_data, player_type, ind_player_type, row, quali
         stats = set()
         for qual_object in qualifiers["Formula"]:
             formula = qual_object["values"][0]
+            formula_matches = list(re.finditer(r"(?:(?:[A-Za-z_:~])\d?|\d?(?:[A-Za-z_:~]))+", formula))
             for header in headers[player_type["da_type"]].keys():
                 header_match = r"(?:" + header.lower() + r")"
                 if header == "Era Adjusted Passing":
@@ -10946,10 +10947,12 @@ def perform_post_qualifier(player_data, player_type, ind_player_type, row, quali
                 elif header == "Scrimmage/All Purpose":
                     header_match = r"(?:scrimmage/all purpose|scrimmage)"
                 for stat in get_constant_data.stat_groups[over_header]:
-                    match = re.search(r"(?:(?<![\w~+])(?=[\w~+])|(?<=[\w~+])(?![\w~+]))" + header_match + r"~" + re.escape(stat.lower()) + r"(?:(?<![\w~+])(?=[\w~+])|(?<=[\w~+])(?![\w~+]))", formula)
-                    if not match:
-                        match = re.search(r"(?:(?<![\w~+])(?=[\w~+])|(?<=[\w~+])(?![\w~+]))" + re.escape(stat.lower()) + r"(?:(?<![\w~+])(?=[\w~+])|(?<=[\w~+])(?![\w~+]))", formula)
-                    if match:
+                    has_match = False
+                    for formula_match in formula_matches:
+                        if formula_match.group() == header.lower():
+                            has_match = True
+                            break
+                    if has_match:
                         if header not in stats:
                             stats[header] = set()
                         stats[header].add(header)
@@ -13951,7 +13954,7 @@ def handle_season_stats(all_rows, player_data, player_type, qualifiers):
         if "Season Formula" in qualifiers:
             stats = set()
             for qual_object in qualifiers["Season Formula"]:
-                formula = qual_object["values"][0]
+                formula_matches = list(re.finditer(r"(?:(?:[A-Za-z_:~])\d?|\d?(?:[A-Za-z_:~]))+", formula))
                 for header in headers[player_type["da_type"]].keys():
                     header_match = r"(?:" + header.lower() + r")"
                     if header == "Era Adjusted Passing":
@@ -13959,10 +13962,12 @@ def handle_season_stats(all_rows, player_data, player_type, qualifiers):
                     elif header == "Scrimmage/All Purpose":
                         header_match = r"(?:scrimmage/all purpose|scrimmage)"
                     for stat in get_constant_data.stat_groups[over_header]:
-                        match = re.search(r"(?:(?<![\w~+])(?=[\w~+])|(?<=[\w~+])(?![\w~+]))" + header_match + r"~" + re.escape(stat.lower()) + r"(?:(?<![\w~+])(?=[\w~+])|(?<=[\w~+])(?![\w~+]))", formula)
-                        if not match:
-                            match = re.search(r"(?:(?<![\w~+])(?=[\w~+])|(?<=[\w~+])(?![\w~+]))" + re.escape(stat.lower()) + r"(?:(?<![\w~+])(?=[\w~+])|(?<=[\w~+])(?![\w~+]))", formula)
-                        if match:
+                        has_match = False
+                        for formula_match in formula_matches:
+                            if formula_match.group() == header.lower():
+                                has_match = True
+                                break
+                        if has_match:
                             if header not in stats:
                                 stats[header] = set()
                             stats[header].add(header)
@@ -15323,10 +15328,16 @@ def comb_rows(matching_rows, player_data, player_type, lower=True, stats=None):
 
 def calculate_recursive_formula(over_header, stat, player_data, player_type, comb_row, matching_rows):
     formula = get_constant_data.formulas[over_header][stat]
+    formula_matches = list(re.finditer(r"(?:(?:[A-Za-z_:~])\d?|\d?(?:[A-Za-z_:~]))+", formula.lower()))
     for header_stat in get_constant_data.formulas[over_header]:
         if header_stat == stat:
             break
-        if re.search(r"(?:(?<![\w+])(?=[\w+])|(?<=[\w+])(?![\w+]))" + re.escape(header_stat.lower()) + r"(?:(?<![\w+])(?=[\w+])|(?<=[\w+])(?![\w+]))", formula.lower()):
+        has_match = False
+        for formula_match in formula_matches:
+            if formula_match.group() == stat.lower():
+                has_match = True
+                break
+        if has_match:
             calculate_recursive_formula(over_header, stat, player_data, player_type, comb_row, matching_rows)
     comb_row[over_header][stat] = get_constant_data.calculate_formula(stat, formula, comb_row, over_header, headers, player_data, player_type, matching_rows)
 
@@ -17323,7 +17334,7 @@ def parse_row(row, table_name, time_frame, year, is_playoffs, player_type, ind_p
                         continue
                 elif (table_name == "advanced_air_yards" or table_name == "advanced_accuracy" or table_name == "advanced_pressure") or table_name.startswith("advanced_passing"):
                     if header_value == "CAY" or header_value == "IAY" or header_value == "YAC":
-                        header_value += "-RAW"
+                        header_value += "RAW"
                     if advanced_over_header:
                         over_header_value = advanced_over_header
                     else:

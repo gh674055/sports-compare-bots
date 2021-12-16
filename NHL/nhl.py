@@ -1893,15 +1893,6 @@ headers = {
                 "game" : 2009
             }
         },
-        "OZFO/60M" : {
-            "positive" : True,
-            "round" : 2,
-            "type" : "Advanced",
-            "valid_since" : {
-                "season" : 1997,
-                "game" : 1997
-            }
-        },
         "OZFOW/60M" : {
             "positive" : True,
             "round" : 2,
@@ -1911,11 +1902,10 @@ headers = {
                 "game" : 1997
             }
         },
-        "NZFO/60M" : {
+        "OZFO/60M" : {
             "positive" : True,
             "round" : 2,
             "type" : "Advanced",
-            "display" : False,
             "valid_since" : {
                 "season" : 1997,
                 "game" : 1997
@@ -1931,7 +1921,17 @@ headers = {
                 "game" : 1997
             }
         },
-        "DZFO/60M" : {
+        "NZFO/60M" : {
+            "positive" : True,
+            "round" : 2,
+            "type" : "Advanced",
+            "display" : False,
+            "valid_since" : {
+                "season" : 1997,
+                "game" : 1997
+            }
+        },
+        "DZFOW/60M" : {
             "positive" : True,
             "round" : 2,
             "type" : "Advanced",
@@ -1940,7 +1940,7 @@ headers = {
                 "game" : 1997
             }
         },
-        "DZFOW/60M" : {
+        "DZFO/60M" : {
             "positive" : True,
             "round" : 2,
             "type" : "Advanced",
@@ -2498,7 +2498,7 @@ headers = {
                 "game" : 2009
             }
         },
-        "Post/Bar" : {
+        "PostBar" : {
             "positive" : True,
             "type" : "Advanced",
             "display-value" : "Post/Bar",
@@ -5607,8 +5607,8 @@ formulas = {
         "PenDrawn/60M" : "PenDrawn / (TOI / 3600)",
         "NetPEN/60M" : "NetPEN / (TOI / 3600)",
         "NetPEN/GP" : "NetPEN / GP",
-        "Post/GP" : "Post/Bar / GP",
-        "Post/60M" : "Post/Bar / (TOI / 3600)",
+        "Post/GP" : "PostBar / GP",
+        "Post/60M" : "PostBar / (TOI / 3600)",
         "S%" : "G / S",
         "TS%" : "G / TSA",
         "SThr%" : "S / TSA",
@@ -15359,7 +15359,7 @@ def handle_season_stats_game(player_type, player_data, player_link, time_frame):
                 row_data["Misconduct"] = game["misconductPenalties"]
                 row_data["GameMisconduct"] = game["gameMisconductPenalties"]
             elif report == "realtime":
-                row_data["Post/Bar"] = (game["missedShotCrossbar"] if game["missedShotCrossbar"] else 0) + (game["missedShotGoalpost"] if game["missedShotGoalpost"] else 0)
+                row_data["PostBar"] = (game["missedShotCrossbar"] if game["missedShotCrossbar"] else 0) + (game["missedShotGoalpost"] if game["missedShotGoalpost"] else 0)
                 row_data["ENG"] = game["emptyNetGoals"]
                 row_data["ENA"] = game["emptyNetAssists"]
                 row_data["ENP"] = game["emptyNetPoints"]
@@ -18472,7 +18472,7 @@ def determine_stat_value(player_game_info, all_events, qualifiers, og_row, playe
 
     goal_stats = ["G", "EVG", "PPG", "SHG", "GWG", "ENG", "OTG", "1stG", "S", "WristS", "WristG", "DeflectS", "DeflectG", "SlapS" "SlapG", "TipS", "TipG", "BackS", "BackG", "WrapS", "WrapG", "TSA", "G_5v5", "S_5v5", "TSA_5v5"]
     shot_stats = ["S", "WristS", "DeflectS", "SlapS", "TipS", "BackS", "WrapS", "TSA", "S_5v5", "TSA_5v5"]
-    missed_shot_stats = ["Post/Bar", "TSA", "TSM", "TSA_5v5", "TSM_5v5"]
+    missed_shot_stats = ["PostBar", "TSA", "TSM", "TSA_5v5", "TSM_5v5"]
     blocked_shot_stats = ["TSA", "TSB", "TSA_5v5", "TSB_5v5"]
     assist_stats = ["A", "A1", "A2", "EVA", "EVA1", "EVA2", "PPA", "PPA1", "PPA2", "SHA", "SHA1", "SHA2"< "ENA", "ENA1", "ENA2", "A_5v5", "A1_5v5", "A2_5v5"]
     hit_stats = ["HIT"]
@@ -18573,7 +18573,7 @@ def determine_stat_value(player_game_info, all_events, qualifiers, og_row, playe
                 if goal_event["event_name"] == "missed_shot":
                     if determine_event_match(goal_event, "missed_shot", qualifiers, player_game_info, og_row):
                         if goal_event["description"].endswith(" Goalpost") or goal_event["description"].endswith("Hit Crossbar"):
-                            row["Post/Bar"] += 1
+                            row["PostBar"] += 1
                         if count_misses:
                             row["S"] += 1
                         if row["Year"] >= 2007:
@@ -22397,7 +22397,7 @@ def perform_metadata_quals(qualifiers, player_type, row, player_game_info, nhl_p
         for goal_event in player_game_info["missed_shot"]:
             if perform_metadata_qual("missed_shot", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], skip_career_events=skip_career_events):
                 if goal_event["description"].endswith(" Goalpost") or goal_event["description"].endswith("Hit Crossbar"):
-                    row["Post/Bar"] += 1
+                    row["PostBar"] += 1
                 if count_misses:
                     row["S"] += 1
                 if row["Year"] >= 2007:
@@ -24207,7 +24207,7 @@ def clear_row_attrs(row, player_type):
         row["HIT"] = 0
         row["HITTkn"] = 0
         row["BLK"] = 0
-        row["Post/Bar"] = 0
+        row["PostBar"] = 0
 
         row["PIM"] = 0
         row["PEN"] = 0
@@ -24636,15 +24636,28 @@ def perform_post_qualifier(player_data, player_type, row, qualifiers, all_rows):
     if "Formula" in qualifiers:
         stats = set()
         for qual_object in qualifiers["Formula"]:
-            formula = qual_object["values"][0]
+            formula = qual_object["values"][0].lower()
+            formula_matches = list(re.finditer(r"(?:(?:[A-Za-z_:~])\d?|\d?(?:[A-Za-z_:~]))+", formula))
             for header in headers[player_type["da_type"]["type"]].keys():
-                match = re.search(r"(?:(?<![\w+])(?=[\w+])|(?<=[\w+])(?![\w+]))" + re.escape(header.lower()) + r"(?:(?<![\w+])(?=[\w+])|(?<=[\w+])(?![\w+]))", formula)
-                if not match:
+                has_match = False
+                for formula_match in formula_matches:
+                    if formula_match.group() == header.lower():
+                        has_match = True
+                        break
+
+                if not has_match:
+                    new_stat = None
                     for header_stat in headers[player_type["da_type"]["type"]]:
                         if "display-value" in headers[player_type["da_type"]["type"]][header_stat] and header_stat.lower() == header.lower():
-                            header = headers[player_type["da_type"]["type"]][header_stat]["display-value"].lower()
-                    match = re.search(r"(?:(?<![\w+])(?=[\w+])|(?<=[\w+])(?![\w+]))" + re.escape(header.lower()) + r"(?:(?<![\w+])(?=[\w+])|(?<=[\w+])(?![\w+]))", formula)
-                if match:
+                            new_stat = headers[player_type["da_type"]["type"]][header_stat]["display-value"].lower()
+                            break
+
+                    if new_stat:
+                        for formula_match in formula_matches:
+                            if formula_match.group() == new_stat.lower():
+                                has_match = True
+                                break
+                if has_match:
                     stats.add(header)
             
         row_normal = fill_row(row, player_data, player_type, lower=False, stats=stats)
@@ -27482,15 +27495,28 @@ def handle_season_stats(all_rows, player_data, player_type, qualifiers):
         if "Season Formula" in qualifiers:
             stats = set()
             for qual_object in qualifiers["Season Formula"]:
-                formula = qual_object["values"][0]
+                formula = qual_object["values"][0].lower()
+                formula_matches = list(re.finditer(r"(?:(?:[A-Za-z_:~])\d?|\d?(?:[A-Za-z_:~]))+", formula))
                 for header in headers[player_type["da_type"]["type"]].keys():
-                    match = re.search(r"(?:(?<![\w+])(?=[\w+])|(?<=[\w+])(?![\w+]))" + re.escape(header.lower()) + r"(?:(?<![\w+])(?=[\w+])|(?<=[\w+])(?![\w+]))", formula)
-                    if not match:
+                    has_match = False
+                    for formula_match in formula_matches:
+                        if formula_match.group() == header.lower():
+                            has_match = True
+                            break
+
+                    if not has_match:
+                        new_stat = None
                         for header_stat in headers[player_type["da_type"]["type"]]:
                             if "display-value" in headers[player_type["da_type"]["type"]][header_stat] and header_stat.lower() == header.lower():
-                                header = headers[player_type["da_type"]["type"]][header_stat]["display-value"].lower()
-                        match = re.search(r"(?:(?<![\w+])(?=[\w+])|(?<=[\w+])(?![\w+]))" + re.escape(header.lower()) + r"(?:(?<![\w+])(?=[\w+])|(?<=[\w+])(?![\w+]))", formula)
-                    if match:
+                                new_stat = headers[player_type["da_type"]["type"]][header_stat]["display-value"].lower()
+                                break
+
+                        if new_stat:
+                            for formula_match in formula_matches:
+                                if formula_match.group() == new_stat.lower():
+                                    has_match = True
+                                    break
+                    if has_match:
                         stats.add(header)
 
             season_row_map[season]["comb_row_upper"] = comb_rows(season_matching_rows, player_data, player_type, False, stats=stats)
@@ -28719,10 +28745,16 @@ def comb_rows(matching_rows, player_data, player_type, lower=True, stats=None):
 
 def calculate_recursive_formula(stat, player_data, player_type, comb_row, matching_rows):
     formula = formulas[player_type["da_type"]["type"]][stat]
+    formula_matches = list(re.finditer(r"(?:(?:[A-Za-z_:~])\d?|\d?(?:[A-Za-z_:~]))+", formula.lower()))
     for header_stat in formulas[player_type["da_type"]["type"]]:
         if header_stat == stat:
             break
-        if re.search(r"(?:(?<![\w+])(?=[\w+])|(?<=[\w+])(?![\w+]))" + re.escape(header_stat.lower()) + r"(?:(?<![\w+])(?=[\w+])|(?<=[\w+])(?![\w+]))", formula.lower()):
+        has_match = False
+        for formula_match in formula_matches:
+            if formula_match.group() == stat.lower():
+                has_match = True
+                break
+        if has_match:
             calculate_recursive_formula(header_stat, player_data, player_type, comb_row, matching_rows)
     comb_row[stat] = calculate_formula(stat, player_type, formula, comb_row, matching_rows, player_data)
 
@@ -32288,10 +32320,13 @@ def calculate_formula(stat, player_type, formula, data, all_rows, player_data, s
 
     earliest_invalid_date = None
     formula = formula.lower()
+
+    formula_matches = list(re.finditer(r"(?:(?:[A-Za-z_:~])\d?|\d?(?:[A-Za-z_:~]))+", formula))
+
     if all_rows:
         for sub_stat in data:
             if stat == "custom_formula" or (sub_stat != "Tm" and sub_stat != "Result" and sub_stat != "player_type" and sub_stat != "is_playoffs" and (not sub_stat in qualifier_map or sub_stat == "Team Score" or sub_stat == "Opponent Score")):
-                temp_earliest_invalid_date = calculate_earliest_invalid_date(sub_stat, player_type, data, formula, earliest_invalid_date, stat, player_data)
+                temp_earliest_invalid_date = calculate_earliest_invalid_date(sub_stat, player_type, data, formula, earliest_invalid_date, stat, player_data, formula_matches)
                 if temp_earliest_invalid_date:
                     earliest_invalid_date = temp_earliest_invalid_date
 
@@ -32300,7 +32335,7 @@ def calculate_formula(stat, player_type, formula, data, all_rows, player_data, s
 
     for sub_stat in data:
         if stat == "custom_formula" or (sub_stat != "Tm" and sub_stat != "Result" and sub_stat != "player_type" and sub_stat != "is_playoffs" and (not sub_stat in qualifier_map or sub_stat == "Team Score" or sub_stat == "Opponent Score")):
-            formula = replace_formula(data, sub_stat, formula, all_rows, earliest_invalid_date, player_type, stat)
+            formula, formula_matches = replace_formula(data, sub_stat, formula, all_rows, earliest_invalid_date, player_type, stat, formula_matches)
 
     try:
         if safe_eval:
@@ -32354,36 +32389,65 @@ def calculate_team_win_losses(data, all_rows, stat):
 
     return result_count
 
-def calculate_earliest_invalid_date(stat, player_type, data, formula, earliest_invalid_date, real_stat, player_data):
-    if re.search(r"(?:(?<![\w+])(?=[\w+])|(?<=[\w+])(?![\w+]))" + re.escape(stat.lower()) + r"(?:(?<![\w+])(?=[\w+])|(?<=[\w+])(?![\w+]))", formula):
+def calculate_earliest_invalid_date(stat, player_type, data, formula, earliest_invalid_date, real_stat, player_data, formula_matches):
+    has_match = False
+    for formula_match in formula_matches:
+        if formula_match.group() == stat.lower():
+            has_match = True
+            break
+
+    if has_match:
         invalid_date = is_invalid_stat(stat, player_type, data, False, player_data)
         if invalid_date:
             if not earliest_invalid_date or invalid_date == True or invalid_date > earliest_invalid_date:
                 return invalid_date
     elif real_stat == "custom_formula":
+        new_stat = None
         for header_stat in headers[player_type["da_type"]["type"]]:
             if "display-value" in headers[player_type["da_type"]["type"]][header_stat] and header_stat.lower() == stat.lower():
-                stat = headers[player_type["da_type"]["type"]][header_stat]["display-value"].lower()
-        if re.search(r"(?:(?<![\w+])(?=[\w+])|(?<=[\w+])(?![\w+]))" + re.escape(stat.lower()) + r"(?:(?<![\w+])(?=[\w+])|(?<=[\w+])(?![\w+]))", formula):
-            invalid_date = is_invalid_stat(stat, player_type, data, False, player_data)
-            if invalid_date:
-                if not earliest_invalid_date or invalid_date == True or invalid_date > earliest_invalid_date:
-                    return invalid_date
+                new_stat = headers[player_type["da_type"]["type"]][header_stat]["display-value"].lower()
+                break
 
-def replace_formula(data, stat, formula, all_rows, earliest_invalid_date, player_type, real_stat):
+        if new_stat:
+            for formula_match in formula_matches:
+                if formula_match.group() == new_stat.lower():
+                    invalid_date = is_invalid_stat(stat, player_type, data, False, player_data)
+                    if invalid_date:
+                        if not earliest_invalid_date or invalid_date == True or invalid_date > earliest_invalid_date:
+                            return invalid_date
+                    break
+
+def replace_formula(data, stat, formula, all_rows, earliest_invalid_date, player_type, real_stat, formula_matches):
     value = data[stat]
     if isinstance(value, numbers.Number):
         value = calculate_valid_value(stat, value, earliest_invalid_date, all_rows, real_stat)
     elif real_stat != "custom_formula":
-        return formula
+        return formula, formula_matches
 
-    formula, num_subs = re.subn(r"(?:(?<![\w+])(?=[\w+])|(?<=[\w+])(?![\w+]))" + re.escape(stat.lower()) + r"(?:(?<![\w+])(?=[\w+])|(?<=[\w+])(?![\w+]))", str(value).lower(), formula)
-    if not num_subs and real_stat == "custom_formula":
+    old_formula = formulas
+    formula, formula_matches = perform_replacement(formula_matches, stat.lower(), str(value), formula)
+
+    if old_formula == formula and real_stat == "custom_formula":
+        new_stat = None
         for header_stat in headers[player_type["da_type"]["type"]]:
             if "display-value" in headers[player_type["da_type"]["type"]][header_stat] and header_stat.lower() == stat.lower():
-                stat = headers[player_type["da_type"]["type"]][header_stat]["display-value"].lower()
-        formula = re.sub(r"(?:(?<![\w+])(?=[\w+])|(?<=[\w+])(?![\w+]))" + re.escape(stat.lower()) + r"(?:(?<![\w+])(?=[\w+])|(?<=[\w+])(?![\w+]))", str(value).lower(), formula)
-    return formula
+                new_stat = headers[player_type["da_type"]["type"]][header_stat]["display-value"].lower()
+                break
+
+        if new_stat:
+            formula, formula_matches = perform_replacement(formula_matches, new_stat.lower(), str(value), formula)
+
+    return formula, formula_matches
+
+def perform_replacement(formula_matches, stat, value, formula):
+    for formula_match in formula_matches:
+        if formula_match.group() == stat:
+            span = formula_match.span()
+            formula = formula[:span[0]] + value + formula[span[1]:]
+            formula_matches = list(re.finditer(r"(?:(?:[A-Za-z_:~])\d?|\d?(?:[A-Za-z_:~]))+", formula))
+            return perform_replacement(formula_matches, stat, value, formula)
+    
+    return formula, formula_matches
 
 def calculate_valid_value(stat, value, earliest_invalid_date, all_rows, real_stat):
     if not earliest_invalid_date:
@@ -32685,7 +32749,7 @@ def print_player_data(player_datas, player_type, highest_vals, lowest_vals, has_
                     if "TOI" in header and not "GP_TOI" in header and not "offITOI" in header and not "x" in header and not "Shft" in header:
                         override_show = True
                 if "current-stats" in extra_stats or "current-stats-zone" in extra_stats:
-                    if header in ("1stG", "Post/Bar", "Post/60M", "TK", "GV", "TK/GV", "TK/60M", "GV/60M", "GF/60M", "GA/60M", "GFPer", "CF/60M", "CA/60M", "CFPer", "FF/60M", "FA/60M", "FFPer", "SF/60M", "SA/60M", "SFPer", "OZ%", "oiSPer", "oiSVPer", "PDO", "oiSRelPer", "oiSVRelPer", "PDORel"):
+                    if header in ("1stG", "PostBar", "Post/60M", "TK", "GV", "TK/GV", "TK/60M", "GV/60M", "GF/60M", "GA/60M", "GFPer", "CF/60M", "CA/60M", "CFPer", "FF/60M", "FA/60M", "FFPer", "SF/60M", "SA/60M", "SFPer", "OZ%", "oiSPer", "oiSVPer", "PDO", "oiSRelPer", "oiSVRelPer", "PDORel"):
                         override_show = True
                     if header in ("GFRel/60M", "CFRel/60M", "FFRel/60M", "SFRel/60M", "GARel/60M", "CARel/60M", "FARel/60M", "SARel/60M", "GFRelPer", "CFRelPer", "FFRelPer", "SFRelPer"):
                         override_show = True
@@ -33107,7 +33171,7 @@ def get_reddit_player_table(player_datas, player_type, debug_mode, original_comm
                     if "TOI" in header and not "GP_TOI" in header and not "offITOI" in header and not "x" in header and not "Shft" in header:
                         override_show = True
                 if "current-stats" in extra_stats or "current-stats-zone" in extra_stats:
-                    if header in ("1stG", "Post/Bar", "Post/60M", "TK", "GV", "TK/GV", "TK/60M", "GV/60M", "GF/60M", "GA/60M", "GFPer", "CF/60M", "CA/60M", "CFPer", "FF/60M", "FA/60M", "FFPer", "SF/60M", "SA/60M", "SFPer", "OZ%", "oiSPer", "oiSVPer", "PDO", "oiSRelPer", "oiSVRelPer", "PDORel"):
+                    if header in ("1stG", "PostBar", "Post/60M", "TK", "GV", "TK/GV", "TK/60M", "GV/60M", "GF/60M", "GA/60M", "GFPer", "CF/60M", "CA/60M", "CFPer", "FF/60M", "FA/60M", "FFPer", "SF/60M", "SA/60M", "SFPer", "OZ%", "oiSPer", "oiSVPer", "PDO", "oiSRelPer", "oiSVRelPer", "PDORel"):
                         override_show = True
                     if header in ("GFRel/60M", "CFRel/60M", "FFRel/60M", "SFRel/60M", "GARel/60M", "CARel/60M", "FARel/60M", "SARel/60M", "GFRelPer", "CFRelPer", "FFRelPer", "SFRelPer"):
                         override_show = True
@@ -33906,7 +33970,7 @@ def handle_table_data(player_data, player_type, over_header, header, highest_val
         if "TOI" in header and not "GP_TOI" in header and not "offITOI" in header and not "x" in header and not "Shft" in header:
             override_show = True
     if "current-stats" in extra_stats or "current-stats-zone" in extra_stats:
-        if header in ("1stG", "Post/Bar", "Post/60M", "TK", "GV", "TK/GV", "TK/60M", "GV/60M", "GF/60M", "GA/60M", "GFPer", "CF/60M", "CA/60M", "CFPer", "FF/60M", "FA/60M", "FFPer", "SF/60M", "SA/60M", "SFPer", "OZ%", "oiSPer", "oiSVPer", "PDO", "oiSRelPer", "oiSVRelPer", "PDORel"):
+        if header in ("1stG", "PostBar", "Post/60M", "TK", "GV", "TK/GV", "TK/60M", "GV/60M", "GF/60M", "GA/60M", "GFPer", "CF/60M", "CA/60M", "CFPer", "FF/60M", "FA/60M", "FFPer", "SF/60M", "SA/60M", "SFPer", "OZ%", "oiSPer", "oiSVPer", "PDO", "oiSRelPer", "oiSVRelPer", "PDORel"):
             override_show = True
         if header in ("GFRel/60M", "CFRel/60M", "FFRel/60M", "SFRel/60M", "GARel/60M", "CARel/60M", "FARel/60M", "SARel/60M", "GFRelPer", "CFRelPer", "FFRelPer", "SFRelPer"):
             override_show = True
@@ -34274,7 +34338,7 @@ def is_invalid_stat(stat, player_type, data, count_inconsistent, player_data):
     if "YearStart" in data and stat in headers[player_type["da_type"]["type"]] and data["YearStart"]:
         if player_type["da_type"]["type"] == "Skater":
             header_shift_stats = ["Shft", "Shft/GP", "TOI/Shft"]
-            report_2_stats = ["PenDrawn", "NetPEN", "Post/Bar", "CF", "CA", "CFPer", "CF/60M", "CA/60M", "FF", "FA", "FFPer", "SF/60M", "SA/60M", "SFPer", "CFRelPer", "FFRelPer", "SFRelPer", "FF/60M", "FA/60M", "offICF", "offICA", "offIFF", "offIFA", "offISF", "offISA", "offICA/60M", "offIFF/60M" , "offISA/60M", "offICF/60M", "offIFA/60M", "offISF/60M", "offIC/60M", "offIF/60M", "offIS/60M", "CFRel/60M", "FFRel/60M", "SFRel/60M", "CARel/60M", "FARel/60M", "SARel/60M", "OZ%", "oiSPer", "oiSVPer", "PDO", "oiSRelPer", "oiSVRelPer", "PDORel", "TSA", "TSM", "TSB", "TSA/GP", "TSB/GP", "TSM/GP", "TS%", "SThr%"]
+            report_2_stats = ["PenDrawn", "NetPEN", "PostBar", "CF", "CA", "CFPer", "CF/60M", "CA/60M", "FF", "FA", "FFPer", "SF/60M", "SA/60M", "SFPer", "CFRelPer", "FFRelPer", "SFRelPer", "FF/60M", "FA/60M", "offICF", "offICA", "offIFF", "offIFA", "offISF", "offISA", "offICA/60M", "offIFF/60M" , "offISA/60M", "offICF/60M", "offIFA/60M", "offISF/60M", "offIC/60M", "offIF/60M", "offIS/60M", "CFRel/60M", "FFRel/60M", "SFRel/60M", "CARel/60M", "FARel/60M", "SARel/60M", "OZ%", "oiSPer", "oiSVPer", "PDO", "oiSRelPer", "oiSVRelPer", "PDORel", "TSA", "TSM", "TSB", "TSA/GP", "TSB/GP", "TSM/GP", "TS%", "SThr%"]
             report_3_stats = ["TK", "GV", "TK/GV", "HIT", "HITTkn", "BLK"]
             strength_stats = ["PEN", "PEN/GP", "PIM", "PIM/GP", "OZFO%", "DZFO%", "OZFO/60M", "DZFO/60M", "OZFOW/60M", "DZFOW/60M", "FOW/GP", "FO/GP", "FOW", "FO", "FO%"]
             shot_on_stats = ["S", "S%", "S/GP"]
