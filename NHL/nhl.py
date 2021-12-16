@@ -19061,13 +19061,13 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
             if str(row_data["NHLGameLink"]) in manual_period_map:
                 for period_map_info in manual_period_map[str(row_data["NHLGameLink"])][str(scoring_play["about"]["period"])]:
                     if period_time >= period_map_info["start"] and period_time <= period_map_info["end"]:
-                        rink_side = period_map_info["sides"][str(scoring_play["team"]["id"])]
+                        rink_side = period_map_info["sides"][str(game_data["team_id"])]
             else:
-                rink_side = period_side_map[scoring_play["about"]["period"]][scoring_play["team"]["id"]]
+                rink_side = period_side_map[scoring_play["about"]["period"]][game_data["team_id"]]
         
             if scoring_play["about"]["period"] == 5 and game_data["is_shootout"] and x_coord < 0:
                 rink_side = "right"
-
+            
             if not zone:
                 if x_coord >= -25 and x_coord <= 25:
                     zone = "NZ"
