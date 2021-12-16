@@ -20831,7 +20831,7 @@ def get_html_play_data(scoring_plays, player_data, og_game_id, is_home, game_dat
                                     sub_scoring_play["team_on_ice"] = scoring_play["team_on_ice"]
                                     sub_scoring_play["opp_on_ice"] = scoring_play["opp_on_ice"]
                                     #sub_scoring_play["team_on_ice_pos"] = scoring_play["team_on_ice_pos"]
-                                    sub_scoring_play["opp_on_ice_pos"] = scoring_play["opp_on_ice_pos"]
+                                    #sub_scoring_play["opp_on_ice_pos"] = scoring_play["opp_on_ice_pos"]
                                     sub_scoring_play["zone"] = scoring_play["zone"]
                                     if real_event_type != "Goal":
                                         sub_scoring_play["result"]["strength"] = scoring_play["result"]["strength"]
