@@ -69,15 +69,20 @@ def main():
                         state = "MB"
 
                     if state in ["UK"]:
-                        country = "England"
+                        country = "UK"
+                        state = None
                     elif state in ["MX"]:
-                        country = "Mexico"
-                    elif state in ["ON", "Mani"]:
-                        country = "Canada"
+                        country = "MX"
+                        state  = None
+                    elif state in ["ON", "MB"]:
+                        country = "CA"
                     else:
-                        country = "USA"
+                        country = "US"
 
-                    location = geolocator.geocode(city + " " + state + " " + country)
+                    if state:
+                        location = geolocate(geolocator, city + " " + state + " " + country)
+                    else:
+                        location = geolocate(geolocator, city + " " + country)
 
                     time_zone = tz_finder.timezone_at(lng=location.longitude, lat=location.latitude)
 
@@ -114,7 +119,7 @@ def main():
                                     venues.append(venue_name)
                             break
 
-                    if not city or not state or not country or not time_zone or not venues:
+                    if not city or not country or not time_zone or not venues:
                         print("Invalid arena " + venue_ids)
 
                     team_venues[venue_id] = {
@@ -142,6 +147,24 @@ def url_request(request):
             if failed_counter > max_request_retries:
                 raise
         except urllib.error.URLError:
+            failed_counter += 1
+            if failed_counter > max_request_retries:
+                raise
+
+        delay_step = 10
+        print("Retrying in " + str(retry_failure_delay) + " seconds to allow fangraphs to chill")
+        time_to_wait = int(math.ceil(float(retry_failure_delay)/float(delay_step)))
+        for i in range(retry_failure_delay, 0, -time_to_wait):
+            print(i)
+            time.sleep(time_to_wait)
+        print("0")
+
+def geolocate(geolocator, location):
+    failed_counter = 0
+    while(True):
+        try:
+            return geolocator.geocode(location, timeout=10)
+        except Exception:
             failed_counter += 1
             if failed_counter > max_request_retries:
                 raise

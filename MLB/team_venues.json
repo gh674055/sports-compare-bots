@@ -1,7 +1,7 @@
 {
     "1": {
         "city": "Anaheim",
-        "country": "USA",
+        "country": "US",
         "state": "CA",
         "time_zone": "America/Los_Angeles",
         "values": [
@@ -13,7 +13,7 @@
     },
     "10": {
         "city": "Oakland",
-        "country": "USA",
+        "country": "US",
         "state": "CA",
         "time_zone": "America/Los_Angeles",
         "values": [
@@ -26,7 +26,7 @@
     },
     "11": {
         "city": "Seattle",
-        "country": "USA",
+        "country": "US",
         "state": "WA",
         "time_zone": "America/Los_Angeles",
         "values": [
@@ -35,7 +35,7 @@
     },
     "12": {
         "city": "St. Petersburg",
-        "country": "USA",
+        "country": "US",
         "state": "FL",
         "time_zone": "America/New_York",
         "values": [
@@ -44,7 +44,7 @@
     },
     "13": {
         "city": "Arlington",
-        "country": "USA",
+        "country": "US",
         "state": "TX",
         "time_zone": "America/Chicago",
         "values": [
@@ -56,7 +56,7 @@
     },
     "14": {
         "city": "Toronto",
-        "country": "Canada",
+        "country": "CA",
         "state": "ON",
         "time_zone": "America/Toronto",
         "values": [
@@ -66,7 +66,7 @@
     },
     "15": {
         "city": "Phoenix",
-        "country": "USA",
+        "country": "US",
         "state": "AZ",
         "time_zone": "America/Phoenix",
         "values": [
@@ -76,7 +76,7 @@
     },
     "16": {
         "city": "Atlanta",
-        "country": "USA",
+        "country": "US",
         "state": "GA",
         "time_zone": "America/New_York",
         "values": [
@@ -85,7 +85,7 @@
     },
     "17": {
         "city": "Chicago",
-        "country": "USA",
+        "country": "US",
         "state": "IL",
         "time_zone": "America/Chicago",
         "values": [
@@ -96,7 +96,7 @@
     },
     "18": {
         "city": "Cincinnati",
-        "country": "USA",
+        "country": "US",
         "state": "OH",
         "time_zone": "America/New_York",
         "values": [
@@ -106,7 +106,7 @@
     },
     "19": {
         "city": "Denver",
-        "country": "USA",
+        "country": "US",
         "state": "CO",
         "time_zone": "America/Denver",
         "values": [
@@ -115,7 +115,7 @@
     },
     "2": {
         "city": "Baltimore",
-        "country": "USA",
+        "country": "US",
         "state": "MD",
         "time_zone": "America/New_York",
         "values": [
@@ -124,7 +124,7 @@
     },
     "20": {
         "city": "Miami",
-        "country": "USA",
+        "country": "US",
         "state": "FL",
         "time_zone": "America/New_York",
         "values": [
@@ -137,7 +137,7 @@
     },
     "21": {
         "city": "Houston",
-        "country": "USA",
+        "country": "US",
         "state": "TX",
         "time_zone": "America/Chicago",
         "values": [
@@ -146,7 +146,7 @@
     },
     "22": {
         "city": "Los Angeles",
-        "country": "USA",
+        "country": "US",
         "state": "CA",
         "time_zone": "America/Los_Angeles",
         "values": [
@@ -155,7 +155,7 @@
     },
     "23": {
         "city": "Milwaukee",
-        "country": "USA",
+        "country": "US",
         "state": "WI",
         "time_zone": "America/Chicago",
         "values": [
@@ -164,7 +164,7 @@
     },
     "2392": {
         "city": "Houston",
-        "country": "USA",
+        "country": "US",
         "state": "TX",
         "time_zone": "America/Chicago",
         "values": [
@@ -175,7 +175,7 @@
     },
     "2394": {
         "city": "Detroit",
-        "country": "USA",
+        "country": "US",
         "state": "MI",
         "time_zone": "America/Detroit",
         "values": [
@@ -184,7 +184,7 @@
     },
     "2395": {
         "city": "San Francisco",
-        "country": "USA",
+        "country": "US",
         "state": "CA",
         "time_zone": "America/Los_Angeles",
         "values": [
@@ -196,7 +196,7 @@
     },
     "2397": {
         "city": "Bunkyo City",
-        "country": "Japan",
+        "country": "JP",
         "state": "JP",
         "time_zone": "Asia/Tokyo",
         "values": [
@@ -205,7 +205,7 @@
     },
     "24": {
         "city": "Montreal",
-        "country": "Canada",
+        "country": "CA",
         "state": "QB",
         "time_zone": "America/Toronto",
         "values": [
@@ -214,7 +214,7 @@
     },
     "25": {
         "city": "Flushing",
-        "country": "USA",
+        "country": "US",
         "state": "NY",
         "time_zone": "America/New_York",
         "values": [
@@ -223,7 +223,7 @@
     },
     "2503": {
         "city": "Las Vegas",
-        "country": "USA",
+        "country": "US",
         "state": "NV",
         "time_zone": "America/Los_Angeles",
         "values": [
@@ -232,7 +232,7 @@
     },
     "2504": {
         "city": "Lake Buena Vista",
-        "country": "USA",
+        "country": "US",
         "state": "FL",
         "time_zone": "America/New_York",
         "values": [
@@ -242,7 +242,7 @@
     },
     "2535": {
         "city": "San Juan",
-        "country": "Puerto Rico",
+        "country": "PR",
         "state": "PR",
         "time_zone": "America/Puerto_Rico",
         "values": [
@@ -251,7 +251,7 @@
     },
     "2536": {
         "city": "Dunedin",
-        "country": "USA",
+        "country": "US",
         "state": "FL",
         "time_zone": "America/New_York",
         "values": [
@@ -260,7 +260,7 @@
     },
     "26": {
         "city": "Philadelphia",
-        "country": "USA",
+        "country": "US",
         "state": "PA",
         "time_zone": "America/New_York",
         "values": [
@@ -269,7 +269,7 @@
     },
     "2602": {
         "city": "Cincinnati",
-        "country": "USA",
+        "country": "US",
         "state": "OH",
         "time_zone": "America/New_York",
         "values": [
@@ -278,7 +278,7 @@
     },
     "2680": {
         "city": "San Diego",
-        "country": "USA",
+        "country": "US",
         "state": "CA",
         "time_zone": "America/Los_Angeles",
         "values": [
@@ -288,7 +288,7 @@
     },
     "2681": {
         "city": "Philadelphia",
-        "country": "USA",
+        "country": "US",
         "state": "PA",
         "time_zone": "America/New_York",
         "values": [
@@ -297,7 +297,7 @@
     },
     "27": {
         "city": "Pittsburgh",
-        "country": "USA",
+        "country": "US",
         "state": "PA",
         "time_zone": "America/New_York",
         "values": [
@@ -306,7 +306,7 @@
     },
     "2701": {
         "city": "Monterrey",
-        "country": "Mexico",
+        "country": "MX",
         "state": "MX",
         "time_zone": "America/Monterrey",
         "values": [
@@ -315,7 +315,7 @@
     },
     "2721": {
         "city": "Washington",
-        "country": "USA",
+        "country": "US",
         "state": "DC",
         "time_zone": "America/New_York",
         "values": [
@@ -325,7 +325,7 @@
     },
     "2735": {
         "city": "Williamsport",
-        "country": "USA",
+        "country": "US",
         "state": "PA",
         "time_zone": "America/New_York",
         "values": [
@@ -334,7 +334,7 @@
     },
     "2756": {
         "city": "Buffalo",
-        "country": "USA",
+        "country": "US",
         "state": "NY",
         "time_zone": "America/New_York",
         "values": [
@@ -343,7 +343,7 @@
     },
     "28": {
         "city": "San Diego",
-        "country": "USA",
+        "country": "US",
         "state": "CA",
         "time_zone": "America/Los_Angeles",
         "values": [
@@ -354,7 +354,7 @@
     },
     "2889": {
         "city": "St. Louis",
-        "country": "USA",
+        "country": "US",
         "state": "MO",
         "time_zone": "America/Chicago",
         "values": [
@@ -363,7 +363,7 @@
     },
     "29": {
         "city": "San Francisco",
-        "country": "USA",
+        "country": "US",
         "state": "CA",
         "time_zone": "America/Los_Angeles",
         "values": [
@@ -373,7 +373,7 @@
     },
     "3": {
         "city": "Boston",
-        "country": "USA",
+        "country": "US",
         "state": "MA",
         "time_zone": "America/New_York",
         "values": [
@@ -382,7 +382,7 @@
     },
     "30": {
         "city": "St. Louis",
-        "country": "USA",
+        "country": "US",
         "state": "MO",
         "time_zone": "America/Chicago",
         "values": [
@@ -391,7 +391,7 @@
     },
     "31": {
         "city": "Pittsburgh",
-        "country": "USA",
+        "country": "US",
         "state": "PA",
         "time_zone": "America/New_York",
         "values": [
@@ -400,7 +400,7 @@
     },
     "3109": {
         "city": "Washington",
-        "country": "USA",
+        "country": "US",
         "state": "DC",
         "time_zone": "America/New_York",
         "values": [
@@ -409,7 +409,7 @@
     },
     "3110": {
         "city": "Washington",
-        "country": "USA",
+        "country": "US",
         "state": "DC",
         "time_zone": "America/New_York",
         "values": [
@@ -418,7 +418,7 @@
     },
     "3111": {
         "city": "Arlington",
-        "country": "USA",
+        "country": "US",
         "state": "TX",
         "time_zone": "America/Chicago",
         "values": [
@@ -427,7 +427,7 @@
     },
     "3112": {
         "city": "Atlanta",
-        "country": "USA",
+        "country": "US",
         "state": "GA",
         "time_zone": "America/New_York",
         "values": [
@@ -437,7 +437,7 @@
     },
     "3113": {
         "city": "Philadelphia",
-        "country": "USA",
+        "country": "US",
         "state": "PA",
         "time_zone": "America/New_York",
         "values": [
@@ -446,7 +446,7 @@
     },
     "3114": {
         "city": "Detroit",
-        "country": "USA",
+        "country": "US",
         "state": "MI",
         "time_zone": "America/Detroit",
         "values": [
@@ -455,7 +455,7 @@
     },
     "3115": {
         "city": "Boston",
-        "country": "USA",
+        "country": "US",
         "state": "MA",
         "time_zone": "America/New_York",
         "values": [
@@ -464,7 +464,7 @@
     },
     "3116": {
         "city": "Cleveland",
-        "country": "USA",
+        "country": "US",
         "state": "OH",
         "time_zone": "America/New_York",
         "values": [
@@ -473,7 +473,7 @@
     },
     "3117": {
         "city": "Houston",
-        "country": "USA",
+        "country": "US",
         "state": "TX",
         "time_zone": "America/Chicago",
         "values": [
@@ -482,7 +482,7 @@
     },
     "3118": {
         "city": "Philadelphia",
-        "country": "USA",
+        "country": "US",
         "state": "PA",
         "time_zone": "America/New_York",
         "values": [
@@ -491,7 +491,7 @@
     },
     "3119": {
         "city": "Chicago",
-        "country": "USA",
+        "country": "US",
         "state": "IL",
         "time_zone": "America/Chicago",
         "values": [
@@ -500,7 +500,7 @@
     },
     "3120": {
         "city": "Cincinnati",
-        "country": "USA",
+        "country": "US",
         "state": "OH",
         "time_zone": "America/New_York",
         "values": [
@@ -510,7 +510,7 @@
     },
     "3121": {
         "city": "Brooklyn",
-        "country": "USA",
+        "country": "US",
         "state": "NY",
         "time_zone": "America/New_York",
         "values": [
@@ -519,7 +519,7 @@
     },
     "3123": {
         "city": "Toronto",
-        "country": "USA",
+        "country": "US",
         "state": "ON",
         "time_zone": "America/Toronto",
         "values": [
@@ -528,7 +528,7 @@
     },
     "3124": {
         "city": "Pittsburgh",
-        "country": "USA",
+        "country": "US",
         "state": "PA",
         "time_zone": "America/New_York",
         "values": [
@@ -537,7 +537,7 @@
     },
     "3125": {
         "city": "Pittsburgh",
-        "country": "USA",
+        "country": "US",
         "state": "PA",
         "time_zone": "America/New_York",
         "values": [
@@ -546,7 +546,7 @@
     },
     "3126": {
         "city": "Washington",
-        "country": "USA",
+        "country": "US",
         "state": "DC",
         "time_zone": "America/New_York",
         "values": [
@@ -556,7 +556,7 @@
     },
     "3127": {
         "city": "New York",
-        "country": "USA",
+        "country": "US",
         "state": "NY",
         "time_zone": "America/New_York",
         "values": [
@@ -565,7 +565,7 @@
     },
     "3128": {
         "city": "Boston",
-        "country": "USA",
+        "country": "US",
         "state": "MA",
         "time_zone": "America/New_York",
         "values": [
@@ -574,7 +574,7 @@
     },
     "3129": {
         "city": "Montreal",
-        "country": "USA",
+        "country": "US",
         "state": "QB",
         "time_zone": "America/Toronto",
         "values": [
@@ -583,7 +583,7 @@
     },
     "3131": {
         "city": "Cleveland",
-        "country": "USA",
+        "country": "US",
         "state": "OH",
         "time_zone": "America/New_York",
         "values": [
@@ -593,7 +593,7 @@
     },
     "3132": {
         "city": "Milwaukee",
-        "country": "USA",
+        "country": "US",
         "state": "WI",
         "time_zone": "America/Chicago",
         "values": [
@@ -602,7 +602,7 @@
     },
     "3133": {
         "city": "Los Angeles",
-        "country": "USA",
+        "country": "US",
         "state": "CA",
         "time_zone": "America/Los_Angeles",
         "values": [
@@ -611,7 +611,7 @@
     },
     "3134": {
         "city": "Baltimore",
-        "country": "USA",
+        "country": "US",
         "state": "MD",
         "time_zone": "America/New_York",
         "values": [
@@ -620,7 +620,7 @@
     },
     "3135": {
         "city": "Bloomington ",
-        "country": "USA",
+        "country": "US",
         "state": "MI",
         "time_zone": "America/Chicago",
         "values": [
@@ -629,7 +629,7 @@
     },
     "3136": {
         "city": "Denver",
-        "country": "USA",
+        "country": "US",
         "state": "CO",
         "time_zone": "America/Denver",
         "values": [
@@ -638,7 +638,7 @@
     },
     "3137": {
         "city": "Kansas City",
-        "country": "USA",
+        "country": "US",
         "state": "MO",
         "time_zone": "America/Chicago",
         "values": [
@@ -647,7 +647,7 @@
     },
     "3138": {
         "city": "Cincinnati",
-        "country": "USA",
+        "country": "US",
         "state": "OH",
         "time_zone": "America/New_York",
         "values": [
@@ -656,7 +656,7 @@
     },
     "3139": {
         "city": "New York",
-        "country": "USA",
+        "country": "US",
         "state": "NY",
         "time_zone": "America/New_York",
         "values": [
@@ -665,7 +665,7 @@
     },
     "3140": {
         "city": "New York",
-        "country": "USA",
+        "country": "US",
         "state": "NY",
         "time_zone": "America/New_York",
         "values": [
@@ -674,7 +674,7 @@
     },
     "3141": {
         "city": "St. Louis",
-        "country": "USA",
+        "country": "US",
         "state": "MO",
         "time_zone": "America/Chicago",
         "values": [
@@ -683,7 +683,7 @@
     },
     "3142": {
         "city": "San Francisco  ",
-        "country": "USA",
+        "country": "US",
         "state": "CA",
         "time_zone": "America/Los_Angeles",
         "values": [
@@ -692,7 +692,7 @@
     },
     "3143": {
         "city": "Philadelphia",
-        "country": "USA",
+        "country": "US",
         "state": "PA",
         "time_zone": "America/New_York",
         "values": [
@@ -702,7 +702,7 @@
     },
     "3144": {
         "city": "Boston",
-        "country": "USA",
+        "country": "US",
         "state": "MA",
         "time_zone": "America/Los_Angeles",
         "values": [
@@ -711,7 +711,7 @@
     },
     "3147": {
         "city": "Boston",
-        "country": "USA",
+        "country": "US",
         "state": "MA",
         "time_zone": "America/New_York",
         "values": [
@@ -720,7 +720,7 @@
     },
     "3148": {
         "city": "Chicago",
-        "country": "USA",
+        "country": "US",
         "state": "IL",
         "time_zone": "America/Chicago",
         "values": [
@@ -729,7 +729,7 @@
     },
     "3149": {
         "city": "St. Louis",
-        "country": "USA",
+        "country": "US",
         "state": "MO",
         "time_zone": "America/Chicago",
         "values": [
@@ -738,7 +738,7 @@
     },
     "3150": {
         "city": "Brooklyn",
-        "country": "USA",
+        "country": "US",
         "state": "NY",
         "time_zone": "America/New_York",
         "values": [
@@ -747,7 +747,7 @@
     },
     "3153": {
         "city": "Los Angeles",
-        "country": "USA",
+        "country": "US",
         "state": "CA",
         "time_zone": "America/Los_Angeles",
         "values": [
@@ -756,7 +756,7 @@
     },
     "3154": {
         "city": "Honolulu",
-        "country": "USA",
+        "country": "US",
         "state": "HI",
         "time_zone": "Pacific/Honolulu",
         "values": [
@@ -765,7 +765,7 @@
     },
     "3155": {
         "city": "Toledo",
-        "country": "USA",
+        "country": "US",
         "state": "OH",
         "time_zone": "America/New_York",
         "values": [
@@ -774,7 +774,7 @@
     },
     "3156": {
         "city": "Detroit",
-        "country": "USA",
+        "country": "US",
         "state": "MI",
         "time_zone": "America/Detroit",
         "values": [
@@ -783,7 +783,7 @@
     },
     "3157": {
         "city": "Dayton",
-        "country": "USA",
+        "country": "US",
         "state": "OH",
         "time_zone": "America/New_York",
         "values": [
@@ -792,7 +792,7 @@
     },
     "3158": {
         "city": "Fort Wayne",
-        "country": "USA",
+        "country": "US",
         "state": "IN",
         "time_zone": "America/Indiana/Indianapolis",
         "values": [
@@ -801,7 +801,7 @@
     },
     "3159": {
         "city": "Cleveland",
-        "country": "USA",
+        "country": "US",
         "state": "OH",
         "time_zone": "America/New_York",
         "values": [
@@ -810,7 +810,7 @@
     },
     "3160": {
         "city": "Cincinnati",
-        "country": "USA",
+        "country": "US",
         "state": "OH",
         "time_zone": "America/New_York",
         "values": [
@@ -819,7 +819,7 @@
     },
     "3161": {
         "city": "Canton",
-        "country": "USA",
+        "country": "US",
         "state": "OH",
         "time_zone": "America/New_York",
         "values": [
@@ -828,7 +828,7 @@
     },
     "3162": {
         "city": "Columbus",
-        "country": "USA",
+        "country": "US",
         "state": "OH",
         "time_zone": "America/New_York",
         "values": [
@@ -837,7 +837,7 @@
     },
     "3163": {
         "city": "Columbus",
-        "country": "USA",
+        "country": "US",
         "state": "OH",
         "time_zone": "America/New_York",
         "values": [
@@ -846,7 +846,7 @@
     },
     "3164": {
         "city": "Baltimore",
-        "country": "USA",
+        "country": "US",
         "state": "MD",
         "time_zone": "America/New_York",
         "values": [
@@ -855,7 +855,7 @@
     },
     "3165": {
         "city": "Grand Rapids",
-        "country": "USA",
+        "country": "US",
         "state": "MI",
         "time_zone": "America/Detroit",
         "values": [
@@ -864,7 +864,7 @@
     },
     "3166": {
         "city": "Warwick",
-        "country": "USA",
+        "country": "US",
         "state": "RI",
         "time_zone": "America/New_York",
         "values": [
@@ -873,7 +873,7 @@
     },
     "3167": {
         "city": "St. Louis",
-        "country": "USA",
+        "country": "US",
         "state": "MO",
         "time_zone": "America/New_York",
         "values": [
@@ -882,7 +882,7 @@
     },
     "3168": {
         "city": "St. Louis",
-        "country": "USA",
+        "country": "US",
         "state": "MO",
         "time_zone": "America/Chicago",
         "values": [
@@ -891,7 +891,7 @@
     },
     "3169": {
         "city": "Chicago",
-        "country": "USA",
+        "country": "US",
         "state": "IL",
         "time_zone": "America/Chicago",
         "values": [
@@ -900,7 +900,7 @@
     },
     "3170": {
         "city": "Newark",
-        "country": "USA",
+        "country": "US",
         "state": "NJ",
         "time_zone": "America/New_York",
         "values": [
@@ -909,7 +909,7 @@
     },
     "32": {
         "city": "Milwaukee",
-        "country": "USA",
+        "country": "US",
         "state": "WI",
         "time_zone": "America/Chicago",
         "values": [
@@ -919,7 +919,7 @@
     },
     "3289": {
         "city": "Flushing",
-        "country": "USA",
+        "country": "US",
         "state": "NY",
         "time_zone": "America/New_York",
         "values": [
@@ -928,7 +928,7 @@
     },
     "3309": {
         "city": "Washington",
-        "country": "USA",
+        "country": "US",
         "state": "DC",
         "time_zone": "America/New_York",
         "values": [
@@ -937,7 +937,7 @@
     },
     "3312": {
         "city": "Minneapolis",
-        "country": "USA",
+        "country": "US",
         "state": "MN",
         "time_zone": "America/Chicago",
         "values": [
@@ -946,7 +946,7 @@
     },
     "3313": {
         "city": "Bronx",
-        "country": "USA",
+        "country": "US",
         "state": "NY",
         "time_zone": "America/New_York",
         "values": [
@@ -955,7 +955,7 @@
     },
     "4": {
         "city": "Chicago",
-        "country": "USA",
+        "country": "US",
         "state": "IL",
         "time_zone": "America/Chicago",
         "values": [
@@ -966,7 +966,7 @@
     },
     "401": {
         "city": "United States",
-        "country": "USA",
+        "country": "US",
         "state": null,
         "time_zone": "America/New_York",
         "values": [
@@ -975,7 +975,7 @@
     },
     "4169": {
         "city": "Miami",
-        "country": "USA",
+        "country": "US",
         "state": "FL",
         "time_zone": "America/New_York",
         "values": [
@@ -985,7 +985,7 @@
     },
     "4589": {
         "city": "Sydney",
-        "country": "Australia",
+        "country": "AU",
         "state": null,
         "time_zone": "Australia/Sydney",
         "values": [
@@ -994,7 +994,7 @@
     },
     "4705": {
         "city": "Atlanta",
-        "country": "USA",
+        "country": "US",
         "state": "GA",
         "time_zone": "America/New_York",
         "values": [
@@ -1004,7 +1004,7 @@
     },
     "5": {
         "city": "Cleveland",
-        "country": "USA",
+        "country": "US",
         "state": "OH",
         "time_zone": "America/New_York",
         "values": [
@@ -1014,7 +1014,7 @@
     },
     "5010": {
         "city": "Fort Bragg",
-        "country": "USA",
+        "country": "US",
         "state": "NC",
         "time_zone": "America/New_York",
         "values": [
@@ -1023,7 +1023,7 @@
     },
     "5325": {
         "city": "Arlington",
-        "country": "USA",
+        "country": "US",
         "state": "TX",
         "time_zone": "America/Chicago",
         "values": [
@@ -1032,7 +1032,7 @@
     },
     "5365": {
         "city": "Omaha",
-        "country": "USA",
+        "country": "US",
         "state": "NE",
         "time_zone": "America/Chicago",
         "values": [
@@ -1041,7 +1041,7 @@
     },
     "5381": {
         "city": "London",
-        "country": "United Kingdom",
+        "country": "UK",
         "state": null,
         "time_zone": "Europe/London",
         "values": [
@@ -1050,7 +1050,7 @@
     },
     "5445": {
         "city": "Dyersville",
-        "country": "USA",
+        "country": "US",
         "state": "IA",
         "time_zone": "America/Chicago",
         "values": [
@@ -1059,7 +1059,7 @@
     },
     "6": {
         "city": "Detroit",
-        "country": "USA",
+        "country": "US",
         "state": "MI",
         "time_zone": "America/Detroit",
         "values": [
@@ -1070,7 +1070,7 @@
     },
     "680": {
         "city": "Seattle",
-        "country": "USA",
+        "country": "US",
         "state": "WA",
         "time_zone": "America/Los_Angeles",
         "values": [
@@ -1080,7 +1080,7 @@
     },
     "7": {
         "city": "Kansas City",
-        "country": "USA",
+        "country": "US",
         "state": "MO",
         "time_zone": "America/Chicago",
         "values": [
@@ -1090,7 +1090,7 @@
     },
     "8": {
         "city": "Minneapolis",
-        "country": "USA",
+        "country": "US",
         "state": "MN",
         "time_zone": "America/Chicago",
         "values": [
@@ -1099,7 +1099,7 @@
     },
     "9": {
         "city": "Bronx",
-        "country": "USA",
+        "country": "US",
         "state": "NY",
         "time_zone": "America/New_York",
         "values": [

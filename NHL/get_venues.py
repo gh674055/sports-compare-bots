@@ -176,7 +176,7 @@ manual_arenas = {
 }
 
 do_check = True
-end_year = 2021
+end_year = 2022
 
 def main():
     team_venues = {}
@@ -255,10 +255,9 @@ def main():
                                             elif arena_location == "Gothenberg":
                                                 arena_location = "Gothenburg"
 
-                                            if arena_location == "San Jose, CA":
-                                                location = geolocator.geocode("San Jose")
-                                            else:
-                                                location = geolocator.geocode(arena_location)
+                                        
+                                            location = geolocate(geolocator, arena_location)
+
                                             time_zone = tz_finder.timezone_at(lng=location.longitude, lat=location.latitude)
 
                                             loc_split = arena_location.split(",")
@@ -269,40 +268,33 @@ def main():
                                             if len(loc_split) == 1:
                                                 city = loc_split[0].strip()
                                                 if city == "Tokyo":
-                                                    country = "Japan"
-                                                    state = "Kanto"
+                                                    country = "JP"
                                                 elif city == "Stockholm":
-                                                    country = "Sweden"
-                                                    state = "Stockholm"
+                                                    country = "SE"
                                                 elif city == "Gothenburg":
-                                                    country = "Sweden"
-                                                    state = "Vastra Gotaland"
+                                                    country = "SE"
                                                 elif city == "London":
-                                                    country = "United Kingdom"
-                                                    state = "England"
+                                                    country = "UK"
                                                 elif city == "Prague":
-                                                    country = "Czech Republic"
-                                                    state = "Bohemia"
+                                                    country = "CZ"
                                                 elif city == "Helsinki":
-                                                    country = "Finland"
-                                                    state = "Uusimaa"
+                                                    country = "FI"
                                                 elif city == "Berlin":
-                                                    country = "Germany"
-                                                    state = "Berlin"
+                                                    country = "DE"
                                             else:
                                                 city = loc_split[0].strip()
                                                 state = loc_split[1].strip()
                                                 if state in ["AB", "BC", "MB", "NB", "NL", "NT", "NS", "NU", "ON", "PE", "QC", "SK", "YT"]:
-                                                    country = "Canada"
+                                                    country = "CA"
                                                 else:
-                                                    country = "USA"
+                                                    country = "US"
 
                                             for index, arena_name in enumerate(arena_names):
                                                 if arena_name == "O2 Arena":
-                                                    if country == "Czech Republic":
+                                                    if country == "CZ":
                                                         arena_names[index] = "O2 Czech Republic"
 
-                                            if not city or not state or not country or not time_zone or not arena_names:
+                                            if not city or not country or not time_zone or not arena_names:
                                                 print("Invalid Arena " + arena_id)
                                             
                                             team_venues[arena_id] = {
@@ -362,6 +354,24 @@ def url_request(request):
             if failed_counter > max_request_retries:
                 raise
         except urllib.error.URLError:
+            failed_counter += 1
+            if failed_counter > max_request_retries:
+                raise
+
+        delay_step = 10
+        print("Retrying in " + str(retry_failure_delay) + " seconds to allow fangraphs to chill")
+        time_to_wait = int(math.ceil(float(retry_failure_delay)/float(delay_step)))
+        for i in range(retry_failure_delay, 0, -time_to_wait):
+            print(i)
+            time.sleep(time_to_wait)
+        print("0")
+
+def geolocate(geolocator, location):
+    failed_counter = 0
+    while(True):
+        try:
+            return geolocator.geocode(location, timeout=10)
+        except Exception:
             failed_counter += 1
             if failed_counter > max_request_retries:
                 raise

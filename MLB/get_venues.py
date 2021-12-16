@@ -26,7 +26,17 @@ request_headers = {
     "User-Agent" : "MLBCompareRedditBot"
 }
 
-end_year = 2021
+end_year = 2022
+
+country_codes = { 
+    "USA" : "US",
+    "Canada" : "CA",
+    "Japan" : "JP",
+    "Puerto Rico" : "PR",
+    "Mexico" : "MX",
+    "Australia" : "AU",
+    "United Kingdom" : "UK"
+}
 
 def main():
     year_short = "y"
@@ -71,7 +81,7 @@ def main():
                         "values" : [],
                         "city" : sub_data["gameData"]["venue"]["location"]["city"] if "city" in sub_data["gameData"]["venue"]["location"] else None,
                         "state" : sub_data["gameData"]["venue"]["location"]["stateAbbrev"] if "stateAbbrev" in sub_data["gameData"]["venue"]["location"] else None,
-                        "country" : sub_data["gameData"]["venue"]["location"]["country"] if "country" in sub_data["gameData"]["venue"]["location"] else None,
+                        "country" : country_codes[sub_data["gameData"]["venue"]["location"]["country"]] if "country" in sub_data["gameData"]["venue"]["location"] else None,
                         "time_zone" : sub_data["gameData"]["venue"]["timeZone"]["id"]
                     }
                 if team_name not in team_venues[venue_id]["values"]:
