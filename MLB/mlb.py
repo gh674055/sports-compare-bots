@@ -35111,7 +35111,7 @@ def get_mlb_game_links_schedule_links(player_data, player_type, player_link, all
                 scheudle_url += "venue(fieldInfo),"
             if "Condition" in qualifiers or "Temperature" in qualifiers or "Wind" in qualifiers:
                 scheudle_url += "weather,"
-            if "Exact Umpire" in qualifiers or "Exact Home Plate Umpire" in qualifiers "Umpire" in qualifiers or "Home Plate Umpire" in qualifiers:
+            if "Exact Umpire" in qualifiers or "Exact Home Plate Umpire" in qualifiers or "Umpire" in qualifiers or "Home Plate Umpire" in qualifiers:
                 scheudle_url += "officials,"
                 
             if scheudle_url.endswith(","):
