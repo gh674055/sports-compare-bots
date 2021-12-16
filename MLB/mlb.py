@@ -23429,6 +23429,9 @@ def parse_row(row, time_frame, year, is_playoffs, player_type, header_values, pr
                         elif result == "BL":
                             row_data.update({"BSv" : 1})
                             row_data.update({"L" : 1})
+                        elif result == "HL":
+                            row_data.update({"Hold" : 1})
+                            row_data.update({"L" : 1})
                         elif result == "S":
                             row_data.update({"SV" : 1})
                         elif result == "BS":
