@@ -6837,6 +6837,11 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                             extra_stats.add(m.group(1) + "-" + str(ordinal_to_number(m.group(2))))
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
                         
+                        last_match = re.finditer(r"\badd-extra-stat:\((.+?)\)", time_frame)
+                        for m in last_match:
+                            extra_stats.add(m.group(1))
+                            time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
+                        
                         last_match = re.finditer(r"\bshow(?: |-)?(only(?: |-)?)?(pitcher-record|record|score|year|game-count|seasons-leading|season|date|per-game|game|play|run-support|run-support-record|exit-record|statcast|advanced-runner|advanced|best-season|worst-season|team|franchise|number|award|live|driven-in|mlb-link)s?\b", time_frame)
                         for m in last_match:
                             extra_stats.add(m.group(2))

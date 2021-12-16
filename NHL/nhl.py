@@ -7523,6 +7523,18 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                             extra_stats.add(m.group(1) + "-" + str(ordinal_to_number(m.group(2))))
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
                         
+                        last_match = re.finditer(r"\badd-extra-stat:\((.+?)\)", time_frame)
+                        for m in last_match:
+                            extra_stats.add(m.group(1))
+                            if m.group(1) == "skip-toi":
+                                extra_stats.add("current-stats-zone")
+                                extra_stats.add("current-stats")
+                            elif m.group(1) == "skip-href":
+                                extra_stats.add("current-stats")
+                            elif m.group(1) == "skip-play":
+                                extra_stats.add("current-stats")
+                            time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
+                        
                         last_match = re.finditer(r"\bshow(?: |-)?(only(?: |-)?)?(goalie-record|record|faceoff|score|goal|year|game-count|seasons-leading|season|date|per-game|game|adjusted|advanced|relative|missing-game|missing-toi|best-season|worst-season|ng|team|franchise|number|fight|penaltie|penalty|award|toi|shot|shift|star|play|nhl-link)s?\b", time_frame)
                         for m in last_match:
                             if "penalt" in m.group(2) or m.group(2) == "fight":
@@ -17455,7 +17467,7 @@ def get_nhl_game_schedule(player_data, all_rows, games_to_skip, player_link, pla
                     future.add_done_callback(functools.partial(result_call_back, time_frame, count_info, new_rows, player_type, player_data, player_link, row_data, extra_stats, index))
             else:
                 count_info["missing_games"].append("[" + str(row_data["Date"]) + "](" + "https://www.nhl.com/gamecenter/" + str(row_data["NHLGameLink"]) + ")")
-        
+                
     if count_info["exception"]:
         raise count_info["exception"]
 
@@ -18786,7 +18798,7 @@ def set_row_data(player_game_info, row_data):
 def get_game_data(index, player_data, row_data, player_id, player_type, time_frame, extra_stats):
     game_data, missing_games, sub_data = setup_game_data(player_data, row_data, player_id, player_type, time_frame)
     if game_data["missing_data"]:
-        if row_data["Year"] < 2000 and "Game Number" not in time_frame["qualifiers"] and "Official" not in time_frame["qualifiers"] and "Referee" not in time_frame["qualifiers"] and "Linesman" not in time_frame["qualifiers"] and "Team Head Coach" not in time_frame["qualifiers"] and "Opponent Head Coach" not in time_frame["qualifiers"]:
+        if "skip-href" not in extra_stats and row_data["Year"] < 2000 and "Game Number" not in time_frame["qualifiers"] and "Official" not in time_frame["qualifiers"] and "Referee" not in time_frame["qualifiers"] and "Linesman" not in time_frame["qualifiers"] and "Team Head Coach" not in time_frame["qualifiers"] and "Opponent Head Coach" not in time_frame["qualifiers"]:
             game_data, missing_games, sub_data = setup_href_game_data(player_data, row_data, player_id, player_type, time_frame)
             if game_data["missing_data"]:
                 return game_data, row_data, missing_games
@@ -18799,7 +18811,7 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
     scoring_plays = []
     if (row_data["Year"] < 2000 and sub_data):
         scoring_plays = sub_data["liveData"]["plays"]["allPlays"]
-    if ((not scoring_plays and True) or (row_data["Year"] >= 2000)) and not has_api_quals(time_frame["qualifiers"]):
+    if ((not scoring_plays and True) or (row_data["Year"] >= 2000)) and not has_api_quals(time_frame["qualifiers"]) and not "skip-play" in extra_stats:
         if row_data["Year"] >= 2007:
             get_html_play_data(scoring_plays, player_data, row_data["NHLGameLink"], row_data["Location"], game_data, sub_data["gameData"]["status"]["abstractGameState"] == "Final", row_data["Year"])
         elif row_data["Year"] >= 2003:
@@ -18864,7 +18876,7 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
 
     game_data["scoring_play_data"] = scoring_play_data
     
-    if row_data["Year"] >= 2007:
+    if row_data["Year"] >= 2007 and "skip-toi" not in extra_stats:
         game_data["shift_data"] = get_html_shift_data(row_data["NHLGameLink"], row_data["Location"], game_data, player_data)
         #if not game_data["shift_data"]:
         #    game_data["shift_data"], missing_games = get_shift_data(row_data["NHLGameLink"], game_data["team_id"], missing_games)
