@@ -26463,7 +26463,7 @@ def perform_qualifier(player_data, player_type, row, time_frame, all_rows):
     return True
 
 def determine_venue_obj(row, is_team):
-    team_id = row["Tm" if is_team else "Opponent"].upper()
+    team_id = team_main_abbr[str(row["Year"])][row["Tm" if is_team else "Opponent"].upper()]
 
     if team_id in team_venue_history:
         for pot_team_venue in team_venue_history[team_id]:
