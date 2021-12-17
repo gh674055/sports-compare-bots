@@ -22262,7 +22262,7 @@ def perform_nhl_game_qualifiers(row, qualifiers):
                 for ump_str in ["TmHeadCoach"]:
                     if (ump_str not in row or row[ump_str] == None):
                         continue
-                    if re.sub(r"[^A-Za-z\s]", "", stadium).strip() in re.sub(r"[^A-Za-z\s]", "", ump_value.lower()).strip():
+                    if re.sub(r"[^A-Za-z\s]", "", stadium).strip() in re.sub(r"[^A-Za-z\s]", "", row[ump_str].lower()).strip():
                         has_match = True
                         break
             if qual_object["negate"]:
@@ -22282,7 +22282,7 @@ def perform_nhl_game_qualifiers(row, qualifiers):
                 for ump_str in ["OppHeadCoach"]:
                     if (ump_str not in row or row[ump_str] == None):
                         continue
-                    if re.sub(r"[^A-Za-z\s]", "", stadium).strip() in re.sub(r"[^A-Za-z\s]", "", ump_value.lower()).strip():
+                    if re.sub(r"[^A-Za-z\s]", "", stadium).strip() in re.sub(r"[^A-Za-z\s]", "", row[ump_str].lower()).strip():
                         has_match = True
                         break
             if qual_object["negate"]:
