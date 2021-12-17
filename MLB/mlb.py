@@ -33892,11 +33892,7 @@ def get_mlb_game_stats_single_thread(all_rows, qualifiers, games_to_skip, player
 
     get_mlb_game_links(player_data, player_type, player_data["player_link"], all_rows)
 
-    hit_end = False
     for index, row_data in enumerate(sorted(all_rows, key=lambda row: row["DateTime"], reverse=is_reverse)):
-        if hit_end:
-            continue
-
         if row_data["GameLink"] not in games_to_skip:
             try:
                 game_data, row_data, index, sub_missing_games = get_live_game_data(index, player_data, row_data, player_type, qualifiers, True)
@@ -33908,6 +33904,7 @@ def get_mlb_game_stats_single_thread(all_rows, qualifiers, games_to_skip, player
                 if has_match:
                     new_rows.append(row_data)
 
+                hit_end = False
                 for stat in stats_needed:
                     if stat in starting_event_stats_needed:
                         saved_row_data["starting_career_stat_" + stat] = saved_row_data[stat]
@@ -33929,25 +33926,14 @@ def get_mlb_game_stats_single_thread(all_rows, qualifiers, games_to_skip, player
                         if saved_row_data[stat] >= event_reversed_stats_needed[stat]:
                             hit_end = True
 
-                if "Event Stat" in qualifiers:
-                    if not handle_stat_num_qual(saved_row_data, qualifiers["Event Stat"], False, True, False):
-                        break
-                if "Event Stat Reversed" in qualifiers:
-                    if not handle_stat_num_qual(saved_row_data, qualifiers["Event Stat Reversed"], True, True, False):
-                        break
-            
-                if "Starting Event Stat" in qualifiers:
-                    if not handle_stat_num_qual(saved_row_data, qualifiers["Starting Event Stat"], False, True, True):
-                        break
-                if "Starting Event Stat Reversed" in qualifiers:
-                    if not handle_stat_num_qual(saved_row_data, qualifiers["Starting Event Stat Reversed"], True, True, True):
-                        break
-
                 percent_complete = 100 * (count_info["count"] / count_info["total_count"])
                 if count_info["total_count"] >= 10 and percent_complete >= count_info["current_percent"]:
                     logger.info("#" + str(threading.get_ident()) + "#   " + player_data["id"] + " game data " + str(count_info["current_percent"]) + "% complete")
                     count_info["current_percent"] += 10
                 count_info["count"] += 1
+
+                if hit_end:
+                    break
             except Exception:
                 logger.info("Error parsing date " + str(row_data["Date"]))
                 raise

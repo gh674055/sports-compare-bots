@@ -10062,6 +10062,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                                 "end_val" : ordinal_to_number(split_vals[1]),
                                                 "end_exclusive" : end_exclusive
                                             })
+                                
                             elif qualifier_str.startswith("event-stat:") or qualifier_str.startswith("event-stat-reversed:") or qualifier_str.startswith("event-stats:") or qualifier_str.startswith("event-stats-reversed:") or  qualifier_str.startswith("game-event-stat:") or qualifier_str.startswith("game-event-stat-reversed:") or qualifier_str.startswith("game-event-stats:") or qualifier_str.startswith("game-event-stats-reversed:") or qualifier_str.startswith("starting-event-stat:") or qualifier_str.startswith("starting-event-stat-reversed:") or qualifier_str.startswith("starting-event-stats:") or qualifier_str.startswith("starting-event-stats-reversed:") or  qualifier_str.startswith("starting-game-event-stat:") or qualifier_str.startswith("starting-game-event-stat-reversed:") or qualifier_str.startswith("starting-game-event-stats:") or qualifier_str.startswith("starting-game-event-stats-reversed:"):
                                 if qualifier_str.startswith("event-stat:"):
                                     qual_str = "event-stat:"
@@ -17571,11 +17572,7 @@ def get_nhl_game_schedule_single_thread(player_data, all_rows, games_to_skip, pl
 
     is_reverse = "Event Stat Reversed" in time_frame["qualifiers"] or "Starting Event Stat Reversed" in time_frame["qualifiers"]
 
-    hit_end = False
     for index, row_data in enumerate(sorted(all_rows, key=lambda row: row["Date"], reverse=is_reverse)):
-        if hit_end:
-            continue
-
         if row_data["NHLGameLink"] not in games_to_skip:
             try:
                 game_data, row_data, sub_missing_games = get_game_data(index, player_data, row_data, player_id, player_type, time_frame, extra_stats)
@@ -17587,6 +17584,7 @@ def get_nhl_game_schedule_single_thread(player_data, all_rows, games_to_skip, pl
                 if has_match:
                     new_rows.append(row_data)
 
+                hit_end = False
                 for stat in stats_needed:
                     if stat in starting_event_stats_needed:
                         saved_row_data["starting_career_stat_" + stat] = saved_row_data[stat]
@@ -17608,25 +17606,14 @@ def get_nhl_game_schedule_single_thread(player_data, all_rows, games_to_skip, pl
                         if saved_row_data[stat] >= event_reversed_stats_needed[stat]:
                             hit_end = True
 
-                if "Event Stat" in time_frame["qualifiers"]:
-                    if not handle_stat_num_qual(saved_row_data, time_frame["qualifiers"]["Event Stat"], False, True, False):
-                        break
-                if "Event Stat Reversed" in time_frame["qualifiers"]:
-                    if not handle_stat_num_qual(saved_row_data, time_frame["qualifiers"]["Event Stat Reversed"], True, True, False):
-                        break
-            
-                if "Starting Event Stat" in time_frame["qualifiers"]:
-                    if not handle_stat_num_qual(saved_row_data, time_frame["qualifiers"]["Starting Event Stat"], False, True, True):
-                        break
-                if "Starting Event Stat Reversed" in time_frame["qualifiers"]:
-                    if not handle_stat_num_qual(saved_row_data, time_frame["qualifiers"]["Starting Event Stat Reversed"], True, True, True):
-                        break
-
                 percent_complete = 100 * (count_info["count"] / count_info["total_count"])
                 if count_info["total_count"] >= 10 and percent_complete >= count_info["current_percent"]:
                     logger.info("#" + str(threading.get_ident()) + "#   " + player_data["id"] + " game data " + str(count_info["current_percent"]) + "% complete")
                     count_info["current_percent"] += 10
                 count_info["count"] += 1
+            
+                if hit_end:
+                    break
             except Exception:
                 logger.info("Error parsing date " + str(row_data["Date"]))
                 raise
