@@ -6832,7 +6832,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                             extra_stats.add(m.group(1))
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
                         
-                        last_match = re.finditer(r"\bshow(?: |-)?(only(?: |-)?)?(pitcher-record|record|slash|score|year|game-count|seasons-leading|season|date|per-game|game|play|run-support|run-support-record|exit-record|statcast|advanced-runner|advanced|best-season|worst-season|team|franchise|number|award|live|driven-in|mlb-link)s?\b", time_frame)
+                        last_match = re.finditer(r"\bshow(?: |-)?(only(?: |-)?)?(pitcher-record|record|slash|score|year|game-count|seasons-leading|season|date|per-game|game|play|run-support|run-support-record|exit-record|statcast|advanced-runner|advanced|best-season|worst-season|team|franchise|number|award|driven-in|mlb-link)s?\b", time_frame)
                         for m in last_match:
                             extra_stats.add(m.group(2))
                             if m.group(2) == "play":
@@ -6904,7 +6904,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
 
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
 
-                        last_match = re.finditer(r"\bhide(?: |-)?(name|year|season|date|query|queries|advanced)s?\b", time_frame)
+                        last_match = re.finditer(r"\bhide(?: |-)?(name|year|season|live|date|query|queries|advanced)s?\b", time_frame)
                         for m in last_match:
                             if m.group(1) == "date" or m.group(1) == "season":
                                 extra_stats.add("hide-year")
@@ -14419,7 +14419,8 @@ def handle_player_data(player_data, time_frame, player_type, player_page, valid_
     else:
         player_data["mlb_id"] = int(player_link.split('/')[-1])
         player_data["player_link"] = player_link
-        live_game = get_live_game(player_link, player_data, player_type, time_frame)
+        if "hide-live" not in extra_stats:
+            live_game = get_live_game(player_link, player_data, player_type, time_frame)
 
     if "Rookie" in time_frame["qualifiers"]:
         determine_rookie_years(player_page, player_type, time_frame["qualifiers"]["Rookie"])
@@ -17914,8 +17915,6 @@ def perform_qualifier(player_data, player_type, row, time_frame, all_rows):
                     return False
     
     if "Game After Sub Query" in qualifiers:
-        if row["Year"] not in player_data["all_games"]:
-            return False
         all_games = player_data["all_games"][row["Year"]]
 
         game_index = [sub_row["GameLink"] for sub_row in player_data["all_games"][row["Year"]]].index(row["GameLink"])
@@ -17936,8 +17935,6 @@ def perform_qualifier(player_data, player_type, row, time_frame, all_rows):
                     return False
     
     if "Game Before Sub Query" in qualifiers:
-        if row["Year"] not in player_data["all_games"]:
-            return False
         all_games = player_data["all_games"][row["Year"]]
 
         game_index = [sub_row["GameLink"] for sub_row in player_data["all_games"][row["Year"]]].index(row["GameLink"])
@@ -26169,7 +26166,9 @@ def setup_career_stats(row_data, player_game_info, saved_row_data, index, player
         return
 
     event_stats_needed = {}
+    event_start_stats_needed = {}
     event_reversed_stats_needed = {}
+    event_start_reversed_stats_needed = {}
     events_stats_needed = {}
     events_reversed_stats_needed = {}
     if "Event Stat" in qualifiers:
@@ -26178,12 +26177,20 @@ def setup_career_stats(row_data, player_game_info, saved_row_data, index, player
                 event_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
             if qual_obj["values"]["end_val"] < event_stats_needed[qual_obj["stat"]]:
                 event_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
+            if qual_obj["stat"] not in event_start_stats_needed:
+                event_start_stats_needed[qual_obj["stat"]] = qual_obj["values"]["start_val"]
+            if qual_obj["values"]["start_val"] > event_start_stats_needed[qual_obj["stat"]]:
+                event_start_stats_needed[qual_obj["stat"]] = qual_obj["values"]["start_val"]
     if "Event Stat Reversed" in qualifiers:
         for qual_obj in qualifiers["Event Stat Reversed"]:
             if qual_obj["stat"] not in event_reversed_stats_needed:
                 event_reversed_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
             if qual_obj["values"]["end_val"] < event_reversed_stats_needed[qual_obj["stat"]]:
                 event_reversed_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
+            if qual_obj["stat"] not in event_start_reversed_stats_needed:
+                event_start_reversed_stats_needed[qual_obj["stat"]] = qual_obj["values"]["start_val"]
+            if qual_obj["values"]["start_val"] > event_start_reversed_stats_needed[qual_obj["stat"]]:
+                event_start_reversed_stats_needed[qual_obj["stat"]] = qual_obj["values"]["start_val"]
     if "Event Stats" in qualifiers:
         for qual_obj in qualifiers["Event Stats"]:
             if qual_obj["stat"] not in events_stats_needed:
@@ -26213,16 +26220,17 @@ def setup_career_stats(row_data, player_game_info, saved_row_data, index, player
             career_stats_info[stat] += saved_row_data[stat]
 
         hit_end = False
-        last_hit_end_pa = True
+        hit_start = False
+        for stat in event_stats_needed:
+            if career_stats_info[stat] >= event_start_stats_needed[stat]:
+                hit_start = True
         for at_bat_event in player_game_info["batting_events" if player_type["da_type"] == "Batter" else "pitching_events"]:
             if copied_quals and not handle_da_mlb_quals(row_data, "batting_events" if player_type["da_type"] == "Batter" else "pitching_events", at_bat_event, copied_quals, player_data, player_type, player_game_info):
                 continue
             
             for stat in event_stats_needed:
-                if hit_end and (player_type["da_type"] != "Batter" or at_bat_event["result"] not in ("run_scored", "stolen_base", "caught_stealing") or at_bat_event["is_pr"] or not last_hit_end_pa):
+                if hit_end:
                     at_bat_event["career_stat_" + stat] = -1
-                    if at_bat_event["result"] not in ("run_scored", "stolen_base", "caught_stealing", "pick_off"):
-                        last_hit_end_pa = False
                 else:
                     if stat == "IP":
                         innings_pitched_to_use = career_stats_info["IP"]
@@ -26252,10 +26260,26 @@ def setup_career_stats(row_data, player_game_info, saved_row_data, index, player
                         if at_bat_event["result"] not in ("run_scored", "stolen_base", "caught_stealing", "pick_off"):
                             career_stats_info["Pit"] += (at_bat_event["pitches"] if at_bat_event["pitches"] else 0)
                         at_bat_event["career_stat_Pit"] = career_stats_info["Pit"]
+                    elif stat in ["ER", "R"]:
+                        if at_bat_event["event_id"] in player_game_info["pitch_event_to_run_event"]:
+                            for sub_at_bat_event in player_game_info["pitch_event_to_run_event"][at_bat_event["event_id"]]:
+                                if copied_quals and not handle_da_mlb_quals(row_data, "pitching_run_events", at_bat_event, sub_at_bat_event, player_data, player_type, player_game_info):
+                                    continue
+                                if stat == "R":
+                                    career_stats_info[stat] += 1
+                                else:
+                                    if "is_unearned_run" not in at_bat_event or not at_bat_event["is_unearned_run"]:
+                                        career_stats_info[stat] += 1
+                                sub_at_bat_event["career_stat_" + stat] = career_stats_info[stat]
                     else:
                         career_stats_info[stat] += event_type_stat_mappings[at_bat_event["result"]].get(stat, 0)
                         at_bat_event["career_stat_" + stat] = career_stats_info[stat]
+                    
+                    if not hit_start:
+                        at_bat_event["career_stat_" + stat] = -1
             
+                    if career_stats_info[stat] >= event_start_stats_needed[stat]:
+                        hit_start = True
                     if career_stats_info[stat] >= event_stats_needed[stat]:
                         hit_end = True
 
@@ -26269,7 +26293,7 @@ def setup_career_stats(row_data, player_game_info, saved_row_data, index, player
         for at_bat_event in player_game_info["pitching_run_events"]:
             if copied_quals and not handle_da_mlb_quals(row_data, "pitching_run_events", at_bat_event, copied_quals, player_data, player_type, player_game_info):
                 continue
-            
+
             if at_bat_event["is_inherited"]:
                 for stat in event_stats_needed:
                     if stat == "IP":
@@ -26283,6 +26307,13 @@ def setup_career_stats(row_data, player_game_info, saved_row_data, index, player
                         elif frac == 1.0:
                             innings_pitched_to_use += 1
                         at_bat_event["career_stat_IP"] = innings_pitched_to_use
+                    elif stat in ["ER", "R"]:
+                        if stat == "R":
+                            career_stats_info[stat] += 1
+                        else:
+                            if "is_unearned_run" not in at_bat_event or not at_bat_event["is_unearned_run"]:
+                                career_stats_info[stat] += 1
+                        at_bat_event["career_stat_" + stat] = career_stats_info[stat]
                     else:
                         at_bat_event["career_stat_" + stat] = career_stats_info[stat]
 
@@ -26311,20 +26342,28 @@ def setup_career_stats(row_data, player_game_info, saved_row_data, index, player
                         elif frac == 1.0:
                             innings_pitched_to_use += 1
                         at_bat_event["career_stat_reversed_IP"] = innings_pitched_to_use
+                    elif stat in ["ER", "R"]:
+                        if stat == "R":
+                            career_stats_info[stat] += 1
+                        else:
+                            if "is_unearned_run" not in at_bat_event or not at_bat_event["is_unearned_run"]:
+                                career_stats_info[stat] += 1
+                        at_bat_event["career_stat_" + stat] = career_stats_info[stat]
                     else:
                         at_bat_event["career_stat_reversed_" + stat] = career_stats_info[stat]
 
         hit_end = False
-        last_hit_end_pa = True
+        hit_start = False
+        for stat in event_reversed_stats_needed:
+            if career_stats_info[stat] >= event_start_reversed_stats_needed[stat]:
+                hit_start = True
         for at_bat_event in reversed(player_game_info["batting_events" if player_type["da_type"] == "Batter" else "pitching_events"]):
             if copied_quals and not handle_da_mlb_quals(row_data, "batting_events" if player_type["da_type"] == "Batter" else "pitching_events", at_bat_event, copied_quals, player_data, player_type, player_game_info):
                 continue
 
             for stat in event_reversed_stats_needed:
-                if hit_end and (player_type["da_type"] != "Batter" or at_bat_event["result"] not in ("run_scored", "stolen_base", "caught_stealing") or at_bat_event["is_pr"] or not last_hit_end_pa):
+                if hit_end:
                     at_bat_event["career_stat_reversed_" + stat] = -1
-                    if at_bat_event["result"] not in ("run_scored", "stolen_base", "caught_stealing", "pick_off"):
-                        last_hit_end_pa = False
                 else:
                     if stat == "IP":
                         innings_pitched_to_use = career_stats_info["IP"]
@@ -26354,10 +26393,26 @@ def setup_career_stats(row_data, player_game_info, saved_row_data, index, player
                         if at_bat_event["result"] not in ("run_scored", "stolen_base", "caught_stealing", "pick_off"):
                             career_stats_info["Pit"] += (at_bat_event["pitches"] if at_bat_event["pitches"] else 0)
                         at_bat_event["career_stat_reversed_Pit"] = career_stats_info["Pit"]
+                    elif stat in ["ER", "R"]:
+                        if at_bat_event["event_id"] in player_game_info["pitch_event_to_run_event"]:
+                            for sub_at_bat_event in player_game_info["pitch_event_to_run_event"][at_bat_event["event_id"]]:
+                                if copied_quals and not handle_da_mlb_quals(row_data, "pitching_run_events", at_bat_event, sub_at_bat_event, player_data, player_type, player_game_info):
+                                    continue
+                                if stat == "R":
+                                    career_stats_info[stat] += 1
+                                else:
+                                    if "is_unearned_run" not in at_bat_event or not at_bat_event["is_unearned_run"]:
+                                        career_stats_info[stat] += 1
+                                sub_at_bat_event["career_stat_reversed_" + stat] = career_stats_info[stat]
                     else:
                         career_stats_info[stat] += event_type_stat_mappings[at_bat_event["result"]].get(stat, 0)
                         at_bat_event["career_stat_reversed_" + stat] = career_stats_info[stat]
                     
+                    if not hit_start:
+                        at_bat_event["career_stat_reversed_" + stat] = -1
+            
+                    if career_stats_info[stat] >= event_start_reversed_stats_needed[stat]:
+                        hit_start = True
                     if career_stats_info[stat] >= event_reversed_stats_needed[stat]:
                         hit_end = True
 
@@ -26406,6 +26461,15 @@ def setup_career_stats(row_data, player_game_info, saved_row_data, index, player
                     if at_bat_event["result"] not in ("run_scored", "stolen_base", "caught_stealing", "pick_off"):
                         career_stats_info["Pit"] += (at_bat_event["pitches"] if at_bat_event["pitches"] else 0)
                     at_bat_event["career_stats_Pit"] = career_stats_info["Pit"]
+                elif stat in ["ER", "R"]:
+                    if at_bat_event["event_id"] in player_game_info["pitch_event_to_run_event"]:
+                        for sub_at_bat_event in player_game_info["pitch_event_to_run_event"][at_bat_event["event_id"]]:
+                            if stat == "R":
+                                career_stats_info[stat] += 1
+                            else:
+                                if "is_unearned_run" not in at_bat_event or not at_bat_event["is_unearned_run"]:
+                                    career_stats_info[stat] += 1
+                            sub_at_bat_event["career_stats_" + stat] = career_stats_info[stat]
                 else:
                     career_stats_info[stat] += event_type_stat_mappings[at_bat_event["result"]].get(stat, 0)
                     at_bat_event["career_stats_" + stat] = career_stats_info[stat]
@@ -26431,6 +26495,13 @@ def setup_career_stats(row_data, player_game_info, saved_row_data, index, player
                         elif frac == 1.0:
                             innings_pitched_to_use += 1
                         at_bat_event["career_stats_IP"] = innings_pitched_to_use
+                    elif stat in ["ER", "R"]:
+                        if stat == "R":
+                            career_stats_info[stat] += 1
+                        else:
+                            if "is_unearned_run" not in at_bat_event or not at_bat_event["is_unearned_run"]:
+                                career_stats_info[stat] += 1
+                        at_bat_event["career_stat_" + stat] = career_stats_info[stat]
                     else:
                         at_bat_event["career_stats_" + stat] = career_stats_info[stat]
 
@@ -26456,6 +26527,13 @@ def setup_career_stats(row_data, player_game_info, saved_row_data, index, player
                         elif frac == 1.0:
                             innings_pitched_to_use += 1
                         at_bat_event["career_stats_reversed_IP"] = innings_pitched_to_use
+                    elif stat in ["ER", "R"]:
+                        if stat == "R":
+                            career_stats_info[stat] += 1
+                        else:
+                            if "is_unearned_run" not in at_bat_event or not at_bat_event["is_unearned_run"]:
+                                career_stats_info[stat] += 1
+                        at_bat_event["career_stat_" + stat] = career_stats_info[stat]
                     else:
                         at_bat_event["career_stats_reversed_" + stat] = career_stats_info[stat]
 
@@ -26489,6 +26567,15 @@ def setup_career_stats(row_data, player_game_info, saved_row_data, index, player
                     if at_bat_event["result"] not in ("run_scored", "stolen_base", "caught_stealing", "pick_off"):
                         career_stats_info["Pit"] += (at_bat_event["pitches"] if at_bat_event["pitches"] else 0)
                     at_bat_event["career_stats_reversed_Pit"] = career_stats_info["Pit"]
+                elif stat in ["ER", "R"]:
+                    if at_bat_event["event_id"] in player_game_info["pitch_event_to_run_event"]:
+                        for sub_at_bat_event in player_game_info["pitch_event_to_run_event"][at_bat_event["event_id"]]:
+                            if stat == "R":
+                                career_stats_info[stat] += 1
+                            else:
+                                if "is_unearned_run" not in at_bat_event or not at_bat_event["is_unearned_run"]:
+                                    career_stats_info[stat] += 1
+                            sub_at_bat_event["career_stats_reversed_" + stat] = career_stats_info[stat]
                 else:
                     career_stats_info[stat] += event_type_stat_mappings[at_bat_event["result"]].get(stat, 0)
                     at_bat_event["career_stats_reversed_" + stat] = career_stats_info[stat]
@@ -26505,7 +26592,9 @@ def setup_game_stats(row_data, player_game_info, player_type, player_data, quali
         return
 
     event_stats_needed = {}
+    event_start_stats_needed = {}
     event_reversed_stats_needed = {}
+    event_start_reversed_stats_needed = {}
     events_stats_needed = {}
     events_reversed_stats_needed = {}
     if "Game Event Stat" in qualifiers:
@@ -26514,12 +26603,20 @@ def setup_game_stats(row_data, player_game_info, player_type, player_data, quali
                 event_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
             if qual_obj["values"]["end_val"] < event_stats_needed[qual_obj["stat"]]:
                 event_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
+            if qual_obj["stat"] not in event_start_stats_needed:
+                event_start_stats_needed[qual_obj["stat"]] = qual_obj["values"]["start_val"]
+            if qual_obj["values"]["start_val"] > event_start_stats_needed[qual_obj["stat"]]:
+                event_start_stats_needed[qual_obj["stat"]] = qual_obj["values"]["start_val"]
     if "Game Event Stat Reversed" in qualifiers:
         for qual_obj in qualifiers["Game Event Stat Reversed"]:
             if qual_obj["stat"] not in event_reversed_stats_needed:
                 event_reversed_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
             if qual_obj["values"]["end_val"] < event_reversed_stats_needed[qual_obj["stat"]]:
                 event_reversed_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
+            if qual_obj["stat"] not in event_start_reversed_stats_needed:
+                event_start_reversed_stats_needed[qual_obj["stat"]] = qual_obj["values"]["start_val"]
+            if qual_obj["values"]["start_val"] > event_start_reversed_stats_needed[qual_obj["stat"]]:
+                event_start_reversed_stats_needed[qual_obj["stat"]] = qual_obj["values"]["start_val"]
     if "Game Event Stats" in qualifiers:
         for qual_obj in qualifiers["Game Event Stats"]:
             if qual_obj["stat"] not in events_stats_needed:
@@ -26546,16 +26643,17 @@ def setup_game_stats(row_data, player_game_info, player_type, player_data, quali
             career_stats_info[stat] = 0
 
         hit_end = False
-        last_hit_end_pa = True
+        hit_start = False
+        for stat in event_stats_needed:
+            if career_stats_info[stat] >= event_start_stats_needed[stat]:
+                hit_start = True
         for at_bat_event in player_game_info["batting_events" if player_type["da_type"] == "Batter" else "pitching_events"]:
             if copied_quals and not handle_da_mlb_quals(row_data, "batting_events" if player_type["da_type"] == "Batter" else "pitching_events", at_bat_event, copied_quals, player_data, player_type, player_game_info):
                 continue
             
             for stat in event_stats_needed:
-                if hit_end and (player_type["da_type"] != "Batter" or at_bat_event["result"] not in ("run_scored", "stolen_base", "caught_stealing") or at_bat_event["is_pr"] or not last_hit_end_pa):
+                if hit_end:
                     at_bat_event["game_stat_" + stat] = -1
-                    if at_bat_event["result"] not in ("run_scored", "stolen_base", "caught_stealing", "pick_off"):
-                        last_hit_end_pa = False
                 else:
                     if stat == "IP":
                         innings_pitched_to_use = career_stats_info["IP"]
@@ -26585,10 +26683,26 @@ def setup_game_stats(row_data, player_game_info, player_type, player_data, quali
                         if at_bat_event["result"] not in ("run_scored", "stolen_base", "caught_stealing", "pick_off"):
                             career_stats_info["Pit"] += (at_bat_event["pitches"] if at_bat_event["pitches"] else 0)
                         at_bat_event["game_stat_Pit"] = career_stats_info["Pit"]
+                    elif stat in ["ER", "R"]:
+                        if at_bat_event["event_id"] in player_game_info["pitch_event_to_run_event"]:
+                            for sub_at_bat_event in player_game_info["pitch_event_to_run_event"][at_bat_event["event_id"]]:
+                                if copied_quals and not handle_da_mlb_quals(row_data, "pitching_run_events", at_bat_event, sub_at_bat_event, player_data, player_type, player_game_info):
+                                    continue
+                                if stat == "R":
+                                    career_stats_info[stat] += 1
+                                else:
+                                    if "is_unearned_run" not in at_bat_event or not at_bat_event["is_unearned_run"]:
+                                        career_stats_info[stat] += 1
+                                sub_at_bat_event["game_stat_" + stat] = career_stats_info[stat]
                     else:
                         career_stats_info[stat] += event_type_stat_mappings[at_bat_event["result"]].get(stat, 0)
                         at_bat_event["game_stat_" + stat] = career_stats_info[stat]
             
+                    if not hit_start:
+                        at_bat_event["game_stat_" + stat] = -1
+            
+                    if career_stats_info[stat] >= event_start_stats_needed[stat]:
+                        hit_start = True
                     if career_stats_info[stat] >= event_stats_needed[stat]:
                         hit_end = True
 
@@ -26616,6 +26730,13 @@ def setup_game_stats(row_data, player_game_info, player_type, player_data, quali
                         elif frac == 1.0:
                             innings_pitched_to_use += 1
                         at_bat_event["game_stat_IP"] = innings_pitched_to_use
+                    elif stat in ["ER", "R"]:
+                        if stat == "R":
+                            career_stats_info[stat] += 1
+                        else:
+                            if "is_unearned_run" not in at_bat_event or not at_bat_event["is_unearned_run"]:
+                                career_stats_info[stat] += 1
+                        at_bat_event["career_stat_" + stat] = career_stats_info[stat]
                     else:
                         at_bat_event["game_stat_" + stat] = career_stats_info[stat]
 
@@ -26641,20 +26762,28 @@ def setup_game_stats(row_data, player_game_info, player_type, player_data, quali
                         elif frac == 1.0:
                             innings_pitched_to_use += 1
                         at_bat_event["game_stat_reversed_IP"] = innings_pitched_to_use
+                    elif stat in ["ER", "R"]:
+                        if stat == "R":
+                            career_stats_info[stat] += 1
+                        else:
+                            if "is_unearned_run" not in at_bat_event or not at_bat_event["is_unearned_run"]:
+                                career_stats_info[stat] += 1
+                        at_bat_event["career_stat_" + stat] = career_stats_info[stat]
                     else:
                         at_bat_event["game_stat_reversed_" + stat] = career_stats_info[stat]
 
         hit_end = False
-        last_hit_end_pa = True
+        hit_start = False
+        for stat in event_reversed_stats_needed:
+            if career_stats_info[stat] >= event_start_reversed_stats_needed[stat]:
+                hit_start = True
         for at_bat_event in reversed(player_game_info["batting_events" if player_type["da_type"] == "Batter" else "pitching_events"]):
             if copied_quals and not handle_da_mlb_quals(row_data, "batting_events" if player_type["da_type"] == "Batter" else "pitching_events", at_bat_event, copied_quals, player_data, player_type, player_game_info):
                 continue
 
             for stat in event_reversed_stats_needed:
-                if hit_end and (player_type["da_type"] != "Batter" or at_bat_event["result"] not in ("run_scored", "stolen_base", "caught_stealing") or at_bat_event["is_pr"] or not last_hit_end_pa):
+                if hit_end:
                     at_bat_event["game_stat_reversed_" + stat] = -1
-                    if at_bat_event["result"] not in ("run_scored", "stolen_base", "caught_stealing", "pick_off"):
-                        last_hit_end_pa = False
                 else:
                     if stat == "IP":
                         innings_pitched_to_use = career_stats_info["IP"]
@@ -26684,10 +26813,26 @@ def setup_game_stats(row_data, player_game_info, player_type, player_data, quali
                         if at_bat_event["result"] not in ("run_scored", "stolen_base", "caught_stealing", "pick_off"):
                             career_stats_info["Pit"] += (at_bat_event["pitches"] if at_bat_event["pitches"] else 0)
                         at_bat_event["game_stat_reversed_Pit"] = career_stats_info["Pit"]
+                    elif stat in ["ER", "R"]:
+                        if at_bat_event["event_id"] in player_game_info["pitch_event_to_run_event"]:
+                            for sub_at_bat_event in player_game_info["pitch_event_to_run_event"][at_bat_event["event_id"]]:
+                                if copied_quals and not handle_da_mlb_quals(row_data, "pitching_run_events", at_bat_event, sub_at_bat_event, player_data, player_type, player_game_info):
+                                    continue
+                                if stat == "R":
+                                    career_stats_info[stat] += 1
+                                else:
+                                    if "is_unearned_run" not in at_bat_event or not at_bat_event["is_unearned_run"]:
+                                        career_stats_info[stat] += 1
+                                sub_at_bat_event["game_stat_reversed_" + stat] = career_stats_info[stat]
                     else:
                         career_stats_info[stat] += event_type_stat_mappings[at_bat_event["result"]].get(stat, 0)
                         at_bat_event["game_stat_reversed_" + stat] = career_stats_info[stat]
                     
+                    if not hit_start:
+                        at_bat_event["game_stat_reversed_" + stat] = -1
+            
+                    if career_stats_info[stat] >= event_start_reversed_stats_needed[stat]:
+                        hit_start = True
                     if career_stats_info[stat] >= event_reversed_stats_needed[stat]:
                         hit_end = True
 
@@ -26734,6 +26879,15 @@ def setup_game_stats(row_data, player_game_info, player_type, player_data, quali
                     if at_bat_event["result"] not in ("run_scored", "stolen_base", "caught_stealing", "pick_off"):
                         career_stats_info["Pit"] += (at_bat_event["pitches"] if at_bat_event["pitches"] else 0)
                     at_bat_event["game_stats_Pit"] = career_stats_info["Pit"]
+                elif stat in ["ER", "R"]:
+                    if at_bat_event["event_id"] in player_game_info["pitch_event_to_run_event"]:
+                        for sub_at_bat_event in player_game_info["pitch_event_to_run_event"][at_bat_event["event_id"]]:
+                            if stat == "R":
+                                career_stats_info[stat] += 1
+                            else:
+                                if "is_unearned_run" not in at_bat_event or not at_bat_event["is_unearned_run"]:
+                                    career_stats_info[stat] += 1
+                            sub_at_bat_event["game_stats_" + stat] = career_stats_info[stat]
                 else:
                     career_stats_info[stat] += event_type_stat_mappings[at_bat_event["result"]].get(stat, 0)
                     at_bat_event["game_stats_" + stat] = career_stats_info[stat]
@@ -26759,6 +26913,13 @@ def setup_game_stats(row_data, player_game_info, player_type, player_data, quali
                         elif frac == 1.0:
                             innings_pitched_to_use += 1
                         at_bat_event["game_stats_IP"] = innings_pitched_to_use
+                    elif stat in ["ER", "R"]:
+                        if stat == "R":
+                            career_stats_info[stat] += 1
+                        else:
+                            if "is_unearned_run" not in at_bat_event or not at_bat_event["is_unearned_run"]:
+                                career_stats_info[stat] += 1
+                        at_bat_event["career_stat_" + stat] = career_stats_info[stat]
                     else:
                         at_bat_event["game_stats_" + stat] = career_stats_info[stat]
 
@@ -26781,6 +26942,13 @@ def setup_game_stats(row_data, player_game_info, player_type, player_data, quali
                         elif frac == 1.0:
                             innings_pitched_to_use += 1
                         at_bat_event["game_stats_reversed_IP"] = innings_pitched_to_use
+                    elif stat in ["ER", "R"]:
+                        if stat == "R":
+                            career_stats_info[stat] += 1
+                        else:
+                            if "is_unearned_run" not in at_bat_event or not at_bat_event["is_unearned_run"]:
+                                career_stats_info[stat] += 1
+                        at_bat_event["career_stat_" + stat] = career_stats_info[stat]
                     else:
                         at_bat_event["game_stats_reversed_" + stat] = career_stats_info[stat]
 
@@ -26814,6 +26982,15 @@ def setup_game_stats(row_data, player_game_info, player_type, player_data, quali
                     if at_bat_event["result"] not in ("run_scored", "stolen_base", "caught_stealing", "pick_off"):
                         career_stats_info["Pit"] += (at_bat_event["pitches"] if at_bat_event["pitches"] else 0)
                     at_bat_event["game_stats_reversed_Pit"] = career_stats_info["Pit"]
+                elif stat in ["ER", "R"]:
+                    if at_bat_event["event_id"] in player_game_info["pitch_event_to_run_event"]:
+                        for sub_at_bat_event in player_game_info["pitch_event_to_run_event"][at_bat_event["event_id"]]:
+                            if stat == "R":
+                                career_stats_info[stat] += 1
+                            else:
+                                if "is_unearned_run" not in at_bat_event or not at_bat_event["is_unearned_run"]:
+                                    career_stats_info[stat] += 1
+                            sub_at_bat_event["game_stats_reversed_" + stat] = career_stats_info[stat]
                 else:
                     career_stats_info[stat] += event_type_stat_mappings[at_bat_event["result"]].get(stat, 0)
                     at_bat_event["game_stats_reversed_" + stat] = career_stats_info[stat]
@@ -26830,7 +27007,9 @@ def setup_starting_career_stats(row_data, player_game_info, saved_row_data, inde
         return
 
     event_stats_needed = {}
+    event_start_stats_needed = {}
     event_reversed_stats_needed = {}
+    event_start_reversed_stats_needed = {}
     events_stats_needed = {}
     events_reversed_stats_needed = {}
     if "Starting Event Stat" in qualifiers:
@@ -26839,12 +27018,20 @@ def setup_starting_career_stats(row_data, player_game_info, saved_row_data, inde
                 event_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
             if qual_obj["values"]["end_val"] < event_stats_needed[qual_obj["stat"]]:
                 event_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
+            if qual_obj["stat"] not in event_start_stats_needed:
+                event_start_stats_needed[qual_obj["stat"]] = qual_obj["values"]["start_val"]
+            if qual_obj["values"]["start_val"] > event_start_stats_needed[qual_obj["stat"]]:
+                event_start_stats_needed[qual_obj["stat"]] = qual_obj["values"]["start_val"]
     if "Starting Event Stat Reversed" in qualifiers:
         for qual_obj in qualifiers["Starting Event Stat Reversed"]:
             if qual_obj["stat"] not in event_reversed_stats_needed:
                 event_reversed_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
             if qual_obj["values"]["end_val"] < event_reversed_stats_needed[qual_obj["stat"]]:
                 event_reversed_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
+            if qual_obj["stat"] not in event_start_reversed_stats_needed:
+                event_start_reversed_stats_needed[qual_obj["stat"]] = qual_obj["values"]["start_val"]
+            if qual_obj["values"]["start_val"] > event_start_reversed_stats_needed[qual_obj["stat"]]:
+                event_start_reversed_stats_needed[qual_obj["stat"]] = qual_obj["values"]["start_val"]
     if "Starting Event Stats" in qualifiers:
         for qual_obj in qualifiers["Starting Event Stats"]:
             if qual_obj["stat"] not in events_stats_needed:
@@ -26874,17 +27061,23 @@ def setup_starting_career_stats(row_data, player_game_info, saved_row_data, inde
             career_stats_info[stat] += saved_row_data[stat]
 
         hit_end = False
-        last_hit_end_pa = True
+        hit_start = False
+        for stat in event_stats_needed:
+            if career_stats_info[stat] >= event_start_stats_needed[stat]:
+                hit_start = True
         for at_bat_event in player_game_info["batting_events" if player_type["da_type"] == "Batter" else "pitching_events"]:
             if copied_quals and not handle_da_mlb_quals(row_data, "batting_events" if player_type["da_type"] == "Batter" else "pitching_events", at_bat_event, copied_quals, player_data, player_type, player_game_info):
                 continue
             
             for stat in event_stats_needed:
-                if hit_end and (player_type["da_type"] != "Batter" or at_bat_event["result"] not in ("run_scored", "stolen_base", "caught_stealing") or at_bat_event["is_pr"] or not last_hit_end_pa):
+                if hit_end:
                     at_bat_event["starting_career_stat_" + stat] = -1
-                    if at_bat_event["result"] not in ("run_scored", "stolen_base", "caught_stealing", "pick_off"):
-                        last_hit_end_pa = False
                 else:
+                    if not hit_start:
+                        at_bat_event["starting_career_stat_" + stat] = -1
+            
+                    if career_stats_info[stat] >= event_start_stats_needed[stat]:
+                        hit_start = True
                     if career_stats_info[stat] >= event_stats_needed[stat]:
                         hit_end = True
 
@@ -26910,6 +27103,17 @@ def setup_starting_career_stats(row_data, player_game_info, saved_row_data, inde
                         at_bat_event["starting_career_stat_" + stat] = career_stats_info[stat]
                         if at_bat_event["result"] not in ("run_scored", "stolen_base", "caught_stealing", "pick_off"):
                             career_stats_info["Pit"] += (at_bat_event["pitches"] if at_bat_event["pitches"] else 0)
+                    elif stat in ["ER", "R"]:
+                        if at_bat_event["event_id"] in player_game_info["pitch_event_to_run_event"]:
+                            for sub_at_bat_event in player_game_info["pitch_event_to_run_event"][at_bat_event["event_id"]]:
+                                if copied_quals and not handle_da_mlb_quals(row_data, "pitching_run_events", at_bat_event, sub_at_bat_event, player_data, player_type, player_game_info):
+                                    continue
+                                if stat == "R":
+                                    career_stats_info[stat] += 1
+                                else:
+                                    if "is_unearned_run" not in at_bat_event or not at_bat_event["is_unearned_run"]:
+                                        career_stats_info[stat] += 1
+                                sub_at_bat_event["starting_career_stat_" + stat] = career_stats_info[stat]
                     else:
                         at_bat_event["starting_career_stat_" + stat] = career_stats_info[stat]
                         career_stats_info[stat] += event_type_stat_mappings[at_bat_event["result"]].get(stat, 0)
@@ -26938,6 +27142,13 @@ def setup_starting_career_stats(row_data, player_game_info, saved_row_data, inde
                         elif frac == 1.0:
                             innings_pitched_to_use += 1
                         at_bat_event["starting_career_stat_IP"] = innings_pitched_to_use
+                    elif stat in ["ER", "R"]:
+                        if stat == "R":
+                            career_stats_info[stat] += 1
+                        else:
+                            if "is_unearned_run" not in at_bat_event or not at_bat_event["is_unearned_run"]:
+                                career_stats_info[stat] += 1
+                        at_bat_event["career_stat_" + stat] = career_stats_info[stat]
                     else:
                         at_bat_event["starting_career_stat_" + stat] = career_stats_info[stat]
 
@@ -26966,22 +27177,35 @@ def setup_starting_career_stats(row_data, player_game_info, saved_row_data, inde
                         elif frac == 1.0:
                             innings_pitched_to_use += 1
                         at_bat_event["starting_career_stat_reversed_IP"] = innings_pitched_to_use
+                    elif stat in ["ER", "R"]:
+                        if stat == "R":
+                            career_stats_info[stat] += 1
+                        else:
+                            if "is_unearned_run" not in at_bat_event or not at_bat_event["is_unearned_run"]:
+                                career_stats_info[stat] += 1
+                        at_bat_event["career_stat_" + stat] = career_stats_info[stat]
                     else:
                         at_bat_event["starting_career_stat_reversed_" + stat] = career_stats_info[stat]
 
         hit_end = False
-        last_hit_end_pa = True
+        hit_start = False
+        for stat in event_reversed_stats_needed:
+            if career_stats_info[stat] >= event_start_reversed_stats_needed[stat]:
+                hit_start = True
         for at_bat_event in reversed(player_game_info["batting_events" if player_type["da_type"] == "Batter" else "pitching_events"]):
             if copied_quals and not handle_da_mlb_quals(row_data, "batting_events" if player_type["da_type"] == "Batter" else "pitching_events", at_bat_event, copied_quals, player_data, player_type, player_game_info):
                 continue
 
             for stat in event_reversed_stats_needed:
-                if hit_end and (player_type["da_type"] != "Batter" or at_bat_event["result"] not in ("run_scored", "stolen_base", "caught_stealing") or at_bat_event["is_pr"] or not last_hit_end_pa):
+                if hit_end:
                     at_bat_event["starting_career_stat_reversed_" + stat] = -1
-                    if at_bat_event["result"] not in ("run_scored", "stolen_base", "caught_stealing", "pick_off"):
-                        last_hit_end_pa = False
                 else:
-                    if career_stats_info[stat] >= event_stats_needed[stat]:
+                    if not hit_start:
+                        at_bat_event["starting_career_stat_reversed_" + stat] = -1
+            
+                    if career_stats_info[stat] >= event_start_reversed_stats_needed[stat]:
+                        hit_start = True
+                    if career_stats_info[stat] >= event_reversed_stats_needed[stat]:
                         hit_end = True
 
                     if stat == "IP":
@@ -27006,6 +27230,17 @@ def setup_starting_career_stats(row_data, player_game_info, saved_row_data, inde
                         at_bat_event["starting_career_stat_reversed_" + stat] = career_stats_info[stat]
                         if at_bat_event["result"] not in ("run_scored", "stolen_base", "caught_stealing", "pick_off"):
                             career_stats_info["Pit"] += (at_bat_event["pitches"] if at_bat_event["pitches"] else 0)
+                    elif stat in ["ER", "R"]:
+                        if at_bat_event["event_id"] in player_game_info["pitch_event_to_run_event"]:
+                            for sub_at_bat_event in player_game_info["pitch_event_to_run_event"][at_bat_event["event_id"]]:
+                                if copied_quals and not handle_da_mlb_quals(row_data, "pitching_run_events", at_bat_event, sub_at_bat_event, player_data, player_type, player_game_info):
+                                    continue
+                                if stat == "R":
+                                    career_stats_info[stat] += 1
+                                else:
+                                    if "is_unearned_run" not in at_bat_event or not at_bat_event["is_unearned_run"]:
+                                        career_stats_info[stat] += 1
+                                sub_at_bat_event["starting_career_stat_reversed_" + stat] = career_stats_info[stat]
                     else:
                         at_bat_event["starting_career_stat_reversed_" + stat] = career_stats_info[stat]
                         career_stats_info[stat] += event_type_stat_mappings[at_bat_event["result"]].get(stat, 0)
@@ -27049,6 +27284,15 @@ def setup_starting_career_stats(row_data, player_game_info, saved_row_data, inde
                     at_bat_event["starting_career_stats_" + stat] = career_stats_info[stat]
                     if at_bat_event["result"] not in ("run_scored", "stolen_base", "caught_stealing", "pick_off"):
                         career_stats_info["Pit"] += (at_bat_event["pitches"] if at_bat_event["pitches"] else 0)
+                elif stat in ["ER", "R"]:
+                    if at_bat_event["event_id"] in player_game_info["pitch_event_to_run_event"]:
+                        for sub_at_bat_event in player_game_info["pitch_event_to_run_event"][at_bat_event["event_id"]]:
+                            if stat == "R":
+                                career_stats_info[stat] += 1
+                            else:
+                                if "is_unearned_run" not in at_bat_event or not at_bat_event["is_unearned_run"]:
+                                    career_stats_info[stat] += 1
+                            sub_at_bat_event["starting_career_stats_" + stat] = career_stats_info[stat]
                 else:
                     at_bat_event["starting_career_stats_" + stat] = career_stats_info[stat]
                     career_stats_info[stat] += event_type_stat_mappings[at_bat_event["result"]].get(stat, 0)
@@ -27074,6 +27318,13 @@ def setup_starting_career_stats(row_data, player_game_info, saved_row_data, inde
                         elif frac == 1.0:
                             innings_pitched_to_use += 1
                         at_bat_event["starting_career_stats_IP"] = innings_pitched_to_use
+                    elif stat in ["ER", "R"]:
+                        if stat == "R":
+                            career_stats_info[stat] += 1
+                        else:
+                            if "is_unearned_run" not in at_bat_event or not at_bat_event["is_unearned_run"]:
+                                career_stats_info[stat] += 1
+                        at_bat_event["career_stat_" + stat] = career_stats_info[stat]
                     else:
                         at_bat_event["starting_career_stats_" + stat] = career_stats_info[stat]
 
@@ -27099,6 +27350,13 @@ def setup_starting_career_stats(row_data, player_game_info, saved_row_data, inde
                         elif frac == 1.0:
                             innings_pitched_to_use += 1
                         at_bat_event["starting_career_stats_reversed_IP"] = innings_pitched_to_use
+                    elif stat in ["ER", "R"]:
+                        if stat == "R":
+                            career_stats_info[stat] += 1
+                        else:
+                            if "is_unearned_run" not in at_bat_event or not at_bat_event["is_unearned_run"]:
+                                career_stats_info[stat] += 1
+                        at_bat_event["career_stat_" + stat] = career_stats_info[stat]
                     else:
                         at_bat_event["starting_career_stats_reversed_" + stat] = career_stats_info[stat]
 
@@ -27126,6 +27384,15 @@ def setup_starting_career_stats(row_data, player_game_info, saved_row_data, inde
                     at_bat_event["starting_career_stats_reversed_" + stat] = career_stats_info[stat]
                     if at_bat_event["result"] not in ("run_scored", "stolen_base", "caught_stealing", "pick_off"):
                         career_stats_info["Pit"] += (at_bat_event["pitches"] if at_bat_event["pitches"] else 0)
+                elif stat in ["ER", "R"]:
+                    if at_bat_event["event_id"] in player_game_info["pitch_event_to_run_event"]:
+                        for sub_at_bat_event in player_game_info["pitch_event_to_run_event"][at_bat_event["event_id"]]:
+                            if stat == "R":
+                                career_stats_info[stat] += 1
+                            else:
+                                if "is_unearned_run" not in at_bat_event or not at_bat_event["is_unearned_run"]:
+                                    career_stats_info[stat] += 1
+                            sub_at_bat_event["starting_career_stats_reversed_" + stat] = career_stats_info[stat]
                 else:
                     at_bat_event["starting_career_stats_reversed_" + stat] = career_stats_info[stat]
                     career_stats_info[stat] += event_type_stat_mappings[at_bat_event["result"]].get(stat, 0)
@@ -27142,7 +27409,9 @@ def setup_starting_game_stats(row_data, player_game_info, player_type, player_da
         return
 
     event_stats_needed = {}
+    event_start_stats_needed = {}
     event_reversed_stats_needed = {}
+    event_start_reversed_stats_needed = {}
     events_stats_needed = {}
     events_reversed_stats_needed = {}
     if "Starting Game Event Stat" in qualifiers:
@@ -27151,12 +27420,20 @@ def setup_starting_game_stats(row_data, player_game_info, player_type, player_da
                 event_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
             if qual_obj["values"]["end_val"] < event_stats_needed[qual_obj["stat"]]:
                 event_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
+            if qual_obj["stat"] not in event_start_stats_needed:
+                event_start_stats_needed[qual_obj["stat"]] = qual_obj["values"]["start_val"]
+            if qual_obj["values"]["start_val"] > event_start_stats_needed[qual_obj["stat"]]:
+                event_start_stats_needed[qual_obj["stat"]] = qual_obj["values"]["start_val"]
     if "Starting Game Event Stat Reversed" in qualifiers:
         for qual_obj in qualifiers["Starting Game Event Stat Reversed"]:
             if qual_obj["stat"] not in event_reversed_stats_needed:
                 event_reversed_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
             if qual_obj["values"]["end_val"] < event_reversed_stats_needed[qual_obj["stat"]]:
                 event_reversed_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
+            if qual_obj["stat"] not in event_start_reversed_stats_needed:
+                event_start_reversed_stats_needed[qual_obj["stat"]] = qual_obj["values"]["start_val"]
+            if qual_obj["values"]["start_val"] > event_start_reversed_stats_needed[qual_obj["stat"]]:
+                event_start_reversed_stats_needed[qual_obj["stat"]] = qual_obj["values"]["start_val"]
     if "Starting Game Event Stats" in qualifiers:
         for qual_obj in qualifiers["Starting Game Event Stats"]:
             if qual_obj["stat"] not in events_stats_needed:
@@ -27183,17 +27460,24 @@ def setup_starting_game_stats(row_data, player_game_info, player_type, player_da
             career_stats_info[stat] = 0
 
         hit_end = False
-        last_hit_end_pa = True
+        hit_start = False
+        for stat in event_stats_needed:
+            if career_stats_info[stat] >= event_start_stats_needed[stat]:
+                hit_start = True
         for at_bat_event in player_game_info["batting_events" if player_type["da_type"] == "Batter" else "pitching_events"]:
             if copied_quals and not handle_da_mlb_quals(row_data, "batting_events" if player_type["da_type"] == "Batter" else "pitching_events", at_bat_event, copied_quals, player_data, player_type, player_game_info):
                 continue
             
             for stat in event_stats_needed:
-                if hit_end and (player_type["da_type"] != "Batter" or at_bat_event["result"] not in ("run_scored", "stolen_base", "caught_stealing") or at_bat_event["is_pr"] or not last_hit_end_pa):
+                if hit_end:
                     at_bat_event["starting_game_stat_" + stat] = -1
-                    if at_bat_event["result"] not in ("run_scored", "stolen_base", "caught_stealing", "pick_off"):
-                        last_hit_end_pa = False
                 else:
+                    if not hit_start:
+                        at_bat_event["starting_game_stat_" + stat] = -1
+            
+                    if career_stats_info[stat] >= event_start_stats_needed[stat]:
+                        hit_start = True
+
                     if career_stats_info[stat] >= event_stats_needed[stat]:
                         hit_end = True
 
@@ -27219,6 +27503,17 @@ def setup_starting_game_stats(row_data, player_game_info, player_type, player_da
                         at_bat_event["starting_game_stat_" + stat] = career_stats_info[stat]
                         if at_bat_event["result"] not in ("run_scored", "stolen_base", "caught_stealing", "pick_off"):
                             career_stats_info["Pit"] += (at_bat_event["pitches"] if at_bat_event["pitches"] else 0)
+                    elif stat in ["ER", "R"]:
+                        if at_bat_event["event_id"] in player_game_info["pitch_event_to_run_event"]:
+                            for sub_at_bat_event in player_game_info["pitch_event_to_run_event"][at_bat_event["event_id"]]:
+                                if copied_quals and not handle_da_mlb_quals(row_data, "pitching_run_events", at_bat_event, sub_at_bat_event, player_data, player_type, player_game_info):
+                                    continue
+                                if stat == "R":
+                                    career_stats_info[stat] += 1
+                                else:
+                                    if "is_unearned_run" not in at_bat_event or not at_bat_event["is_unearned_run"]:
+                                        career_stats_info[stat] += 1
+                                sub_at_bat_event["starting_game_stat_" + stat] = career_stats_info[stat]
                     else:
                         at_bat_event["starting_game_stat_" + stat] = career_stats_info[stat]
                         career_stats_info[stat] += event_type_stat_mappings[at_bat_event["result"]].get(stat, 0)
@@ -27247,6 +27542,13 @@ def setup_starting_game_stats(row_data, player_game_info, player_type, player_da
                         elif frac == 1.0:
                             innings_pitched_to_use += 1
                         at_bat_event["starting_game_stat_IP"] = innings_pitched_to_use
+                    elif stat in ["ER", "R"]:
+                        if stat == "R":
+                            career_stats_info[stat] += 1
+                        else:
+                            if "is_unearned_run" not in at_bat_event or not at_bat_event["is_unearned_run"]:
+                                career_stats_info[stat] += 1
+                        at_bat_event["career_stat_" + stat] = career_stats_info[stat]
                     else:
                         at_bat_event["starting_game_stat_" + stat] = career_stats_info[stat]
 
@@ -27272,22 +27574,36 @@ def setup_starting_game_stats(row_data, player_game_info, player_type, player_da
                         elif frac == 1.0:
                             innings_pitched_to_use += 1
                         at_bat_event["starting_game_stat_reversed_IP"] = innings_pitched_to_use
+                    elif stat in ["ER", "R"]:
+                        if stat == "R":
+                            career_stats_info[stat] += 1
+                        else:
+                            if "is_unearned_run" not in at_bat_event or not at_bat_event["is_unearned_run"]:
+                                career_stats_info[stat] += 1
+                        at_bat_event["career_stat_" + stat] = career_stats_info[stat]
                     else:
                         at_bat_event["starting_game_stat_reversed_" + stat] = career_stats_info[stat]
 
         hit_end = False
-        last_hit_end_pa = True
+        hit_start = False
+        for stat in event_reversed_stats_needed:
+            if career_stats_info[stat] >= event_start_reversed_stats_needed[stat]:
+                hit_start = True
         for at_bat_event in reversed(player_game_info["batting_events" if player_type["da_type"] == "Batter" else "pitching_events"]):
             if copied_quals and not handle_da_mlb_quals(row_data, "batting_events" if player_type["da_type"] == "Batter" else "pitching_events", at_bat_event, copied_quals, player_data, player_type, player_game_info):
                 continue
 
             for stat in event_reversed_stats_needed:
-                if hit_end and (player_type["da_type"] != "Batter" or at_bat_event["result"] not in ("run_scored", "stolen_base", "caught_stealing") or at_bat_event["is_pr"] or not last_hit_end_pa):
+                if hit_end:
                     at_bat_event["starting_game_stat_reversed_" + stat] = -1
-                    if at_bat_event["result"] not in ("run_scored", "stolen_base", "caught_stealing", "pick_off"):
-                        last_hit_end_pa = False
                 else:
-                    if career_stats_info[stat] >= event_stats_needed[stat]:
+                    if not hit_start:
+                        at_bat_event["starting_game_stat_reversed_" + stat] = -1
+            
+                    if career_stats_info[stat] >= event_start_reversed_stats_needed[stat]:
+                        hit_start = True
+
+                    if career_stats_info[stat] >= event_reversed_stats_needed[stat]:
                         hit_end = True
 
                     if stat == "IP":
@@ -27312,6 +27628,17 @@ def setup_starting_game_stats(row_data, player_game_info, player_type, player_da
                         at_bat_event["starting_game_stat_reversed_" + stat] = career_stats_info[stat]
                         if at_bat_event["result"] not in ("run_scored", "stolen_base", "caught_stealing", "pick_off"):
                             career_stats_info["Pit"] += (at_bat_event["pitches"] if at_bat_event["pitches"] else 0)
+                    elif stat in ["ER", "R"]:
+                        if at_bat_event["event_id"] in player_game_info["pitch_event_to_run_event"]:
+                            for sub_at_bat_event in player_game_info["pitch_event_to_run_event"][at_bat_event["event_id"]]:
+                                if copied_quals and not handle_da_mlb_quals(row_data, "pitching_run_events", at_bat_event, sub_at_bat_event, player_data, player_type, player_game_info):
+                                    continue
+                                if stat == "R":
+                                    career_stats_info[stat] += 1
+                                else:
+                                    if "is_unearned_run" not in at_bat_event or not at_bat_event["is_unearned_run"]:
+                                        career_stats_info[stat] += 1
+                                sub_at_bat_event["starting_game_stat_reversed_" + stat] = career_stats_info[stat]
                     else:
                         at_bat_event["starting_game_stat_reversed_" + stat] = career_stats_info[stat]
                         career_stats_info[stat] += event_type_stat_mappings[at_bat_event["result"]].get(stat, 0)
@@ -27352,6 +27679,15 @@ def setup_starting_game_stats(row_data, player_game_info, player_type, player_da
                     at_bat_event["starting_game_stats_" + stat] = career_stats_info[stat]
                     if at_bat_event["result"] not in ("run_scored", "stolen_base", "caught_stealing", "pick_off"):
                         career_stats_info["Pit"] += (at_bat_event["pitches"] if at_bat_event["pitches"] else 0)
+                elif stat in ["ER", "R"]:
+                    if at_bat_event["event_id"] in player_game_info["pitch_event_to_run_event"]:
+                        for sub_at_bat_event in player_game_info["pitch_event_to_run_event"][at_bat_event["event_id"]]:
+                            if stat == "R":
+                                career_stats_info[stat] += 1
+                            else:
+                                if "is_unearned_run" not in at_bat_event or not at_bat_event["is_unearned_run"]:
+                                    career_stats_info[stat] += 1
+                            sub_at_bat_event["starting_game_stats_" + stat] = career_stats_info[stat]
                 else:
                     at_bat_event["starting_game_stats_" + stat] = career_stats_info[stat]
                     career_stats_info[stat] += event_type_stat_mappings[at_bat_event["result"]].get(stat, 0)
@@ -27377,6 +27713,13 @@ def setup_starting_game_stats(row_data, player_game_info, player_type, player_da
                         elif frac == 1.0:
                             innings_pitched_to_use += 1
                         at_bat_event["starting_game_stats_IP"] = innings_pitched_to_use
+                    elif stat in ["ER", "R"]:
+                        if stat == "R":
+                            career_stats_info[stat] += 1
+                        else:
+                            if "is_unearned_run" not in at_bat_event or not at_bat_event["is_unearned_run"]:
+                                career_stats_info[stat] += 1
+                        at_bat_event["career_stat_" + stat] = career_stats_info[stat]
                     else:
                         at_bat_event["starting_game_stats_" + stat] = career_stats_info[stat]
 
@@ -27399,6 +27742,13 @@ def setup_starting_game_stats(row_data, player_game_info, player_type, player_da
                         elif frac == 1.0:
                             innings_pitched_to_use += 1
                         at_bat_event["starting_game_stats_reversed_IP"] = innings_pitched_to_use
+                    elif stat in ["ER", "R"]:
+                        if stat == "R":
+                            career_stats_info[stat] += 1
+                        else:
+                            if "is_unearned_run" not in at_bat_event or not at_bat_event["is_unearned_run"]:
+                                career_stats_info[stat] += 1
+                        at_bat_event["career_stat_" + stat] = career_stats_info[stat]
                     else:
                         at_bat_event["starting_game_stats_reversed_" + stat] = career_stats_info[stat]
 
@@ -27426,6 +27776,15 @@ def setup_starting_game_stats(row_data, player_game_info, player_type, player_da
                     at_bat_event["starting_game_stats_reversed_" + stat] = career_stats_info[stat]
                     if at_bat_event["result"] not in ("run_scored", "stolen_base", "caught_stealing", "pick_off"):
                         career_stats_info["Pit"] += (at_bat_event["pitches"] if at_bat_event["pitches"] else 0)
+                elif stat in ["ER", "R"]:
+                    if at_bat_event["event_id"] in player_game_info["pitch_event_to_run_event"]:
+                        for sub_at_bat_event in player_game_info["pitch_event_to_run_event"][at_bat_event["event_id"]]:
+                            if stat == "R":
+                                career_stats_info[stat] += 1
+                            else:
+                                if "is_unearned_run" not in at_bat_event or not at_bat_event["is_unearned_run"]:
+                                    career_stats_info[stat] += 1
+                            sub_at_bat_event["starting_game_stats_reversed_" + stat] = career_stats_info[stat]
                 else:
                     at_bat_event["starting_game_stats_reversed_" + stat] = career_stats_info[stat]
                     career_stats_info[stat] += event_type_stat_mappings[at_bat_event["result"]].get(stat, 0)
@@ -27438,10 +27797,10 @@ def setup_starting_game_stats(row_data, player_game_info, player_type, player_da
                                 sub_at_bat_event["starting_game_stats_reversed_" + stat] = at_bat_event["starting_game_stats_reversed_" + stat]
 
 def perform_sub_mlb_inning_qualifiers(row, player_data, qualifiers, player_game_info, player_type):
+    clear_data(row)
+
     if not player_game_info or player_game_info["missing_data"]:
         return False, row
-
-    clear_data(row)
 
     events_by_inning = {}
 
@@ -27527,11 +27886,11 @@ def perform_sub_mlb_inning_qualifiers(row, player_data, qualifiers, player_game_
     return overall_has_match, raw_row_data
 
 def perform_sub_mlb_game_qualifiers(row, player_data, qualifiers, player_game_info, player_type, do_clear):
-    if not player_game_info or player_game_info["missing_data"]:
-        return False, row
-
     if do_clear:
         clear_data(row)
+
+    if not player_game_info or player_game_info["missing_data"]:
+        return False, row
 
     skip_run_events = False
     if "Batting Lefty" in qualifiers or "Batting Righty" in qualifiers or "Back To Back With" in qualifiers or "Batting In Front Of" in qualifiers or "Batting Behind" in qualifiers or "Batting Next To" in qualifiers or "Pinch Hitting" in qualifiers or "Leading Off Game" in qualifiers or "Leading Off Whole Game" in qualifiers  or "Leading Off Inning" in qualifiers or "Swung At First Pitch" in qualifiers or "Time Facing Opponent" in qualifiers:
@@ -33855,33 +34214,53 @@ def get_mlb_game_stats_single_thread(all_rows, qualifiers, games_to_skip, player
         return new_rows, count_info["missing_games"]
 
     event_stats_needed = {}
+    event_start_stats_needed = {}
     event_reversed_stats_needed = {}
+    event_start_reversed_stats_needed = {}
     starting_event_stats_needed = {}
+    starting_event_start_stats_needed = {}
     starting_event_reversed_stats_needed = {}
+    starting_event_start_reversed_stats_needed = {}
     if "Event Stat" in qualifiers:
         for qual_obj in qualifiers["Event Stat"]:
             if qual_obj["stat"] not in event_stats_needed:
                 event_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
             if qual_obj["values"]["end_val"] < event_stats_needed[qual_obj["stat"]]:
                 event_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
+            if qual_obj["stat"] not in event_start_stats_needed:
+                event_start_stats_needed[qual_obj["stat"]] = qual_obj["values"]["start_val"]
+            if qual_obj["values"]["start_val"] > event_start_stats_needed[qual_obj["stat"]]:
+                event_start_stats_needed[qual_obj["stat"]] = qual_obj["values"]["start_val"]
     if "Event Stat Reversed" in qualifiers:
         for qual_obj in qualifiers["Event Stat Reversed"]:
             if qual_obj["stat"] not in event_reversed_stats_needed:
                 event_reversed_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
             if qual_obj["values"]["end_val"] < event_reversed_stats_needed[qual_obj["stat"]]:
                 event_reversed_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
+            if qual_obj["stat"] not in event_start_reversed_stats_needed:
+                event_start_reversed_stats_needed[qual_obj["stat"]] = qual_obj["values"]["start_val"]
+            if qual_obj["values"]["start_val"] > event_start_reversed_stats_needed[qual_obj["stat"]]:
+                event_start_reversed_stats_needed[qual_obj["stat"]] = qual_obj["values"]["start_val"]
     if "Starting Event Stat" in qualifiers:
         for qual_obj in qualifiers["Starting Event Stat"]:
-            if qual_obj["stat"] not in starting_event_stats_needed:
-                starting_event_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
-            if qual_obj["values"]["end_val"] < starting_event_stats_needed[qual_obj["stat"]]:
-                starting_event_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
+            if qual_obj["stat"] not in event_stats_needed:
+                event_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
+            if qual_obj["values"]["end_val"] < event_stats_needed[qual_obj["stat"]]:
+                event_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
+            if qual_obj["stat"] not in starting_event_start_stats_needed:
+                starting_event_start_stats_needed[qual_obj["stat"]] = qual_obj["values"]["start_val"]
+            if qual_obj["values"]["start_val"] > starting_event_start_stats_needed[qual_obj["stat"]]:
+                starting_event_start_stats_needed[qual_obj["stat"]] = qual_obj["values"]["start_val"]
     if "Starting Event Stat Reversed" in qualifiers:
         for qual_obj in qualifiers["Starting Event Stat Reversed"]:
-            if qual_obj["stat"] not in starting_event_reversed_stats_needed:
-                starting_event_reversed_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
-            if qual_obj["values"]["end_val"] < starting_event_reversed_stats_needed[qual_obj["stat"]]:
-                starting_event_reversed_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
+            if qual_obj["stat"] not in event_reversed_stats_needed:
+                event_reversed_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
+            if qual_obj["values"]["end_val"] < event_reversed_stats_needed[qual_obj["stat"]]:
+                event_reversed_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
+            if qual_obj["stat"] not in starting_event_start_reversed_stats_needed:
+                starting_event_start_reversed_stats_needed[qual_obj["stat"]] = qual_obj["values"]["start_val"]
+            if qual_obj["values"]["start_val"] > starting_event_start_reversed_stats_needed[qual_obj["stat"]]:
+                starting_event_start_reversed_stats_needed[qual_obj["stat"]] = qual_obj["values"]["start_val"]
     stats_needed = set(list(event_stats_needed.keys()) + list(event_reversed_stats_needed.keys()) + list(starting_event_stats_needed.keys()) + list(starting_event_reversed_stats_needed.keys()))
     
     saved_row_data = {}
@@ -33901,28 +34280,46 @@ def get_mlb_game_stats_single_thread(all_rows, qualifiers, games_to_skip, player
                 if stat not in raw_row_data:
                     break
 
-                if has_match:
-                    new_rows.append(row_data)
-
                 hit_end = False
+                hit_start = False
                 for stat in stats_needed:
                     if stat in starting_event_stats_needed:
                         saved_row_data["starting_career_stat_" + stat] = saved_row_data[stat]
+                        if saved_row_data[stat] >= starting_event_start_stats_needed[stat]:
+                            hit_start = True
                         if saved_row_data[stat] >= starting_event_stats_needed[stat]:
                             hit_end = True
                     if stat in starting_event_reversed_stats_needed:
                         saved_row_data["starting_career_stat_reversed_" + stat] = saved_row_data[stat]
+                        if saved_row_data[stat] >= starting_event_start_reversed_stats_needed[stat]:
+                            hit_start = True
                         if saved_row_data[stat] >= starting_event_reversed_stats_needed[stat]:
                             hit_end = True
 
-                    saved_row_data[stat] += raw_row_data[stat]
+                    if stat == "IP":
+                        frac, whole = math.modf(raw_row_data["IP"])
+                        frac = round_value(frac, 1)
+                        innings_pitched_to_use = whole
+                        if frac == 0.3:
+                            innings_pitched_to_use += 1/3
+                        elif frac == 0.7:
+                            innings_pitched_to_use += 2/3
+                        elif frac == 1.0:
+                            innings_pitched_to_use += 1
+                        saved_row_data[stat] += innings_pitched_to_use
+                    else:
+                        saved_row_data[stat] += raw_row_data[stat]
                 
                     if stat in event_stats_needed:
                         saved_row_data["career_stat_" + stat] = saved_row_data[stat]
+                        if saved_row_data[stat] >= event_start_stats_needed[stat]:
+                            hit_start = True
                         if saved_row_data[stat] >= event_stats_needed[stat]:
                             hit_end = True
                     if stat in event_reversed_stats_needed:
                         saved_row_data["career_stat_reversed_" + stat] = saved_row_data[stat]
+                        if saved_row_data[stat] >= event_start_reversed_stats_needed[stat]:
+                            hit_start = True
                         if saved_row_data[stat] >= event_reversed_stats_needed[stat]:
                             hit_end = True
 
@@ -33932,6 +34329,8 @@ def get_mlb_game_stats_single_thread(all_rows, qualifiers, games_to_skip, player
                     count_info["current_percent"] += 10
                 count_info["count"] += 1
 
+                if hit_start:
+                    new_rows.append(row_data)
                 if hit_end:
                     break
             except Exception:
@@ -37439,7 +37838,6 @@ def get_live_game_data(row_index, player_data, row_data, player_type, qualifiers
                     elif the_runner == player_data["mlb_id"]:
                         bat_run_data = copy.deepcopy(sub_event_obj)
                         bat_run_data["result"] = "run_scored"
-                        bat_run_data["is_pr"] = the_runner in team_position_map["PR"]
                         if player_data["mlb_id"] == batter:
                             run_event = bat_run_data
                         else:
@@ -37457,7 +37855,6 @@ def get_live_game_data(row_index, player_data, row_data, player_type, qualifiers
                         sb_base = "HP"
                     sb_data = copy.deepcopy(sub_event_obj)
                     sb_data["result"] = "stolen_base"
-                    sb_data["is_pr"] = the_runner in team_position_map["PR"]
                     if runner["details"]["movementReason"] != "r_stolen_base":
                         sb_data["sb_base"] = sb_base
                     if the_runner == player_data["mlb_id"]:
@@ -37471,7 +37868,6 @@ def get_live_game_data(row_index, player_data, row_data, player_type, qualifiers
                         sb_base = "HP"
                     sb_data = copy.deepcopy(sub_event_obj)
                     sb_data["result"] = "caught_stealing"
-                    sb_data["is_pr"] = the_runner in team_position_map["PR"]
                     if runner["details"]["movementReason"] != "r_caught_stealing" and runner["details"]["movementReason"] != "r_pickoff_caught_stealing":
                         sb_data["sb_base"] = sb_base
                     if the_runner == player_data["mlb_id"]:
