@@ -15391,7 +15391,7 @@ def get_live_game(player_link, player_data, player_type, time_frame):
                     continue
 
             latest_game["teamGameNumber"] = team_game_number
-            lastest_game["time_int"] = ids_to_header[game["gamePk"]]
+            latest_game["time_int"] = ids_to_header[game["gamePk"]]
             lastest_games.append(latest_game)
             team_game_number += 1
 
