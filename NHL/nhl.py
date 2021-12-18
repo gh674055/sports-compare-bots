@@ -1898,8 +1898,8 @@ headers = {
             "round" : 2,
             "type" : "Advanced",
             "valid_since" : {
-                "season" : 1997,
-                "game" : 1997
+                "season" : 2009,
+                "game" : 2009
             }
         },
         "OZFO/60M" : {
@@ -1907,8 +1907,8 @@ headers = {
             "round" : 2,
             "type" : "Advanced",
             "valid_since" : {
-                "season" : 1997,
-                "game" : 1997
+                "season" : 2009,
+                "game" : 2009
             }
         },
         "NZFOW/60M" : {
@@ -1917,8 +1917,8 @@ headers = {
             "type" : "Advanced",
             "display" : False,
             "valid_since" : {
-                "season" : 1997,
-                "game" : 1997
+                "season" : 2009,
+                "game" : 2009
             }
         },
         "NZFO/60M" : {
@@ -1927,8 +1927,8 @@ headers = {
             "type" : "Advanced",
             "display" : False,
             "valid_since" : {
-                "season" : 1997,
-                "game" : 1997
+                "season" : 2009,
+                "game" : 2009
             }
         },
         "DZFOW/60M" : {
@@ -1936,8 +1936,8 @@ headers = {
             "round" : 2,
             "type" : "Advanced",
             "valid_since" : {
-                "season" : 1997,
-                "game" : 1997
+                "season" : 2009,
+                "game" : 2009
             }
         },
         "DZFO/60M" : {
@@ -1945,8 +1945,8 @@ headers = {
             "round" : 2,
             "type" : "Advanced",
             "valid_since" : {
-                "season" : 1997,
-                "game" : 1997
+                "season" : 2009,
+                "game" : 2009
             }
         },
         "GC/GP" : {
