@@ -33045,7 +33045,7 @@ def print_player_data(player_datas, player_type, highest_vals, lowest_vals, has_
             del all_headers[over_header]
     
     if player_type["da_type"]["type"] == "Skater" and "Advanced" in all_headers:
-        if set(all_headers["Advanced"].keys()) == {"Player_Score", "GP_Score", "PEN", "PEN/60M"} or "Penalty On" in extra_stats:
+        if (set(all_headers["Advanced"].keys()) in ({"Player_Score", "GP_Score", "PEN", "PEN/60M"}, {"Player_Score", "GP_Score", "PEN"})) or "Penalty On" in extra_stats:
             if "PEN" in all_headers["Advanced"]:
                 pen_obj = all_headers["Advanced"]["PEN"]
                 del all_headers["Advanced"]["PEN"]
@@ -33394,7 +33394,7 @@ def get_reddit_player_table(player_datas, player_type, debug_mode, original_comm
             del all_headers[over_header]
     
     if player_type["da_type"]["type"] == "Skater" and "Advanced" in all_headers:
-        if set(all_headers["Advanced"].keys()) == {"Player_Score", "GP_Score", "PEN", "PEN/60M"} or "Penalty On" in extra_stats:
+        if (set(all_headers["Advanced"].keys()) in ({"Player_Score", "GP_Score", "PEN", "PEN/60M"}, {"Player_Score", "GP_Score", "PEN"})) or "Penalty On" in extra_stats:
             if "PEN" in all_headers["Advanced"]:
                 pen_obj = all_headers["Advanced"]["PEN"]
                 del all_headers["Advanced"]["PEN"]
