@@ -24131,7 +24131,6 @@ def perform_strength_qual(player_game_info, goal_event, qual_type, qualifiers, i
             has_match = team_skaters > opp_skaters
         elif qual_type == "Less Skaters":
             has_match = team_skaters < opp_skaters
-            has_match = team_players < opp_players
         elif qual_type == "Team Goalie Pulled":
             has_match = team_goalies == 0
         elif qual_type == "Opponent Goalie Pulled":
