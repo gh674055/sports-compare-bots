@@ -7349,8 +7349,8 @@ def determine_raw_str(subbb_frame):
                                 elif qualifier == "Holiday" or qualifier == "City" or qualifier == "Exact City" or qualifier == "Team City" or qualifier == "Team Exact City" or qualifier == "Opponent City" or qualifier == "Opponent Exact City" or qualifier == "Surface" or qualifier == "Roof" or qualifier == "Moon Phase" or qualifier == "Pass Distance" or qualifier == "Pass Direction" or qualifier == "Team Time Zone" or qualifier == "Team Exact Time Zone" or qualifier == "Opponent Time Zone" or qualifier == "Opponent Exact Time Zone" or qualifier == "Time Zone" or qualifier == "Exact Time Zone":
                                     sub_qualifier = sub_qualifier.title()
                                 elif qualifier == "Stadium"  or qualifier == "Exact Stadium":
-                                    if sub_qualifier in team_venues:
-                                        sub_qualifier = team_venues[sub_qualifier]["venues"][len(team_venues[sub_qualifier]["venues"]) - 1] + " (" + sub_qualifier + ")"
+                                    if sub_qualifier.upper() in team_venues:
+                                        sub_qualifier = team_venues[sub_qualifier.upper()]["venues"][len(team_venues[sub_qualifier.upper()]["venues"]) - 1] + " (" + sub_qualifier.upper() + ")"
                                     else:
                                         sub_qualifier = sub_qualifier.title()
                                 elif qualifier == "Team Division" or qualifier == "Opponent Division":

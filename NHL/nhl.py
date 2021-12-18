@@ -14135,8 +14135,14 @@ def determine_raw_str(subbb_frame):
                                 elif qualifier == "Holiday" or qualifier == "City" or qualifier == "Exact City" or qualifier == "Team City" or qualifier == "Team Exact City" or qualifier == "Opponent City" or qualifier == "Opponent Exact City" or qualifier == "Outdoor Event" or qualifier == "Exact Outdoor Event" or qualifier == "Penalty Type" or qualifier == "Penalty Severity" or qualifier == "Shot Type" or qualifier == "Exact Penalty Type" or qualifier == "Exact Penalty Severity" or qualifier == "Exact Shot Type" or qualifier == "Moon Phase" or qualifier == "Exact Official" or qualifier == "Exact Referee" or qualifier == "Exact Linesman" or qualifier == "Exact Team Head Coach" or qualifier == "Exact Opponent Head Coach" or qualifier == "Official" or qualifier == "Referee" or qualifier == "Linesman" or qualifier == "Team Head Coach" or qualifier == "Opponent Head Coach" or qualifier == "Team Time Zone" or qualifier == "Team Exact Time Zone" or qualifier == "Opponent Time Zone" or qualifier == "Opponent Exact Time Zone" or qualifier == "Time Zone" or qualifier == "Exact Time Zone":
                                     sub_qualifier = sub_qualifier.title()
                                 elif qualifier == "Arena"  or qualifier == "Exact Arena":
-                                    if sub_qualifier in team_venues:
-                                        sub_qualifier = team_venues[sub_qualifier]["venues"][len(team_venues[sub_qualifier]["venues"]) - 1] + " (" + sub_qualifier + ")"
+                                    venue_id_to_use = None
+                                    for venue_id in team_venues:
+                                        if re.sub(r"[^A-Za-z\s]", "", sub_qualifier).strip() == re.sub(r"[^A-Za-z\s]", "", venue_id).strip():
+                                            venue_id_to_use = venue_id
+                                            break
+                                        
+                                    if venue_id_to_use:
+                                        sub_qualifier = team_venues[venue_id_to_use]["venues"][len(team_venues[venue_id_to_use]["venues"]) - 1] + " (" + venue_id_to_use + ")"
                                     else:
                                         sub_qualifier = sub_qualifier.title()
                                 elif qualifier == "Team Conference" or qualifier == "Opponent Conference" or qualifier == "Team Division"  or qualifier == "Opponent Division":
@@ -31476,18 +31482,24 @@ def perform_schedule_qualifiers(row, qualifiers):
             return False
         
         team_venue_obj = None
+        venue_id_to_use = None
         for venue_id in team_venues:
             if row["Arena"] in team_venues[venue_id]["venues"]:
                 team_venue_obj = team_venues[venue_id]
+                venue_id_to_use = venue_id
                 break
 
         for qual_object in qualifiers["Arena"]:
             has_match = False
             for arena in qual_object["values"]:
-                for sub_arena in team_venue_obj["venues"]:
-                    if re.sub(r"[^A-Za-z\s]", "", arena).strip() in re.sub(r"[^A-Za-z\s]", "", sub_arena.lower()).strip():
-                        has_match = True
-                        break
+                if re.sub(r"[^A-Za-z\s]", "", arena).strip() == re.sub(r"[^A-Za-z\s]", "", venue_id_to_use).strip():
+                    has_match = True
+                    break
+                else:
+                    for sub_arena in team_venue_obj["venues"]:
+                        if re.sub(r"[^A-Za-z\s]", "", arena).strip() in re.sub(r"[^A-Za-z\s]", "", sub_arena.lower()).strip():
+                            has_match = True
+                            break
             if qual_object["negate"]:
                 if has_match:
                     return False
@@ -31499,10 +31511,19 @@ def perform_schedule_qualifiers(row, qualifiers):
         if "Arena" not in row or row["Arena"] == None:
             return False
 
+        venue_id_to_use = None
+        for venue_id in team_venues:
+            if row["Arena"] in team_venues[venue_id]["venues"]:
+                venue_id_to_use = venue_id
+                break
+
         for qual_object in qualifiers["Exact Arena"]:
             has_match = False
             for arena in qual_object["values"]:
-                if arena == row["Arena"].lower():
+                if re.sub(r"[^A-Za-z\s]", "", arena).strip() == re.sub(r"[^A-Za-z\s]", "", venue_id_to_use).strip():
+                    has_match = True
+                    break
+                elif arena == row["Arena"].lower():
                     has_match = True
                     break
             if qual_object["negate"]:
