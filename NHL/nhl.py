@@ -129,6 +129,9 @@ all_days_re = r"(?:" + "|".join([day + "-?" for day in all_days]) + r")+"
 
 string_stats = ["Tm"]
 
+skater_header_indv_shift_stats = ["CF", "CA", "CFPer", "CF/60M", "CA/60M", "FF", "FA", "FFPer", "SF/60M", "SA/60M", "oiOppS", "oiTmS", "SFPer", "FF/60M", "FA/60M", "offIGF", "offIGA", "offICF", "offICA", "offIFF", "offIFA", "offISF", "offISA", "offIGF/60M", "offICA/60M", "offIFF/60M" , "offISA/60M", "offIGA/60M", "offICF/60M", "offIFA/60M", "offISF/60M", "offIG/60M", "offIC/60M", "offIF/60M", "offIS/60M", "GFRel/60M", "CFRel/60M", "FFRel/60M", "SFRel/60M", "GARel/60M", "CARel/60M", "FARel/60M", "SARel/60M", "CFRelPer", "FFRelPer", "GFRelPer", "SFRelPer", "oiSPer", "oiSVPer", "PDO", "oiSRelPer", "oiSVRelPer", "PDORel", "OZ%", "TSA", "TSM", "TSB", "TSA/GP", "TSA/60M", "TSB/GP", "TSB/60M", "TSM/GP", "TSM/60M", "TS%", "SThr%"]
+goalie_header_indv_shift_stats = []
+
 headers = {
     "Skater" : {
         "Player" : {
@@ -1203,6 +1206,7 @@ headers = {
             "positive" : True,
             "display" : False,
             "type" : "Advanced",
+            "display-value" :  "SF",
             "valid_since" : {
                 "season" : 2009,
                 "game" : 2009
@@ -1212,6 +1216,7 @@ headers = {
             "positive" : False,
             "display" : False,
             "type" : "Advanced",
+            "display-value" :  "SA",
             "valid_since" : {
                 "season" : 2009,
                 "game" : 2009
@@ -14611,15 +14616,31 @@ def handle_player_data(player_data, time_frame, player_type, player_page, valid_
                                 stats.append(stat["stat"])
                         else:
                             stats = [sub_qual_object["stat"]]
-                stat = " ".join(stats)
-                if "time" in stat or "arena" in stat or "score" in stat or "goal" in stat or "result" in stat or "round" in stat or "series" in stat or "tmgm" in stat or "gamesrest" in stat or "gamesinarow" in stat or "daysinarow" in stat or "elimination" in stat or "clinching" in stat or "tmg" in stat or "oppg" in stat or "ttlg" in stat or "gdiff" in stat:
-                    has_schedule_stat_qual = True
-                if "fight" in stat:
-                    extra_stats.add("penalties")
-                if "star" in stat:
-                    extra_stats.add("star")
-                if "hittkn" in stat:
-                    extra_stats.add("current-stats")
+                for stat in stats:
+                    if "time" in stat or "arena" in stat or "score" in stat or "goal" in stat or "result" in stat or "round" in stat or "series" in stat or "tmgm" in stat or "gamesrest" in stat or "gamesinarow" in stat or "daysinarow" in stat or "elimination" in stat or "clinching" in stat or "tmg" in stat or "oppg" in stat or "ttlg" in stat or "gdiff" in stat:
+                        has_schedule_stat_qual = True
+                    if "fight" in stat:
+                        extra_stats.add("penalties")
+                    if "star" in stat:
+                        extra_stats.add("star")
+                    if "hittkn" in stat:
+                        extra_stats.add("current-stats")
+                    if stat in [indv_shift_stat.lower() for indv_shift_stat in skater_header_indv_shift_stats]:
+                        extra_stats.add("current-stats")
+                    for header_stat in headers[player_type["da_type"]["type"]]:
+                        if "display-value" in headers[player_type["da_type"]["type"]][header_stat] and headers[player_type["da_type"]["type"]][header_stat]["display-value"].lower() == stat:
+                            stat = header_stat.lower()
+                            if "time" in stat or "arena" in stat or "score" in stat or "goal" in stat or "result" in stat or "round" in stat or "series" in stat or "tmgm" in stat or "gamesrest" in stat or "gamesinarow" in stat or "daysinarow" in stat or "elimination" in stat or "clinching" in stat or "tmg" in stat or "oppg" in stat or "ttlg" in stat or "gdiff" in stat:
+                                has_schedule_stat_qual = True
+                            if "fight" in stat:
+                                extra_stats.add("penalties")
+                            if "star" in stat:
+                                extra_stats.add("star")
+                            if "hittkn" in stat:
+                                extra_stats.add("current-stats")
+                            if stat in [indv_shift_stat.lower() for indv_shift_stat in skater_header_indv_shift_stats]:
+                                extra_stats.add("current-stats")
+                            break
     
     add_pen = False
     add_star = False
@@ -14627,14 +14648,30 @@ def handle_player_data(player_data, time_frame, player_type, player_page, valid_
     for extra_stat in extra_stats:
         if extra_stat.startswith("show-stat-"):
             stat = extra_stat.split("show-stat-", 1)[1]
-            if stat == "time" or stat == "arena" or stat == "score" or stat == "goal" or stat == "result" or stat == "round" or stat == "series" or stat == "tmgm" or stat == "gamesrest" or stat == "gamesinarow" or stat == "daysinarow" or stat == "elimination" or stat == "clinching" or stat == "tmhg" or stat == "oppg" or stat == "ttlg" or stat == "gdiff":
+            if "time" in stat or "arena" in stat or "score" in stat or "goal" in stat or "result" in stat or "round" in stat or "series" in stat or "tmgm" in stat or "gamesrest" in stat or "gamesinarow" in stat or "daysinarow" in stat or "elimination" in stat or "clinching" in stat or "tmg" in stat or "oppg" in stat or "ttlg" in stat or "gdiff" in stat:
                 has_schedule_stat_qual = True
-            if stat == "fight":
+            if "fight" in stat:
                 add_pen = True
             if "star" in stat:
                 add_star = True
-            if stat == "hittkn":
+            if "hittkn" in stat:
                 add_current_stats = True
+            if stat in [indv_shift_stat.lower() for indv_shift_stat in skater_header_indv_shift_stats]:
+                add_current_stats = True
+            for header_stat in headers[player_type["da_type"]["type"]]:
+                if "display-value" in headers[player_type["da_type"]["type"]][header_stat] and headers[player_type["da_type"]["type"]][header_stat]["display-value"].lower() == stat:
+                    stat = header_stat.lower()
+                    if "time" in stat or "arena" in stat or "score" in stat or "goal" in stat or "result" in stat or "round" in stat or "series" in stat or "tmgm" in stat or "gamesrest" in stat or "gamesinarow" in stat or "daysinarow" in stat or "elimination" in stat or "clinching" in stat or "tmg" in stat or "oppg" in stat or "ttlg" in stat or "gdiff" in stat:
+                        has_schedule_stat_qual = True
+                    if "fight" in stat:
+                        add_pen = True
+                    if "star" in stat:
+                        add_star = True
+                    if "hittkn" in stat:
+                        add_current_stats = True
+                    if stat in [indv_shift_stat.lower() for indv_shift_stat in skater_header_indv_shift_stats]:
+                        add_current_stats = True
+                    break
     
     if add_pen:
         extra_stats.add("penalties")
@@ -34769,14 +34806,14 @@ def is_invalid_stat(stat, player_type, data, count_inconsistent, player_data):
     if "YearStart" in data and stat in headers[player_type["da_type"]["type"]] and data["YearStart"]:
         if player_type["da_type"]["type"] == "Skater":
             header_shift_stats = ["Shft", "Shft/GP", "TOI/Shft"]
-            report_2_stats = ["PenDrawn", "NetPEN", "PostBar", "CF", "CA", "CFPer", "CF/60M", "CA/60M", "FF", "FA", "FFPer", "SF/60M", "SA/60M", "SFPer", "CFRelPer", "FFRelPer", "SFRelPer", "FF/60M", "FA/60M", "offICF", "offICA", "offIFF", "offIFA", "offISF", "offISA", "offICA/60M", "offIFF/60M" , "offISA/60M", "offICF/60M", "offIFA/60M", "offISF/60M", "offIC/60M", "offIF/60M", "offIS/60M", "CFRel/60M", "FFRel/60M", "SFRel/60M", "CARel/60M", "FARel/60M", "SARel/60M", "OZ%", "oiSPer", "oiSVPer", "PDO", "oiSRelPer", "oiSVRelPer", "PDORel", "TSA", "TSM", "TSB", "TSA/GP", "TSB/GP", "TSM/GP", "TS%", "SThr%"]
+            report_2_stats = ["PenDrawn", "NetPEN", "PostBar", "CF", "CA", "CFPer", "CF/60M", "CA/60M", "FF", "FA", "FFPer", "SF/60M", "SA/60M", "oiOppS", "oiTmS", "SFPer", "CFRelPer", "FFRelPer", "SFRelPer", "FF/60M", "FA/60M", "offICF", "offICA", "offIFF", "offIFA", "offISF", "offISA", "offICA/60M", "offIFF/60M" , "offISA/60M", "offICF/60M", "offIFA/60M", "offISF/60M", "offIC/60M", "offIF/60M", "offIS/60M", "CFRel/60M", "FFRel/60M", "SFRel/60M", "CARel/60M", "FARel/60M", "SARel/60M", "OZ%", "oiSPer", "oiSVPer", "PDO", "oiSRelPer", "oiSVRelPer", "PDORel", "TSA", "TSM", "TSB", "TSA/GP", "TSB/GP", "TSM/GP", "TS%", "SThr%"]
             report_3_stats = ["TK", "GV", "TK/GV", "HIT", "HITTkn", "BLK"]
             strength_stats = ["PEN", "PEN/GP", "PIM", "PIM/GP", "OZFO%", "DZFO%", "OZFO/60M", "DZFO/60M", "OZFOW/60M", "DZFOW/60M", "FOW/GP", "FO/GP", "FOW", "FO", "FO%"]
             shot_on_stats = ["S", "S%", "S/GP"]
             shot_on_on_stats = ["S", "S%", "S/GP"]
             report_stats = ["OZFO%", "DZFO%", "OZFO/60M", "DZFO/60M",  "OZFOW/60M", "DZFOW/60M","FOW/GP", "FO/GP", "FOW", "FO", "FO%", "S", "S%", "S/GP"]
             game_report_stats = ["PlusMinus", "GF", "EVGF", "GA", "EVGA", "IGP", "EVIGP", "IPP", "EVIPP", "GF%", "EVGF%", "GF/60M", "GA/60M", "GFRelPer", "offIGF", "offIGA", "offIGF/60M", "offIGA/60M", "GFRel/60M", "offIG/60M", "GARel/60M"]
-            header_indv_shift_stats = ["CF", "CA", "CFPer", "CF/60M", "CA/60M", "FF", "FA", "FFPer", "SF/60M", "SA/60M", "SFPer", "FF/60M", "FA/60M", "offIGF", "offIGA", "offICF", "offICA", "offIFF", "offIFA", "offISF", "offISA", "offIGF/60M", "offICA/60M", "offIFF/60M" , "offISA/60M", "offIGA/60M", "offICF/60M", "offIFA/60M", "offISF/60M", "offIG/60M", "offIC/60M", "offIF/60M", "offIS/60M", "GFRel/60M", "CFRel/60M", "FFRel/60M", "SFRel/60M", "GARel/60M", "CARel/60M", "FARel/60M", "SARel/60M", "CFRelPer", "FFRelPer", "GFRelPer", "SFRelPer", "oiSPer", "oiSVPer", "PDO", "oiSRelPer", "oiSVRelPer", "PDORel", "OZ%", "TSA", "TSM", "TSB", "TSA/GP", "TSA/60M", "TSB/GP", "TSB/60M", "TSM/GP", "TSM/60M", "TS%", "SThr%"]
+            header_indv_shift_stats = skater_header_indv_shift_stats
         else:
             header_shift_stats = []
             report_2_stats = ["SH", "SA", "SV", "EVSH", "PPSH", "SHSH", "SVEvenStrength", "SVPowerPlay", "SVShorthanded", "SV%", "GA%-", "SH/60M", "SV/60M", "SA/60M", "SH/GP", "SV/GP", "SA/GP"]
@@ -34786,7 +34823,7 @@ def is_invalid_stat(stat, player_type, data, count_inconsistent, player_data):
             shot_on_stats = []
             shot_on_on_stats = ["SH", "SA", "SV", "EVSH", "PPSH", "SHSH", "SVEvenStrength", "SVPowerPlay", "SVShorthanded", "SV%", "GA%-", "SH/60M", "SV/60M", "SA/60M", "SH/GP", "SV/GP", "SA/GP"]
             game_report_stats = ["GF", "GFA", "GAA", "AdjGAA", "GA/60M", "GF/60M"]
-            header_indv_shift_stats = []
+            header_indv_shift_stats = goalie_header_indv_shift_stats
 
         for index, date_start in enumerate(data["DateStart"]):
             if player_data["stat_values"]["is_shift_data"]:
