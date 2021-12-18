@@ -34200,7 +34200,7 @@ def get_mlb_game_stats(all_rows, qualifiers, games_to_skip, player_data, missing
     if not count_info["total_count"]:
         return new_rows, count_info["missing_games"]
 
-    get_mlb_game_links(player_data, player_type, player_data["player_link"], all_rows)
+    get_mlb_game_links_schedule_links(player_data, player_type, player_data["player_link"], all_rows, {})
 
     with ThreadPoolExecutor(max_workers=5) as sub_executor:
         for index, row_data in enumerate(sorted(all_rows, key=lambda row: row["DateTime"])):
@@ -34286,7 +34286,7 @@ def get_mlb_game_stats_single_thread(all_rows, qualifiers, games_to_skip, player
 
     is_reverse = "Event Stat Reversed" in qualifiers or "Starting Event Stat Reversed" in qualifiers
 
-    get_mlb_game_links(player_data, player_type, player_data["player_link"], all_rows)
+    get_mlb_game_links_schedule_links(player_data, player_type, player_data["player_link"], all_rows, {})
 
     for index, row_data in enumerate(sorted(all_rows, key=lambda row: row["DateTime"], reverse=is_reverse)):
         if row_data["GameLink"] not in games_to_skip:
@@ -35298,180 +35298,6 @@ def set_row_data(player_game_info, row_data, player_type):
             row_data["ExitL"] = 1
         elif row_data.get("GS", 0):
             row_data["ExitND"] = 1
-
-def get_mlb_game_links(player_data, player_type, player_link, all_rows):
-    seasons = list(set([row["Year"] for row in all_rows]))
-    for season in seasons:
-        scheudle_url = mlb_player_schedule_url_format.format(player_data["mlb_id"], season)
-        if player_type["da_type"] == "Batter":
-            scheudle_url += "&group=hitting"
-        else:
-            scheudle_url += "&group=pitching"
-
-        request = urllib.request.Request(scheudle_url, headers=request_headers)
-        data = url_request_json(request)
-
-        if data["stats"]:
-            ids_to_header = {}
-            for index, sub_game in enumerate(data["stats"][0]["splits"]):
-                game_type = sub_game["gameType"]
-                if game_type != "R" and game_type != "F" and game_type != "D" and game_type != "L" and game_type != "W":
-                    continue
-                if sub_game["status"]["detailedState"]:
-                    if sub_game["status"]["detailedState"] == "Cancelled" or sub_game["status"]["detailedState"] == "Warmup" or sub_game["status"]["detailedState"] == "Postponed" or sub_game["status"]["detailedState"].startswith("Suspended"):
-                        continue
-                ids_to_header[sub_game["gamePk"]] = index
-            
-            if len(ids_to_header) > 1:
-                for game_pk in ids_to_header:
-                    ids_to_header[game_pk] += 1
-
-            for sub_game in data["stats"][0]["splits"]:
-                game_type = sub_game["gameType"]
-                if game_type != "R" and game_type != "F" and game_type != "D" and game_type != "L" and game_type != "W":
-                    continue
-                if sub_game["status"]["detailedState"]:
-                    if sub_game["status"]["detailedState"] == "Cancelled" or sub_game["status"]["detailedState"] == "Warmup" or sub_game["status"]["detailedState"] == "Postponed" or sub_game["status"]["detailedState"].startswith("Suspended"):
-                        continue
-            
-                game_datetime = dateutil.parser.parse(sub_game["date"])
-                game_date = game_datetime.date()
-                time_int = ids_to_header[sub_game["gamePk"]]
-                game_datetime = game_datetime.replace(hour=time_int)
-
-                for index, row_data in enumerate(all_rows):
-                    if row_data["Date"] == game_date:
-                        has_second_match = False
-                        for sub_index, sub_row_data in enumerate(all_rows):
-                            if sub_index != index:
-                                if sub_row_data["Date"] == game_date:
-                                    has_second_match = True
-                                    break
-
-                        if has_second_match:
-                            if row_data["DateTime"] == game_datetime:
-                                row_data["MLBGameLink"] = sub_game["game"]["gamePk"]
-                        else:
-                            row_data["MLBGameLink"] = sub_game["game"]["gamePk"]
-        
-        has_missing_games = False
-        for row_data in all_rows:
-            if row_data["Year"] == season and not "MLBGameLink" in row_data:
-                has_missing_games = True
-                break
-        
-        if has_missing_games:
-            sub_year = season
-            for team in player_data["numbers_year_map"][sub_year]:
-                if team not in player_data["player_team_map"]:
-                    continue
-                team_name = player_data["player_team_map"][team]
-                
-                sleague = get_team_league(team, sub_year)
-
-                if team_name in get_team_ids.manual_mappings:
-                    og_team_name = team_name
-                    team_name = get_team_ids.manual_mappings[team_name]
-                    if isinstance(team_name, dict):
-                        if sleague in team_name:
-                            team_name = team_name[sleague]
-                        else:
-                            team_name = og_team_name
-
-                if team_name == "Washington Senators":
-                    if sleague == "AL":
-                        if sub_year < 1961:
-                            team_name = "Washington Senators (1901)"
-                    elif sleague == "NL":
-                        if sub_year < 1891:
-                            team_name = "Washington Senators (1886)"
-                elif team_name == "Baltimore Orioles":
-                    if sleague == "AA":
-                        if sub_year < 1890:
-                            team_name = "Baltimore Orioles (1882)"
-                    elif sleague == "AL":
-                        if sub_year < 1903:
-                            team_name = "Baltimore Orioles (1901)"
-                elif team_name == "Cincinnati Reds":
-                    if sleague == "NL":
-                        if sub_year < 1882:
-                            team_name = "Cincinnati Reds (1876)"
-                elif team_name == "Columbus Colts":
-                    if sleague == "AA":
-                        if sub_year < 1889:
-                            team_name = "Columbus Colts (1883)"
-                elif team_name == "Milwaukee Brewers":
-                    if sleague == "AL":
-                        if sub_year < 1968:
-                            team_name = "Milwaukee Brewers (1901)"
-                elif team_name == "Washington Nationals":
-                    if sleague == "NL":
-                        if sub_year < 1890:
-                            team_name = "Washington Senators (1886)"
-                elif team_name == "Cleveland Blues":
-                    if sleague == "NL":
-                        if sub_year < 1880:
-                            team_name = "Cleveland Spiders (1879)"
-
-                if sleague not in team_ids or team_name not in team_ids[sleague]:
-                    continue
-
-                team_id = team_ids[sleague][team_name]
-
-                da_dates = []
-                
-                scheudle_url = mlb_team_schedule_url_format.format(team_id, sub_year)
-                request = urllib.request.Request(scheudle_url, headers=request_headers)
-                data = url_request_json(request)
-
-                for game in data["dates"]:
-                    da_dates.append(game)
-
-                # for month_int in range(1, 13):
-                #     min_date = datetime.date(sub_year, month_int, 1)
-                #     max_date = datetime.date(sub_year, month_int, calendar.monthrange(sub_year, month_int)[1])
-
-                #     scheudle_url = mlb_team_schedule_url_format.format(team_id, urllib.parse.quote_plus(str(min_date)), urllib.parse.quote_plus(str(max_date)))
-                #     request = urllib.request.Request(scheudle_url, headers=request_headers)
-                #     data = url_request_json(request)
-
-                #     for game in data["dates"]:
-                #         da_dates.append(game)
-
-                for sub_game in da_dates:
-                    ids_to_header = {}
-                    for index, game in enumerate(sub_game["games"]):
-                        game_type = game["gameType"]
-                        if game_type != "R" and game_type != "F" and game_type != "D" and game_type != "L" and game_type != "W":
-                            continue
-                        if game["status"]["detailedState"]:
-                            if game["status"]["detailedState"] == "Cancelled" or game["status"]["detailedState"] == "Warmup" or game["status"]["detailedState"] == "Postponed" or game["status"]["detailedState"].startswith("Suspended"):
-                                continue
-                        ids_to_header[game["gamePk"]] = index
-                    
-                    if len(ids_to_header) > 1:
-                        for game_pk in ids_to_header:
-                            ids_to_header[game_pk] += 1
-
-                    for game in sub_game["games"]:
-                        if game["season"] == str(season):
-                            game_type = game["gameType"]
-                            if game_type != "R" and game_type != "F" and game_type != "D" and game_type != "L" and game_type != "W":
-                                continue
-                            if game["status"]["detailedState"]:
-                                if game["status"]["detailedState"] == "Cancelled" or game["status"]["detailedState"] == "Warmup" or game["status"]["detailedState"] == "Postponed" or game["status"]["detailedState"].startswith("Suspended"):
-                                    continue
-                        
-                            game_datetime = dateutil.parser.parse(game["officialDate"])
-                            game_date = game_datetime.date()
-                            time_int = ids_to_header[game["gamePk"]]
-                            game_datetime = game_datetime.replace(hour=time_int)
-
-                            for index, row_data in enumerate(all_rows):
-                                if row_data["Date"] == game_date:
-                                    if row_data["DateTime"] == game_datetime:
-                                        if row_data["Tm"] == team:
-                                            row_data["MLBGameLink"] = game["gamePk"]
 
 def get_mlb_game_links_schedule_links(player_data, player_type, player_link, all_rows, qualifiers):
     seasons = list(set([row["Year"] for row in all_rows]))
