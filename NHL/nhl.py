@@ -8602,11 +8602,9 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                             elif qualifier_str == "facing-lefty":
                                 qual_type = "Facing Lefty"
                                 extra_stats.add("current-stats")
-                                extra_stats.add("current-stats-zone")
                             elif qualifier_str == "facing-righty":
                                 qual_type = "Facing Righty"
                                 extra_stats.add("current-stats")
-                                extra_stats.add("current-stats-zone")
                             elif qualifier_str in ["tip-in", "deflected", "wrist-shot", "slap-shot", "snap-shot", "back-hand", "wrap-around"]:
                                 qual_type = "Exact Shot Type"
                                 player_type["da_type"] = {
@@ -22953,7 +22951,7 @@ def calculate_toi(row, qualifiers, player_game_info, player_id, player_link, sav
 
     matching_shifts = set()
     for shift_event in player_game_info["shift_events"]:
-        if perform_on_ice_quals(qualifiers, shift_data, shift_event, row, shift_event["period"], shift_event["periodTime"]):
+        if perform_on_ice_quals(player_game_info, qualifiers, shift_data, shift_event, row, shift_event["period"], shift_event["periodTime"]):
             if perform_metadata_qual("shift", shift_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], is_toi=True, skip_career_events=skip_career_events):
                 row["TOI"] += 1
                 strength = determine_strength(player_game_info, shift_event["period"], shift_event["periodTime"], shift_event)
@@ -22967,13 +22965,13 @@ def calculate_toi(row, qualifiers, player_game_info, player_id, player_link, sav
                     matching_shifts.add(shift_event["shift_index"])
     
     for shift_event in player_game_info["oi_shift_events"]:
-        if perform_on_ice_quals(qualifiers, shift_data, shift_event, row, shift_event["period"], shift_event["periodTime"]):
+        if perform_on_ice_quals(player_game_info, qualifiers, shift_data, shift_event, row, shift_event["period"], shift_event["periodTime"]):
             if perform_metadata_qual("shift_oi", shift_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], is_toi=True, is_off_ice=True, skip_career_events=skip_career_events):
                 row["offITOI"] += 1
                 
 def is_five_toi(player_game_info, goal_event, period, second):
     team_skaters, team_goalies, opp_skaters, opp_goalies, has_shift = get_on_ice_info(player_game_info, goal_event, period, second)
-    return has_shift and team_skaters == 5 and team_goalies == 1 and opp_skaters == 5 and opp_goalies == 1
+    return has_shift and len(team_skaters) == 5 and len(team_goalies) == 1 and len(opp_skaters) == 5 and len(opp_goalies) == 1
 
 def determine_strength(player_game_info, period, second, goal_event):
     if "strength" in goal_event and goal_event["strength"]:
@@ -22986,9 +22984,9 @@ def determine_strength(player_game_info, period, second, goal_event):
 
     team_skaters, team_goalies, opp_skaters, opp_goalies, has_shift = get_on_ice_info(player_game_info, goal_event, period, second)
     if has_shift:
-        if team_skaters + team_goalies  < opp_skaters + opp_goalies:
+        if len(team_skaters) + len(team_goalies)  < len(opp_skaters) + len(opp_goalies):
             return "SH"
-        elif team_skaters + team_goalies  > opp_skaters + opp_goalies:
+        elif len(team_skaters) + len(team_goalies)  > len(opp_skaters) + len(opp_goalies):
             return "PP"
         else:
             return "EV"
@@ -22996,10 +22994,10 @@ def determine_strength(player_game_info, period, second, goal_event):
 
 def get_on_ice_info(player_game_info, goal_event, period, second, is_faceoff=False):
     shift_data = player_game_info["shift_data"]
-    team_skaters = 0
-    team_goalies = 0
-    opp_skaters = 0
-    opp_goalies = 0
+    team_skaters = []
+    team_goalies = []
+    opp_skaters = []
+    opp_goalies = []
     team_on_ice = goal_event["team_on_ice"] if "team_on_ice" in goal_event else None
     opp_on_ice = goal_event["opp_on_ice"] if "opp_on_ice" in goal_event else None
 
@@ -23008,15 +23006,15 @@ def get_on_ice_info(player_game_info, goal_event, period, second, is_faceoff=Fal
         for player in player_game_info["team_players"]:
             if is_player_on_ice(shift_data, team_on_ice, opp_on_ice, period, second, player, True, is_faceoff):
                 if player in player_game_info["team_goalies"]:
-                    team_goalies += 1
+                    team_goalies.append(player)
                 else:
-                    team_skaters += 1
+                    team_skaters.append(player)
         for player in player_game_info["opp_players"]:
             if is_player_on_ice(shift_data, team_on_ice, opp_on_ice, period, second, player, False, is_faceoff):
                 if player in player_game_info["opp_goalies"]:
-                    opp_goalies += 1
+                    opp_goalies.append(player)
                 else:
-                    opp_skaters += 1
+                    opp_skaters.append(player)
 
     return team_skaters, team_goalies, opp_skaters, opp_goalies, has_shift_data
 
@@ -23443,6 +23441,28 @@ def perform_metadata_qual(event_name, goal_event, qualifiers, player_game_info, 
                     if not has_match:
                         return False
         
+        if "Facing Righty" in qualifiers:
+            if player_game_info["player_type"]["da_type"]["type"] == "Skater":
+                if event_name != "goal" and event_name != "shot":
+                    return False
+            else:
+                if event_name != "goal_against" and event_name != "save_against":
+                    return False
+
+            if not perform_sub_metadata_qual(goal_event, "facingRighty", qualifiers["Facing Righty"], player_game_info, year):
+                return False
+        
+        if "Facing Lefty" in qualifiers:
+            if player_game_info["player_type"]["da_type"]["type"] == "Skater":
+                if event_name != "goal" and event_name != "shot":
+                    return False
+        else:
+            if event_name != "goal_against" and event_name != "save_against":
+                return False
+
+        if not perform_sub_metadata_qual(goal_event, "facingLefty", qualifiers["Facing Lefty"], player_game_info, year):
+            return False
+        
         if "Game Winning" in qualifiers:
             if not perform_bool_qual(goal_event, "gameWinningGoal", qualifiers["Game Winning"]):
                 return False
@@ -23720,28 +23740,6 @@ def perform_metadata_qual(event_name, goal_event, qualifiers, player_game_info, 
     if "Neutral Zone" in qualifiers:
         if not perform_zone_qual(goal_event, "NZ", qualifiers["Neutral Zone"]):
             return False
-    
-    if "Facing Righty" in qualifiers:
-        if player_game_info["player_type"]["da_type"]["type"] == "Skater":
-            if event_name != "goal" and event_name != "shot":
-                return False
-        else:
-            if event_name != "goal_against" and event_name != "save_against":
-                return False
-
-        if not perform_sub_metadata_qual(goal_event, "facingRighty", qualifiers["Facing Righty"], player_game_info, year):
-            return False
-    
-    if "Facing Lefty" in qualifiers:
-        if player_game_info["player_type"]["da_type"]["type"] == "Skater":
-            if event_name != "goal" and event_name != "shot":
-                return False
-        else:
-            if event_name != "goal_against" and event_name != "save_against":
-                return False
-
-        if not perform_sub_metadata_qual(goal_event, "facingLefty", qualifiers["Facing Lefty"], player_game_info, year):
-            return False
 
     if "Event Time" in qualifiers:
         if "event_time" not in goal_event:
@@ -23987,7 +23985,7 @@ def perform_formula_qual(goal_event, qualifiers):
     
     return True
 
-def perform_on_ice_quals(qualifiers, shift_data, goal_event, row, period, second):
+def perform_on_ice_quals(player_game_info, qualifiers, shift_data, goal_event, row, period, second):
     teammate_on_ice_quals = qualifiers.get("Assisted By", []) + qualifiers.get("Assisted On", []) + qualifiers.get("Assisted With", []) + qualifiers.get("Points With", []) + qualifiers.get("Primary Assisted By", []) + qualifiers.get("Primary Assisted On", []) + qualifiers.get("Primary Assisted With", []) + qualifiers.get("Primary Points With", [])   
     if not perform_sub_on_ice_qual(teammate_on_ice_quals, shift_data, goal_event, row, period, second, True, False, True):
         return False
@@ -23995,6 +23993,51 @@ def perform_on_ice_quals(qualifiers, shift_data, goal_event, row, period, second
     teammate_off_ice_quals = qualifiers.get("Shot On", []) + qualifiers.get("Shot By", []) + qualifiers.get("Hit On", []) + qualifiers.get("Penalty On", []) + qualifiers.get("Faceoff Against", []) + qualifiers.get("Fight Against", [])
     if not perform_sub_on_ice_qual(teammate_off_ice_quals, shift_data, goal_event, row, period, second, False, False, True):
         return False
+
+    if "Facing Lefty" in qualifiers:
+        team_skaters, team_goalies, opp_skaters, opp_goalies, has_shift = get_on_ice_info(player_game_info, goal_event, period, second)
+        if not has_shift:
+            return False
+        is_facing_lefty = False
+        has_side = False
+        for player in (opp_goalies if player_game_info["player_type"]["da_type"]["type"] == "Skater" else opp_skaters):
+            if player in player_game_info["player_side_map"]:
+                has_side = True
+                if player_game_info["player_side_map"][player] == "L":
+                    is_facing_lefty = True
+                    break
+        if not has_side:
+            return False
+
+        for qual_object in qualifiers["Facing Lefty"]:
+            if qual_object["negate"]:
+                if is_facing_lefty:
+                    return False
+            else:
+                if not is_facing_lefty:
+                    return False
+    if "Facing Righty" in qualifiers:
+        team_skaters, team_goalies, opp_skaters, opp_goalies, has_shift = get_on_ice_info(player_game_info, goal_event, period, second)
+        if not has_shift:
+            return False
+        is_facing_righty = False
+        has_side = False
+        for player in (opp_goalies if player_game_info["player_type"]["da_type"]["type"] == "Skater" else opp_skaters):
+            if player in player_game_info["player_side_map"]:
+                has_side = True
+                if player_game_info["player_side_map"][player] == "R":
+                    is_facing_lefty = True
+                    break
+        if not has_side:
+            return False
+
+        for qual_object in qualifiers["Facing Righty"]:
+            if qual_object["negate"]:
+                if is_facing_righty:
+                    return False
+            else:
+                if not is_facing_righty:
+                    return False
 
     return True
 
@@ -24036,37 +24079,36 @@ def perform_sub_on_ice_qual(qualifers, shift_data, goal_event, row, period, seco
 def perform_strength_qual(player_game_info, goal_event, qual_type, qualifiers, is_faceoff=False):
     has_row_match = True
     team_skaters, team_goalies, opp_skaters, opp_goalies, has_shift = get_on_ice_info(player_game_info, goal_event, goal_event["period"], goal_event["periodTime"], is_faceoff)
-    team_players = team_skaters + team_goalies
-    opp_players = opp_skaters + opp_goalies
+    team_players = len(team_skaters) + len(team_goalies)
+    opp_players = len(opp_skaters) + len(opp_goalies)
     if not has_shift:
         return False
     for qual_object in qualifiers:
         has_match = False
         if qual_type == "Strength":
             if qual_object["values"]["team_skaters"] > 5:
-                has_match = team_skaters == qual_object["values"]["team_skaters"] and team_goalies == 0
+                has_match = len(team_skaters) == qual_object["values"]["team_skaters"] and len(team_goalies) == 0
             else:
-                has_match = team_skaters == qual_object["values"]["team_skaters"] and team_goalies == 1
+                has_match = len(team_skaters) == qual_object["values"]["team_skaters"] and len(team_goalies) == 1
             if has_match:
                 if qual_object["values"]["opp_skaters"] > 5:
-                    has_match = opp_skaters == qual_object["values"]["opp_skaters"] and opp_goalies == 0
+                    has_match = len(opp_skaters) == qual_object["values"]["opp_skaters"] and len(opp_goalies) == 0
                 else:
-                    has_match = opp_skaters == qual_object["values"]["opp_skaters"] and opp_goalies == 1
+                    has_match = len(opp_skaters) == qual_object["values"]["opp_skaters"] and len(opp_goalies) == 1
         elif qual_type == "Even Skaters":
-            has_match = team_skaters == opp_skaters
+            has_match = len(team_skaters) == len(opp_skaters)
         elif qual_type == "More Skaters":
-            has_match = team_skaters > opp_skaters
+            has_match = len(team_skaters) > len(opp_skaters)
         elif qual_type == "Less Skaters":
-            has_match = team_skaters < opp_skaters
-            has_match = team_players < opp_players
+            has_match = len(team_skaters) < len(opp_skaters)
         elif qual_type == "Team Goalie Pulled":
-            has_match = team_goalies == 0
+            has_match = len(team_goalies) == 0
         elif qual_type == "Opponent Goalie Pulled":
-            has_match = opp_goalies == 0
+            has_match = len(opp_goalies) == 0
         elif qual_type == "Team Skaters":
-            has_match = team_skaters >= qual_object["values"]["start_val"] and team_skaters <= qual_object["values"]["end_val"]
+            has_match = len(team_skaters) >= qual_object["values"]["start_val"] and len(team_skaters) <= qual_object["values"]["end_val"]
         elif qual_type == "Opponent Skaters":
-            has_match = opp_skaters >= qual_object["values"]["start_val"] and opp_skaters <= qual_object["values"]["end_val"]
+            has_match = len(opp_skaters) >= qual_object["values"]["start_val"] and len(opp_skaters) <= qual_object["values"]["end_val"]
         elif qual_type == "Team Players":
             has_match = team_players >= qual_object["values"]["start_val"] and team_players <= qual_object["values"]["end_val"]
         elif qual_type == "Opponent Players":
