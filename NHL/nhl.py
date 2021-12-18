@@ -10151,6 +10151,10 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                     stat = "P"
                                 elif stat == "shot-faced" or stat == "shots-faced":
                                     stat = "SA"
+                                elif stat == "goal-allowed" or stat == "goals-allowed":
+                                    stat = "GA"
+                                elif stat == "save":
+                                    stat = "SV"
                                 else:
                                     stat = qual_type.upper()
 
@@ -10459,7 +10463,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
 
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
                     
-                        last_matches = re.finditer(r"\b(no(?:t|n)?(?: |-))?(first|1st|last|this|past)?(?: ?(\S*) (starting-)?(game-)?(minute|second|min|toi|shots?-faced|shot|period|shift|goal|assist|point)s?)\b", time_frame)
+                        last_matches = re.finditer(r"\b(no(?:t|n)?(?: |-))?(first|1st|last|this|past)?(?: ?(\S*) (starting-)?(game-)?(minute|second|min|toi|shots?-faced|goals?-allowed|save|shot|period|shift|goal|assist|point)s?)\b", time_frame)
                         for last_match in last_matches:
                             compare_type = last_match.group(2)
                             time_unit = last_match.group(3)
@@ -10518,6 +10522,10 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 stat = "P"
                             elif qual_type == "shot-faced" or qual_type == "shots-faced":
                                 stat = "SA"
+                            elif qual_type == "goal-allowed" or qual_type == "goals-allowed":
+                                stat = "GA"
+                            elif qual_type == "save":
+                                stat = "SV"
                             else:
                                 stat = qual_type.upper()
 
