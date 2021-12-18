@@ -14337,8 +14337,16 @@ def determine_raw_str(subbb_frame):
                             else:
                                 if qualifier == "Team" or qualifier == "Opponent" or qualifier == "TV Network" or qualifier == "Radio Network" or qualifier == "Raw TV Network" or qualifier == "Raw Radio Network" or qualifier == "National TV Network" or qualifier == "National Raw TV Network" or qualifier == "Any National TV Network" or qualifier == "Any National Raw TV Network" or qualifier == "Team Franchise" or qualifier == "Opponent Franchise" or qualifier == "Previous Team" or qualifier == "Upcoming Team" or qualifier == "Previous Opponent" or qualifier == "Upcoming Opponent" or qualifier == "Previous Team Franchise" or qualifier == "Upcoming Team Franchise" or qualifier == "Previous Opponent Franchise" or qualifier == "Upcoming Opponent Franchise" or qualifier == "Team League" or qualifier == "Opponent League" or qualifier == "Previous Team League" or qualifier == "Upcoming Team League" or qualifier == "Previous Opponent League" or qualifier == "Upcoming Opponent League" or qualifier == "Formula" or qualifier == "Season Formula" or qualifier == "Event Formula" or qualifier == "Primary Season Position" or qualifier == "Season Position" or qualifier == "Position" or qualifier == "Hit Location" or qualifier == "Exact Hit Location" or qualifier == "Facing Position" or qualifier == "Facing Primary Position" or qualifier == "Facing Main Position" or qualifier == "Primary Game Position" or qualifier == "Game Position" or qualifier == "State" or qualifier == "Exact State" or qualifier == "Team State" or qualifier == "Team Exact State" or qualifier == "Opponent State" or qualifier == "Opponent Exact State" or qualifier == "Country" or qualifier == "Exact Country" or qualifier == "Team Country" or qualifier == "Team Exact Country" or qualifier == "Opponent Country" or qualifier == "Opponent Exact Country":
                                     sub_qualifier = sub_qualifier.upper()
-                                elif qualifier == "Holiday" or qualifier == "Stadium"  or qualifier == "Exact Stadium" or qualifier == "Pitch Type"  or qualifier == "Exact Pitch Type" or qualifier == "Hit Trajectory" or qualifier == "Hit Hardness" or qualifier == "Event Type" or qualifier == "Exact Event Type" or qualifier == "Previous Event Type" or qualifier == "Upcoming Exact Event Type" or qualifier == "Upcoming Player Event Type" or qualifier == "Previous Exact Event Type" or qualifier == "Previous Player Event Type" or qualifier == "Previous Exact Player Event Type" or qualifier == "Upcoming Event Type" or qualifier == "Upcoming Exact Event Type" or qualifier == "City" or qualifier == "Exact City" or qualifier == "Team City" or qualifier == "Team Exact City" or qualifier == "Opponent City" or qualifier == "Opponent Exact City" or qualifier == "Event Description" or qualifier == "Exact Event Description" or qualifier == "Surface" or qualifier == "Condition" or qualifier == "Moon Phase" or qualifier == "Exact Home Plate Umpire" or qualifier == "Exact Umpire" or qualifier == "Home Plate Umpire" or qualifier == "Umpire" or qualifier == "Team Time Zone" or qualifier == "Team Exact Time Zone" or qualifier == "Opponent Time Zone" or qualifier == "Opponent Exact Time Zone" or qualifier == "Time Zone" or qualifier == "Exact Time Zone":
+                                elif qualifier == "Holiday" or qualifier == "Pitch Type"  or qualifier == "Exact Pitch Type" or qualifier == "Hit Trajectory" or qualifier == "Hit Hardness" or qualifier == "Event Type" or qualifier == "Exact Event Type" or qualifier == "Previous Event Type" or qualifier == "Upcoming Exact Event Type" or qualifier == "Upcoming Player Event Type" or qualifier == "Previous Exact Event Type" or qualifier == "Previous Player Event Type" or qualifier == "Previous Exact Player Event Type" or qualifier == "Upcoming Event Type" or qualifier == "Upcoming Exact Event Type" or qualifier == "City" or qualifier == "Exact City" or qualifier == "Team City" or qualifier == "Team Exact City" or qualifier == "Opponent City" or qualifier == "Opponent Exact City" or qualifier == "Event Description" or qualifier == "Exact Event Description" or qualifier == "Surface" or qualifier == "Condition" or qualifier == "Moon Phase" or qualifier == "Exact Home Plate Umpire" or qualifier == "Exact Umpire" or qualifier == "Home Plate Umpire" or qualifier == "Umpire" or qualifier == "Team Time Zone" or qualifier == "Team Exact Time Zone" or qualifier == "Opponent Time Zone" or qualifier == "Opponent Exact Time Zone" or qualifier == "Time Zone" or qualifier == "Exact Time Zone":
                                     sub_qualifier = sub_qualifier.title()
+                                elif qualifier == "Stadium"  or qualifier == "Exact Stadium":
+                                    if sub_qualifier.isdigit():
+                                        if sub_qualifier in team_venues:
+                                            sub_qualifier = team_venues[sub_qualifier]["values"][len(team_venues[sub_qualifier]["values"]) - 1] + " (" + sub_qualifier + ")"
+                                        else:
+                                            sub_qualifier = "Unknown" + " (" + sub_qualifier + ")"
+                                    else:
+                                        sub_qualifier = sub_qualifier.title()
                                 elif qualifier == "Team Division" or qualifier == "Opponent Division":
                                     sub_qualifier_split = sub_qualifier.split("-")
                                     sub_qualifier = sub_qualifier_split[0].upper() + "-"
@@ -15339,6 +15347,19 @@ def get_live_game(player_link, player_data, player_type, time_frame):
     lastest_games = []
     team_game_number = 1
     for sub_game in da_dates:
+        for index, game in enumerate(sub_game["games"]):
+            game_type = game["gameType"]
+            if game_type != "R" and game_type != "F" and game_type != "D" and game_type != "L" and game_type != "W":
+                continue
+            if game["status"]["detailedState"]:
+                if game["status"]["detailedState"] == "Cancelled" or game["status"]["detailedState"] == "Warmup" or game["status"]["detailedState"] == "Postponed" or game["status"]["detailedState"].startswith("Suspended"):
+                    continue
+            ids_to_header[game["gamePk"]] = index
+
+        if len(ids_to_header) > 1:
+            for game_pk in ids_to_header:
+                ids_to_header[game_pk] += 1
+
         for latest_game in sub_game["games"]:
             game_type = latest_game["gameType"]
             if game_type != "R" and game_type != "F" and game_type != "D" and game_type != "L" and game_type != "W":
@@ -15356,6 +15377,7 @@ def get_live_game(player_link, player_data, player_type, time_frame):
                     continue
 
             latest_game["teamGameNumber"] = team_game_number
+            lastest_game["time_int"] = ids_to_header[game["gamePk"]]
             lastest_games.append(latest_game)
             team_game_number += 1
 
@@ -15412,12 +15434,7 @@ def determine_row_data(game_data, player_type, player_data, player_id, current_t
 
     game_datetime = dateutil.parser.parse(game_data["officialDate"])
     row_data["Date"] = game_datetime.date()
-    time_int = 0
-    if game_data["doubleHeader"] != "N":
-        if game_data["gameNumber"] == 1:
-            time_int = 1
-        else:
-            time_int = 2
+    time_int = game_data["time_int"]
     row_data["DateTime"] = game_datetime.replace(hour=time_int)
 
     if row_data["DateTime"] in all_dates:
@@ -35295,17 +35312,31 @@ def get_mlb_game_links(player_data, player_type, player_link, all_rows):
         data = url_request_json(request)
 
         if data["stats"]:
+            ids_to_header = {}
+            for index, sub_game in enumerate(data["stats"][0]["splits"]):
+                game_type = sub_game["gameType"]
+                if game_type != "R" and game_type != "F" and game_type != "D" and game_type != "L" and game_type != "W":
+                    continue
+                if sub_game["status"]["detailedState"]:
+                    if sub_game["status"]["detailedState"] == "Cancelled" or sub_game["status"]["detailedState"] == "Warmup" or sub_game["status"]["detailedState"] == "Postponed" or sub_game["status"]["detailedState"].startswith("Suspended"):
+                        continue
+                ids_to_header[sub_game["gamePk"]] = index
+            
+            if len(ids_to_header) > 1:
+                for game_pk in ids_to_header:
+                    ids_to_header[game_pk] += 1
+
             for sub_game in data["stats"][0]["splits"]:
                 game_type = sub_game["gameType"]
                 if game_type != "R" and game_type != "F" and game_type != "D" and game_type != "L" and game_type != "W":
                     continue
+                if sub_game["status"]["detailedState"]:
+                    if sub_game["status"]["detailedState"] == "Cancelled" or sub_game["status"]["detailedState"] == "Warmup" or sub_game["status"]["detailedState"] == "Postponed" or sub_game["status"]["detailedState"].startswith("Suspended"):
+                        continue
             
                 game_datetime = dateutil.parser.parse(sub_game["date"])
                 game_date = game_datetime.date()
-                if sub_game["game"]["gameNumber"] == 1:
-                    time_int = 1
-                else:
-                    time_int = 2
+                time_int = ids_to_header[sub_game["gamePk"]]
                 game_datetime = game_datetime.replace(hour=time_int)
 
                 for index, row_data in enumerate(all_rows):
@@ -35408,6 +35439,20 @@ def get_mlb_game_links(player_data, player_type, player_link, all_rows):
                 #         da_dates.append(game)
 
                 for sub_game in da_dates:
+                    ids_to_header = {}
+                    for index, game in enumerate(sub_game["games"]):
+                        game_type = game["gameType"]
+                        if game_type != "R" and game_type != "F" and game_type != "D" and game_type != "L" and game_type != "W":
+                            continue
+                        if game["status"]["detailedState"]:
+                            if game["status"]["detailedState"] == "Cancelled" or game["status"]["detailedState"] == "Warmup" or game["status"]["detailedState"] == "Postponed" or game["status"]["detailedState"].startswith("Suspended"):
+                                continue
+                        ids_to_header[game["gamePk"]] = index
+                    
+                    if len(ids_to_header) > 1:
+                        for game_pk in ids_to_header:
+                            ids_to_header[game_pk] += 1
+
                     for game in sub_game["games"]:
                         if game["season"] == str(season):
                             game_type = game["gameType"]
@@ -35419,12 +35464,7 @@ def get_mlb_game_links(player_data, player_type, player_link, all_rows):
                         
                             game_datetime = dateutil.parser.parse(game["officialDate"])
                             game_date = game_datetime.date()
-                            time_int = 0
-                            if game["doubleHeader"] != "N":
-                                if game["gameNumber"] == 1:
-                                    time_int = 1
-                                else:
-                                    time_int = 2
+                            time_int = ids_to_header[game["gamePk"]]
                             game_datetime = game_datetime.replace(hour=time_int)
 
                             for index, row_data in enumerate(all_rows):
@@ -35508,7 +35548,7 @@ def get_mlb_game_links_schedule_links(player_data, player_type, player_link, all
             if scheudle_url.endswith(","):
                 scheudle_url = scheudle_url[:-1]
             else:
-                scheudle_url = scheudle_url[:-8]
+                scheudle_url = scheudle_url[:-9]
 
             request = urllib.request.Request(scheudle_url, headers=request_headers)
             data = url_request_json(request)
@@ -35536,7 +35576,7 @@ def get_mlb_game_links_schedule_links(player_data, player_type, player_link, all
             #     if scheudle_url.endswith(","):
             #         scheudle_url = scheudle_url[:-1]
             #     else:
-            #         scheudle_url = scheudle_url[:-8]
+            #         scheudle_url = scheudle_url[:-9]
             #     request = urllib.request.Request(scheudle_url, headers=request_headers)
             #     data = url_request_json(request)
 
@@ -35546,6 +35586,20 @@ def get_mlb_game_links_schedule_links(player_data, player_type, player_link, all
             national_networks_to_skip = ["MLBN", "MLBN-INT", "Twitter", "YouTube", "FB-WATCH", "ESPN+"]
 
             for sub_game in da_dates:
+                ids_to_header = {}
+                for index, game in enumerate(sub_game["games"]):
+                    game_type = game["gameType"]
+                    if game_type != "R" and game_type != "F" and game_type != "D" and game_type != "L" and game_type != "W":
+                        continue
+                    if game["status"]["detailedState"]:
+                        if game["status"]["detailedState"] == "Cancelled" or game["status"]["detailedState"] == "Warmup" or game["status"]["detailedState"] == "Postponed" or game["status"]["detailedState"].startswith("Suspended"):
+                            continue
+                    ids_to_header[game["gamePk"]] = index
+                
+                if len(ids_to_header) > 1:
+                    for game_pk in ids_to_header:
+                        ids_to_header[game_pk] += 1
+
                 for game in sub_game["games"]:
                     if game["season"] == str(season):
                         game_type = game["gameType"]
@@ -35557,12 +35611,7 @@ def get_mlb_game_links_schedule_links(player_data, player_type, player_link, all
                     
                         game_datetime = dateutil.parser.parse(game["officialDate"])
                         game_date = game_datetime.date()
-                        time_int = 0
-                        if game["doubleHeader"] != "N":
-                            if game["gameNumber"] == 1:
-                                time_int = 1
-                            else:
-                                time_int = 2
+                        time_int = ids_to_header[game["gamePk"]]
                         game_datetime = game_datetime.replace(hour=time_int)
 
                         is_national = False
