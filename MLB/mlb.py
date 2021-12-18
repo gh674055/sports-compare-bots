@@ -15355,20 +15355,25 @@ def get_live_game(player_link, player_data, player_type, time_frame):
     lastest_games = []
     team_game_number = 1
     for sub_game in da_dates:
-        for index, game in enumerate(sub_game["games"]):
+        for game in sub_game["games"]:
+            if game["officialDate"] != sub_game["date"]:
+                continue
             game_type = game["gameType"]
             if game_type != "R" and game_type != "F" and game_type != "D" and game_type != "L" and game_type != "W":
                 continue
             if game["status"]["detailedState"]:
                 if game["status"]["detailedState"] == "Cancelled" or game["status"]["detailedState"] == "Warmup" or game["status"]["detailedState"] == "Postponed" or game["status"]["detailedState"].startswith("Suspended"):
                     continue
-            ids_to_header[game["gamePk"]] = index
+            ids_to_header[game["gamePk"]] = len(ids_to_header)
 
         if len(ids_to_header) > 1:
             for game_pk in ids_to_header:
                 ids_to_header[game_pk] += 1
 
         for latest_game in sub_game["games"]:
+            if latest_game["gamePk"] not in ids_to_header:
+                continue
+
             game_type = latest_game["gameType"]
             if game_type != "R" and game_type != "F" and game_type != "D" and game_type != "L" and game_type != "W":
                 continue
@@ -35415,20 +35420,25 @@ def get_mlb_game_links_schedule_links(player_data, player_type, player_link, all
 
             for sub_game in da_dates:
                 ids_to_header = {}
-                for index, game in enumerate(sub_game["games"]):
+                for game in sub_game["games"]:
+                    if game["officialDate"] != sub_game["date"]:
+                        continue
                     game_type = game["gameType"]
                     if game_type != "R" and game_type != "F" and game_type != "D" and game_type != "L" and game_type != "W":
                         continue
                     if game["status"]["detailedState"]:
                         if game["status"]["detailedState"] == "Cancelled" or game["status"]["detailedState"] == "Warmup" or game["status"]["detailedState"] == "Postponed" or game["status"]["detailedState"].startswith("Suspended"):
                             continue
-                    ids_to_header[game["gamePk"]] = index
+                    ids_to_header[game["gamePk"]] = len(ids_to_header)
                 
                 if len(ids_to_header) > 1:
                     for game_pk in ids_to_header:
                         ids_to_header[game_pk] += 1
 
                 for game in sub_game["games"]:
+                    if game["gamePk"] not in ids_to_header:
+                        continue
+
                     if game["season"] == str(season):
                         game_type = game["gameType"]
                         if game_type != "R" and game_type != "F" and game_type != "D" and game_type != "L" and game_type != "W":
