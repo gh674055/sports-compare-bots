@@ -15355,6 +15355,7 @@ def get_live_game(player_link, player_data, player_type, time_frame):
     lastest_games = []
     team_game_number = 1
     for sub_game in da_dates:
+        ids_to_header = {}
         for game in sub_game["games"]:
             if game["officialDate"] != sub_game["date"]:
                 continue
