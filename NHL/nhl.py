@@ -5937,10 +5937,10 @@ qualifier_map = {
     "Round" : {
         "sc" : "Stanley Cup",
         "cf" : "Conference Finals",
-        "cs" : "Conference Semifinals",
-        "cq" : "Conference Quaterfinals",
-        "qr" : "Qualifying",
-        "pr" : "Play-In",
+        "cs" : "Second Round",
+        "cq" : "First Round",
+        "qr" : "Qualifying Round",
+        "pr" : "Play-In Round",
         "rr" : "Round Robin"
     },
     "Time" : {
