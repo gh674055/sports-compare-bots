@@ -6832,7 +6832,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                             extra_stats.add(m.group(1))
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
                         
-                        last_match = re.finditer(r"\bshow(?: |-)?(only(?: |-)?)?(pitcher-record|record|slash|score|year|game-count|seasons-leading|season|date|per-game|game|play|run-support|run-support-record|exit-record|statcast|advanced-runner|advanced|best-season|worst-season|team|franchise|number|award|driven-in|mlb-link)s?\b", time_frame)
+                        last_match = re.finditer(r"\bshow(?: |-)?(only(?: |-)?)?(pitcher-record|record|slash|score|year|games?-count|seasons-leading|season|date|per-game|game|play|run-support|run-support-record|exit-record|statcast|advanced-runner|advanced|best-season|worst-season|team|franchise|number|award|driven-in|mlb-link)s?\b", time_frame)
                         for m in last_match:
                             extra_stats.add(m.group(2))
                             if m.group(2) == "play":
@@ -6851,7 +6851,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 player_type["da_type"] = "Pitcher"
                                 if "run-support" in m.group(1):
                                     extra_stats.add("score")
-                            elif m.group(2) == "game-count":
+                            elif m.group(2) == "game-count" or m.group(2) == "games-count":
                                 extra_stats.add("show-only-stat-g")
                                 extra_stats.add("show-only-stat-gs")
                                 extra_stats.add("show-only-table-standard")
@@ -11847,7 +11847,6 @@ def handle_name_threads(sub_name, parse_time_frames, index, player_type, remove_
                     subbb_player_data = {
                         "ids" : [subb_player_data["id"]],
                         "mlb_ids" : [subb_player_data["mlb_id"]],
-                        "quals" : [subb_player_data["quals"]],
                         "has_season_stats" : subb_player_data["has_season_stats"],
                         "stat_values" : {
                             "DateStart" : subb_player_data["DateStart"],
