@@ -1816,6 +1816,24 @@ headers = {
                 "game" : 2009
             }
         },
+        "OZFOW/60M" : {
+            "positive" : True,
+            "round" : 2,
+            "type" : "Advanced",
+            "valid_since" : {
+                "season" : 2009,
+                "game" : 2009
+            }
+        },
+        "OZFO/60M" : {
+            "positive" : True,
+            "round" : 2,
+            "type" : "Advanced",
+            "valid_since" : {
+                "season" : 2009,
+                "game" : 2009
+            }
+        },
         "OZFO%": {
             "positive" : True,
             "round" : "percent",
@@ -1847,6 +1865,26 @@ headers = {
             "positive" : True,
             "display" : False,
             "type" : "Advanced",
+            "valid_since" : {
+                "season" : 2009,
+                "game" : 2009
+            }
+        },
+        "NZFOW/60M" : {
+            "positive" : True,
+            "round" : 2,
+            "type" : "Advanced",
+            "display" : False,
+            "valid_since" : {
+                "season" : 2009,
+                "game" : 2009
+            }
+        },
+        "NZFO/60M" : {
+            "positive" : True,
+            "round" : 2,
+            "type" : "Advanced",
+            "display" : False,
             "valid_since" : {
                 "season" : 2009,
                 "game" : 2009
@@ -1889,53 +1927,6 @@ headers = {
                 "game" : 2009
             }
         },
-        "DZFO%": {
-            "positive" : True,
-            "round" : "percent",
-            "type" : "Advanced",
-            "valid_since" : {
-                "season" : 2009,
-                "game" : 2009
-            }
-        },
-        "OZFOW/60M" : {
-            "positive" : True,
-            "round" : 2,
-            "type" : "Advanced",
-            "valid_since" : {
-                "season" : 2009,
-                "game" : 2009
-            }
-        },
-        "OZFO/60M" : {
-            "positive" : True,
-            "round" : 2,
-            "type" : "Advanced",
-            "valid_since" : {
-                "season" : 2009,
-                "game" : 2009
-            }
-        },
-        "NZFOW/60M" : {
-            "positive" : True,
-            "round" : 2,
-            "type" : "Advanced",
-            "display" : False,
-            "valid_since" : {
-                "season" : 2009,
-                "game" : 2009
-            }
-        },
-        "NZFO/60M" : {
-            "positive" : True,
-            "round" : 2,
-            "type" : "Advanced",
-            "display" : False,
-            "valid_since" : {
-                "season" : 2009,
-                "game" : 2009
-            }
-        },
         "DZFOW/60M" : {
             "positive" : True,
             "round" : 2,
@@ -1948,6 +1939,15 @@ headers = {
         "DZFO/60M" : {
             "positive" : True,
             "round" : 2,
+            "type" : "Advanced",
+            "valid_since" : {
+                "season" : 2009,
+                "game" : 2009
+            }
+        },
+        "DZFO%": {
+            "positive" : True,
+            "round" : "percent",
             "type" : "Advanced",
             "valid_since" : {
                 "season" : 2009,
