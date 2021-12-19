@@ -7158,7 +7158,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 player_type["da_type"] = {
                                     "type" : "Skater"
                                 }
-                                extra_stats.add("Points On")
+                                extra_stats.add("scoring-stats")
                                 extra_stats.add("current-stats")
                             elif qualifier_str.startswith("assisted-by:"):
                                 qual_str = "assisted-by:"
@@ -7190,7 +7190,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 player_type["da_type"] = {
                                     "type" : "Skater"
                                 }
-                                extra_stats.add("Points On")
+                                extra_stats.add("scoring-stats")
                                 extra_stats.add("current-stats")
                             elif qualifier_str.startswith("primary-assisted-by:"):
                                 qual_str = "primary-assisted-by:"
@@ -7773,7 +7773,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 player_type["da_type"] = {
                                     "type" : "Skater"
                                 }
-                                extra_stats.add("Points On")
+                                extra_stats.add("scoring-stats")
                                 extra_stats.add("current-stats")
                             elif qualifier_str.startswith("assisted-by"):
                                 qual_str = "assisted-by:"
@@ -7805,7 +7805,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 player_type["da_type"] = {
                                     "type" : "Skater"
                                 }
-                                extra_stats.add("Points On")
+                                extra_stats.add("scoring-stats")
                                 extra_stats.add("current-stats")
                             elif qualifier_str.startswith("primary-assisted-by"):
                                 qual_str = "primary-assisted-by"
@@ -18801,7 +18801,7 @@ def determine_stat_value(player_game_info, all_events, qualifiers, og_row, playe
     if stat not in row:
         return -1
 
-    goal_stats = ["G", "EVG", "PPG", "SHG", "GWG", "ENG", "OTG", "P", "EVP", "PPP", "SHP", "GWP", "ENP", "OTP", "P1", "EVP1", "PPP1", "SHP1", "GWP1", "ENP1", "OTP1", "1stG", "S", "WristS", "WristG", "DeflectS", "DeflectG", "SlapS" "SlapG", "TipS", "TipG", "BackS", "BackG", "WrapS", "WrapG", "TSA", "G_5v5", "P_5v5", "S_5v5", "TSA_5v5", "HAT"]
+    goal_stats = ["G", "EVG", "PPG", "SHG", "GWG", "ENG", "OTG", "P", "EVP", "PPP", "SHP", "GWP", "ENP", "P1", "EVP1", "PPP1", "SHP1", "GWP1", "ENP1", "OTP1", "1stG", "S", "WristS", "WristG", "DeflectS", "DeflectG", "SlapS" "SlapG", "TipS", "TipG", "BackS", "BackG", "WrapS", "WrapG", "TSA", "G_5v5", "P_5v5", "S_5v5", "TSA_5v5", "HAT"]
     shot_stats = ["S", "WristS", "DeflectS", "SlapS", "TipS", "BackS", "WrapS", "TSA", "S_5v5", "TSA_5v5"]
     missed_shot_stats = ["PostBar", "TSA", "TSM", "TSA_5v5", "TSM_5v5"]
     blocked_shot_stats = ["TSA", "TSB", "TSA_5v5", "TSB_5v5"]
