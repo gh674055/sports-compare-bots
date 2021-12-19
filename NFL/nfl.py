@@ -15362,11 +15362,11 @@ def calculate_recursive_formula(over_header, stat, player_data, player_type, com
             break
         has_match = False
         for formula_match in formula_matches:
-            if formula_match.group() == stat.lower():
+            if formula_match.group() == header_stat.lower():
                 has_match = True
                 break
         if has_match:
-            calculate_recursive_formula(over_header, stat, player_data, player_type, comb_row, matching_rows)
+            calculate_recursive_formula(over_header, header_stat, player_data, player_type, comb_row, matching_rows)
     comb_row[over_header][stat] = get_constant_data.calculate_formula(stat, formula, comb_row, over_header, headers, player_data, player_type, matching_rows)
 
 def handle_date_rows(player_data, player_type, stat, the_over_stat, start_date, date_diff, all_rows):

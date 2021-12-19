@@ -21932,7 +21932,7 @@ def calculate_recursive_formula(stat, player_data, player_type, comb_row, matchi
             break
         has_match = False
         for formula_match in formula_matches:
-            if formula_match.group() == stat.lower():
+            if formula_match.group() == header_stat.lower():
                 has_match = True
                 break
         if has_match:
