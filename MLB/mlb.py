@@ -25889,7 +25889,7 @@ def handle_event_stats(qual, all_rows, games_to_skip, time_frame, player_type, p
     if qual in time_frame["qualifiers"]:
         for row_data in all_rows:
             for qual_obj in time_frame["qualifiers"][qual]:
-                if not is_invalid_stat(qual_obj["stat"], player_type, row_data, False)["all_invalid"]:
+                if is_invalid_stat(qual_obj["stat"], player_type, row_data, False)["all_invalid"]:
                     games_to_skip.add(row_data["GameLink"])
 
 def handle_mlb_game_stats_single_thread(all_rows, qualifiers, player_data, player_type, missing_games, extra_stats):

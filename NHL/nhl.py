@@ -17023,7 +17023,7 @@ def handle_event_stats(qual, all_rows, games_to_skip, time_frame, player_type, p
     if qual in time_frame["qualifiers"]:
         for row_data in all_rows:
             for qual_obj in time_frame["qualifiers"][qual]:
-                if not is_invalid_stat(qual_obj["stat"], player_type, row_data, False, player_data):
+                if is_invalid_stat(qual_obj["stat"], player_type, row_data, False, player_data):
                     games_to_skip.add(row_data["NHLGameLink"])
 
 def handle_nhl_game_stats_single_thread(player_data, all_rows, time_frame, player_link, player_type, missing_games, missing_toi, extra_stats):
