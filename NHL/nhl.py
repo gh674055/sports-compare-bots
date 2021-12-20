@@ -14717,11 +14717,11 @@ def handle_player_data(player_data, time_frame, player_type, player_page, valid_
     
     if not "hide-advanced" in extra_stats or ("Game Number" in time_frame["qualifiers"] or "Exact Official" in time_frame["qualifiers"] or "Exact Referee" in time_frame["qualifiers"] or "Exact Linesman" in time_frame["qualifiers"] or "Exact Team Head Coach" in time_frame["qualifiers"] or "Exact Opponent Head Coach" in time_frame["qualifiers"] or "Official" in time_frame["qualifiers"] or "Referee" in time_frame["qualifiers"] or "Linesman" in time_frame["qualifiers"] or "Team Head Coach" in time_frame["qualifiers"] or "Opponent Head Coach" in time_frame["qualifiers"] or "penalties" in extra_stats or "star" in extra_stats):
         if ("Event Stat" in time_frame["qualifiers"] or "Event Stat Reversed" in time_frame["qualifiers"] or "Event Stats" in time_frame["qualifiers"] or "Event Stats Reversed" in time_frame["qualifiers"] or "Starting Event Stat" in time_frame["qualifiers"] or "Starting Event Stat Reversed" in time_frame["qualifiers"] or "Starting Event Stats" in time_frame["qualifiers"] or "Starting Event Stats Reversed" in time_frame["qualifiers"]):
+            player_data["stat_values"]["is_indv_shift_data"] = True
             all_rows, missing_games, missing_toi = handle_nhl_game_stats_single_thread(player_data, all_rows, time_frame, player_link, player_type, missing_games, missing_toi, extra_stats)
-            player_data["stat_values"]["is_indv_shift_data"] = True
         elif "Game Number" in time_frame["qualifiers"] or "Exact Referee" in time_frame["qualifiers"] or "Exact Linesman" in time_frame["qualifiers"] or "Exact Team Head Coach" in time_frame["qualifiers"] or "Exact Opponent Head Coach" in time_frame["qualifiers"] or "Official" in time_frame["qualifiers"] or "Referee" in time_frame["qualifiers"] or "Linesman" in time_frame["qualifiers"] or "Team Head Coach" in time_frame["qualifiers"] or "Opponent Head Coach" in time_frame["qualifiers"] or "penalties" in extra_stats or "star" in extra_stats or "current-stats" in extra_stats:
-            all_rows, missing_games, missing_toi = handle_nhl_game_stats(player_data, all_rows, time_frame, player_link, player_type, missing_games, missing_toi, extra_stats)
             player_data["stat_values"]["is_indv_shift_data"] = True
+            all_rows, missing_games, missing_toi = handle_nhl_game_stats(player_data, all_rows, time_frame, player_link, player_type, missing_games, missing_toi, extra_stats)
 
     if time_frame["qualifiers"]:
         new_rows = []
@@ -17013,9 +17013,18 @@ def handle_nhl_game_stats(player_data, all_rows, time_frame, player_link, player
         for row_data in all_rows:
             if row_data["Year"] < 2010:
                 games_to_skip.add(row_data["NHLGameLink"])
+    for qual in ["Event Stat", "Event Stat Reversed", "Event Stats", "Event Stats Reversed", "Starting Event Stat", "Starting Event Stat Reversed", "Starting Event Stats", "Starting Event Stats Reversed", "Game Event Stat", "Game Event Stat Reversed", "Game Event Stats", "Game Event Stats Reversed", "Starting Game Event Stat", "Starting Game Event Stat Reversed", "Starting Game Event Stats", "Starting Game Event Stats Reversed"]:
+        handle_event_stats(qual, all_rows, games_to_skip, time_frame, player_type, player_data)
     
     all_rows = sorted(all_rows, key=lambda row: row["Date"])
     return get_nhl_game_schedule(player_data, all_rows, games_to_skip, player_link, player_type, time_frame, missing_games, missing_toi, extra_stats)
+
+def handle_event_stats(qual, all_rows, games_to_skip, time_frame, player_type, player_data):
+    if qual in time_frame["qualifiers"]:
+        for row_data in all_rows:
+            for qual_obj in time_frame["qualifiers"][qual]:
+                if not is_invalid_stat(qual_obj["stat"], player_type, row_data, False, player_data):
+                    games_to_skip.add(row_data["NHLGameLink"])
 
 def handle_nhl_game_stats_single_thread(player_data, all_rows, time_frame, player_link, player_type, missing_games, missing_toi, extra_stats):
     if not all_rows:
@@ -17259,6 +17268,8 @@ def handle_nhl_game_stats_single_thread(player_data, all_rows, time_frame, playe
         for row_data in all_rows:
             if row_data["Year"] < 2010:
                 games_to_skip.add(row_data["NHLGameLink"])
+    for qual in ["Event Stat", "Event Stat Reversed", "Event Stats", "Event Stats Reversed", "Starting Event Stat", "Starting Event Stat Reversed", "Starting Event Stats", "Starting Event Stats Reversed", "Game Event Stat", "Game Event Stat Reversed", "Game Event Stats", "Game Event Stats Reversed", "Starting Game Event Stat", "Starting Game Event Stat Reversed", "Starting Game Event Stats", "Starting Game Event Stats Reversed"]:
+        handle_event_stats(qual, all_rows, games_to_skip, time_frame, player_type, player_data)
 
     all_rows = sorted(all_rows, key=lambda row: row["Date"])
     return get_nhl_game_schedule_single_thread(player_data, all_rows, games_to_skip, player_link, player_type, time_frame, missing_games, missing_toi, extra_stats)

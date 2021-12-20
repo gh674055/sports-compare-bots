@@ -25880,8 +25880,17 @@ def handle_mlb_game_stats(all_rows, qualifiers, player_data, player_type, missin
                 
             if not has_match:
                 games_to_skip.add(row_data["GameLink"])
+    for qual in ["Event Stat", "Event Stat Reversed", "Event Stats", "Event Stats Reversed", "Starting Event Stat", "Starting Event Stat Reversed", "Starting Event Stats", "Starting Event Stats Reversed", "Game Event Stat", "Game Event Stat Reversed", "Game Event Stats", "Game Event Stats Reversed", "Starting Game Event Stat", "Starting Game Event Stat Reversed", "Starting Game Event Stats", "Starting Game Event Stats Reversed"]:
+        handle_event_stats(qual, all_rows, games_to_skip, time_frame, player_type, player_data)
 
     return get_mlb_game_stats(all_rows, qualifiers, games_to_skip, player_data, missing_games, player_type, extra_stats, True)
+
+def handle_event_stats(qual, all_rows, games_to_skip, time_frame, player_type, player_data):
+    if qual in time_frame["qualifiers"]:
+        for row_data in all_rows:
+            for qual_obj in time_frame["qualifiers"][qual]:
+                if not is_invalid_stat(qual_obj["stat"], player_type, row_data, False)["all_invalid"]:
+                    games_to_skip.add(row_data["GameLink"])
 
 def handle_mlb_game_stats_single_thread(all_rows, qualifiers, player_data, player_type, missing_games, extra_stats):
     if not all_rows:
@@ -26209,6 +26218,8 @@ def handle_mlb_game_stats_single_thread(all_rows, qualifiers, player_data, playe
                 
             if not has_match:
                 games_to_skip.add(row_data["GameLink"])
+    for qual in ["Event Stat", "Event Stat Reversed", "Event Stats", "Event Stats Reversed", "Starting Event Stat", "Starting Event Stat Reversed", "Starting Event Stats", "Starting Event Stats Reversed", "Game Event Stat", "Game Event Stat Reversed", "Game Event Stats", "Game Event Stats Reversed", "Starting Game Event Stat", "Starting Game Event Stat Reversed", "Starting Game Event Stats", "Starting Game Event Stats Reversed"]:
+        handle_event_stats(qual, all_rows, games_to_skip, time_frame, player_type, player_data)
 
     return get_mlb_game_stats_single_thread(all_rows, qualifiers, games_to_skip, player_data, missing_games, player_type, extra_stats)
 
