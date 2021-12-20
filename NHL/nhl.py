@@ -10153,6 +10153,8 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                     extra_stats.add("show-stat-shft")
                                 elif stat == "shot":
                                     stat = "S"
+                                elif stat == "total-shot":
+                                    stat = "TSA"
                                 elif stat == "goal":
                                     stat = "G"
                                 elif stat == "assist":
@@ -10473,7 +10475,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
 
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
                     
-                        last_matches = re.finditer(r"\b(no(?:t|n)?(?: |-))?(first|1st|last|this|past)?(?: ?(\S*) (starting-)?(game-)?(minute|second|min|toi|shots?-faced|goals?-allowed|save|shot|period|shift|goal|assist|point)s?)\b", time_frame)
+                        last_matches = re.finditer(r"\b(no(?:t|n)?(?: |-))?(first|1st|last|this|past)?(?: ?(\S*) (starting-)?(game-)?(minute|second|min|toi|shots?-faced|goals?-allowed|save|total-shot|shot|period|shift|goal|assist|point)s?)\b", time_frame)
                         for last_match in last_matches:
                             compare_type = last_match.group(2)
                             time_unit = last_match.group(3)
@@ -10524,6 +10526,8 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 extra_stats.add("show-stat-shft")
                             elif qual_type == "shot":
                                 stat = "S"
+                            elif qual_type == "total-shot":
+                                stat = "TSA"
                             elif qual_type == "goal":
                                 stat = "G"
                             elif qual_type == "assist":
