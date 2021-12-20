@@ -10973,7 +10973,7 @@ def perform_post_qualifier(player_data, player_type, ind_player_type, row, quali
         for qual_object in qualifiers["Formula"]:
             formula = qual_object["values"][0]
             formula_matches = list(re.finditer(r"(?:(?:[A-Za-z_:~])\d?|\d?(?:[A-Za-z_:~]))+", formula))
-            for header in headers[player_type["da_type"]].keys():
+            for header in list(headers[player_type["da_type"]].keys()) + ["Shared"]:
                 header_match = r"(?:" + header.lower() + r")"
                 if header == "Era Adjusted Passing":
                     header_match = r"(?:era adjusted passing|total)"
@@ -13916,7 +13916,7 @@ def find_sub_stat_match(sub_qual_objects, player_type, stats):
 
 def find_sub_sub_stat_match(over_stat, stat, player_type, stats):
     if not over_stat:
-        for sub_over_stat in headers[player_type["da_type"]]:
+        for sub_over_stat in list(headers[player_type["da_type"]].keys()) + ["Shared"]:
             for sub_stat in get_constant_data.stat_groups[sub_over_stat]:
                 if sub_stat.lower() == stat:
                     if not sub_over_stat in stats:
@@ -13929,7 +13929,7 @@ def find_sub_sub_stat_match(over_stat, stat, player_type, stats):
         elif over_stat == "scrimmage":
             over_stat = "scrimmage/all purpose"
 
-        for sub_over_stat in headers[player_type["da_type"]]:
+        for sub_over_stat in list(headers[player_type["da_type"]].keys()) + ["Shared"]:
             if sub_over_stat.lower() == over_stat:
                 for sub_stat in get_constant_data.stat_groups[sub_over_stat]:
                     if sub_stat.lower() == stat:
@@ -13988,7 +13988,7 @@ def handle_season_stats(all_rows, player_data, player_type, qualifiers):
             stats = set()
             for qual_object in qualifiers["Season Formula"]:
                 formula_matches = list(re.finditer(r"(?:(?:[A-Za-z_:~])\d?|\d?(?:[A-Za-z_:~]))+", formula))
-                for header in headers[player_type["da_type"]].keys():
+                for header in list(headers[player_type["da_type"]].keys()) + ["Shared"]:
                     header_match = r"(?:" + header.lower() + r")"
                     if header == "Era Adjusted Passing":
                         header_match = r"(?:era adjusted passing|total)"
