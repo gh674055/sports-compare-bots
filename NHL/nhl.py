@@ -19541,30 +19541,30 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
             
             if is_player_on_ice(game_data["shift_data"], team_on_ice, opp_on_ice, scoring_play["about"]["period"], period_time, player_id, True):
                 if scoring_play["team"]["id"] == game_data["team_id"]:
-                    game_data["all_team_goals"].append(shared_data)
+                    game_data["all_team_goals"].append({**shared_data, **{}})
                     if row_data["Year"] >= 2007:
-                        game_data["all_team_shots"].append(shared_data)
-                        game_data["all_team_shots_og"].append(shared_data)
-                        game_data["all_team_unblocked_shots"].append(shared_data)
+                        game_data["all_team_shots"].append({**shared_data, **{}})
+                        game_data["all_team_shots_og"].append({**shared_data, **{}})
+                        game_data["all_team_unblocked_shots"].append({**shared_data, **{}})
                 else:
-                    game_data["all_opp_goals"].append(shared_data)
+                    game_data["all_opp_goals"].append({**shared_data, **{}})
                     if row_data["Year"] >= 2007:
-                        game_data["all_opp_shots"].append(shared_data)
-                        game_data["all_opp_shots_og"].append(shared_data)
-                        game_data["all_opp_unblocked_shots"].append(shared_data)
+                        game_data["all_opp_shots"].append({**shared_data, **{}})
+                        game_data["all_opp_shots_og"].append({**shared_data, **{}})
+                        game_data["all_opp_unblocked_shots"].append({**shared_data, **{}})
             else:
                 if scoring_play["team"]["id"] == game_data["team_id"]:
-                    game_data["of_all_team_goals"].append(shared_data)
+                    game_data["of_all_team_goals"].append({**shared_data, **{}})
                     if row_data["Year"] >= 2007:
-                        game_data["of_all_team_shots"].append(shared_data)
-                        game_data["of_all_team_shots_og"].append(shared_data)
-                        game_data["of_all_team_unblocked_shots"].append(shared_data)
+                        game_data["of_all_team_shots"].append({**shared_data, **{}})
+                        game_data["of_all_team_shots_og"].append({**shared_data, **{}})
+                        game_data["of_all_team_unblocked_shots"].append({**shared_data, **{}})
                 else:
-                    game_data["of_all_opp_goals"].append(shared_data)
+                    game_data["of_all_opp_goals"].append({**shared_data, **{}})
                     if row_data["Year"] >= 2007:
-                        game_data["of_all_opp_shots"].append(shared_data)
-                        game_data["of_all_opp_shots_og"].append(shared_data)
-                        game_data["of_all_opp_unblocked_shots"].append(shared_data)
+                        game_data["of_all_opp_shots"].append({**shared_data, **{}})
+                        game_data["of_all_opp_shots_og"].append({**shared_data, **{}})
+                        game_data["of_all_opp_unblocked_shots"].append({**shared_data, **{}})
 
             next_shot_penalty_shot = False
             first_goal = False
@@ -19602,22 +19602,22 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
 
             if is_player_on_ice(game_data["shift_data"], team_on_ice, opp_on_ice, scoring_play["about"]["period"], period_time, player_id, True):
                 if scoring_play["team"]["id"] == game_data["team_id"]:
-                    game_data["all_team_shots"].append(shared_data)
-                    game_data["all_team_shots_og"].append(shared_data)
-                    game_data["all_team_unblocked_shots"].append(shared_data)
+                    game_data["all_team_shots"].append({**shared_data, **{}})
+                    game_data["all_team_shots_og"].append({**shared_data, **{}})
+                    game_data["all_team_unblocked_shots"].append({**shared_data, **{}})
                 else:
-                    game_data["all_opp_shots"].append(shared_data)
-                    game_data["all_opp_shots_og"].append(shared_data)
-                    game_data["all_opp_unblocked_shots"].append(shared_data)
+                    game_data["all_opp_shots"].append({**shared_data, **{}})
+                    game_data["all_opp_shots_og"].append({**shared_data, **{}})
+                    game_data["all_opp_unblocked_shots"].append({**shared_data, **{}})
             else:
                 if scoring_play["team"]["id"] == game_data["team_id"]:
-                    game_data["of_all_team_shots"].append(shared_data)
-                    game_data["of_all_team_shots_og"].append(shared_data)
-                    game_data["of_all_team_unblocked_shots"].append(shared_data)
+                    game_data["of_all_team_shots"].append({**shared_data, **{}})
+                    game_data["of_all_team_shots_og"].append({**shared_data, **{}})
+                    game_data["of_all_team_unblocked_shots"].append({**shared_data, **{}})
                 else:
-                    game_data["of_all_opp_shots"].append(shared_data)
-                    game_data["of_all_opp_shots_og"].append(shared_data)
-                    game_data["of_all_opp_unblocked_shots"].append(shared_data)
+                    game_data["of_all_opp_shots"].append({**shared_data, **{}})
+                    game_data["of_all_opp_shots_og"].append({**shared_data, **{}})
+                    game_data["of_all_opp_unblocked_shots"].append({**shared_data, **{}})
 
             next_shot_penalty_shot = False
         elif scoring_play["result"]["event"] == "Missed Shot":
@@ -19652,18 +19652,18 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
 
             if is_player_on_ice(game_data["shift_data"], team_on_ice, opp_on_ice, scoring_play["about"]["period"], period_time, player_id, True):
                 if scoring_play["team"]["id"] == game_data["team_id"]:
-                    game_data["all_team_shots"].append(shared_data)
-                    game_data["all_team_unblocked_shots"].append(shared_data)
+                    game_data["all_team_shots"].append({**shared_data, **{}})
+                    game_data["all_team_unblocked_shots"].append({**shared_data, **{}})
                 else:
-                    game_data["all_opp_shots"].append(shared_data)
-                    game_data["all_opp_unblocked_shots"].append(shared_data)
+                    game_data["all_opp_shots"].append({**shared_data, **{}})
+                    game_data["all_opp_unblocked_shots"].append({**shared_data, **{}})
             else:
                 if scoring_play["team"]["id"] == game_data["team_id"]:
-                    game_data["of_all_team_shots"].append(shared_data)
-                    game_data["of_all_team_unblocked_shots"].append(shared_data)
+                    game_data["of_all_team_shots"].append({**shared_data, **{}})
+                    game_data["of_all_team_unblocked_shots"].append({**shared_data, **{}})
                 else:
-                    game_data["of_all_opp_shots"].append(shared_data)
-                    game_data["of_all_opp_unblocked_shots"].append(shared_data)
+                    game_data["of_all_opp_shots"].append({**shared_data, **{}})
+                    game_data["of_all_opp_unblocked_shots"].append({**shared_data, **{}})
 
             next_shot_penalty_shot = False
         elif scoring_play["result"]["event"] == "Penalty":
@@ -19757,18 +19757,18 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                     "block_against" : block_against
                 }})
             elif player_shot:
-                game_data["blocked_shot"].append(shared_data)
+                game_data["blocked_shot"].append({**shared_data, **{}})
 
             if is_player_on_ice(game_data["shift_data"], team_on_ice, opp_on_ice, scoring_play["about"]["period"], period_time, player_id, True):
                 if scoring_play["team"]["id"] != game_data["team_id"]:
-                    game_data["all_team_shots"].append(shared_data)
+                    game_data["all_team_shots"].append({**shared_data, **{}})
                 else:
-                    game_data["all_opp_shots"].append(shared_data)
+                    game_data["all_opp_shots"].append({**shared_data, **{}})
             else:
                 if scoring_play["team"]["id"] != game_data["team_id"]:
-                    game_data["of_all_team_shots"].append(shared_data)
+                    game_data["of_all_team_shots"].append({**shared_data, **{}})
                 else:
-                    game_data["of_all_opp_shots"].append(shared_data)
+                    game_data["of_all_opp_shots"].append({**shared_data, **{}})
             next_shot_penalty_shot = False
         elif scoring_play["result"]["event"] == "Faceoff":
             player_faceoff_winner = False
