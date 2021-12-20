@@ -17022,9 +17022,21 @@ def handle_nhl_game_stats(player_data, all_rows, time_frame, player_link, player
 def handle_event_stats(qual, all_rows, games_to_skip, time_frame, player_type, player_data):
     if qual in time_frame["qualifiers"]:
         for row_data in all_rows:
+            row_data["DateStart"] = [row_data["Date"]]
+            row_data["YearStart"] = [row_data["Year"]]
+            row_data["YearEnd"] = [row_data["Year"]]
+            row_data["DateEnd"] = [row_data["Date"]]
+            prev_is_playofs = row_data["is_playoffs"]
+            if row_data["is_playoffs"]:
+                row_data["is_playoffs"] = "Only"
+            else:
+                row_data["is_playoffs"] = None
+            
             for qual_obj in time_frame["qualifiers"][qual]:
                 if is_invalid_stat(qual_obj["stat"], player_type, row_data, False, player_data):
                     games_to_skip.add(row_data["NHLGameLink"])
+            
+            row_data["is_playoffs"] = prev_is_playofs
 
 def handle_nhl_game_stats_single_thread(player_data, all_rows, time_frame, player_link, player_type, missing_games, missing_toi, extra_stats):
     if not all_rows:
