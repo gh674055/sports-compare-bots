@@ -10161,7 +10161,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                     stat = "A"
                                 elif stat == "point":
                                     stat = "P"
-                                elif stat == "shot-faced" or stat == "shots-faced":
+                                elif stat == "shot-faced" or stat == "shots-faced" or stat == "shot-against" or stat == "shots-against":
                                     stat = "SA"
                                 elif stat == "goal-allowed" or stat == "goals-allowed":
                                     stat = "GA"
@@ -10475,7 +10475,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
 
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
                     
-                        last_matches = re.finditer(r"\b(no(?:t|n)?(?: |-))?(first|1st|last|this|past)?(?: ?(\S*) (starting-)?(game-)?(minute|second|min|toi|shots?-faced|goals?-allowed|save|total-shot|shot|period|shift|goal|assist|point)s?)\b", time_frame)
+                        last_matches = re.finditer(r"\b(no(?:t|n)?(?: |-))?(first|1st|last|this|past)?(?: ?(\S*) (starting-)?(game-)?(minute|second|min|toi|shots?-faced|goals|shots?-against|?-allowed|save|total-shot|shot|period|shift|goal|assist|point)s?)\b", time_frame)
                         for last_match in last_matches:
                             compare_type = last_match.group(2)
                             time_unit = last_match.group(3)
@@ -10534,7 +10534,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 stat = "A"
                             elif qual_type == "point":
                                 stat = "P"
-                            elif qual_type == "shot-faced" or qual_type == "shots-faced":
+                            elif qual_type == "shot-faced" or qual_type == "shots-faced" or qual_type == "shot-against" or qual_type == "shots-against":
                                 stat = "SA"
                             elif qual_type == "goal-allowed" or qual_type == "goals-allowed":
                                 stat = "GA"
