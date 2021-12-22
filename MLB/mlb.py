@@ -22537,6 +22537,9 @@ def get_player_position(player_page):
         main_pos = player_info.parent.text.replace("Positions:", "").strip().lower()
     else:
         main_pos = player_info.parent.text.replace("Position:", "").strip().lower()
+
+    main_pos = re.split(r",\s+|(\s+and\s+)", main_pos)[0]
+
     if main_pos.startswith("first baseman"):
         return "1B"
     elif main_pos.startswith("second baseman"):
@@ -22553,6 +22556,14 @@ def get_player_position(player_page):
         return "RF"
     elif main_pos.startswith("catcher"):
         return "C"
+    elif main_pos.startswith("outfielder"):
+        return "OF"
+    elif main_pos.startswith("designated hitter"):
+        return "DH"
+    elif main_pos.startswith("pinch hitter"):
+        return "PH"
+    elif main_pos.startswith("pinch runner"):
+        return "PR"
     elif "pitcher" in main_pos:
         throws_pos = player_page.find("div", {"itemtype" : "https://schema.org/Person"}).find("strong", text="Throws: ")
         if throws_pos:
@@ -22567,14 +22578,6 @@ def get_player_position(player_page):
             else:
                 return "P"
         return "P"
-    elif main_pos.startswith("outfielder"):
-        return "OF"
-    elif main_pos.startswith("designated hitter"):
-        return "DH"
-    elif main_pos.startswith("pinch hitter"):
-        return "PH"
-    elif main_pos.startswith("pinch runner"):
-        return "PR"
     else:
         return "UNK"
     return None
