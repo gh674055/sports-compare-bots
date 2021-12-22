@@ -19428,7 +19428,6 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
             
             if rink_side == "right":
                 x_coord *= -1
-            else:
                 y_coord *= -1
 
         event_time = None
@@ -24452,9 +24451,9 @@ def perform_side_qual(event, qualifiers, is_left):
         return False
         
     if is_left:
-        has_match = event["y_coord"] < 0
-    else:
         has_match = event["y_coord"] > 0
+    else:
+        has_match = event["y_coord"] < 0
 
     for qual_object in qualifiers:
         if qual_object["negate"]:
