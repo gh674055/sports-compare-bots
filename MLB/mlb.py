@@ -22538,7 +22538,7 @@ def get_player_position(player_page):
     else:
         main_pos = player_info.parent.text.replace("Position:", "").strip().lower()
 
-    main_pos = re.split(r",\s+|(\s+and\s+)", main_pos)[0]
+    main_pos = re.split(r",\s+|\s+and\s+", main_pos)[0]
 
     if main_pos.startswith("first baseman"):
         return "1B"
@@ -22604,21 +22604,6 @@ def get_player_jaws_position(player_page):
                         player_pos_link = next_row.find("a")
                         if player_pos_link:
                             return re.split(r"\_|\.", player_pos_link["href"])[1].upper()
-
-def get_ind_player_type(player_page):
-    player_info = player_page.find("div", {"itemtype" : "https://schema.org/Person"}).find("strong", text="Position:")
-    if not player_info:
-        player_info = player_page.find("div", {"itemtype" : "https://schema.org/Person"}).find("strong", text="Positions:")
-        if not player_info:
-            return []
-        player_type_el = player_info.parent.text.replace("Positions:", "").strip()
-    else:
-        player_type_el = player_info.parent.text.replace("Position:", "").strip()
-    player_type_el = re.split(r",|and", player_type_el)
-    player_posistions = []
-    for player_position in player_type_el:
-        player_posistions.append(player_position.replace(",", "").strip().lower())
-    return player_posistions
 
 def get_player_name(player_page):
     player_info = player_page.find("div", {"itemtype" : "https://schema.org/Person"})
