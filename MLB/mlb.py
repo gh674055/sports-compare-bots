@@ -22534,11 +22534,11 @@ def get_player_position(player_page):
         player_info = player_page.find("div", {"itemtype" : "https://schema.org/Person"}).find("strong", text="Positions:")
         if not player_info:
             return "UNK"
-        main_pos = player_info.parent.text.replace("Positions:", "").strip().split(" ")
+        main_pos = player_info.parent.text.replace("Positions:", "").strip().lower()
     else:
-        main_pos = player_info.parent.text.replace("Position:", "").strip().split(" ")
+        main_pos = player_info.parent.text.replace("Position:", "").strip().lower()
 
-    main_pos = main_pos[0].replace(",", "").strip().lower()
+    main_pos = re.split(r",\s+|(\s+and\s+)", main_pos)[0]
 
     if main_pos.startswith("first baseman"):
         return "1B"
