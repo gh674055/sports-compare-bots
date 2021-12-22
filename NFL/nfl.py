@@ -6000,7 +6000,7 @@ def handle_the_same_games_quals(sub_name, qual_str, subbb_frames, time_frame, pl
                         "new_qual_type" : new_qual_type
                     }
 
-def url_request(request, timeout=10):
+def url_request(request, timeout=30):
     failed_counter = 0
     while(True):
         try:
@@ -6031,7 +6031,7 @@ def url_request(request, timeout=10):
             time.sleep(time_to_wait)
         logger.info("#" + str(threading.get_ident()) + "#   " + "0")
 
-def url_request_lxml(request, timeout=10):
+def url_request_lxml(request, timeout=30):
     failed_counter = 0
     while(True):
         try:
@@ -6053,7 +6053,7 @@ def url_request_lxml(request, timeout=10):
             time.sleep(time_to_wait)
         logger.info("#" + str(threading.get_ident()) + "#   " + "0")
 
-def url_request_bytes(request, timeout=10):
+def url_request_bytes(request, timeout=30):
     failed_counter = 0
     while(True):
         try:
@@ -6072,7 +6072,7 @@ def url_request_bytes(request, timeout=10):
             time.sleep(time_to_wait)
         logger.info("#" + str(threading.get_ident()) + "#   " + "0")
 
-def url_request_json(request, timeout=10):
+def url_request_json(request, timeout=30):
     failed_counter = 0
     while(True):
         try:

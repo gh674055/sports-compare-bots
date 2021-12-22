@@ -579,7 +579,7 @@ def get_park_factors(single_year, park_factors, log=True):
 
     return park_factors
 
-def url_request(request, log, timeout=10):
+def url_request(request, log, timeout=30):
     failed_counter = 0
     while(True):
         try:

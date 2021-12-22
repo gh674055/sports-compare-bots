@@ -22426,7 +22426,7 @@ def fill_row(row, player_data, player_type, lower=True, stats=None):
     else:
         return row
 
-def url_request(request, timeout=10):
+def url_request(request, timeout=30):
     failed_counter = 0
     while(True):
         try:
@@ -22457,7 +22457,7 @@ def url_request(request, timeout=10):
             time.sleep(time_to_wait)
         logger.info("#" + str(threading.get_ident()) + "#   " + "0")
 
-def url_request_lxml(request, timeout=10):
+def url_request_lxml(request, timeout=30):
     failed_counter = 0
     while(True):
         try:
@@ -22479,7 +22479,7 @@ def url_request_lxml(request, timeout=10):
             time.sleep(time_to_wait)
         logger.info("#" + str(threading.get_ident()) + "#   " + "0")
 
-def url_request_bytes(request, timeout=10):
+def url_request_bytes(request, timeout=30):
     failed_counter = 0
     while(True):
         try:

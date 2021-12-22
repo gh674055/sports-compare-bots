@@ -542,7 +542,7 @@ def calculate_year_games_by_team(year, for_playoffs):
 
     return teams
 
-def url_request(request, timeout=10):
+def url_request(request, timeout=30):
     failed_counter = 0
     while(True):
         try:

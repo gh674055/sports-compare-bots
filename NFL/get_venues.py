@@ -163,7 +163,7 @@ def geolocate(geolocator, location):
     failed_counter = 0
     while(True):
         try:
-            return geolocator.geocode(location, timeout=10)
+            return geolocator.geocode(location, timeout=30)
         except Exception:
             failed_counter += 1
             if failed_counter > max_request_retries:

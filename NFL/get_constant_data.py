@@ -5688,7 +5688,7 @@ def calculate_current_games_by_team():
                 teams[team] = games
     return teams
 
-def url_request(request, timeout=10):
+def url_request(request, timeout=30):
     failed_counter = 0
     while(True):
         try:
