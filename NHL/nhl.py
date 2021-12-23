@@ -17606,6 +17606,12 @@ def get_nhl_game_schedule(player_data, all_rows, games_to_skip, player_link, pla
 
     if not count_info["total_count"]:
         return new_rows, missing_games, missing_toi
+    
+    # stat_data = {
+    #     "primary_assist" : {},
+    #     "all_assist" : {},
+    #     "players" : {}
+    # }
 
     with ThreadPoolExecutor(max_workers=5) as sub_executor:
         for index, row_data in enumerate(all_rows):
@@ -17618,6 +17624,17 @@ def get_nhl_game_schedule(player_data, all_rows, games_to_skip, player_link, pla
                 
     if count_info["exception"]:
         raise count_info["exception"]
+
+    # primary_assisters = [k for k, v in sorted(stat_data["primary_assist"].items(), key=lambda item: item[1], reverse=True)][:10]
+    # secondary_assisters = [k for k, v in sorted(stat_data["all_assist"].items(), key=lambda item: item[1], reverse=True)][:10]
+
+    # print("Player | Assists")
+    # for secondary in secondary_assisters:
+    #     print(stat_data["players"][secondary] + " | " + str(stat_data["all_assist"][secondary]))
+    # print("----------------------------")
+    # print("Player | Assists")
+    # for primary in primary_assisters:
+    #     print(stat_data["players"][primary] + " | " + str(stat_data["primary_assist"][primary]))
 
     return sorted(new_rows, key=lambda row: row["Date"]), missing_games, missing_toi
 
@@ -19531,6 +19548,19 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                     "oppSide" : None if (not goalie or goalie not in game_data["player_side_map"]) else game_data["player_side_map"][goalie],
                     "shotType" : scoring_play["result"]["secondaryType"] if "secondaryType" in scoring_play["result"] else None
                 }})
+                # if len(assists) > 0:
+                #     primary_assist = assists[0]
+                #     if primary_assist not in stat_data["primary_assist"]:
+                #         stat_data["primary_assist"][primary_assist] = 0
+                #     stat_data["primary_assist"][primary_assist] += 1
+                #     if primary_assist not in stat_data["all_assist"]:
+                #         stat_data["all_assist"][primary_assist] = 0
+                #     stat_data["all_assist"][primary_assist] += 1
+                #     if len(assists) > 1:
+                #         secondary_assist = assists[1]
+                #         if secondary_assist not in stat_data["all_assist"]:
+                #             stat_data["all_assist"][secondary_assist] = 0
+                #         stat_data["all_assist"][secondary_assist] += 1
             elif player_assisted:
                 game_data["assist"].append({**shared_data , **{
                     "scorer" : scorer,
@@ -20013,6 +20043,7 @@ def setup_game_data(player_data, row_data, player_id, player_type, time_frame):
             game_data["team_skaters"].add(player["person"]["id"])
         
         game_data["team_players"].add(player["person"]["id"])
+        # stat_data["players"][player["person"]["id"]] = player["person"]["fullName"]
 
         if "shootsCatches" in player["person"] and player["person"]["shootsCatches"]:
             game_data["player_side_map"][player["person"]["id"]] = player["person"]["shootsCatches"]
@@ -20032,6 +20063,7 @@ def setup_game_data(player_data, row_data, player_id, player_type, time_frame):
             game_data["opp_skaters"].add(player["person"]["id"])
         
         game_data["opp_players"].add(player["person"]["id"])
+        # stat_data["players"][player["person"]["id"]] = player["person"]["fullName"]
 
         if "shootsCatches" in player["person"] and player["person"]["shootsCatches"]:
             game_data["player_side_map"][player["person"]["id"]] = player["person"]["shootsCatches"]
