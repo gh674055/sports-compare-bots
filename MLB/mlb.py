@@ -201,10 +201,6 @@ headers = {
             "positive" : True,
             "display" : False
         },
-        "DaysOnEarth" : {
-            "positive" : True,
-            "display" : False
-        },
         "Result" : {
             "positive" : True,
             "display" : False
@@ -284,6 +280,14 @@ headers = {
             "positive" : True,
             "display-value" : "G",
             "type" : "Defense/Value (Baseball Reference)"
+        },
+        "DaysOnEarth" : {
+            "positive" : True,
+            "display" : False
+        },
+        "DaysSpan" : {
+            "positive" : True,
+            "display" : False
         },
         "TmW" :{
             "positive" : True,
@@ -2063,10 +2067,6 @@ headers = {
             "positive" : True,
             "display" : False
         },
-        "DaysOnEarth" : {
-            "positive" : True,
-            "display" : False
-        },
         "Result" : {
             "positive" : True,
             "display" : False
@@ -2140,6 +2140,14 @@ headers = {
         },
         "GS" : {
             "positive" : True
+        },
+        "DaysOnEarth" : {
+            "positive" : True,
+            "display" : False
+        },
+        "DaysSpan" : {
+            "positive" : True,
+            "display" : False
         },
         "TmW" :{
             "positive" : True,
@@ -4251,6 +4259,7 @@ decimal_stats = [
 formulas = {
     "Batter" : {
         "DaysOnEarth" : "Special",
+        "DaysSpan" : "Special",
         "TmW" : "Special",
         "TmL" : "Special",
         "TmT" : "Special",
@@ -4372,6 +4381,7 @@ formulas = {
         "WS%" : "WS / UniqueSeasons"
     }, "Pitcher" : {
         "DaysOnEarth" : "Special",
+        "DaysSpan" : "Special",
         "TmW" : "Special",
         "TmL" : "Special",
         "TmT" : "Special",
@@ -38745,6 +38755,13 @@ def calculate_formula(stat, player_data, player_type, formula, data, all_rows, s
                             value += (death_day - birthday).days
                         else:
                             value += (datetime.datetime.now().date() - birthday).days
+            return value
+        elif stat == "DaysSpan":
+            value = 0
+            if all_rows:
+                first_date = min(row["Date"] for row in all_rows)
+                last_date = max(row["Date"] for row in all_rows)
+                value = (last_date - first_date).days
             return value
         elif stat == "TmW":
             return calculate_team_win_losses(data, all_rows, "W")

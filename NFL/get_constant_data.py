@@ -3271,10 +3271,6 @@ stat_groups = {
             "positive" : True,
             "display" : False
         },
-        "DaysOnEarth" : {
-            "positive" : True,
-            "display" : False
-        },
         "G" : {
             "positive" : True
         },
@@ -3302,6 +3298,14 @@ stat_groups = {
                 "inconsistent" : 1980,
                 "inconsistent-game" : 1999
             }
+        },
+        "DaysOnEarth" : {
+            "positive" : True,
+            "display" : False
+        },
+        "DaysSpan" : {
+            "positive" : True,
+            "display" : False
         },
         "TmW" :{
             "positive" : True,
@@ -4969,6 +4973,7 @@ formulas = {
     },
     "Shared" : {
         "DaysOnEarth" : "Special",
+        "DaysSpan" : "Special",
         "TmW" : "Special",
         "TmL" : "Special",
         "TmT" : "Special",
@@ -5736,6 +5741,13 @@ def calculate_formula(stat, formula, data, header, headers, player_data, player_
                             value += (death_day - birthday).days
                         else:
                             value += (datetime.datetime.now().date() - birthday).days
+            return value
+        elif stat == "DaysSpan":
+            value = 0
+            if all_rows:
+                first_date = min(row["Shared"]["Date"] for row in all_rows)
+                last_date = max(row["Shared"]["Date"] for row in all_rows)
+                value = (last_date - first_date).days
             return value
         elif stat == "FG%:0-19":
             if data[header]["FGA:0-19"]:

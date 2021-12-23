@@ -274,12 +274,16 @@ headers = {
             "positive" : True,
             "display" : False
         },
+        "GP": {
+            "positive" : True
+        },
         "DaysOnEarth" : {
             "positive" : True,
             "display" : False
         },
-        "GP": {
-            "positive" : True
+        "DaysSpan" : {
+            "positive" : True,
+            "display" : False
         },
         "Per": {
             "positive" : True,
@@ -4372,12 +4376,16 @@ headers = {
             "positive" : True,
             "display" : False
         },
+        "GP": {
+            "positive" : True
+        },
         "DaysOnEarth" : {
             "positive" : True,
             "display" : False
         },
-        "GP": {
-            "positive" : True
+        "DaysSpan" : {
+            "positive" : True,
+            "display" : False
         },
         "Per": {
             "positive" : True,
@@ -5519,6 +5527,7 @@ headers = {
 formulas = {
     "Skater" : {
         "DaysOnEarth" : "Special",
+        "DaysSpan" : "Special",
         "FirstStar%" : "FirstStar / GP",
         "SecondStar%" : "SecondStar / GP",
         "ThirdStar%" : "ThirdStar / GP",
@@ -5827,6 +5836,7 @@ formulas = {
     },
     "Goalie" : {
         "DaysOnEarth" : "Special",
+        "DaysSpan" : "Special",
         "FirstStar%" : "FirstStar / GP",
         "SecondStar%" : "SecondStar / GP",
         "ThirdStar%" : "ThirdStar / GP",
@@ -32800,6 +32810,13 @@ def calculate_formula(stat, player_type, formula, data, all_rows, player_data, s
                             value += (death_day - birthday).days
                         else:
                             value += (datetime.datetime.now().date() - birthday).days
+            return value
+        elif stat == "DaysSpan":
+            value = 0
+            if all_rows:
+                first_date = min(row["Date"] for row in all_rows)
+                last_date = max(row["Date"] for row in all_rows)
+                value = (last_date - first_date).days
             return value
         elif stat in ("TmW", "TmL", "TmTtlL", "TmT", "TmOTL", "TmROW", "TmROL"):
             return calculate_team_win_losses(data, all_rows, stat)
