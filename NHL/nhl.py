@@ -32813,10 +32813,19 @@ def calculate_formula(stat, player_type, formula, data, all_rows, player_data, s
             return value
         elif stat == "DaysSpan":
             value = 0
-            if all_rows:
-                first_date = min(row["Date"] for row in all_rows)
-                last_date = max(row["Date"] for row in all_rows)
-                value = (last_date - first_date).days
+            if "seperate_rows" in player_data["stat_values"]:
+                for sub_rows in player_data["stat_values"]["seperate_rows"]:
+                    if sub_rows:
+                        first_date = min(row["Date"] for row in sub_rows)
+                        last_date = max(row["Date"] for row in sub_rows)
+                        if not isinstance(first_date, int):
+                            value += (last_date - first_date).days
+            else:
+                if all_rows:
+                    first_date = min(row["Date"] for row in all_rows)
+                    last_date = max(row["Date"] for row in all_rows)
+                    if not isinstance(first_date, int):
+                        value = (last_date - first_date).days
             return value
         elif stat in ("TmW", "TmL", "TmTtlL", "TmT", "TmOTL", "TmROW", "TmROL"):
             return calculate_team_win_losses(data, all_rows, stat)

@@ -6489,6 +6489,7 @@ def combine_player_datas(player_datas, player_type, any_missing_games, time_fram
     player_data["stat_values"]["Shared"]["is_playoffs"] = is_playoffs
 
     all_rows = []
+    sub_add_rows = []
     multiple_matches = False
     has_season_stats = True
     has_award_stats = True
@@ -6508,6 +6509,7 @@ def combine_player_datas(player_datas, player_type, any_missing_games, time_fram
         raw_sub_range = ""
         raw_sub_time = ""
         all_rows += sub_player_data["rows"]
+        sub_add_rows.append(sub_player_data["rows"])
 
         if sub_player_data["Player"] != "No Player Match!":
             has_one_player = True
@@ -6751,6 +6753,7 @@ def combine_player_datas(player_datas, player_type, any_missing_games, time_fram
         return player_data
 
     player_data["stat_values"]["Shared"]["all_rows"] = all_rows
+    player_data["stat_values"]["Shared"]["seperate_rows"] = sub_add_rows
     
     if add_type == "minus":
         parsed_stats = {}

@@ -13144,6 +13144,7 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
     format_str = "b" if player_type["da_type"] == "Batter" else "p"
 
     all_rows = []
+    sub_add_rows = []
     multiple_matches = False
     has_season_stats = True
     has_season_pitch_stats = False
@@ -13163,6 +13164,7 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
         raw_sub_range = ""
         raw_sub_time = ""
         all_rows += sub_player_data["rows"]
+        sub_add_rows.append(sub_player_data["rows"])
 
         if sub_player_data["Player"] != "No Player Match!":
             has_one_player = True
@@ -13430,6 +13432,7 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
         all_rows[len(all_rows) - 1]["WAR7yr"] = calculate_war_7yr_multiplayer(player_datas, player_type, is_pitching_jaws)
     
     player_data["stat_values"]["all_rows"] = all_rows
+    player_data["stat_values"]["seperate_rows"] = sub_add_rows
     
     if add_type == "minus":
         parsed_stats = set()
@@ -38758,10 +38761,19 @@ def calculate_formula(stat, player_data, player_type, formula, data, all_rows, s
             return value
         elif stat == "DaysSpan":
             value = 0
-            if all_rows:
-                first_date = min(row["Date"] for row in all_rows)
-                last_date = max(row["Date"] for row in all_rows)
-                value = (last_date - first_date).days
+            if "seperate_rows" in player_data["stat_values"]:
+                for sub_rows in player_data["stat_values"]["seperate_rows"]:
+                    if sub_rows:
+                        first_date = min(row["Date"] for row in sub_rows)
+                        last_date = max(row["Date"] for row in sub_rows)
+                        if not isinstance(first_date, int):
+                            value += (last_date - first_date).days
+            else:
+                if all_rows:
+                    first_date = min(row["Date"] for row in all_rows)
+                    last_date = max(row["Date"] for row in all_rows)
+                    if not isinstance(first_date, int):
+                        value = (last_date - first_date).days
             return value
         elif stat == "TmW":
             return calculate_team_win_losses(data, all_rows, "W")

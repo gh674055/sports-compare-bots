@@ -5744,10 +5744,19 @@ def calculate_formula(stat, formula, data, header, headers, player_data, player_
             return value
         elif stat == "DaysSpan":
             value = 0
-            if all_rows:
-                first_date = min(row["Shared"]["Date"] for row in all_rows)
-                last_date = max(row["Shared"]["Date"] for row in all_rows)
-                value = (last_date - first_date).days
+            if "seperate_rows" in player_data["stat_values"]["Shared"]:
+                for sub_rows in player_data["stat_values"]["Shared"]["seperate_rows"]:
+                    if sub_rows:
+                        first_date = min(row["Shared"]["Date"] for row in sub_rows)
+                        last_date = max(row["Shared"]["Date"] for row in sub_rows)
+                        if not isinstance(first_date, int):
+                            value += (last_date - first_date).days
+            else:
+                if all_rows:
+                    first_date = min(row["Shared"]["Date"] for row in all_rows)
+                    last_date = max(row["Shared"]["Date"] for row in all_rows)
+                    if not isinstance(first_date, int):
+                        value = (last_date - first_date).days
             return value
         elif stat == "FG%:0-19":
             if data[header]["FGA:0-19"]:
