@@ -116,6 +116,7 @@ ignore_approved = True
 
 current_season = 2021
 show_title_current_season = False
+season_in_progress = True
 
 alert_message_no_approved = "Comparison received! The comment reply will be made with the comparison is finished\n\nComparisons may be slow due to recent Reddit API changes\n\n---"
 alert_message = "Comparison received! Updates will be provided as players finish\n\n---"
@@ -14499,7 +14500,7 @@ def handle_player_data(player_data, time_frame, player_type, player_page, valid_
     add_updated_years(player_link, player_data, time_frame)
 
     live_game = None
-    if "hide-live" not in extra_stats:
+    if "hide-live" not in extra_stats and season_in_progress:
         live_game = add_live_years(player_link, player_data, player_type, time_frame)
 
     missing_games = []

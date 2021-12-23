@@ -124,6 +124,7 @@ ignore_approved = True
 
 current_season = 2021
 show_title_current_season = True
+season_in_progress = False
 
 alert_message_no_approved = "Comparison received! The comment reply will be made with the comparison is finished\n\nComparisons may be slow due to recent Reddit API changes\n\n---"
 alert_message = "Comparison received! Updates will be provided as players finish\n\n---"
@@ -4242,6 +4243,17 @@ headers = {
             "type" : "Awards/Honors",
             "round" : "percent"
         }
+    }
+}
+
+special_doubleheaders = {
+    "2000-09-25" : {
+        "double_team" : "CLE",
+        "single_teams" : ["CHW", "MIN"]
+    },
+    "1951-09-13" : {
+        "double_team" : "STL",
+        "single_teams" : ["NYG", "BSN"]
     }
 }
 
@@ -14444,7 +14456,7 @@ def handle_player_data(player_data, time_frame, player_type, player_page, valid_
     else:
         player_data["mlb_id"] = int(player_link.split('/')[-1])
         player_data["player_link"] = player_link
-        if "hide-live" not in extra_stats:
+        if "hide-live" not in extra_stats and season_in_progress:
             live_game = get_live_game(player_link, player_data, player_type, time_frame)
 
     if "Rookie" in time_frame["qualifiers"]:
@@ -15577,6 +15589,12 @@ def determine_row_data(game_data, player_type, player_data, player_id, current_t
     if "Opponent" not in row_data:
         logger.warn("#" + str(threading.get_ident()) + "#   " + "Unable to get MLB live game link for BRef ID : " + player_data["id"] + " and team/year " + parsed_team_name + "/" +  str(row_data["Year"]) + ". Cannot retrieve MLB live data")
         return
+
+    if str(row_data["Date"]) in special_doubleheaders and row_data["Tm"] in special_doubleheaders[str(row_data["Date"])]["single_teams"]:
+        row_data["DateTime"] = game_datetime.replace(hour=0)
+
+    if row_data["DateTime"] in all_dates:
+        return None
 
     row_data["Location"] = is_home
     row_data["MLBLiveGame"] = True
@@ -18640,6 +18658,9 @@ def perform_qualifier(player_data, player_type, row, time_frame, all_rows):
         double_header_results = set()
         date = row["Date"]
         hour = row["DateTime"].hour
+
+        if str(row["Date"]) in special_doubleheaders and row["Tm"] in special_doubleheaders[str(row["Date"])]["single_teams"]:
+            return False
 
         if hour == 1:
             double_header_results.add("First")
@@ -35520,7 +35541,7 @@ def get_mlb_game_links_schedule_links(player_data, player_type, player_link, all
                                     radio_networks.append(call_sign.lower())
                         for index, row_data in enumerate(all_rows):
                             if row_data["Date"] == game_date:
-                                if row_data["DateTime"] == game_datetime:
+                                if row_data["DateTime"] == game_datetime or (str(game_date) in special_doubleheaders and team in special_doubleheaders[str(game_date)]["single_teams"]):
                                     if row_data["Tm"] == team:
                                         row_data["MLBGameLink"] = game["gamePk"]
                                         if "broadcasts" in game and game["broadcasts"]:
