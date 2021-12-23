@@ -17629,10 +17629,12 @@ def get_nhl_game_schedule(player_data, all_rows, games_to_skip, player_link, pla
     # secondary_assisters = [k for k, v in sorted(stat_data["all_assist"].items(), key=lambda item: item[1], reverse=True)][:10]
 
     # print("Player | Assists")
+    # print("---|---")
     # for secondary in secondary_assisters:
     #     print(stat_data["players"][secondary] + " | " + str(stat_data["all_assist"][secondary]))
     # print("----------------------------")
-    # print("Player | Assists")
+    # print("Player | Primary Assists")
+    # print("---|---")
     # for primary in primary_assisters:
     #     print(stat_data["players"][primary] + " | " + str(stat_data["primary_assist"][primary]))
 
