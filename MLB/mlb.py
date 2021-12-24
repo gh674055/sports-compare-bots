@@ -11104,28 +11104,6 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
     except BaseException:
         raise CustomMessageException("Invalid query!")
 
-    if player_type["da_type"] == None:
-        player_type["da_type"] = get_init_type(names, parse_time_frames)
-
-    for subb_frames in parse_time_frames:
-        for subbb_frames in subb_frames:
-            for time_frame in subbb_frames:
-                objs_to_add = {}
-                objs_to_delete = set()
-                for qual_str in time_frame["qualifiers"]:
-                    if qual_str in ["Facing", "Facing First Name", "Facing Last Name"]:
-                        objs_to_delete.add(qual_str)
-                        if player_type["da_type"] == "Batter":
-                            new_qual_str = qual_str.replace("Facing", "Batting Against")
-                        else:
-                            new_qual_str = qual_str.replace("Facing", "Pitching Against")
-                        objs_to_add[new_qual_str] = time_frame["qualifiers"][qual_str]
-
-                for obj_to_add in objs_to_add:
-                    time_frame["qualifiers"][obj_to_add] = objs_to_add[obj_to_add]
-                for obj_to_delete in objs_to_delete:
-                    del time_frame["qualifiers"][obj_to_delete]
-
     best_games_table = 0
     worst_games_table = 0
     for extra_stat in extra_stats:
@@ -11162,6 +11140,28 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
 
         while len(subb_frame) < len(subb_names):
             subb_frame.append(copy.deepcopy(subb_frame[len(subb_frame) - 1]))
+    
+    if player_type["da_type"] == None:
+        player_type["da_type"] = get_init_type(names, parse_time_frames)
+
+    for subb_frames in parse_time_frames:
+        for subbb_frames in subb_frames:
+            for time_frame in subbb_frames:
+                objs_to_add = {}
+                objs_to_delete = set()
+                for qual_str in time_frame["qualifiers"]:
+                    if qual_str in ["Facing", "Facing First Name", "Facing Last Name"]:
+                        objs_to_delete.add(qual_str)
+                        if player_type["da_type"] == "Batter":
+                            new_qual_str = qual_str.replace("Facing", "Batting Against")
+                        else:
+                            new_qual_str = qual_str.replace("Facing", "Pitching Against")
+                        objs_to_add[new_qual_str] = time_frame["qualifiers"][qual_str]
+
+                for obj_to_add in objs_to_add:
+                    time_frame["qualifiers"][obj_to_add] = objs_to_add[obj_to_add]
+                for obj_to_delete in objs_to_delete:
+                    del time_frame["qualifiers"][obj_to_delete]
 
     parsed_game_quals = set()
 
