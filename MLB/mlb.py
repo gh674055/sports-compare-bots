@@ -33767,10 +33767,10 @@ def handle_da_pitch_quals(row, event_name, at_bat_event, qualifiers, player_data
         if sub_score_diff >= 1:
             sub_men_on_base_to_use = 1
             if sub_man_on_second:
-                sub_men_on_base_to_use + 1
+                sub_men_on_base_to_use += 1
             if sub_man_on_third:
-                sub_men_on_base_to_use + 1
-            sub_tying_on_first = sub_score_diff <= sub_men_on_base_to_use
+                sub_men_on_base_to_use += 1
+            sub_tying_on_first = sub_score_diff == sub_men_on_base_to_use
     
     sub_winning_on_first = False
     if sub_man_on_first:
@@ -33778,10 +33778,10 @@ def handle_da_pitch_quals(row, event_name, at_bat_event, qualifiers, player_data
         if sub_score_diff >= 0:
             sub_men_on_base_to_use = 1
             if sub_man_on_second:
-                sub_men_on_base_to_use + 1
+                sub_men_on_base_to_use += 1
             if sub_man_on_third:
-                sub_men_on_base_to_use + 1
-            sub_tying_on_first = sub_score_diff < sub_men_on_base_to_use
+                sub_men_on_base_to_use += 1
+            sub_tying_on_first = sub_score_diff == sub_men_on_base_to_use - 1
     
     sub_tying_on_second = False
     if sub_man_on_second:
@@ -33789,8 +33789,8 @@ def handle_da_pitch_quals(row, event_name, at_bat_event, qualifiers, player_data
         if sub_score_diff >= 1:
             sub_men_on_base_to_use = 1
             if sub_man_on_third:
-                sub_men_on_base_to_use + 1
-            sub_tying_on_second = sub_score_diff <= sub_men_on_base_to_use
+                sub_men_on_base_to_use += 1
+            sub_tying_on_second = sub_score_diff == sub_men_on_base_to_use
     
     sub_winning_on_second = False
     if sub_man_on_second:
@@ -33798,22 +33798,22 @@ def handle_da_pitch_quals(row, event_name, at_bat_event, qualifiers, player_data
         if sub_score_diff >= 0:
             sub_men_on_base_to_use = 1
             if sub_man_on_third:
-                sub_men_on_base_to_use + 1
-            sub_winning_on_second = sub_score_diff < sub_men_on_base_to_use
+                sub_men_on_base_to_use += 1
+            sub_winning_on_second = sub_score_diff == sub_men_on_base_to_use - 1
     
     sub_tying_on_third = False
     if sub_man_on_third:
         sub_score_diff = sub_pitch_score - sub_bat_score
         if sub_score_diff >= 1:
             sub_men_on_base_to_use = 1
-            sub_tying_on_third = sub_score_diff <= sub_men_on_base_to_use
+            sub_tying_on_third = sub_score_diff == sub_men_on_base_to_use
     
     sub_winning_on_third = False
     if sub_man_on_third:
         sub_score_diff = sub_pitch_score - sub_bat_score
         if sub_score_diff >= 0:
             sub_men_on_base_to_use = 1
-            sub_winning_on_third = sub_score_diff < sub_men_on_base_to_use
+            sub_winning_on_third = sub_score_diff == sub_men_on_base_to_use - 1
 
     sub_end_time = None
     if "endTime" in sub_play and sub_play["endTime"]:
@@ -37009,10 +37009,10 @@ def get_live_game_data(row_index, player_data, row_data, player_type, qualifiers
                 if score_diff >= 1:
                     men_on_base_to_use = 1
                     if man_on_second:
-                        men_on_base_to_use + 1
+                        men_on_base_to_use += 1
                     if man_on_third:
-                        men_on_base_to_use + 1
-                    tying_on_first = score_diff <= men_on_base_to_use
+                        men_on_base_to_use += 1
+                    tying_on_first = score_diff == men_on_base_to_use
             
             winning_on_first = False
             if man_on_first:
@@ -37020,10 +37020,10 @@ def get_live_game_data(row_index, player_data, row_data, player_type, qualifiers
                 if score_diff >= 0:
                     men_on_base_to_use = 1
                     if man_on_second:
-                        men_on_base_to_use + 1
+                        men_on_base_to_use += 1
                     if man_on_third:
-                        men_on_base_to_use + 1
-                    tying_on_first = score_diff < men_on_base_to_use
+                        men_on_base_to_use += 1
+                    tying_on_first = score_diff == men_on_base_to_use - 1
             
             tying_on_second = False
             if man_on_second:
@@ -37031,8 +37031,8 @@ def get_live_game_data(row_index, player_data, row_data, player_type, qualifiers
                 if score_diff >= 1:
                     men_on_base_to_use = 1
                     if man_on_third:
-                        men_on_base_to_use + 1
-                    tying_on_second = score_diff <= men_on_base_to_use
+                        men_on_base_to_use += 1
+                    tying_on_second = score_diff == men_on_base_to_use
             
             winning_on_second = False
             if man_on_second:
@@ -37040,22 +37040,22 @@ def get_live_game_data(row_index, player_data, row_data, player_type, qualifiers
                 if score_diff >= 0:
                     men_on_base_to_use = 1
                     if man_on_third:
-                        men_on_base_to_use + 1
-                    winning_on_second = score_diff < men_on_base_to_use
+                        men_on_base_to_use += 1
+                    winning_on_second = score_diff == men_on_base_to_use - 1
             
             tying_on_third = False
             if man_on_third:
                 score_diff = pitch_score - bat_score
                 if score_diff >= 1:
                     men_on_base_to_use = 1
-                    tying_on_third = score_diff <= men_on_base_to_use
+                    tying_on_third = score_diff == men_on_base_to_use
             
             winning_on_third = False
             if man_on_third:
                 score_diff = pitch_score - bat_score
                 if score_diff >= 0:
                     men_on_base_to_use = 1
-                    winning_on_third = score_diff < men_on_base_to_use
+                    winning_on_third = score_diff == men_on_base_to_use - 1
 
             pitching_lefty = None
             pitching_righty = None
@@ -37801,10 +37801,10 @@ def get_live_game_data(row_index, player_data, row_data, player_type, qualifiers
                     if sub_score_diff >= 1:
                         sub_men_on_base_to_use = 1
                         if sub_man_on_second:
-                            sub_men_on_base_to_use + 1
+                            sub_men_on_base_to_use += 1
                         if sub_man_on_third:
-                            sub_men_on_base_to_use + 1
-                        sub_tying_on_first = sub_score_diff <= sub_men_on_base_to_use
+                            sub_men_on_base_to_use += 1
+                        sub_tying_on_first = sub_score_diff == sub_men_on_base_to_use
                 
                 sub_winning_on_first = False
                 if sub_man_on_first:
@@ -37812,10 +37812,10 @@ def get_live_game_data(row_index, player_data, row_data, player_type, qualifiers
                     if sub_score_diff >= 0:
                         sub_men_on_base_to_use = 1
                         if sub_man_on_second:
-                            sub_men_on_base_to_use + 1
+                            sub_men_on_base_to_use += 1
                         if sub_man_on_third:
-                            sub_men_on_base_to_use + 1
-                        sub_tying_on_first = sub_score_diff < sub_men_on_base_to_use
+                            sub_men_on_base_to_use += 1
+                        sub_tying_on_first = sub_score_diff == sub_men_on_base_to_use - 1
                 
                 sub_tying_on_second = False
                 if sub_man_on_second:
@@ -37823,8 +37823,8 @@ def get_live_game_data(row_index, player_data, row_data, player_type, qualifiers
                     if sub_score_diff >= 1:
                         sub_men_on_base_to_use = 1
                         if sub_man_on_third:
-                            sub_men_on_base_to_use + 1
-                        sub_tying_on_second = sub_score_diff <= sub_men_on_base_to_use
+                            sub_men_on_base_to_use += 1
+                        sub_tying_on_second = sub_score_diff == sub_men_on_base_to_use
                 
                 sub_winning_on_second = False
                 if sub_man_on_second:
@@ -37832,22 +37832,22 @@ def get_live_game_data(row_index, player_data, row_data, player_type, qualifiers
                     if sub_score_diff >= 0:
                         sub_men_on_base_to_use = 1
                         if sub_man_on_third:
-                            sub_men_on_base_to_use + 1
-                        sub_winning_on_second = sub_score_diff < sub_men_on_base_to_use
+                            sub_men_on_base_to_use += 1
+                        sub_winning_on_second = sub_score_diff == sub_men_on_base_to_use - 1
                 
                 sub_tying_on_third = False
                 if sub_man_on_third:
                     sub_score_diff = sub_pitch_score - sub_bat_score
                     if sub_score_diff >= 1:
                         sub_men_on_base_to_use = 1
-                        sub_tying_on_third = sub_score_diff <= sub_men_on_base_to_use
+                        sub_tying_on_third = sub_score_diff == sub_men_on_base_to_use
                 
                 sub_winning_on_third = False
                 if sub_man_on_third:
                     sub_score_diff = sub_pitch_score - sub_bat_score
                     if sub_score_diff >= 0:
                         sub_men_on_base_to_use = 1
-                        sub_winning_on_third = sub_score_diff < sub_men_on_base_to_use
+                        sub_winning_on_third = sub_score_diff == sub_men_on_base_to_use - 1
 
                 sub_end_time = None
                 if "endTime" in sub_play and sub_play["endTime"]:
