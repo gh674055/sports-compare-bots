@@ -2027,7 +2027,7 @@ def handle_player_string(comment, player_type, is_fantasy, last_updated, hide_ta
                             elif compare_type.startswith("through"):
                                 qualifier_obj["time_unit_start"] = datetime.date.min
                                 qualifier_obj["time_unit_end"] = dateutil.relativedelta.relativedelta(years=years, months=months, days=days)
-                                 if not has_second_months:
+                                if not has_second_months:
                                     qualifier_obj["time_unit_end"].months = 12
                                 if not has_second_days:
                                     qualifier_obj["time_unit_end"].days = -1
