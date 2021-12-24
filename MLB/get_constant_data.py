@@ -19,6 +19,7 @@ league_totals_url = "https://www.fangraphs.com/leaders.aspx?pos=all&stats={}&lg=
 constants_url = "https://www.fangraphs.com/guts.aspx?type=cn"
 park_factors_url = "https://www.fangraphs.com/guts.aspx?type=pf&teamid=0&season={}"
 league_excluding_pitchers_url = "https://www.fangraphs.com/leaders.aspx?pos=np&stats=bat&lg={}&qual=0&type=1&season={}&month=0&season1={}&ind=0&team=0,ss&rost=0&age=0&filter=&players=0"
+league_excluding_pitchers_url_non_advanced = "https://www.fangraphs.com/leaders.aspx?pos=np&stats=bat&lg={}&qual=0&type=0&season={}&month=0&season1={}&ind=0&team=0,ss&rost=0&age=0&filter=&players=0"
 
 start_year = 1871
 end_year = datetime.date.today().year
@@ -417,12 +418,12 @@ def get_totals(single_year, totals, log=True):
                                 totals[league][key][str(year)][header_value] = column_value
 
                         if key == "Batter" and league != "MLB":
-                            request = urllib.request.Request(league_excluding_pitchers_url.format(league.lower(), year, year), headers=request_headers)
+                            pitcherless_values = {}
+
+                            request = urllib.request.Request(league_excluding_pitchers_url_non_advanced.format(league.lower(), year, year), headers=request_headers)
                             response, player_page = url_request(request, log)
 
                             table = player_page.find("table", id="LeaderBoard1_dg1_ctl00")
-
-                            pitcherless_values = {}
 
                             sub_header_columns = table.find("thead").find_all("th")
                             sub_header_values = []
@@ -434,9 +435,29 @@ def get_totals(single_year, totals, log=True):
                             for sub_sub_index, column in enumerate(columns):
                                 header_value = sub_header_values[sub_sub_index]
                                 column_contents = column.find(text=True)
-                                if header_value == "PA" or header_value == "wRC":
+                                if column_contents.strip() and not column_contents.endswith("%"):
                                     column_value = float(column_contents)
                                     pitcherless_values[header_value] = column_value
+                            
+                            request = urllib.request.Request(league_excluding_pitchers_url.format(league.lower(), year, year), headers=request_headers)
+                            response, player_page = url_request(request, log)
+
+                            table = player_page.find("table", id="LeaderBoard1_dg1_ctl00")
+
+                            sub_header_columns = table.find("thead").find_all("th")
+                            sub_header_values = []
+                            for header in sub_header_columns:
+                                sub_header_values.append(header.find(text=True).strip())
+
+                            row = table.find("tbody").find("tr")
+                            columns = row.find_all("td", recursive=False)
+                            for sub_sub_index, column in enumerate(columns):
+                                header_value = sub_header_values[sub_sub_index]
+                                column_contents = column.find(text=True)
+                                if column_contents.strip() and not column_contents.endswith("%"):
+                                    column_value = float(column_contents)
+                                    pitcherless_values[header_value] = column_value
+
                             totals[league][key][str(year)]["pitcherless_values"] = pitcherless_values
 
                 count = index + 1
