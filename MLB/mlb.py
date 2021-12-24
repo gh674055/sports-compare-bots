@@ -39010,12 +39010,13 @@ def calculate_advanced_stats(data, all_rows, player_type, time_frame):
                     total_bb_k_weight - yearly_woba_stats[year][team]["SO"]
                     total_h_weight -= yearly_woba_stats[year][team]["H"]
                     total_woba_weight -= yearly_woba_stats[year][team]["AB"] + yearly_woba_stats[year][team]["BB"] - yearly_woba_stats[year][team]["IBB"] + yearly_woba_stats[year][team]["SF"] + yearly_woba_stats[year][team]["HBP"]
-                elif int(year) < 1920:
-                    total_sb_weight -= yearly_woba_stats[year][team]["SB"] + yearly_woba_stats[year][team]["CS"]
-                    total_k_weight -= yearly_woba_stats[year][team]["PA"]
-                elif int(year) < 1913 and (sleague == "AL" or int(year) < 1910):
-                    total_k_weight -= yearly_woba_stats[year][team]["PA"]
-        
+                else:
+                    if int(year) < 1913 and (sleague == "AL" or int(year) < 1910):
+                        total_k_weight -= yearly_woba_stats[year][team]["PA"]
+                    
+                    if int(year) < 1920:
+                        total_sb_weight -= yearly_woba_stats[year][team]["SB"] + yearly_woba_stats[year][team]["CS"]
+                    
         for year in yearly_woba_stats:
             constant_year = year
             if constant_year not in park_factors or not park_factors[constant_year]:
