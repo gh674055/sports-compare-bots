@@ -39186,7 +39186,7 @@ def calculate_advanced_stats(data, all_rows, player_type, time_frame):
                             babip = (yearly_woba_stats[year][team]["H"] - yearly_woba_stats[year][team]["HR"]) / (yearly_woba_stats[year][team]["AB"] - yearly_woba_stats[year][team]["SO"] - yearly_woba_stats[year][team]["HR"])
                             league_obp = (totals[sleague]["Batter"][constant_year]["pitcherless_values"]["H"] - totals[sleague]["Batter"][constant_year]["pitcherless_values"]["HR"]) / (totals[sleague]["Batter"][constant_year]["pitcherless_values"]["AB"] - totals[sleague]["Batter"][constant_year]["pitcherless_values"]["SO"] - totals[sleague]["Batter"][constant_year]["pitcherless_values"]["HR"])
                         babip_plus = (babip / league_obp) * 100
-                        total_BABIPPlus += babip_plus * (wrcplus_weight / total_wrcplus_weight)
+                        total_BABIPPlus += babip_plus * (wrcplus_weight / total_k_weight)
                     except ZeroDivisionError:
                         pass
 
