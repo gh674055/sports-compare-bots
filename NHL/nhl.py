@@ -7964,7 +7964,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
 
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
 
-                        last_match = re.finditer(r"(no(?:t|n)?(?: |-))?(?:only ?)?(before|after|exact)? *(?:season-)?age:? *(?:(\d+)(y|m|d)?)(?:(\d+)(y|m|d)?)?(?:(\d+)(y|m|d)?)?(?:-(?:(\d+)(y|m|d)?)(?:(\d+)(y|m|d)?)?(?:(\d+)(y|m|d)?)?)?", time_frame)
+                        last_match = re.finditer(r"(no(?:t|n)?(?: |-))?(?:only ?)?(before|after|exact|through)? *(?:season-)?age:? *(?:(\d+)(y|m|d)?)(?:(\d+)(y|m|d)?)?(?:(\d+)(y|m|d)?)?(?:-(?:(\d+)(y|m|d)?)(?:(\d+)(y|m|d)?)?(?:(\d+)(y|m|d)?)?)?", time_frame)
                         for m in last_match:
                             qualifier_obj = {}
 
@@ -8085,6 +8085,13 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                             elif compare_type.startswith("exact"):
                                 qualifier_obj["time_unit_start"] = dateutil.relativedelta.relativedelta(years=years, months=months, days=days)
                                 qualifier_obj["time_unit_start"] = qualifier_obj["time_unit_start"]
+                            elif compare_type.startswith("through"):
+                                qualifier_obj["time_unit_start"] = datetime.date.min
+                                qualifier_obj["time_unit_end"] = dateutil.relativedelta.relativedelta(years=years, months=months, days=days)
+                                if not has_second_months:
+                                    qualifier_obj["time_unit_end"].months = 12
+                                if not has_second_days:
+                                    qualifier_obj["time_unit_end"].days = -1
                             else:
                                 qualifier_obj["time_unit_start"] = datetime.date.min
                                 if "season-age" in m.group(0):
