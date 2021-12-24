@@ -1048,7 +1048,11 @@ headers = {
         "BB/SO+" : {
             "positive" : True,
             "type" : "Adjusted",
-            "display-value" : "BB/K+"
+            "display-value" : "BB/K+",
+            "valid_since" : {
+                "season" : 1910,
+                "game" : 1910
+            }
         },
         "BB/162": {
             "positive" : True,
@@ -1200,7 +1204,11 @@ headers = {
         "SO%+" : {
             "positive" : False,
             "type" : "Adjusted",
-            "display-value" : "K%+"
+            "display-value" : "K%+",
+            "valid_since" : {
+                "season" : 1910,
+                "game" : 1910
+            }
         },
         "BB-SO%": {
             "positive" : True,
@@ -1211,7 +1219,11 @@ headers = {
         "BB-SO%+": {
             "positive" : True,
             "type" : "Adjusted",
-            "display-value" : "BB-K%+"
+            "display-value" : "BB-K%+",
+            "valid_since" : {
+                "season" : 1910,
+                "game" : 1910
+            }
         },
         "TTO%": {
             "positive" : True,
@@ -1220,7 +1232,11 @@ headers = {
         },
         "TTO%+": {
             "positive" : True,
-            "type" : "Adjusted"
+            "type" : "Adjusted",
+            "valid_since" : {
+                "season" : 1910,
+                "game" : 1910
+            }
         },
         "IBB": {
             "positive" : True,
@@ -1308,7 +1324,11 @@ headers = {
         },
         "BAbip+" : {
             "positive" : True,
-            "type" : "Adjusted"
+            "type" : "Adjusted",
+            "valid_since" : {
+                "season" : 1910,
+                "game" : 1910
+            }
         },
         "wSB" : {
             "positive" : True,
@@ -4958,6 +4978,56 @@ league_data_mapping = {
             "AA-UA-PL-FL-NNL-ECL-ANL-NSL-EWL-NN2-NAL" : {
                 "game" : 1949,
                 "season" : 1949
+            }
+        },
+        "SO%+" : {
+            "AL" : {
+                "game" : 1910,
+                "season" : 1910
+            },
+            "NL" : {
+                "game" : 1913,
+                "season" : 1913
+            }
+        },
+        "BB-SO%+" : {
+            "AL" : {
+                "game" : 1910,
+                "season" : 1910
+            },
+            "NL" : {
+                "game" : 1913,
+                "season" : 1913
+            }
+        },
+        "BB/SO+" : {
+            "AL" : {
+                "game" : 1910,
+                "season" : 1910
+            },
+            "NL" : {
+                "game" : 1913,
+                "season" : 1913
+            }
+        },
+        "TTO%+" : {
+            "AL" : {
+                "game" : 1910,
+                "season" : 1910
+            },
+            "NL" : {
+                "game" : 1913,
+                "season" : 1913
+            }
+        },
+        "BAbip+" : {
+            "AL" : {
+                "game" : 1910,
+                "season" : 1910
+            },
+            "NL" : {
+                "game" : 1913,
+                "season" : 1913
             }
         }
     },
@@ -38867,7 +38937,9 @@ def calculate_advanced_stats(data, all_rows, player_type, time_frame):
 
     total_woba_weight = data["AB"] + data["BB"] - data["IBB"] + data["SF"] + data["HBP"]
     total_bb_k_weight = data["SO"]
+    total_k_weight = data["PA"]
     total_sb_weight = data["SB"] + data["CS"]
+    total_h_weight = data["H"]
     if player_type["da_type"] == "Batter":
         total_wrcplus_weight = data["PA"]
     else:
@@ -38930,10 +39002,19 @@ def calculate_advanced_stats(data, all_rows, player_type, time_frame):
             if constant_year not in park_factors or not park_factors[constant_year]:
                 constant_year = str(int(current_season) - 1)
             for team in yearly_woba_stats[year]:
+                sleague = get_team_league(team, constant_year)
                 if team not in park_factors[constant_year]:
                     total_wrcplus_weight -= yearly_woba_stats[year][team]["PA"]
+                    total_sb_weight -= yearly_woba_stats[year][team]["SB"] + yearly_woba_stats[year][team]["CS"]
+                    total_k_weight -= yearly_woba_stats[year][team]["PA"]
+                    total_bb_k_weight - yearly_woba_stats[year][team]["SO"]
+                    total_h_weight -= yearly_woba_stats[year][team]["H"]
+                    total_woba_weight -= yearly_woba_stats[year][team]["AB"] + yearly_woba_stats[year][team]["BB"] - yearly_woba_stats[year][team]["IBB"] + yearly_woba_stats[year][team]["SF"] + yearly_woba_stats[year][team]["HBP"]
                 elif int(year) < 1920:
                     total_sb_weight -= yearly_woba_stats[year][team]["SB"] + yearly_woba_stats[year][team]["CS"]
+                    total_k_weight -= yearly_woba_stats[year][team]["PA"]
+                elif int(year) < 1913 and (sleague == "AL" or int(year) < 1910):
+                    total_k_weight -= yearly_woba_stats[year][team]["PA"]
         
         for year in yearly_woba_stats:
             constant_year = year
@@ -39026,13 +39107,14 @@ def calculate_advanced_stats(data, all_rows, player_type, time_frame):
                 except ZeroDivisionError:
                     pass
 
-                try:
-                    k_per = yearly_woba_stats[year][team]["SO"] / yearly_woba_stats[year][team]["PA"]
-                    league_k_per = totals[sleague]["Batter"][constant_year]["pitcherless_values"]["SO"] / totals[sleague]["Batter"][constant_year]["pitcherless_values"]["PA"]
-                    k_plus = (k_per / league_k_per) * 100
-                    total_KPlus += k_plus * (wrcplus_weight / total_wrcplus_weight)
-                except ZeroDivisionError:
-                    pass
+                if int(year) >= 1910 and (sleague == "NL" or int(year) >= 1913):
+                    try:
+                        k_per = yearly_woba_stats[year][team]["SO"] / yearly_woba_stats[year][team]["PA"]
+                        league_k_per = totals[sleague]["Batter"][constant_year]["pitcherless_values"]["SO"] / totals[sleague]["Batter"][constant_year]["pitcherless_values"]["PA"]
+                        k_plus = (k_per / league_k_per) * 100
+                        total_KPlus += k_plus * (yearly_woba_stats[year][team]["PA"] / total_k_weight)
+                    except ZeroDivisionError:
+                        pass
 
                 try:
                     bb_per = yearly_woba_stats[year][team]["BB"] / yearly_woba_stats[year][team]["PA"]
@@ -39050,13 +39132,14 @@ def calculate_advanced_stats(data, all_rows, player_type, time_frame):
                 except ZeroDivisionError:
                     pass
 
-                try:
-                    tto_per = (yearly_woba_stats[year][team]["HR"] + yearly_woba_stats[year][team]["BB"] + yearly_woba_stats[year][team]["SO"]) / yearly_woba_stats[year][team]["PA"]
-                    league_tto_per = (totals[sleague]["Batter"][constant_year]["pitcherless_values"]["HR"] + totals[sleague]["Batter"][constant_year]["pitcherless_values"]["BB"] + totals[sleague]["Batter"][constant_year]["pitcherless_values"]["SO"]) / totals[sleague]["Batter"][constant_year]["pitcherless_values"]["PA"]
-                    tto_plus = (tto_per / league_tto_per) * 100
-                    total_TTOPlus += tto_plus * (wrcplus_weight / total_wrcplus_weight)
-                except ZeroDivisionError:
-                    pass
+                if int(year) >= 1910 and (sleague == "NL" or int(year) >= 1913):
+                    try:
+                        tto_per = (yearly_woba_stats[year][team]["HR"] + yearly_woba_stats[year][team]["BB"] + yearly_woba_stats[year][team]["SO"]) / yearly_woba_stats[year][team]["PA"]
+                        league_tto_per = (totals[sleague]["Batter"][constant_year]["pitcherless_values"]["HR"] + totals[sleague]["Batter"][constant_year]["pitcherless_values"]["BB"] + totals[sleague]["Batter"][constant_year]["pitcherless_values"]["SO"]) / totals[sleague]["Batter"][constant_year]["pitcherless_values"]["PA"]
+                        tto_plus = (tto_per / league_tto_per) * 100
+                        total_TTOPlus += tto_plus * (yearly_woba_stats[year][team]["PA"] / total_k_weight)
+                    except ZeroDivisionError:
+                        pass
 
                 try:
                     player_xbh = yearly_woba_stats[year][team]["2B"] + yearly_woba_stats[year][team]["3B"] + yearly_woba_stats[year][team]["HR"]
@@ -39076,15 +39159,16 @@ def calculate_advanced_stats(data, all_rows, player_type, time_frame):
                     xh_per = player_xbh / yearly_woba_stats[year][team]["H"]
                     league_xh_per = league_xbh / totals[sleague]["Batter"][constant_year]["pitcherless_values"]["H"]
                     xh_plus = (xh_per / league_xh_per) * 100
-                    total_XHPlus += xh_plus * (yearly_woba_stats[year][team]["H"] / data["H"])
+                    total_XHPlus += xh_plus * (yearly_woba_stats[year][team]["H"] / total_h_weight)
                 except ZeroDivisionError:
                     pass
 
-                try:
-                    bbmk_per_plus = bb_plus - k_plus
-                    total_BBMKPlus += bbmk_per_plus * (wrcplus_weight / total_wrcplus_weight)
-                except ZeroDivisionError:
-                    pass
+                if int(year) >= 1910 and (sleague == "NL" or int(year) >= 1913):
+                    try:
+                        bbmk_per_plus = bb_plus - k_plus
+                        total_BBMKPlus += bbmk_per_plus * (yearly_woba_stats[year][team]["PA"] / total_k_weight)
+                    except ZeroDivisionError:
+                        pass
 
                 if yearly_woba_stats[year][team]["AB"] and totals[sleague]["Batter"][constant_year]["pitcherless_values"]["AB"]:
                     iso = slg - avg
@@ -39092,25 +39176,27 @@ def calculate_advanced_stats(data, all_rows, player_type, time_frame):
                     iso_plus = (iso / league_iso) * 100
                     total_ISOPlus += iso_plus * (wrcplus_weight / total_wrcplus_weight)
 
-                try:
-                    if int(year) >= 1954:
-                        babip = (yearly_woba_stats[year][team]["H"] - yearly_woba_stats[year][team]["HR"]) / (yearly_woba_stats[year][team]["AB"] - yearly_woba_stats[year][team]["SO"] - yearly_woba_stats[year][team]["HR"] + yearly_woba_stats[year][team]["SF"])
-                        league_obp = (totals[sleague]["Batter"][constant_year]["pitcherless_values"]["H"] - totals[sleague]["Batter"][constant_year]["pitcherless_values"]["HR"]) / (totals[sleague]["Batter"][constant_year]["pitcherless_values"]["AB"] - totals[sleague]["Batter"][constant_year]["pitcherless_values"]["SO"] - totals[sleague]["Batter"][constant_year]["pitcherless_values"]["HR"] + totals[sleague]["Batter"][constant_year]["pitcherless_values"]["SF"])
-                    else:
-                        babip = (yearly_woba_stats[year][team]["H"] - yearly_woba_stats[year][team]["HR"]) / (yearly_woba_stats[year][team]["AB"] - yearly_woba_stats[year][team]["SO"] - yearly_woba_stats[year][team]["HR"])
-                        league_obp = (totals[sleague]["Batter"][constant_year]["pitcherless_values"]["H"] - totals[sleague]["Batter"][constant_year]["pitcherless_values"]["HR"]) / (totals[sleague]["Batter"][constant_year]["pitcherless_values"]["AB"] - totals[sleague]["Batter"][constant_year]["pitcherless_values"]["SO"] - totals[sleague]["Batter"][constant_year]["pitcherless_values"]["HR"])
-                    babip_plus = (babip / league_obp) * 100
-                    total_BABIPPlus += babip_plus * (wrcplus_weight / total_wrcplus_weight)
-                except ZeroDivisionError:
-                    pass
+                if int(year) >= 1910 and (sleague == "NL" or int(year) >= 1913):
+                    try:
+                        if int(year) >= 1954:
+                            babip = (yearly_woba_stats[year][team]["H"] - yearly_woba_stats[year][team]["HR"]) / (yearly_woba_stats[year][team]["AB"] - yearly_woba_stats[year][team]["SO"] - yearly_woba_stats[year][team]["HR"] + yearly_woba_stats[year][team]["SF"])
+                            league_obp = (totals[sleague]["Batter"][constant_year]["pitcherless_values"]["H"] - totals[sleague]["Batter"][constant_year]["pitcherless_values"]["HR"]) / (totals[sleague]["Batter"][constant_year]["pitcherless_values"]["AB"] - totals[sleague]["Batter"][constant_year]["pitcherless_values"]["SO"] - totals[sleague]["Batter"][constant_year]["pitcherless_values"]["HR"] + totals[sleague]["Batter"][constant_year]["pitcherless_values"]["SF"])
+                        else:
+                            babip = (yearly_woba_stats[year][team]["H"] - yearly_woba_stats[year][team]["HR"]) / (yearly_woba_stats[year][team]["AB"] - yearly_woba_stats[year][team]["SO"] - yearly_woba_stats[year][team]["HR"])
+                            league_obp = (totals[sleague]["Batter"][constant_year]["pitcherless_values"]["H"] - totals[sleague]["Batter"][constant_year]["pitcherless_values"]["HR"]) / (totals[sleague]["Batter"][constant_year]["pitcherless_values"]["AB"] - totals[sleague]["Batter"][constant_year]["pitcherless_values"]["SO"] - totals[sleague]["Batter"][constant_year]["pitcherless_values"]["HR"])
+                        babip_plus = (babip / league_obp) * 100
+                        total_BABIPPlus += babip_plus * (wrcplus_weight / total_wrcplus_weight)
+                    except ZeroDivisionError:
+                        pass
 
-                try:
-                    bbk = (yearly_woba_stats[year][team]["BB"]) / (yearly_woba_stats[year][team]["SO"])
-                    league_bbk = (totals[sleague]["Batter"][constant_year]["pitcherless_values"]["BB"]) / (totals[sleague]["Batter"][constant_year]["pitcherless_values"]["SO"])
-                    bbk_plus = (bbk / league_bbk) * 100
-                    total_BBKPlus += bbk_plus * (yearly_woba_stats[year][team]["SO"] / total_bb_k_weight)
-                except ZeroDivisionError:
-                    pass
+                if int(year) >= 1910 and (sleague == "NL" or int(year) >= 1913):
+                    try:
+                        bbk = (yearly_woba_stats[year][team]["BB"]) / (yearly_woba_stats[year][team]["SO"])
+                        league_bbk = (totals[sleague]["Batter"][constant_year]["pitcherless_values"]["BB"]) / (totals[sleague]["Batter"][constant_year]["pitcherless_values"]["SO"])
+                        bbk_plus = (bbk / league_bbk) * 100
+                        total_BBKPlus += bbk_plus * (yearly_woba_stats[year][team]["SO"] / total_bb_k_weight)
+                    except ZeroDivisionError:
+                        pass
 
                 if int(year) >= 1920:
                     try:
@@ -41271,7 +41357,7 @@ def handle_table_data(over_header, player_data, player_datas, player_type, heade
                 value = str(round_value(float(rec_split[0]))) + ":" + str(round_value(float(rec_split[1])))
                 if len(rec_split) == 3:
                     value += ":" + str(round_value(float(rec_split[2])))
-            value = str(value) 
+            value = str(value)
             
             if header == "G":
                 if player_data["stat_values"]["any_missing_games"]:
@@ -41281,6 +41367,8 @@ def handle_table_data(over_header, player_data, player_datas, player_type, heade
                     return "N/A"
                 
                 if has_missing_park_factors:
+                    value += "*"
+                elif is_invalid_stat(header, player_type, player_data["stat_values"], True)["any_invalid"]:
                     value += "*"
             elif "Salary" in header or "$" in header:
                 if not og_value and not seasons_leading:
