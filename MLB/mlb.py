@@ -1274,37 +1274,6 @@ headers = {
             "positive" : True,
             "type" : "Adjusted"
         },
-        "WPA" : {
-            "positive" : True,
-            "round" : 1,
-            "valid_since" : {
-                "game-np" : 1916,
-                "season-np" : 1916,
-                "season" : 1901,
-                "game" : 1901
-            }
-        },
-        "WPA/LI" : {
-            "positive" : True,
-            "display" : False,
-            "round" : 1,
-            "valid_since" : {
-                "game-np" : 1916,
-                "season-np" : 1916,
-                "season" : 1901,
-                "game" : 1901
-            }
-        },
-        "cWPA" : {
-            "positive" : True,
-            "round" : "percent-1",
-            "valid_since" : {
-                "game-np" : 1916,
-                "season-np" : 1916,
-                "season" : 1901,
-                "game" : 1901
-            }
-        },
         "wSB" : {
             "positive" : True,
             "round" : 2,
@@ -1333,6 +1302,40 @@ headers = {
         "wRC+" : {
             "positive" : True,
             "type" : "Adjusted"
+        },
+        "WPA" : {
+            "positive" : True,
+            "round" : 1,
+            "type" : "Per Game/Advanced",
+            "valid_since" : {
+                "game-np" : 1916,
+                "season-np" : 1916,
+                "season" : 1901,
+                "game" : 1901
+            }
+        },
+        "WPA/LI" : {
+            "positive" : True,
+            "display" : False,
+            "type" : "Per Game/Advanced",
+            "round" : 1,
+            "valid_since" : {
+                "game-np" : 1916,
+                "season-np" : 1916,
+                "season" : 1901,
+                "game" : 1901
+            }
+        },
+        "cWPA" : {
+            "positive" : True,
+            "round" : "percent-1",
+            "type" : "Per Game/Advanced",
+            "valid_since" : {
+                "game-np" : 1916,
+                "season-np" : 1916,
+                "season" : 1901,
+                "game" : 1901
+            }
         },
         "PwrSpd" : {
             "positive" : True,
@@ -3654,6 +3657,7 @@ headers = {
         "WPA" : {
             "positive" : True,
             "round" : 1,
+            "type" : "Per Game/Advanced",
             "valid_since" : {
                 "game-np" : 1916,
                 "season-np" : 1916,
@@ -3665,6 +3669,7 @@ headers = {
             "positive" : True,
             "display" : False,
             "round" : 1,
+            "type" : "Per Game/Advanced",
             "valid_since" : {
                 "game-np" : 1916,
                 "season-np" : 1916,
@@ -3675,6 +3680,7 @@ headers = {
         "cWPA" : {
             "positive" : True,
             "round" : "percent-1",
+            "type" : "Per Game/Advanced",
             "valid_since" : {
                 "game-np" : 1916,
                 "season-np" : 1916,
