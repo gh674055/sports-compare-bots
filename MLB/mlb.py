@@ -6012,6 +6012,16 @@ playoff_format_history = [
     },
     {
         "start" : 1969,
+        "end" : 1980,
+        "rounds" : [3, 4]
+    },
+    {
+        "start" : 1981,
+        "end" : 1981,
+        "rounds" : [3, 3, 4]
+    },
+    {
+        "start" : 1982,
         "end" : 1984,
         "rounds" : [3, 4]
     },
@@ -24202,11 +24212,13 @@ def handle_schedule_stats(player_data, live_game, all_rows, qualifiers, is_playo
                         continue
                     
                     if row_data["DateTime"] == data["DateTime"] and row_data["Tm"] == data["Tm"]:
-                        round_length = playoff_rounds[round_index]
                         if row_data["Round"] == "wc" and row_data["Year"] != 2020:
                             row_data["Elimination"] = True
                             row_data["Clinching"] = True
                         else:
+                            if len(playoff_rounds) <= round_index:
+                                print(round_index)
+                                print(playoff_rounds)
                             round_length = playoff_rounds[round_index]
                             if opponent_wins == round_length - 1:  
                                 row_data["Elimination"] = True
@@ -38937,13 +38949,14 @@ def calculate_advanced_stats(data, all_rows, player_type, time_frame):
 
     total_woba_weight = data["AB"] + data["BB"] - data["IBB"] + data["SF"] + data["HBP"]
     total_bb_k_weight = data["SO"]
-    total_k_weight = data["PA"]
     total_sb_weight = data["SB"] + data["CS"]
     total_h_weight = data["H"]
     if player_type["da_type"] == "Batter":
         total_wrcplus_weight = data["PA"]
+        total_k_weight = data["PA"]
     else:
         total_wrcplus_weight = data["BF"]
+        total_k_weight = data["BF"]
     if total_wrcplus_weight:
 
         yearly_woba_stats = {}
