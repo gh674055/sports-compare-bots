@@ -39339,6 +39339,40 @@ def calculate_advanced_stats(data, all_rows, player_type, time_frame):
                 if constant_year not in park_factors or not park_factors[constant_year]:
                     constant_year = str(int(current_season) - 1)
 
+                real_yearly_woba_stats = {}
+                for team in yearly_woba_stats[year]:
+                    if team not in park_factors[constant_year]:
+                        continue
+                    for key in yearly_woba_stats[year][team]:
+                        if key not in real_yearly_woba_stats:
+                            real_yearly_woba_stats[key] = 0
+                        real_yearly_woba_stats[key] += yearly_woba_stats[year][team][key]
+
+                if data["IP"] and real_yearly_woba_stats:
+                    league_innings = totals["MLB"]["Pitcher"][constant_year]["IP"]
+                    league_innings_split = str(league_innings).split(".")
+                    league_innings = float(league_innings_split[0])
+                    if league_innings_split[1] == "1":
+                        league_innings += 1/3
+                    elif league_innings_split[1] == "2":
+                        league_innings += 2/3
+                        
+                    total_ERA = (9 * totals["MLB"]["Pitcher"][constant_year]["ER"]) / (league_innings)
+                    cFIP = total_ERA - (((13 * totals["MLB"]["Pitcher"][constant_year]["HR"]) + (3 * (totals["MLB"]["Pitcher"][constant_year]["BB"] + totals["MLB"]["Pitcher"][constant_year]["HBP"])) - (2 * totals["MLB"]["Pitcher"][constant_year]["SO"])) / league_innings)
+
+                    FIP = 0.0
+                    fip_weight = real_yearly_woba_stats["IP"]
+                    try:
+                        FIP = (((13 * real_yearly_woba_stats["HR"]) + (3 * (real_yearly_woba_stats["HBP"] + real_yearly_woba_stats["BB"])) - (2 * real_yearly_woba_stats["SO"])) / real_yearly_woba_stats["IP"]) + cFIP
+                    except ZeroDivisionError:
+                        pass
+                    total_FIP += FIP * (fip_weight / total_fip_weight)
+
+            for year in yearly_woba_stats:
+                constant_year = year
+                if constant_year not in park_factors or not park_factors[constant_year]:
+                    constant_year = str(int(current_season) - 1)
+
                 for team in yearly_woba_stats[year]:
                     if team not in park_factors[constant_year]:
                         continue
@@ -39408,7 +39442,6 @@ def calculate_advanced_stats(data, all_rows, player_type, time_frame):
                             FIP = (((13 * yearly_woba_stats[year][team]["HR"]) + (3 * (yearly_woba_stats[year][team]["HBP"] + yearly_woba_stats[year][team]["BB"])) - (2 * yearly_woba_stats[year][team]["SO"])) / yearly_woba_stats[year][team]["IP"]) + cFIP
                         except ZeroDivisionError:
                             pass
-                        total_FIP += FIP * (fip_weight / total_fip_weight)
 
                         sLeaugeFIP = (((13 * totals[sleague]["Pitcher"][constant_year]["HR"]) + (3 * (totals[sleague]["Pitcher"][constant_year]["HBP"] + totals[sleague]["Pitcher"][constant_year]["BB"])) - (2 * totals[sleague]["Pitcher"][constant_year]["SO"])) / s_league_innings) + cFIP
 
