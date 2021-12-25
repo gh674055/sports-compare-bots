@@ -5139,6 +5139,7 @@ qualifier_map = {
         True : "Only Starts",
         False : "No Starts"
     },
+    "Start Position" : {},
     "Month" : {},
     "Stadium" : {},
     "Exact Stadium" : {},
