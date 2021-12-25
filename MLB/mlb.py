@@ -1125,16 +1125,6 @@ headers = {
                 "inconsistent" : 1928
             }
         },
-        "SB%+": {
-            "positive" : True,
-            "type" : "Adjusted",
-            "valid_since" : {
-                "game" : 1920,
-                "season" : 1920,
-                "inconsistent-game" : 1928,
-                "inconsistent" : 1928
-            }
-        },
         "WPA/162" : {
             "positive" : True,
             "display" : False,
@@ -5949,7 +5939,6 @@ advanced_stats = {
         "SLG+",
         "SO%+",
         "BB/SO+",
-        "SB%+",
         "BB%+",
         "HR%+",
         "TTO%+",
@@ -38925,7 +38914,6 @@ def calculate_advanced_stats(data, all_rows, player_type, time_frame):
     total_wRCPlus = 0.0
     total_wOBA = 0.0
     total_BBKPlus = 0.0
-    total_SBPerPlus = 0.0
 
     has_live = False
     for row_data in all_rows:
@@ -39212,15 +39200,6 @@ def calculate_advanced_stats(data, all_rows, player_type, time_frame):
                     except ZeroDivisionError:
                         pass
 
-                if int(year) >= 1920:
-                    try:
-                        sb_per = (yearly_woba_stats[year][team]["SB"]) / (yearly_woba_stats[year][team]["SB"] + yearly_woba_stats[year][team]["CS"])
-                        league_sb_per = (totals[sleague]["Batter"][constant_year]["pitcherless_values"]["SB"]) / (totals[sleague]["Batter"][constant_year]["pitcherless_values"]["SB"] + totals[sleague]["Batter"][constant_year]["pitcherless_values"]["CS"])
-                        sb_per_plus = (sb_per / league_sb_per) * 100
-                        total_SBPerPlus += sb_per_plus * ((yearly_woba_stats[year][team]["SB"] + yearly_woba_stats[year][team]["CS"]) / total_sb_weight)
-                    except ZeroDivisionError:
-                        pass
-
         data["wSB"] = total_wSB
         data["wRC"] = total_wRC
         data["wRAA"] = total_wRAA
@@ -39239,7 +39218,6 @@ def calculate_advanced_stats(data, all_rows, player_type, time_frame):
         data["ISO+"] = total_ISOPlus
         data["BAbip+"] = total_BABIPPlus
         data["BB/SO+"] = total_BBKPlus
-        data["SB%+"] = total_SBPerPlus
         data["wOBA"] = total_wOBA
 
     if player_type["da_type"] != "Batter":
@@ -39257,7 +39235,6 @@ def calculate_advanced_stats(data, all_rows, player_type, time_frame):
         total_ISOPlus = 0
         total_BABIPPlus = 0
         total_BBKPlus = 0
-        total_SBPerPlus = 0
         
         total_wrcplus_weight = data["BF"]
 
@@ -39275,7 +39252,6 @@ def calculate_advanced_stats(data, all_rows, player_type, time_frame):
         data["ISO+"] = 0
         data["BAbip+"] = 0
         data["BB/SO+"] = 0
-        data["SB%+"] = 0
 
         if total_wrcplus_weight:
             total_FIP = 0.0
