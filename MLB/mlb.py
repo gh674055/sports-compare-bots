@@ -24213,9 +24213,6 @@ def handle_schedule_stats(player_data, live_game, all_rows, qualifiers, is_playo
                             row_data["Elimination"] = True
                             row_data["Clinching"] = True
                         else:
-                            if len(playoff_rounds) <= round_index:
-                                print(round_index)
-                                print(playoff_rounds)
                             round_length = playoff_rounds[round_index]
                             if opponent_wins == round_length - 1:  
                                 row_data["Elimination"] = True
@@ -39500,7 +39497,6 @@ def calculate_advanced_stats(data, all_rows, player_type, time_frame):
                         try:
                             kmbb_per = k_per - bb_per
                             league_kmbb_per = league_k_per - league_bb_per
-                            print(league_kmbb_per)
                             kmbb_per_plus = 100 + (((kmbb_per - league_kmbb_per) / abs(league_kmbb_per)) * 100)
                             total_KMBBPlus += kmbb_per_plus * (wrcplus_weight / total_wrcplus_weight)
                         except ZeroDivisionError:
