@@ -9058,6 +9058,8 @@ def perform_nfl_game_qualifiers(row, qualifiers):
 
         venue_obj = team_venues[row["Shared"]["StadiumID"]]
         val_to_check = venue_obj["state"]
+        if not val_to_check:
+            return False
 
         for qual_object in qualifiers["State"]:
             has_match = False
@@ -9078,6 +9080,8 @@ def perform_nfl_game_qualifiers(row, qualifiers):
 
         venue_obj = team_venues[row["Shared"]["StadiumID"]]
         val_to_check = venue_obj["state"]
+        if not val_to_check:
+            return False
 
         for qual_object in qualifiers["Exact State"]:
             has_match = False
@@ -12337,10 +12341,6 @@ def perform_qualifier(player_data, player_type, ind_player_type, row, time_frame
                 if stadium in val_to_check.lower():
                     has_match = True
                     break
-                elif venue_obj["state"].lower() == "ny" and val_to_check.lower() in ["brooklyn", "bronx", "flushing"]:
-                    if stadium in "new york":
-                        has_match = True
-                        break
             if qual_object["negate"]:
                 if has_match:
                     return False
@@ -12374,6 +12374,8 @@ def perform_qualifier(player_data, player_type, ind_player_type, row, time_frame
             return False
 
         val_to_check = venue_obj["state"]
+        if not val_to_check:
+            return False
 
         for qual_object in qualifiers["Team State"]:
             has_match = False
@@ -12394,6 +12396,8 @@ def perform_qualifier(player_data, player_type, ind_player_type, row, time_frame
             return False
 
         val_to_check = venue_obj["state"]
+        if not val_to_check:
+            return False
 
         for qual_object in qualifiers["Team Exact State"]:
             has_match = False
@@ -12501,10 +12505,6 @@ def perform_qualifier(player_data, player_type, ind_player_type, row, time_frame
                 if stadium in val_to_check.lower():
                     has_match = True
                     break
-                elif venue_obj["state"].lower() == "ny" and val_to_check.lower() in ["brooklyn", "bronx", "flushing"]:
-                    if stadium in "new york":
-                        has_match = True
-                        break
             if qual_object["negate"]:
                 if has_match:
                     return False
@@ -12538,6 +12538,8 @@ def perform_qualifier(player_data, player_type, ind_player_type, row, time_frame
             return False
 
         val_to_check = venue_obj["state"]
+        if not val_to_check:
+            return False
 
         for qual_object in qualifiers["Opponent State"]:
             has_match = False
@@ -12558,6 +12560,8 @@ def perform_qualifier(player_data, player_type, ind_player_type, row, time_frame
             return False
 
         val_to_check = venue_obj["state"]
+        if not val_to_check:
+            return False
 
         for qual_object in qualifiers["Opponent Exact State"]:
             has_match = False
