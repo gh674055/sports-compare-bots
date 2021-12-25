@@ -9845,7 +9845,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
 
                                 split_vals = re.split(r"(?<!\\)\-", re.split(r"(?<!\\)" + qual_str, qualifier_str)[1])
                                 if len(split_vals) == 1:
-                                    if qual_type == "Opponent Win Percentage" or qual_type == "Opponent Points Percentage" or qual_type == "Current Opponent Win Percentage" or qual_type == "Current Opponent Points Percentage":
+                                    if "Percentage" in qual_type:
                                         qualifier_obj["values"] = {
                                             "start_val" : ordinal_to_number(split_vals[0]),
                                             "end_val" : 1,
@@ -9864,7 +9864,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                         "reverse" : reverse
                                     }
                                 
-                                if qual_type == "Opponent Win Percentage" or qual_type == "Opponent Points Percentage" or qual_type == "Current Opponent Win Percentage" or qual_type == "Current Opponent Points Percentage":
+                                if "Percentage" in qual_type:
                                     if qualifier_obj["values"]["start_val"] > 1:
                                         qualifier_obj["values"]["start_val"] = qualifier_obj["values"]["start_val"] / 100
                                     if qualifier_obj["values"]["end_val"] > 1:
@@ -9936,7 +9936,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
 
                                 split_vals = re.split(r"(?<!\\)\-", re.split(r"(?<!\\)" + qual_str, qualifier_str)[1])
                                 if len(split_vals) == 1:
-                                    if qual_type == "Team Win Percentage" or qual_type == "Team Points Percentage" or qual_type == "Current Team Win Percentage" or qual_type == "Current Team Points Percentage":
+                                    if "Percentage" in qual_type:
                                         qualifier_obj["values"] = {
                                             "start_val" : ordinal_to_number(split_vals[0]),
                                             "end_val" : 1,
@@ -9955,7 +9955,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                         "reverse" : reverse
                                     }
                                 
-                                if qual_type == "Team Win Percentage" or qual_type == "Team Points Percentage" or qual_type == "Current Team Win Percentage" or qual_type == "Current Team Points Percentage":
+                                if "Percentage" in qual_type:
                                     if qualifier_obj["values"]["start_val"] > 1:
                                         qualifier_obj["values"]["start_val"] = qualifier_obj["values"]["start_val"] / 100
                                     if qualifier_obj["values"]["end_val"] > 1:
