@@ -39242,7 +39242,11 @@ def calculate_advanced_stats(data, all_rows, player_type, time_frame):
         data["SLG+"] = total_SLGPlus
         data["ISO+"] = total_ISOPlus
         data["BAbip+"] = total_BABIPPlus
-        data["BB/SO+"] = total_BBKPlus
+        if data["SO"]:
+            data["BB/SO+"] = total_BBKPlus
+        else:
+            if data["BB"]:
+                data["BB/SO+"] = math.inf
         data["wOBA"] = total_wOBA
 
     if player_type["da_type"] != "Batter":
@@ -39550,8 +39554,13 @@ def calculate_advanced_stats(data, all_rows, player_type, time_frame):
             data["HR%+"] = total_HRPlus
             data["SO%+"] = total_KPlus
             data["BB%+"] = total_BBPlus
-            data["SO/BB+"] = total_KBBPlus
             data["SO-BB%+"] = total_KMBBPlus
+
+            if data["BB"]:
+                data["SO/BB+"] = total_KBBPlus
+            else:
+                if data["SO"]:
+                    data["SO/BB+"] = math.inf
 
             if data["IP"]:
                 data["FIP"] = total_FIP
