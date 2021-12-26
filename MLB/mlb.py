@@ -39191,9 +39191,10 @@ def calculate_advanced_stats(data, all_rows, player_type, time_frame):
                 if int(year) >= 1910 and (sleague == "NL" or int(year) >= 1913):
                     try:
                         bbmk_per = bb_per - k_per
-                        league_bbmk_per = league_bb_per - league_k_per
-                        bbmk_per_plus = 100 + (((bbmk_per - league_bbmk_per) / abs(league_bbmk_per)) * 100)
-                        total_BBMKPlus += bbmk_per_plus * (yearly_woba_stats[year][team]["PA"] / total_k_weight)
+                        if bbmk_per:
+                            league_bbmk_per = league_bb_per - league_k_per
+                            bbmk_per_plus = 100 + (((bbmk_per - league_bbmk_per) / abs(league_bbmk_per)) * 100)
+                            total_BBMKPlus += bbmk_per_plus * (yearly_woba_stats[year][team]["PA"] / total_k_weight)
                     except ZeroDivisionError:
                         pass
 
@@ -39545,9 +39546,10 @@ def calculate_advanced_stats(data, all_rows, player_type, time_frame):
 
                         try:
                             kmbb_per = k_per - bb_per
-                            league_kmbb_per = league_k_per - league_bb_per
-                            kmbb_per_plus = 100 + (((kmbb_per - league_kmbb_per) / abs(league_kmbb_per)) * 100)
-                            total_KMBBPlus += kmbb_per_plus * (wrcplus_weight / total_wrcplus_weight)
+                            if kmbb_per:
+                                league_kmbb_per = league_k_per - league_bb_per
+                                kmbb_per_plus = 100 + (((kmbb_per - league_kmbb_per) / abs(league_kmbb_per)) * 100)
+                                total_KMBBPlus += kmbb_per_plus * (wrcplus_weight / total_wrcplus_weight)
                         except ZeroDivisionError:
                             pass
             
