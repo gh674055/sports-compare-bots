@@ -19856,13 +19856,14 @@ def human_moon(date):
 
 def is_moon_match(da_date, da_moon_date):
     da_moon_date = da_moon_date.datetime()
+    da_moon_date = pytz.utc.localize(da_moon_date).astimezone(pytz.timezone("US/Eastern"))
     if da_moon_date.time() < datetime.time(hour=12, minute=0, second=0):
         dt_1 = da_moon_date - datetime.timedelta(days=1)
         dt_2 = da_moon_date
     else:
         dt_1 = da_moon_date
         dt_2 = da_moon_date
-    
+
     return da_date >= dt_1.date() and da_date <= dt_2.date()
 
 def parse_entered_str(row):
