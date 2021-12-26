@@ -26871,7 +26871,7 @@ def human_moon(date):
         return "Waning Crescent"
 
 def is_moon_match(da_date, da_moon_date):
-    da_moon_date = ephem.localtime(da_moon_date)
+    da_moon_date = da_moon_date.datetime()
     if da_moon_date.time() < datetime.time(hour=12, minute=0, second=0):
         dt_1 = da_moon_date - datetime.timedelta(days=1)
         dt_2 = da_moon_date
