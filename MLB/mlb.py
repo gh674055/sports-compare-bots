@@ -39034,7 +39034,7 @@ def calculate_advanced_stats(data, all_rows, player_type, time_frame):
                         nearest_match = {}
                         sub_season_index = 0
                         for sub_year in yearly_woba_stats:
-                            for sub_team in yearly_woba_stats[year]:
+                            for sub_team in yearly_woba_stats[sub_year]:
                                 if yearly_woba_stats[sub_year][sub_team]["SO"]:
                                     if not nearest_match or abs(sub_season_index - season_index) <= abs(nearest_match["index"] - season_index):
                                         nearest_match = {
@@ -39416,7 +39416,7 @@ def calculate_advanced_stats(data, all_rows, player_type, time_frame):
                             nearest_match = {}
                             sub_season_index = 0
                             for sub_year in yearly_woba_stats:
-                                for sub_team in yearly_woba_stats[year]:
+                                for sub_team in yearly_woba_stats[sub_year]:
                                     if yearly_woba_stats[sub_year][sub_team]["BB"]:
                                         if not nearest_match or abs(sub_season_index - season_index) <= abs(nearest_match["index"] - season_index):
                                             nearest_match = {
@@ -39437,7 +39437,7 @@ def calculate_advanced_stats(data, all_rows, player_type, time_frame):
                             nearest_match = {}
                             sub_season_index = 0
                             for sub_year in yearly_woba_stats:
-                                for sub_team in yearly_woba_stats[year]:
+                                for sub_team in yearly_woba_stats[sub_year]:
                                     if yearly_woba_stats[sub_year][sub_team]["IP"]:
                                         if not nearest_match or abs(sub_season_index - season_index) <= abs(nearest_match["index"] - season_index):
                                             nearest_match = {
@@ -39472,7 +39472,7 @@ def calculate_advanced_stats(data, all_rows, player_type, time_frame):
                                 constant_year = sub_year
                                 if constant_year not in park_factors or not park_factors[constant_year]:
                                     constant_year = str(int(current_season) - 1)
-                                for sub_team in yearly_woba_stats[year]:
+                                for sub_team in yearly_woba_stats[sub_year]:
                                     if sub_team not in park_factors[constant_year]:
                                         continue
                                     if yearly_woba_stats[sub_year][sub_team]["IP"]:
