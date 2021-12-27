@@ -3125,6 +3125,7 @@ headers = {
         "SO9+": {
             "positive" : True,
             "type" : "Adjusted",
+            "display" : False,
             "display-value" : "K9+"
         },
         "BB9": {
@@ -3135,6 +3136,7 @@ headers = {
         },
         "BB9+": {
             "positive" : False,
+            "display" : False,
             "type" : "Adjusted"
         },
         "AB": {
@@ -3158,6 +3160,7 @@ headers = {
         },
         "H9+": {
             "positive" : False,
+            "display" : False,
             "type" : "Adjusted"
         },
         "1B": {
@@ -3205,6 +3208,7 @@ headers = {
         },
         "HR9+": {
             "positive" : False,
+            "display" : False,
             "type" : "Adjusted"
         },
         "TB": {
