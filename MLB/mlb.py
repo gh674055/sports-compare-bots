@@ -39459,7 +39459,7 @@ def calculate_advanced_stats(data, all_rows, player_type, time_frame):
             if data["IP"]:
                 season_index = 0
                 for year in yearly_woba_stats:
-                    constant_year = sub_year
+                    constant_year = year
                     if constant_year not in park_factors or not park_factors[constant_year]:
                         constant_year = str(int(current_season) - 1)
                     for team in yearly_woba_stats[year]:
