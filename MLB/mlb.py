@@ -38993,6 +38993,7 @@ def calculate_advanced_stats(data, all_rows, player_type, time_frame):
                     yearly_woba_stats[year][team] = {
                         "H" : 0,
                         "BB" : 0,
+                        "BB_SO" : 0,
                         "SO" : 0,
                         "IBB" : 0,
                         "HBP" : 0,
@@ -39008,6 +39009,7 @@ def calculate_advanced_stats(data, all_rows, player_type, time_frame):
                     }
 
                 yearly_woba_stats[year][team]["BB"] += row_data.get("BB", 0)
+                yearly_woba_stats[year][team]["BB_SO"] += row_data.get("BB", 0)
                 yearly_woba_stats[year][team]["SO"] += row_data.get("SO", 0)
                 yearly_woba_stats[year][team]["IBB"] += row_data.get("IBB", 0) if int(constant_year) >= 1955 else 0
                 yearly_woba_stats[year][team]["HBP"] += row_data.get("HBP", 0)
@@ -39023,7 +39025,28 @@ def calculate_advanced_stats(data, all_rows, player_type, time_frame):
                 yearly_woba_stats[year][team]["CS"] += row_data.get("CS", 0)
             except ZeroDivisionError:
                 pass
-        
+
+        if data["SO"]:
+            season_index = 0
+            for year in yearly_woba_stats:
+                for team in yearly_woba_stats[year]:
+                    if not yearly_woba_stats[year][team]["SO"]:
+                        nearest_match = {}
+                        sub_season_index = 0
+                        for sub_year in yearly_woba_stats:
+                            for sub_team in yearly_woba_stats[year]:
+                                if yearly_woba_stats[sub_year][sub_team]["SO"]:
+                                    if not nearest_match or abs(sub_season_index - season_index) <= abs(nearest_match["index"] - season_index):
+                                        nearest_match = {
+                                            "index" : sub_season_index,
+                                            "year" : sub_year,
+                                            "team" : sub_team
+                                        }
+                                sub_season_index += 1
+                        if nearest_match:
+                            yearly_woba_stats[nearest_match["year"]][nearest_match["team"]]["BB_SO"] += yearly_woba_stats[year][team]["BB_SO"]
+                    season_index += 1
+
         for year in yearly_woba_stats:
             constant_year = year
             if constant_year not in park_factors or not park_factors[constant_year]:
@@ -39225,7 +39248,7 @@ def calculate_advanced_stats(data, all_rows, player_type, time_frame):
 
                 if int(year) >= 1910 and (sleague == "NL" or int(year) >= 1913):
                     try:
-                        bbk = (yearly_woba_stats[year][team]["BB"]) / (yearly_woba_stats[year][team]["SO"])
+                        bbk = (yearly_woba_stats[year][team]["BB_SO"]) / (yearly_woba_stats[year][team]["SO"])
                         league_bbk = (totals[sleague]["Batter"][constant_year]["pitcherless_values"]["BB"]) / (totals[sleague]["Batter"][constant_year]["pitcherless_values"]["SO"])
                         bbk_plus = 100 + (((bbk - league_bbk) / league_bbk) * 100)
                         total_BBKPlus += bbk_plus * (yearly_woba_stats[year][team]["SO"] / total_bb_k_weight)
@@ -39319,29 +39342,180 @@ def calculate_advanced_stats(data, all_rows, player_type, time_frame):
                         if not team in yearly_woba_stats[year]:
                             yearly_woba_stats[year][team] = {
                                 "H" : 0,
+                                "H_IP" : 0,
+                                "H_IP_ER" : 0,
                                 "IP" : 0,
-                                "AB" : 0,
                                 "ER" : 0,
                                 "HR" : 0,
                                 "HBP" : 0,
                                 "BB" : 0,
                                 "SO" : 0,
+                                "SO_BB" : 0,
                                 "BF" : 0,
-                                "SF" : 0
+                                "SF" : 0,
+                                "ER_IP" : 0,
+                                "HR_IP" : 0,
+                                "HBP_IP" : 0,
+                                "BB_IP" : 0,
+                                "SO_IP" : 0,
+                                "SF_IP" : 0,
+                                "ER_IP_ER" : 0,
+                                "HR_IP_ER" : 0,
+                                "HBP_IP_ER" : 0,
+                                "BB_IP_ER" : 0,
+                                "SO_IP_ER" : 0,
+                                "SF_IP_ER" : 0
                             }
 
                         yearly_woba_stats[year][team]["IP"] += row_data.get("IP", 0)
                         yearly_woba_stats[year][team]["H"] += row_data.get("H", 0)
-                        yearly_woba_stats[year][team]["AB"] += row_data.get("AB", 0)
+                        yearly_woba_stats[year][team]["H_IP"] += row_data.get("H", 0)
+                        yearly_woba_stats[year][team]["H_IP_ER"] += row_data.get("H", 0)
                         yearly_woba_stats[year][team]["ER"] += row_data.get("ER", 0)
                         yearly_woba_stats[year][team]["HR"] += row_data.get("HR", 0)
                         yearly_woba_stats[year][team]["HBP"] += row_data.get("HBP", 0)
                         yearly_woba_stats[year][team]["BB"] += row_data.get("BB", 0)
                         yearly_woba_stats[year][team]["SO"] += row_data.get("SO", 0)
+                        yearly_woba_stats[year][team]["SO_BB"] += row_data.get("SO", 0)
                         yearly_woba_stats[year][team]["BF"] += row_data.get("BF", 0)
                         yearly_woba_stats[year][team]["SF"] += row_data.get("SF", 0)
+                        yearly_woba_stats[year][team]["ER_IP"] += row_data.get("ER", 0)
+                        yearly_woba_stats[year][team]["HR_IP"] += row_data.get("HR", 0)
+                        yearly_woba_stats[year][team]["HBP_IP"] += row_data.get("HBP", 0)
+                        yearly_woba_stats[year][team]["BB_IP"] += row_data.get("BB", 0)
+                        yearly_woba_stats[year][team]["SO_IP"] += row_data.get("SO", 0)
+                        yearly_woba_stats[year][team]["SF_IP"] += row_data.get("SF", 0)
+                        yearly_woba_stats[year][team]["ER_IP_ER"] += row_data.get("ER", 0)
+                        yearly_woba_stats[year][team]["HR_IP_ER"] += row_data.get("HR", 0)
+                        yearly_woba_stats[year][team]["HBP_IP_ER"] += row_data.get("HBP", 0)
+                        yearly_woba_stats[year][team]["BB_IP_ER"] += row_data.get("BB", 0)
+                        yearly_woba_stats[year][team]["SO_IP_ER"] += row_data.get("SO", 0)
+                        yearly_woba_stats[year][team]["SF_IP_ER"] += row_data.get("SF", 0)
                 except ZeroDivisionError:
                     pass
+
+            real_yearly_woba_stats = {}
+            for year in yearly_woba_stats:
+                real_yearly_woba_stats[year] = {}
+                constant_year = year
+                if constant_year not in park_factors or not park_factors[constant_year]:
+                    constant_year = str(int(current_season) - 1)
+                for team in yearly_woba_stats[year]:
+                    if team not in park_factors[constant_year]:
+                        continue
+                    for key in yearly_woba_stats[year][team]:
+                        if key not in real_yearly_woba_stats[year]:
+                            real_yearly_woba_stats[year][key] = 0
+                        real_yearly_woba_stats[year][key] += yearly_woba_stats[year][team][key]
+
+            if data["BB"]:
+                season_index = 0
+                for year in yearly_woba_stats:
+                    for team in yearly_woba_stats[year]:
+                        if not yearly_woba_stats[year][team]["BB"]:
+                            nearest_match = {}
+                            sub_season_index = 0
+                            for sub_year in yearly_woba_stats:
+                                for sub_team in yearly_woba_stats[year]:
+                                    if yearly_woba_stats[sub_year][sub_team]["BB"]:
+                                        if not nearest_match or abs(sub_season_index - season_index) <= abs(nearest_match["index"] - season_index):
+                                            nearest_match = {
+                                                "index" : sub_season_index,
+                                                "year" : sub_year,
+                                                "team" : sub_team
+                                            }
+                                    sub_season_index += 1
+                            if nearest_match:
+                                yearly_woba_stats[nearest_match["year"]][nearest_match["team"]]["SO_BB"] += yearly_woba_stats[year][team]["SO_BB"]
+                        season_index += 1
+
+            if data["IP"]:
+                season_index = 0
+                for year in yearly_woba_stats:
+                    for team in yearly_woba_stats[year]:
+                        if not yearly_woba_stats[year][team]["IP"]:
+                            nearest_match = {}
+                            sub_season_index = 0
+                            for sub_year in yearly_woba_stats:
+                                for sub_team in yearly_woba_stats[year]:
+                                    if yearly_woba_stats[sub_year][sub_team]["IP"]:
+                                        if not nearest_match or abs(sub_season_index - season_index) <= abs(nearest_match["index"] - season_index):
+                                            nearest_match = {
+                                                "index" : sub_season_index,
+                                                "year" : sub_year,
+                                                "team" : sub_team
+                                            }
+                                    sub_season_index += 1
+                            if nearest_match:
+                                yearly_woba_stats[nearest_match["year"]][nearest_match["team"]]["H_IP"] += yearly_woba_stats[year][team]["H_IP"]
+                                yearly_woba_stats[nearest_match["year"]][nearest_match["team"]]["ER_IP"] += yearly_woba_stats[year][team]["ER_IP"]
+                                yearly_woba_stats[nearest_match["year"]][nearest_match["team"]]["HR_IP"] += yearly_woba_stats[year][team]["HR_IP"]
+                                yearly_woba_stats[nearest_match["year"]][nearest_match["team"]]["HBP_IP"] += yearly_woba_stats[year][team]["HBP_IP"]
+                                yearly_woba_stats[nearest_match["year"]][nearest_match["team"]]["BB_IP"] += yearly_woba_stats[year][team]["BB_IP"]
+                                yearly_woba_stats[nearest_match["year"]][nearest_match["team"]]["SO_IP"] += yearly_woba_stats[year][team]["SO_IP"]
+                                yearly_woba_stats[nearest_match["year"]][nearest_match["team"]]["SF_IP"] += yearly_woba_stats[year][team]["SF_IP"]
+                        season_index += 1
+            
+            if data["IP"]:
+                season_index = 0
+                for year in yearly_woba_stats:
+                    constant_year = sub_year
+                    if constant_year not in park_factors or not park_factors[constant_year]:
+                        constant_year = str(int(current_season) - 1)
+                    for team in yearly_woba_stats[year]:
+                        if team not in park_factors[constant_year]:
+                            continue
+                        if not yearly_woba_stats[year][team]["IP"]:
+                            nearest_match = {}
+                            sub_season_index = 0
+                            for sub_year in yearly_woba_stats:
+                                constant_year = sub_year
+                                if constant_year not in park_factors or not park_factors[constant_year]:
+                                    constant_year = str(int(current_season) - 1)
+                                for sub_team in yearly_woba_stats[year]:
+                                    if sub_team not in park_factors[constant_year]:
+                                        continue
+                                    if yearly_woba_stats[sub_year][sub_team]["IP"]:
+                                        if not nearest_match or abs(sub_season_index - season_index) <= abs(nearest_match["index"] - season_index):
+                                            nearest_match = {
+                                                "index" : sub_season_index,
+                                                "year" : sub_year,
+                                                "team" : sub_team
+                                            }
+                                    sub_season_index += 1
+                            if nearest_match:
+                                yearly_woba_stats[nearest_match["year"]][nearest_match["team"]]["H_IP_ER"] += yearly_woba_stats[year][team]["H_IP_ER"]
+                                yearly_woba_stats[nearest_match["year"]][nearest_match["team"]]["ER_IP_ER"] += yearly_woba_stats[year][team]["ER_IP_ER"]
+                                yearly_woba_stats[nearest_match["year"]][nearest_match["team"]]["HR_IP_ER"] += yearly_woba_stats[year][team]["HR_IP_ER"]
+                                yearly_woba_stats[nearest_match["year"]][nearest_match["team"]]["HBP_IP_ER"] += yearly_woba_stats[year][team]["HBP_IP_ER"]
+                                yearly_woba_stats[nearest_match["year"]][nearest_match["team"]]["BB_IP_ER"] += yearly_woba_stats[year][team]["BB_IP_ER"]
+                                yearly_woba_stats[nearest_match["year"]][nearest_match["team"]]["SO_IP_ER"] += yearly_woba_stats[year][team]["SO_IP_ER"]
+                                yearly_woba_stats[nearest_match["year"]][nearest_match["team"]]["SF_IP_ER"] += yearly_woba_stats[year][team]["SF_IP_ER"]
+                        season_index += 1
+
+            if data["IP"]:
+                season_index = 0
+                for year in real_yearly_woba_stats:
+                    if real_yearly_woba_stats[year] and not real_yearly_woba_stats[year]["IP"]:
+                        nearest_match = {}
+                        sub_season_index = 0
+                        for sub_year in real_yearly_woba_stats:
+                            if real_yearly_woba_stats[sub_year] and real_yearly_woba_stats[sub_year]["IP"]:
+                                if not nearest_match or abs(sub_season_index - season_index) <= abs(nearest_match["index"] - season_index):
+                                    nearest_match = {
+                                        "index" : sub_season_index,
+                                        "year" : sub_year
+                                    }
+                            sub_season_index += 1
+                        if nearest_match:
+                            real_yearly_woba_stats[nearest_match["year"]]["H_IP"] += real_yearly_woba_stats[year]["H_IP"]
+                            real_yearly_woba_stats[nearest_match["year"]]["ER_IP"] += real_yearly_woba_stats[year]["ER_IP"]
+                            real_yearly_woba_stats[nearest_match["year"]]["HR_IP"] += real_yearly_woba_stats[year]["HR_IP"]
+                            real_yearly_woba_stats[nearest_match["year"]]["HBP_IP"] += real_yearly_woba_stats[year]["HBP_IP"]
+                            real_yearly_woba_stats[nearest_match["year"]]["BB_IP"] += real_yearly_woba_stats[year]["BB_IP"]
+                            real_yearly_woba_stats[nearest_match["year"]]["SO_IP"] += real_yearly_woba_stats[year]["SO_IP"]
+                            real_yearly_woba_stats[nearest_match["year"]]["SF_IP"] += real_yearly_woba_stats[year]["SF_IP"]
+                    season_index += 1
 
             for year in yearly_woba_stats:
                 constant_year = year
@@ -39357,21 +39531,12 @@ def calculate_advanced_stats(data, all_rows, player_type, time_frame):
                     elif int(year) < 1916:
                         total_wrcplus_weight -= yearly_woba_stats[year][team]["BF"]
 
-            for year in yearly_woba_stats:
+            for year in real_yearly_woba_stats:
                 constant_year = year
                 if constant_year not in park_factors or not park_factors[constant_year]:
                     constant_year = str(int(current_season) - 1)
 
-                real_yearly_woba_stats = {}
-                for team in yearly_woba_stats[year]:
-                    if team not in park_factors[constant_year]:
-                        continue
-                    for key in yearly_woba_stats[year][team]:
-                        if key not in real_yearly_woba_stats:
-                            real_yearly_woba_stats[key] = 0
-                        real_yearly_woba_stats[key] += yearly_woba_stats[year][team][key]
-
-                if data["IP"] and real_yearly_woba_stats:
+                if data["IP"] and real_yearly_woba_stats[year]:
                     league_innings = totals["MLB"]["Pitcher"][constant_year]["IP"]
                     league_innings_split = str(league_innings).split(".")
                     league_innings = float(league_innings_split[0])
@@ -39384,9 +39549,9 @@ def calculate_advanced_stats(data, all_rows, player_type, time_frame):
                     cFIP = total_ERA - (((13 * totals["MLB"]["Pitcher"][constant_year]["HR"]) + (3 * (totals["MLB"]["Pitcher"][constant_year]["BB"] + totals["MLB"]["Pitcher"][constant_year]["HBP"])) - (2 * totals["MLB"]["Pitcher"][constant_year]["SO"])) / league_innings)
 
                     FIP = 0.0
-                    fip_weight = real_yearly_woba_stats["IP"]
+                    fip_weight = real_yearly_woba_stats[year]["IP"]
                     try:
-                        FIP = (((13 * real_yearly_woba_stats["HR"]) + (3 * (real_yearly_woba_stats["HBP"] + real_yearly_woba_stats["BB"])) - (2 * real_yearly_woba_stats["SO"])) / real_yearly_woba_stats["IP"]) + cFIP
+                        FIP = (((13 * real_yearly_woba_stats[year]["HR_IP"]) + (3 * (real_yearly_woba_stats[year]["HBP_IP"] + real_yearly_woba_stats[year]["BB_IP"])) - (2 * real_yearly_woba_stats[year]["SO_IP"])) / real_yearly_woba_stats[year]["IP"]) + cFIP
                     except ZeroDivisionError:
                         pass
                     total_FIP += FIP * (fip_weight / total_fip_weight)
@@ -39427,7 +39592,7 @@ def calculate_advanced_stats(data, all_rows, player_type, time_frame):
                     if data["IP"]:
                         era = 0.0
                         try:
-                            era = (9 * yearly_woba_stats[year][team]["ER"]) / yearly_woba_stats[year][team]["IP"]
+                            era = (9 * yearly_woba_stats[year][team]["ER_IP_ER"]) / yearly_woba_stats[year][team]["IP"]
                         except ZeroDivisionError:
                             pass
 
@@ -39462,7 +39627,7 @@ def calculate_advanced_stats(data, all_rows, player_type, time_frame):
                         FIP = 0.0
                         fip_weight = yearly_woba_stats[year][team]["IP"]
                         try:
-                            FIP = (((13 * yearly_woba_stats[year][team]["HR"]) + (3 * (yearly_woba_stats[year][team]["HBP"] + yearly_woba_stats[year][team]["BB"])) - (2 * yearly_woba_stats[year][team]["SO"])) / yearly_woba_stats[year][team]["IP"]) + cFIP
+                            FIP = (((13 * yearly_woba_stats[year][team]["HR_IP"]) + (3 * (yearly_woba_stats[year][team]["HBP_IP"] + yearly_woba_stats[year][team]["BB_IP"])) - (2 * yearly_woba_stats[year][team]["SO_IP"])) / yearly_woba_stats[year][team]["IP"]) + cFIP
                         except ZeroDivisionError:
                             pass
 
@@ -39478,7 +39643,7 @@ def calculate_advanced_stats(data, all_rows, player_type, time_frame):
                         wrcplus_weight = yearly_woba_stats[year][team]["BF"]
                         
                         try:
-                            whip = (yearly_woba_stats[year][team]["BB"] + yearly_woba_stats[year][team]["H"]) / (yearly_woba_stats[year][team]["IP"])
+                            whip = (yearly_woba_stats[year][team]["BB_IP"] + yearly_woba_stats[year][team]["H_IP"]) / (yearly_woba_stats[year][team]["IP"])
                             league_whip = (totals[sleague]["Pitcher"][constant_year]["BB"] + totals[sleague]["Pitcher"][constant_year]["H"]) / (totals[sleague]["Pitcher"][constant_year]["IP"])
                             whip_plus = 100 + (((whip - league_whip) / league_whip) * 100)
                             total_WHIPPlus += whip_plus * (eraminus_weight / total_eraminus_weight)
@@ -39486,7 +39651,7 @@ def calculate_advanced_stats(data, all_rows, player_type, time_frame):
                             pass
                         
                         try:
-                            k9 = (yearly_woba_stats[year][team]["SO"] * 9) / (yearly_woba_stats[year][team]["IP"])
+                            k9 = (yearly_woba_stats[year][team]["SO_IP"] * 9) / (yearly_woba_stats[year][team]["IP"])
                             league_k9 = (totals[sleague]["Pitcher"][constant_year]["SO"] * 9) / (totals[sleague]["Pitcher"][constant_year]["IP"])
                             k9_plus = 100 + (((k9 - league_k9) / league_k9) * 100)
                             total_K9Plus += k9_plus * (eraminus_weight / total_eraminus_weight)
@@ -39494,7 +39659,7 @@ def calculate_advanced_stats(data, all_rows, player_type, time_frame):
                             pass
                     
                         try:
-                            bb9 = (yearly_woba_stats[year][team]["BB"] * 9) / (yearly_woba_stats[year][team]["IP"])
+                            bb9 = (yearly_woba_stats[year][team]["BB_IP"] * 9) / (yearly_woba_stats[year][team]["IP"])
                             league_bb9 = (totals[sleague]["Pitcher"][constant_year]["BB"] * 9) / (totals[sleague]["Pitcher"][constant_year]["IP"])
                             bb9_plus = 100 + (((bb9 - league_bb9) / league_bb9) * 100)
                             total_BB9Plus += bb9_plus * (eraminus_weight / total_eraminus_weight)
@@ -39502,7 +39667,7 @@ def calculate_advanced_stats(data, all_rows, player_type, time_frame):
                             pass
 
                         try:
-                            hr9 = (yearly_woba_stats[year][team]["HR"] * 9) / (yearly_woba_stats[year][team]["IP"])
+                            hr9 = (yearly_woba_stats[year][team]["HR_IP"] * 9) / (yearly_woba_stats[year][team]["IP"])
                             league_hr9 = (totals[sleague]["Pitcher"][constant_year]["HR"] * 9) / (totals[sleague]["Pitcher"][constant_year]["IP"])
                             hr9_plus = 100 + (((hr9 - league_hr9) / league_hr9) * 100)
                             total_HR9Plus += hr9_plus * (eraminus_weight / total_eraminus_weight)
@@ -39510,7 +39675,7 @@ def calculate_advanced_stats(data, all_rows, player_type, time_frame):
                             pass
 
                         try:
-                            h9 = (yearly_woba_stats[year][team]["H"] * 9) / (yearly_woba_stats[year][team]["IP"])
+                            h9 = (yearly_woba_stats[year][team]["H_IP"] * 9) / (yearly_woba_stats[year][team]["IP"])
                             league_h9 = (totals[sleague]["Pitcher"][constant_year]["H"] * 9) / (totals[sleague]["Pitcher"][constant_year]["IP"])
                             h9_plus = 100 + (((h9 - league_h9) / league_h9) * 100)
                             total_H9Plus += h9_plus * (eraminus_weight / total_eraminus_weight)
@@ -39518,7 +39683,7 @@ def calculate_advanced_stats(data, all_rows, player_type, time_frame):
                             pass
 
                     try:
-                        kbb = (yearly_woba_stats[year][team]["SO"]) / (yearly_woba_stats[year][team]["BB"])
+                        kbb = (yearly_woba_stats[year][team]["SO_BB"]) / (yearly_woba_stats[year][team]["BB"])
                         league_kbb = (totals[sleague]["Pitcher"][constant_year]["SO"]) / (totals[sleague]["Pitcher"][constant_year]["BB"])
                         kbb_plus = 100 + (((kbb - league_kbb) / league_kbb) * 100)
                         total_KBBPlus += kbb_plus * (yearly_woba_stats[year][team]["BB"] / total_k_bb_weight)
