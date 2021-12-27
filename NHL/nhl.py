@@ -11896,6 +11896,8 @@ def handle_name_threads(sub_name, parse_time_frames, index, player_type, remove_
             for row in player_data["stat_values"]["all_rows"]:
                 team = row["Tm"]
                 year = str(row["Year"])
+                if team not in franchises:
+                    franchises[team] = set()
                 franchises[team].add(year)
             if len(franchises) > 1:
                 if comment_obj:
