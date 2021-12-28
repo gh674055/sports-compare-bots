@@ -5115,12 +5115,6 @@ qualifier_map = {
         "wc" : "Wild Card"
     },
     "Super Bowl" : {},
-    "Time" : {
-        "m" : "Morning",
-        "e" : "Early Afternoon",
-        "a" : "Late Afternoon",
-        "l" : "Night"
-    },
     "Start Time" : {},
     "Local Start Time" : {},
     "Location" : {
