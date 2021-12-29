@@ -36253,18 +36253,12 @@ def get_live_game_data(row_index, player_data, row_data, player_type, qualifiers
                 if scoring_play["result"]["type"] != "atBat" or "eventType" not in scoring_play["result"]:
                     continue
                 
-                has_substituion = False
                 for play in scoring_play["playEvents"]:
-                    if "isSubstitution" in play and play["isSubstitution"]:
-                        has_substituion = True
-                        break
-                
-                if has_substituion:
-                    continue
-               
-                if "isInPlay" in scoring_play["playEvents"][len(scoring_play["playEvents"]) - 1]["details"] and scoring_play["playEvents"][len(scoring_play["playEvents"]) - 1]["details"]["isInPlay"]:
-                    if scoring_play["count"]["balls"] != 0 or scoring_play["count"]["strikes"] != 0:
-                        has_count_data = True
+                    if play["isPitch"]:
+                        code = play["details"]["call"]["code"][-1:].upper()
+                        if code not in ["S", "B", "E", "X", "D", "K", "I", "H"]:
+                            has_count_data = True
+                            break
 
                 if has_count_data:
                     break
