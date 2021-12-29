@@ -234,6 +234,32 @@ def main():
                 team_str = unidecode.unidecode(team["name"])
                 league = leagues_to_id[team["league"]["name"]]
 
+                season = team["season"]
+
+                if id_val not in team_venue_history:
+                     team_venue_history[id_val] = []
+
+                if last_season == None:
+                    team_venue_history[id_val].append({
+                        "start_year" : season,
+                        "end_year" : None,
+                        "venue" : team["venue"]["id"]
+                    })
+                elif index == len(data["teams"]) - 1:
+                     team_venue_history[id_val].append({
+                        "start_year" : None,
+                        "end_year" : last_season - 1,
+                        "venue" : team["venue"]["id"]
+                    })
+                else:
+                    team_venue_history[id_val].append({
+                        "start_year" : season,
+                        "end_year" : last_season - 1,
+                        "venue" : team["venue"]["id"]
+                    })
+                
+                last_season = season
+
                 if team_str == "Washington Senators":
                     if league == "AL":
                         if int(team["firstYearOfPlay"]) < 1961:
@@ -278,32 +304,6 @@ def main():
                         continue
                 team_info[league][team_str] = id_val
                 team_abr[league][abbr] = team_str
-
-                season = team["season"]
-
-                if id_val not in team_venue_history:
-                     team_venue_history[id_val] = []
-
-                if last_season == None:
-                    team_venue_history[id_val].append({
-                        "start_year" : season,
-                        "end_year" : None,
-                        "venue" : team["venue"]["id"]
-                    })
-                elif index == len(data["teams"]) - 1:
-                     team_venue_history[id_val].append({
-                        "start_year" : None,
-                        "end_year" : last_season - 1,
-                        "venue" : team["venue"]["id"]
-                    })
-                else:
-                    team_venue_history[id_val].append({
-                        "start_year" : season,
-                        "end_year" : last_season - 1,
-                        "venue" : team["venue"]["id"]
-                    })
-                
-                last_season = season
     
     for id_val in range(1, 806):
         request = urllib.request.Request(mlb_teams_url_format_2.format(id_val), headers=request_headers)
