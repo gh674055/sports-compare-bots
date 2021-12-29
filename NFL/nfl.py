@@ -2517,20 +2517,20 @@ def handle_player_string(comment, player_type, is_fantasy, last_updated, hide_ta
                                     qual_type = "Start Time"
                                     qual_val = {
                                         "start_val" : datetime.time(16, 0, 0),
-                                        "end_val" : datetime.time(17, 59, 0),
+                                        "end_val" : datetime.time(18, 59, 0),
                                         "time_zone" : "US/Eastern"
                                     }
                                 elif qualifier_str.startswith("afternoon"):
                                     qual_type = "Start Time"
                                     qual_val = {
                                         "start_val" : datetime.time(12, 0, 0),
-                                        "end_val" : datetime.time(17, 59, 0),
+                                        "end_val" : datetime.time(18, 59, 0),
                                         "time_zone" : "US/Eastern"
                                     }
                                 elif qualifier_str.startswith("night"):
                                     qual_type = "Start Time"
                                     qual_val = {
-                                        "start_val" : datetime.time(18, 0, 0),
+                                        "start_val" : datetime.time(19, 0, 0),
                                         "end_val" : datetime.time(23, 59, 0),
                                         "time_zone" : "US/Eastern"
                                     }
@@ -2538,13 +2538,13 @@ def handle_player_string(comment, player_type, is_fantasy, last_updated, hide_ta
                                     qual_type = "Start Time"
                                     qual_val = {
                                         "start_val" : datetime.time(0, 0, 0),
-                                        "end_val" : datetime.time(17, 59, 0),
+                                        "end_val" : datetime.time(18, 59, 0),
                                         "time_zone" : "US/Eastern"
                                     }
                                 elif qualifier_str == "evening":
                                     qual_type = "Start Time"
                                     qual_val = {
-                                        "start_val" : datetime.time(18, 0, 0),
+                                        "start_val" : datetime.time(19, 0, 0),
                                         "end_val" : datetime.time(23, 59, 0),
                                         "time_zone" : "US/Eastern"
                                     }
@@ -18633,7 +18633,7 @@ def perform_schedule_qualifiers(row, qualifiers):
         if not "StartTime" in row["Shared"]:
             return False
 
-        is_national = row["Shared"]["is_playoffs"] or row["Shared"]["Date"].weekday() != 6 or row["Shared"]["StartTime"] < datetime.time(12, 0, 0) or not row["Shared"]["StartTime"] >= datetime.time(18, 0, 0)
+        is_national = row["Shared"]["is_playoffs"] or row["Shared"]["Date"].weekday() != 6 or row["Shared"]["StartTime"] < datetime.time(12, 0, 0) or not row["Shared"]["StartTime"] >= datetime.time(19, 0, 0)
         for qual_object in qualifiers["National Game"]:
             if qual_object["negate"]:
                 if is_national:
