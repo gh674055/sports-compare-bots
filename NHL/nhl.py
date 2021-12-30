@@ -8153,7 +8153,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
 
                                 time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
                         
-                        last_match = re.finditer(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?((leading-by|trailing-by)-(\S+))\b", time_frame)
+                        last_match = re.finditer(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?((leading-by|trailing-by|game|series-game)-(\S+))\b", time_frame)
                         for m in last_match:
                             qualifier_obj = {}
                             
@@ -8170,6 +8170,10 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                             elif qualifier_str == "trailing-by":
                                 qual_type = "Score Margin"
                                 extra_stats.add("current-stats")
+                            elif qualifier_str == "game" or qualifier_str == "series-game":
+                                qual_type = "Series Game"
+                                if not playoffs:
+                                    playoffs = "Only"
 
                             value = ordinal_to_number(m.group(4))
 
