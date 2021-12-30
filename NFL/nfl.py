@@ -17871,7 +17871,7 @@ def parse_row(row, table_name, time_frame, year, is_playoffs, player_type, ind_p
                             if len(result) == 3:
                                 row_data["Era Adjusted Passing"].update({"QBT" : int(result[2])})
                     continue
-
+                
             if over_header_value == "Rushing":
                 if header_value == "Rush":
                     if not table_name.startswith("detailed_") and not table_name.startswith("advanced_"):
@@ -17949,7 +17949,7 @@ def parse_row(row, table_name, time_frame, year, is_playoffs, player_type, ind_p
                 over_header_value = "Advanced/Kicking"
             elif over_header_value == "Punting" and header_value == "Lng":
                 over_header_value = "Advanced/Punting"
-            elif table_name.startswith("detailed_") or table_name.startswith("advanced_") and (over_header_value == "Pass Coverage" or over_header_value == "Pass Rush" or over_header_value == "Tackles" or header_value == "Sk"):
+            elif table_name.startswith("detailed_") or table_name.startswith("advanced_") and (over_header_value == "Pass Coverage" or over_header_value == "Pass Rush" or over_header_value == "Tackles" or header_value == "Sk" or header_value == "Prss"):
                 over_header_value = "Advanced/Defense"
                 if header_value == "Tgt":
                     header_value = "Tgt"
