@@ -41798,10 +41798,7 @@ def ordinal_to_number(ordinal):
                     try:
                         ordinal = float(w2n.word_to_num(ordinal))
                     except Exception:
-                        if ordinal:
-                            return unescape_string(ordinal).upper()
-                        else:
-                            return ordinal
+                        raise Exception("Invalid ordinal: " + str(ordinal))
 
         if is_percent:
             ordinal = ordinal / 100
@@ -41822,7 +41819,7 @@ def ordinal_to_number(ordinal):
 
         return ordinal
     else:
-        return ordinal
+        raise Exception("Invalid ordinal: " + str(ordinal))
 
 def unescape_string(escaped_string):
     if escaped_string:
