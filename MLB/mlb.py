@@ -1045,6 +1045,74 @@ headers = {
             "isinf" : "BB",
             "display-value" : "BB/K"
         },
+        "BA+" : {
+            "positive" : True,
+            "display-value" : "AVG+",
+            "type" : "Adjusted"
+        },
+        "OBP+" : {
+            "positive" : True,
+            "type" : "Adjusted"
+        },
+        "SLG+" : {
+            "positive" : True,
+            "type" : "Adjusted"
+        },
+        "ISO+" : {
+            "positive" : True,
+            "type" : "Adjusted"
+        },
+        "BAbip+" : {
+            "positive" : True,
+            "type" : "Adjusted",
+            "valid_since" : {
+                "season" : 1910,
+                "game" : 1910
+            }
+        },
+        "HR%+" : {
+            "positive" : True,
+            "type" : "Adjusted"
+        },
+        "XBH%+" : {
+            "positive" : True,
+            "type" : "Adjusted"
+        },
+        "X/H%+" : {
+            "positive" : True,
+            "type" : "Adjusted"
+        },
+        "BB%+" : {
+            "positive" : True,
+            "type" : "Adjusted"
+        },
+        "SO%+" : {
+            "positive" : False,
+            "type" : "Adjusted",
+            "display-value" : "K%+",
+            "valid_since" : {
+                "season" : 1910,
+                "game" : 1910
+            }
+        },
+        "BB-SO%+": {
+            "positive" : True,
+            "type" : "Adjusted",
+            "display-value" : "BB-K%+",
+            "display" : False,
+            "valid_since" : {
+                "season" : 1910,
+                "game" : 1910
+            }
+        },
+        "TTO%+": {
+            "positive" : True,
+            "type" : "Adjusted",
+            "valid_since" : {
+                "season" : 1910,
+                "game" : 1910
+            }
+        },
         "BB/SO+" : {
             "positive" : True,
             "type" : "Adjusted",
@@ -1053,6 +1121,10 @@ headers = {
                 "season" : 1910,
                 "game" : 1910
             }
+        },
+        "wRC+" : {
+            "positive" : True,
+            "type" : "Adjusted"
         },
         "BB/162": {
             "positive" : True,
@@ -1154,36 +1226,20 @@ headers = {
             "round" : "percent",
             "type" : "Per Game/Advanced"
         },
-        "HR%+" : {
-            "positive" : True,
-            "type" : "Adjusted"
-        },
         "XBH%" : {
             "positive" : True,
             "round" : "percent",
             "type" : "Per Game/Advanced"
-        },
-        "XBH%+" : {
-            "positive" : True,
-            "type" : "Adjusted"
         },
         "X/H%" : {
             "positive" : True,
             "round" : "percent",
             "type" : "Per Game/Advanced"
         },
-        "X/H%+" : {
-            "positive" : True,
-            "type" : "Adjusted"
-        },
         "BB%" : {
             "positive" : True,
             "round" : "percent",
             "type" : "Per Game/Advanced"
-        },
-        "BB%+" : {
-            "positive" : True,
-            "type" : "Adjusted"
         },
         "SO%" : {
             "positive" : False,
@@ -1191,43 +1247,16 @@ headers = {
             "type" : "Per Game/Advanced",
             "display-value" : "K%"
         },
-        "SO%+" : {
-            "positive" : False,
-            "type" : "Adjusted",
-            "display-value" : "K%+",
-            "valid_since" : {
-                "season" : 1910,
-                "game" : 1910
-            }
-        },
         "BB-SO%": {
             "positive" : True,
             "round" : 'percent',
             "type" : "Per Game/Advanced",
             "display-value" : "BB-K%"
         },
-        "BB-SO%+": {
-            "positive" : True,
-            "type" : "Adjusted",
-            "display-value" : "BB-K%+",
-            "display" : False,
-            "valid_since" : {
-                "season" : 1910,
-                "game" : 1910
-            }
-        },
         "TTO%": {
             "positive" : True,
             "round" : 'percent',
             "type" : "Per Game/Advanced"
-        },
-        "TTO%+": {
-            "positive" : True,
-            "type" : "Adjusted",
-            "valid_since" : {
-                "season" : 1910,
-                "game" : 1910
-            }
         },
         "IBB": {
             "positive" : True,
@@ -1284,15 +1313,9 @@ headers = {
         }, "OBP" : {
             "positive" : True,
             "round" : 3
-        }, "OBP+" : {
-            "positive" : True,
-            "type" : "Adjusted"
         }, "SLG" : {
             "positive" : True,
             "round" : 3
-        }, "SLG+" : {
-            "positive" : True,
-            "type" : "Adjusted"
         }, "OPS" : {
             "positive" : True,
             "round" : 3
@@ -1305,21 +1328,9 @@ headers = {
             "positive" : True,
             "round" : 3
         },
-        "ISO+" : {
-            "positive" : True,
-            "type" : "Adjusted"
-        },
         "BAbip" : {
             "positive" : True,
             "round" : 3
-        },
-        "BAbip+" : {
-            "positive" : True,
-            "type" : "Adjusted",
-            "valid_since" : {
-                "season" : 1910,
-                "game" : 1910
-            }
         },
         "wSB" : {
             "positive" : True,
@@ -1345,10 +1356,6 @@ headers = {
             "positive" : True,
             "round" : 2,
             "type" : "Per Game/Advanced"
-        },
-        "wRC+" : {
-            "positive" : True,
-            "type" : "Adjusted"
         },
         "WPA" : {
             "positive" : True,
@@ -3108,10 +3115,77 @@ headers = {
             "isinf" : "SO",
             "display-value" : "K/BB"
         },
+        "SO9+": {
+            "positive" : True,
+            "type" : "Adjusted",
+            "display-value" : "K9+"
+        },
+        "BB9+": {
+            "positive" : False,
+            "type" : "Adjusted"
+        },
+        "H9+": {
+            "positive" : False,
+            "type" : "Adjusted"
+        },
+        "HR9+": {
+            "positive" : False,
+            "type" : "Adjusted"
+        },
+        "SO%+" : {
+            "positive" : True,
+            "type" : "Adjusted",
+            "display-value" : "K%+",
+            "valid_since" : {
+                "season" : 1916,
+                "game" : 1916
+            }
+        },
+        "BB%+" : {
+            "positive" : False,
+            "type" : "Adjusted",
+            "valid_since" : {
+                "season" : 1916,
+                "game" : 1916
+            }
+        },
+        "SO-BB%+": {
+            "positive" : True,
+            "type" : "Adjusted",
+            "display" : False,
+            "display-value" : "K-BB%+"
+        },
+        "HR%+" : {
+            "positive" : False,
+            "type" : "Adjusted"
+        },
         "SO/BB+": {
             "positive" : True,
             "type" : "Adjusted",
             "display-value" : "K/BB+"
+        },
+        "WHIP+": {
+            "positive" : False,
+            "type" : "Adjusted"
+        },
+        "wRC+" : {
+            "positive" : False,
+            "type" : "Adjusted",
+            "display" : False,
+            "valid_since" : {
+                "game-np" : 1916,
+                "season-np" : 1916,
+                "season" : 1901,
+                "game" : 1901
+            }
+        },
+        "ERA-": {
+            "positive" : False,
+            "type" : "Adjusted"
+        },
+        "FIP-": {
+            "positive" : False,
+            "type" : "Adjusted"
         },
         "SO9": {
             "positive" : True,
@@ -3120,20 +3194,11 @@ headers = {
             "type" : "Per Game/Advanced",
             "display-value" : "K9"
         },
-        "SO9+": {
-            "positive" : True,
-            "type" : "Adjusted",
-            "display-value" : "K9+"
-        },
         "BB9": {
             "positive" : False,
             "round" : 2,
             "isinf" : "BB",
             "type" : "Per Game/Advanced"
-        },
-        "BB9+": {
-            "positive" : False,
-            "type" : "Adjusted"
         },
         "AB": {
             "positive" : True,
@@ -3153,10 +3218,6 @@ headers = {
             "round" : 2,
             "isinf" : "H",
             "type" : "Per Game/Advanced"
-        },
-        "H9+": {
-            "positive" : False,
-            "type" : "Adjusted"
         },
         "1B": {
             "positive" : False,
@@ -3201,10 +3262,6 @@ headers = {
             "isinf" : "HR",
             "type" : "Per Game/Advanced"
         },
-        "HR9+": {
-            "positive" : False,
-            "type" : "Adjusted"
-        },
         "TB": {
             "positive" : False,
             "valid_since" : {
@@ -3248,27 +3305,10 @@ headers = {
             "type" : "Per Game/Advanced",
             "display-value" : "K%"
         },
-        "SO%+" : {
-            "positive" : True,
-            "type" : "Adjusted",
-            "display-value" : "K%+",
-            "valid_since" : {
-                "season" : 1916,
-                "game" : 1916
-            }
-        },
         "BB%" : {
             "positive" : False,
             "round" : "percent",
             "type" : "Per Game/Advanced"
-        },
-        "BB%+" : {
-            "positive" : False,
-            "type" : "Adjusted",
-            "valid_since" : {
-                "season" : 1916,
-                "game" : 1916
-            }
         },
         "SO-BB%": {
             "positive" : True,
@@ -3276,20 +3316,10 @@ headers = {
             "type" : "Per Game/Advanced",
             "display-value" : "K-BB%"
         },
-        "SO-BB%+": {
-            "positive" : True,
-            "type" : "Adjusted",
-            "display" : False,
-            "display-value" : "K-BB%+"
-        },
         "HR%" : {
             "positive" : False,
             "round" : "percent",
             "type" : "Per Game/Advanced"
-        },
-        "HR%+" : {
-            "positive" : False,
-            "type" : "Adjusted"
         },
         "XBH%" : {
             "positive" : False,
@@ -3598,17 +3628,6 @@ headers = {
                 "game" : 1901
             }
         },
-        "wRC+" : {
-            "positive" : False,
-            "type" : "Adjusted",
-            "display" : False,
-            "valid_since" : {
-                "game-np" : 1916,
-                "season-np" : 1916,
-                "season" : 1901,
-                "game" : 1901
-            }
-        },
         "RS" : {
             "positive" : False,
             "display" : False
@@ -3668,10 +3687,6 @@ headers = {
             "isinf" : "BB|H",
             "round" : 3
         },
-        "WHIP+": {
-            "positive" : False,
-            "type" : "Adjusted"
-        },
         "PtchR" : {
             "positive" : True,
             "display" : False,
@@ -3706,17 +3721,9 @@ headers = {
             },
             "type" : "Per Game/Advanced"
         },
-        "ERA-": {
-            "positive" : False,
-            "type" : "Adjusted"
-        },
         "ERA+": {
             "positive" : True,
             "display" : False,
-            "type" : "Adjusted"
-        },
-        "FIP-": {
-            "positive" : False,
             "type" : "Adjusted"
         },
         "WPA" : {
