@@ -15947,22 +15947,17 @@ def get_live_game(player_link, player_data, player_type, time_frame):
         for player in sub_data["liveData"]["boxscore"]["teams"][team_str]["players"]:
             player = sub_data["liveData"]["boxscore"]["teams"][team_str]["players"][player]
             if player["person"]["id"] == player_id:
-                if player_type["da_type"]["type"] == "Skater":
-                    has_non_goalie = False
-                    if player_data["player_position"]:
-                        player_pos_split = player_data["player_position"].split("/")
-                        for sub_player_pos in player_pos_split:
-                            if sub_player_pos != "G":
-                                has_non_goalie = True
-                    else:
-                        has_non_goalie = True
-                    
-                    stat_str = "skaterStats" if has_non_goalie else "goalieStats"
+                if player_type["da_type"]["type"] == "Skater":                    
+                    stat_str = "skaterStats" if not player["position"]["code"] == "G" else "goalieStats"
                     if stat_str not in player["stats"]:
+                        return
+                    if stat_str == "goalieStats" and not start_time_to_str(player["stats"]["goalieStats"]["timeOnIce"]):
                         return
                 else:
                     stat_str = "goalieStats"
                     if stat_str not in player["stats"]:
+                        return
+                    if stat_str == "goalieStats" and not start_time_to_str(player["stats"]["goalieStats"]["timeOnIce"]):
                         return
                 
                 sub_data["gameData"]["game"]["date"] = game_date
