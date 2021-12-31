@@ -1157,38 +1157,6 @@ headers = {
             "display-value" : "EVx +/-",
             "type" : "Advanced"
         },
-        "oiSPer" : {
-            "positive" : True,
-            "display" : False,
-            "round" : "percent",
-            "type" : "Advanced",
-            "display-value" : "oiS%",
-            "valid_since" : {
-                "season" : 2009,
-                "game" : 2009
-            }
-        },
-        "oiSVPer" : {
-            "positive" : True,
-            "display" : False,
-            "round" : "percent",
-            "display-value" : "oiSV%",
-            "type" : "Advanced",
-            "valid_since" : {
-                "season" : 2009,
-                "game" : 2009
-            }
-        },
-        "PDO" : {
-            "positive" : True,
-            "display" : False,
-            "round" : "percent",
-            "type" : "Advanced",
-            "valid_since" : {
-                "season" : 2009,
-                "game" : 2009
-            }
-        },
          "CF" : {
             "positive" : True,
             "display" : False,
@@ -1275,6 +1243,17 @@ headers = {
                 "game" : 2009
             }
         },
+        "CFPer" : {
+            "positive" : True,
+            "round" : "percent",
+            "display-value" : "CF%",
+            "display" : False,
+            "type" : "Advanced",
+            "valid_since" : {
+                "season" : 2009,
+                "game" : 2009
+            }
+        },
         "FF/60M" : {
             "positive" : True,
             "type" : "Advanced",
@@ -1300,6 +1279,17 @@ headers = {
             "type" : "Advanced",
             "display" : False,
             "round" : 2,
+            "valid_since" : {
+                "season" : 2009,
+                "game" : 2009
+            }
+        },
+        "FFPer" : {
+            "positive" : True,
+            "round" : "percent",
+            "display" : False,
+            "display-value" : "FF%",
+            "type" : "Advanced",
             "valid_since" : {
                 "season" : 2009,
                 "game" : 2009
@@ -1336,33 +1326,43 @@ headers = {
                 "game" : 2009
             }
         },
-        "CFPer" : {
-            "positive" : True,
-            "round" : "percent",
-            "display-value" : "CF%",
-            "display" : False,
-            "type" : "Advanced",
-            "valid_since" : {
-                "season" : 2009,
-                "game" : 2009
-            }
-        },
-        "FFPer" : {
-            "positive" : True,
-            "round" : "percent",
-            "display" : False,
-            "display-value" : "FF%",
-            "type" : "Advanced",
-            "valid_since" : {
-                "season" : 2009,
-                "game" : 2009
-            }
-        },
         "SFPer" : {
             "positive" : True,
             "round" : "percent",
             "display" : False,
             "display-value" : "SF%",
+            "type" : "Advanced",
+            "valid_since" : {
+                "season" : 2009,
+                "game" : 2009
+            }
+        },
+        "oiSPer" : {
+            "positive" : True,
+            "display" : False,
+            "round" : "percent",
+            "type" : "Advanced",
+            "display-value" : "oiS%",
+            "valid_since" : {
+                "season" : 2009,
+                "game" : 2009
+            }
+        },
+        "oiSVPer" : {
+            "positive" : True,
+            "display" : False,
+            "round" : "percent",
+            "display-value" : "oiSV%",
+            "type" : "Advanced",
+            "valid_since" : {
+                "season" : 2009,
+                "game" : 2009
+            }
+        },
+        "PDO" : {
+            "positive" : True,
+            "display" : False,
+            "round" : "percent",
             "type" : "Advanced",
             "valid_since" : {
                 "season" : 2009,
@@ -1461,6 +1461,16 @@ headers = {
                 "game" : 2009
             }
         },
+        "offIGFPer" : {
+            "positive" : True,
+            "round" : "percent",
+            "display" : False,
+            "type" : "Relative",
+            "valid_since" : {
+                "season" : 2009,
+                "game" : 2009
+            }
+        },
         "offICF/60M" : {
             "positive" : True,
             "display" : False,
@@ -1475,6 +1485,16 @@ headers = {
             "positive" : False,
             "display" : False,
             "round" : 2,
+            "type" : "Relative",
+            "valid_since" : {
+                "season" : 2009,
+                "game" : 2009
+            }
+        },
+        "offICFPer" : {
+            "positive" : True,
+            "round" : "percent",
+            "display" : False,
             "type" : "Relative",
             "valid_since" : {
                 "season" : 2009,
@@ -1501,6 +1521,16 @@ headers = {
                 "game" : 2009
             }
         },
+        "offIFFPer" : {
+            "positive" : True,
+            "round" : "percent",
+            "display" : False,
+            "type" : "Relative",
+            "valid_since" : {
+                "season" : 2009,
+                "game" : 2009
+            }
+        },
         "offISF/60M" : {
             "positive" : True,
             "display" : False,
@@ -1515,6 +1545,16 @@ headers = {
             "positive" : False,
             "display" : False,
             "round" : 2,
+            "type" : "Relative",
+            "valid_since" : {
+                "season" : 2009,
+                "game" : 2009
+            }
+        },
+        "offISFPer" : {
+            "positive" : True,
+            "round" : "percent",
+            "display" : False,
             "type" : "Relative",
             "valid_since" : {
                 "season" : 2009,
@@ -1561,46 +1601,6 @@ headers = {
                 "game" : 2009
             }
         },
-        "offIGFPer" : {
-            "positive" : True,
-            "round" : "percent",
-            "display" : False,
-            "type" : "Relative",
-            "valid_since" : {
-                "season" : 2009,
-                "game" : 2009
-            }
-        },
-        "offICFPer" : {
-            "positive" : True,
-            "round" : "percent",
-            "display" : False,
-            "type" : "Relative",
-            "valid_since" : {
-                "season" : 2009,
-                "game" : 2009
-            }
-        },
-        "offIFFPer" : {
-            "positive" : True,
-            "round" : "percent",
-            "display" : False,
-            "type" : "Relative",
-            "valid_since" : {
-                "season" : 2009,
-                "game" : 2009
-            }
-        },
-        "offISFPer" : {
-            "positive" : True,
-            "round" : "percent",
-            "display" : False,
-            "type" : "Relative",
-            "valid_since" : {
-                "season" : 2009,
-                "game" : 2009
-            }
-        },
         "GFRel/60M" : {
             "positive" : True,
             "type" : "Relative",
@@ -1632,6 +1632,99 @@ headers = {
                 "game" : 2009
             }
         },
+        "CFRel/60M" : {
+            "positive" : True,
+            "type" : "Relative",
+            "display" : False,
+            "round" : 2,
+            "valid_since" : {
+                "season" : 2009,
+                "game" : 2009
+            }
+        },
+        "CARel/60M" : {
+            "positive" : False,
+            "type" : "Relative",
+            "display" : False,
+            "round" : 2,
+            "valid_since" : {
+                "season" : 2009,
+                "game" : 2009
+            }
+        },
+        "CFRelPer" : {
+            "positive" : True,
+            "round" : "percent",
+            "display" : False,
+            "type" : "Relative",
+            "display-value" : "CFRel%",
+            "valid_since" : {
+                "season" : 2009,
+                "game" : 2009
+            }
+        },
+        "FFRel/60M" : {
+            "positive" : True,
+            "type" : "Relative",
+            "display" : False,
+            "round" : 2,
+            "valid_since" : {
+                "season" : 2009,
+                "game" : 2009
+            }
+        },
+        "FARel/60M" : {
+            "positive" : False,
+            "type" : "Relative",
+            "display" : False,
+            "round" : 2,
+            "valid_since" : {
+                "season" : 2009,
+                "game" : 2009
+            }
+        },
+        "FFRelPer" : {
+            "positive" : True,
+            "round" : "percent",
+            "display" : False,
+            "display-value" : "FFRel%",
+            "type" : "Relative",
+            "valid_since" : {
+                "season" : 2009,
+                "game" : 2009
+            }
+        },
+        "SFRel/60M" : {
+            "positive" : True,
+            "type" : "Relative",
+            "display" : False,
+            "round" : 2,
+            "valid_since" : {
+                "season" : 2009,
+                "game" : 2009
+            }
+        },
+        "SARel/60M" : {
+            "positive" : False,
+            "type" : "Relative",
+            "display" : False,
+            "round" : 2,
+            "valid_since" : {
+                "season" : 2009,
+                "game" : 2009
+            }
+        },
+        "SFRelPer" : {
+            "positive" : True,
+            "round" : "percent",
+            "display" : False,
+            "display-value" : "SFRel%",
+            "type" : "Relative",
+            "valid_since" : {
+                "season" : 2009,
+                "game" : 2009
+            }
+        },
         "oiSRelPer" : {
             "positive" : True,
             "display" : False,
@@ -1658,99 +1751,6 @@ headers = {
             "positive" : True,
             "display" : False,
             "round" : "percent",
-            "type" : "Relative",
-            "valid_since" : {
-                "season" : 2009,
-                "game" : 2009
-            }
-        },
-        "CFRel/60M" : {
-            "positive" : True,
-            "type" : "Relative",
-            "display" : False,
-            "round" : 2,
-            "valid_since" : {
-                "season" : 2009,
-                "game" : 2009
-            }
-        },
-        "CARel/60M" : {
-            "positive" : False,
-            "type" : "Relative",
-            "display" : False,
-            "round" : 2,
-            "valid_since" : {
-                "season" : 2009,
-                "game" : 2009
-            }
-        },
-        "FFRel/60M" : {
-            "positive" : True,
-            "type" : "Relative",
-            "display" : False,
-            "round" : 2,
-            "valid_since" : {
-                "season" : 2009,
-                "game" : 2009
-            }
-        },
-        "FARel/60M" : {
-            "positive" : False,
-            "type" : "Relative",
-            "display" : False,
-            "round" : 2,
-            "valid_since" : {
-                "season" : 2009,
-                "game" : 2009
-            }
-        },
-        "SFRel/60M" : {
-            "positive" : True,
-            "type" : "Relative",
-            "display" : False,
-            "round" : 2,
-            "valid_since" : {
-                "season" : 2009,
-                "game" : 2009
-            }
-        },
-        "SARel/60M" : {
-            "positive" : False,
-            "type" : "Relative",
-            "display" : False,
-            "round" : 2,
-            "valid_since" : {
-                "season" : 2009,
-                "game" : 2009
-            }
-        },
-        "CFRelPer" : {
-            "positive" : True,
-            "round" : "percent",
-            "display" : False,
-            "type" : "Relative",
-            "display-value" : "CFRel%",
-            "valid_since" : {
-                "season" : 2009,
-                "game" : 2009
-            }
-        },
-        "FFRelPer" : {
-            "positive" : True,
-            "round" : "percent",
-            "display" : False,
-            "display-value" : "FFRel%",
-            "type" : "Relative",
-            "valid_since" : {
-                "season" : 2009,
-                "game" : 2009
-            }
-        },
-        "SFRelPer" : {
-            "positive" : True,
-            "round" : "percent",
-            "display" : False,
-            "display-value" : "SFRel%",
             "type" : "Relative",
             "valid_since" : {
                 "season" : 2009,
@@ -3954,6 +3954,16 @@ headers = {
                 "game" : 2009
             }
         },
+        "CFPer_5v5" : {
+            "positive" : True,
+            "round" : "percent",
+            "display-value" : "CF%_5v5",
+            "type" : "5v5",
+            "valid_since" : {
+                "season" : 2009,
+                "game" : 2009
+            }
+        },
         "FF/60M_5v5" : {
             "positive" : True,
             "type" : "5v5",
@@ -3977,16 +3987,6 @@ headers = {
             "display" : False,
             "type" : "5v5",
             "round" : 2,
-            "valid_since" : {
-                "season" : 2009,
-                "game" : 2009
-            }
-        },
-        "CFPer_5v5" : {
-            "positive" : True,
-            "round" : "percent",
-            "display-value" : "CF%_5v5",
-            "type" : "5v5",
             "valid_since" : {
                 "season" : 2009,
                 "game" : 2009
