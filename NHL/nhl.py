@@ -15811,7 +15811,7 @@ def handle_live_stats(player_type, player_data, player_link, time_frame, all_row
             if not is_shootout and len(sub_data["liveData"]["linescore"]["periods"]) > 3:
                 is_ot = True
 
-            game = player["stats"][ "goalieStats"]
+            game = player["stats"]["goalieStats"]
             if "decision" in game:
                 decision = game["decision"]
                 if decision == "W":
