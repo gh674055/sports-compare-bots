@@ -14503,15 +14503,15 @@ def handle_min_max_final(stat_val, current_explain_strs, player_data, player_typ
                             range_str += team.upper()
 
     if not range_str:
-        if over_stat:
-            stat_val["stat_obj"]["explain_str"] =  over_stat.title() + ">" + stat.upper() + "|" + qual_type + ":" + qual_num_str
-        else:
-            stat_val["stat_obj"]["explain_str"] = stat.upper() + "|" + qual_type + ":" + qual_num_str
         if not match_all:
+            if over_stat:
+                stat_val["stat_obj"]["explain_str"] =  over_stat.title() + ">" + stat.upper() + "|" + qual_type + ":" + qual_num_str
+            else:
+                stat_val["stat_obj"]["explain_str"] = stat.upper() + "|" + qual_type + ":" + qual_num_str
             if match_count != 1:
                 stat_val["stat_obj"]["explain_str"] += "|" + str(match_count) + " Stretches"
         else:
-            stat_val["stat_obj"]["explain_str"] += str(match_count) + " Stretches "
+            stat_val["stat_obj"]["explain_str"] += str(match_count) + " Stretches"
         if only_seasons:
             stat_val["stat_obj"]["explain_str"] += "|Only Seasons"
     else:
@@ -14519,7 +14519,7 @@ def handle_min_max_final(stat_val, current_explain_strs, player_data, player_typ
             if match_count != 1:
                 stat_val["stat_obj"]["explain_str"] += "|" + str(match_count) + " Stretches"
         else:
-            stat_val["stat_obj"]["explain_str"] += str(match_count) + " Stretches "
+            stat_val["stat_obj"]["explain_str"] += str(match_count) + " Stretches"
         if only_seasons:
             stat_val["stat_obj"]["explain_str"] += "|Only Seasons"
         stat_val["stat_obj"]["explain_str"] += "|" + range_str
