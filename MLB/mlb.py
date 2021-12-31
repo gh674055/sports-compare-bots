@@ -7178,20 +7178,20 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 extra_stats.add("hide-" + m.group(1))
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
                         
-                        last_match = re.finditer(r"\b(show(?: |-)?stat:)\(.+?\)", time_frame)
+                        last_match = re.finditer(r"\b(show(?: |-)?stat:)[\S-]+\b", time_frame)
                         for m in last_match:
                             for stat in re.split(r"(?<!\\)\-", re.split(r"(?<!\\)" + m.group(1), m.group(0))[1].strip("()")):
                                 extra_stats.add("show-stat-" + unescape_string(stat.strip()))
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
                         
-                        last_match = re.finditer(r"\b(show(?: |-)?only(?: |-)?stat:)\(.+?\)", time_frame)
+                        last_match = re.finditer(r"\b(show(?: |-)?only(?: |-)?stat:)[\S-]+\b", time_frame)
                         for m in last_match:
                             for stat in re.split(r"(?<!\\)\-", re.split(r"(?<!\\)" + m.group(1), m.group(0))[1].strip("()")):
                                 extra_stats.add("show-only-stat-" + unescape_string(stat.strip()))
                                 extra_stats.add("show-stat-" + unescape_string(stat.strip()))
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
                         
-                        last_match = re.finditer(r"\b(hide(?: |-)?stat:)\(.+?\)", time_frame)
+                        last_match = re.finditer(r"\b(hide(?: |-)?stat:)[\S-]+\b", time_frame)
                         for m in last_match:
                             for stat in re.split(r"(?<!\\)\-", re.split(r"(?<!\\)" + m.group(1), m.group(0))[1].strip("()")):
                                 extra_stats.add("hide-stat-" + unescape_string(stat.strip()))
