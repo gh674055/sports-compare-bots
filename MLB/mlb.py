@@ -2023,6 +2023,16 @@ headers = {
             "display-value" : "G Ink",
             "type" : "Awards/Honors"
         },
+        "Young" : {
+            "positive" : True,
+            "display" : False,
+            "type" : "Awards/Honors"
+        },
+        "Old" : {
+            "positive" : True,
+            "display" : False,
+            "type" : "Awards/Honors"
+        },
         "AllStar%" : {
             "positive" : True,
             "display" : False,
@@ -4292,6 +4302,16 @@ headers = {
             "display-value" : "G Ink",
             "type" : "Awards/Honors"
         },
+        "Young" : {
+            "positive" : True,
+            "display" : False,
+            "type" : "Awards/Honors"
+        },
+        "Old" : {
+            "positive" : True,
+            "display" : False,
+            "type" : "Awards/Honors"
+        },
         "AllStar%" : {
             "positive" : True,
             "display" : False,
@@ -6100,7 +6120,10 @@ div_id_to_stat = {
         "leaderboard_rew_bat" : "REW",
         "leaderboard_wpa_li_bat" : "WPA/LI",
         "leaderboard_Salary" : "Salary",
-        "leaderboard_mvp" : "MVP"
+        "leaderboard_mvp" : "MVP",
+        "leaderboard_Oldest" : "Old",
+        "leaderboard_Youngest" : "Young"
+
     }, "Pitcher" : {
         "leaderboard_W" : "W",
         "leaderboard_L" : "L",
@@ -6142,7 +6165,9 @@ div_id_to_stat = {
         "leaderboard_wpa_li_def" : "WPA/LI",
         "leaderboard_Salary" : "Salary",
         "leaderboard_mvp" : "MVP",
-        "leaderboard_cyyoung" : "CyYoung"
+        "leaderboard_cyyoung" : "CyYoung",
+        "leaderboard_Oldest" : "Old",
+        "leaderboard_Youngest" : "Young"
     }
 }
 
