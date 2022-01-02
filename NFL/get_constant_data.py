@@ -5117,6 +5117,8 @@ qualifier_map = {
     "Super Bowl" : {},
     "Start Time" : {},
     "Local Start Time" : {},
+    "Team Start Time" : {},
+    "Opponent Start Time" : {},
     "Location" : {
         "home" : "Home",
         "away" : "Away",
