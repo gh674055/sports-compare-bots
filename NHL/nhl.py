@@ -11028,7 +11028,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                         time_frame_type = "date"
                         if not time_frame:
                             time_start = 0
-                            time_end = datetime.date.today().year
+                            time_end = current_season
                         else:
                             unit = None
                             last_match = re.search(r"(first|1st|last|this|past)? ?(\S*)? ?((?:(?:calendar|date)(?: |-))?days?|(?:(?:calendar|date)(?: |-))?weeks?|(?:(?:calendar|date)(?: |-))?months?|(?:(?:calendar|date)(?: |-))?years?|seasons?)( ([\w-]+)( reversed?)?)?", time_frame)
@@ -11202,7 +11202,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                     qualifiers[qual_str].append(qualifier_obj)
 
                                     time_start = 0
-                                    time_end = datetime.date.today().year
+                                    time_end = current_season
                                     time_frame_type = "date"
 
                                 time_frame = re.sub(r"\s+", " ", time_frame.replace(last_match.group(0), "", 1)).strip()
@@ -11263,7 +11263,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                     time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
                                 
                                 time_start = 0
-                                time_end = datetime.date.today().year
+                                time_end = current_season
 
                                 if time_frame:
                                     find_all_match = tuple(re.finditer(r"(?<!\\)-", time_frame))
@@ -11310,7 +11310,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
         else:
             parse_time_frames.append([[{
                 "time_start" : 0,
-                "time_end" : datetime.date.today().year,
+                "time_end" : current_season,
                 "type" : "date",
                 "playoffs" : None,
                 "add_type" : "plus",
@@ -12597,7 +12597,7 @@ def determine_player_str(qualifier, player_str, time_frame, qual_str):
         bracket_index = re.search(r"(?<!\\)]", player_str).start()
         player_str = player_str[:bracket_index] + " hide-advanced" + player_str[bracket_index:]
 
-    if is_pre_query and time_frame["type"] == "date":
+    if is_pre_query and time_frame["type"] == "date" and not (time_frame["time_start"] == 0 and time_frame["time_end"] == current_season):
         bracket_index = re.search(r"(?<!\\)]", player_str).start()
         player_str = player_str[:bracket_index] + " " + get_time_str(time_frame["time_start"], False) + " to " + get_time_str(time_frame["time_end"], False) + player_str[bracket_index:]
     
@@ -12953,7 +12953,7 @@ def get_player(name, time_frames):
                     year_score = -1000
                     career_length = 0
                     if year_start and year_end:
-                        current_year = datetime.datetime.now().year
+                        current_year = current_season
                         if current_year < year_end:
                             year_end = current_year
                         year_score = math.log(1 / (current_year - year_end + 1), 1.2)
@@ -13845,7 +13845,7 @@ def determine_raw_str(subbb_frame):
                 else:
                     qual_str += "Last " + str(subbb_frame["time_end"]) + " Seasons"
     else:
-        if subbb_frame["time_start"] == 0 and subbb_frame["time_end"] == datetime.date.today().year:
+        if subbb_frame["time_start"] == 0 and subbb_frame["time_end"] == current_season:
             qual_str += "Career"
         else:
             if isinstance(subbb_frame["time_end"], dateutil.relativedelta.relativedelta):
@@ -15065,7 +15065,7 @@ def handle_player_data(player_data, time_frame, player_type, player_page, valid_
 def get_team_map_info(player_data, player_type, valid_teams, comment_obj):
     subbb_frames = [{
         "time_start" : 0,
-        "time_end" : datetime.date.today().year,
+        "time_end" : current_season,
         "type" : "date",
         "add_type" : "add", 
         "playoffs" : "Include",
@@ -15175,7 +15175,7 @@ def get_team_map_info(player_data, player_type, valid_teams, comment_obj):
 def get_all_games(player_data, time_frame, player_type, comment_obj):
     subbb_frames = [{
         "time_start" : 0,
-        "time_end" : datetime.date.today().year,
+        "time_end" : current_season,
         "type" : "date",
         "add_type" : "add", 
         "playoffs" : "Include",
@@ -35276,7 +35276,7 @@ def handle_string_year(string_year, playoffs, is_first, replace_first_year):
     if string_year.isdigit():
         if len(string_year) == 2:
             pot_string_year = int("20" + string_year)
-            if pot_string_year > datetime.datetime.now().year:
+            if pot_string_year > current_season:
                 string_year = int("19" + string_year)
             else:
                 string_year = pot_string_year
@@ -35289,7 +35289,7 @@ def handle_string_year(string_year, playoffs, is_first, replace_first_year):
         if string_year == "min":
             return datetime.date.min.year
         elif string_year == "max" or string_year == "now" or string_year == "present":
-            return datetime.date.today().year
+            return current_season
         elif string_year == "today":
             return datetime.date.today()
         elif string_year == "yesterday":
