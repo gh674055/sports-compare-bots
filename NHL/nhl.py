@@ -13867,7 +13867,7 @@ def determine_raw_str(subbb_frame):
                     qual_str += "s"
             else:
                 time_start = subbb_frame["time_start"]
-                if time_start == datetime.date.min or time_start == datetime.date.min.year:
+                if time_start == datetime.date.min or time_start == 0:
                     time_start = "MIN"
                 time_end = subbb_frame["time_end"]
 
@@ -35287,7 +35287,7 @@ def handle_string_year(string_year, playoffs, is_first, replace_first_year):
         return int(string_year)
     else:
         if string_year == "min":
-            return datetime.date.min.year
+            return 0
         elif string_year == "max" or string_year == "now" or string_year == "present":
             return current_season
         elif string_year == "today":
