@@ -8661,7 +8661,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                     "type" : "Skater"
                                 }
                                 qualifier_obj["values"] = [re.sub(r"[\s-]+", "", qualifier_str)]
-                                extra_stats.add("Shot")
+                                extra_stats.add("scoring-stats")
                                 extra_stats.add("current-stats")
                             elif qualifier_str in ["deflection"]:
                                 qual_type = "Exact Shot Type"
@@ -8669,7 +8669,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                     "type" : "Skater"
                                 }
                                 qualifier_obj["values"] = ["deflected"]
-                                extra_stats.add("Shot")
+                                extra_stats.add("scoring-stats")
                                 extra_stats.add("current-stats")
                             elif qualifier_str == "minor":
                                 qual_type = "Exact Penalty Severity"
@@ -9450,7 +9450,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                     player_type["da_type"] = {
                                         "type" : "Skater"
                                     }
-                                    extra_stats.add("Shot")
+                                    extra_stats.add("scoring-stats")
                                     extra_stats.add("current-stats")
                                 elif qualifier_str.startswith("exact-shot-type:"):
                                     qual_str = "exact-shot-type:"
@@ -9458,7 +9458,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                     player_type["da_type"] = {
                                         "type" : "Skater"
                                     }
-                                    extra_stats.add("Shot")
+                                    extra_stats.add("scoring-stats")
                                     extra_stats.add("current-stats")
                                 elif qualifier_str.startswith("state:"):
                                     qual_str = "state:"
