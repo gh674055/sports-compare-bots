@@ -39122,7 +39122,8 @@ def calculate_advanced_stats(data, all_rows, player_type, time_frame):
     total_sb_weight = data["SB"] + data["CS"]
     total_h_weight = data["H"]
     total_ab_weight = data["AB"]
-    total_k_ab_weight = data["AB"]
+    total_babip_weight = data["AB"] - data["SO"] - data["HR"]
+    total_obp_weight = data["AB"] + data["BB"] + data["HBP"]
     if player_type["da_type"] == "Batter":
         total_wrcplus_weight = data["PA"]
         total_k_weight = data["PA"]
@@ -39215,7 +39216,8 @@ def calculate_advanced_stats(data, all_rows, player_type, time_frame):
                     total_wrcplus_weight -= yearly_woba_stats[year][team]["PA"]
                     total_sb_weight -= yearly_woba_stats[year][team]["SB"] + yearly_woba_stats[year][team]["CS"]
                     total_k_weight -= yearly_woba_stats[year][team]["PA"]
-                    total_k_ab_weight -= yearly_woba_stats[year][team]["AB"]
+                    total_babip_weight -= yearly_woba_stats[year][team]["AB"] - yearly_woba_stats[year][team]["SO"] - yearly_woba_stats[year][team]["HR"]
+                    total_obp_weight -= yearly_woba_stats[year][team]["AB"] + yearly_woba_stats[year][team]["BB"] + yearly_woba_stats[year][team]["HBP"]
                     total_bb_k_weight - yearly_woba_stats[year][team]["SO"]
                     total_h_weight -= yearly_woba_stats[year][team]["H"]
                     total_ab_weight -= yearly_woba_stats[year][team]["AB"]
@@ -39223,7 +39225,7 @@ def calculate_advanced_stats(data, all_rows, player_type, time_frame):
                 else:
                     if int(year) < 1913 and (sleague == "AL" or int(year) < 1910):
                         total_k_weight -= yearly_woba_stats[year][team]["PA"]
-                        total_k_ab_weight -= yearly_woba_stats[year][team]["AB"]
+                        total_babip_weight -= yearly_woba_stats[year][team]["AB"] - yearly_woba_stats[year][team]["SO"] - yearly_woba_stats[year][team]["HR"]
                     
                     if int(year) < 1920:
                         total_sb_weight -= yearly_woba_stats[year][team]["SB"] + yearly_woba_stats[year][team]["CS"]
@@ -39304,7 +39306,7 @@ def calculate_advanced_stats(data, all_rows, player_type, time_frame):
                         obp = (yearly_woba_stats[year][team]["H"] + yearly_woba_stats[year][team]["BB"] + yearly_woba_stats[year][team]["HBP"]) / (yearly_woba_stats[year][team]["AB"] + yearly_woba_stats[year][team]["BB"] + yearly_woba_stats[year][team]["HBP"])
                         league_obp = (totals[sleague]["Batter"][constant_year]["pitcherless_values"]["H"] + totals[sleague]["Batter"][constant_year]["pitcherless_values"]["BB"] + totals[sleague]["Batter"][constant_year]["pitcherless_values"]["HBP"]) / (totals[sleague]["Batter"][constant_year]["pitcherless_values"]["AB"] + totals[sleague]["Batter"][constant_year]["pitcherless_values"]["BB"] + totals[sleague]["Batter"][constant_year]["pitcherless_values"]["HBP"])
                     obp_plus = 100 + (((obp - league_obp) / league_obp) * 100)
-                    total_OBPPlus += obp_plus * (wrcplus_weight / total_wrcplus_weight)
+                    total_OBPPlus += obp_plus * ((yearly_woba_stats[year][team]["AB"] + yearly_woba_stats[year][team]["BB"] + yearly_woba_stats[year][team]["HBP"]) / total_obp_weight)
                 except ZeroDivisionError:
                     pass
 
@@ -39400,7 +39402,7 @@ def calculate_advanced_stats(data, all_rows, player_type, time_frame):
                             babip = (yearly_woba_stats[year][team]["H"] - yearly_woba_stats[year][team]["HR"]) / (yearly_woba_stats[year][team]["AB"] - yearly_woba_stats[year][team]["SO"] - yearly_woba_stats[year][team]["HR"])
                             league_babip = (totals[sleague]["Batter"][constant_year]["pitcherless_values"]["H"] - totals[sleague]["Batter"][constant_year]["pitcherless_values"]["HR"]) / (totals[sleague]["Batter"][constant_year]["pitcherless_values"]["AB"] - totals[sleague]["Batter"][constant_year]["pitcherless_values"]["SO"] - totals[sleague]["Batter"][constant_year]["pitcherless_values"]["HR"])
                         babip_plus = 100 + (((babip - league_babip) / league_babip) * 100)
-                        total_BABIPPlus += babip_plus * (yearly_woba_stats[year][team]["AB"] / total_k_ab_weight)
+                        total_BABIPPlus += babip_plus * ((yearly_woba_stats[year][team]["AB"] - yearly_woba_stats[year][team]["SO"] - yearly_woba_stats[year][team]["HR"]) / total_babip_weight)
                     except ZeroDivisionError:
                         pass
 
