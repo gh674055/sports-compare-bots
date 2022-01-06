@@ -34978,7 +34978,7 @@ def is_against_header(header, over_header, extra_stats, player_type, has_toi_sta
             if header == "TOI":
                 return False
 
-    if (header.startswith("EV") or header.startswith("PP") or header.startswith("SH") or "PlusMinus" in header) and "strength" in extra_stats:
+    if (header.startswith("EV") or header.startswith("PP") or header.startswith("SH")) and "strength" in extra_stats:
         return True
     
     if "type" in headers[player_type["da_type"]["type"]][header] and (headers[player_type["da_type"]["type"]][header]["type"] == "5v5") and "strength" in extra_stats:
