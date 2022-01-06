@@ -586,38 +586,10 @@ headers = {
                 "game" : 2009
             }
         },
-        "Shft" : {
-            "positive" : True,
-            "display" : False,
-            "valid_since" : {
-                "season" : 1997,
-                "game" : 1997
-            }
-        },
         "TOI/GP" : {
             "positive" : True,
             "round" : "time",
             "type" : "Per Game/60 Minutes",
-            "valid_since" : {
-                "season" : 1997,
-                "game" : 1997
-            }
-        },
-        "Shft/GP" : {
-            "positive" : True,
-            "display" : False,
-            "type" : "Per Game/60 Minutes",
-            "round" : 2,
-            "valid_since" : {
-                "season" : 1997,
-                "game" : 1997
-            }
-        },
-        "TOI/Shft" : {
-            "positive" : True,
-            "round" : "time",
-            "type" : "Per Game/60 Minutes",
-            "display" : False,
             "valid_since" : {
                 "season" : 1997,
                 "game" : 1997
@@ -682,6 +654,34 @@ headers = {
             "positive" : True,
             "round" : "time",
             "type" : "Per Game/60 Minutes",
+            "valid_since" : {
+                "season" : 1997,
+                "game" : 1997
+            }
+        },
+        "Shft/GP" : {
+            "positive" : True,
+            "display" : False,
+            "type" : "Per Game/60 Minutes",
+            "round" : 2,
+            "valid_since" : {
+                "season" : 1997,
+                "game" : 1997
+            }
+        },
+        "Shft" : {
+            "positive" : True,
+            "display" : False,
+            "valid_since" : {
+                "season" : 1997,
+                "game" : 1997
+            }
+        },
+        "TOI/Shft" : {
+            "positive" : True,
+            "round" : "time",
+            "type" : "Per Game/60 Minutes",
+            "display" : False,
             "valid_since" : {
                 "season" : 1997,
                 "game" : 1997
