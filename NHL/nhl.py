@@ -7568,6 +7568,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 elif m.group(2) == "shift":
                                     extra_stats.add("current-stats")
                                     extra_stats.add("show-stat-shft")
+                                    extra_stats.add("show-stat-toi/shft")
                                 elif m.group(2) == "goal":
                                     extra_stats.add("score")
                                 elif m.group(2) == "game-count" or m.group(2) == "games-count":
@@ -10012,6 +10013,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                     qual_type = "Shift Stat"
                                     extra_stats.add("current-stats")
                                     extra_stats.add("show-stat-shft")
+                                    extra_stats.add("show-stat-toi/shft")
                                     extra_stats.add("hide-table-relative")
                                 elif qualifier_str.startswith("stat:"):
                                     qual_str = "stat:"
@@ -10213,6 +10215,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 elif stat == "shift":
                                     stat = "Shft"
                                     extra_stats.add("show-stat-shft")
+                                    extra_stats.add("show-stat-toi/shft")
                                     extra_stats.add("hide-table-relative")
                                 elif stat == "shot":
                                     stat = "S"
@@ -10587,6 +10590,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                             elif qual_type == "shift":
                                 stat = "Shft"
                                 extra_stats.add("show-stat-shft")
+                                extra_stats.add("show-stat-toi/shft")
                                 extra_stats.add("hide-table-relative")
                             elif qual_type == "shot":
                                 stat = "S"
