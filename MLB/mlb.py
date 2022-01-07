@@ -1205,7 +1205,7 @@ headers = {
             "valid_since" : {
                 "game-np" : 1916,
                 "season-np" : 1916,
-                "season" : 1901,
+                "season" : 1916,
                 "game" : 1901
             }
         },
@@ -1217,7 +1217,7 @@ headers = {
             "valid_since" : {
                 "game-np" : 1916,
                 "season-np" : 1916,
-                "season" : 1901,
+                "season" : 1916,
                 "game" : 1901
             }
         },
@@ -1364,7 +1364,7 @@ headers = {
             "valid_since" : {
                 "game-np" : 1916,
                 "season-np" : 1916,
-                "season" : 1901,
+                "season" : 1916,
                 "game" : 1901
             }
         },
@@ -1376,7 +1376,7 @@ headers = {
             "valid_since" : {
                 "game-np" : 1916,
                 "season-np" : 1916,
-                "season" : 1901,
+                "season" : 1916,
                 "game" : 1901
             }
         },
@@ -1387,9 +1387,20 @@ headers = {
             "valid_since" : {
                 "game-np" : 1916,
                 "season-np" : 1916,
-                "season" : 1901,
+                "season" : 1916,
                 "game" : 1901
             }
+        },
+        "RE24" : {
+            "positive" : True,
+            "round" : 1,
+            "valid_since" : {
+                "game-np" : 1916,
+                "season-np" : 1916,
+                "season" : 1916,
+                "game" : 1901
+            },
+            "type" : "Per Game/Advanced"
         },
         "PwrSpd" : {
             "positive" : True,
@@ -1416,18 +1427,6 @@ headers = {
             "display" : False,
             "type" : "Per Game/Advanced"
         },
-        "RE24" : {
-            "positive" : True,
-            "round" : 1,
-            "display" : False,
-            "valid_since" : {
-                "game-np" : 1916,
-                "season-np" : 1916,
-                "season" : 1901,
-                "game" : 1901
-            },
-            "type" : "Per Game/Advanced"
-        },
         "REW" : {
             "positive" : True,
             "round" : 1,
@@ -1435,7 +1434,7 @@ headers = {
             "valid_since" : {
                 "game-np" : 1916,
                 "season-np" : 1916,
-                "season" : 1901,
+                "season" : 1916,
                 "game" : 1901
             },
             "type" : "Per Game/Advanced"
@@ -3707,18 +3706,6 @@ headers = {
             "display" : False,
             "type" : "Per Game/Advanced"
         },
-        "RE24" : {
-            "positive" : True,
-            "round" : 1,
-            "display" : False,
-            "valid_since" : {
-                "game-np" : 1916,
-                "season-np" : 1916,
-                "season" : 1901,
-                "game" : 1901
-            },
-            "type" : "Per Game/Advanced"
-        },
         "REW" : {
             "positive" : True,
             "round" : 1,
@@ -3726,7 +3713,7 @@ headers = {
             "valid_since" : {
                 "game-np" : 1916,
                 "season-np" : 1916,
-                "season" : 1901,
+                "season" : 1916,
                 "game" : 1901
             },
             "type" : "Per Game/Advanced"
@@ -3741,9 +3728,9 @@ headers = {
             "round" : 1,
             "type" : "Per Game/Advanced",
             "valid_since" : {
-                "game-np" : 1916,
+                "game-np" : 1930,
                 "season-np" : 1916,
-                "season" : 1901,
+                "season" : 1916,
                 "game" : 1901
             }
         },
@@ -3753,9 +3740,9 @@ headers = {
             "round" : 1,
             "type" : "Per Game/Advanced",
             "valid_since" : {
-                "game-np" : 1916,
+                "game-np" : 1930,
                 "season-np" : 1916,
-                "season" : 1901,
+                "season" : 1916,
                 "game" : 1901
             }
         },
@@ -3766,9 +3753,20 @@ headers = {
             "valid_since" : {
                 "game-np" : 1916,
                 "season-np" : 1916,
-                "season" : 1901,
+                "season" : 1916,
                 "game" : 1901
             }
+        },
+        "RE24" : {
+            "positive" : True,
+            "round" : 1,
+            "valid_since" : {
+                "game-np" : 1930,
+                "season-np" : 1916,
+                "season" : 1916,
+                "game" : 1901
+            },
+            "type" : "Per Game/Advanced"
         },
         "Inn" : {
             "positive" : True,
@@ -5298,18 +5296,6 @@ league_data_mapping = {
             }
         },
         "cWPA" : {
-            "AA-UA-PL-FL-NNL-ECL-ANL-NSL-EWL-NN2-NAL" : {
-                "game" : 1949,
-                "season" : 1949
-            }
-        },
-        "WPA/162" : {
-            "AA-UA-PL-FL-NNL-ECL-ANL-NSL-EWL-NN2-NAL" : {
-                "game" : 1949,
-                "season" : 1949
-            }
-        },
-        "cWPA/162" : {
             "AA-UA-PL-FL-NNL-ECL-ANL-NSL-EWL-NN2-NAL" : {
                 "game" : 1949,
                 "season" : 1949
@@ -16540,6 +16526,7 @@ def handle_season_only_stats(player_page, player_data, player_type, time_frame, 
         for row in all_rows:
             row["WPA"] = 0
             row["cWPA"] = 0
+            row["RE24"] = 0
     
     comments = None
     previous_headers = set()
@@ -16704,10 +16691,10 @@ def handle_season_only_stats(player_page, player_data, player_type, time_frame, 
                         for pot_row in reversed(all_rows):
                             if pot_row["Year"] == row_data["Year"] and ((stat_sum_range and not table_has_teeam_quals) or pot_row["Tm"] == row_data["Tm"]):
                                 for stat in row_data:
-                                    if stat in headers[player_type["da_type"]] and (stat == "WPA" or stat == "cWPA" or ("type" in headers[player_type["da_type"]][stat] and headers[player_type["da_type"]][stat]["type"].startswith("Defense"))):
+                                    if stat in headers[player_type["da_type"]] and (stat == "WPA" or stat == "cWPA" or stat == "RE24" or ("type" in headers[player_type["da_type"]][stat] and headers[player_type["da_type"]][stat]["type"].startswith("Defense"))):
                                         if stat == "Salary":
                                             continue
-                                        if table_name.endswith("win_probability") and stat != "WPA" and stat != "cWPA":
+                                        if table_name.endswith("win_probability") and stat != "WPA" and stat != "cWPA" and stat != "RE24":
                                             continue
                                         if not stat in pot_row:
                                             pot_row[stat] = 0.0
@@ -41777,7 +41764,7 @@ def handle_table_data(over_header, player_data, player_datas, player_type, heade
             elif "AllStar" in header and missing_all_star:
                 value += "*"
             elif has_live_stats:
-                if header in ("WPA", "cWPA", "WPA/162", "cWPA/162"):
+                if header in ("WPA", "cWPA", "RE24", "WPA/162", "cWPA/162"):
                     if has_non_live_stats:
                         value += "*"
                     else:
@@ -41823,11 +41810,11 @@ def is_against_header(header, over_header, extra_stats, player_type):
     if player_type["da_type"] == "Batter":
         if "no-steals" in extra_stats and header in ("R", "SB", "CS", "NS", "R/162", "SB/162", "CS/162", "SB%", "wSB"):
             return True
-        return header in ("WPA", "cWPA", "WPA/162", "cWPA/162") or ("162" in header and not "per-game" in extra_stats)
+        return header in ("WPA", "cWPA", "RE24", "WPA/162", "cWPA/162") or ("162" in header and not "per-game" in extra_stats)
     else:
         if "no-steals" in extra_stats and header in ("SB", "CS", "NS", "SB%", "wSB", "PO"):
             return True
-        return header in ("WPA", "cWPA", "WPA/162", "cWPA/162", "GS", "W", "L", "W/L%", "QS", "QS%", "CG", "CG%", "SHO", "SHO%", "Hold", "SV", "BSv", "SV%", "HLD", "NoHit", "Prfct", "IP/GS", "Pit/GS", "GSc/GS") or header.startswith("GS/") or header.startswith("GS_") or "162" in header
+        return header in ("WPA", "cWPA", "RE24", "WPA/162", "cWPA/162", "GS", "W", "L", "W/L%", "QS", "QS%", "CG", "CG%", "SHO", "SHO%", "Hold", "SV", "BSv", "SV%", "HLD", "NoHit", "Prfct", "IP/GS", "Pit/GS", "GSc/GS") or header.startswith("GS/") or header.startswith("GS_") or "162" in header
 
 def is_invalid_stat(stat, player_type, data, count_inconsistent):
     invalid_data = {}
