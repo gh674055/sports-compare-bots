@@ -8663,6 +8663,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 player_type["da_type"] = {
                                     "type" : "Skater"
                                 }
+                                qualifier_obj["values"] = [qualifier_str]
                                 extra_stats.add("scoring-stats")
                                 extra_stats.add("current-stats")
                             elif qualifier_str in ["deflection"]:
