@@ -8663,7 +8663,6 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 player_type["da_type"] = {
                                     "type" : "Skater"
                                 }
-                                qualifier_obj["values"] = [re.sub(r"[\s-]+", "", qualifier_str)]
                                 extra_stats.add("scoring-stats")
                                 extra_stats.add("current-stats")
                             elif qualifier_str in ["deflection"]:
@@ -24708,7 +24707,7 @@ def perform_sub_metadata_qual(event, attr_str, qualifiers, player_game_info, yea
         for qual_object in qualifiers:
             has_match = False
             for value in qual_object["values"]:
-                if re.sub(r"[^A-Za-z\s]", "", value.lower()).strip() == re.sub(r"[^A-Za-z\s]", "", str_value.lower()).strip():
+                if re.sub(r"[^A-Za-z]", "", value.lower()).strip() == re.sub(r"[^A-Za-z]", "", str_value.lower()).strip():
                     has_match = True
             if qual_object["negate"]:
                 if has_match:
@@ -24725,7 +24724,7 @@ def perform_sub_metadata_qual(event, attr_str, qualifiers, player_game_info, yea
         for qual_object in qualifiers:
             has_match = False
             for value in qual_object["values"]:
-                if re.sub(r"[^A-Za-z\s]", "", value.lower().strip()) in re.sub(r"[^A-Za-z\s]", "", str_value.lower()).strip():
+                if re.sub(r"[^A-Za-z]", "", value.lower().strip()) in re.sub(r"[^A-Za-z]", "", str_value.lower()).strip():
                     has_match = True
             if qual_object["negate"]:
                 if has_match:
