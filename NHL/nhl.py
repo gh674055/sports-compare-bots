@@ -8658,19 +8658,12 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 qual_type = "Facing Righty"
                                 extra_stats.add("current-stats")
                                 extra_stats.add("current-stats-zone")
-                            elif qualifier_str in ["deflected", "wrist-shot", "slap-shot", "snap-shot", "back-hand"]:
+                            elif qualifier_str in ["tip-in", "deflected", "wrist-shot", "slap-shot", "snap-shot", "back-hand", "wrap-around"]:
                                 qual_type = "Exact Shot Type"
                                 player_type["da_type"] = {
                                     "type" : "Skater"
                                 }
-                                qualifier_obj["values"] = [re.sub(r"[\s-]+", " ", qualifier_str)]
-                                extra_stats.add("scoring-stats")
-                                extra_stats.add("current-stats")
-                            elif qualifier_str in ["tip-in", "wrap-around"]:
-                                qual_type = "Exact Shot Type"
-                                player_type["da_type"] = {
-                                    "type" : "Skater"
-                                }
+                                qualifier_obj["values"] = [re.sub(r"[\s-]+", "", qualifier_str)]
                                 extra_stats.add("scoring-stats")
                                 extra_stats.add("current-stats")
                             elif qualifier_str in ["deflection"]:
