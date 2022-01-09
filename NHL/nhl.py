@@ -19304,11 +19304,10 @@ def determine_stat_value(player_game_info, all_events, qualifiers, og_row, playe
                                     row["Minor"] += 1
                                 else:
                                     row[goal_event["penaltySeverity"]] += 1
+                            if "penaltyType" in goal_event and goal_event["penaltyType"] == "Fighting":
+                                row["Fight"] += 1
                         else:
                             row["PenDrawn"] += 1
-                        
-                        if "penaltyType" in goal_event and goal_event["penaltyType"] == "Fighting":
-                            row["Fight"] += 1
         else:                
             if stat in goal_against_stats:
                 if goal_event["event_name"] == "goal_against":
@@ -23533,10 +23532,10 @@ def perform_metadata_quals(qualifiers, player_type, row, player_game_info, nhl_p
                             row["Minor"] += 1
                         else:
                             row[goal_event["penaltySeverity"]] += 1
+                    if "penaltyType" in goal_event and goal_event["penaltyType"] == "Fighting":
+                        row["Fight"] += 1
                 else:
                     row["PenDrawn"] += 1
-                if "penaltyType" in goal_event and goal_event["penaltyType"] == "Fighting":
-                    row["Fight"] += 1
         for goal_event in player_game_info["all_team_goals"]:
             if perform_metadata_qual("all_team_goals", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], skip_career_events=skip_career_events):
                 row["GF"] += 1
