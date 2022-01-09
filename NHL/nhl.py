@@ -15883,29 +15883,6 @@ def handle_live_stats(player_type, player_data, player_link, time_frame, all_row
 
                     if not row_data["GA"]:
                         row_data["SO"] = 1
-
-        if is_final:
-            is_ot = False
-            if not is_shootout and len(sub_data["liveData"]["linescore"]["periods"]) > 3:
-                is_ot = True
-
-            game = player["stats"]["goalieStats"]
-            if "decision" in game:
-                decision = game["decision"]
-                if decision == "W":
-                    row_data["W"] = 1
-                    if not is_shootout:
-                        row_data["ROW"] = 1
-                elif decision == "L":
-                    if not row_data["is_playoffs"] and (is_ot or is_shootout):
-                        row_data["OTL"] = 1
-                    else:
-                        row_data["L"] = 1
-                    if not is_shootout:
-                        row_data["ROW"] = 1
-                    row_data["TtlL"] = 1
-                else:
-                    row_data["ND"] = 1
                     
     row_data["Team Score"] = sub_data["liveData"]["linescore"]["teams"][team_str]["goals"]
     row_data["Opponent Score"] = sub_data["liveData"]["linescore"]["teams"][opp_team_str]["goals"]
@@ -15936,6 +15913,47 @@ def handle_live_stats(player_type, player_data, player_link, time_frame, all_row
         row_data["Result"] = result_str
     else:
         row_data["Result"] = None
+
+    if player_type["da_type"]["type"] != "Skater":
+        if is_final:
+            is_ot = False
+            if not is_shootout and len(sub_data["liveData"]["linescore"]["periods"]) > 3:
+                is_ot = True
+
+            game = player["stats"]["goalieStats"]
+            if "decision" in game:
+                decision = game["decision"]
+                if decision == "W":
+                    row_data["W"] = 1
+                    if not is_shootout:
+                        row_data["ROW"] = 1
+                elif decision == "L":
+                    if not row_data["is_playoffs"] and (is_ot or is_shootout):
+                        row_data["OTL"] = 1
+                    else:
+                        row_data["L"] = 1
+                    if not is_shootout:
+                        row_data["ROW"] = 1
+                    row_data["TtlL"] = 1
+                else:
+                    row_data["ND"] = 1
+            else:
+                if game_data["winning_goalie"]:
+                    if player_id == game_data["winning_goalie"]:
+                        if row_data["Team Score"] > row_data["Opponent Score"]:
+                            row_data["W"] = 1
+                            if not is_shootout:
+                                row_data["ROW"] = 1
+                    elif player_id == game_data["losing_goalie"]:
+                        if not row_data["is_playoffs"] and (is_ot or is_shootout):
+                            row_data["OTL"] = 1
+                        else:
+                            row_data["L"] = 1
+                        if not is_shootout:
+                            row_data["ROW"] = 1
+                        row_data["TtlL"] = 1
+                    else:
+                        row_data["ND"] = 1
 
     all_rows.append(row_data)
     all_rows = sorted(all_rows, key=lambda row: row["Date"])
@@ -19854,6 +19872,41 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                 shared_data["oppGoals"] -= 1
                 shared_data["goalMargin"] += 1
 
+            if game_winning_goal:
+                if not game_data["winning_goalie"]:
+                    if scoring_play["team"]["id"] == game_data["team_id"]:
+                        for player in team_on_ice:
+                            if player in game_data["team_goalies"]:
+                                game_data["winning_goalie"] = player
+                                break
+
+                        if not game_data["winning_goalie"]:
+                            game_data["winning_goalie"] = determine_last_goalie(row_data, game_data, scoring_play["about"]["period"], period_time, "team")
+
+                        for player in opp_on_ice:
+                            if player in game_data["opp_goalies"]:
+                                game_data["losing_goalie"] = player
+                                break
+
+                        if not game_data["losing_goalie"]:
+                            game_data["losing_goalie"] = determine_last_goalie(row_data, game_data, scoring_play["about"]["period"], period_time, "opp")
+                    else:
+                        for player in opp_on_ice:
+                            if player in game_data["opp_goalies"]:
+                                game_data["winning_goalie"] = player
+                                break
+
+                        if not game_data["winning_goalie"]:
+                            game_data["winning_goalie"] = determine_last_goalie(row_data, game_data, scoring_play["about"]["period"], period_time, "opp")
+                        
+                        for player in team_on_ice:
+                            if player in game_data["team_goalies"]:
+                                game_data["losing_goalie"] = player
+                                break
+
+                        if not game_data["losing_goalie"]:
+                            game_data["losing_goalie"] = determine_last_goalie(row_data, game_data, scoring_play["about"]["period"], period_time, "team")
+
             if player_scored:
                 game_data["goal"].append({**shared_data , **{
                     "goalie" : goalie,
@@ -20237,6 +20290,39 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
             game_data["all_events"][goal_event["period"]][goal_event["periodTime"]].append(goal_event)
     
     return game_data, row_data, missing_games
+
+def determine_last_goalie(row_data, game_data, period, periodTime, team_str):
+    shift_data = game_data["shift_data"]
+    if not shift_data:
+        return None
+
+    time_to_check = ((period - 1) * 1200) + periodTime
+
+    goalie_data = {}
+    for goalie in game_data[team_str + "_goalies"]:
+        if goalie in shift_data[team_str]:
+            for sub_period in shift_data[team_str][goalie]:
+                time_to_use = (sub_period - 1) * 1200
+                
+                for shift_event in shift_data[team_str][goalie][sub_period]:
+                    start_time = shift_event["time_start"] + time_to_use
+                    end_time = shift_event["time_end"] + time_to_use
+                    if start_time <= time_to_check or end_time <= time_to_check:
+                        if end_time < periodTime:
+                            per_time_to_use = time_to_check - end_time
+                        else:
+                            per_time_to_use = 0
+
+                        if goalie not in goalie_data:
+                            goalie_data[goalie] = float("inf")
+
+                        if per_time_to_use < goalie_data[goalie]:
+                            goalie_data[goalie] = per_time_to_use
+
+    if goalie_data:
+        return min(goalie_data, key=goalie_data.get)
+    else:
+        return None
             
 def setup_game_data(player_data, row_data, player_id, player_type, time_frame):
     game_data = {
@@ -20309,7 +20395,9 @@ def setup_game_data(player_data, row_data, player_id, player_type, time_frame):
         "OtherOfficialID" : [],
         "TmHeadCoach" : None,
         "OppHeadCoach" : None,
-        "StartTime" : None
+        "StartTime" : None,
+        "winning_goalie" : None,
+        "losing_goalie" : None
     }
 
     missing_games = False
@@ -20438,6 +20526,9 @@ def setup_game_data(player_data, row_data, player_id, player_type, time_frame):
         if "thirdStar" in sub_data["liveData"]["decisions"]:
             if player_id == sub_data["liveData"]["decisions"]["thirdStar"]["id"]:
                 game_data["ThirdStar"] = 1
+        if "winner" in sub_data["liveData"]["decisions"]:
+            game_data["winning_goalie"] = sub_data["liveData"]["decisions"]["winner"]["id"]
+            game_data["losing_goalie"] = sub_data["liveData"]["decisions"]["loser"]["id"]
     
     if "officials" in sub_data["liveData"]["boxscore"]:
         for index, umpire_obj in enumerate(sub_data["liveData"]["boxscore"]["officials"]):
@@ -20532,7 +20623,9 @@ def setup_href_game_data(player_data, row_data, player_id, player_type, time_fra
         "OtherOfficialID" : [],
         "TmHeadCoach" : None,
         "OppHeadCoach" : None,
-        "StartTime" : None
+        "StartTime" : None,
+        "winning_goalie" : 1,
+        "losing_goalie" : 1
     }
 
     missing_games = False
