@@ -7262,6 +7262,9 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 extra_stats.add("Fight Against")
                                 extra_stats.add("fight")
                                 extra_stats.add("penalties")
+                                extra_stats.add("show-stat-fight")
+                                extra_stats.add("show-stat-fight/gp")
+                                extra_stats.add("show-stat-fight/60m")
                                 extra_stats.add("current-stats")
                             elif qualifier_str.startswith("fighting-against:"):
                                 qual_str = "fighting-against:"
@@ -7269,6 +7272,9 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 extra_stats.add("Fight Against")
                                 extra_stats.add("fight")
                                 extra_stats.add("penalties")
+                                extra_stats.add("show-stat-fight")
+                                extra_stats.add("show-stat-fight/gp")
+                                extra_stats.add("show-stat-fight/60m")
                                 extra_stats.add("current-stats")
                             elif qualifier_str.startswith("holiday:"):
                                 qual_str = "holiday:"
@@ -7594,6 +7600,9 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                     extra_stats.add("show-only-table-standard")
                                 elif m.group(2) == "fight":
                                     extra_stats.add("penalties")
+                                    extra_stats.add("show-stat-fight")
+                                    extra_stats.add("show-stat-fight/gp")
+                                    extra_stats.add("show-stat-fight/60m")
                                     player_type["da_type"] = {
                                         "type" : "Skater"
                                     }
@@ -7904,6 +7913,9 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 extra_stats.add("Fight Against")
                                 extra_stats.add("fight")
                                 extra_stats.add("penalties")
+                                extra_stats.add("show-stat-fight")
+                                extra_stats.add("show-stat-fight/gp")
+                                extra_stats.add("show-stat-fight/60m")
                                 extra_stats.add("current-stats")
                             elif qualifier_str.startswith("fighting-against"):
                                 qual_str = "fighting-against"
@@ -7911,6 +7923,9 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 extra_stats.add("Fight Against")
                                 extra_stats.add("fight")
                                 extra_stats.add("penalties")
+                                extra_stats.add("show-stat-fight")
+                                extra_stats.add("show-stat-fight/gp")
+                                extra_stats.add("show-stat-fight/60m")
                                 extra_stats.add("current-stats")
                             elif qualifier_str.startswith("playing-same-game"):
                                 qual_str = "playing-same-game:"
