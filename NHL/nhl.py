@@ -7565,7 +7565,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 extra_stats.add("current-stats")
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
                         
-                        last_match = re.finditer(r"\bshow(?: |-)?(only(?: |-)?)?(goalie-record|record|faceoff|slash|score|goal|year|games?-count|seasons-leading|season|date|per-game|game|adjusted|advanced|relative|missing-game|missing-toi|best-season|worst-season|ng|team|franchise|number|fight|penaltie|penalty|award|toi|shot|shift|star|play|nhl-link)s?\b", time_frame)
+                        last_match = re.finditer(r"\bshow(?: |-)?(only(?: |-)?)?(goalie-record|record|faceoff|slash|score|goal|year|games?-count|seasons-leading|season|date|per-game|game|adjusted|advanced|relative|missing-game|missing-toi|best-season|worst-season|ng|team|franchise|number|fight|penalty-taken|penalties-taken|penaltie|penalty|award|toi|shot|shift|star|play|nhl-link)s?\b", time_frame)
                         for m in last_match:
                             if "penalt" in m.group(2) or m.group(2) == "fight":
                                 extra_stats.add("penalties")
@@ -33673,7 +33673,7 @@ def print_player_data(player_datas, player_type, highest_vals, lowest_vals, has_
         else:
             all_headers["Advanced"] = advance_headers
     if penalty_headers and "penalties" in extra_stats:
-        all_headers["Penalty"] = penalty_headers
+        all_headers["Penalties Taken"] = penalty_headers
 
     if award_headers:
         has_award_stats = True
@@ -34048,7 +34048,7 @@ def get_reddit_player_table(player_datas, player_type, debug_mode, original_comm
         else:
             all_headers["Advanced"] = advance_headers
     if penalty_headers and "penalties" in extra_stats:
-        all_headers["Penalty"] = penalty_headers
+        all_headers["Penalties Taken"] = penalty_headers
 
     if award_headers:
         has_award_stats = True
