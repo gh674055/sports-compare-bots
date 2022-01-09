@@ -8640,12 +8640,15 @@ def handle_nfl_game_stats(player_data, all_rows, qualifiers, extra_stats, missin
 
     with ThreadPoolExecutor(max_workers=5) as sub_executor:
         for index, row_data in enumerate(all_rows):
-            if row_data["Shared"]["GameLink"]:
-                if row_data["Shared"]["GameLink"] not in games_to_skip:
-                    future = sub_executor.submit(get_game_data, index, player_data, row_data, qualifiers, extra_stats)
-                    future.add_done_callback(functools.partial(result_call_back, qualifiers, count_info, new_rows, player_type, player_data, row_data, extra_stats))
+            if "GameLink" in row_data["Shared"]:
+                if row_data["Shared"]["GameLink"]:
+                    if row_data["Shared"]["GameLink"] not in games_to_skip:
+                        future = sub_executor.submit(get_game_data, index, player_data, row_data, qualifiers, extra_stats)
+                        future.add_done_callback(functools.partial(result_call_back, qualifiers, count_info, new_rows, player_type, player_data, row_data, extra_stats))
+                else:
+                    count_info["missing_games"] = True
             else:
-                count_info["missing_games"] = True
+                new_rows.append(row_data)
 
     if count_info["exception"]:
         raise count_info["exception"]
