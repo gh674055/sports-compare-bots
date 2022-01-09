@@ -33656,6 +33656,14 @@ def print_player_data(player_datas, player_type, highest_vals, lowest_vals, has_
                 all_headers["Per Game/60 Minutes"]["PEN/60M"] = pen_obj
             del all_headers["Advanced"]
         elif "Penalty" in extra_stats:
+            if "PenDrawn" in all_headers["Advanced"]:
+                pen_obj = all_headers["Advanced"]["PenDrawn"]
+                del all_headers["Advanced"]["PenDrawn"]
+                all_headers["Standard"]["PenDrawn"] = pen_obj
+            if "PenDrawn/60M" in all_headers["Advanced"]:
+                pen_obj = all_headers["Advanced"]["PenDrawn/60M"]
+                del all_headers["Advanced"]["PenDrawn/60M"]
+                all_headers["Per Game/60 Minutes"]["PenDrawn/60M"] = pen_obj
             if "PEN" in all_headers["Advanced"]:
                 pen_obj = all_headers["Advanced"]["PEN"]
                 del all_headers["Advanced"]["PEN"]
@@ -33672,14 +33680,6 @@ def print_player_data(player_datas, player_type, highest_vals, lowest_vals, has_
                 pen_obj = all_headers["Advanced"]["NetPEN/60M"]
                 del all_headers["Advanced"]["NetPEN/60M"]
                 all_headers["Per Game/60 Minutes"]["NetPEN/60M"] = pen_obj
-            if "PenDrawn" in all_headers["Advanced"]:
-                pen_obj = all_headers["Advanced"]["PenDrawn"]
-                del all_headers["Advanced"]["PenDrawn"]
-                all_headers["Standard"]["PenDrawn"] = pen_obj
-            if "PenDrawn/60M" in all_headers["Advanced"]:
-                pen_obj = all_headers["Advanced"]["PenDrawn/60M"]
-                del all_headers["Advanced"]["PenDrawn/60M"]
-                all_headers["Per Game/60 Minutes"]["PenDrawn/60M"] = pen_obj
             del all_headers["Advanced"]
 
     error_getting_adv = False
@@ -34031,6 +34031,14 @@ def get_reddit_player_table(player_datas, player_type, debug_mode, original_comm
                 all_headers["Per Game/60 Minutes"]["PEN/60M"] = pen_obj
             del all_headers["Advanced"]
         elif "Penalty" in extra_stats:
+            if "PenDrawn" in all_headers["Advanced"]:
+                pen_obj = all_headers["Advanced"]["PenDrawn"]
+                del all_headers["Advanced"]["PenDrawn"]
+                all_headers["Standard"]["PenDrawn"] = pen_obj
+            if "PenDrawn/60M" in all_headers["Advanced"]:
+                pen_obj = all_headers["Advanced"]["PenDrawn/60M"]
+                del all_headers["Advanced"]["PenDrawn/60M"]
+                all_headers["Per Game/60 Minutes"]["PenDrawn/60M"] = pen_obj
             if "PEN" in all_headers["Advanced"]:
                 pen_obj = all_headers["Advanced"]["PEN"]
                 del all_headers["Advanced"]["PEN"]
@@ -34047,14 +34055,6 @@ def get_reddit_player_table(player_datas, player_type, debug_mode, original_comm
                 pen_obj = all_headers["Advanced"]["NetPEN/60M"]
                 del all_headers["Advanced"]["NetPEN/60M"]
                 all_headers["Per Game/60 Minutes"]["NetPEN/60M"] = pen_obj
-            if "PenDrawn" in all_headers["Advanced"]:
-                pen_obj = all_headers["Advanced"]["PenDrawn"]
-                del all_headers["Advanced"]["PenDrawn"]
-                all_headers["Standard"]["PenDrawn"] = pen_obj
-            if "PenDrawn/60M" in all_headers["Advanced"]:
-                pen_obj = all_headers["Advanced"]["PenDrawn/60M"]
-                del all_headers["Advanced"]["PenDrawn/60M"]
-                all_headers["Per Game/60 Minutes"]["PenDrawn/60M"] = pen_obj
             del all_headers["Advanced"]
 
     all_unique_quals = True
