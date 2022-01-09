@@ -7261,18 +7261,14 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 qual_type = "Fight Against"
                                 extra_stats.add("Fight Against")
                                 extra_stats.add("fight")
-                                extra_stats.add("show-only-stat-fight")
-                                extra_stats.add("show-only-stat-fight/gp")
-                                extra_stats.add("show-only-stat-fight/60m")
+                                extra_stats.add("penalties")
                                 extra_stats.add("current-stats")
                             elif qualifier_str.startswith("fighting-against:"):
                                 qual_str = "fighting-against:"
                                 qual_type = "Fight Against"
                                 extra_stats.add("Fight Against")
                                 extra_stats.add("fight")
-                                extra_stats.add("show-only-stat-fight")
-                                extra_stats.add("show-only-stat-fight/gp")
-                                extra_stats.add("show-only-stat-fight/60m")
+                                extra_stats.add("penalties")
                                 extra_stats.add("current-stats")
                             elif qualifier_str.startswith("holiday:"):
                                 qual_str = "holiday:"
@@ -7597,6 +7593,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                     extra_stats.add("show-only-stat-gs")
                                     extra_stats.add("show-only-table-standard")
                                 elif m.group(2) == "fight":
+                                    extra_stats.add("penalties")
                                     player_type["da_type"] = {
                                         "type" : "Skater"
                                     }
@@ -7906,18 +7903,14 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 qual_type = "Fight Against"
                                 extra_stats.add("Fight Against")
                                 extra_stats.add("fight")
-                                extra_stats.add("show-only-stat-fight")
-                                extra_stats.add("show-only-stat-fight/gp")
-                                extra_stats.add("show-only-stat-fight/60m")
+                                extra_stats.add("penalties")
                                 extra_stats.add("current-stats")
                             elif qualifier_str.startswith("fighting-against"):
                                 qual_str = "fighting-against"
                                 qual_type = "Fight Against"
                                 extra_stats.add("Fight Against")
                                 extra_stats.add("fight")
-                                extra_stats.add("show-only-stat-fight")
-                                extra_stats.add("show-only-stat-fight/gp")
-                                extra_stats.add("show-only-stat-fight/60m")
+                                extra_stats.add("penalties")
                                 extra_stats.add("current-stats")
                             elif qualifier_str.startswith("playing-same-game"):
                                 qual_str = "playing-same-game:"
