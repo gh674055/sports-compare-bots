@@ -5307,6 +5307,7 @@ qualifier_map = {
     "Current Opponent Ties" : {},
     "Current Opponent Games Over 500" : {},
     "Current Opponent Win Percentage" : {},
+    "Attendance" : {},
     "Opponent Points Rank" : {},
     "Opponent Points Allowed Rank" : {},
     "Opponent Yards Rank" : {},
