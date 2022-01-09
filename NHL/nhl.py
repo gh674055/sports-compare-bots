@@ -7332,6 +7332,8 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 }
                                 extra_stats.add("Penalty")
                                 extra_stats.add("penalties")
+                                extra_stats.add("hide-stat-fight")
+                                extra_stats.add("hide-stat-fight/60m")
                                 extra_stats.add("current-stats")
                             elif qualifier_str.startswith("penalty-severity:"):
                                 qual_str = "penalty-severity:"
@@ -7339,7 +7341,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 player_type["da_type"] = {
                                     "type" : "Skater"
                                 }
-                                extra_stats.add("Penalty")
+                                extra_stats.add("Penalty Sev")
                                 extra_stats.add("penalties")
                                 extra_stats.add("current-stats")
                             elif qualifier_str.startswith("exact-penalty-type:"):
@@ -7350,6 +7352,8 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 }
                                 extra_stats.add("Penalty")
                                 extra_stats.add("penalties")
+                                extra_stats.add("hide-stat-fight")
+                                extra_stats.add("hide-stat-fight/60m")
                                 extra_stats.add("current-stats")
                             elif qualifier_str.startswith("official:"):
                                 qual_str = "official:"
@@ -7387,7 +7391,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 player_type["da_type"] = {
                                     "type" : "Skater"
                                 }
-                                extra_stats.add("Penalty")
+                                extra_stats.add("Penalty Sev")
                                 extra_stats.add("penalties")
                                 extra_stats.add("current-stats")
                             elif qualifier_str.startswith("event-time:") or qualifier_str.startswith("start-time:"):
@@ -8691,7 +8695,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                     "type" : "Skater"
                                 }
                                 qualifier_obj["values"] = [qualifier_str]
-                                extra_stats.add("Penalty")
+                                extra_stats.add("Penalty Sev")
                                 extra_stats.add("penalties")
                                 extra_stats.add("current-stats")
                             elif qualifier_str == "minor":
@@ -8700,7 +8704,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                     "type" : "Skater"
                                 }
                                 qualifier_obj["values"] = ["bench minor", "minor"]
-                                extra_stats.add("Penalty")
+                                extra_stats.add("Penalty Sev")
                                 extra_stats.add("penalties")
                                 extra_stats.add("current-stats")
                             elif qualifier_str == "stick-infraction":
@@ -8711,6 +8715,8 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 qualifier_obj["values"] = ["butt ending", "cross checking", "hooking", "slashing", "spearing"]
                                 extra_stats.add("Penalty")
                                 extra_stats.add("penalties")
+                                extra_stats.add("hide-stat-fight")
+                                extra_stats.add("hide-stat-fight/60m")
                                 extra_stats.add("current-stats")
                             elif qualifier_str in ["new-moon", "waning-crescent", "third-quarter", "waning-gibbous", "full-moon", "waxing-gibbous", "first-quarter", "waxing-crescent"]:
                                 qual_type = "Moon Phase"
@@ -33759,7 +33765,7 @@ def print_player_data(player_datas, player_type, highest_vals, lowest_vals, has_
                 del all_headers["Advanced"]["PEN/60M"]
                 all_headers["Per Game/60 Minutes"]["PEN/60M"] = pen_obj
             del all_headers["Advanced"]
-        elif "Penalty" in extra_stats:
+        elif "Penalty" in extra_stats or "Penalty Sev" in extra_stats:
             if "PenDrawn" in all_headers["Advanced"]:
                 pen_obj = all_headers["Advanced"]["PenDrawn"]
                 del all_headers["Advanced"]["PenDrawn"]
@@ -34134,7 +34140,7 @@ def get_reddit_player_table(player_datas, player_type, debug_mode, original_comm
                 del all_headers["Advanced"]["PEN/60M"]
                 all_headers["Per Game/60 Minutes"]["PEN/60M"] = pen_obj
             del all_headers["Advanced"]
-        elif "Penalty" in extra_stats:
+        elif "Penalty" in extra_stats or "Penalty Sev" in extra_stats:
             if "PenDrawn" in all_headers["Advanced"]:
                 pen_obj = all_headers["Advanced"]["PenDrawn"]
                 del all_headers["Advanced"]["PenDrawn"]
@@ -35465,7 +35471,15 @@ def is_against_header(header, over_header, extra_stats, player_type, has_toi_sta
         if header in ("PIM", "PEN", "PIM/GP", "PEN/GP", "PEN/60M", "PIM/60M"):
             return False
         else:
-            return not ("type" in headers[player_type["da_type"]["type"]][header] and headers[player_type["da_type"]["type"]][header]["type"] == "Penalty")
+            if "Penalty Sev" in extra_stats:
+                return True
+            else:
+                return not ("type" in headers[player_type["da_type"]["type"]][header] and headers[player_type["da_type"]["type"]][header]["type"] == "Penalty")
+    if "Penalty Sev" in extra_stats:
+        if header in ("PIM", "PEN", "PenDrawn", "NetPEN", "PIM/GP", "PEN/GP", "PenDrawn/GP", "NetPEN/GP", "PEN/60M", "PIM/60M", "PenDrawn/60M", "NetPEN/60M"):
+            return False
+        else:
+            return True
     if "Penalty" in extra_stats:
         if header in ("PIM", "PEN", "PenDrawn", "NetPEN", "PIM/GP", "PEN/GP", "PenDrawn/GP", "NetPEN/GP", "PEN/60M", "PIM/60M", "PenDrawn/60M", "NetPEN/60M"):
             return False
