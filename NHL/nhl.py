@@ -20123,12 +20123,12 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                     else:
                         pen_obj["penaltySeverity"] = "Minor"
                 
-                if player_penalty or player_penalty_drawn:
-                    if not (len(scoring_play["players"]) == 1 and "description" in scoring_play["result"] and " served by " in scoring_play["result"]["description"]):
-                        pen_obj["player_penalty"] = player_penalty
-                        if "penaltyType" in pen_obj and pen_obj["penaltyType"] == "Fighting" and player_penalty:
-                            game_data["Fight"] += 1
-                        game_data["penalty"].append(pen_obj)
+            if player_penalty or player_penalty_drawn:
+                if not (len(scoring_play["players"]) == 1 and "description" in scoring_play["result"] and " served by " in scoring_play["result"]["description"]):
+                    pen_obj["player_penalty"] = player_penalty
+                    if "penaltyType" in pen_obj and pen_obj["penaltyType"] == "Fighting" and player_penalty:
+                        game_data["Fight"] += 1
+                    game_data["penalty"].append(pen_obj)
             if not ("penaltySeverity" in pen_obj and (pen_obj["penaltySeverity"] == "Misconduct" or pen_obj["penaltySeverity"] == "GameMisconduct")) and not ("penaltyType" in pen_obj and pen_obj["penaltyType"] == "Fighting"):
                 game_data["all_penalty"].append(pen_obj)
         elif scoring_play["result"]["event"] == "Hit":
@@ -21557,7 +21557,7 @@ def get_html_play_data(scoring_plays, player_data, og_game_id, is_home, game_dat
                                     }
                                 })
                             
-                            last_match = re.search(r"(\S+)(?:\s+\((\S+)\))?\((\d+)\s+min\)", description_string)
+                            last_match = re.search(r"(?:\s+[^a-z]+\s+)(.+)(?:\s+\((\S+)\))?\((\d+)\s+min\)", description_string)
                             penalty_type = last_match.group(1)
                             pen_severity = last_match.group(2)
                             penalty_minutes = int(last_match.group(3))
@@ -21569,13 +21569,16 @@ def get_html_play_data(scoring_plays, player_data, og_game_id, is_home, game_dat
                             if penalty_type:
                                 penalty_type = re.sub(r"\(\d+ min\)", "", penalty_type).strip()
 
-                            if penalty_type in ("Game Misconduct", "Bench Minor", "Minor", "Major", "Match", "Misconduct"):
+                        
+                            if penalty_type.endswith("(maj)"):
+                                penalty_type = penalty_type[:-5].strip()
+                                if not penalty_type:
+                                    penalty_type = None
+                                pen_severity = "Major"
+                            elif penalty_type in ("Game Misconduct", "Bench Minor", "Minor", "Major", "Match", "Misconduct"):
                                 pen_severity = penalty_type
                                 penalty_type = None
-                            
-                            if pen_severity == "maj":
-                                pen_severity = "Major"
-                        
+
                             scoring_play["result"]["penaltyMinutes"] = penalty_minutes
                             if penalty_type:
                                 scoring_play["result"]["secondaryType"] = penalty_type
