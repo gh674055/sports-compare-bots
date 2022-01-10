@@ -19602,7 +19602,7 @@ def set_row_data(player_game_info, row_data):
 def get_game_data(index, player_data, row_data, player_id, player_type, time_frame, extra_stats):
     game_data, missing_games, sub_data = setup_game_data(player_data, row_data, player_id, player_type, time_frame)
     if game_data["missing_data"]:
-        if "skip-href" not in extra_stats and row_data["Year"] < 2001 and "Game Number" not in time_frame["qualifiers"] and "Attendance" not in time_frame["qualifiers"] and "Start Time" not in time_frame["qualifiers"] and "Team Start Time" not in time_frame["qualifiers"] and "Opponent Start Time" not in time_frame["qualifiers"] and "Local Start Time" not in time_frame["qualifiers"] and "Exact Referee" not in time_frame["qualifiers"] and "Exact Linesman" not in time_frame["qualifiers"] or "Exact Team Head Coach" not in time_frame["qualifiers"] and "Exact Opponent Head Coach" not in time_frame["qualifiers"] and "Official" not in time_frame["qualifiers"] and "Referee" not in time_frame["qualifiers"] and "Linesman" not in time_frame["qualifiers"] and "Team Head Coach" not in time_frame["qualifiers"] and "Opponent Head Coach" not in time_frame["qualifiers"]:
+        if "skip-href" not in extra_stats and row_data["Year"] < 1999 and "Game Number" not in time_frame["qualifiers"] and "Attendance" not in time_frame["qualifiers"] and "Start Time" not in time_frame["qualifiers"] and "Team Start Time" not in time_frame["qualifiers"] and "Opponent Start Time" not in time_frame["qualifiers"] and "Local Start Time" not in time_frame["qualifiers"] and "Exact Referee" not in time_frame["qualifiers"] and "Exact Linesman" not in time_frame["qualifiers"] or "Exact Team Head Coach" not in time_frame["qualifiers"] and "Exact Opponent Head Coach" not in time_frame["qualifiers"] and "Official" not in time_frame["qualifiers"] and "Referee" not in time_frame["qualifiers"] and "Linesman" not in time_frame["qualifiers"] and "Team Head Coach" not in time_frame["qualifiers"] and "Opponent Head Coach" not in time_frame["qualifiers"]:
             game_data, missing_games, sub_data = setup_href_game_data(player_data, row_data, player_id, player_type, time_frame)
             if game_data["missing_data"]:
                 return game_data, row_data, missing_games
@@ -19616,14 +19616,14 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
     if (row_data["Year"] < 2001 and sub_data):
         scoring_plays = sub_data["liveData"]["plays"]["allPlays"]
     got_plays = False
-    if ((not scoring_plays and True) or (row_data["Year"] >= 2001)) and not has_api_quals(time_frame["qualifiers"]) and not "skip-play" in extra_stats:
+    if ((not scoring_plays and True) or (row_data["Year"] >= 1999)) and not has_api_quals(time_frame["qualifiers"]) and not "skip-play" in extra_stats:
         if row_data["Year"] >= 2007:
             get_html_play_data(scoring_plays, player_data, row_data["NHLGameLink"], row_data["Location"], game_data, sub_data["gameData"]["status"]["abstractGameState"] == "Final", row_data["Year"])
             got_plays = True
         elif row_data["Year"] >= 2003:
             get_old_html_play_data(scoring_plays, player_data, row_data["NHLGameLink"], row_data["Location"], game_data, True, row_data["Year"])
             got_plays = True
-        elif row_data["Year"] >= 2001:
+        elif row_data["Year"] >= 1999:
             get_older_html_play_data(scoring_plays, player_data, row_data["NHLGameLink"], row_data["Location"], game_data, True, row_data["Year"])
             got_plays = True
         
@@ -19632,6 +19632,9 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
 
     if not scoring_plays and sub_data:
         scoring_plays = sub_data["liveData"]["plays"]["allPlays"]
+        if got_plays:
+            if "Shot On" in time_frame["qualifiers"] or "Shot By" in time_frame["qualifiers"] or "Facing Lefty" in time_frame["qualifiers"] or "Facing Righty" in time_frame["qualifiers"] or "Event Formula" in time_frame["qualifiers"] or "On Ice With" in time_frame["qualifiers"] or "On Ice Against" in time_frame["qualifiers"] or "On Line With" in time_frame["qualifiers"] or "On Line Against" in time_frame["qualifiers"] or "Assisted On" in time_frame["qualifiers"] or "Assisted With" in time_frame["qualifiers"] or "Points With" in time_frame["qualifiers"] or "Assisted By" in time_frame["qualifiers"] or "Primary Assisted On" in time_frame["qualifiers"] or "Primary Assisted With" in time_frame["qualifiers"] or "Primary Points With" in time_frame["qualifiers"] or "Primary Assisted By" in time_frame["qualifiers"] or "Hit On" in time_frame["qualifiers"] or "Block On" in time_frame["qualifiers"] or "Penalty On" in time_frame["qualifiers"] or "Faceoff Against" in time_frame["qualifiers"] or "Fight Against" in time_frame["qualifiers"] or "Penalty Type" in time_frame["qualifiers"] or "Penalty Severity" in time_frame["qualifiers"] or "Shot Type" in time_frame["qualifiers"] or "Exact Penalty Type" in time_frame["qualifiers"] or "Exact Penalty Severity" in time_frame["qualifiers"] or "Exact Shot Type" in time_frame["qualifiers"] or "Team Score" in time_frame["qualifiers"] or "Opponent Score" in time_frame["qualifiers"] or "Score Margin" in time_frame["qualifiers"] or "Score Difference" in time_frame["qualifiers"] or "Event Sub Query" in time_frame["qualifiers"] or "Or Event Sub Query" in time_frame["qualifiers"] or "Period" in time_frame["qualifiers"] or "Period Stat" in time_frame["qualifiers"] or "Shift Stat" in time_frame["qualifiers"] or "Coordinates" in time_frame["qualifiers"] or "X Coordinate" in time_frame["qualifiers"] or "Y Coordinate" in time_frame["qualifiers"] or "Goalie Angle" in time_frame["qualifiers"] or "Raw Coordinates" in time_frame["qualifiers"] or "Raw X Coordinate" in time_frame["qualifiers"] or "Raw Y Coordinate" in time_frame["qualifiers"] or "Absolute Coordinates" in time_frame["qualifiers"] or "Absolute X Coordinate" in time_frame["qualifiers"] or "Absolute Y Coordinate" in time_frame["qualifiers"] or "Within Distance" in time_frame["qualifiers"] or "Raw Within Distance" in time_frame["qualifiers"] or "Absolute Within Distance" in time_frame["qualifiers"] or "Left Side" in time_frame["qualifiers"] or "Right Side" in time_frame["qualifiers"] or "Faceoff Circle" in time_frame["qualifiers"] or "Goalie Crease" in time_frame["qualifiers"] or "Goalie Circle" in time_frame["qualifiers"] or "Period Time" in time_frame["qualifiers"] or "Period Time Remaining" in time_frame["qualifiers"] or "Unassisted" in time_frame["qualifiers"] or "Event Stat" in time_frame["qualifiers"] or "Event Stat Reversed" in time_frame["qualifiers"] or "Event Stats" in time_frame["qualifiers"] or "Event Stats Reversed" in time_frame["qualifiers"] or "Game Event Stat" in time_frame["qualifiers"] or "Game Event Stat Reversed" in time_frame["qualifiers"] or "Game Event Stats" in time_frame["qualifiers"] or "Game Event Stats Reversed" in time_frame["qualifiers"] or "Starting Event Stat" in time_frame["qualifiers"] or "Starting Event Stat Reversed" in time_frame["qualifiers"] or "Starting Event Stats" in time_frame["qualifiers"] or "Starting Event Stats Reversed" in time_frame["qualifiers"] or "Starting Game Event Stat" in time_frame["qualifiers"] or "Starting Game Event Stat Reversed" in time_frame["qualifiers"] or "Starting Game Event Stats" in time_frame["qualifiers"] or "Starting Game Event Stats Reversed" in time_frame["qualifiers"] or "Strength" in time_frame["qualifiers"] or "Even Skaters" in time_frame["qualifiers"] or "Even Goalies" in time_frame["qualifiers"] or "More Skaters" in time_frame["qualifiers"] or "Less Skaters" in time_frame["qualifiers"] or "Team Goalie Pulled" in time_frame["qualifiers"] or "Opponent Goalie Pulled" in time_frame["qualifiers"] or "Power Play" in time_frame["qualifiers"] or "Short Handed" in time_frame["qualifiers"] or "Even Strength" in time_frame["qualifiers"] or "Team Skaters" in time_frame["qualifiers"] or "Opponent Skaters" in time_frame["qualifiers"] or "Team Players" in time_frame["qualifiers"] or "Opponent Players" in time_frame["qualifiers"] or "Overtime" in time_frame["qualifiers"] or "Game Winning" in time_frame["qualifiers"] or "Offensive Zone" in time_frame["qualifiers"] or "Defensive Zone" in time_frame["qualifiers"] or "Neutral Zone" in time_frame["qualifiers"] or "Event Time" in time_frame["qualifiers"] or "Team Event Time" in time_frame["qualifiers"] or "Opponent Event Time" in time_frame["qualifiers"] or "Local Event Time" in time_frame["qualifiers"] or "Position" in time_frame["qualifiers"] or "fight" in extra_stats or "current-stats" in extra_stats:
+                missing_games = True
 
     if row_data["NHLGameLink"] in missing_event_data:
         for scoring_play in scoring_plays:
@@ -20046,32 +20049,33 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                     "shotType" : scoring_play["result"]["secondaryType"] if "secondaryType" in scoring_play["result"] else None
                 }})
             
-            if is_player_on_ice(game_data["shift_data"], team_on_ice, opp_on_ice, scoring_play["about"]["period"], period_time, player_id, True):
-                if scoring_play["team"]["id"] == game_data["team_id"]:
-                    game_data["all_team_goals"].append({**shared_data, **{}})
-                    if row_data["Year"] >= 2007:
-                        game_data["all_team_shots"].append({**shared_data, **{}})
-                        game_data["all_team_shots_og"].append({**shared_data, **{}})
-                        game_data["all_team_unblocked_shots"].append({**shared_data, **{}})
+            if game_data["shift_data"] or team_on_ice:
+                if is_player_on_ice(game_data["shift_data"], team_on_ice, opp_on_ice, scoring_play["about"]["period"], period_time, player_id, True):
+                    if scoring_play["team"]["id"] == game_data["team_id"]:
+                        game_data["all_team_goals"].append({**shared_data, **{}})
+                        if row_data["Year"] >= 2007:
+                            game_data["all_team_shots"].append({**shared_data, **{}})
+                            game_data["all_team_shots_og"].append({**shared_data, **{}})
+                            game_data["all_team_unblocked_shots"].append({**shared_data, **{}})
+                    else:
+                        game_data["all_opp_goals"].append({**shared_data, **{}})
+                        if row_data["Year"] >= 2007:
+                            game_data["all_opp_shots"].append({**shared_data, **{}})
+                            game_data["all_opp_shots_og"].append({**shared_data, **{}})
+                            game_data["all_opp_unblocked_shots"].append({**shared_data, **{}})
                 else:
-                    game_data["all_opp_goals"].append({**shared_data, **{}})
-                    if row_data["Year"] >= 2007:
-                        game_data["all_opp_shots"].append({**shared_data, **{}})
-                        game_data["all_opp_shots_og"].append({**shared_data, **{}})
-                        game_data["all_opp_unblocked_shots"].append({**shared_data, **{}})
-            else:
-                if scoring_play["team"]["id"] == game_data["team_id"]:
-                    game_data["of_all_team_goals"].append({**shared_data, **{}})
-                    if row_data["Year"] >= 2007:
-                        game_data["of_all_team_shots"].append({**shared_data, **{}})
-                        game_data["of_all_team_shots_og"].append({**shared_data, **{}})
-                        game_data["of_all_team_unblocked_shots"].append({**shared_data, **{}})
-                else:
-                    game_data["of_all_opp_goals"].append({**shared_data, **{}})
-                    if row_data["Year"] >= 2007:
-                        game_data["of_all_opp_shots"].append({**shared_data, **{}})
-                        game_data["of_all_opp_shots_og"].append({**shared_data, **{}})
-                        game_data["of_all_opp_unblocked_shots"].append({**shared_data, **{}})
+                    if scoring_play["team"]["id"] == game_data["team_id"]:
+                        game_data["of_all_team_goals"].append({**shared_data, **{}})
+                        if row_data["Year"] >= 2007:
+                            game_data["of_all_team_shots"].append({**shared_data, **{}})
+                            game_data["of_all_team_shots_og"].append({**shared_data, **{}})
+                            game_data["of_all_team_unblocked_shots"].append({**shared_data, **{}})
+                    else:
+                        game_data["of_all_opp_goals"].append({**shared_data, **{}})
+                        if row_data["Year"] >= 2007:
+                            game_data["of_all_opp_shots"].append({**shared_data, **{}})
+                            game_data["of_all_opp_shots_og"].append({**shared_data, **{}})
+                            game_data["of_all_opp_unblocked_shots"].append({**shared_data, **{}})
 
             next_shot_penalty_shot = False
             first_goal = False
@@ -20107,24 +20111,25 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                     "shotType" : scoring_play["result"]["secondaryType"] if "secondaryType" in scoring_play["result"] else None
                 }})
 
-            if is_player_on_ice(game_data["shift_data"], team_on_ice, opp_on_ice, scoring_play["about"]["period"], period_time, player_id, True):
-                if scoring_play["team"]["id"] == game_data["team_id"]:
-                    game_data["all_team_shots"].append({**shared_data, **{}})
-                    game_data["all_team_shots_og"].append({**shared_data, **{}})
-                    game_data["all_team_unblocked_shots"].append({**shared_data, **{}})
+            if game_data["shift_data"] or team_on_ice:
+                if is_player_on_ice(game_data["shift_data"], team_on_ice, opp_on_ice, scoring_play["about"]["period"], period_time, player_id, True):
+                    if scoring_play["team"]["id"] == game_data["team_id"]:
+                        game_data["all_team_shots"].append({**shared_data, **{}})
+                        game_data["all_team_shots_og"].append({**shared_data, **{}})
+                        game_data["all_team_unblocked_shots"].append({**shared_data, **{}})
+                    else:
+                        game_data["all_opp_shots"].append({**shared_data, **{}})
+                        game_data["all_opp_shots_og"].append({**shared_data, **{}})
+                        game_data["all_opp_unblocked_shots"].append({**shared_data, **{}})
                 else:
-                    game_data["all_opp_shots"].append({**shared_data, **{}})
-                    game_data["all_opp_shots_og"].append({**shared_data, **{}})
-                    game_data["all_opp_unblocked_shots"].append({**shared_data, **{}})
-            else:
-                if scoring_play["team"]["id"] == game_data["team_id"]:
-                    game_data["of_all_team_shots"].append({**shared_data, **{}})
-                    game_data["of_all_team_shots_og"].append({**shared_data, **{}})
-                    game_data["of_all_team_unblocked_shots"].append({**shared_data, **{}})
-                else:
-                    game_data["of_all_opp_shots"].append({**shared_data, **{}})
-                    game_data["of_all_opp_shots_og"].append({**shared_data, **{}})
-                    game_data["of_all_opp_unblocked_shots"].append({**shared_data, **{}})
+                    if scoring_play["team"]["id"] == game_data["team_id"]:
+                        game_data["of_all_team_shots"].append({**shared_data, **{}})
+                        game_data["of_all_team_shots_og"].append({**shared_data, **{}})
+                        game_data["of_all_team_unblocked_shots"].append({**shared_data, **{}})
+                    else:
+                        game_data["of_all_opp_shots"].append({**shared_data, **{}})
+                        game_data["of_all_opp_shots_og"].append({**shared_data, **{}})
+                        game_data["of_all_opp_unblocked_shots"].append({**shared_data, **{}})
 
             next_shot_penalty_shot = False
         elif scoring_play["result"]["event"] == "Missed Shot":
@@ -20157,20 +20162,21 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                     "oppSide" : None if scorer not in game_data["player_side_map"] else game_data["player_side_map"][scorer]
                 }})
 
-            if is_player_on_ice(game_data["shift_data"], team_on_ice, opp_on_ice, scoring_play["about"]["period"], period_time, player_id, True):
-                if scoring_play["team"]["id"] == game_data["team_id"]:
-                    game_data["all_team_shots"].append({**shared_data, **{}})
-                    game_data["all_team_unblocked_shots"].append({**shared_data, **{}})
+            if game_data["shift_data"] or team_on_ice:
+                if is_player_on_ice(game_data["shift_data"], team_on_ice, opp_on_ice, scoring_play["about"]["period"], period_time, player_id, True):
+                    if scoring_play["team"]["id"] == game_data["team_id"]:
+                        game_data["all_team_shots"].append({**shared_data, **{}})
+                        game_data["all_team_unblocked_shots"].append({**shared_data, **{}})
+                    else:
+                        game_data["all_opp_shots"].append({**shared_data, **{}})
+                        game_data["all_opp_unblocked_shots"].append({**shared_data, **{}})
                 else:
-                    game_data["all_opp_shots"].append({**shared_data, **{}})
-                    game_data["all_opp_unblocked_shots"].append({**shared_data, **{}})
-            else:
-                if scoring_play["team"]["id"] == game_data["team_id"]:
-                    game_data["of_all_team_shots"].append({**shared_data, **{}})
-                    game_data["of_all_team_unblocked_shots"].append({**shared_data, **{}})
-                else:
-                    game_data["of_all_opp_shots"].append({**shared_data, **{}})
-                    game_data["of_all_opp_unblocked_shots"].append({**shared_data, **{}})
+                    if scoring_play["team"]["id"] == game_data["team_id"]:
+                        game_data["of_all_team_shots"].append({**shared_data, **{}})
+                        game_data["of_all_team_unblocked_shots"].append({**shared_data, **{}})
+                    else:
+                        game_data["of_all_opp_shots"].append({**shared_data, **{}})
+                        game_data["of_all_opp_unblocked_shots"].append({**shared_data, **{}})
 
             next_shot_penalty_shot = False
         elif scoring_play["result"]["event"] == "Penalty":
@@ -20275,16 +20281,17 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
             elif player_shot:
                 game_data["blocked_shot"].append({**shared_data, **{}})
 
-            if is_player_on_ice(game_data["shift_data"], team_on_ice, opp_on_ice, scoring_play["about"]["period"], period_time, player_id, True):
-                if scoring_play["team"]["id"] != game_data["team_id"]:
-                    game_data["all_team_shots"].append({**shared_data, **{}})
+            if game_data["shift_data"] or team_on_ice:
+                if is_player_on_ice(game_data["shift_data"], team_on_ice, opp_on_ice, scoring_play["about"]["period"], period_time, player_id, True):
+                    if scoring_play["team"]["id"] != game_data["team_id"]:
+                        game_data["all_team_shots"].append({**shared_data, **{}})
+                    else:
+                        game_data["all_opp_shots"].append({**shared_data, **{}})
                 else:
-                    game_data["all_opp_shots"].append({**shared_data, **{}})
-            else:
-                if scoring_play["team"]["id"] != game_data["team_id"]:
-                    game_data["of_all_team_shots"].append({**shared_data, **{}})
-                else:
-                    game_data["of_all_opp_shots"].append({**shared_data, **{}})
+                    if scoring_play["team"]["id"] != game_data["team_id"]:
+                        game_data["of_all_team_shots"].append({**shared_data, **{}})
+                    else:
+                        game_data["of_all_opp_shots"].append({**shared_data, **{}})
             next_shot_penalty_shot = False
         elif scoring_play["result"]["event"] == "Faceoff":
             player_faceoff_winner = False
@@ -20509,7 +20516,7 @@ def setup_game_data(player_data, row_data, player_id, player_type, time_frame):
     }
 
     missing_games = False
-    if row_data["Year"] < 2001 and has_shift_quals(time_frame["qualifiers"]):
+    if row_data["Year"] < 1999 and has_shift_quals(time_frame["qualifiers"]):
         game_data["missing_data"] = True
         return game_data, missing_games, None
     
@@ -20816,7 +20823,7 @@ def setup_href_game_data(player_data, row_data, player_id, player_type, time_fra
     }
 
     missing_games = False
-    if row_data["Year"] < 2001 and has_shift_quals(time_frame["qualifiers"]):
+    if row_data["Year"] < 1999 and has_shift_quals(time_frame["qualifiers"]):
         game_data["missing_data"] = True
         return game_data, missing_games, None
     
