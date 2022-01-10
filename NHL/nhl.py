@@ -20197,7 +20197,7 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                     else:
                         pen_obj["penaltySeverity"] = "Minor"
                 
-                if pen_obj["penaltySeverity"] == "Minor" and scoring_play["result"]["penaltyMinutes"] == 5:
+                if "penaltySeverity" in pen_obj and pen_obj["penaltySeverity"] == "Minor" and scoring_play["result"]["penaltyMinutes"] == 5:
                     pen_obj["penaltySeverity"] = "Major"
                 
             if player_penalty or player_penalty_drawn:
