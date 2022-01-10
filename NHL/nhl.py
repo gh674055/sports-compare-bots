@@ -12130,7 +12130,7 @@ def handle_name_threads(sub_name, parse_time_frames, index, player_type, remove_
                 for row in subb_player_data["rows"]:
                     rows_count += 1
             
-            if rows_count > 200:
+            if rows_count > 20:
                 raise CustomMessageException("Cannot show more than 20 games!")
             
             if rows_count > 1:
@@ -20163,6 +20163,12 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
             pen_obj["penalty_for"] = penalty_for
             pen_obj["penalty_against"] = penalty_against
             pen_obj["penalty_served"] = penalty_served
+            
+            if "penaltySeverity" in scoring_play["result"] and scoring_play["result"]["penaltySeverity"]:
+                scoring_play["result"]["penaltySeverity"] = scoring_play["result"]["penaltySeverity"].title()
+            
+            if "secondaryType" in scoring_play["result"] and scoring_play["result"]["secondaryType"]:
+                scoring_play["result"]["secondaryType"] = scoring_play["result"]["secondaryType"].title()
 
             if "penaltySeverity" in scoring_play["result"] and scoring_play["result"]["penaltySeverity"] == "Penalty Shot":
                 next_shot_penalty_shot = True
@@ -20176,8 +20182,8 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                 pen_obj["penaltyType"] = scoring_play["result"]["secondaryType"]
                 if not has_pen_sev:
                     pen_sev_string = scoring_play["result"]["secondaryType"] if scoring_play["result"]["secondaryType"] != "Game Misconduct" else "GameMisconduct"
-                    if pen_sev_string == "Fighting":
-                        pen_obj["penaltyType"] = "Fighting"
+                    if scoring_play["result"]["penaltyMinutes"] == 5:
+                        pen_obj["penaltyType"] = pen_sev_string
                         pen_sev_string = "Major"
                     elif pen_sev_string == "Bench Minor":
                         pen_sev_string = "Minor"
@@ -20185,6 +20191,9 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                         pen_obj["penaltySeverity"] = pen_sev_string
                     else:
                         pen_obj["penaltySeverity"] = "Minor"
+                
+                if pen_obj["penaltySeverity"] == "Minor" and scoring_play["result"]["penaltyMinutes"] == 5:
+                    pen_obj["penaltySeverity"] = "Major"
                 
             if player_penalty or player_penalty_drawn:
                 if not (len(scoring_play["players"]) == 1 and "description" in scoring_play["result"] and " served by " in scoring_play["result"]["description"]):
@@ -21666,15 +21675,18 @@ def get_html_play_data(scoring_plays, player_data, og_game_id, is_home, game_dat
                                 penalty_type.replace("PS-", "")
                                 pen_severity = "Penalty Shot"
                             
-                            if penalty_type:
-                                penalty_type = re.sub(r"\(\d+ min\)", "", penalty_type).strip()
-
-                        
-                            if penalty_type.endswith("(maj)"):
-                                penalty_type = penalty_type[:-5].strip()
+                            if "(maj)" in penalty_type:
+                                pen_severity = "Major"
+                                penalty_type = penalty_type.replace("(maj)", "").strip()
                                 if not penalty_type:
                                     penalty_type = None
-                                pen_severity = "Major"
+                            
+                            if penalty_type:
+                                penalty_type = re.sub(r"\(\d+ min\)", "", penalty_type).strip().title()
+
+                            if penalty_type == "Match Penalty":
+                                pen_severity = "Match"
+                                penalty_type = None
                             elif penalty_type in ("Game Misconduct", "Bench Minor", "Minor", "Major", "Match", "Misconduct"):
                                 pen_severity = penalty_type
                                 penalty_type = None
@@ -22270,11 +22282,16 @@ def get_old_html_play_data(scoring_plays, player_data, og_game_id, is_home, game
                 if "(maj)" in penalty_type:
                     pen_severity = "Major"
                     penalty_type = penalty_type.replace("(maj)", "").strip()
+                    if not penalty_type:
+                        penalty_type = None
                 
                 if penalty_type:
-                    penalty_type = re.sub(r"\(\d+ min\)", "", penalty_type).strip()
+                    penalty_type = re.sub(r"\(\d+ min\)", "", penalty_type).strip().title()
 
-                if penalty_type in ("Game Misconduct", "Bench Minor", "Minor", "Major", "Match", "Misconduct"):
+                if penalty_type == "Match Penalty":
+                    pen_severity = "Match"
+                    penalty_type = None
+                elif penalty_type in ("Game Misconduct", "Bench Minor", "Minor", "Major", "Match", "Misconduct"):
                     pen_severity = penalty_type
                     penalty_type = None
             
@@ -22621,11 +22638,16 @@ def get_older_html_play_data(scoring_plays, player_data, og_game_id, is_home, ga
                 if "(maj)" in penalty_type:
                     pen_severity = "Major"
                     penalty_type = penalty_type.replace("(maj)", "").strip()
+                    if not penalty_type:
+                        penalty_type = None
 
                 if penalty_type:
-                    penalty_type = re.sub(r"\(\d+ min\)", "", penalty_type).strip()
+                    penalty_type = re.sub(r"\(\d+ min\)", "", penalty_type).strip().title()
 
-                if penalty_type in ("Game Misconduct", "Bench Minor", "Minor", "Major", "Match", "Misconduct"):
+                if penalty_type == "Match Penalty":
+                    pen_severity = "Match"
+                    penalty_type = None
+                elif penalty_type in ("Game Misconduct", "Bench Minor", "Minor", "Major", "Match", "Misconduct"):
                     pen_severity = penalty_type
                     penalty_type = None
                             
@@ -22886,9 +22908,11 @@ def get_href_html_play_data(scoring_plays, player_data, game_link, is_home, team
             if "(maj)" in penalty_type:
                 pen_severity = "Major"
                 penalty_type = penalty_type.replace("(maj)", "").strip()
+                if not penalty_type:
+                    penalty_type = None
 
             if penalty_type:
-                penalty_type = re.sub(r"\(\d+ min\)", "", penalty_type).strip()
+                penalty_type = penalty_type.title()
 
             if penalty_type in ("Game Misconduct", "Bench Minor", "Minor", "Major", "Match", "Misconduct"):
                 pen_severity = penalty_type
