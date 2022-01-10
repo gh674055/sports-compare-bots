@@ -20671,15 +20671,13 @@ def get_html_game_stats(game_data, missing_games, row_data):
         if game_info_row_text:
             game_info_match = re.search(r"^.+([0-1]\d{3})$", game_info_row_text)
             if game_info_match:
-                pot_game_id = int(game_info_match.group(1))
+                pot_game_id = str(game_info_match.group(1))
                 if pot_game_id != game_id[2:]:
                     missing_games = True
                     game_data["missing_data"] = True
                     return missing_games
 
-    last_tables = player_page_xml.xpath("body//table")
-    last_table = last_tables[len(last_tables) - 1]
-    last_rows = last_table.xpath(".//tr")
+    last_rows = player_page_xml.xpath("body//tr")
     last_row = last_rows[len(last_rows) - 1]
     last_columns = str(last_row.text_content()).split()
     last_column = last_columns[len(last_columns) - 1]
@@ -20991,13 +20989,11 @@ def get_html_shift_data(og_game_id, is_home, game_data, player_data, row_year):
             if game_info_row_text:
                 game_info_match = re.search(r"^.+([0-1]\d{3})$", game_info_row_text)
                 if game_info_match:
-                    pot_game_id = int(game_info_match.group(1))
+                    pot_game_id = str(game_info_match.group(1))
                     if pot_game_id != game_id[2:]:
                         return {}
 
-        last_tables = player_page_xml.xpath("body//table")
-        last_table = last_tables[len(last_tables) - 1]
-        last_rows = last_table.xpath(".//tr")
+        last_rows = player_page_xml.xpath("body//tr")
         last_row = last_rows[len(last_rows) - 1]
         last_columns = str(last_row.text_content()).split()
         last_column = last_columns[len(last_columns) - 1]
@@ -21214,13 +21210,11 @@ def get_html_play_data(scoring_plays, player_data, og_game_id, is_home, game_dat
         if game_info_row_text:
             game_info_match = re.search(r"^.+([0-1]\d{3})$", game_info_row_text)
             if game_info_match:
-                pot_game_id = int(game_info_match.group(1))
+                pot_game_id = str(game_info_match.group(1))
                 if pot_game_id != game_id[2:]:
                     return []
-
-    last_tables = player_page_xml.xpath("body//table")
-    last_table = last_tables[len(last_tables) - 1]
-    last_rows = last_table.xpath(".//tr")
+                    
+    last_rows = player_page_xml.xpath("body//tr")
     last_row = last_rows[len(last_rows) - 1]
     last_columns = str(last_row.text_content()).split()
     last_column = last_columns[len(last_columns) - 1]
@@ -21875,13 +21869,11 @@ def get_old_html_play_data(scoring_plays, player_data, og_game_id, is_home, game
         if game_info_row_text:
             game_info_match = re.search(r"(?:game|no:)\s+(\d{4})", game_info_row_text)
             if game_info_match:
-                pot_game_id = int(game_info_match.group(1))
+                pot_game_id = str(game_info_match.group(1))
                 if pot_game_id != game_id[2:]:
                     return []
 
-    last_tables = player_page_xml.xpath("body//table")
-    last_table = last_tables[len(last_tables) - 1]
-    last_rows = last_table.xpath(".//tr")
+    last_rows = player_page_xml.xpath("body//tr")
     last_row = last_rows[len(last_rows) - 1]
     last_columns = str(last_row.text_content()).split()
     last_column = last_columns[len(last_columns) - 1]
@@ -22466,9 +22458,7 @@ def get_older_html_play_data(scoring_plays, player_data, og_game_id, is_home, ga
                 if pot_game_id != game_id[2:]:
                     return []
 
-    last_tables = player_page_xml.xpath("body//table")
-    last_table = last_tables[len(last_tables) - 1]
-    last_rows = last_table.xpath(".//tr")
+    last_rows = player_page_xml.xpath("body//tr")
     last_row = last_rows[len(last_rows) - 1]
     last_columns = str(last_row.text_content()).split()
     last_column = last_columns[len(last_columns) - 1]
