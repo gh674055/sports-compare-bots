@@ -14403,7 +14403,7 @@ def calculate_values(all_rows, player_type, og_player_data, extra_stats={}):
 
     adv_year = 2009 if player_type["da_type"]["type"] == "Skater" else 1917
     if adv_year == 2009 and has_against_quals_no_so(extra_stats):
-        adv_year = 2000
+        adv_year = 1917
 
     total_games = 0
     all_total_games = 0
