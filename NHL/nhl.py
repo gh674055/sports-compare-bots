@@ -20669,26 +20669,35 @@ def get_html_game_stats(game_data, missing_games, row_data):
 
     for game_info_row_text in game_info_table_rows:
         if game_info_row_text:
-            game_info_match = re.search(r"^.+([0-1]\d{3})$", game_info_row_text)
+            game_info_match = re.search(r"(?:game|no:)\s+(\d{4})", game_info_row_text)
             if game_info_match:
                 pot_game_id = str(game_info_match.group(1))
                 if pot_game_id != game_id[2:]:
                     missing_games = True
                     game_data["missing_data"] = True
                     return missing_games
-
-    last_rows = player_page_xml.xpath("body//tr")
-    last_row = last_rows[len(last_rows) - 1]
-    last_columns = str(last_row.text_content()).split()
-    last_column = last_columns[len(last_columns) - 1]
-    pot_date = dateutil.parser.parse(last_column.rsplit("-", 1)[0])
-    pot_year = pot_date.year
-    if pot_date.month <= 8:
-        pot_year -= 1
-    if pot_year != row_data["Year"]:
-        missing_games = True
-        game_data["missing_data"] = True
-        return missing_games
+            else:
+                try:
+                    pot_date = dateutil.parser.parse(game_info_row_text)
+                    pot_year = pot_date.year
+                    if pot_date.month <= 8:
+                        pot_year -= 1
+                    if pot_year != row_year:
+                        missing_games = True
+                        game_data["missing_data"] = True
+                        return missing_games
+                except Exception:
+                    game_info_row_text_split = game_info_row_text.split("/")
+                    if len(game_info_row_text_split) == 3:
+                        pot_date = dateutil.parser.parse(game_info_row_text_split[2])
+                        pot_year = pot_date.year
+                        if pot_date.month <= 8:
+                            pot_year -= 1
+                        if pot_year != row_year:
+                            missing_games = True
+                            game_data["missing_data"] = True
+                            return missing_games
+                    pass
 
     for game_info_row_text in game_info_table_rows:
         if game_info_row_text:
@@ -20987,22 +20996,29 @@ def get_html_shift_data(og_game_id, is_home, game_data, player_data, row_year):
 
         for game_info_row_text in game_info_table_rows:
             if game_info_row_text:
-                game_info_match = re.search(r"^.+([0-1]\d{3})$", game_info_row_text)
+                game_info_match = re.search(r"(?:game|no:)\s+(\d{4})", game_info_row_text)
                 if game_info_match:
                     pot_game_id = str(game_info_match.group(1))
                     if pot_game_id != game_id[2:]:
                         return {}
-
-        last_rows = player_page_xml.xpath("body//tr")
-        last_row = last_rows[len(last_rows) - 1]
-        last_columns = str(last_row.text_content()).split()
-        last_column = last_columns[len(last_columns) - 1]
-        pot_date = dateutil.parser.parse(last_column.rsplit("-", 1)[0])
-        pot_year = pot_date.year
-        if pot_date.month <= 8:
-            pot_year -= 1
-        if pot_year != row_year:
-            return {}
+                else:
+                    try:
+                        pot_date = dateutil.parser.parse(game_info_row_text)
+                        pot_year = pot_date.year
+                        if pot_date.month <= 8:
+                            pot_year -= 1
+                        if pot_year != row_year:
+                            return {}
+                    except Exception:
+                        game_info_row_text_split = game_info_row_text.split("/")
+                        if len(game_info_row_text_split) == 3:
+                            pot_date = dateutil.parser.parse(game_info_row_text_split[2])
+                            pot_year = pot_date.year
+                            if pot_date.month <= 8:
+                                pot_year -= 1
+                            if pot_year != row_year:
+                                return {}
+                        pass
             
         in_progress_period = None
         for game_info_row_text in game_info_table_rows:
@@ -21208,22 +21224,29 @@ def get_html_play_data(scoring_plays, player_data, og_game_id, is_home, game_dat
 
     for game_info_row_text in game_info_table_rows:
         if game_info_row_text:
-            game_info_match = re.search(r"^.+([0-1]\d{3})$", game_info_row_text)
+            game_info_match = re.search(r"(?:game|no:)\s+(\d{4})", game_info_row_text)
             if game_info_match:
                 pot_game_id = str(game_info_match.group(1))
                 if pot_game_id != game_id[2:]:
                     return []
-                    
-    last_rows = player_page_xml.xpath("body//tr")
-    last_row = last_rows[len(last_rows) - 1]
-    last_columns = str(last_row.text_content()).split()
-    last_column = last_columns[len(last_columns) - 1]
-    pot_date = dateutil.parser.parse(last_column.rsplit("-", 1)[0])
-    pot_year = pot_date.year
-    if pot_date.month <= 8:
-        pot_year -= 1
-    if pot_year != row_year:
-        return []
+            else:
+                try:
+                    pot_date = dateutil.parser.parse(game_info_row_text)
+                    pot_year = pot_date.year
+                    if pot_date.month <= 8:
+                        pot_year -= 1
+                    if pot_year != row_year:
+                        return []
+                except Exception:
+                    game_info_row_text_split = game_info_row_text.split("/")
+                    if len(game_info_row_text_split) == 3:
+                        pot_date = dateutil.parser.parse(game_info_row_text_split[2])
+                        pot_year = pot_date.year
+                        if pot_date.month <= 8:
+                            pot_year -= 1
+                        if pot_year != row_year:
+                            return []
+                    pass
 
     tables = player_page_xml.xpath("body/table")
     if not tables:
@@ -21872,17 +21895,24 @@ def get_old_html_play_data(scoring_plays, player_data, og_game_id, is_home, game
                 pot_game_id = str(game_info_match.group(1))
                 if pot_game_id != game_id[2:]:
                     return []
-
-    last_rows = player_page_xml.xpath("body//tr")
-    last_row = last_rows[len(last_rows) - 1]
-    last_columns = str(last_row.text_content()).split()
-    last_column = last_columns[len(last_columns) - 1]
-    pot_date = dateutil.parser.parse(last_column.rsplit("-", 1)[0])
-    pot_year = pot_date.year
-    if pot_date.month <= 8:
-        pot_year -= 1
-    if pot_year != row_year:
-        return []
+            else:
+                try:
+                    pot_date = dateutil.parser.parse(game_info_row_text)
+                    pot_year = pot_date.year
+                    if pot_date.month <= 8:
+                        pot_year -= 1
+                    if pot_year != row_year:
+                        return []
+                except Exception:
+                    game_info_row_text_split = game_info_row_text.split("/")
+                    if len(game_info_row_text_split) == 3:
+                        pot_date = dateutil.parser.parse(game_info_row_text_split[2])
+                        pot_year = pot_date.year
+                        if pot_date.month <= 8:
+                            pot_year -= 1
+                        if pot_year != row_year:
+                            return []
+                    pass
 
     table = player_page_xml.xpath("body//table")[1]
     table_text = str(table.text_content())
@@ -22457,17 +22487,24 @@ def get_older_html_play_data(scoring_plays, player_data, og_game_id, is_home, ga
                 pot_game_id = str(game_info_match.group(1))
                 if pot_game_id != game_id[2:]:
                     return []
-
-    last_rows = player_page_xml.xpath("body//tr")
-    last_row = last_rows[len(last_rows) - 1]
-    last_columns = str(last_row.text_content()).split()
-    last_column = last_columns[len(last_columns) - 1]
-    pot_date = dateutil.parser.parse(last_column.rsplit("-", 1)[0])
-    pot_year = pot_date.year
-    if pot_date.month <= 8:
-        pot_year -= 1
-    if pot_year != row_year:
-        return []
+            else:
+                try:
+                    pot_date = dateutil.parser.parse(game_info_row_text)
+                    pot_year = pot_date.year
+                    if pot_date.month <= 8:
+                        pot_year -= 1
+                    if pot_year != row_year:
+                        return []
+                except Exception:
+                    game_info_row_text_split = game_info_row_text.split("/")
+                    if len(game_info_row_text_split) == 3:
+                        pot_date = dateutil.parser.parse(game_info_row_text_split[2])
+                        pot_year = pot_date.year
+                        if pot_date.month <= 8:
+                            pot_year -= 1
+                        if pot_year != row_year:
+                            return []
+                    pass
 
     tables = player_page_xml.xpath("body//table")
     score_table = tables[1]
