@@ -75,7 +75,8 @@ subreddits_to_crawl = {
     "cowboys" : False,
     "nygiants" : False,
     "saints" : False,
-    "watercoolerwednesday" : False
+    "watercoolerwednesday" : False,
+    "greenbaypackers" : False
 }
 
 approved_subreddits = [
