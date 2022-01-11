@@ -3295,7 +3295,11 @@ headers = {
         },
         "SH": {
             "positive" : False,
-            "display" : False
+            "display" : False,
+            "valid_since" : {
+                "season" : 1894,
+                "game" : 1894
+            }
         },
         "SF": {
             "positive" : False,
