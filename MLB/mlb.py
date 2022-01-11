@@ -3293,6 +3293,10 @@ headers = {
             "positive" : False,
             "display" : False
         },
+        "SH": {
+            "positive" : False,
+            "display" : False
+        },
         "SF": {
             "positive" : False,
             "display" : False,
@@ -8323,6 +8327,20 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 qual_type = "Bunting"
                                 if "statcast" in extra_stats:
                                     extra_stats.add("show-stat-pit")
+                                extra_stats.add("show-stat-sh")
+                                extra_stats.add("hide-stat-bb")
+                                extra_stats.add("hide-stat-bb%")
+                                extra_stats.add("hide-stat-bb%+")
+                                extra_stats.add("hide-stat-so/bb")
+                                extra_stats.add("hide-stat-so/bb+")
+                                extra_stats.add("hide-stat-so-bb%")
+                                extra_stats.add("hide-stat-so-bb%+")
+                                extra_stats.add("hide-stat-bb/so")
+                                extra_stats.add("hide-stat-bb/so+")
+                                extra_stats.add("hide-stat-bb-so%")
+                                extra_stats.add("hide-stat-bb-so%+")
+                                extra_stats.add("hide-stat-bb-ibb")
+                                extra_stats.add("hide-stat-bb-hpb")
                                 extra_stats.add("current-stats")
                             elif qualifier_str == "winter" or qualifier_str == "spring" or qualifier_str == "summer" or qualifier_str == "fall" or qualifier_str == "autumn":
                                 qual_type = "Temperate Season"
