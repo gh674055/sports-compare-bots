@@ -15150,7 +15150,7 @@ def handle_player_data(player_data, time_frame, player_type, player_page, valid_
                         years_to_skip_allstar[year] = all_star_dates
 
     has_post_qual = False
-    if "Season Stat" in time_frame["qualifiers"] or "Previous Season Stat" in time_frame["qualifiers"] or "Upcoming Season Stat" in time_frame["qualifiers"] or "Season Formula" in time_frame["qualifiers"] or "Total Games Stat" in time_frame["qualifiers"] or "Max Streak" in time_frame["qualifiers"] or "Count Streak" in time_frame["qualifiers"] or "Max Streak Formula" in time_frame["qualifiers"] or "Count Streak Formula" in time_frame["qualifiers"] or "Max Stretch" in time_frame["qualifiers"] or "Quickest" in time_frame["qualifiers"] or "Slowest" in time_frame["qualifiers"] or "Max Stat" in time_frame["qualifiers"] or "Min Stat" in time_frame["qualifiers"] or "Season" in time_frame["qualifiers"] or "Seasons" not in time_frame["qualifiers"] or "Season Reversed" in time_frame["qualifiers"] or "Season Games" in time_frame["qualifiers"] or "Games" in time_frame["qualifiers"]:
+    if "Season Stat" in time_frame["qualifiers"] or "Previous Season Stat" in time_frame["qualifiers"] or "Upcoming Season Stat" in time_frame["qualifiers"] or "Season Formula" in time_frame["qualifiers"] or "Total Games Stat" in time_frame["qualifiers"] or "Max Streak" in time_frame["qualifiers"] or "Count Streak" in time_frame["qualifiers"] or "Max Streak Formula" in time_frame["qualifiers"] or "Count Streak Formula" in time_frame["qualifiers"] or "Max Stretch" in time_frame["qualifiers"] or "Quickest" in time_frame["qualifiers"] or "Slowest" in time_frame["qualifiers"] or "Max Stat" in time_frame["qualifiers"] or "Min Stat" in time_frame["qualifiers"] or "Season" in time_frame["qualifiers"] or "Season Reversed" in time_frame["qualifiers"] or "Season Games" in time_frame["qualifiers"] or "Games" in time_frame["qualifiers"]:
         is_full_career = False
         is_full_career_drs = False
         is_full_teams = False
@@ -16544,7 +16544,6 @@ def handle_season_only_stats(player_page, player_data, player_type, time_frame, 
                 has_non_war_quals = True
         has_team_quals = "Team" in time_frame["qualifiers"] or "Team Franchise" in time_frame["qualifiers"] or "Team League" in time_frame["qualifiers"] or "Team Division" in time_frame["qualifiers"]
 
-    is_career_teams = is_career or is_full_teams
     is_full_career = is_full_career if is_full_career else is_career and not has_quals
 
     if not all_teams_unique:
@@ -16566,6 +16565,7 @@ def handle_season_only_stats(player_page, player_data, player_type, time_frame, 
             teams_map[team_franchise] = {}
         teams_map[team_franchise][year] = team
 
+    is_multi_team = is_full_teams and len(teams_map) > 1 and has_team_quals
     is_single_team = is_full_teams and len(teams_map) == 1
     
     min_year = None
@@ -16631,17 +16631,19 @@ def handle_season_only_stats(player_page, player_data, player_type, time_frame, 
             standard_table_rows = table.find("tbody").find_all("tr")
 
             single_team_match = False
-            if is_career_teams and table_has_teeam_quals:
-                standard_table_rows = table.find("tfoot").find_all("tr")[2:]
+            is_all_match = False
+            if is_multi_team:
+                standard_table_rows = table.find("tfoot").find_all("tr")[3:]
                 if standard_table_rows:
-                    indexes_to_remove = set()
+                    is_all_match = True
+                    rows_to_remove = set()
                     for index, new_row in enumerate(standard_table_rows):
-                        if (new_row.get("class") and "thead" in new_row.get("class")):
-                            indexes_to_remove.add(index)
+                        team_franchise = str(new_row.find("th", {"data-stat" : "player_stats_summary_explain"}).find(text=True)).split("(")[0].strip().upper()
+                        if team_franchise not in teams_map:
+                            rows_to_remove.add(index)
                             continue
-
-                        team_str = str(new_row.find("th", {"data-stat" : "player_stats_summary_explain"}).find(text=True)).split("(")[0].strip().upper()
-                        last_row = all_rows[len(all_rows) - 1]
+                        last_year = max(teams_map[team_franchise].keys())
+                        single_team = teams_map[team_franchise][last_year]
                         new_row.find("th").extract()
                         new_row.find("td").extract()
 
@@ -16651,7 +16653,7 @@ def handle_season_only_stats(player_page, player_data, player_type, time_frame, 
                         new_row.insert(0, new_tag)
                         new_tag = player_page.new_tag("td")
                         new_tag["data-stat"] = "team_ID"
-                        new_tag.string = team_str
+                        new_tag.string = single_team
                         new_row.insert(0, new_tag)
                         new_tag = player_page.new_tag("td")
                         new_tag["data-stat"] = "age"
@@ -16659,11 +16661,10 @@ def handle_season_only_stats(player_page, player_data, player_type, time_frame, 
                         new_row.insert(0, new_tag)
                         new_tag = player_page.new_tag("th")
                         new_tag["data-stat"] = "year_ID"
-                        new_tag.string = str(last_row["Year"])
+                        new_tag.string = last_year
                         new_row.insert(0, new_tag)
-                    standard_table_rows = [new_row for index, new_row in enumerate(standard_table_rows) if index not in indexes_to_remove]
+                    standard_table_rows = [team_row for index, team_row in enumerate(standard_table_rows) if index not in rows_to_remove]
                 else:
-                    table_has_teeam_quals = False
                     request = urllib.request.Request(sum_stats_format.format(player_data["id"], table_name, stat_sum_range), headers=request_headers)
                     try:
                         response, player_page_to_use = url_request(request)
@@ -16731,7 +16732,7 @@ def handle_season_only_stats(player_page, player_data, player_type, time_frame, 
             for i in range(len(standard_table_rows)):
                 row = standard_table_rows[i]
                 row_id = row.get("id")
-                match =  True if is_career_teams and table_has_teeam_quals else bool(stat_sum_range and not table_has_teeam_quals)
+                match =  True if is_all_match else bool(stat_sum_range and not table_has_teeam_quals)
                 if single_team_match:
                     match = True
 
