@@ -16634,7 +16634,12 @@ def handle_season_only_stats(player_page, player_data, player_type, time_frame, 
             if is_career_teams and table_has_teeam_quals:
                 standard_table_rows = table.find("tfoot").find_all("tr")[2:]
                 if standard_table_rows:
-                    for new_row in standard_table_rows:
+                    indexes_to_remove = set()
+                    for index, new_row in enumerate(standard_table_rows):
+                        if (new_row.get("class") and "thead" in new_row.get("class")):
+                            indexes_to_remove.add(index)
+                            continue
+
                         team_str = str(new_row.find("th", {"data-stat" : "player_stats_summary_explain"}).find(text=True)).split("(")[0].strip().upper()
                         last_row = all_rows[len(all_rows) - 1]
                         new_row.find("th").extract()
@@ -16656,6 +16661,7 @@ def handle_season_only_stats(player_page, player_data, player_type, time_frame, 
                         new_tag["data-stat"] = "year_ID"
                         new_tag.string = str(last_row["Year"])
                         new_row.insert(0, new_tag)
+                    standard_table_rows = [new_row for index, new_row in enumerate(standard_table_rows) if index not in indexes_to_remove]
                 else:
                     table_has_teeam_quals = False
                     request = urllib.request.Request(sum_stats_format.format(player_data["id"], table_name, stat_sum_range), headers=request_headers)
