@@ -27425,12 +27425,12 @@ def perform_qualifier(player_data, player_type, row, time_frame, all_rows):
                     return False
 
     if "Moon Phase" in qualifiers:
-        moon_phase = human_moon(row["Date"])
+        moon_phases = human_moon(row["Date"])
 
         for qual_object in qualifiers["Moon Phase"]:
             has_match = False
             for stadium in qual_object["values"]:
-                if stadium == moon_phase.lower():
+                if stadium in moon_phases:
                     has_match = True
                     break
             if qual_object["negate"]:
@@ -27791,34 +27791,38 @@ def human_moon(date):
     previous_last_quarter = ephem.previous_last_quarter_moon(date)
     previous_first_quarter = ephem.previous_first_quarter_moon(date)
 
+    moon_phases = []
+
     if is_moon_match(date.date(), next_full):
-        return "Full Moon"
+        moon_phases.append("Full Moon")
     if is_moon_match(date.date(), previous_full):
-        return "Full Moon"
+        moon_phases.append("Full Moon")
     
     if is_moon_match(date.date(), next_new):
-        return "New Moon"
+        moon_phases.append("New Moon")
     if is_moon_match(date.date(), previous_new):
-        return "New Moon"
+        moon_phases.append("New Moon")
     
     if is_moon_match(date.date(), next_first_quarter):
-        return "First Quarter"
+        moon_phases.append("First Quarter")
     if is_moon_match(date.date(), previous_first_quarter):
-        return "First Quarter"
+        moon_phases.append("First Quarter")
     
     if is_moon_match(date.date(), next_last_quarter):
-        return "Third Quarter"
+        moon_phases.append("Third Quarter")
     if is_moon_match(date.date(), previous_last_quarter):
-        return "Third Quarter"    
+        moon_phases.append("Third Quarter")
     
     if previous_new < next_first_quarter < next_full < next_last_quarter < next_new:
-        return "Waxing Crescent"
+        moon_phases.append("Waxing Crescent")
     elif previous_first_quarter < next_full < next_last_quarter < next_new < next_first_quarter:
-        return "Waxing Gibbous"
+        moon_phases.append("Waxing Gibbous")
     elif previous_full < next_last_quarter < next_new < next_first_quarter < next_full:
-        return "Waning Gibbous"
+        moon_phases.append("Waning Gibbous")
     elif previous_last_quarter < next_new < next_first_quarter < next_full < next_last_quarter:
-        return "Waning Crescent"
+        moon_phases.append("Waning Crescent")
+
+    return [moon_phase.lower() for moon_phase in moon_phases]
 
 def is_moon_match(da_date, da_moon_date):
     da_moon_date = da_moon_date.datetime()
