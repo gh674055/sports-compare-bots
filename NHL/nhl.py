@@ -7429,7 +7429,6 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 if qualifier_str.startswith("event-time:"):
                                     qual_str = "event-time:"
                                     qual_type = "Event Time"
-                                    extra_stats.add("current-stats-zone")
                                     extra_stats.add("current-stats")
                                 elif qualifier_str.startswith("start-time:"):
                                     qual_str = "start-time:"
@@ -9651,7 +9650,6 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 if qualifier_str.startswith("local-event-time:"):
                                     qual_str = "local-event-time:"
                                     qual_type = "Local Event Time"
-                                    extra_stats.add("current-stats-zone")
                                     extra_stats.add("current-stats")
                                 elif qualifier_str.startswith("local-start-time:"):
                                     qual_str = "local-start-time:"
@@ -9659,7 +9657,6 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 elif qualifier_str.startswith("team-event-time:"):
                                     qual_str = "team-event-time:"
                                     qual_type = "Team Event Time"
-                                    extra_stats.add("current-stats-zone")
                                     extra_stats.add("current-stats")
                                 elif qualifier_str.startswith("team-start-time:"):
                                     qual_str = "team-start-time:"
@@ -9667,7 +9664,6 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 elif qualifier_str.startswith("opponent-event-time:"):
                                     qual_str = "opponent-event-time:"
                                     qual_type = "Opponent Event Time"
-                                    extra_stats.add("current-stats-zone")
                                     extra_stats.add("current-stats")
                                 elif qualifier_str.startswith("opponent-start-time:"):
                                     qual_str = "opponent-start-time:"
@@ -14900,7 +14896,7 @@ def handle_player_data(player_data, time_frame, player_type, player_page, valid_
             if str(year) not in all_star_games:
                 needs_half = True
 
-    if has_schedule_stat_qual or "Local Start Time" in time_frame["qualifiers"] or "Arena" in time_frame["qualifiers"] or "Exact Arena" in time_frame["qualifiers"] or "Time Zone" in time_frame["qualifiers"]  or "Exact Time Zone" in time_frame["qualifiers"] or "City" in time_frame["qualifiers"]  or "Exact City" in time_frame["qualifiers"] or "State" in time_frame["qualifiers"]  or "Exact State" in time_frame["qualifiers"] or "Country" in time_frame["qualifiers"]  or "Exact Country" in time_frame["qualifiers"] or "Result" in time_frame["qualifiers"] or "Previous Result" in time_frame["qualifiers"] or "Upcoming Result" in time_frame["qualifiers"] or "Elimination" in time_frame["qualifiers"] or "Clinching" in time_frame["qualifiers"] or "Elimination Or Clinching" in time_frame["qualifiers"] or "Winner Take All" in time_frame["qualifiers"] or "Ahead In Series" in time_frame["qualifiers"] or "Behind In Series" in time_frame["qualifiers"] or "Even In Series" in time_frame["qualifiers"] or "Series Team Wins" in time_frame["qualifiers"] or "Series Opponent Wins" in time_frame["qualifiers"] or "Series Score Margin" in time_frame["qualifiers"] or "Series Score Difference" in time_frame["qualifiers"] or "Round" in time_frame["qualifiers"] or "Series Game" in time_frame["qualifiers"] or "Final Team Score" in time_frame["qualifiers"] or "Final Opponent Score" in time_frame["qualifiers"] or "Final Score Margin" in time_frame["qualifiers"] or "Final Score Difference" in time_frame["qualifiers"] or "Team Game" in time_frame["qualifiers"] or "Team Game Reversed" in time_frame["qualifiers"] or "Games Rest" in time_frame["qualifiers"] or "Starts Rest" in time_frame["qualifiers"] or "Days In A Row" in time_frame["qualifiers"] or "Games In A Row" in time_frame["qualifiers"] or "Starts In A Row" in time_frame["qualifiers"] or "Previous Team Result" in time_frame["qualifiers"] or "Upcoming Team Result" in time_frame["qualifiers"] or "National Game" in time_frame["qualifiers"] or "Any National Game" in time_frame["qualifiers"] or "USA National Game" in time_frame["qualifiers"] or "Any USA National Game" in time_frame["qualifiers"] or "CAN National Game" in time_frame["qualifiers"] or "Any CAN National Game" in time_frame["qualifiers"] or "TV Network" in time_frame["qualifiers"] or "Raw TV Network" in time_frame["qualifiers"] or "National TV Network" in time_frame["qualifiers"] or "National Raw TV Network" in time_frame["qualifiers"] or "Any National TV Network" in time_frame["qualifiers"] or "Any National Raw TV Network" in time_frame["qualifiers"] or "Current Winning Opponent" in time_frame["qualifiers"] or "Current Losing Opponent" in time_frame["qualifiers"] or "Current Tied Opponent" in time_frame["qualifiers"] or "Current Winning Or Tied Opponent" in time_frame["qualifiers"] or "Current Losing Or Tied Opponent" in time_frame["qualifiers"] or "Current Winning Team" in time_frame["qualifiers"] or "Current Losing Team" in time_frame["qualifiers"] or "Current Tied Team" in time_frame["qualifiers"] or "Current Winning Or Tied Team" in time_frame["qualifiers"] or "Current Losing Or Tied Team" in time_frame["qualifiers"] or "Current Team Win Percentage" in time_frame["qualifiers"] or "Current Opponent Win Percentage" in time_frame["qualifiers"] or "Current Team Points Percentage" in time_frame["qualifiers"] or "Current Opponent Points Percentage" in time_frame["qualifiers"] or "Current Team Wins" in time_frame["qualifiers"] or "Current Team Losses" in time_frame["qualifiers"] or "Current Team Ties" in time_frame["qualifiers"] or "Current Team Points" in time_frame["qualifiers"] or "Current Opponent Wins" in time_frame["qualifiers"] or "Current Opponent Losses" in time_frame["qualifiers"] or "Current Opponent Ties" in time_frame["qualifiers"] or "Current Opponent Points" in time_frame["qualifiers"] or "Current Team Games Over 500" in time_frame["qualifiers"] or "Current Opponent Games Over 500" in time_frame["qualifiers"] or needs_half or "score" in extra_stats or "record" in extra_stats:
+    if has_schedule_stat_qual or "Local Start Time" in time_frame["qualifiers"] or "Local Event Time" in time_frame["qualifiers"] or "Arena" in time_frame["qualifiers"] or "Exact Arena" in time_frame["qualifiers"] or "Time Zone" in time_frame["qualifiers"]  or "Exact Time Zone" in time_frame["qualifiers"] or "City" in time_frame["qualifiers"]  or "Exact City" in time_frame["qualifiers"] or "State" in time_frame["qualifiers"]  or "Exact State" in time_frame["qualifiers"] or "Country" in time_frame["qualifiers"]  or "Exact Country" in time_frame["qualifiers"] or "Result" in time_frame["qualifiers"] or "Previous Result" in time_frame["qualifiers"] or "Upcoming Result" in time_frame["qualifiers"] or "Elimination" in time_frame["qualifiers"] or "Clinching" in time_frame["qualifiers"] or "Elimination Or Clinching" in time_frame["qualifiers"] or "Winner Take All" in time_frame["qualifiers"] or "Ahead In Series" in time_frame["qualifiers"] or "Behind In Series" in time_frame["qualifiers"] or "Even In Series" in time_frame["qualifiers"] or "Series Team Wins" in time_frame["qualifiers"] or "Series Opponent Wins" in time_frame["qualifiers"] or "Series Score Margin" in time_frame["qualifiers"] or "Series Score Difference" in time_frame["qualifiers"] or "Round" in time_frame["qualifiers"] or "Series Game" in time_frame["qualifiers"] or "Final Team Score" in time_frame["qualifiers"] or "Final Opponent Score" in time_frame["qualifiers"] or "Final Score Margin" in time_frame["qualifiers"] or "Final Score Difference" in time_frame["qualifiers"] or "Team Game" in time_frame["qualifiers"] or "Team Game Reversed" in time_frame["qualifiers"] or "Games Rest" in time_frame["qualifiers"] or "Starts Rest" in time_frame["qualifiers"] or "Days In A Row" in time_frame["qualifiers"] or "Games In A Row" in time_frame["qualifiers"] or "Starts In A Row" in time_frame["qualifiers"] or "Previous Team Result" in time_frame["qualifiers"] or "Upcoming Team Result" in time_frame["qualifiers"] or "National Game" in time_frame["qualifiers"] or "Any National Game" in time_frame["qualifiers"] or "USA National Game" in time_frame["qualifiers"] or "Any USA National Game" in time_frame["qualifiers"] or "CAN National Game" in time_frame["qualifiers"] or "Any CAN National Game" in time_frame["qualifiers"] or "TV Network" in time_frame["qualifiers"] or "Raw TV Network" in time_frame["qualifiers"] or "National TV Network" in time_frame["qualifiers"] or "National Raw TV Network" in time_frame["qualifiers"] or "Any National TV Network" in time_frame["qualifiers"] or "Any National Raw TV Network" in time_frame["qualifiers"] or "Current Winning Opponent" in time_frame["qualifiers"] or "Current Losing Opponent" in time_frame["qualifiers"] or "Current Tied Opponent" in time_frame["qualifiers"] or "Current Winning Or Tied Opponent" in time_frame["qualifiers"] or "Current Losing Or Tied Opponent" in time_frame["qualifiers"] or "Current Winning Team" in time_frame["qualifiers"] or "Current Losing Team" in time_frame["qualifiers"] or "Current Tied Team" in time_frame["qualifiers"] or "Current Winning Or Tied Team" in time_frame["qualifiers"] or "Current Losing Or Tied Team" in time_frame["qualifiers"] or "Current Team Win Percentage" in time_frame["qualifiers"] or "Current Opponent Win Percentage" in time_frame["qualifiers"] or "Current Team Points Percentage" in time_frame["qualifiers"] or "Current Opponent Points Percentage" in time_frame["qualifiers"] or "Current Team Wins" in time_frame["qualifiers"] or "Current Team Losses" in time_frame["qualifiers"] or "Current Team Ties" in time_frame["qualifiers"] or "Current Team Points" in time_frame["qualifiers"] or "Current Opponent Wins" in time_frame["qualifiers"] or "Current Opponent Losses" in time_frame["qualifiers"] or "Current Opponent Ties" in time_frame["qualifiers"] or "Current Opponent Points" in time_frame["qualifiers"] or "Current Team Games Over 500" in time_frame["qualifiers"] or "Current Opponent Games Over 500" in time_frame["qualifiers"] or needs_half or "score" in extra_stats or "record" in extra_stats:
         all_rows, missing_games = handle_schedule_stats(player_data, all_rows, time_frame["qualifiers"], time_frame["playoffs"], missing_games)
     
     if "Winning Opponent" in time_frame["qualifiers"] or "Losing Opponent" in time_frame["qualifiers"] or "Tied Opponent" in time_frame["qualifiers"] or "Winning Or Tied Opponent" in time_frame["qualifiers"] or "Losing Or Tied Opponent" in time_frame["qualifiers"] or "Playoff Opponent" in time_frame["qualifiers"] or "Cup Winner Opponent" in time_frame["qualifiers"] or "Conference Winner Opponent" in time_frame["qualifiers"] or "Opponent Goals Rank" in time_frame["qualifiers"] or "Opponent Goals Allowed Rank" in time_frame["qualifiers"] or "Opponent Win Percentage" in time_frame["qualifiers"] or "Opponent Points Percentage" in time_frame["qualifiers"] or "Winning Team" in time_frame["qualifiers"] or "Losing Team" in time_frame["qualifiers"] or "Tied Team" in time_frame["qualifiers"] or "Winning Or Tied Team" in time_frame["qualifiers"] or "Losing Or Tied Team" in time_frame["qualifiers"] or "Playoff Team" in time_frame["qualifiers"] or "Cup Winner Team" in time_frame["qualifiers"] or "Conference Winner Team" in time_frame["qualifiers"] or "Team Goals Rank" in time_frame["qualifiers"] or "Team Goals Allowed Rank" in time_frame["qualifiers"] or "Team Win Percentage" in time_frame["qualifiers"] or "Team Points Percentage" in time_frame["qualifiers"] or "Team Wins" in time_frame["qualifiers"] or "Team Losses" in time_frame["qualifiers"] or "Team Ties" in time_frame["qualifiers"] or "Team Points" in time_frame["qualifiers"] or "Opponent Wins" in time_frame["qualifiers"] or "Opponent Losses" in time_frame["qualifiers"] or "Opponent Ties" in time_frame["qualifiers"] or "Opponent Points" in time_frame["qualifiers"] or "Team Conference" in time_frame["qualifiers"] or "Team Division" in time_frame["qualifiers"] or "Opponent Conference" in time_frame["qualifiers"] or "Opponent Division" in time_frame["qualifiers"] or "Interconference" in time_frame["qualifiers"] or "Intraconference" in time_frame["qualifiers"] or "Intradivision" in time_frame["qualifiers"] or "Interdivision" in time_frame["qualifiers"] or "Team Standings Rank" in time_frame["qualifiers"] or "Opponent Standings Rank" in time_frame["qualifiers"] or "Team Games Over 500" in time_frame["qualifiers"] or "Opponent Games Over 500" in time_frame["qualifiers"]:
@@ -19613,10 +19609,10 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
         return game_data, row_data, missing_games
 
     scoring_plays = []
-    if row_data["Year"] < 2001:
+    if row_data["Year"] < 2001 or has_api_quals(time_frame["qualifiers"]):
         scoring_plays = sub_data["liveData"]["plays"]["allPlays"]
     
-        if not scoring_plays and ("Shot On" not in time_frame["qualifiers"] and "Shot By" not in time_frame["qualifiers"] and "Facing Lefty" not in time_frame["qualifiers"] and "Facing Righty" not in time_frame["qualifiers"]):
+        if not scoring_plays and not has_api_quals(time_frame["qualifiers"]) ("Shot On" not in time_frame["qualifiers"] and "Shot By" not in time_frame["qualifiers"] and "Facing Lefty" not in time_frame["qualifiers"] and "Facing Righty" not in time_frame["qualifiers"]):
             get_href_html_play_data(scoring_plays, player_data, row_data["GameLink"], row_data["Location"], row_data["Tm"], row_data["Opponent"].upper(), game_data, True)
     
     if row_data["Year"] >= 2001 and not has_api_quals(time_frame["qualifiers"]) and not "skip-play" in extra_stats:
@@ -19811,6 +19807,7 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                     game_data["opp_id"] : "right" if left_side > right_side else "left"
                 }
 
+    faceoff_time_information = {}
     for event_id, scoring_play in enumerate(scoring_plays):
         if "players" not in scoring_play or not scoring_play["players"]:
             continue
@@ -20316,6 +20313,13 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                     "winner" : True,
                     "faceoff_against" : faceoff_against
                 }})
+
+            if event_time:
+                if scoring_play["about"]["period"] not in faceoff_time_information:
+                    faceoff_time_information[scoring_play["about"]["period"]] = {}
+                faceoff_time_information[scoring_play["about"]["period"]][period_time] = event_time
+            elif ("Event Time" in time_frame["qualifiers"] or "Local Event Time" in time_frame["qualifiers"]):
+                game_data["missing_toi"] = True
         elif scoring_play["result"]["event"] == "Takeaway" or scoring_play["result"]["event"] == "Giveaway":
             if scoring_play["players"][0]["player"]["id"] == player_id:
                 game_data["takeaway"].append({**shared_data , **{
@@ -20350,6 +20354,29 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
 
                     shift_event["shift_index"] = shift_index
 
+                    if ("Event Time" in time_frame["qualifiers"] or "Local Event Time" in time_frame["qualifiers"]):
+                        if faceoff_time_information:
+                            if period in faceoff_time_information:
+                                faceoff_times = sorted(faceoff_time_information[period].keys())
+                                for faceoff_index, faceoff_time in enumerate(faceoff_times):
+                                    if faceoff_time == second:
+                                        shift_event["event_time"] = faceoff_time_information[period][faceoff_time]
+                                    elif faceoff_time > second:
+                                        if faceoff_index != 0:
+                                            faceoff_time = faceoff_times[faceoff_index - 1]
+                                            faceoff_event_time = faceoff_time_information[period][faceoff_time]
+
+                                            shift_event["event_time"] = faceoff_event_time + datetime.timedelta(seconds=(second - faceoff_time))
+                                if faceoff_times and not "event_time" in shift_event:
+                                    faceoff_time = faceoff_times[len(faceoff_times) - 1]
+                                    if faceoff_time < second:
+                                        faceoff_event_time = faceoff_time_information[period][faceoff_time]
+                                        
+                                        shift_event["event_time"] = faceoff_event_time + datetime.timedelta(seconds=(second - faceoff_time))
+
+                        if not "event_time" in shift_event:
+                            game_data["missing_toi"] = True
+
                     game_data["shift_events"].append(shift_event)
                 shift_index += 1
 
@@ -20357,13 +20384,13 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
             for second in range(1, game_data["period_length"][period] + 1):
                 if not is_player_on_ice(shift_data, None, None, period, second, player_id, True):
                     shift_event = {
-                        "period" : period
+                        "period" : period,
+                        "periodTime" : second
                     }
                     score_info = get_score_info(game_data["scoring_play_data"], period, second)
                     shift_event["teamGoals"] = score_info[0]
                     shift_event["oppGoals"] = score_info[1]
                     shift_event["goalMargin"] = score_info[0] - score_info[1]
-                    shift_event["periodTime"] = second
 
                     if row_data["is_playoffs"] or shift_event["period"] <= 3:
                         time_to_use = 1200
@@ -20375,6 +20402,29 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                     shift_event["periodTimeRemaining"] = time_to_use - shift_event["periodTime"]
 
                     shift_event["event_id"] = str(period) + "-"  + str(second)
+
+                    if ("Event Time" in time_frame["qualifiers"] or "Local Event Time" in time_frame["qualifiers"]):
+                        if faceoff_time_information:
+                            if period in faceoff_time_information:
+                                faceoff_times = sorted(faceoff_time_information[period].keys())
+                                for faceoff_index, faceoff_time in enumerate(faceoff_times):
+                                    if faceoff_time == second:
+                                        shift_event["event_time"] = faceoff_time_information[period][faceoff_time]
+                                    elif faceoff_time > second:
+                                        if faceoff_index != 0:
+                                            faceoff_time = faceoff_times[faceoff_index - 1]
+                                            faceoff_event_time = faceoff_time_information[period][faceoff_time]
+
+                                            shift_event["event_time"] = faceoff_event_time + datetime.timedelta(seconds=(second - faceoff_time))
+                                if faceoff_times and not "event_time" in shift_event:
+                                    faceoff_time = faceoff_times[len(faceoff_times) - 1]
+                                    if faceoff_time < second:
+                                        faceoff_event_time = faceoff_time_information[period][faceoff_time]
+                                        
+                                        shift_event["event_time"] = faceoff_event_time + datetime.timedelta(seconds=(second - faceoff_time))
+
+                        if not "event_time" in shift_event:
+                            game_data["missing_toi"] = True
 
                     game_data["oi_shift_events"].append(shift_event)
 
@@ -20911,26 +20961,6 @@ def setup_href_game_data(player_data, row_data, player_id, player_type, time_fra
         game_data["periods"].append(period)
 
     return game_data, missing_games, None
-            
-def is_player_on_ice(shift_data, team_on_ice, opp_on_ice, period, period_time, player_id, is_team, is_faceoff=False):
-    if is_team and team_on_ice:
-        return player_id in team_on_ice
-    elif not is_team and opp_on_ice:
-        return player_id in opp_on_ice
-        
-    team_str = "team" if is_team else "opp"
-    if not shift_data:
-        return None
-    if player_id not in shift_data[team_str] or period not in shift_data[team_str][player_id]:
-        return False
-    for shift_event in shift_data[team_str][player_id][period]:
-        if is_faceoff:
-            if period_time >= shift_event["time_start"] - 1 and period_time <= shift_event["time_end"] - 1:
-                return True
-        else:
-            if period_time >= shift_event["time_start"] and period_time <= shift_event["time_end"]:
-                return True
-    return False
 
 def start_time_to_str(time_str):
     if not time_str:
