@@ -2225,8 +2225,8 @@ headers = {
         "SHA" : {
             "positive" : True,
             "valid_since" : {
-                "inconsistent" : 1933,
-                "inconsistent-game" : 1933
+                "season" : 1933,
+                "game" : 1933
             }
         },
         "SHA/GP" : {
@@ -6605,6 +6605,7 @@ with open ("award_results.json", "r") as file:
 team_ids = None
 with open ("team_ids.json", "r") as file:
     team_ids = json.load(file)
+team_ids_reversed = {v: k for k, v in team_ids.items()}
 
 team_abbr = None
 with open ("team_abr.json", "r") as file:
@@ -17608,35 +17609,41 @@ def get_nhl_schedule(player_data, all_rows, qualifiers):
                     player_team_id = game_data["teams"]["away"]["team"]["id"]
                     player_opp_id = game_data["teams"]["home"]["team"]["id"]
 
-                parsed_team_name = {v: k for k, v in team_ids.items()}[player_team_id]
-                parsed_opp_name = {v: k for k, v in team_ids.items()}[player_opp_id]
+                if player_team_id in team_ids_reversed:
+                    parsed_team_name = team_ids_reversed[player_team_id]
 
-                if parsed_team_name in team_name_info:
-                    for abbr in team_name_info[parsed_team_name]:
-                        if row_data["Year"] in team_name_info[parsed_team_name][abbr]:
-                            row_data["Tm"] = abbr
-                            break
-                
-                if "Tm" not in row_data:
                     if parsed_team_name in team_name_info:
                         for abbr in team_name_info[parsed_team_name]:
-                            row_data["Tm"] = abbr
-                
-                if parsed_opp_name in team_name_info:
-                    for abbr in team_name_info[parsed_opp_name]:
-                        if row_data["Year"] in team_name_info[parsed_opp_name][abbr]:
-                            row_data["Opponent"] = abbr.lower()
-                            break
-                
-                if "Opponent" not in row_data:
+                            if row_data["Year"] in team_name_info[parsed_team_name][abbr]:
+                                row_data["Tm"] = abbr
+                                break
+                    
+                    if "Tm" not in row_data:
+                        if parsed_team_name in team_name_info:
+                            for abbr in team_name_info[parsed_team_name]:
+                                row_data["Tm"] = abbr
+
+                if player_opp_id in team_ids_reversed:
+                    parsed_opp_name = team_ids_reversed[player_opp_id]
+                    
                     if parsed_opp_name in team_name_info:
                         for abbr in team_name_info[parsed_opp_name]:
-                            row_data["Opponent"] = abbr.lower()
+                            if row_data["Year"] in team_name_info[parsed_opp_name][abbr]:
+                                row_data["Opponent"] = abbr.lower()
+                                break
+                    
+                    if "Opponent" not in row_data:
+                        if parsed_opp_name in team_name_info:
+                            for abbr in team_name_info[parsed_opp_name]:
+                                row_data["Opponent"] = abbr.lower()
+                else:
+                    logger.info("Unknown opponent " + str(player_opp_id) + " for year " + str(row_data["Year"]) + ". Skipping game")
+                    continue
                 
                 if "Tm" not in row_data:
-                    raise Exception("Unknown team " + parsed_team_name + " for year " + str(row_data["Year"]))
+                    raise Exception("Unknown team " + str(player_team_id) + " for year " + str(row_data["Year"]))
                 if "Opponent" not in row_data:
-                    raise Exception("Unknown team " + parsed_opp_name + " for year " + str(row_data["Year"]))
+                    raise Exception("Unknown team " + str(player_opp_id) + " for year " + str(row_data["Year"]))
 
                 row_data["TmGm"] = game_number
                 game_number += 1
