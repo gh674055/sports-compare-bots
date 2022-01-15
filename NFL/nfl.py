@@ -6898,6 +6898,7 @@ def combine_player_datas(player_datas, player_type, any_missing_games, time_fram
     
     if add_type == "minus":
         parsed_stats = {}
+        total_count = sum([len(sub_player_data["seperate_rows"]) for sub_player_data in player_datas])
         for sub_player_data in player_datas:
             for sub_all_rows in sub_player_data["seperate_rows"]:
                 calculated_values = calculate_values(sub_all_rows, player_type, player_data, extra_stats)
@@ -6915,7 +6916,12 @@ def combine_player_datas(player_datas, player_type, any_missing_games, time_fram
                                         print(str(player_data["stat_values"][over_header][stat]) + " " + str(calculated_values["stat_values"][over_header][stat]))
                                     player_data["stat_values"][over_header][stat] = (player_data["stat_values"][over_header][stat] - calculated_values["stat_values"][over_header][stat]) / abs(calculated_values["stat_values"][over_header][stat])
                                 else:
-                                    player_data["stat_values"][over_header][stat] = float("inf")
+                                    if player_data["stat_values"][over_header][stat] > 0:
+                                        player_data["stat_values"][over_header][stat] = float("inf")
+                                    elif player_data["stat_values"][over_header][stat] < 0:
+                                        player_data["stat_values"][over_header][stat] = -float("inf")
+                                    else:
+                                        player_data["stat_values"][over_header][stat] = 0
                             elif (over_header == "Era Adjusted Passing" and stat.startswith("Rec")) or stat == "TmRec" or stat == "ATS TmRec" or stat == "O/U TmRec":
                                 old_rec_split = player_data["stat_values"][over_header][stat].split(":")
                                 new_rec_split = calculated_values["stat_values"][over_header][stat].split(":")
@@ -6928,6 +6934,14 @@ def combine_player_datas(player_datas, player_type, any_missing_games, time_fram
                             if stat not in player_data["stat_values"][over_header]:
                                 player_data["stat_values"][over_header][stat] = calculated_values["stat_values"][over_header][stat]
                                 parsed_stats[over_header].add(stat)
+                                if isinstance(player_data["stat_values"][over_header][stat], numbers.Number):
+                                    if total_count == 1:
+                                        if player_data["stat_values"][over_header][stat] > 0:
+                                            player_data["stat_values"][over_header][stat] = float("inf")
+                                        elif player_data["stat_values"][over_header][stat] < 0:
+                                            player_data["stat_values"][over_header][stat] = -float("inf")
+                                        else:
+                                            player_data["stat_values"][over_header][stat] = 0
                 
                 for over_header in calculated_values["stat_values"]:
                     if not over_header in player_data["stat_values"]:
@@ -7262,7 +7276,7 @@ def determine_raw_str(subbb_frame):
                             qual_str += "Not "
                         player_url_str = create_player_url_string(player["name"], player["id"], {})
                         if player_url_str == "No Player Match!":
-                            qual_str += player_url_str + " (Searched Term: \"" + " + ".join(player["search_term"]) + "\")"
+                            qual_str += player_url_str + " (Searched Term: \"" + "+".join(player["search_term"]) + "\")"
                         else:
                             qual_str += player_url_str + ((" (" + player["query"] + ")") if player["query"] != "Query: " else "")
                 elif qualifier == "Sub Query" or qualifier == "Or Sub Query" or qualifier == "Day Of Sub Query" or qualifier == "Day After Sub Query" or qualifier == "Day Before Sub Query" or qualifier == "Game After Sub Query" or qualifier == "Game Before Sub Query" or qualifier == "Season Sub Query" or qualifier == "Or Season Sub Query" or qualifier == "Season After Sub Query" or qualifier == "Season Before Sub Query":
@@ -21289,7 +21303,7 @@ def print_player_data(player_datas, player_type, highest_vals, lowest_vals, has_
 
         player_search_str = ""
         if has_one_player_missing:
-            player_search_str = " Searched Term: \"" + " + ".join(player_data["stat_values"]["Shared"]["Search Term"]) + "\""
+            player_search_str = " Searched Term: \"" + "+".join(player_data["stat_values"]["Shared"]["Search Term"]) + "\""
 
         ranges_str += player_str + player_search_str
         if missing_all_players:
@@ -21658,7 +21672,7 @@ def get_reddit_player_table(player_datas, player_type, is_fantasy, debug_mode, o
 
         player_search_str = ""
         if has_one_player_missing:
-            player_search_str = " Searched Term: \"" + " + ".join(player_data["stat_values"]["Shared"]["Search Term"]) + "\""
+            player_search_str = " Searched Term: \"" + "+".join(player_data["stat_values"]["Shared"]["Search Term"]) + "\""
 
         ranges_str += player_str + player_search_str
         if missing_all_players:
@@ -22363,7 +22377,7 @@ def create_table_html(html_info, player_datas, original_comment, last_updated, c
 
             if has_one_player_missing:
                 h2_div = soup.new_tag("div")
-                h2_div.string = "Searched Term: \"" + " + ".join(player_data["stat_values"]["Shared"]["Search Term"]) + "\""
+                h2_div.string = "Searched Term: \"" + "+".join(player_data["stat_values"]["Shared"]["Search Term"]) + "\""
                 h2_div["style"] = "font-size: medium;"
                 h2.append(h2_div)
 

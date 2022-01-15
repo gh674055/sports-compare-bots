@@ -13135,16 +13135,10 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
     player_data["stat_values"]["Raw Quals"] = "Query: "
     
     is_playoffs = None
-    multi_frame = False
-    last_frame = None
     has_reg_season = False
     has_playoffs = False
     for subb_frame in time_frames:
         for time_frame in subb_frame:
-            if last_frame and time_frame != last_frame:
-                multi_frame = True
-            last_frame = time_frame
-
             if "Sub Query" in time_frame["qualifiers"]:
                 for qualifier in time_frame["qualifiers"]["Sub Query"]:
                     for player in qualifier["values"]:
@@ -13803,6 +13797,7 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
     
     if add_type == "minus":
         parsed_stats = set()
+        total_count = sum([len(sub_player_data["seperate_rows"]) for sub_player_data in player_datas])
         for sub_player_data in player_datas:
             for sub_all_rows in sub_player_data["seperate_rows"]:
                 calculated_values = calculate_values(sub_all_rows, player_type, time_frames, player_data, extra_stats)
@@ -13812,7 +13807,12 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
                             if abs(calculated_values["stat_values"][stat]):
                                 player_data["stat_values"][stat] = (player_data["stat_values"][stat] - calculated_values["stat_values"][stat]) / abs(calculated_values["stat_values"][stat])
                             else:
-                                player_data["stat_values"][stat] = float("inf")
+                                if player_data["stat_values"][stat] > 0:
+                                    player_data["stat_values"][stat] = float("inf")
+                                elif player_data["stat_values"][stat] < 0:
+                                    player_data["stat_values"][stat] = -float("inf")
+                                else:
+                                    player_data["stat_values"][stat] = 0
                         elif stat == "TmRec":
                             old_rec_split = player_data["stat_values"][stat].split(":")
                             new_rec_split = calculated_values["stat_values"][stat].split(":")
@@ -13833,6 +13833,14 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
                         if stat not in player_data["stat_values"]:
                             player_data["stat_values"][stat] = calculated_values["stat_values"][stat]
                             parsed_stats.add(stat)
+                            if isinstance(player_data["stat_values"][stat], numbers.Number):
+                                if total_count == 1:
+                                    if player_data["stat_values"][stat] > 0:
+                                        player_data["stat_values"][stat] = float("inf")
+                                    elif player_data["stat_values"][stat] < 0:
+                                        player_data["stat_values"][stat] = -float("inf")
+                                    else:
+                                        player_data["stat_values"][stat] = 0
                 
                 for stat in player_data["stat_values"]:
                     if stat in string_stats:
@@ -14361,7 +14369,7 @@ def determine_raw_str(subbb_frame):
                             qual_str += "Not "
                         player_url_str = create_player_url_string(player["name"], player["id"], {})
                         if player_url_str == "No Player Match!":
-                            qual_str += player_url_str + " (Searched Term: \"" + " + ".join(player["search_term"]) + "\")"
+                            qual_str += player_url_str + " (Searched Term: \"" + "+".join(player["search_term"]) + "\")"
                         else:
                             qual_str += player_url_str + ((" (" + player["query"] + ")") if player["query"] != "Query: " else "")
                 elif qualifier == "Batting Against First Name" or qualifier == "Pitching Against First Name" or qualifier == "Batting Against Last Name" or qualifier == "Pitching Against Last Name":
@@ -14393,7 +14401,7 @@ def determine_raw_str(subbb_frame):
                         qual_str += "+".join(player["pos"]) + " -> "
                         player_url_str = create_player_url_string(player["name"], player["id"], {})
                         if player_url_str == "No Player Match!":
-                            qual_str += player_url_str + " (Searched Term: \"" + " + ".join(player["search_term"]) + "\")"
+                            qual_str += player_url_str + " (Searched Term: \"" + "+".join(player["search_term"]) + "\")"
                         else:
                             qual_str += player_url_str + ((" (" + player["query"] + ")") if player["query"] != "Query: " else "")
                 elif qualifier == "Days Rest" or qualifier == "Upcoming Days Rest" or qualifier == "Starts Days Rest" or qualifier == "Upcoming Starts Days Rest" or qualifier == "Start Days In A Row" or qualifier == "Game Days In A Row" or qualifier == "Days In A Row" or qualifier == "Games In A Row" or qualifier == "Starts In A Row" or qualifier == "Game Days Rest" or qualifier == "Start Days Rest" or qualifier == "Games Rest" or qualifier == "Starts Rest" or qualifier == "Inning Entered" or qualifier == "Outs Entered" or qualifier == "Outs Remaining Entered" or qualifier == "Men On Base Entered" or qualifier == "Men In Scoring Entered" or qualifier == "Team Score" or qualifier == "Ending Team Score" or qualifier == "Run Support" or qualifier == "Opponent Score" or qualifier == "Ending Opponent Score" or qualifier == "Previous Team Score" or qualifier == "Previous Opponent Score" or qualifier == "Final Team Score" or qualifier == "Team Pitch Count" or qualifier == "Game Pitch Count" or qualifier == "Pitch Count" or qualifier == "Pitcher Batters Faced" or qualifier == "Batter Plate Appearance" or qualifier == "Pitcher Batters Faced Reversed" or qualifier == "Batter Plate Appearance Reversed" or qualifier == "Starting Pitch Count" or qualifier == "At Bat Pitch Count" or qualifier == "Men On Base" or qualifier == "Final Opponent Score" or qualifier == "Upcoming Team Score" or qualifier == "Upcoming Opponent Score" or qualifier == "Series Team Wins" or qualifier == "Series Opponent Wins" or qualifier == "Series Score Margin" or qualifier == "Series Score Difference" or qualifier == "Season Number" or qualifier == "Game Number" or qualifier == "Ending Outs" or qualifier == "Outs" or qualifier == "Outs Remaining" or qualifier == "After Strikes" or qualifier == "After Balls" or qualifier == "Swinging On Strikes" or qualifier == "Swinging On Balls" or qualifier == "After Swinging On Strikes" or qualifier == "After Swinging On Balls" or qualifier == "Strikes" or qualifier == "Balls" or qualifier == "Runs" or qualifier == "Play Outs" or qualifier == "RBIs" or qualifier == "Number Drove In" or qualifier == "Pitch Speed" or qualifier == "Pitch Zone" or qualifier == "Pitch Spin" or qualifier == "Exit Velocity" or qualifier == "Hit Distance" or qualifier == "Launch Angle" or qualifier == "Number Of Men On Base" or qualifier == "Number Of Men In Scoring" or qualifier == "Team Wins" or qualifier == "Team Losses" or qualifier == "Opponent Wins" or qualifier == "Opponent Losses" or qualifier == "Current Team Wins" or qualifier == "Current Team Losses" or qualifier == "Current Opponent Wins" or qualifier == "Current Opponent Losses" or qualifier == "Team Games Over 500" or qualifier == "Opponent Games Over 500" or qualifier == "Current Team Games Over 500" or qualifier == "Current Opponent Games Over 500" or qualifier == "Hit X Coordinate" or qualifier == "Hit Y Coordinate" or qualifier == "Pitch X Coordinate" or qualifier == "Pitch Y Coordinate" or qualifier == "Absolute Pitch X Coordinate" or qualifier == "Absolute Pitch Y Coordinate" or qualifier == "Attendance":
@@ -40527,7 +40535,7 @@ def print_player_data(player_datas, player_type, highest_vals, lowest_vals, has_
 
         player_search_str = ""
         if has_one_player_missing:
-            player_search_str = " Searched Term: \"" + " + ".join(player_data["stat_values"]["Search Term"]) + "\""
+            player_search_str = " Searched Term: \"" + "+".join(player_data["stat_values"]["Search Term"]) + "\""
 
         ranges_str += player_str + player_search_str
         if missing_all_players:
@@ -41002,7 +41010,7 @@ def get_reddit_player_table(player_datas, player_type, debug_mode, original_comm
 
         player_search_str = ""
         if has_one_player_missing:
-            player_search_str = " Searched Term: \"" + " + ".join(player_data["stat_values"]["Search Term"]) + "\""
+            player_search_str = " Searched Term: \"" + "+".join(player_data["stat_values"]["Search Term"]) + "\""
 
         ranges_str += player_str + player_search_str
         if missing_all_players:
@@ -41528,7 +41536,7 @@ def create_table_html(html_info, player_datas, player_type, original_comment, la
 
             if has_one_player_missing:
                 h2_div = soup.new_tag("div")
-                h2_div.string = "Searched Term: \"" + " + ".join(player_data["stat_values"]["Search Term"]) + "\""
+                h2_div.string = "Searched Term: \"" + "+".join(player_data["stat_values"]["Search Term"]) + "\""
                 h2_div["style"] = "font-size: medium;"
                 h2.append(h2_div)
 

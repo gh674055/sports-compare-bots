@@ -13727,6 +13727,7 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
 
     if add_type == "minus":
         parsed_stats = set()
+        total_count = sum([len(sub_player_data["seperate_rows"]) for sub_player_data in player_datas])
         for sub_player_data in player_datas:
             for sub_all_rows in sub_player_data["seperate_rows"]:
                 calculated_values = calculate_values(sub_all_rows, player_type, player_data, extra_stats)
@@ -13736,7 +13737,12 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
                             if abs(calculated_values["stat_values"][stat]):
                                 player_data["stat_values"][stat] = (player_data["stat_values"][stat] - calculated_values["stat_values"][stat]) / abs(calculated_values["stat_values"][stat])
                             else:
-                                player_data["stat_values"][stat] = float("inf")
+                                if player_data["stat_values"][stat] > 0:
+                                    player_data["stat_values"][stat] = float("inf")
+                                elif player_data["stat_values"][stat] < 0:
+                                    player_data["stat_values"][stat] = -float("inf")
+                                else:
+                                    player_data["stat_values"][stat] = 0
                         elif stat == "TmRec":
                             old_rec_split = player_data["stat_values"][stat].split(":")
                             new_rec_split = calculated_values["stat_values"][stat].split(":")
@@ -13753,6 +13759,14 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
                         if stat not in player_data["stat_values"]:
                             player_data["stat_values"][stat] = calculated_values["stat_values"][stat]
                             parsed_stats.add(stat)
+                            if isinstance(player_data["stat_values"][stat], numbers.Number):
+                                if total_count == 1:
+                                    if player_data["stat_values"][stat] > 0:
+                                        player_data["stat_values"][stat] = float("inf")
+                                    elif player_data["stat_values"][stat] < 0:
+                                        player_data["stat_values"][stat] = -float("inf")
+                                    else:
+                                        player_data["stat_values"][stat] = 0
                 
                 for stat in player_data["stat_values"]:
                     if stat in string_stats:
@@ -14097,7 +14111,7 @@ def determine_raw_str(subbb_frame):
                             qual_str += "Not "
                         player_url_str = create_player_url_string(player["name"], player["id"], {})
                         if player_url_str == "No Player Match!":
-                            qual_str += player_url_str + " (Searched Term: \"" + " + ".join(player["search_term"]) + "\")"
+                            qual_str += player_url_str + " (Searched Term: \"" + "+".join(player["search_term"]) + "\")"
                         else:
                             qual_str += player_url_str + ((" (" + player["query"] + ")") if player["query"] != "Query: " else "")
                 elif qualifier == "Sub Query" or qualifier == "Event Sub Query" or qualifier == "Or Sub Query" or qualifier == "Or Event Sub Query" or qualifier == "Day Of Sub Query" or qualifier == "Day After Sub Query" or qualifier == "Day Before Sub Query" or qualifier == "Game After Sub Query" or qualifier == "Game Before Sub Query" or qualifier == "Season Sub Query" or qualifier == "Or Season Sub Query" or qualifier == "Season After Sub Query" or qualifier == "Season Before Sub Query":
@@ -34021,7 +34035,7 @@ def print_player_data(player_datas, player_type, highest_vals, lowest_vals, has_
 
         player_search_str = ""
         if has_one_player_missing:
-            player_search_str = " Searched Term: \"" + " + ".join(player_data["stat_values"]["Search Term"]) + "\""
+            player_search_str = " Searched Term: \"" + "+".join(player_data["stat_values"]["Search Term"]) + "\""
 
         ranges_str += player_str + player_search_str
         if missing_all_players:
@@ -34615,7 +34629,7 @@ def get_reddit_player_table(player_datas, player_type, debug_mode, original_comm
 
         player_search_str = ""
         if has_one_player_missing:
-            player_search_str = " Searched Term: \"" + " + ".join(player_data["stat_values"]["Search Term"]) + "\""
+            player_search_str = " Searched Term: \"" + "+".join(player_data["stat_values"]["Search Term"]) + "\""
 
         ranges_str += player_str + player_search_str
         if missing_all_players:
@@ -35272,7 +35286,7 @@ def create_table_html(html_info, player_datas, original_comment, last_updated, c
 
             if has_one_player_missing:
                 h2_div = soup.new_tag("div")
-                h2_div.string = "Searched Term: \"" + " + ".join(player_data["stat_values"]["Search Term"]) + "\""
+                h2_div.string = "Searched Term: \"" + "+".join(player_data["stat_values"]["Search Term"]) + "\""
                 h2_div["style"] = "font-size: medium;"
                 h2.append(h2_div)
 
