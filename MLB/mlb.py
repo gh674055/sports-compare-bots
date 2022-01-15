@@ -6600,7 +6600,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                 sub_parsed_time_frames = []
                 for sub_time_frame in subb_time_frames:
                     time_frames = re.split(r"(?<!\\)(?:\+|\bdiff\b)", sub_time_frame.strip())
-                    add_type = "minus" if re.search(r"\bdiff\b", sub_time_frame.strip()) else "plus"
+                    add_type = "minus" if re.search(r"\b(diff|playerdiff)\b", sub_time_frame.strip()) else "plus"
                     da_time_frames = []
                     for time_frame in time_frames:
                         time_start = None
@@ -6609,6 +6609,8 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
 
                         og_time_str = time_frame
                         qualifiers = {}
+
+                        time_frame = re.sub(r"\bplayerdiff\b", "", time_frame).strip()
 
                         last_match = re.finditer(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?((?:qual-sub-query):(?<!\\)\((.*?)(?<!\\)\))", time_frame)
                         for m in last_match:
@@ -12238,7 +12240,7 @@ def handle_name_threads(sub_name, parse_time_frames, index, player_type, remove_
                             "all_rows" : row
                         }
                     }
-                    calculated_values = calculate_values(row, player_type, {"qualifiers" : {}}, subbb_player_data, extra_stats)
+                    calculated_values = calculate_values(row, player_type, None, subbb_player_data, extra_stats)
                     for stat in calculated_values["stat_values"]:
                         if stat not in subbb_player_data["stat_values"]:
                             subbb_player_data["stat_values"][stat] = calculated_values["stat_values"][stat]
@@ -12804,7 +12806,7 @@ def handle_the_same_games_quals(sub_name, qual_str, subbb_frames, time_frame, pl
                 player_data["stat_values"]["is_playoffs"] = "Include"
             player_data["stat_values"]["all_rows"] = player_data["rows"]
 
-            calculated_values = calculate_values(player_data["stat_values"]["all_rows"], player_type, {"qualifiers" : {}}, player_data)
+            calculated_values = calculate_values(player_data["stat_values"]["all_rows"], player_type, None, player_data)
 
             if new_qual_type == "Games":
                 min_value = calculated_values["stat_values"]["G"]
@@ -12863,8 +12865,8 @@ def handle_multi_name_data(names, time_frames, player_type, remove_duplicates, r
             player_data["Search Term"] = name
             player_datas.append(player_data)
     
-    if len(player_datas) > 1:
-        add_type = "plus"
+    # if len(player_datas) > 1:
+    #     add_type = "plus"
     
     return combine_player_datas(player_datas, player_type, any_missing_games, any_missing_salary, any_missing_inf, time_frames, add_type, remove_duplicates, remove_duplicate_games, is_pitching_jaws, extra_stats), player_datas
 
@@ -13117,7 +13119,8 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
         "ids": [],
         "mlb_ids" : [],
         "quals" : [],
-        "stat_values": {}
+        "stat_values": {},
+        "add_type" : add_type
     }
 
     player_data["stat_values"]["DateStart"] = []
@@ -13703,7 +13706,7 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
                 else:
                     raw_sub_time += " + "
 
-        player_data["stat_values"]["Raw Player"] += "{" + (sub_player_data["Player"] if "hide-name" not in extra_stats else "?????") + "} + "
+        player_data["stat_values"]["Raw Player"] += "{" + (sub_player_data["Player"] if "hide-name" not in extra_stats else "?????") + "} " + ("DIFF" if add_type == "minus" else "+") + " "
         if raw_sub_range[:(-6 if add_type == "minus" else -3)]:
             player_data["stat_values"]["Raw Range"] += "{" + raw_sub_range[:(-6 if add_type == "minus" else -3)] + "}"
         else:
@@ -13767,7 +13770,7 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
     player_data["player_current_number"] = player_numbers
     player_data["player_hof"] = player_hofs
 
-    player_data["stat_values"]["Raw Player"] = player_data["stat_values"]["Raw Player"][:-3]
+    player_data["stat_values"]["Raw Player"] = player_data["stat_values"]["Raw Player"][:(-6 if add_type == "minus" else -3)]
     player_data["stat_values"]["Raw Range"] = player_data["stat_values"]["Raw Range"][:(-6 if add_type == "minus" else -3)]
     player_data["stat_values"]["Raw Time"] = player_data["stat_values"]["Raw Time"][:(-6 if add_type == "minus" else -3)]
     if not multiple_matches:
@@ -13800,49 +13803,47 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
     
     if add_type == "minus":
         parsed_stats = set()
-        for index, sub_all_rows in enumerate(player_datas[0]["seperate_rows"]):
-            calculated_values = calculate_values(sub_all_rows, player_type, time_frames[0][index], player_data, extra_stats)
-            for stat in calculated_values["stat_values"]:
-                if stat in parsed_stats:
-                    if isinstance(player_data["stat_values"][stat], numbers.Number):
-                        player_data["stat_values"][stat] -= calculated_values["stat_values"][stat]
-                    elif stat == "TmRec":
-                        old_rec_split = player_data["stat_values"][stat].split(":")
-                        new_rec_split = calculated_values["stat_values"][stat].split(":")
-                        player_data["stat_values"][stat] = str(round_value(float(old_rec_split[0]) - float(new_rec_split[0]))) + ":" + str(round_value(float(old_rec_split[1]) - float(new_rec_split[1])))
-                        if len(old_rec_split) == 3 or len(new_rec_split) == 3:
-                            old_ties = 0
-                            if len(old_rec_split) == 3:
-                                old_ties = old_rec_split[2]
-                            new_ties = 0
-                            if len(new_rec_split) == 3:
-                                new_ties = new_rec_split[2]
-                            player_data["stat_values"][stat] += ":" + str(round_value(float(old_ties) - float(new_ties)))
-                    elif stat in string_stats:
-                        if not player_data["stat_values"][stat]:
+        for sub_player_data in player_datas:
+            for sub_all_rows in sub_player_data["seperate_rows"]:
+                calculated_values = calculate_values(sub_all_rows, player_type, time_frames, player_data, extra_stats)
+                for stat in calculated_values["stat_values"]:
+                    if stat in parsed_stats:
+                        if isinstance(player_data["stat_values"][stat], numbers.Number):
+                            player_data["stat_values"][stat] -= calculated_values["stat_values"][stat]
+                        elif stat == "TmRec":
+                            old_rec_split = player_data["stat_values"][stat].split(":")
+                            new_rec_split = calculated_values["stat_values"][stat].split(":")
+                            player_data["stat_values"][stat] = str(round_value(float(old_rec_split[0]) - float(new_rec_split[0]))) + ":" + str(round_value(float(old_rec_split[1]) - float(new_rec_split[1])))
+                            if len(old_rec_split) == 3 or len(new_rec_split) == 3:
+                                old_ties = 0
+                                if len(old_rec_split) == 3:
+                                    old_ties = old_rec_split[2]
+                                new_ties = 0
+                                if len(new_rec_split) == 3:
+                                    new_ties = new_rec_split[2]
+                                player_data["stat_values"][stat] += ":" + str(round_value(float(old_ties) - float(new_ties)))
+                        elif stat in string_stats:
+                            if not player_data["stat_values"][stat]:
+                                player_data["stat_values"][stat] = ""
+                            player_data["stat_values"][stat] += calculated_values["stat_values"][stat] + "-"
+                    else:
+                        if stat not in player_data["stat_values"]:
+                            player_data["stat_values"][stat] = calculated_values["stat_values"][stat]
+                            parsed_stats.add(stat)
+                
+                for stat in player_data["stat_values"]:
+                    if stat in string_stats:
+                        if player_data["stat_values"][stat]:
+                            parsed_teams = set()
+                            stat_vals = player_data["stat_values"][stat].split("-")
                             player_data["stat_values"][stat] = ""
-                        player_data["stat_values"][stat] += calculated_values["stat_values"][stat] + "-"
-                else:
-                    if stat not in player_data["stat_values"]:
-                        player_data["stat_values"][stat] = calculated_values["stat_values"][stat]
-                        parsed_stats.add(stat)
-            
-            for stat in player_data["stat_values"]:
-                if stat in string_stats:
-                    if player_data["stat_values"][stat]:
-                        parsed_teams = set()
-                        stat_vals = player_data["stat_values"][stat].split("-")
-                        player_data["stat_values"][stat] = ""
-                        for stat_val in stat_vals:
-                            if stat_val and stat_val not in parsed_teams:
-                                player_data["stat_values"][stat] += stat_val + "-"
-                                parsed_teams.add(stat_val)
-                        player_data["stat_values"][stat] = player_data["stat_values"][stat][:-1]
+                            for stat_val in stat_vals:
+                                if stat_val and stat_val not in parsed_teams:
+                                    player_data["stat_values"][stat] += stat_val + "-"
+                                    parsed_teams.add(stat_val)
+                            player_data["stat_values"][stat] = player_data["stat_values"][stat][:-1]
     else:
-        if multi_frame:
-            calculated_values = calculate_values(all_rows, player_type, {"qualifiers" : {}}, player_data, extra_stats)
-        else:
-            calculated_values = calculate_values(all_rows, player_type, time_frames[0][0], player_data, extra_stats)
+        calculated_values = calculate_values(all_rows, player_type, time_frames, player_data, extra_stats)
         for stat in calculated_values["stat_values"]:
             if stat not in player_data["stat_values"]:
                 player_data["stat_values"][stat] = calculated_values["stat_values"][stat]
@@ -14021,7 +14022,7 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
 
     return player_data
 
-def calculate_values(all_rows, player_type, time_frame, og_player_data, extra_stats={}):
+def calculate_values(all_rows, player_type, time_frames, og_player_data, extra_stats={}):
     has_own_jaws = False
 
     player_data = {
@@ -14104,7 +14105,7 @@ def calculate_values(all_rows, player_type, time_frame, og_player_data, extra_st
             player_data["stat_values"][stat] = value
 
     if not seasons_leading:
-        calculate_advanced_stats(player_data["stat_values"], all_rows, player_type, time_frame)
+        calculate_advanced_stats(player_data["stat_values"], all_rows, player_type, time_frames)
 
     return player_data
 
@@ -22329,7 +22330,7 @@ def comb_rows(matching_rows, player_data, player_type, lower=True, stats=None):
                 calculate_recursive_formula(stat, player_data, player_type, comb_row, matching_rows)
 
     if stats == None or set(stats).intersection(advanced_stats[player_type["da_type"]]):
-        calculate_advanced_stats(comb_row, matching_rows, player_type, {"qualifiers" : {}})
+        calculate_advanced_stats(comb_row, matching_rows, player_type, None)
 
     headers_to_remove = set()
     for header in comb_row:
@@ -22820,7 +22821,7 @@ def fill_row(row, player_data, player_type, lower=True, stats=None):
                     break
 
         if missing_advanced:
-            calculate_advanced_stats(row, [row], player_type, {"qualifiers" : {}})
+            calculate_advanced_stats(row, [row], player_type, None)
 
     headers_to_remove = set()
     for header in row:
@@ -39232,7 +39233,7 @@ def get_opponent_schedule(seasons, is_schedule_diff, is_runs_diff):
     
     return team_obj
 
-def calculate_advanced_stats(data, all_rows, player_type, time_frame):
+def calculate_advanced_stats(data, all_rows, player_type, time_frames):
     total_wSB = 0.0
     total_wRC = 0.0
     total_wRAA = 0.0
@@ -39253,6 +39254,27 @@ def calculate_advanced_stats(data, all_rows, player_type, time_frame):
     total_wOBA = 0.0
     total_BBKPlus = 0.0
 
+    is_location = None
+    is_away = None
+    if time_frames:
+        for sub_time_frame in time_frames:
+            for sub_sub_time_frame in sub_time_frame:
+                if "Location" in sub_sub_time_frame["qualifiers"]:
+                    if is_location != False:
+                        is_location = True
+                        if any("away" in qual_object["values"] and not qual_object["negate"] for qual_object in sub_sub_time_frame["qualifiers"]["Location"]) or any("home" in qual_object["values"] and qual_object["negate"] for qual_object in sub_sub_time_frame["qualifiers"]["Location"]):
+                            if is_away != False:
+                                is_away = True
+                            else:
+                                is_location = False
+                        else:
+                            if is_away != True:
+                                is_away = False
+                            else:
+                                is_location = False
+                else:
+                    is_location = False
+    
     has_live = False
     for row_data in all_rows:
         if row_data["Year"] == current_season and not show_title_current_season and not row_data["is_playoffs"]:
@@ -39397,15 +39419,13 @@ def calculate_advanced_stats(data, all_rows, player_type, time_frame):
 
                 sleague = get_team_league(team, constant_year)
 
-                if "Location" in time_frame["qualifiers"]:
-                    is_away = any("away" in qual_object["values"] and not qual_object["negate"] for qual_object in time_frame["qualifiers"]["Location"]) or any("home" in qual_object["values"] and qual_object["negate"] for qual_object in time_frame["qualifiers"]["Location"])
+                park_factor = park_factors[constant_year][team]["Basic (5yr)"]
+                if is_location:
                     if is_away:
                         park_factor = 100
                     else:
                         park_factor_diff = park_factors[constant_year][team]["Basic (5yr)"] - 100
                         park_factor = park_factors[constant_year][team]["Basic (5yr)"] + park_factor_diff
-                else:
-                    park_factor = park_factors[constant_year][team]["Basic (5yr)"]
 
                 wOBA = 0.0
                 try:
@@ -39883,9 +39903,13 @@ def calculate_advanced_stats(data, all_rows, player_type, time_frame):
 
                     sleague = get_team_league(team, constant_year)
                     
-                    
-                    if "Location" in time_frame["qualifiers"]:
-                        is_away = any("away" in qual_object["values"] and not qual_object["negate"] for qual_object in time_frame["qualifiers"]["Location"]) or any("home" in qual_object["values"] and qual_object["negate"] for qual_object in time_frame["qualifiers"]["Location"])
+                    park_factor = park_factors[constant_year][team]["Basic (5yr)"]
+                    if park_factors[constant_year][team]["FIP"]:
+                        fip_park_factor = park_factors[constant_year][team]["FIP"]
+                    else:
+                        fip_park_factor = park_factor
+
+                    if is_location:
                         if is_away:
                             park_factor = 100
                             fip_park_factor = 100
@@ -39898,12 +39922,6 @@ def calculate_advanced_stats(data, all_rows, player_type, time_frame):
                                 fip_park_factor = park_factors[constant_year][team]["FIP"] + fip_park_factor_diff
                             else:
                                 fip_park_factor = park_factor
-                    else:
-                        park_factor = park_factors[constant_year][team]["Basic (5yr)"]
-                        if park_factors[constant_year][team]["FIP"]:
-                            fip_park_factor = park_factors[constant_year][team]["FIP"]
-                        else:
-                            fip_park_factor = park_factor
 
                     if data["IP"]:
                         era = 0.0
@@ -40493,7 +40511,10 @@ def print_player_data(player_datas, player_type, highest_vals, lowest_vals, has_
             for index, player in enumerate(player_data["stat_values"]["Player"]):
                 player_str += create_player_url_string(player, player_data["ids"][index], extra_stats)
                 if index != len(player_data["stat_values"]["Player"]) - 1:
-                    player_str += " + "
+                    if player_data["add_type"] == "minus":
+                        player_str += " DIFF "
+                    else:
+                        player_str += " + "
 
         has_one_player_missing = False
         missing_all_players = True
@@ -40961,7 +40982,10 @@ def get_reddit_player_table(player_datas, player_type, debug_mode, original_comm
             for index, player in enumerate(player_data["stat_values"]["Player"]):
                 player_str += create_player_url_string(player, player_data["ids"][index], extra_stats)
                 if index != len(player_data["stat_values"]["Player"]) - 1:
-                    player_str += " + "
+                    if player_data["add_type"] == "minus":
+                        player_str += " DIFF "
+                    else:
+                        player_str += " + "
         
         has_one_player_missing = False
         missing_all_players = True
