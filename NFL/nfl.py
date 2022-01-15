@@ -6910,7 +6910,12 @@ def combine_player_datas(player_datas, player_type, any_missing_games, time_fram
                     for stat in calculated_values["stat_values"][over_header]:
                         if stat in parsed_stats[over_header]:
                             if isinstance(player_data["stat_values"][over_header][stat], numbers.Number):
-                                player_data["stat_values"][over_header][stat] -= calculated_values["stat_values"][over_header][stat]
+                                if abs(calculated_values["stat_values"][over_header][stat]):
+                                    if stat == "Rate":
+                                        print(str(player_data["stat_values"][over_header][stat]) + " " + str(calculated_values["stat_values"][over_header][stat]))
+                                    player_data["stat_values"][over_header][stat] = (player_data["stat_values"][over_header][stat] - calculated_values["stat_values"][over_header][stat]) / abs(calculated_values["stat_values"][over_header][stat])
+                                else:
+                                    player_data["stat_values"][over_header][stat] = float("inf")
                             elif (over_header == "Era Adjusted Passing" and stat.startswith("Rec")) or stat == "TmRec" or stat == "ATS TmRec" or stat == "O/U TmRec":
                                 old_rec_split = player_data["stat_values"][over_header][stat].split(":")
                                 new_rec_split = calculated_values["stat_values"][over_header][stat].split(":")
@@ -13657,8 +13662,6 @@ def handle_max_min_data(all_rows, player_data, player_type, qualifiers):
                     round_val = get_constant_data.stat_groups[real_over_stat][real_stat]["round"]
                     if round_val == "percent":
                         value = ("{:.2f}").format(get_constant_data.round_value(100 * value, 2)) + "%"
-                    elif round_val == "y/n":
-                        value = "Y" if value > 0 else "N"
                     else:
                         value = get_constant_data.round_value(value, round_val)
                         value = ("{:." + str(round_val) + "f}").format(value)
@@ -21456,6 +21459,11 @@ def print_player_data(player_datas, player_type, highest_vals, lowest_vals, has_
 
             if over_header.startswith("Awards/Honors/") and header != "Player":
                 continue
+             
+            if player_data["add_type"] == "minus":
+                if (over_header == "Era Adjusted Passing" and header.startswith("Rec")) or header == "TmRec" or header == "ATS TmRec" or header == "O/U TmRec":
+                    if not ("show-only-stat-" + header.lower() in extra_stats or "show-only-stat-" + over_header + ">" + header.lower() in extra_stats or "show-stat-" + header.lower() in extra_stats or "show-stat-" + over_header + ">" + header.lower() in extra_stats):
+                        continue
             
             if "hide-stat-" + header.lower() in extra_stats or "hide-stat-" + over_header + ">" + header.lower() in extra_stats:
                 continue
@@ -21505,6 +21513,11 @@ def print_player_data(player_datas, player_type, highest_vals, lowest_vals, has_
             elif "FmbLst" in header or "Tnv" in header:
                 if error_getting_fmb_lst:
                     continue
+
+            if player_data["add_type"] == "minus":
+                if (over_header == "Era Adjusted Passing" and header.startswith("Rec")) or header == "TmRec" or header == "ATS TmRec" or header == "O/U TmRec":
+                    if not ("show-only-stat-" + header.lower() in extra_stats or "show-only-stat-" + over_header + ">" + header.lower() in extra_stats or "show-stat-" + header.lower() in extra_stats or "show-stat-" + over_header + ">" + header.lower() in extra_stats):
+                        continue
 
             if "hide-stat-" + header.lower() in extra_stats or "hide-stat-" + over_header + ">" + header.lower() in extra_stats:
                 continue
@@ -21801,6 +21814,11 @@ def get_reddit_player_table(player_datas, player_type, is_fantasy, debug_mode, o
             if over_header.startswith("Awards/Honors/") and header != "Player":
                 continue
 
+            if player_data["add_type"] == "minus":
+                if (over_header == "Era Adjusted Passing" and header.startswith("Rec")) or header == "TmRec" or header == "ATS TmRec" or header == "O/U TmRec":
+                    if not ("show-only-stat-" + header.lower() in extra_stats or "show-only-stat-" + over_header + ">" + header.lower() in extra_stats or "show-stat-" + header.lower() in extra_stats or "show-stat-" + over_header + ">" + header.lower() in extra_stats):
+                        continue
+
             if "hide-stat-" + header.lower() in extra_stats or "hide-stat-" + over_header + ">" + header.lower() in extra_stats:
                 continue
             for extra_stat in extra_stats:
@@ -21849,6 +21867,11 @@ def get_reddit_player_table(player_datas, player_type, is_fantasy, debug_mode, o
             elif "FmbLst" in header or "Tnv" in header:
                 if error_getting_fmb_lst:
                     continue
+
+            if player_data["add_type"] == "minus":
+                if (over_header == "Era Adjusted Passing" and header.startswith("Rec")) or header == "TmRec" or header == "ATS TmRec" or header == "O/U TmRec":
+                    if not ("show-only-stat-" + header.lower() in extra_stats or "show-only-stat-" + over_header + ">" + header.lower() in extra_stats or "show-stat-" + header.lower() in extra_stats or "show-stat-" + over_header + ">" + header.lower() in extra_stats):
+                        continue
 
             if "hide-stat-" + header.lower() in extra_stats or "hide-stat-" + over_header + ">" + header.lower() in extra_stats:
                 continue
@@ -22537,6 +22560,10 @@ def handle_table_data(player_data, player_type, header, over_header, highest_val
         return None
     if over_header.startswith("Awards/Honors") and "hide-table-awards/honors" in extra_stats:
         return None
+    if player_data["add_type"] == "minus":
+        if (over_header == "Era Adjusted Passing" and header.startswith("Rec")) or header == "TmRec" or header == "ATS TmRec" or header == "O/U TmRec":
+            if not ("show-only-stat-" + header.lower() in extra_stats or "show-only-stat-" + over_header + ">" + header.lower() in extra_stats or "show-stat-" + header.lower() in extra_stats or "show-stat-" + over_header + ">" + header.lower() in extra_stats):
+                return None
     if "hide-stat-" + header.lower() in extra_stats or "hide-stat-" + over_header + ">" + header.lower() in extra_stats:
         return None
     for extra_stat in extra_stats:
@@ -22638,12 +22665,12 @@ def handle_table_data(player_data, player_type, header, over_header, highest_val
                                 return "N/A"
 
                             if isinstance(value, numbers.Number):
-                                if "round" in get_constant_data.stat_groups[over_header][header] and not seasons_leading:
+                                if player_data["add_type"] == "minus":
+                                    value = ("{:.2f}").format(get_constant_data.round_value(100 * value, 2)) + "%"
+                                elif "round" in get_constant_data.stat_groups[over_header][header] and not seasons_leading:
                                     round_val = get_constant_data.stat_groups[over_header][header]["round"]
                                     if round_val == "percent":
                                         value = ("{:.2f}").format(get_constant_data.round_value(100 * value, 2)) + "%"
-                                    elif round_val == "y/n":
-                                        value = "Y" if value > 0 else "N"
                                     else:
                                         value = get_constant_data.round_value(value, round_val)
                                         value = ("{:." + str(round_val) + "f}").format(value)

@@ -13733,7 +13733,10 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
                 for stat in calculated_values["stat_values"]:
                     if stat in parsed_stats:
                         if isinstance(player_data["stat_values"][stat], numbers.Number):
-                            player_data["stat_values"][stat] -= calculated_values["stat_values"][stat]
+                            if abs(calculated_values["stat_values"][stat]):
+                                player_data["stat_values"][stat] = (player_data["stat_values"][stat] - calculated_values["stat_values"][stat]) / abs(calculated_values["stat_values"][stat])
+                            else:
+                                player_data["stat_values"][stat] = float("inf")
                         elif stat == "TmRec":
                             old_rec_split = player_data["stat_values"][stat].split(":")
                             new_rec_split = calculated_values["stat_values"][stat].split(":")
@@ -34217,6 +34220,10 @@ def print_player_data(player_datas, player_type, highest_vals, lowest_vals, has_
             table = PrettyTable()
             field_names = []
             for header in all_headers[over_header]:
+                if player_data["add_type"] == "minus":
+                    if header == "TmRec" or header == "TmRORec":
+                        if not ("show-only-stat-" + header.lower() in extra_stats or "show-only-stat-" + over_header + ">" + header.lower() in extra_stats or "show-stat-" + header.lower() in extra_stats or "show-stat-" + over_header + ">" + header.lower() in extra_stats):
+                            continue
                 if "hide-stat-" + header.lower() in extra_stats or "hide-stat-" + over_header + ">" + header.lower() in extra_stats:
                     continue
                 if "display-value" in all_headers[over_header][header] and all_headers[over_header][header]["display-value"]:
@@ -34672,6 +34679,10 @@ def get_reddit_player_table(player_datas, player_type, debug_mode, original_comm
 
             field_names = []
             for header in all_headers[over_header]:
+                if player_data["add_type"] == "minus":
+                    if header == "TmRec" or header == "TmRORec":
+                        if not ("show-only-stat-" + header.lower() in extra_stats or "show-only-stat-" + over_header + ">" + header.lower() in extra_stats or "show-stat-" + header.lower() in extra_stats or "show-stat-" + over_header + ">" + header.lower() in extra_stats):
+                            continue
                 if "hide-stat-" + header.lower() in extra_stats or "hide-stat-" + over_header + ">" + header.lower() in extra_stats:
                     continue
                 if "display-value" in all_headers[over_header][header] and all_headers[over_header][header]["display-value"]:
@@ -35471,6 +35482,10 @@ def handle_table_data(player_data, player_type, over_header, header, highest_val
         return None
     if over_header.startswith("5v5") and "hide-table-5v5" in extra_stats:
         return None
+    if player_data["add_type"] == "minus":
+        if header == "TmRec" or header == "TmRORec":
+            if not ("show-only-stat-" + header.lower() in extra_stats or "show-only-stat-" + over_header + ">" + header.lower() in extra_stats or "show-stat-" + header.lower() in extra_stats or "show-stat-" + over_header + ">" + header.lower() in extra_stats):
+                return None
     if "hide-stat-" + header.lower() in extra_stats or "hide-stat-" + over_header + ">" + header.lower() in extra_stats:
         return None
     if "display-value" in headers[player_type["da_type"]["type"]][header] and headers[player_type["da_type"]["type"]][header]["display-value"]:
@@ -35713,7 +35728,9 @@ def handle_table_data(player_data, player_type, over_header, header, highest_val
                 return "N/A"
 
             if isinstance(value, numbers.Number):
-                if "round" in headers[player_type["da_type"]["type"]][header] and not seasons_leading:
+                if player_data["add_type"] == "minus":
+                    value = ("{:.2f}").format(round_value(100 * value, 2)) + "%"
+                elif "round" in headers[player_type["da_type"]["type"]][header] and not seasons_leading:
                     round_val = headers[player_type["da_type"]["type"]][header]["round"]
                     if round_val == "percent":
                         value = ("{:.2f}").format(round_value(100 * value, 2)) + "%"
