@@ -6217,7 +6217,7 @@ def is_invalid_year_stat(header, stat, data, count_inconsistent, date_start, yea
     return None
 
 def round_value(value, round_val=0):
-    if value == math.inf:
+    if value == math.inf or value == -math.inf:
         return value
     decimal_val = decimal.Decimal(str(value)).quantize(
         decimal.Decimal(("{:." + str(round_val) + "f}").format(0)), 

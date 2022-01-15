@@ -42243,7 +42243,7 @@ def handle_string_year(string_year, is_first, replace_first_year):
             return date
     
 def round_value(value, round_val=0):
-    if value == math.inf:
+    if value == math.inf or value == -math.inf:
         return value
     decimal_val = decimal.Decimal(str(value)).quantize(
         decimal.Decimal(("{:." + str(round_val) + "f}").format(0)), 
