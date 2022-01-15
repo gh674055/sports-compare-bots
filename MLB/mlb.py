@@ -13054,8 +13054,6 @@ def get_player(name, time_frames):
                         career_length = (year_end - year_start) + 1
 
                     score = 0
-                    if last_name_match:
-                        score += 5
                     if is_hof:
                         score += 20
                     elif is_allstar:
@@ -13070,6 +13068,7 @@ def get_player(name, time_frames):
                         "id" : player_id,
                         "has_years" : bool(career_length),
                         "is_exact" : is_exact,
+                        "last_name_match" : last_name_match,
                         "has_year_match_count": has_year_match_count,
                         "contains_name" : contains_name,
                         "has_first_name_match" : has_first_name_match,
@@ -13077,7 +13076,7 @@ def get_player(name, time_frames):
                         "score" : score
                     })
             if matching_players:
-                matching_players.sort(key=lambda player: (-player["prof_player"], -player["has_years"], -player["has_year_match_count"], -player["is_exact"], -player["contains_name"], -player["has_first_name_match"], -player["score"]))
+                matching_players.sort(key=lambda player: (-player["prof_player"], -player["has_years"], -player["has_year_match_count"], -player["is_exact"], -player["last_name_match"], -player["contains_name"], -player["has_first_name_match"], -player["score"]))
                 matching_player = matching_players[0]
 
                 if matching_player["prof_player"]:

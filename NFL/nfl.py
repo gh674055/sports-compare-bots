@@ -6436,8 +6436,6 @@ def get_player(name, player_type, time_frames):
                     position_score = position_scores[primary_pos] if primary_pos in position_scores else (45 if primary_pos in headers else 30)
 
                     score = 0
-                    if last_name_match:
-                        score += 5
                     if is_hof:
                         score += 20
                     elif is_allstar:
@@ -6453,6 +6451,7 @@ def get_player(name, player_type, time_frames):
                         "id" : player_id,
                         "has_years" : bool(career_length),
                         "is_exact" : is_exact,
+                        "last_name_match" : last_name_match,
                         "has_year_match_count": has_year_match_count,
                         "contains_name" : contains_name,
                         "has_first_name_match" : has_first_name_match,
@@ -6460,7 +6459,7 @@ def get_player(name, player_type, time_frames):
                         "score" : score
                     })
             if matching_players:
-                matching_players.sort(key=lambda player: (-player["has_years"], -player["has_year_match_count"], -player["is_exact"], -player["contains_name"], -player["has_first_name_match"], -player["is_position_type"], -player["score"]))
+                matching_players.sort(key=lambda player: (-player["has_years"], -player["has_year_match_count"], -player["is_exact"], -player["last_name_match"], -player["contains_name"], -player["has_first_name_match"], -player["is_position_type"], -player["score"]))
                 matching_player = matching_players[0]
 
                 player_url = main_page_url_format.format(matching_player["id"][0].upper(), matching_player["id"])
