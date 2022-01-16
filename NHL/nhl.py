@@ -21547,7 +21547,7 @@ def get_html_play_data(scoring_plays, player_data, og_game_id, is_home, game_dat
                                     }
                                 })
                             else:
-                                if opp_on_ice:
+                                if opp_on_ice["S"]:
                                     scoring_play["result"]["emptyNet"] = True
 
                             if game_winning_team == team_id:
@@ -22250,7 +22250,7 @@ def get_old_html_play_data(scoring_plays, player_data, og_game_id, is_home, game
                         }
                     })
                 else:
-                    if opp_on_ice:
+                    if opp_on_ice["S"]:
                         scoring_play["result"]["emptyNet"] = True
 
                 if game_winning_team == team_id:
@@ -22773,7 +22773,7 @@ def get_older_html_play_data(scoring_plays, player_data, og_game_id, is_home, ga
                     }
                 })
             else:
-                if opp_on_ice:
+                if opp_on_ice["S"]:
                     scoring_play["result"]["emptyNet"] = True
 
             if game_winning_team == team_id:
