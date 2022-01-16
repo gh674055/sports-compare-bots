@@ -36638,50 +36638,51 @@ def get_live_game_data(row_index, player_data, row_data, player_type, qualifiers
                                         if scoring_play["matchup"]["batter"]["id"] == player_data["mlb_id"] and player_type["da_type"] == "Batter" and ("Batting Lefty" in qualifiers or "Batting Righty" in qualifiers):
                                             missing_games = True
                             elif play["details"]["eventType"] == "offensive_substitution":
-                                old_player = play["replacedPlayer"]["id"]
-                                if play["count"]["strikes"] == 2:
-                                    event_type = scoring_play["result"]["eventType"]
-                                    if event_type in ["field_out", "double_play", "triple_play", "fielders_choice", "fielders_choice_out", "force_out", "cs_double_play"]:
-                                        event_type = "out"
-                                    elif event_type in ["field_error"]:
-                                        event_type = "error"
-                                    elif event_type in ["strike_out", "strikeout_double_play", "strikeout_triple_play"]:
-                                        event_type = "strikeout"
-                                    elif event_type in ["sac_fly_double_play"]:
-                                        event_type = "sac_fly"
-                                    elif event_type in ["sac_bunt_double_play"]:
-                                        event_type = "sac_bunt"
+                                if play["position"]["abbreviation"] == "PH":
+                                    old_player = play["replacedPlayer"]["id"]
+                                    if play["count"]["strikes"] == 2:
+                                        event_type = scoring_play["result"]["eventType"]
+                                        if event_type in ["field_out", "double_play", "triple_play", "fielders_choice", "fielders_choice_out", "force_out", "cs_double_play"]:
+                                            event_type = "out"
+                                        elif event_type in ["field_error"]:
+                                            event_type = "error"
+                                        elif event_type in ["strike_out", "strikeout_double_play", "strikeout_triple_play"]:
+                                            event_type = "strikeout"
+                                        elif event_type in ["sac_fly_double_play"]:
+                                            event_type = "sac_fly"
+                                        elif event_type in ["sac_bunt_double_play"]:
+                                            event_type = "sac_bunt"
 
-                                    if event_type not in event_type_stat_mappings or event_type in ["stolen_base", "caught_stealing", "run_scored", "pick_off"]:
-                                        event_type = "no_stats"
+                                        if event_type not in event_type_stat_mappings or event_type in ["stolen_base", "caught_stealing", "run_scored", "pick_off"]:
+                                            event_type = "no_stats"
 
-                                    if event_type == "home_run" and "description" in scoring_play["result"] and scoring_play["result"]["description"] and "inside-the-park" in scoring_play["result"]["description"]:
-                                        event_type = "inside_the_park_home_run"
+                                        if event_type == "home_run" and "description" in scoring_play["result"] and scoring_play["result"]["description"] and "inside-the-park" in scoring_play["result"]["description"]:
+                                            event_type = "inside_the_park_home_run"
 
-                                    if event_type == "strikeout":
-                                        play["postPlay"] = play["player"]["id"]
-                                        play["player"]["id"] = old_player
-                                        scoring_play["matchup"]["batter"]["id"] = old_player
-                                        
-                                        bat_pos = sub_data["gameData"]["players"]["ID" + str(old_player)]["batSide"]["code"]
-                                        if bat_pos == "S":
-                                            pitch_pos = sub_data["gameData"]["players"]["ID" + str(scoring_play["matchup"]["pitcher"]["id"])]["pitchHand"]["code"]
-                                            if pitch_pos == "S":
-                                                scoring_play["matchup"]["splits"]["pitcher"] = None
-                                            else:
-                                                if pitch_pos == "R":
-                                                    scoring_play["matchup"]["splits"]["pitcher"] = "vs_LHB"
+                                        if event_type == "strikeout":
+                                            play["postPlay"] = play["player"]["id"]
+                                            play["player"]["id"] = old_player
+                                            scoring_play["matchup"]["batter"]["id"] = old_player
+                                            
+                                            bat_pos = sub_data["gameData"]["players"]["ID" + str(old_player)]["batSide"]["code"]
+                                            if bat_pos == "S":
+                                                pitch_pos = sub_data["gameData"]["players"]["ID" + str(scoring_play["matchup"]["pitcher"]["id"])]["pitchHand"]["code"]
+                                                if pitch_pos == "S":
+                                                    scoring_play["matchup"]["splits"]["pitcher"] = None
                                                 else:
-                                                    scoring_play["matchup"]["splits"]["pitcher"] = "vs_RHB"
-                                        else:
-                                            scoring_play["matchup"]["splits"]["pitcher"] = "vs_" + bat_pos + "HB"
+                                                    if pitch_pos == "R":
+                                                        scoring_play["matchup"]["splits"]["pitcher"] = "vs_LHB"
+                                                    else:
+                                                        scoring_play["matchup"]["splits"]["pitcher"] = "vs_RHB"
+                                            else:
+                                                scoring_play["matchup"]["splits"]["pitcher"] = "vs_" + bat_pos + "HB"
 
 
-                                        if old_player == player_data["mlb_id"] and ("Batting Lefty" in qualifiers or "Batting Righty" in qualifiers):
-                                            missing_games = True
-                                        
-                                        if scoring_play["matchup"]["pitcher"]["id"] == player_data["mlb_id"] and player_type["da_type"] != "Batter" and ("Facing Lefty" in qualifiers or "Facing Righty" in qualifiers or "Platoon Advantage" in qualifiers):
-                                            missing_games = True
+                                            if old_player == player_data["mlb_id"] and ("Batting Lefty" in qualifiers or "Batting Righty" in qualifiers):
+                                                missing_games = True
+                                            
+                                            if scoring_play["matchup"]["pitcher"]["id"] == player_data["mlb_id"] and player_type["da_type"] != "Batter" and ("Facing Lefty" in qualifiers or "Facing Righty" in qualifiers or "Platoon Advantage" in qualifiers):
+                                                missing_games = True
 
         if is_final:
             for index, scoring_play in enumerate(sub_data["liveData"]["plays"]["allPlays"]):
