@@ -584,8 +584,8 @@ headers = {
             "display" : False,
             "type" : "Relative",
             "valid_since" : {
-                "season" : 2007,
-                "game" : 2007
+                "season" : 2009,
+                "game" : 2009
             }
         },
         "TOI/GP" : {
@@ -18265,6 +18265,14 @@ def perform_sub_nhl_period_qualifiers(row, qualifiers, player_game_info, player_
         "faceoff",
         "all_faceoffs",
         "takeaway",
+        "oi_all_team_goals",
+        "oi_all_team_shots",
+        "oi_all_team_shots_og",
+        "oi_all_team_unblocked_shots",
+        "oi_all_opp_goals",
+        "oi_all_opp_shots",
+        "oi_all_opp_shots_og",
+        "oi_all_opp_unblocked_shots",
         "all_team_goals",
         "all_team_shots",
         "all_team_shots_og",
@@ -18273,16 +18281,8 @@ def perform_sub_nhl_period_qualifiers(row, qualifiers, player_game_info, player_
         "all_opp_shots",
         "all_opp_shots_og",
         "all_opp_unblocked_shots",
-        "of_all_team_goals",
-        "of_all_team_shots",
-        "of_all_team_shots_og",
-        "of_all_team_unblocked_shots",
-        "of_all_opp_goals",
-        "of_all_opp_shots",
-        "of_all_opp_shots_og",
-        "of_all_opp_unblocked_shots",
         "shift_events",
-        "oi_shift_events"
+        "all_shift_events"
     ]
 
     periods = set()
@@ -18419,6 +18419,14 @@ def perform_sub_nhl_shift_qualifiers(row, qualifiers, player_game_info, player_t
         "faceoff",
         "all_faceoffs",
         "takeaway",
+        "oi_all_team_goals",
+        "oi_all_team_shots",
+        "oi_all_team_shots_og",
+        "oi_all_team_unblocked_shots",
+        "oi_all_opp_goals",
+        "oi_all_opp_shots",
+        "oi_all_opp_shots_og",
+        "oi_all_opp_unblocked_shots",
         "all_team_goals",
         "all_team_shots",
         "all_team_shots_og",
@@ -18427,16 +18435,8 @@ def perform_sub_nhl_shift_qualifiers(row, qualifiers, player_game_info, player_t
         "all_opp_shots",
         "all_opp_shots_og",
         "all_opp_unblocked_shots",
-        "of_all_team_goals",
-        "of_all_team_shots",
-        "of_all_team_shots_og",
-        "of_all_team_unblocked_shots",
-        "of_all_opp_goals",
-        "of_all_opp_shots",
-        "of_all_opp_shots_og",
-        "of_all_opp_unblocked_shots",
         "shift_events",
-        "oi_shift_events"
+        "all_shift_events"
     ]
 
     shifts = set()
@@ -19343,22 +19343,22 @@ def determine_stat_value(player_game_info, all_events, qualifiers, og_row, playe
     all_faceoff_stats = ["OZ", "NZ", "DZ"]
     takeaway_stats = ["TK", "GV"]
     penalty_stats = ["PIM", "PEN", "PenDrawn", "NetPEN", "Minor", "Major", "Misconduct", "GameMisconduct", "Match", "Fight"]
-    all_team_goals_stats = ["GF", "PlusMinus", "EVGF"]
-    all_opp_goals_stats = ["GA", "PlusMinus", "EVGA"]
-    all_team_shots_og_stats = ["oiTmS", "TmSF", "TtlSF"]
-    all_opp_shots_og_stats = ["oiOppS", "OppSF", "TtlSF"]
-    all_team_shots_stats = ["CF", "TmCF", "TtlCF"]
-    all_opp_shots_stats = ["CA", "OppCF", "TtlCF"]
-    all_team_unblocked_shots_stats = ["FF", "TmFF", "TtlFF"]
-    all_opp_unblocked_shots_stats = ["FA", "OppFF", "TtlFF"]
-    of_all_team_goals_stats = ["offIGF"]
-    of_all_opp_goals_stats = ["offIGA"]
-    of_all_team_shots_stats = ["offICF", "TmCF", "TtlCF",]
-    of_all_opp_shots_stats = ["offICA", "OppCF", "TtlCF",]
-    of_all_team_unblocked_shots_stats = ["offIFF", "TmFF", "TtlFF"]
-    of_all_opp_unblocked_shots_stats = ["offIFA", "OppFF", "TtlFF"]
-    of_all_team_shots_og_stats = ["offISF", "TmSF", "TmSF"]
-    of_all_opp_shots_og_stats = ["offISA", "OppSF", "TmSF"]
+    oi_all_team_goals_stats = ["GF", "PlusMinus", "EVGF"]
+    oi_all_opp_goals_stats = ["GA", "PlusMinus", "EVGA"]
+    oi_all_team_shots_stats = ["CF", "TmCF", "TtlCF"]
+    oi_all_opp_shots_stats = ["CA", "OppCF", "TtlCF"]
+    oi_oi_all_team_shots_og_stats = ["oiTmS", "TmSF", "TtlSF"]
+    oi_all_opp_shots_og_stats = ["oiOppS", "OppSF", "TtlSF"]
+    oi_all_team_unblocked_shots_stats = ["FF", "TmFF", "TtlFF"]
+    oi_all_opp_unblocked_shots_stats = ["FA", "OppFF", "TtlFF"]
+    all_team_goals_stats = ["offIGF"]
+    all_opp_goals_stats = ["offIGA"]
+    all_team_shots_stats = ["offICF", "TmCF", "TtlCF",]
+    all_opp_shots_stats = ["offICA", "OppCF", "TtlCF",]
+    all_team_shots_og_stats = ["offISF", "TmSF", "TmSF"]
+    all_opp_shots_og_stats = ["offISA", "OppSF", "TmSF"]
+    all_team_unblocked_shots_stats = ["offIFF", "TmFF", "TtlFF"]
+    all_opp_unblocked_shots_stats = ["offIFA", "OppFF", "TtlFF"]
     goal_against_stats = ["GA", "SA", "EVGA", "EVSH", "PPGA", "PPSH", "SHGA", "SHSH"]
     save_against_stats = ["SV", "SA", "EVSH", "PPSH", "SHGA"]
     missed_shot_against_stats = ["SV", "SA"]
@@ -19564,39 +19564,39 @@ def determine_stat_value(player_game_info, all_events, qualifiers, og_row, playe
                             row["SV"] += 1
                             row["SA"] += 1
 
-        if stat in all_team_goals_stats:
-            if goal_event["event_name"] == "all_team_goals":
+        if stat in oi_all_team_goals_stats:
+            if goal_event["event_name"] == "oi_all_team_goals":
                 if determine_event_match(goal_event, qualifiers, player_game_info, og_row):
                     row["GF"] += 1
                     if goal_event["strength"] == "EVEN" or goal_event["strength"] != "PPG":
                         row["PlusMinus"] += 1
                         if goal_event["strength"] == "EVEN":
                             row["EVGF"] += 1
-        if stat in all_opp_goals_stats:
-            if goal_event["event_name"] == "all_opp_goals":
+        if stat in oi_all_opp_goals_stats:
+            if goal_event["event_name"] == "oi_all_opp_goals":
                 if determine_event_match(goal_event, qualifiers, player_game_info, og_row):
                     row["GA"] += 1
                     if goal_event["strength"] == "EVEN" or goal_event["strength"] != "SHG":
                         row["PlusMinus"] -= 1
                         if goal_event["strength"] == "EVEN":
                             row["EVGA"] += 1
-        if stat in all_team_shots_og_stats:
-            if goal_event["event_name"] == "all_team_shots_og":
+        if stat in oi_all_team_shots_og_stats:
+            if goal_event["event_name"] == "oi_all_team_shots_og":
                 if determine_event_match(goal_event, qualifiers, player_game_info, og_row):
                     row["oiTmS"] += 1
                     row["TmSF"] += 1
-        if stat in all_opp_shots_og_stats:
-            if goal_event["event_name"] == "all_opp_shots_og":
+        if stat in oi_all_opp_shots_og_stats:
+            if goal_event["event_name"] == "oi_all_opp_shots_og":
                 if determine_event_match(goal_event, qualifiers, player_game_info, og_row):
                     row["oiOppS"] += 1
                     row["OppSF"] += 1
-        if stat in all_team_shots_stats:
-            if goal_event["event_name"] == "all_team_shots":
+        if stat in oi_all_team_shots_stats:
+            if goal_event["event_name"] == "oi_all_team_shots":
                 if determine_event_match(goal_event, qualifiers, player_game_info, og_row):
                     row["CF"] += 1
                     row["TmCF"] += 1
-        if stat in all_opp_shots_stats:
-            if goal_event["event_name"] == "all_opp_shots":
+        if stat in oi_all_opp_shots_stats:
+            if goal_event["event_name"] == "oi_all_opp_shots":
                 if determine_event_match(goal_event, qualifiers, player_game_info, og_row):
                     row["CA"] += 1
                     row["OppCF"] += 1
@@ -19610,41 +19610,41 @@ def determine_stat_value(player_game_info, all_events, qualifiers, og_row, playe
                 if determine_event_match(goal_event, qualifiers, player_game_info, og_row):
                     row["FA"] += 1
                     row["OppFF"] += 1
-        if stat in of_all_team_goals_stats:
-            if goal_event["event_name"] == "of_all_team_goals":
+        if stat in all_team_goals_stats:
+            if goal_event["event_name"] == "all_team_goals":
                 if determine_event_match(goal_event, qualifiers, player_game_info, og_row, is_off_ice=True):
                     row["offIGF"] += 1
-        if stat in of_all_opp_goals_stats:
-            if goal_event["event_name"] == "of_all_opp_goals":
+        if stat in all_opp_goals_stats:
+            if goal_event["event_name"] == "all_opp_goals":
                 if determine_event_match(goal_event, qualifiers, player_game_info, og_row, is_off_ice=True):
                     row["offIGA"] += 1
-        if stat in of_all_team_shots_stats:
-            if goal_event["event_name"] == "of_all_team_shots":
+        if stat in all_team_shots_stats:
+            if goal_event["event_name"] == "all_team_shots":
                 if determine_event_match(goal_event, qualifiers, player_game_info, og_row, is_off_ice=True):
                     row["offICF"] += 1
                     row["TmCF"] += 1
-        if stat in of_all_opp_shots_stats:
-            if goal_event["event_name"] == "of_all_opp_shots":
+        if stat in all_opp_shots_stats:
+            if goal_event["event_name"] == "all_opp_shots":
                 if determine_event_match(goal_event, qualifiers, player_game_info, og_row, is_off_ice=True):
                     row["offICA"] += 1
                     row["OppCF"] += 1
-        if stat in of_all_team_unblocked_shots_stats:
-            if goal_event["event_name"] == "of_all_team_unblocked_shots":
+        if stat in all_team_unblocked_shots_stats:
+            if goal_event["event_name"] == "all_team_unblocked_shots":
                 if determine_event_match(goal_event, qualifiers, player_game_info, og_row, is_off_ice=True):
                     row["offIFF"] += 1
                     row["TmFF"] += 1
-        if stat in of_all_opp_unblocked_shots_stats:
-            if goal_event["event_name"] == "of_all_opp_unblocked_shots":
+        if stat in all_opp_unblocked_shots_stats:
+            if goal_event["event_name"] == "all_opp_unblocked_shots":
                 if determine_event_match(goal_event, qualifiers, player_game_info, og_row, is_off_ice=True):
                     row["offIFA"] += 1
                     row["OppFF"] += 1
-        if stat in of_all_team_shots_og_stats:
-            if goal_event["event_name"] == "of_all_team_shots_og":
+        if stat in all_team_shots_og_stats:
+            if goal_event["event_name"] == "all_team_shots_og":
                 if determine_event_match(goal_event, qualifiers, player_game_info, og_row, is_off_ice=True):
                     row["offISF"] += 1
                     row["TmSF"] += 1
-        if stat in of_all_opp_shots_og_stats:
-            if goal_event["event_name"] == "of_all_opp_shots_og":
+        if stat in all_opp_shots_og_stats:
+            if goal_event["event_name"] == "all_opp_shots_og":
                 if determine_event_match(goal_event, qualifiers, player_game_info, og_row, is_off_ice=True):
                     row["offISA"] += 1
                     row["OppSF"] += 1
@@ -20171,30 +20171,30 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                 if is_on_ice != None:
                     if is_on_ice:
                         if scoring_play["team"]["id"] == game_data["team_id"]:
-                            game_data["all_team_goals"].append({**shared_data, **{}})
+                            game_data["oi_all_team_goals"].append({**shared_data, **{}})
                             if row_data["Year"] >= 2007:
-                                game_data["all_team_shots"].append({**shared_data, **{}})
-                                game_data["all_team_shots_og"].append({**shared_data, **{}})
-                                game_data["all_team_unblocked_shots"].append({**shared_data, **{}})
+                                game_data["oi_all_team_shots"].append({**shared_data, **{}})
+                                game_data["oi_all_team_shots_og"].append({**shared_data, **{}})
+                                game_data["oi_all_team_unblocked_shots"].append({**shared_data, **{}})
                         else:
-                            game_data["all_opp_goals"].append({**shared_data, **{}})
+                            game_data["oi_all_opp_goals"].append({**shared_data, **{}})
                             if row_data["Year"] >= 2007:
-                                game_data["all_opp_shots"].append({**shared_data, **{}})
-                                game_data["all_opp_shots_og"].append({**shared_data, **{}})
-                                game_data["all_opp_unblocked_shots"].append({**shared_data, **{}})
+                                game_data["oi_all_opp_shots"].append({**shared_data, **{}})
+                                game_data["oi_all_opp_shots_og"].append({**shared_data, **{}})
+                                game_data["oi_all_opp_unblocked_shots"].append({**shared_data, **{}})
+
+                    if scoring_play["team"]["id"] == game_data["team_id"]:
+                        game_data["all_team_goals"].append({**shared_data, **{}})
+                        if row_data["Year"] >= 2007:
+                            game_data["all_team_shots"].append({**shared_data, **{}})
+                            game_data["all_team_shots_og"].append({**shared_data, **{}})
+                            game_data["all_team_unblocked_shots"].append({**shared_data, **{}})
                     else:
-                        if scoring_play["team"]["id"] == game_data["team_id"]:
-                            game_data["of_all_team_goals"].append({**shared_data, **{}})
-                            if row_data["Year"] >= 2007:
-                                game_data["of_all_team_shots"].append({**shared_data, **{}})
-                                game_data["of_all_team_shots_og"].append({**shared_data, **{}})
-                                game_data["of_all_team_unblocked_shots"].append({**shared_data, **{}})
-                        else:
-                            game_data["of_all_opp_goals"].append({**shared_data, **{}})
-                            if row_data["Year"] >= 2007:
-                                game_data["of_all_opp_shots"].append({**shared_data, **{}})
-                                game_data["of_all_opp_shots_og"].append({**shared_data, **{}})
-                                game_data["of_all_opp_unblocked_shots"].append({**shared_data, **{}})
+                        game_data["all_opp_goals"].append({**shared_data, **{}})
+                        if row_data["Year"] >= 2007:
+                            game_data["all_opp_shots"].append({**shared_data, **{}})
+                            game_data["all_opp_shots_og"].append({**shared_data, **{}})
+                            game_data["all_opp_unblocked_shots"].append({**shared_data, **{}})
 
             next_shot_penalty_shot = False
             first_goal = False
@@ -20243,22 +20243,22 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                 if is_on_ice != None:
                     if is_on_ice:
                         if scoring_play["team"]["id"] == game_data["team_id"]:
-                            game_data["all_team_shots"].append({**shared_data, **{}})
-                            game_data["all_team_shots_og"].append({**shared_data, **{}})
-                            game_data["all_team_unblocked_shots"].append({**shared_data, **{}})
+                            game_data["oi_all_team_shots"].append({**shared_data, **{}})
+                            game_data["oi_all_team_shots_og"].append({**shared_data, **{}})
+                            game_data["oi_all_team_unblocked_shots"].append({**shared_data, **{}})
                         else:
-                            game_data["all_opp_shots"].append({**shared_data, **{}})
-                            game_data["all_opp_shots_og"].append({**shared_data, **{}})
-                            game_data["all_opp_unblocked_shots"].append({**shared_data, **{}})
+                            game_data["oi_all_opp_shots"].append({**shared_data, **{}})
+                            game_data["oi_all_opp_shots_og"].append({**shared_data, **{}})
+                            game_data["oi_all_opp_unblocked_shots"].append({**shared_data, **{}})
+
+                    if scoring_play["team"]["id"] == game_data["team_id"]:
+                        game_data["all_team_shots"].append({**shared_data, **{}})
+                        game_data["all_team_shots_og"].append({**shared_data, **{}})
+                        game_data["all_team_unblocked_shots"].append({**shared_data, **{}})
                     else:
-                        if scoring_play["team"]["id"] == game_data["team_id"]:
-                            game_data["of_all_team_shots"].append({**shared_data, **{}})
-                            game_data["of_all_team_shots_og"].append({**shared_data, **{}})
-                            game_data["of_all_team_unblocked_shots"].append({**shared_data, **{}})
-                        else:
-                            game_data["of_all_opp_shots"].append({**shared_data, **{}})
-                            game_data["of_all_opp_shots_og"].append({**shared_data, **{}})
-                            game_data["of_all_opp_unblocked_shots"].append({**shared_data, **{}})
+                        game_data["all_opp_shots"].append({**shared_data, **{}})
+                        game_data["all_opp_shots_og"].append({**shared_data, **{}})
+                        game_data["all_opp_unblocked_shots"].append({**shared_data, **{}})
 
             next_shot_penalty_shot = False
         elif scoring_play["result"]["event"] == "Missed Shot":
@@ -20304,18 +20304,18 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                 if is_on_ice != None:
                     if is_on_ice:
                         if scoring_play["team"]["id"] == game_data["team_id"]:
-                            game_data["all_team_shots"].append({**shared_data, **{}})
-                            game_data["all_team_unblocked_shots"].append({**shared_data, **{}})
+                            game_data["oi_all_team_shots"].append({**shared_data, **{}})
+                            game_data["oi_all_team_unblocked_shots"].append({**shared_data, **{}})
                         else:
-                            game_data["all_opp_shots"].append({**shared_data, **{}})
-                            game_data["all_opp_unblocked_shots"].append({**shared_data, **{}})
+                            game_data["oi_all_opp_shots"].append({**shared_data, **{}})
+                            game_data["oi_all_opp_unblocked_shots"].append({**shared_data, **{}})
+
+                    if scoring_play["team"]["id"] == game_data["team_id"]:
+                        game_data["all_team_shots"].append({**shared_data, **{}})
+                        game_data["all_team_unblocked_shots"].append({**shared_data, **{}})
                     else:
-                        if scoring_play["team"]["id"] == game_data["team_id"]:
-                            game_data["of_all_team_shots"].append({**shared_data, **{}})
-                            game_data["of_all_team_unblocked_shots"].append({**shared_data, **{}})
-                        else:
-                            game_data["of_all_opp_shots"].append({**shared_data, **{}})
-                            game_data["of_all_opp_unblocked_shots"].append({**shared_data, **{}})
+                        game_data["all_opp_shots"].append({**shared_data, **{}})
+                        game_data["all_opp_unblocked_shots"].append({**shared_data, **{}})
 
             next_shot_penalty_shot = False
         elif scoring_play["result"]["event"] == "Penalty":
@@ -20424,14 +20424,14 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
             if is_on_ice != None:
                 if is_on_ice:
                     if scoring_play["team"]["id"] != game_data["team_id"]:
-                        game_data["all_team_shots"].append({**shared_data, **{}})
+                        game_data["oi_all_team_shots"].append({**shared_data, **{}})
                     else:
-                        game_data["all_opp_shots"].append({**shared_data, **{}})
+                        game_data["oi_all_opp_shots"].append({**shared_data, **{}})
+
+                if scoring_play["team"]["id"] != game_data["team_id"]:
+                    game_data["all_team_shots"].append({**shared_data, **{}})
                 else:
-                    if scoring_play["team"]["id"] != game_data["team_id"]:
-                        game_data["of_all_team_shots"].append({**shared_data, **{}})
-                    else:
-                        game_data["of_all_opp_shots"].append({**shared_data, **{}})
+                    game_data["all_opp_shots"].append({**shared_data, **{}})
             next_shot_penalty_shot = False
         elif scoring_play["result"]["event"] == "Faceoff":
             player_faceoff_winner = False
@@ -20535,52 +20535,50 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
 
         for period in game_data["periods"]:
             for second in range(1, game_data["period_length"][period] + 1):
-                is_on_ice = is_player_on_ice(shift_data, None, None, period, second, player_id, True)
-                if is_on_ice == False:
-                    shift_event = {
-                        "period" : period,
-                        "periodTime" : second
-                    }
-                    score_info = get_score_info(game_data["scoring_play_data"], period, second)
-                    shift_event["teamGoals"] = score_info[0]
-                    shift_event["oppGoals"] = score_info[1]
-                    shift_event["goalMargin"] = score_info[0] - score_info[1]
+                shift_event = {
+                    "period" : period,
+                    "periodTime" : second
+                }
+                score_info = get_score_info(game_data["scoring_play_data"], period, second)
+                shift_event["teamGoals"] = score_info[0]
+                shift_event["oppGoals"] = score_info[1]
+                shift_event["goalMargin"] = score_info[0] - score_info[1]
 
-                    if row_data["is_playoffs"] or shift_event["period"] <= 3:
-                        time_to_use = 1200
-                    elif row_data["Year"] <= 1942:
-                        time_to_use = 600
-                    else:
-                        time_to_use = 300
+                if row_data["is_playoffs"] or shift_event["period"] <= 3:
+                    time_to_use = 1200
+                elif row_data["Year"] <= 1942:
+                    time_to_use = 600
+                else:
+                    time_to_use = 300
 
-                    shift_event["periodTimeRemaining"] = time_to_use - shift_event["periodTime"]
+                shift_event["periodTimeRemaining"] = time_to_use - shift_event["periodTime"]
 
-                    shift_event["event_id"] = str(period) + "-"  + str(second)
+                shift_event["event_id"] = str(period) + "-"  + str(second)
 
-                    if ("Event Time" in time_frame["qualifiers"] or "Local Event Time" in time_frame["qualifiers"]):
-                        if faceoff_time_information:
-                            if period in faceoff_time_information:
-                                faceoff_times = sorted(faceoff_time_information[period].keys())
-                                for faceoff_index, faceoff_time in enumerate(faceoff_times):
-                                    if faceoff_time == second:
-                                        shift_event["event_time"] = faceoff_time_information[period][faceoff_time]
-                                    elif faceoff_time > second:
-                                        if faceoff_index != 0:
-                                            faceoff_time = faceoff_times[faceoff_index - 1]
-                                            faceoff_event_time = faceoff_time_information[period][faceoff_time]
-
-                                            shift_event["event_time"] = faceoff_event_time + datetime.timedelta(seconds=(second - faceoff_time))
-                                if faceoff_times and not "event_time" in shift_event:
-                                    faceoff_time = faceoff_times[len(faceoff_times) - 1]
-                                    if faceoff_time < second:
+                if ("Event Time" in time_frame["qualifiers"] or "Local Event Time" in time_frame["qualifiers"]):
+                    if faceoff_time_information:
+                        if period in faceoff_time_information:
+                            faceoff_times = sorted(faceoff_time_information[period].keys())
+                            for faceoff_index, faceoff_time in enumerate(faceoff_times):
+                                if faceoff_time == second:
+                                    shift_event["event_time"] = faceoff_time_information[period][faceoff_time]
+                                elif faceoff_time > second:
+                                    if faceoff_index != 0:
+                                        faceoff_time = faceoff_times[faceoff_index - 1]
                                         faceoff_event_time = faceoff_time_information[period][faceoff_time]
-                                        
+
                                         shift_event["event_time"] = faceoff_event_time + datetime.timedelta(seconds=(second - faceoff_time))
+                            if faceoff_times and not "event_time" in shift_event:
+                                faceoff_time = faceoff_times[len(faceoff_times) - 1]
+                                if faceoff_time < second:
+                                    faceoff_event_time = faceoff_time_information[period][faceoff_time]
+                                    
+                                    shift_event["event_time"] = faceoff_event_time + datetime.timedelta(seconds=(second - faceoff_time))
 
-                        if not "event_time" in shift_event:
-                            game_data["missing_toi"] = True
+                    if not "event_time" in shift_event:
+                        game_data["missing_toi"] = True
 
-                    game_data["oi_shift_events"].append(shift_event)
+                game_data["all_shift_events"].append(shift_event)
 
     for event_str in game_data:
         if not isinstance(game_data[event_str], list):
@@ -20672,14 +20670,14 @@ def setup_game_data(player_data, row_data, player_id, player_type, time_frame):
         "all_opp_shots" : [],
         "all_opp_shots_og" : [],
         "all_opp_unblocked_shots" : [],
-        "of_all_team_goals" : [],
-        "of_all_team_shots" : [],
-        "of_all_team_shots_og" : [],
-        "of_all_team_unblocked_shots" : [],
-        "of_all_opp_goals" : [],
-        "of_all_opp_shots" : [],
-        "of_all_opp_shots_og" : [],
-        "of_all_opp_unblocked_shots" : [],
+        "oi_all_team_goals" : [],
+        "oi_all_team_shots" : [],
+        "oi_all_team_shots_og" : [],
+        "oi_all_team_unblocked_shots" : [],
+        "oi_all_opp_goals" : [],
+        "oi_all_opp_shots" : [],
+        "oi_all_opp_shots_og" : [],
+        "oi_all_opp_unblocked_shots" : [],
         "is_playoffs" : row_data["is_playoffs"],
         "Fight" : 0,
         "FirstStar" : 0,
@@ -20695,7 +20693,7 @@ def setup_game_data(player_data, row_data, player_id, player_type, time_frame):
         "shift_data" : {},
         "all_events" : {},
         "shift_events" : [],
-        "oi_shift_events" : [],
+        "all_shift_events" : [],
         "player_side_map" : {},
         "player_first_name_map" : {},
         "player_last_name_map" : {},
@@ -20956,6 +20954,8 @@ def get_html_game_stats(game_data, missing_games, row_data):
 def setup_href_game_data(player_data, row_data, player_id, player_type, time_frame):
     game_data = {
         "Date" : row_data["Date"],
+        "player_type" : player_type,
+        "player_id" : player_id,
         "team_skaters" : set(),
         "team_goalies" : set(),
         "team_players" : set(),
@@ -20991,14 +20991,14 @@ def setup_href_game_data(player_data, row_data, player_id, player_type, time_fra
         "all_opp_shots" : [],
         "all_opp_shots_og" : [],
         "all_opp_unblocked_shots" : [],
-        "of_all_team_goals" : [],
-        "of_all_team_shots" : [],
-        "of_all_team_shots_og" : [],
-        "of_all_team_unblocked_shots" : [],
-        "of_all_opp_goals" : [],
-        "of_all_opp_shots" : [],
-        "of_all_opp_shots_og" : [],
-        "of_all_opp_unblocked_shots" : [],
+        "oi_all_team_goals" : [],
+        "oi_all_team_shots" : [],
+        "oi_all_team_shots_og" : [],
+        "oi_all_team_unblocked_shots" : [],
+        "oi_all_opp_goals" : [],
+        "oi_all_opp_shots" : [],
+        "oi_all_opp_shots_og" : [],
+        "oi_all_opp_unblocked_shots" : [],
         "is_playoffs" : row_data["is_playoffs"],
         "Fight" : 0,
         "FirstStar" : 0,
@@ -21012,6 +21012,14 @@ def setup_href_game_data(player_data, row_data, player_id, player_type, time_fra
         "is_shootout" : False,
         "period_length" : {},
         "shift_data" : {},
+        "all_events" : {},
+        "shift_events" : [],
+        "all_shift_events" : [],
+        "player_side_map" : {},
+        "player_first_name_map" : {},
+        "player_last_name_map" : {},
+        "player_birth_country_map" : {},
+        "player_nationality_map" : {},
         "Referee" : [],
         "RefereeID" : [],
         "Linesman" : [],
@@ -24072,15 +24080,15 @@ def perform_metadata_quals(qualifiers, player_type, row, player_game_info, nhl_p
                         row["Fight"] += 1
                 else:
                     row["PenDrawn"] += 1
-        for goal_event in player_game_info["all_team_goals"]:
-            if perform_metadata_qual("all_team_goals", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], skip_career_events=skip_career_events):
+        for goal_event in player_game_info["oi_all_team_goals"]:
+            if perform_metadata_qual("oi_all_team_goals", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], skip_career_events=skip_career_events):
                 row["GF"] += 1
                 if goal_event["strength"] == "EVEN" or goal_event["strength"] != "PPG":
                     row["PlusMinus"] += 1
                     if goal_event["strength"] == "EVEN":
                         row["EVGF"] += 1
-        for goal_event in player_game_info["all_opp_goals"]:
-            if perform_metadata_qual("all_opp_goals", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], skip_career_events=skip_career_events):
+        for goal_event in player_game_info["oi_all_opp_goals"]:
+            if perform_metadata_qual("oi_all_opp_goals", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], skip_career_events=skip_career_events):
                 row["GA"] += 1
                 if goal_event["strength"] == "EVEN" or goal_event["strength"] != "SHG":
                     row["PlusMinus"] -= 1
@@ -24116,62 +24124,62 @@ def perform_metadata_quals(qualifiers, player_type, row, player_game_info, nhl_p
                 if perform_metadata_qual("missed_shot_against", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], skip_career_events=skip_career_events):
                     row["SV"] += 1
                     row["SA"] += 1
-        for goal_event in player_game_info["all_team_goals"]:
-            if perform_metadata_qual("all_team_goals", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], skip_career_events=skip_career_events):
+        for goal_event in player_game_info["oi_all_team_goals"]:
+            if perform_metadata_qual("oi_all_team_goals", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], skip_career_events=skip_career_events):
                 row["GF"] += 1
 
-    for goal_event in player_game_info["all_team_shots_og"]:
-        if perform_metadata_qual("all_team_shots_og", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], skip_career_events=skip_career_events):
+    for goal_event in player_game_info["oi_all_team_shots_og"]:
+        if perform_metadata_qual("oi_all_team_shots_og", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], skip_career_events=skip_career_events):
             row["oiTmS"] += 1
             row["TmSF"] += 1
-    for goal_event in player_game_info["all_opp_shots_og"]:
+    for goal_event in player_game_info["oi_all_opp_shots_og"]:
         if perform_metadata_qual("all_opp_shots_og", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], skip_career_events=skip_career_events):
             row["oiOppS"] += 1
             row["OppSF"] += 1
-    for goal_event in player_game_info["all_team_shots"]:
-        if perform_metadata_qual("all_team_shots", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], skip_career_events=skip_career_events):
+    for goal_event in player_game_info["oi_all_team_shots"]:
+        if perform_metadata_qual("oi_all_team_shots", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], skip_career_events=skip_career_events):
             row["CF"] += 1
             row["TmCF"] += 1
-    for goal_event in player_game_info["all_opp_shots"]:
-        if perform_metadata_qual("all_opp_shots", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], skip_career_events=skip_career_events):
+    for goal_event in player_game_info["oi_all_opp_shots"]:
+        if perform_metadata_qual("oi_all_opp_shots", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], skip_career_events=skip_career_events):
             row["CA"] += 1
             row["OppCF"] += 1
-    for goal_event in player_game_info["all_team_unblocked_shots"]:
-        if perform_metadata_qual("all_team_unblocked_shots", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], skip_career_events=skip_career_events):
+    for goal_event in player_game_info["oi_all_team_unblocked_shots"]:
+        if perform_metadata_qual("oi_all_team_unblocked_shots", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], skip_career_events=skip_career_events):
             row["FF"] += 1
             row["TmFF"] += 1
-    for goal_event in player_game_info["all_opp_unblocked_shots"]:
-        if perform_metadata_qual("all_opp_unblocked_shots", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], skip_career_events=skip_career_events):
+    for goal_event in player_game_info["oi_all_opp_unblocked_shots"]:
+        if perform_metadata_qual("oi_all_opp_unblocked_shots", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], skip_career_events=skip_career_events):
             row["FA"] += 1
             row["OppFF"] += 1
-    for goal_event in player_game_info["of_all_team_goals"]:
-        if perform_metadata_qual("of_all_team_goals", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], is_off_ice=True, skip_career_events=skip_career_events):
+    for goal_event in player_game_info["all_team_goals"]:
+        if perform_metadata_qual("all_team_goals", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], is_off_ice=True, skip_career_events=skip_career_events):
             row["offIGF"] += 1
-    for goal_event in player_game_info["of_all_opp_goals"]:
-        if perform_metadata_qual("of_all_opp_goals", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], is_off_ice=True, skip_career_events=skip_career_events):
+    for goal_event in player_game_info["all_opp_goals"]:
+        if perform_metadata_qual("all_opp_goals", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], is_off_ice=True, skip_career_events=skip_career_events):
             row["offIGA"] += 1
-    for goal_event in player_game_info["of_all_team_shots"]:
-        if perform_metadata_qual("of_all_team_shots", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], is_off_ice=True, skip_career_events=skip_career_events):
+    for goal_event in player_game_info["all_team_shots"]:
+        if perform_metadata_qual("all_team_shots", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], is_off_ice=True, skip_career_events=skip_career_events):
             row["offICF"] += 1
             row["TmCF"] += 1
-    for goal_event in player_game_info["of_all_opp_shots"]:
-        if perform_metadata_qual("of_all_opp_shots", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], is_off_ice=True, skip_career_events=skip_career_events):
+    for goal_event in player_game_info["all_opp_shots"]:
+        if perform_metadata_qual("all_opp_shots", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], is_off_ice=True, skip_career_events=skip_career_events):
             row["offICA"] += 1
             row["OppCF"] += 1
-    for goal_event in player_game_info["of_all_team_unblocked_shots"]:
-        if perform_metadata_qual("of_all_team_unblocked_shots", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], is_off_ice=True, skip_career_events=skip_career_events):
+    for goal_event in player_game_info["all_team_unblocked_shots"]:
+        if perform_metadata_qual("all_team_unblocked_shots", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], is_off_ice=True, skip_career_events=skip_career_events):
             row["offIFF"] += 1
             row["TmFF"] += 1
-    for goal_event in player_game_info["of_all_opp_unblocked_shots"]:
-        if perform_metadata_qual("of_all_opp_unblocked_shots", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], is_off_ice=True, skip_career_events=skip_career_events):
+    for goal_event in player_game_info["all_opp_unblocked_shots"]:
+        if perform_metadata_qual("all_opp_unblocked_shots", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], is_off_ice=True, skip_career_events=skip_career_events):
             row["offIFA"] += 1
             row["OppFF"] += 1
-    for goal_event in player_game_info["of_all_team_shots_og"]:
-        if perform_metadata_qual("of_all_team_shots_og", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], is_off_ice=True, skip_career_events=skip_career_events):
+    for goal_event in player_game_info["all_team_shots_og"]:
+        if perform_metadata_qual("all_team_shots_og", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], is_off_ice=True, skip_career_events=skip_career_events):
             row["offISF"] += 1
             row["TmSF"] += 1
-    for goal_event in player_game_info["of_all_opp_shots_og"]:
-        if perform_metadata_qual("of_all_opp_shots_og", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], is_off_ice=True, skip_career_events=skip_career_events):
+    for goal_event in player_game_info["all_opp_shots_og"]:
+        if perform_metadata_qual("all_opp_shots_og", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], is_off_ice=True, skip_career_events=skip_career_events):
             row["offISA"] += 1
             row["OppSF"] += 1
 
@@ -24196,10 +24204,11 @@ def calculate_toi(row, qualifiers, player_game_info, player_id, player_link, sav
     
     row["GP_TOI"] = 1
 
+
     matching_shifts = set()
     for shift_event in player_game_info["shift_events"]:
         if perform_on_ice_quals(qualifiers, shift_data, shift_event, row, shift_event["period"], shift_event["periodTime"]):
-            if perform_metadata_qual("shift", shift_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], is_toi=True, skip_career_events=skip_career_events):
+            if perform_metadata_qual("shift_events", shift_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], is_toi=True, skip_career_events=skip_career_events):
                 row["TOI"] += 1
                 row["TtlTOI"] += 1
                 if not ("strength-stats" in extra_stats or "hide-strength" in extra_stats) or "strength" in extra_stats:
@@ -24211,9 +24220,9 @@ def calculate_toi(row, qualifiers, player_game_info, player_id, player_link, sav
                     row["Shft"] += 1
                     matching_shifts.add(shift_event["shift_index"])
     
-    for shift_event in player_game_info["oi_shift_events"]:
+    for shift_event in player_game_info["all_shift_events"]:
         if perform_on_ice_quals(qualifiers, shift_data, shift_event, row, shift_event["period"], shift_event["periodTime"]):
-            if perform_metadata_qual("shift_oi", shift_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], is_toi=True, is_off_ice=True, skip_career_events=skip_career_events):
+            if perform_metadata_qual("all_shift_events", shift_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], is_toi=True, is_off_ice=True, skip_career_events=skip_career_events):
                 row["offITOI"] += 1
                 row["TtlTOI"] += 1
 
@@ -24752,12 +24761,20 @@ def perform_metadata_qual(event_name, goal_event, qualifiers, player_game_info, 
             return False
     
     if "On Line With" in qualifiers:
-        if not perform_sub_on_ice_qual(qualifiers["On Line With"], player_game_info["shift_data"], goal_event, row, goal_event["period"], goal_event["periodTime"], True, is_faceoff, False, is_off_ice):
-            return False
+        if is_off_ice:
+            if not perform_sub_line_on_ice_qual(qualifiers["On Line With"], player_game_info["shift_data"], player_game_info["player_id"], goal_event, row, goal_event["period"], goal_event["periodTime"], True, is_faceoff):
+                return False
+        else:
+            if not perform_sub_on_ice_qual(qualifiers["On Line With"], player_game_info["shift_data"], goal_event, row, goal_event["period"], goal_event["periodTime"], True, is_faceoff, False):
+                return False
     
     if "On Line Against" in qualifiers:
-        if not perform_sub_on_ice_qual(qualifiers["On Line Against"], player_game_info["shift_data"], goal_event, row, goal_event["period"], goal_event["periodTime"], False, is_faceoff, False, is_off_ice):
-            return False
+        if is_off_ice:
+            if not perform_sub_line_on_ice_qual(qualifiers["On Line Against"], player_game_info["shift_data"], player_game_info["player_id"], goal_event, row, goal_event["period"], goal_event["periodTime"], False, is_faceoff):
+                return False
+        else:
+            if not perform_sub_on_ice_qual(qualifiers["On Line Against"], player_game_info["shift_data"], goal_event, row, goal_event["period"], goal_event["periodTime"], False, is_faceoff, False):
+                return False
 
     if "Team Score" in qualifiers:
         if not perform_sub_metadata_qual(goal_event, "teamGoals", qualifiers["Team Score"], player_game_info, year):
@@ -25292,6 +25309,13 @@ def perform_metadata_qual(event_name, goal_event, qualifiers, player_game_info, 
         if not has_any_match:
             return False
 
+    if is_off_ice and not ("On Line With" in qualifiers or "On Line Against" in qualifiers):
+        team_on_ice = goal_event["team_on_ice"] if "team_on_ice" in goal_event else None
+        opp_on_ice = goal_event["opp_on_ice"] if "opp_on_ice" in goal_event else None
+        is_on_ice = is_player_on_ice(player_game_info["shift_data"], team_on_ice, opp_on_ice, goal_event["period"], goal_event["periodTime"], player_game_info["player_id"], True)
+        if is_on_ice:
+            return False
+
     return True
 
 def handle_stat_num_qual(goal_event, qualifiers, is_reversed, is_career, is_starting):
@@ -25384,7 +25408,7 @@ def perform_on_ice_quals(qualifiers, shift_data, goal_event, row, period, second
 
     return True
 
-def perform_sub_on_ice_qual(qualifers, shift_data, goal_event, row, period, second, is_team, is_faceoff, skip_negative, is_off_ice=False):
+def perform_sub_on_ice_qual(qualifers, shift_data, goal_event, row, period, second, is_team, is_faceoff, skip_negative):
     has_row_match = True
     team_on_ice = goal_event["team_on_ice"] if "team_on_ice" in goal_event else None
     opp_on_ice = goal_event["opp_on_ice"] if "opp_on_ice" in goal_event else None
@@ -25403,9 +25427,6 @@ def perform_sub_on_ice_qual(qualifers, shift_data, goal_event, row, period, seco
             if not has_match:
                 return False
 
-        if is_off_ice:
-            negate = not negate
-
         has_match = False
         for player in qual_object["values"]:
             is_on_ice = is_player_on_ice(shift_data, team_on_ice, opp_on_ice, period, second, player["nhl_id"], is_team, is_faceoff)
@@ -25417,6 +25438,20 @@ def perform_sub_on_ice_qual(qualifers, shift_data, goal_event, row, period, seco
         else:
             if not has_match:
                 has_row_match = False
+
+    return has_row_match
+
+def perform_sub_line_on_ice_qual(qualifers, shift_data, player_id, goal_event, row, period, second, is_team, is_faceoff):
+    team_on_ice = goal_event["team_on_ice"] if "team_on_ice" in goal_event else None
+    opp_on_ice = goal_event["opp_on_ice"] if "opp_on_ice" in goal_event else None
+    has_row_match = perform_sub_on_ice_qual(qualifers, shift_data, goal_event, row, period, second, is_team, is_faceoff, False)
+
+    if has_row_match:
+        is_on_ice = is_player_on_ice(shift_data, team_on_ice, opp_on_ice, period, second, player_id, True, is_faceoff)
+        if is_on_ice:
+            has_row_match = False
+    else:
+        has_row_match = True
 
     return has_row_match
 
@@ -34481,22 +34516,38 @@ def print_player_data(player_datas, player_type, highest_vals, lowest_vals, has_
                     override_show = True
                 if "Shot On" in extra_stats and ("EVG" in header or "PPG" in header or "SHG" in header):
                     override_show = True
+                    if header == "TOI" or header == "EVTOI" or header == "PPTOI" or header == "SHTOI":
+                        override_show = True
                 if "Shot By" in extra_stats and ("EV" in header or "PP" in header or "SH" in header) and not "SH%" in header:
                     override_show = True
+                    if header == "TOI" or header == "EVTOI" or header == "PPTOI" or header == "SHTOI":
+                        override_show = True
                 if "Assisted On" in extra_stats and ("A1" in header or "EVA" in header or "PPA" in header or "SHA" in header):
                     override_show = True
+                    if header == "TOI" or header == "EVTOI" or header == "PPTOI" or header == "SHTOI":
+                        override_show = True
                 if "Assisted By" in extra_stats and ("EVG" in header or "PPG" in header or "SHG" in header):
                     override_show = True
+                    if header == "TOI" or header == "EVTOI" or header == "PPTOI" or header == "SHTOI":
+                        override_show = True
                 if "Faceoff Against" in extra_stats and "FO" in header:
                     override_show = True
+                    if header == "TOI" or header == "EVTOI" or header == "PPTOI" or header == "SHTOI":
+                        override_show = True
                 if "Points On" in extra_stats and ("P1" in header or "EVP" in header or "PPP" in header or "SHP" in header):
                     override_show = True
+                    if header == "TOI" or header == "EVTOI" or header == "PPTOI" or header == "SHTOI":
+                        override_show = True
                 if "scoring-stats" in extra_stats and ("EVG" in header or "PPG" in header or "SHG" in header or "A1" in header or "EVA" in header or "PPA" in header or "SHA" in header or "P1" in header or "EVP" in header or "PPP" in header or "SHP" in header):
                     override_show = True
                 if "Hit On" in extra_stats and header in ("HIT/GP"):
                     override_show = True
+                    if header == "TOI" or header == "EVTOI" or header == "PPTOI" or header == "SHTOI":
+                        override_show = True
                 if "Block On" in extra_stats and header in ("BLK/GP"):
                     override_show = True
+                    if header == "TOI" or header == "EVTOI" or header == "PPTOI" or header == "SHTOI":
+                        override_show = True
                 if "current-stats" in extra_stats or "current-stats-zone" in extra_stats:
                     if header in ("1stG", "PostBar", "Post/60M", "TK", "GV", "TK/GV", "TK/60M", "GV/60M", "GF/60M", "GA/60M", "GFPer", "CF/60M", "CA/60M", "CFPer", "FF/60M", "FA/60M", "FFPer", "SF/60M", "SA/60M", "SFPer", "OZ%", "oiSPer", "oiSVPer", "PDO", "oiSRelPer", "oiSVRelPer", "PDORel"):
                         override_show = True
@@ -34505,6 +34556,8 @@ def print_player_data(player_datas, player_type, highest_vals, lowest_vals, has_
                     if "TSA" in header or header == "SThr%" or header == "TS%" or header == "TOI%":
                         override_show = True
                     if "shift" in extra_stats and "Shft" in header:
+                        override_show = True
+                    if header == "TOI" or header == "EVTOI" or header == "PPTOI" or header == "SHTOI":
                         override_show = True
                 if seasons_leading and header in div_id_to_stat[player_type["da_type"]["type"]].values():
                     override_show = True
@@ -34920,22 +34973,38 @@ def get_reddit_player_table(player_datas, player_type, debug_mode, original_comm
                     override_show = True
                 if "Shot On" in extra_stats and ("EVG" in header or "PPG" in header or "SHG" in header):
                     override_show = True
+                    if header == "TOI" or header == "EVTOI" or header == "PPTOI" or header == "SHTOI":
+                        override_show = True
                 if "Shot By" in extra_stats and ("EV" in header or "PP" in header or "SH" in header) and not "SH%" in header:
                     override_show = True
+                    if header == "TOI" or header == "EVTOI" or header == "PPTOI" or header == "SHTOI":
+                        override_show = True
                 if "Assisted On" in extra_stats and ("A1" in header or "EVA" in header or "PPA" in header or "SHA" in header):
                     override_show = True
+                    if header == "TOI" or header == "EVTOI" or header == "PPTOI" or header == "SHTOI":
+                        override_show = True
                 if "Assisted By" in extra_stats and ("EVG" in header or "PPG" in header or "SHG" in header):
                     override_show = True
+                    if header == "TOI" or header == "EVTOI" or header == "PPTOI" or header == "SHTOI":
+                        override_show = True
                 if "Faceoff Against" in extra_stats and "FO" in header:
                     override_show = True
+                    if header == "TOI" or header == "EVTOI" or header == "PPTOI" or header == "SHTOI":
+                        override_show = True
                 if "Points On" in extra_stats and ("P1" in header or "EVP" in header or "PPP" in header or "SHP" in header):
                     override_show = True
+                    if header == "TOI" or header == "EVTOI" or header == "PPTOI" or header == "SHTOI":
+                        override_show = True
                 if "scoring-stats" in extra_stats and ("EVG" in header or "PPG" in header or "SHG" in header or "A1" in header or "EVA" in header or "PPA" in header or "SHA" in header or "P1" in header or "EVP" in header or "PPP" in header or "SHP" in header):
                     override_show = True
                 if "Hit On" in extra_stats and header in ("HIT/GP"):
                     override_show = True
+                    if header == "TOI" or header == "EVTOI" or header == "PPTOI" or header == "SHTOI":
+                        override_show = True
                 if "Block On" in extra_stats and header in ("BLK/GP"):
                     override_show = True
+                    if header == "TOI" or header == "EVTOI" or header == "PPTOI" or header == "SHTOI":
+                        override_show = True
                 if "current-stats" in extra_stats or "current-stats-zone" in extra_stats:
                     if header in ("1stG", "PostBar", "Post/60M", "TK", "GV", "TK/GV", "TK/60M", "GV/60M", "GF/60M", "GA/60M", "GFPer", "CF/60M", "CA/60M", "CFPer", "FF/60M", "FA/60M", "FFPer", "SF/60M", "SA/60M", "SFPer", "OZ%", "oiSPer", "oiSVPer", "PDO", "oiSRelPer", "oiSVRelPer", "PDORel"):
                         override_show = True
@@ -34944,6 +35013,8 @@ def get_reddit_player_table(player_datas, player_type, debug_mode, original_comm
                     if "TSA" in header or header == "SThr%" or header == "TS%" or header == "TOI%":
                         override_show = True
                     if "shift" in extra_stats and "Shft" in header:
+                        override_show = True
+                    if header == "TOI" or header == "EVTOI" or header == "PPTOI" or header == "SHTOI":
                         override_show = True
                 if seasons_leading and header in div_id_to_stat[player_type["da_type"]["type"]].values():
                     override_show = True
@@ -35703,22 +35774,38 @@ def handle_table_data(player_data, player_type, over_header, header, highest_val
         override_show = True
     if "Shot On" in extra_stats and ("EVG" in header or "PPG" in header or "SHG" in header):
         override_show = True
+        if header == "TOI" or header == "EVTOI" or header == "PPTOI" or header == "SHTOI":
+            override_show = True
     if "Shot By" in extra_stats and ("EV" in header or "PP" in header or "SH" in header) and not "SH%" in header:
         override_show = True
+        if header == "TOI" or header == "EVTOI" or header == "PPTOI" or header == "SHTOI":
+            override_show = True
     if "Assisted On" in extra_stats and ("A1" in header or "EVA" in header or "PPA" in header or "SHA" in header):
         override_show = True
+        if header == "TOI" or header == "EVTOI" or header == "PPTOI" or header == "SHTOI":
+            override_show = True
     if "Assisted By" in extra_stats and ("EVG" in header or "PPG" in header or "SHG" in header):
         override_show = True
+        if header == "TOI" or header == "EVTOI" or header == "PPTOI" or header == "SHTOI":
+            override_show = True
     if "Faceoff Against" in extra_stats and "FO" in header:
         override_show = True
+        if header == "TOI" or header == "EVTOI" or header == "PPTOI" or header == "SHTOI":
+            override_show = True
     if "Points On" in extra_stats and ("P1" in header or "EVP" in header or "PPP" in header or "SHP" in header):
         override_show = True
+        if header == "TOI" or header == "EVTOI" or header == "PPTOI" or header == "SHTOI":
+            override_show = True
     if "scoring-stats" in extra_stats and ("EVG" in header or "PPG" in header or "SHG" in header or "A1" in header or "EVA" in header or "PPA" in header or "SHA" in header or "P1" in header or "EVP" in header or "PPP" in header or "SHP" in header):
         override_show = True
     if "Hit On" in extra_stats and header in ("HIT/GP"):
         override_show = True
+        if header == "TOI" or header == "EVTOI" or header == "PPTOI" or header == "SHTOI":
+            override_show = True
     if "Block On" in extra_stats and header in ("BLK/GP"):
         override_show = True
+        if header == "TOI" or header == "EVTOI" or header == "PPTOI" or header == "SHTOI":
+            override_show = True
     if "current-stats" in extra_stats or "current-stats-zone" in extra_stats:
         if header in ("1stG", "PostBar", "Post/60M", "TK", "GV", "TK/GV", "TK/60M", "GV/60M", "GF/60M", "GA/60M", "GFPer", "CF/60M", "CA/60M", "CFPer", "FF/60M", "FA/60M", "FFPer", "SF/60M", "SA/60M", "SFPer", "OZ%", "oiSPer", "oiSVPer", "PDO", "oiSRelPer", "oiSVRelPer", "PDORel"):
             override_show = True
@@ -35727,6 +35814,8 @@ def handle_table_data(player_data, player_type, over_header, header, highest_val
         if "TSA" in header or header == "SThr%" or header == "TS%" or header == "TOI%":
             override_show = True
         if "shift" in extra_stats and "Shft" in header:
+            override_show = True
+        if header == "TOI" or header == "EVTOI" or header == "PPTOI" or header == "SHTOI":
             override_show = True
 
     seasons_leading = 0
