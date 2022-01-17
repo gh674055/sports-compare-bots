@@ -7680,7 +7680,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                             extra_stats.add(m.group(1))
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
                         
-                        last_match = re.finditer(r"\bshow(?: |-)?(only(?: |-)?)?(goalie-record|record|faceoff|slash|score|goal|year|games?-count|seasons-leading|season|date|per-game|game|adjusted|advanced|relative|missing-game|missing-toi|best-season|worst-season|ng|team|franchise|number|fight|penalty-taken|penalties-taken|penaltie|penalty|award|toi|shot|shift|star|play|nhl-link|strength)s?\b", time_frame)
+                        last_match = re.finditer(r"\bshow(?: |-)?(only(?: |-)?)?(goalie-record|record|faceoff|slash|score|goal|year|games?-count|seasons-leading|season|date|per-game|game|adjusted|advanced|relative|missing-game|missing-toi|best-season|worst-season|ng|team|franchise|number|fight|penalty-taken|penalties-taken|penaltie|penalty|award|toi|shot|shift|star|play|nhl-link|strength|toi)s?\b", time_frame)
                         for m in last_match:
                             if "penalt" in m.group(2):
                                 extra_stats.add("penalties")
@@ -7745,6 +7745,17 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                     player_type["da_type"] = {
                                         "type" : "Skater"
                                     }
+                                elif m.group(2) == "toi":
+                                    extra_stats.add("show-only-stat-toi")
+                                    extra_stats.add("show-only-stat-evtoi")
+                                    extra_stats.add("show-only-stat-pptoi")
+                                    extra_stats.add("show-only-stat-shtoi")
+                                    extra_stats.add("show-only-stat-toi_5v5")
+                                    extra_stats.add("show-only-stat-toi/gp")
+                                    extra_stats.add("show-only-stat-evtoi/gp")
+                                    extra_stats.add("show-only-stat-pptoi/gp")
+                                    extra_stats.add("show-only-stat-shtoi/gp")
+                                    extra_stats.add("show-only-stat-toi_5v5/gp")
 
                             if m.group(1):
                                 if m.group(2) == "record":
@@ -13599,7 +13610,7 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
                 if True:# in sub_player_data["game_valid_years"]:
                     date_end = "[" + str(date_end) + "](" + game_splits_url_format.format(sub_player_data["id"][0], sub_player_data["id"], str(display_end_year + 1)) + ")"
 
-                if "date" not in extra_stats or len(sorted(list(set([row["Date"] for row in sub_player_data["rows"]])))) > 20:
+                if "date" not in extra_stats:
                     if date_start == date_end:
                         raw_sub_range += str(date_start)
                     else:
@@ -13661,7 +13672,7 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
                 else:
                     date_end = str(date_end)
 
-                if "date" not in extra_stats or len(sorted(list(set([row["Date"] for row in sub_player_data["rows"]])))) > 20:
+                if "date" not in extra_stats:
                     if date_start == date_end:
                         raw_sub_range += str(date_start)
                     else:
@@ -13707,8 +13718,11 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
                 raw_time_start = "[" + start_season + " Season - Age: " + start_date_diff_str + "]"
                 raw_time_end = "[" + end_season + " Season - Age: " + end_date_diff_str + "]"
 
-            if "date" in extra_stats and len(sorted(list(set([row["Date"] for row in sub_player_data["rows"]])))) <= 20:
+            if "date" in extra_stats:
                 dates = sorted(list(set([row["Date"] for row in sub_player_data["rows"]])))
+                if len(dates) > 20:
+                    raise CustomMessageException("Cannot show more than 20 dates!")
+
                 for date_start in dates:
                     if isinstance(date_start, int):
                         display_start_year = date_start
@@ -17969,8 +17983,7 @@ def get_nhl_game_schedule(player_data, all_rows, games_to_skip, player_link, pla
     
     # stat_data = {
     #     "primary_assist" : {},
-    #     "all_assist" : {},
-    #     "players" : {}
+    #     "all_assist" : {}
     # }
 
     with ThreadPoolExecutor(max_workers=5) as sub_executor:
@@ -17985,18 +17998,18 @@ def get_nhl_game_schedule(player_data, all_rows, games_to_skip, player_link, pla
     if count_info["exception"]:
         raise count_info["exception"]
 
-    # primary_assisters = [k for k, v in sorted(stat_data["primary_assist"].items(), key=lambda item: item[1], reverse=True)][:10]
-    # secondary_assisters = [k for k, v in sorted(stat_data["all_assist"].items(), key=lambda item: item[1], reverse=True)][:10]
+    # primary_assisters = [k for k, v in sorted(stat_data["primary_assist"].items(), key=lambda item: item[1]["a"], reverse=True)][:10]
+    # all_assisters = [k for k, v in sorted(stat_data["all_assist"].items(), key=lambda item: item[1]["a"], reverse=True)][:10]
 
     # print("Player | Assists")
     # print("---|---")
-    # for secondary in secondary_assisters:
-    #     print(stat_data["players"][secondary] + " | " + str(stat_data["all_assist"][secondary]))
+    # for all_assist in all_assisters:
+    #     print(all_assist + " " + str(stat_data["players"][all_assist]["p"]) + " | " + str(stat_data["all_assist"][all_assist]["a"]))
     # print("----------------------------")
     # print("Player | Primary Assists")
     # print("---|---")
     # for primary in primary_assisters:
-    #     print(stat_data["players"][primary] + " | " + str(stat_data["primary_assist"][primary]))
+    #     print(primary + " " + str(stat_data["players"][primary]["p"]) + " | " + str(stat_data["primary_assist"][primary]["a"]))
 
     return sorted(new_rows, key=lambda row: row["Date"]), missing_games, missing_toi
 
@@ -19720,7 +19733,7 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
     game_data, missing_games, sub_data = setup_game_data(player_data, row_data, player_id, player_type, time_frame)
     if game_data["missing_data"]:
         if "hide-href" not in extra_stats and row_data["Year"] < 2001 and "Game Number" not in time_frame["qualifiers"] and "Attendance" not in time_frame["qualifiers"] and "Start Time" not in time_frame["qualifiers"] and "Team Start Time" not in time_frame["qualifiers"] and "Opponent Start Time" not in time_frame["qualifiers"] and "Local Start Time" not in time_frame["qualifiers"] and "Exact Referee" not in time_frame["qualifiers"] and "Exact Linesman" not in time_frame["qualifiers"] or "Exact Team Head Coach" not in time_frame["qualifiers"] and "Exact Opponent Head Coach" not in time_frame["qualifiers"] and "Official" not in time_frame["qualifiers"] and "Referee" not in time_frame["qualifiers"] and "Linesman" not in time_frame["qualifiers"] and "Team Head Coach" not in time_frame["qualifiers"] and "Opponent Head Coach" not in time_frame["qualifiers"] and "Shot On First Name" not in time_frame["qualifiers"] and "Shot By First Name" not in time_frame["qualifiers"] and "Shot On Last Name" not in time_frame["qualifiers"] and not "Shot By Last Name" in time_frame["qualifiers"] and "Shot On Birth Country" not in time_frame["qualifiers"] and "Shot By Birth Country" not in time_frame["qualifiers"] and "Shot On Nationality" not in time_frame["qualifiers"] and "Shot By Nationality" not in time_frame["qualifiers"] and "Facing Lefty" not in time_frame["qualifiers"] and "Facing Righty" not in time_frame["qualifiers"]:
-            game_data, missing_games, sub_data = setup_href_game_data(player_data, row_data, player_id, player_type, time_frame)
+            game_data, missing_games, sub_data = setup_href_game_data(player_data, row_data, player_id, player_type, time_frame, None)
             if game_data["missing_data"]:
                 return game_data, row_data, missing_games
         else:
@@ -19733,7 +19746,10 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
     if row_data["Year"] < 2001 or has_api_quals(time_frame["qualifiers"]):
         scoring_plays = sub_data["liveData"]["plays"]["allPlays"]
     
-        if not scoring_plays and not has_api_quals(time_frame["qualifiers"]) and (not "Shot On" in time_frame["qualifiers"] and not "Shot By" in time_frame["qualifiers"] and not "Shot On First Name" in time_frame["qualifiers"] and not "Shot By First Name" in time_frame["qualifiers"] and not "Shot On Last Name" in time_frame["qualifiers"] and not "Shot By Last Name" in time_frame["qualifiers"] and not "Shot On Birth Country" in time_frame["qualifiers"] and not "Shot By Birth Country" in time_frame["qualifiers"] and not "Shot On Nationality" in time_frame["qualifiers"] and not "Shot By Nationality" in time_frame["qualifiers"] and not "Facing Lefty" in time_frame["qualifiers"] and not "Facing Righty" in time_frame["qualifiers"]):
+        if "hide-href" not in extra_stats and not scoring_plays and not has_api_quals(time_frame["qualifiers"]) and (not "Shot On" in time_frame["qualifiers"] and not "Shot By" in time_frame["qualifiers"] and not "Shot On First Name" in time_frame["qualifiers"] and not "Shot By First Name" in time_frame["qualifiers"] and not "Shot On Last Name" in time_frame["qualifiers"] and not "Shot By Last Name" in time_frame["qualifiers"] and not "Shot On Birth Country" in time_frame["qualifiers"] and not "Shot By Birth Country" in time_frame["qualifiers"] and not "Shot On Nationality" in time_frame["qualifiers"] and not "Shot By Nationality" in time_frame["qualifiers"] and not "Facing Lefty" in time_frame["qualifiers"] and not "Facing Righty" in time_frame["qualifiers"]):
+            game_data, missing_games, sub_data = setup_href_game_data(player_data, row_data, player_id, player_type, time_frame, game_data)
+            if game_data["missing_data"]:
+                return game_data, row_data, missing_games
             get_href_html_play_data(scoring_plays, player_data, row_data["GameLink"], row_data["Location"], row_data["Tm"], row_data["Opponent"].upper(), game_data, True)
     
     if row_data["Year"] >= 2001 and not has_api_quals(time_frame["qualifiers"]) and not "hude-play" in extra_stats:
@@ -20133,17 +20149,31 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                 }})
                 # if len(assists) > 0:
                 #     primary_assist = assists[0]
-                #     if primary_assist not in stat_data["primary_assist"]:
-                #         stat_data["primary_assist"][primary_assist] = 0
-                #     stat_data["primary_assist"][primary_assist] += 1
-                #     if primary_assist not in stat_data["all_assist"]:
-                #         stat_data["all_assist"][primary_assist] = 0
-                #     stat_data["all_assist"][primary_assist] += 1
+                #     player_name = game_data["player_names"][primary_assist]
+                #     if player_name not in stat_data["primary_assist"]:
+                #         stat_data["primary_assist"][player_name] = {
+                #             "a" : 0,
+                #             "p" : set()
+                #         }
+                #     stat_data["primary_assist"][player_name]["a"] += 1
+                #     stat_data["primary_assist"][player_name]["p"].add(primary_assist)
+                #     if player_name not in stat_data["all_assist"]:
+                #         stat_data["all_assist"][player_name] = {
+                #             "a" : 0,
+                #             "p" : set()
+                #         }
+                #     stat_data["all_assist"][player_name]["a"] += 1
+                #     stat_data["all_assist"][player_name]["p"].add(primary_assist)
                 #     if len(assists) > 1:
                 #         secondary_assist = assists[1]
-                #         if secondary_assist not in stat_data["all_assist"]:
-                #             stat_data["all_assist"][secondary_assist] = 0
-                #         stat_data["all_assist"][secondary_assist] += 1
+                #         player_name = game_data["player_names"][secondary_assist]
+                #         if player_name not in stat_data["all_assist"]:
+                #             stat_data["all_assist"][player_name] = {
+                #             "a" : 0,
+                #             "p" : set()
+                #         }
+                #         stat_data["all_assist"][player_name]["a"] += 1
+                #         stat_data["all_assist"][player_name]["p"].add(secondary_assist)
             elif player_assisted:
                 game_data["assist"].append({**shared_data , **{
                     "scorer" : scorer,
@@ -20694,6 +20724,7 @@ def setup_game_data(player_data, row_data, player_id, player_type, time_frame):
         "all_events" : {},
         "shift_events" : [],
         "all_shift_events" : [],
+        "player_names" : {},
         "player_side_map" : {},
         "player_first_name_map" : {},
         "player_last_name_map" : {},
@@ -20762,7 +20793,6 @@ def setup_game_data(player_data, row_data, player_id, player_type, time_frame):
             game_data["team_skaters"].add(player["person"]["id"])
         
         game_data["team_players"].add(player["person"]["id"])
-        # stat_data["players"][player["person"]["id"]] = player["person"]["fullName"]
 
         if "shootsCatches" in player["person"] and player["person"]["shootsCatches"]:
             game_data["player_side_map"][player["person"]["id"]] = player["person"]["shootsCatches"]
@@ -20782,7 +20812,6 @@ def setup_game_data(player_data, row_data, player_id, player_type, time_frame):
             game_data["opp_skaters"].add(player["person"]["id"])
         
         game_data["opp_players"].add(player["person"]["id"])
-        # stat_data["players"][player["person"]["id"]] = player["person"]["fullName"]
 
         if "shootsCatches" in player["person"] and player["person"]["shootsCatches"]:
             game_data["player_side_map"][player["person"]["id"]] = player["person"]["shootsCatches"]
@@ -20810,6 +20839,7 @@ def setup_game_data(player_data, row_data, player_id, player_type, time_frame):
                     break
         sub_player = sub_data["gameData"]["players"][player]
         player = sub_data["liveData"]["boxscore"]["teams"][string_to_use]["players"][player]
+        game_data["player_names"][player["person"]["id"]] = sub_player["fullName"]
         game_data["player_first_name_map"][player["person"]["id"]] = sub_player["firstName"]
         game_data["player_last_name_map"][player["person"]["id"]] = sub_player["lastName"]
         game_data["player_birth_country_map"][player["person"]["id"]] = sub_player["birthCountry"]
@@ -20951,87 +20981,91 @@ def get_html_game_stats(game_data, missing_games, row_data):
 
     return missing_games
 
-def setup_href_game_data(player_data, row_data, player_id, player_type, time_frame):
-    game_data = {
-        "Date" : row_data["Date"],
-        "player_type" : player_type,
-        "player_id" : player_id,
-        "team_skaters" : set(),
-        "team_goalies" : set(),
-        "team_players" : set(),
-        "opp_skaters" : set(),
-        "opp_goalies" : set(),
-        "opp_players" : set(),
-        "team_numbers" : {},
-        "opp_numbers" : {},
-        "team_names" : {},
-        "opp_names" : {},
-        "goal" : [],
-        "assist" : [],
-        "goal_against" : [],
-        "save_against" : [],
-        "missed_shot_against" : [],
-        "shot" : [],
-        "missed_shot" : [],
-        "blocked_shot" : [],
-        "hit" : [],
-        "hit_taken" : [],
-        "block" : [],
-        "penalty" : [],
-        "all_penalty" : [],
-        "faceoff" : [],
-        "all_faceoffs" : [],
-        "periods" : [],
-        "takeaway" : [],
-        "all_team_goals" : [],
-        "all_team_shots" : [],
-        "all_team_shots_og" : [],
-        "all_team_unblocked_shots" : [],
-        "all_opp_goals" : [],
-        "all_opp_shots" : [],
-        "all_opp_shots_og" : [],
-        "all_opp_unblocked_shots" : [],
-        "oi_all_team_goals" : [],
-        "oi_all_team_shots" : [],
-        "oi_all_team_shots_og" : [],
-        "oi_all_team_unblocked_shots" : [],
-        "oi_all_opp_goals" : [],
-        "oi_all_opp_shots" : [],
-        "oi_all_opp_shots_og" : [],
-        "oi_all_opp_unblocked_shots" : [],
-        "is_playoffs" : row_data["is_playoffs"],
-        "Fight" : 0,
-        "FirstStar" : 0,
-        "SecondStar" : 0,
-        "ThirdStar" : 0,
-        "Number" : None,
-        "Attendance" : None,
-        "is_playoffs" : row_data["is_playoffs"],
-        "missing_data" : False,
-        "missing_toi" : False,
-        "is_shootout" : False,
-        "period_length" : {},
-        "shift_data" : {},
-        "all_events" : {},
-        "shift_events" : [],
-        "all_shift_events" : [],
-        "player_side_map" : {},
-        "player_first_name_map" : {},
-        "player_last_name_map" : {},
-        "player_birth_country_map" : {},
-        "player_nationality_map" : {},
-        "Referee" : [],
-        "RefereeID" : [],
-        "Linesman" : [],
-        "LinesmanID" : [],
-        "OtherOfficial" : [],
-        "OtherOfficialID" : [],
-        "TmHeadCoach" : None,
-        "OppHeadCoach" : None,
-        "StartTime" : None,
-        "winning_goalie" : 1,
-        "losing_goalie" : 1
-    }
+def setup_href_game_data(player_data, row_data, player_id, player_type, time_frame, game_data):
+    started_with_data = bool(game_data)
+
+    if not started_with_data:
+        game_data = {
+            "Date" : row_data["Date"],
+            "player_type" : player_type,
+            "player_id" : player_id,
+            "team_skaters" : set(),
+            "team_goalies" : set(),
+            "team_players" : set(),
+            "opp_skaters" : set(),
+            "opp_goalies" : set(),
+            "opp_players" : set(),
+            "team_numbers" : {},
+            "opp_numbers" : {},
+            "team_names" : {},
+            "opp_names" : {},
+            "goal" : [],
+            "assist" : [],
+            "goal_against" : [],
+            "save_against" : [],
+            "missed_shot_against" : [],
+            "shot" : [],
+            "missed_shot" : [],
+            "blocked_shot" : [],
+            "hit" : [],
+            "hit_taken" : [],
+            "block" : [],
+            "penalty" : [],
+            "all_penalty" : [],
+            "faceoff" : [],
+            "all_faceoffs" : [],
+            "periods" : [],
+            "takeaway" : [],
+            "all_team_goals" : [],
+            "all_team_shots" : [],
+            "all_team_shots_og" : [],
+            "all_team_unblocked_shots" : [],
+            "all_opp_goals" : [],
+            "all_opp_shots" : [],
+            "all_opp_shots_og" : [],
+            "all_opp_unblocked_shots" : [],
+            "oi_all_team_goals" : [],
+            "oi_all_team_shots" : [],
+            "oi_all_team_shots_og" : [],
+            "oi_all_team_unblocked_shots" : [],
+            "oi_all_opp_goals" : [],
+            "oi_all_opp_shots" : [],
+            "oi_all_opp_shots_og" : [],
+            "oi_all_opp_unblocked_shots" : [],
+            "is_playoffs" : row_data["is_playoffs"],
+            "Fight" : 0,
+            "FirstStar" : 0,
+            "SecondStar" : 0,
+            "ThirdStar" : 0,
+            "Number" : None,
+            "Attendance" : None,
+            "is_playoffs" : row_data["is_playoffs"],
+            "missing_data" : False,
+            "missing_toi" : False,
+            "is_shootout" : False,
+            "period_length" : {},
+            "shift_data" : {},
+            "all_events" : {},
+            "shift_events" : [],
+            "all_shift_events" : [],
+            "player_names" : {},
+            "player_side_map" : {},
+            "player_first_name_map" : {},
+            "player_last_name_map" : {},
+            "player_birth_country_map" : {},
+            "player_nationality_map" : {},
+            "Referee" : [],
+            "RefereeID" : [],
+            "Linesman" : [],
+            "LinesmanID" : [],
+            "OtherOfficial" : [],
+            "OtherOfficialID" : [],
+            "TmHeadCoach" : None,
+            "OppHeadCoach" : None,
+            "StartTime" : None,
+            "winning_goalie" : 1,
+            "losing_goalie" : 1
+        }
 
     missing_games = False
     if row_data["Year"] < 2001 and has_shift_quals(time_frame["qualifiers"]):
@@ -21051,84 +21085,134 @@ def setup_href_game_data(player_data, row_data, player_id, player_type, time_fra
     if not player_page_xml.getroot():
         return []
 
-    game_data["team_str"] = "home" if row_data["Location"] else "away"
-    game_data["opp_str"] = "away" if row_data["Location"] else "home"
+    if not started_with_data:
+        game_data["team_str"] = "home" if row_data["Location"] else "away"
+        game_data["opp_str"] = "away" if row_data["Location"] else "home"
 
-    for parsed_team_name in team_name_info:
-        for abbr in team_name_info[parsed_team_name]:
-            if abbr == row_data["Tm"] and row_data["Year"] in team_name_info[parsed_team_name][abbr]:
-                game_data["team_id"] = team_ids[parsed_team_name]
-                break
-                
-    if "team_id" not in row_data:
         for parsed_team_name in team_name_info:
             for abbr in team_name_info[parsed_team_name]:
-                if abbr == row_data["Tm"]:
+                if abbr == row_data["Tm"] and row_data["Year"] in team_name_info[parsed_team_name][abbr]:
                     game_data["team_id"] = team_ids[parsed_team_name]
                     break
-    
-    for parsed_team_name in team_name_info:
-        for abbr in team_name_info[parsed_team_name]:
-            if abbr == row_data["Opponent"].upper() and row_data["Year"] in team_name_info[parsed_team_name][abbr]:
-                game_data["opp_id"] = team_ids[parsed_team_name]
-                break
-                
-    if "opp_id" not in row_data:
+                    
+        if "team_id" not in row_data:
+            for parsed_team_name in team_name_info:
+                for abbr in team_name_info[parsed_team_name]:
+                    if abbr == row_data["Tm"]:
+                        game_data["team_id"] = team_ids[parsed_team_name]
+                        break
+        
         for parsed_team_name in team_name_info:
             for abbr in team_name_info[parsed_team_name]:
-                if abbr == row_data["Opponent"].upper():
+                if abbr == row_data["Opponent"].upper() and row_data["Year"] in team_name_info[parsed_team_name][abbr]:
                     game_data["opp_id"] = team_ids[parsed_team_name]
                     break
-
-    scorebox = player_page_xml.xpath("//div[@class = 'scorebox']")[0]
-    scor_divs = scorebox.xpath("./div")
-    home_team_div = scor_divs[0]
-    away_team_div = scor_divs[1]
-
-    home_team_divs = home_team_div.xpath("./div")
-    away_team_divs = away_team_div.xpath("./div")
-
-    home_team_score = int(str(home_team_divs[1].text_content()))
-    away_team_score = int(str(away_team_divs[1].text_content()))
-
-    if row_data["Location"]:
-        game_data["team_goals"] = home_team_score
-        game_data["opp_goals"] = away_team_score
-    else:
-        game_data["team_goals"] = away_team_score
-        game_data["opp_goals"] = home_team_score
-
-    game_data["is_shootout"] = False
-
-    score_table = player_page_xml.xpath("//table[@id = 'scoring']")
-    if score_table:
-        score_table = score_table[0]
-    else:
-        score_table = None
-
-    last_period = 3
-    for index, row in enumerate(score_table.xpath(".//tr")):
-        if row.get("class") and "thead" in row.get("class"):
-            row_text = str(row.text_content()).strip()
-            if row_text == "Shootout":
-                period = 5
-                game_data["is_shootout"] = True
-            else:
-                period = int(ordinal_to_number(row_text.split()[0]))
-                if "OT" in row_text:
-                    period += 3
-
-            if period > last_period:
-                last_period = period
+                    
+        if "opp_id" not in row_data:
+            for parsed_team_name in team_name_info:
+                for abbr in team_name_info[parsed_team_name]:
+                    if abbr == row_data["Opponent"].upper():
+                        game_data["opp_id"] = team_ids[parsed_team_name]
+                        break
     
-    if game_data["is_shootout"]:
-        if game_data["team_goals"] > game_data["opp_goals"]:
-            game_data["team_goals"] -= 1
-        elif game_data["opp_goals"] > game_data["team_goals"]:
-            game_data["opp_goals"] -= 1
-    
-    for period in range(1, last_period + 1):
-        game_data["periods"].append(period)
+    goalie_team_table = player_page_xml.xpath("//table[@id = '" + row_data["Tm"] + "_goalies']")
+    if goalie_team_table:
+        goalie_team_table = goalie_team_table[0]
+        for index, row in enumerate(goalie_team_table.xpath(".//tr")):
+            if row.get("class") and "thead" in row.get("class"):
+                player_column = row.xpath(".//td")[0]
+                player_id = player_column["data-append-csv"]
+
+                game_data["team_goalies"].add(player_id)
+
+    team_table = player_page_xml.xpath("//table[@id = '" + row_data["Tm"] + "_skaters']")
+    if team_table:
+        team_table = team_table[0]
+        for index, row in enumerate(team_table.xpath(".//tr")):
+            if row.get("class") and "thead" in row.get("class"):
+                player_column = row.xpath(".//td")[0]
+                player_id = player_column["data-append-csv"]
+                player_name = str(player_column.text_content())
+
+                game_data["team_players"].add(player_id)
+                game_data["player_names"][player_id] = player_name
+                if player_id not in game_data["team_goalies"]:
+                    game_data["team_skaters"].add(player_id)
+
+    goalie_opp_table = player_page_xml.xpath("//table[@id = '" + row_data["Opponent"].upper() + "_goalies']")
+    if goalie_opp_table:
+        goalie_opp_table = goalie_opp_table[0]
+        for index, row in enumerate(goalie_opp_table.xpath(".//tr")):
+            if row.get("class") and "thead" in row.get("class"):
+                player_column = row.xpath(".//td")[0]
+                player_id = player_column["data-append-csv"]
+
+                game_data["opp_goalies"].add(player_id)
+
+    opp_table = player_page_xml.xpath("//table[@id = '" + row_data["Opponent"].upper() + "_skaters']")
+    if opp_table:
+        opp_table = opp_table[0]
+        for index, row in enumerate(opp_table.xpath(".//tr")):
+            if row.get("class") and "thead" in row.get("class"):
+                player_column = row.xpath(".//td")[0]
+                player_id = player_column["data-append-csv"]
+                player_name = str(player_column.text_content())
+
+                game_data["opp_players"].add(player_id)
+                game_data["player_names"][player_id] = player_name
+                if player_id not in game_data["opp_goalies"]:
+                    game_data["opp_skaters"].add(player_id)
+
+    if not started_with_data:
+        scorebox = player_page_xml.xpath("//div[@class = 'scorebox']")[0]
+        scor_divs = scorebox.xpath("./div")
+        home_team_div = scor_divs[0]
+        away_team_div = scor_divs[1]
+
+        home_team_divs = home_team_div.xpath("./div")
+        away_team_divs = away_team_div.xpath("./div")
+
+        home_team_score = int(str(home_team_divs[1].text_content()))
+        away_team_score = int(str(away_team_divs[1].text_content()))
+
+        if row_data["Location"]:
+            game_data["team_goals"] = home_team_score
+            game_data["opp_goals"] = away_team_score
+        else:
+            game_data["team_goals"] = away_team_score
+            game_data["opp_goals"] = home_team_score
+
+        game_data["is_shootout"] = False
+
+        score_table = player_page_xml.xpath("//table[@id = 'scoring']")
+        if score_table:
+            score_table = score_table[0]
+        else:
+            score_table = None
+
+        last_period = 3
+        for index, row in enumerate(score_table.xpath(".//tr")):
+            if row.get("class") and "thead" in row.get("class"):
+                row_text = str(row.text_content()).strip()
+                if row_text == "Shootout":
+                    period = 5
+                    game_data["is_shootout"] = True
+                else:
+                    period = int(ordinal_to_number(row_text.split()[0]))
+                    if "OT" in row_text:
+                        period += 3
+
+                if period > last_period:
+                    last_period = period
+        
+        if game_data["is_shootout"]:
+            if game_data["team_goals"] > game_data["opp_goals"]:
+                game_data["team_goals"] -= 1
+            elif game_data["opp_goals"] > game_data["team_goals"]:
+                game_data["opp_goals"] -= 1
+        
+        for period in range(1, last_period + 1):
+            game_data["periods"].append(period)
 
     return game_data, missing_games, None
 

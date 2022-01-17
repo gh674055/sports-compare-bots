@@ -6676,7 +6676,7 @@ def combine_player_datas(player_datas, player_type, any_missing_games, time_fram
                 if date_end in sub_player_data["game_valid_years"]:
                     date_end = "[" + str(date_end) + "](" + yearly_game_splits_url_format.format(sub_player_data["id"][0].upper(), sub_player_data["id"], str(date_end)) + ")"
                 
-                if "date" not in extra_stats or len(sorted(list(set([row["Shared"]["Date"] for row in sub_player_data["rows"]])))) > 20:
+                if "date" not in extra_stats:
                     if date_start == date_end:
                         raw_sub_range += str(date_start)
                     else:
@@ -6722,7 +6722,7 @@ def combine_player_datas(player_datas, player_type, any_missing_games, time_fram
                 date_start = "[" + str(date_start) + "](" + date_start_link + ")"
                 date_end = "[" + str(date_end) + "](" + date_end_link + ")"
 
-                if "date" not in extra_stats or len(sorted(list(set([row["Shared"]["Date"] for row in sub_player_data["rows"]])))) > 20:
+                if "date" not in extra_stats:
                     if date_start == date_end:
                         raw_sub_range += str(date_start)
                     else:
@@ -6768,8 +6768,11 @@ def combine_player_datas(player_datas, player_type, any_missing_games, time_fram
                 raw_time_start = "[" + start_season + " Season - Age: " + start_date_diff_str + "]"
                 raw_time_end = "[" + end_season + " Season - Age: " + end_date_diff_str + "]"
 
-            if "date" in extra_stats and len(sorted(list(set([row["Shared"]["Date"] for row in sub_player_data["rows"]])))) <= 20:
+            if "date" in extra_stats:
                 dates = sorted(list(set([row["Shared"]["Date"] for row in sub_player_data["rows"]])))
+                if len(dates) > 20:
+                    raise CustomMessageException("Cannot show more than 20 dates!")
+
                 for date_start in dates:
                     if isinstance(date_start, int):
                         if date_start in sub_player_data["game_valid_years"]:
