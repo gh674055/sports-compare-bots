@@ -210,6 +210,10 @@ headers = {
             "positive" : True,
             "display" : False
         },
+        "RawCrGm" : {
+            "positive" : True,
+            "display" : False
+        },
         "Result" : {
             "positive" : True,
             "display" : False
@@ -2170,6 +2174,10 @@ headers = {
             "display" : False
         },
         "CrGmRev" : {
+            "positive" : True,
+            "display" : False
+        },
+        "RawCrGm" : {
             "positive" : True,
             "display" : False
         },
@@ -12378,6 +12386,10 @@ def calculate_chunks(da_list, size):
                 break
     return all_items
 
+def calculate_even_chunks(da_list, size):
+    for i in range(0, len(da_list), size):
+        yield da_list[i:i + size]
+
 def calculate_best(player_data, player_datas, player_type, extra_stats, is_best):
     has_non_playoffs = False
     for sub_player_data in player_datas:
@@ -14189,6 +14201,17 @@ def calculate_values(all_rows, player_type, time_frames, og_player_data, extra_s
         elif frac == 1.0:
             player_data["stat_values"]["Inn"] += 1
 
+    if "IPStart" in player_data["stat_values"]:
+        frac, whole = math.modf(player_data["stat_values"]["IPStart"])
+        frac = round_value(frac, 1)
+        player_data["stat_values"]["IPStart"] = whole
+        if frac == 0.3:
+            player_data["stat_values"]["IPStart"] += 1/3
+        elif frac == 0.7:
+            player_data["stat_values"]["IPStart"] += 2/3
+        elif frac == 1.0:
+            player_data["stat_values"]["IPStart"] += 1
+
     for stat in player_data["stat_values"]:
         if stat in string_stats:
             if player_data["stat_values"][stat]:
@@ -15638,6 +15661,10 @@ def handle_player_data(player_data, time_frame, player_type, player_page, valid_
         
         if not has_war_7:
             all_rows[len(all_rows) - 1]["WAR7yr"] = calculate_war_7yr(player_data, all_rows, player_type, is_pitching_jaws)
+
+    if not has_against_quals(extra_stats):
+        if is_game_page:
+            fix_prob_data(all_rows, player_data, player_type)
         
     seasons_leading_start = 0
     seasons_leading_end = 0
@@ -23944,6 +23971,93 @@ def handle_missing_game_data(all_rows, player_data, player_type, time_frame, val
                                 row_data["StartsPit"] = 0
                             row_data["StartsPit"] += 1
                     break
+
+def fix_prob_data(all_rows, player_data, player_type):
+    season_ranges = {
+        True : [],
+        False : []
+    }
+
+    for row in all_rows:
+        row["WPA"] = 0
+        row["cWPA"] = 0
+        row["RE24"] = 0
+    
+    max_reg_year = 0
+    max_playoff_year = 0
+    for row_data in all_rows:
+        season_ranges[row_data["is_playoffs"]].append(row_data["RawCrGm"])
+        if row_data["is_playoffs"]:
+            if row_data["Year"] > max_playoff_year:
+                max_playoff_year = row_data["Year"]
+        else:
+            if row_data["Year"] > max_reg_year:
+                max_reg_year = row_data["Year"]
+        
+    if season_ranges[True] and max_playoff_year >= 1901:
+        handle_prob_data(player_type, season_ranges[True], player_data, all_rows, True)
+    
+    if season_ranges[False] and max_reg_year >= 1916:
+        handle_prob_data(player_type, season_ranges[False], player_data, all_rows, False)
+        
+def handle_prob_data(player_type, all_season_ranges, player_data, all_rows, is_post):
+    the_table_name = "batting_gamelogs" if player_type["da_type"] == "Batter" else "pitching_gamelogs"
+    if is_post:
+        the_table_name += "_post"
+    
+    is_consec = False
+    if sorted(all_season_ranges) == list(range(min(all_season_ranges), max(all_season_ranges) + 1)):
+        season_ranges_split = [all_season_ranges]
+        is_consec = True
+    else:
+        season_ranges_split = calculate_even_chunks(all_season_ranges, 1000)
+    for season_ranges in season_ranges_split:
+        if len(season_ranges) > 1 and is_consec:
+            stat_sum_range = str(season_ranges[0]) + "-" + str(season_ranges[len(season_ranges) - 1])
+        else:
+            stat_sum_range = ",".join([str(season_range) for season_range in season_ranges]) if len(season_ranges) > 1 else str(season_ranges[0]) + "-" + str(season_ranges[0])
+
+        request = urllib.request.Request(sum_stats_format.format(player_data["id"], the_table_name, stat_sum_range), headers=request_headers)
+        try:
+            response, player_page = url_request(request)
+        except urllib.error.HTTPError:
+            raise
+
+        table_name = "span_stats"
+
+        table = player_page.find("table", id=table_name)
+        if not table:
+            if not comments:
+                comments = player_page.find_all(string=lambda text: isinstance(text, Comment))
+            for c in comments:
+                temp_soup = BeautifulSoup(c, "lxml")
+                temp_table = temp_soup.find("table", id=table_name)
+                if temp_table:
+                    table = temp_table
+                    break
+
+        if table:
+            standard_table_rows = table.find("tbody").find_all("tr")
+            for i in range(len(standard_table_rows)):
+                row = standard_table_rows[i]
+                for pot_row in all_rows:
+                    if pot_row["Year"] >= (1901 if is_post else 1916) and pot_row["is_playoffs"] == is_post:
+                        wpa_str = row.find("td", {"data-stat" : "wpa_" + ("bat" if player_type["da_type"] == "Batter" else "def")}).find(text=True)
+                        if wpa_str:
+                            if "WPA" not in pot_row:
+                                pot_row["WPA"] = 0
+                            pot_row["WPA"] += float(wpa_str)
+                        cwpa_str = row.find("td", {"data-stat" : "cwpa_" + ("bat" if player_type["da_type"] == "Batter" else "def")}).find(text=True)
+                        if cwpa_str:
+                            if "cWPA" not in pot_row:
+                                pot_row["cWPA"] = 0
+                            pot_row["cWPA"] += float(cwpa_str[:-1]) / 100
+                        re24_str = row.find("td", {"data-stat" : "re24_" + ("bat" if player_type["da_type"] == "Batter" else "def")}).find(text=True)
+                        if re24_str:
+                            if "RE24" not in pot_row:
+                                pot_row["RE24"] = 0
+                            pot_row["RE24"] += float(re24_str)
+                        break
     
 def parse_row(row, time_frame, year, is_playoffs, player_type, header_values, previous_headers, table_index, table_name):
     date = None
@@ -24083,6 +24197,9 @@ def parse_row(row, time_frame, year, is_playoffs, player_type, header_values, pr
                         row_data.update({"Team Score" : None})
                         row_data.update({"Opponent Score" : None})
                     continue
+                elif hasattr(column, "data-stat") and column["data-stat"] == "career_game_num":
+                    if not is_playoffs:
+                        row_data.update({"RawCrGm" : int(column.find(text=True))})
             
             if table_name == "standard_fielding":
                 if header_value == "SB" or header_value == "CS":
@@ -24147,6 +24264,9 @@ def parse_row(row, time_frame, year, is_playoffs, player_type, header_values, pr
         row_data["CalendarYear"] = None if isinstance(date, int) else date.year
                 
         row_data["is_playoffs"] = is_playoffs
+
+        if is_playoffs:
+            row_data["RawCrGm"] = int(row.find("th", {"data-stat" : "ranker"}).find(text=True))
 
         if "Tm" in row_data and row_data["Tm"] != "TOT" and not "," in row_data["Tm"]:
             row_data["TmLg"] = get_team_league(row_data["Tm"], row_data["Year"])
@@ -40047,6 +40167,18 @@ def calculate_advanced_stats(data, all_rows, player_type, time_frames):
                         yearly_woba_stats[year][team]["SF_IP_ER"] += row_data.get("SF", 0)
                 except ZeroDivisionError:
                     pass
+
+            for year in yearly_woba_stats:
+                for team in yearly_woba_stats[year]:
+                    frac, whole = math.modf(yearly_woba_stats[year][team]["IP"])
+                    frac = round_value(frac, 1)
+                    yearly_woba_stats[year][team]["IP"] = whole
+                    if frac == 0.3:
+                        yearly_woba_stats[year][team]["IP"] += 1/3
+                    elif frac == 0.7:
+                        yearly_woba_stats[year][team]["IP"] += 2/3
+                    elif frac == 1.0:
+                        yearly_woba_stats[year][team]["IP"] += 1
 
             real_yearly_woba_stats = {}
             for year in yearly_woba_stats:
