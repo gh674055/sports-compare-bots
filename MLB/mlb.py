@@ -74,6 +74,8 @@ import get_constant_data
 import get_team_ids
 import ephem
 import ssl
+import cProfile
+import pstats
 
 subreddits_to_crawl = [
     "sportscomparebots",
@@ -34016,10 +34018,10 @@ def handle_da_pitch_quals(row, event_name, at_bat_event, qualifiers, player_data
     else:
         is_team_batting = True if at_bat_event["is_top_inning"] else False
 
-    sub_tm_position_map = copy.deepcopy(at_bat_event["team_position_map"])
-    sub_opp_position_map = copy.deepcopy(at_bat_event["opp_position_map"])
-    sub_team_batting_order_map = copy.deepcopy(at_bat_event["team_batting_order_map"])
-    sub_opp_batting_order_map = copy.deepcopy(at_bat_event["opp_batting_order_map"])
+    sub_tm_position_map = at_bat_event["team_position_map"].copy()
+    sub_opp_position_map = at_bat_event["opp_position_map"].copy()
+    sub_team_batting_order_map = at_bat_event["team_batting_order_map"].copy()
+    sub_opp_batting_order_map = at_bat_event["opp_batting_order_map"].copy()
     sub_next_play_pinch = None
     for play in at_bat_event["playEvents"][0:sub_play_index]:
         if "isSubstitution" in play and play["isSubstitution"]:
@@ -34177,12 +34179,12 @@ def handle_da_pitch_quals(row, event_name, at_bat_event, qualifiers, player_data
         if play["isPitch"]:
             sub_num_pitches += 1
             if play["details"]["isStrike"]:
-                last_count = copy.deepcopy(sub_counts[len(sub_counts) - 1])
+                last_count = sub_counts[len(sub_counts) - 1].copy()
                 if last_count["strikes"] != 2:
                     last_count["strikes"] += 1
                 sub_counts.append(last_count)
             elif play["details"]["isBall"]:
-                last_count = copy.deepcopy(sub_counts[len(sub_counts) - 1])
+                last_count = sub_counts[len(sub_counts) - 1].copy()
                 if last_count["balls"] != 3:
                     last_count["balls"] += 1
                 sub_counts.append(last_count)
@@ -36158,6 +36160,8 @@ def perform_mlb_schedule_qualifiers(row, qualifiers):
     return True
 
 def result_call_back(qualifiers, count_info, new_rows, player_type, player_data, needs_plays, old_row_data, extra_stats, result):
+    # profile = cProfile.Profile()
+    # profile.enable()
     try:
         if result.exception():
             logger.info("Error parsing date " + str(old_row_data["Date"]))
@@ -36196,6 +36200,9 @@ def result_call_back(qualifiers, count_info, new_rows, player_type, player_data,
             if not count_info["exception"]:
                 count_info["exception"] = err
         return
+    # finally:
+    #     ps = pstats.Stats(profile)
+    #     ps.print_stats()
 
 def handle_result_qualifiers(game_data, index, row_data, sub_missing_games, player_type, player_data, qualifiers, saved_row_data, count_info, extra_stats):
     set_row_data(game_data, row_data, player_type)
@@ -36829,8 +36836,8 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
         pitcher_matchup_map = {}
         # pitcher_responsible_map = {}
 
-        starter_team_position_map = copy.deepcopy(team_position_map)
-        starter_opp_position_map = copy.deepcopy(opp_position_map)
+        starter_team_position_map = team_position_map.copy()
+        starter_opp_position_map = opp_position_map.copy()
 
         pitch_count_obj = {
             "team_pitch_count" : 0,
@@ -36899,7 +36906,6 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
                 game_data["missing_data"] = True
                 return game_data, row_data, row_index, missing_games
 
-        og_plays = copy.deepcopy(sub_data["liveData"]["plays"]["allPlays"])
         for index, scoring_play in enumerate(sub_data["liveData"]["plays"]["allPlays"]):
             if scoring_play["result"]["type"] != "atBat" or "eventType" not in scoring_play["result"]:
                 continue
@@ -37097,10 +37103,10 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
 
         post_play_events = []
         for index, scoring_play in enumerate(sub_data["liveData"]["plays"]["allPlays"]):
-            starting_tm_position_map = copy.deepcopy(team_position_map)
-            starting_opp_position_map = copy.deepcopy(opp_position_map)
-            starting_team_batting_order_map = copy.deepcopy(team_batting_order_map)
-            starting_opp_batting_order_map = copy.deepcopy(opp_batting_order_map)
+            starting_tm_position_map = team_position_map.copy()
+            starting_opp_position_map = opp_position_map.copy()
+            starting_team_batting_order_map = team_batting_order_map.copy()
+            starting_opp_batting_order_map = opp_batting_order_map.copy()
             for play in scoring_play["playEvents"]:
                 if "isSubstitution" in play and play["isSubstitution"]:
                     if "postPlay" in play and play["postPlay"]:
@@ -37376,13 +37382,13 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
                     code = play["details"]["call"]["code"][-1:].upper()
                     pitches.append(code)
                     if play["details"]["isStrike"]:
-                        last_count = copy.deepcopy(counts[len(counts) - 1])
+                        last_count = counts[len(counts) - 1].copy()
                         if last_count["strikes"] != 2:
                             last_count["strikes"] += 1
                         if sub_sub_play_index != last_pitch_index:
                             counts.append(last_count)
                     elif play["details"]["isBall"]:
-                        last_count = copy.deepcopy(counts[len(counts) - 1])
+                        last_count = counts[len(counts) - 1].copy()
                         if last_count["balls"] != 3:
                             last_count["balls"] += 1
                         if sub_sub_play_index != last_pitch_index:
@@ -38011,14 +38017,14 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
                 "pitching_righty" : pitching_righty,
                 "batting_lefty" : batting_lefty,
                 "batting_righty" : batting_righty,
-                "team_position_map" : copy.deepcopy(team_position_map),
-                "opp_position_map" : copy.deepcopy(opp_position_map),
+                "team_position_map" : team_position_map.copy(),
+                "opp_position_map" : opp_position_map.copy(),
                 "team_main_position_map" : team_main_position_map,
                 "opp_main_position_map" : opp_main_position_map,
                 "team_primary_position_map" : team_primary_position_map,
                 "opp_primary_position_map" : opp_primary_position_map,
-                "team_batting_order_map" : copy.deepcopy(team_batting_order_map),
-                "opp_batting_order_map" : copy.deepcopy(opp_batting_order_map),
+                "team_batting_order_map" : team_batting_order_map.copy(),
+                "opp_batting_order_map" : opp_batting_order_map.copy(),
                 "leading_off_game" : leading_off_game,
                 "leading_off_team" : leading_off_team,
                 "leading_off_inning" : first_batter_inning,
@@ -38124,10 +38130,10 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
                 sub_play_index = runner["details"]["playIndex"]
                 sub_play = scoring_play["playEvents"][sub_play_index]
 
-                sub_tm_position_map = copy.deepcopy(starting_tm_position_map)
-                sub_opp_position_map = copy.deepcopy(starting_opp_position_map)
-                sub_team_batting_order_map = copy.deepcopy(starting_team_batting_order_map)
-                sub_opp_batting_order_map = copy.deepcopy(starting_opp_batting_order_map)
+                sub_tm_position_map = starting_tm_position_map.copy()
+                sub_opp_position_map = starting_opp_position_map.copy()
+                sub_team_batting_order_map = starting_team_batting_order_map.copy()
+                sub_opp_batting_order_map = starting_opp_batting_order_map.copy()
                 sub_next_play_pinch = None
                 for play in scoring_play["playEvents"][0:sub_play_index]:
                     if "isSubstitution" in play and play["isSubstitution"]:
@@ -38307,12 +38313,12 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
                     if play["isPitch"]:
                         sub_num_pitches += 1
                         if play["details"]["isStrike"]:
-                            last_count = copy.deepcopy(sub_counts[len(sub_counts) - 1])
+                            last_count = sub_counts[len(sub_counts) - 1].copy()
                             if last_count["strikes"] != 2:
                                 last_count["strikes"] += 1
                             sub_counts.append(last_count)
                         elif play["details"]["isBall"]:
-                            last_count = copy.deepcopy(sub_counts[len(sub_counts) - 1])
+                            last_count = sub_counts[len(sub_counts) - 1].copy()
                             if last_count["balls"] != 3:
                                 last_count["balls"] += 1
                             sub_counts.append(last_count)
@@ -38895,7 +38901,7 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
                     is_inherited = run_pitcher != pitcher
                     
                     if run_pitcher == player_data["mlb_id"]:
-                        pitch_run_data = copy.deepcopy(sub_event_obj)
+                        pitch_run_data = sub_event_obj.copy()
 
                         if is_inherited:
                             last_pitch_event = game_data["pitching_events"][len(game_data["pitching_events"]) - 1]
@@ -38915,7 +38921,7 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
                             game_data["pitch_event_to_run_event"][event_id] = []
                         game_data["pitch_event_to_run_event"][event_id].append(pitch_run_data)
                     elif the_runner == player_data["mlb_id"]:
-                        bat_run_data = copy.deepcopy(sub_event_obj)
+                        bat_run_data = sub_event_obj.copy()
                         bat_run_data["result"] = "run_scored"
                         if player_data["mlb_id"] == batter:
                             run_event = bat_run_data
@@ -38932,7 +38938,7 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
                     sb_base = sb_base[len(sb_base) - 1].upper()
                     if sb_base == "HOME":
                         sb_base = "HP"
-                    sb_data = copy.deepcopy(sub_event_obj)
+                    sb_data = sub_event_obj.copy()
                     sb_data["result"] = "stolen_base"
                     if runner["details"]["movementReason"] != "r_stolen_base":
                         sb_data["sb_base"] = sb_base
@@ -38945,7 +38951,7 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
                     sb_base = sb_base[len(sb_base) - 1].upper()
                     if sb_base == "HOME":
                         sb_base = "HP"
-                    sb_data = copy.deepcopy(sub_event_obj)
+                    sb_data = sub_event_obj.copy()
                     sb_data["result"] = "caught_stealing"
                     if runner["details"]["movementReason"] != "r_caught_stealing" and runner["details"]["movementReason"] != "r_pickoff_caught_stealing":
                         sb_data["sb_base"] = sb_base
@@ -38959,7 +38965,7 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
                     sb_base = sb_base[len(sb_base) - 1].upper()
                     if sb_base == "HOME":
                         sb_base = "HP"
-                    sb_data = copy.deepcopy(sub_event_obj)
+                    sb_data = sub_event_obj.copy()
                     sb_data["result"] = "pick_off"
                     if runner["details"]["movementReason"] != "r_caught_stealing" and runner["details"]["movementReason"] != "r_pickoff_caught_stealing":
                         sb_data["sb_base"] = sb_base
