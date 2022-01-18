@@ -157,6 +157,8 @@ position_map = {
 }
 position_map_reversed = {v: k for k, v in position_map.items()}
 
+count_stats = ["Pit", "PitBall", "Chase", "PitStrike", "LkStr", "Str", "1stStr", "SwStr", "SwgStr", "Str", "1stStr", "CntStr", "Str", "1stStr", "Bal", "2StrPit"]
+
 headers = {
     "Batter" : {
         "Player" : {
@@ -15039,8 +15041,9 @@ def handle_player_data(player_data, time_frame, player_type, player_page, valid_
         handle_missing_playoff_rows(player_page, player_data, valid_years, all_rows, player_type, time_frame)
     
     has_result_stat_qual = False
+    has_count_stat = False
     for qualifier in time_frame["qualifiers"]:
-        if "Season" not in qualifier and "State" not in qualifier and "Facing" not in qualifier and "Event Stat" not in qualifier and ("Stat" in qualifier or "Streak" in qualifier or "Stretch" in qualifier or ("Formula" in qualifier and qualifier != "Event Formula") or "Quickest" in qualifier or "Slowest" in qualifier):
+        if "Season" not in qualifier and "State" not in qualifier and "Facing" not in qualifier and ("Event Stat" not in qualifier or qualifier == "Individual Event Stat") and ("Stat" in qualifier or "Streak" in qualifier or "Stretch" in qualifier or ("Formula" in qualifier and qualifier != "Event Formula") or "Quickest" in qualifier or "Slowest" in qualifier):
             for qual_object in time_frame["qualifiers"][qualifier]:
                 for sub_qual_object in qual_object["values"]:
                     if "Formula" in qualifier:
@@ -15057,6 +15060,10 @@ def handle_player_data(player_data, time_frame, player_type, player_page, valid_
                         has_result_stat_qual = True
                     if "gwrbi" in stat or "slam" in stat or "walkoff" in stat or "drivenin" in stat or "gwdrivenin" in stat:
                         extra_stats.add("current-stats")
+                    for count_stat in count_stats:
+                        if count_stat.lower() in stat:
+                            has_count_stat = True
+                            break
                     for header_stat in headers[player_type["da_type"]]:
                         if "display-value" in headers[player_type["da_type"]][header_stat] and headers[player_type["da_type"]][header_stat]["display-value"].lower() == stat:
                             stat = header_stat.lower()
@@ -15064,6 +15071,10 @@ def handle_player_data(player_data, time_frame, player_type, player_page, valid_
                                 has_result_stat_qual = True
                             if "gwrbi" in stat or "slam" in stat or "walkoff" in stat or "drivenin" in stat or "gwdrivenin" in stat:
                                 extra_stats.add("current-stats")
+                            for count_stat in count_stats:
+                                if count_stat.lower() in stat:
+                                    has_count_stat = True
+                                    break
                             break
         
     add_play = False
@@ -15074,6 +15085,10 @@ def handle_player_data(player_data, time_frame, player_type, player_page, valid_
                 has_result_stat_qual = True
             if "gwrbi" in stat or "slam" in stat or "walkoff" in stat or "drivenin" in stat or "gwdrivenin" in stat:
                 add_play = True
+            for count_stat in count_stats:
+                if count_stat.lower() in stat:
+                    has_count_stat = True
+                    break
             for header_stat in headers[player_type["da_type"]]:
                 if "display-value" in headers[player_type["da_type"]][header_stat] and headers[player_type["da_type"]][header_stat]["display-value"].lower() == stat:
                     stat = header_stat.lower()
@@ -15081,6 +15096,10 @@ def handle_player_data(player_data, time_frame, player_type, player_page, valid_
                         has_result_stat_qual = True
                     if "gwrbi" in stat or "slam" in stat or "walkoff" in stat or "drivenin" in stat or "gwdrivenin" in stat:
                         add_play = True
+                    for count_stat in count_stats:
+                        if count_stat.lower() in stat:
+                            has_count_stat = True
+                            break
                     break
 
     if add_play:
@@ -15181,9 +15200,9 @@ def handle_player_data(player_data, time_frame, player_type, player_page, valid_
 
     if not "hide-advanced" in extra_stats or (has_result_stat_qual or "Game Number" in time_frame["qualifiers"] or "Run Support" in time_frame["qualifiers"] or "run-support-record" in extra_stats or "run-support" in extra_stats or "advanced-runner" in extra_stats or "exit-record" in extra_stats):
         if ("Event Stat" in time_frame["qualifiers"] or "Event Stat Reversed" in time_frame["qualifiers"] or "Event Stats" in time_frame["qualifiers"] or "Event Stats Reversed" in time_frame["qualifiers"] or "Starting Event Stat" in time_frame["qualifiers"] or "Starting Event Stat Reversed" in time_frame["qualifiers"] or "Starting Event Stats" in time_frame["qualifiers"] or "Starting Event Stats Reversed" in time_frame["qualifiers"]):
-            all_rows, missing_games = handle_mlb_game_stats_single_thread(all_rows, time_frame["qualifiers"], player_data, player_type, missing_games, extra_stats)
+            all_rows, missing_games = handle_mlb_game_stats_single_thread(all_rows, has_count_stat, time_frame["qualifiers"], player_data, player_type, missing_games, extra_stats)
         elif has_result_stat_qual or "Game Number" in time_frame["qualifiers"] or "Run Support" in time_frame["qualifiers"] or "current-stats" in extra_stats or "run-support-record" in extra_stats or "run-support" in extra_stats or "advanced-runner" in extra_stats or "exit-record" in extra_stats:
-            all_rows, missing_games = handle_mlb_game_stats(all_rows, time_frame["qualifiers"], player_data, player_type, missing_games, extra_stats)
+            all_rows, missing_games = handle_mlb_game_stats(all_rows, has_count_stat, time_frame["qualifiers"], player_data, player_type, missing_games, extra_stats)
 
     if time_frame["qualifiers"]:
         new_rows = []
@@ -16200,7 +16219,7 @@ def determine_row_data(game_data, player_type, player_data, player_id, current_t
         row_data["Pit"] = game["pitchesThrown"]
 
         fake_row_data = copy.deepcopy(row_data)
-        fake_game_data, fake_row_data, fake_index, fake_sub_missing_games = get_live_game_data(-1, player_data, fake_row_data, player_type, {}, True)
+        fake_game_data, fake_row_data, fake_index, fake_sub_missing_games = get_live_game_data(-1, False, player_data, fake_row_data, player_type, {}, True)
         perform_sub_mlb_game_qualifiers(fake_row_data, player_data, {}, fake_game_data, player_type, True)
         row_data["GDP"] = fake_row_data["GDP"]
 
@@ -16425,7 +16444,7 @@ def determine_row_data(game_data, player_type, player_data, player_id, current_t
     if is_final:
         if player_type["da_type"] == "Batter":
             fake_row_data = copy.deepcopy(row_data)
-            fake_game_data = get_live_game_data(-1, player_data, fake_row_data, player_type, {}, True)[0]
+            fake_game_data = get_live_game_data(-1, False, player_data, fake_row_data, player_type, {}, True)[0]
             row_data["Finished"] = False
             for position in fake_game_data["final_team_position_map"]:
                 if position in ("PH", "PR"):
@@ -26018,7 +26037,7 @@ def get_team_schedule(player_data, seasons, needs_reg_season, needs_playoffs, ne
     
     return season_objs
 
-def handle_mlb_game_stats(all_rows, qualifiers, player_data, player_type, missing_games, extra_stats):
+def handle_mlb_game_stats(all_rows, has_count_stat, qualifiers, player_data, player_type, missing_games, extra_stats):
     if not all_rows:
         return [], missing_games
 
@@ -26402,7 +26421,7 @@ def handle_mlb_game_stats(all_rows, qualifiers, player_data, player_type, missin
     for qual in ["Event Stat", "Event Stat Reversed", "Event Stats", "Event Stats Reversed", "Starting Event Stat", "Starting Event Stat Reversed", "Starting Event Stats", "Starting Event Stats Reversed", "Game Event Stat", "Game Event Stat Reversed", "Game Event Stats", "Game Event Stats Reversed", "Starting Game Event Stat", "Starting Game Event Stat Reversed", "Starting Game Event Stats", "Starting Game Event Stats Reversed"]:
         handle_event_stats(qual, all_rows, games_to_skip, qualifiers, player_type, player_data)
 
-    return get_mlb_game_stats(all_rows, qualifiers, games_to_skip, player_data, missing_games, player_type, extra_stats, True)
+    return get_mlb_game_stats(all_rows, has_count_stat, qualifiers, games_to_skip, player_data, missing_games, player_type, extra_stats, True)
 
 def handle_event_stats(qual, all_rows, games_to_skip, qualifiers, player_type, player_data):
     if qual in qualifiers:
@@ -26420,7 +26439,7 @@ def handle_event_stats(qual, all_rows, games_to_skip, qualifiers, player_type, p
             
             row_data["is_playoffs"] = prev_is_playofs
 
-def handle_mlb_game_stats_single_thread(all_rows, qualifiers, player_data, player_type, missing_games, extra_stats):
+def handle_mlb_game_stats_single_thread(all_rows, has_count_stat, qualifiers, player_data, player_type, missing_games, extra_stats):
     if not all_rows:
         return [], missing_games
 
@@ -26749,7 +26768,7 @@ def handle_mlb_game_stats_single_thread(all_rows, qualifiers, player_data, playe
     for qual in ["Event Stat", "Event Stat Reversed", "Event Stats", "Event Stats Reversed", "Starting Event Stat", "Starting Event Stat Reversed", "Starting Event Stats", "Starting Event Stats Reversed", "Game Event Stat", "Game Event Stat Reversed", "Game Event Stats", "Game Event Stats Reversed", "Starting Game Event Stat", "Starting Game Event Stat Reversed", "Starting Game Event Stats", "Starting Game Event Stats Reversed"]:
         handle_event_stats(qual, all_rows, games_to_skip, qualifiers, player_type, player_data)
 
-    return get_mlb_game_stats_single_thread(all_rows, qualifiers, games_to_skip, player_data, missing_games, player_type, extra_stats)
+    return get_mlb_game_stats_single_thread(all_rows, has_count_stat, qualifiers, games_to_skip, player_data, missing_games, player_type, extra_stats)
 
 def setup_career_stats(row_data, player_game_info, saved_row_data, index, player_type, player_data, qualifiers):
     if not player_game_info or player_game_info["missing_data"]:
@@ -35046,7 +35065,7 @@ def perform_mlb_game_qualifiers(row, qualifiers):
     
     return True
 
-def get_mlb_game_stats(all_rows, qualifiers, games_to_skip, player_data, missing_games, player_type, extra_stats, needs_plays):
+def get_mlb_game_stats(all_rows, has_count_stat, qualifiers, games_to_skip, player_data, missing_games, player_type, extra_stats, needs_plays):
     if needs_plays:
         logger.info("#" + str(threading.get_ident()) + "#   " + player_data["id"] + " starting game data")
     count_info = {
@@ -35064,7 +35083,7 @@ def get_mlb_game_stats(all_rows, qualifiers, games_to_skip, player_data, missing
     with ThreadPoolExecutor(max_workers=5) as sub_executor:
         for index, row_data in enumerate(sorted(all_rows, key=lambda row: row["DateTime"])):
             if row_data["GameLink"] not in games_to_skip:
-                future = sub_executor.submit(get_live_game_data, index, player_data, row_data, player_type, qualifiers, needs_plays)
+                future = sub_executor.submit(get_live_game_data, index, has_count_stat, player_data, row_data, player_type, qualifiers, needs_plays)
                 future.add_done_callback(functools.partial(result_call_back, qualifiers, count_info, new_rows, player_type, player_data, needs_plays, row_data, extra_stats))
     
     if count_info["exception"]:
@@ -35075,7 +35094,7 @@ def get_mlb_game_stats(all_rows, qualifiers, games_to_skip, player_data, missing
 
     return sorted(new_rows, key=lambda row: row["DateTime"]), count_info["missing_games"]
 
-def get_mlb_game_stats_single_thread(all_rows, qualifiers, games_to_skip, player_data, missing_games, player_type, extra_stats):
+def get_mlb_game_stats_single_thread(all_rows, has_count_stat, qualifiers, games_to_skip, player_data, missing_games, player_type, extra_stats):
     logger.info("#" + str(threading.get_ident()) + "#   " + player_data["id"] + " starting game data")
     count_info = {
         "current_percent" : 10,
@@ -35148,7 +35167,7 @@ def get_mlb_game_stats_single_thread(all_rows, qualifiers, games_to_skip, player
     for index, row_data in enumerate(sorted(all_rows, key=lambda row: row["DateTime"], reverse=is_reverse)):
         if row_data["GameLink"] not in games_to_skip:
             try:
-                game_data, row_data, index, sub_missing_games = get_live_game_data(index, player_data, row_data, player_type, qualifiers, True)
+                game_data, row_data, index, sub_missing_games = get_live_game_data(index, has_count_stat, player_data, row_data, player_type, qualifiers, True)
                 has_match, raw_row_data = handle_result_qualifiers(game_data, index, row_data, sub_missing_games, player_type, player_data, qualifiers, saved_row_data, count_info, extra_stats)
                 
                 if stat not in raw_row_data:
@@ -36561,7 +36580,7 @@ def get_mlb_game_links_schedule_links(player_data, player_type, player_link, all
                                 row_data["SeriesOpponentWins"] = opponent_wins
                                 row_data["SeriesScore"] = team_wins - opponent_wins
     
-def get_live_game_data(row_index, player_data, row_data, player_type, qualifiers, needs_plays):
+def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_type, qualifiers, needs_plays):
     missing_games = False
     game_data = {
         "missing_data" : False,
@@ -36835,7 +36854,7 @@ def get_live_game_data(row_index, player_data, row_data, player_type, qualifiers
                     break
         
         if not has_count_data:
-            if "Hit Location" in qualifiers or "Exact Hit Location" in qualifiers or "Bunting" in qualifiers or "Fastball" in qualifiers or "Out Of Zone" in qualifiers or "In Zone" in qualifiers or "Breaking" in qualifiers or "Offspeed" in qualifiers or "Swung At First Pitch" in qualifiers or "First Pitch" in qualifiers or "Batter Ahead" in qualifiers or "Even Count" in qualifiers or "Pitcher Ahead" in qualifiers or "After Batter Ahead" in qualifiers or "After Even Count" in qualifiers or "After Pitcher Ahead" in qualifiers or "Full Count" in qualifiers or "Swinging On Strikes" in qualifiers or "Swinging On Balls" in qualifiers or "After Swinging On Strikes" in qualifiers or "After Swinging On Balls" in qualifiers or "After Strikes" in qualifiers or "After Balls" in qualifiers or "Strikes" in qualifiers or "Balls" in qualifiers or "Pitch Speed" in qualifiers or "Pitch Zone" in qualifiers or "Pitch Spin" in qualifiers or "Exit Velocity" in qualifiers or "Hit Distance" in qualifiers or "Hit Coordinates" in qualifiers or "Hit Y Coordinate" in qualifiers or "Hit X Coordinate" in qualifiers or "Pitch Coordinates" in qualifiers or "Pitch Y Coordinate" in qualifiers or "Pitch X Coordinate" in qualifiers or "Absolute Pitch Coordinates" in qualifiers or "Absolute Pitch Y Coordinate" in qualifiers or "Absolute Pitch X Coordinate" in qualifiers or "Hit Within Distance" in qualifiers or "Pitch Within Distance" in qualifiers or "Absolute Pitch Within Distance" in qualifiers or "Launch Angle" in qualifiers or "Count" in qualifiers or "After Count" in qualifiers or "After Swinging On Count" in qualifiers or "Swinging On Count" in qualifiers or "Game Pitch Count" in qualifiers or "Team Pitch Count" in qualifiers or "Pitch Count" in qualifiers or "Batters Faced" in qualifiers or "Plate Appearances" in qualifiers or "Starting Pitch Count" in qualifiers or "At Bat Pitch Count" in qualifiers or "Pitch Type" in qualifiers or "Exact Pitch Type" in qualifiers or "Hit Trajectory" in qualifiers or "Hit Hardness" in qualifiers:
+            if has_count_stat or "Hit Location" in qualifiers or "Exact Hit Location" in qualifiers or "Bunting" in qualifiers or "Fastball" in qualifiers or "Out Of Zone" in qualifiers or "In Zone" in qualifiers or "Breaking" in qualifiers or "Offspeed" in qualifiers or "Swung At First Pitch" in qualifiers or "First Pitch" in qualifiers or "Batter Ahead" in qualifiers or "Even Count" in qualifiers or "Pitcher Ahead" in qualifiers or "After Batter Ahead" in qualifiers or "After Even Count" in qualifiers or "After Pitcher Ahead" in qualifiers or "Full Count" in qualifiers or "Swinging On Strikes" in qualifiers or "Swinging On Balls" in qualifiers or "After Swinging On Strikes" in qualifiers or "After Swinging On Balls" in qualifiers or "After Strikes" in qualifiers or "After Balls" in qualifiers or "Strikes" in qualifiers or "Balls" in qualifiers or "Pitch Speed" in qualifiers or "Pitch Zone" in qualifiers or "Pitch Spin" in qualifiers or "Exit Velocity" in qualifiers or "Hit Distance" in qualifiers or "Hit Coordinates" in qualifiers or "Hit Y Coordinate" in qualifiers or "Hit X Coordinate" in qualifiers or "Pitch Coordinates" in qualifiers or "Pitch Y Coordinate" in qualifiers or "Pitch X Coordinate" in qualifiers or "Absolute Pitch Coordinates" in qualifiers or "Absolute Pitch Y Coordinate" in qualifiers or "Absolute Pitch X Coordinate" in qualifiers or "Hit Within Distance" in qualifiers or "Pitch Within Distance" in qualifiers or "Absolute Pitch Within Distance" in qualifiers or "Launch Angle" in qualifiers or "Count" in qualifiers or "After Count" in qualifiers or "After Swinging On Count" in qualifiers or "Swinging On Count" in qualifiers or "Game Pitch Count" in qualifiers or "Team Pitch Count" in qualifiers or "Pitch Count" in qualifiers or "Batters Faced" in qualifiers or "Plate Appearances" in qualifiers or "Starting Pitch Count" in qualifiers or "At Bat Pitch Count" in qualifiers or "Pitch Type" in qualifiers or "Exact Pitch Type" in qualifiers or "Hit Trajectory" in qualifiers or "Hit Hardness" in qualifiers:
                 missing_games = True
                 game_data["missing_data"] = True
                 return game_data, row_data, row_index, missing_games
