@@ -40058,9 +40058,10 @@ def calculate_advanced_stats(data, all_rows, player_type, time_frames):
                     if team not in park_factors[constant_year]:
                         continue
                     for key in yearly_woba_stats[year][team]:
-                        if key not in real_yearly_woba_stats[year]:
-                            real_yearly_woba_stats[year][key] = 0
-                        real_yearly_woba_stats[year][key] += yearly_woba_stats[year][team][key]
+                        if key != "TmLg":
+                            if key not in real_yearly_woba_stats[year]:
+                                real_yearly_woba_stats[year][key] = 0
+                            real_yearly_woba_stats[year][key] += yearly_woba_stats[year][team][key]
 
             if data["BB"]:
                 season_index = 0
