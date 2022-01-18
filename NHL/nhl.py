@@ -32816,7 +32816,6 @@ def handle_schedule_stats(player_data, all_rows, qualifiers, is_playoffs, missin
                                 "Year" : row_data["Year"],
                                 "Tm" : row_data["Tm"],
                                 "Opponent" : row_data["Opponent"],
-                                "Time" : manual_info_row["Time"],
                                 "Arena" : manual_info_row["Arena"],
                                 "NHLGameLink" : row_data["NHLGameLink"]
                             }
@@ -33236,17 +33235,6 @@ def handle_schedule_stats(player_data, all_rows, qualifiers, is_playoffs, missin
 def perform_schedule_qualifiers(row, qualifiers):
     if "TmGm" not in row or row["TmGm"] == None:
         return False
-
-    if "Time" in qualifiers:
-        if row["Time"] == None:
-            return
-        for qual_object in qualifiers["Time"]:
-            if qual_object["negate"]:
-                if row["Time"].lower() in qual_object["values"]:
-                    return False
-            else:
-                if not row["Time"].lower() in qual_object["values"]:
-                    return False
     
     if "Arena" in qualifiers:
         if "Arena" not in row or row["Arena"] == None:
