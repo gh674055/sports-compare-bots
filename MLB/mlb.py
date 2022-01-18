@@ -23978,16 +23978,16 @@ def fix_prob_data(all_rows, player_data, player_type, is_game):
         False : []
     }
 
-    for row in all_rows:
-        if is_game or row["is_playoffs"]:
-            row["WPA"] = 0
-            row["cWPA"] = 0
-            row["RE24"] = 0
+    for row_data in all_rows:
+        if is_game or row_data["is_playoffs"]:
+            row_data["WPA"] = 0
+            row_data["cWPA"] = 0
+            row_data["RE24"] = 0
     
     max_reg_year = 0
     max_playoff_year = 0
     for row_data in all_rows:
-        if is_game or row["is_playoffs"]:
+        if is_game or row_data["is_playoffs"]:
             season_ranges[row_data["is_playoffs"]].append(row_data["RawCrGm"])
             if row_data["is_playoffs"]:
                 if row_data["Year"] > max_playoff_year:
