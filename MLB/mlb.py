@@ -15664,7 +15664,7 @@ def handle_player_data(player_data, time_frame, player_type, player_page, valid_
 
     if not has_against_quals(extra_stats):
         if is_game_page:
-            fix_prob_data(all_rows, player_data, player_type)
+            fix_prob_data(all_rows, player_data, player_type, is_game)
         
     seasons_leading_start = 0
     seasons_leading_end = 0
@@ -23972,27 +23972,29 @@ def handle_missing_game_data(all_rows, player_data, player_type, time_frame, val
                             row_data["StartsPit"] += 1
                     break
 
-def fix_prob_data(all_rows, player_data, player_type):
+def fix_prob_data(all_rows, player_data, player_type, is_game):
     season_ranges = {
         True : [],
         False : []
     }
 
     for row in all_rows:
-        row["WPA"] = 0
-        row["cWPA"] = 0
-        row["RE24"] = 0
+        if is_game or row["is_playoffs"]:
+            row["WPA"] = 0
+            row["cWPA"] = 0
+            row["RE24"] = 0
     
     max_reg_year = 0
     max_playoff_year = 0
     for row_data in all_rows:
-        season_ranges[row_data["is_playoffs"]].append(row_data["RawCrGm"])
-        if row_data["is_playoffs"]:
-            if row_data["Year"] > max_playoff_year:
-                max_playoff_year = row_data["Year"]
-        else:
-            if row_data["Year"] > max_reg_year:
-                max_reg_year = row_data["Year"]
+        if is_game or row["is_playoffs"]:
+            season_ranges[row_data["is_playoffs"]].append(row_data["RawCrGm"])
+            if row_data["is_playoffs"]:
+                if row_data["Year"] > max_playoff_year:
+                    max_playoff_year = row_data["Year"]
+            else:
+                if row_data["Year"] > max_reg_year:
+                    max_reg_year = row_data["Year"]
         
     if season_ranges[True] and max_playoff_year >= 1901:
         handle_prob_data(player_type, season_ranges[True], player_data, all_rows, True)
