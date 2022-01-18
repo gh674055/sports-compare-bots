@@ -20178,66 +20178,67 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
         upcoming_event_type = None
         previous_player_event_type = None
         upcoming_player_event_type = None
-        for sub_event_id, sub_scoring_play in enumerate(scoring_plays):
-            event_type = sub_scoring_play["result"]["event"]
-            if event_type in ["Goal", "Shot", "Missed Shot", "Penalty", "Hit", "Blocked Shot", "Faceoff"]:
-                if sub_scoring_play["about"]["period"] == scoring_play["about"]["period"]:
-                    if sub_event_id < event_id:
-                        previous_event_type = event_type
-                    elif sub_event_id > event_id:
-                        if not upcoming_event_type:
-                            upcoming_event_type = event_type
+        if "Previous Event Type" in time_frame["qualifiers"] or "Upcoming Exact Event Type" in time_frame["qualifiers"] or "Upcoming Player Event Type" in time_frame["qualifiers"] or  "Previous Exact Event Type" in time_frame["qualifiers"] or "Previous Player Event Type" in time_frame["qualifiers"] or "Previous Exact Player Event Type" in time_frame["qualifiers"] or "Upcoming Event Type" in time_frame["qualifiers"] or "Upcoming Exact Event Type" in time_frame["qualifiers"]:
+            for sub_event_id, sub_scoring_play in enumerate(scoring_plays):
+                event_type = sub_scoring_play["result"]["event"]
+                if event_type in ["Goal", "Shot", "Missed Shot", "Penalty", "Hit", "Blocked Shot", "Faceoff"]:
+                    if sub_scoring_play["about"]["period"] == scoring_play["about"]["period"]:
+                        if sub_event_id < event_id:
+                            previous_event_type = event_type
+                        elif sub_event_id > event_id:
+                            if not upcoming_event_type:
+                                upcoming_event_type = event_type
 
-                is_player_event = False
-                if event_type in ["Goal"]:
-                    for score_player in scoring_play["players"]:
-                        if score_player["playerType"] in ["Scorer", "Goalie"]:
-                            if score_player["player"]["id"] == player_id or score_player["player"]["id"] == player_data["id"]:
-                                is_player_event = True
-                                break
-                elif event_type in ["Shot"]:
-                    for score_player in scoring_play["players"]:
-                        if score_player["playerType"] in ["Shooter", "Goalie"]:
-                            if score_player["player"]["id"] == player_id or score_player["player"]["id"] == player_data["id"]:
-                                is_player_event = True
-                                break
-                elif event_type in ["Missed Shot"]:
-                    for score_player in scoring_play["players"]:
-                        if score_player["playerType"] == ["Shooter", "Goalie", "Unknown"]:
-                            if score_player["player"]["id"] == player_id or score_player["player"]["id"] == player_data["id"]:
-                                is_player_event = True
-                                break
-                elif event_type in ["Blocked Shot"]:
-                    for score_player in scoring_play["players"]:
-                        if score_player["playerType"] in ["Shooter", "Blocker"]:
-                            if score_player["player"]["id"] == player_id or score_player["player"]["id"] == player_data["id"]:
-                                is_player_event = True
-                                break
-                elif event_type in ["Penalty"]:
-                    for score_player in scoring_play["players"]:
-                        if score_player["playerType"] in ["PenaltyOn", "DrewBy"]:
-                            if score_player["player"]["id"] == player_id or score_player["player"]["id"] == player_data["id"]:
-                                is_player_event = True
-                                break
-                elif event_type in ["Hit"]:
-                    for score_player in scoring_play["players"]:
-                        if score_player["playerType"] in ["Hitter", "Hittee"]:
-                            if score_player["player"]["id"] == player_id or score_player["player"]["id"] == player_data["id"]:
-                                is_player_event = True
-                                break
-                elif event_type in ["Faceoff"]:
-                    for score_player in scoring_play["players"]:
-                        if score_player["playerType"] in ["Winner", "Loser"]:
-                            if score_player["player"]["id"] == player_id or score_player["player"]["id"] == player_data["id"]:
-                                is_player_event = True
-                                break
-                
-                if is_player_event:
-                    if sub_event_id < event_id:
-                        previous_player_event_type = event_type
-                    elif sub_event_id > event_id:
-                        if not upcoming_player_event_type:
-                            upcoming_player_event_type = event_type
+                    is_player_event = False
+                    if event_type in ["Goal"]:
+                        for score_player in scoring_play["players"]:
+                            if score_player["playerType"] in ["Scorer", "Goalie"]:
+                                if score_player["player"]["id"] == player_id or score_player["player"]["id"] == player_data["id"]:
+                                    is_player_event = True
+                                    break
+                    elif event_type in ["Shot"]:
+                        for score_player in scoring_play["players"]:
+                            if score_player["playerType"] in ["Shooter", "Goalie"]:
+                                if score_player["player"]["id"] == player_id or score_player["player"]["id"] == player_data["id"]:
+                                    is_player_event = True
+                                    break
+                    elif event_type in ["Missed Shot"]:
+                        for score_player in scoring_play["players"]:
+                            if score_player["playerType"] == ["Shooter", "Goalie", "Unknown"]:
+                                if score_player["player"]["id"] == player_id or score_player["player"]["id"] == player_data["id"]:
+                                    is_player_event = True
+                                    break
+                    elif event_type in ["Blocked Shot"]:
+                        for score_player in scoring_play["players"]:
+                            if score_player["playerType"] in ["Shooter", "Blocker"]:
+                                if score_player["player"]["id"] == player_id or score_player["player"]["id"] == player_data["id"]:
+                                    is_player_event = True
+                                    break
+                    elif event_type in ["Penalty"]:
+                        for score_player in scoring_play["players"]:
+                            if score_player["playerType"] in ["PenaltyOn", "DrewBy"]:
+                                if score_player["player"]["id"] == player_id or score_player["player"]["id"] == player_data["id"]:
+                                    is_player_event = True
+                                    break
+                    elif event_type in ["Hit"]:
+                        for score_player in scoring_play["players"]:
+                            if score_player["playerType"] in ["Hitter", "Hittee"]:
+                                if score_player["player"]["id"] == player_id or score_player["player"]["id"] == player_data["id"]:
+                                    is_player_event = True
+                                    break
+                    elif event_type in ["Faceoff"]:
+                        for score_player in scoring_play["players"]:
+                            if score_player["playerType"] in ["Winner", "Loser"]:
+                                if score_player["player"]["id"] == player_id or score_player["player"]["id"] == player_data["id"]:
+                                    is_player_event = True
+                                    break
+                    
+                    if is_player_event:
+                        if sub_event_id < event_id:
+                            previous_player_event_type = event_type
+                        elif sub_event_id > event_id:
+                            if not upcoming_player_event_type:
+                                upcoming_player_event_type = event_type
 
         shared_data = {
             "event_type" : scoring_play["result"]["event"],
