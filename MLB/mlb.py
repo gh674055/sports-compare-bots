@@ -7092,6 +7092,12 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                             time_zone = time_zones[key]
                                             split_vals[index] = split_vals[index][:-(len(key))].strip()
                                             break
+                                    if not time_zone:
+                                        for key in pytz.all_timezones:
+                                            if split_val.upper().endswith(key.upper()):
+                                                time_zone = key
+                                                split_vals[index] = split_vals[index][:-(len(key))].strip()
+                                                break
                                 if not time_zone:
                                     time_zone = "US/Eastern"
                                 

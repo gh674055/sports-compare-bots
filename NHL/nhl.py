@@ -6712,7 +6712,8 @@ manual_info = {
         "Home TmGm" : 102,
         "Road TmGm" : 98,
         "Per" : 2,
-        "Date" : datetime.date(1988, 5, 24)
+        "Date" : datetime.date(1988, 5, 24),
+        "StartTime" : dateutil.parser.parse("1988-05-24T23:30:00Z")
     },
     1987030414 : {
         "Home Score" : 6,
@@ -6721,41 +6722,21 @@ manual_info = {
         "Road Goals" : 3,
         "Home Result" : "W",
         "Road Result" : "L",
-        "Home Wins" : 12,
-        "Road Wins" : 15,
-        "Home Losses" : 9,
-        "Road Losses" : 2,
+        "Home Wins" : 15,
+        "Road Wins" : 12,
+        "Home Losses" : 2,
+        "Road Losses" : 9,
         "Home Ties" : 1,
         "Road Ties" : 1,
         "Home OT Losses" : 0,
         "Road OT Losses" : 0,
         "Arena" : "Northlands Coliseum",
-        "Home TmGm" : 103,
-        "Road TmGm" : 99,
+        "Home TmGm" : 99,
+        "Road TmGm" : 103,
         "Per" : 3,
-        "Date" : datetime.date(1988, 5, 26)
-    },
-    1990020681 : {
-        "Home Score" : 4,
-        "Road Score" : 3,
-        "Home Goals" : 4,
-        "Road Goals" : 3,
-        "Home Result" : "W",
-        "Road Result" : "L",
-        "Home Wins" : 23,
-        "Road Wins" : 32,
-        "Home Losses" : 36,
-        "Road Losses" : 28,
-        "Home Ties" : 7,
-        "Road Ties" : 4,
-        "Home OT Losses" : 0,
-        "Road OT Losses" : 0,
-        "Arena" : "Pacific Coliseum",
-        "Home TmGm" : 67,
-        "Road TmGm" : 65,
-        "Per" : 3,
-        "Date" : datetime.date(1991, 2, 27)
-    },
+        "Date" : datetime.date(1988, 5, 26),
+        "StartTime" : dateutil.parser.parse("1988-05-27T01:00:00Z")
+    }
 }
 
 missing_event_data = {
@@ -7550,6 +7531,12 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                             time_zone = time_zones[key]
                                             split_vals[index] = split_vals[index][:-(len(key))].strip()
                                             break
+                                    if not time_zone:
+                                        for key in pytz.all_timezones:
+                                            if split_val.upper().endswith(key.upper()):
+                                                time_zone = key
+                                                split_vals[index] = split_vals[index][:-(len(key))].strip()
+                                                break
                                 if not time_zone:
                                     time_zone = "US/Eastern"
                                 
@@ -15074,7 +15061,7 @@ def handle_player_data(player_data, time_frame, player_type, player_page, valid_
             if str(year) not in all_star_games:
                 needs_half = True
 
-    if has_schedule_stat_qual or "Local Start Time" in time_frame["qualifiers"] or "Local Event Time" in time_frame["qualifiers"] or "Arena" in time_frame["qualifiers"] or "Overtime" in time_frame["qualifiers"] or "Exact Arena" in time_frame["qualifiers"] or "Time Zone" in time_frame["qualifiers"]  or "Exact Time Zone" in time_frame["qualifiers"] or "City" in time_frame["qualifiers"]  or "Exact City" in time_frame["qualifiers"] or "State" in time_frame["qualifiers"]  or "Exact State" in time_frame["qualifiers"] or "Country" in time_frame["qualifiers"]  or "Exact Country" in time_frame["qualifiers"] or "Result" in time_frame["qualifiers"] or "Previous Result" in time_frame["qualifiers"] or "Upcoming Result" in time_frame["qualifiers"] or "Elimination" in time_frame["qualifiers"] or "Clinching" in time_frame["qualifiers"] or "Elimination Or Clinching" in time_frame["qualifiers"] or "Winner Take All" in time_frame["qualifiers"] or "Ahead In Series" in time_frame["qualifiers"] or "Behind In Series" in time_frame["qualifiers"] or "Even In Series" in time_frame["qualifiers"] or "Series Team Wins" in time_frame["qualifiers"] or "Series Opponent Wins" in time_frame["qualifiers"] or "Series Score Margin" in time_frame["qualifiers"] or "Series Score Difference" in time_frame["qualifiers"] or "Round" in time_frame["qualifiers"] or "Series Game" in time_frame["qualifiers"] or "Final Team Score" in time_frame["qualifiers"] or "Final Opponent Score" in time_frame["qualifiers"] or "Final Score Margin" in time_frame["qualifiers"] or "Final Score Difference" in time_frame["qualifiers"] or "Team Game" in time_frame["qualifiers"] or "Team Game Reversed" in time_frame["qualifiers"] or "Games Rest" in time_frame["qualifiers"] or "Starts Rest" in time_frame["qualifiers"] or "Days In A Row" in time_frame["qualifiers"] or "Games In A Row" in time_frame["qualifiers"] or "Starts In A Row" in time_frame["qualifiers"] or "Previous Team Result" in time_frame["qualifiers"] or "Upcoming Team Result" in time_frame["qualifiers"] or "National Game" in time_frame["qualifiers"] or "Any National Game" in time_frame["qualifiers"] or "USA National Game" in time_frame["qualifiers"] or "Any USA National Game" in time_frame["qualifiers"] or "CAN National Game" in time_frame["qualifiers"] or "Any CAN National Game" in time_frame["qualifiers"] or "TV Network" in time_frame["qualifiers"] or "Raw TV Network" in time_frame["qualifiers"] or "National TV Network" in time_frame["qualifiers"] or "National Raw TV Network" in time_frame["qualifiers"] or "Any National TV Network" in time_frame["qualifiers"] or "Any National Raw TV Network" in time_frame["qualifiers"] or "Current Winning Opponent" in time_frame["qualifiers"] or "Current Losing Opponent" in time_frame["qualifiers"] or "Current Tied Opponent" in time_frame["qualifiers"] or "Current Winning Or Tied Opponent" in time_frame["qualifiers"] or "Current Losing Or Tied Opponent" in time_frame["qualifiers"] or "Current Winning Team" in time_frame["qualifiers"] or "Current Losing Team" in time_frame["qualifiers"] or "Current Tied Team" in time_frame["qualifiers"] or "Current Winning Or Tied Team" in time_frame["qualifiers"] or "Current Losing Or Tied Team" in time_frame["qualifiers"] or "Current Team Win Percentage" in time_frame["qualifiers"] or "Current Opponent Win Percentage" in time_frame["qualifiers"] or "Current Team Points Percentage" in time_frame["qualifiers"] or "Current Opponent Points Percentage" in time_frame["qualifiers"] or "Current Team Wins" in time_frame["qualifiers"] or "Current Team Losses" in time_frame["qualifiers"] or "Current Team Ties" in time_frame["qualifiers"] or "Current Team Points" in time_frame["qualifiers"] or "Current Opponent Wins" in time_frame["qualifiers"] or "Current Opponent Losses" in time_frame["qualifiers"] or "Current Opponent Ties" in time_frame["qualifiers"] or "Current Opponent Points" in time_frame["qualifiers"] or "Current Team Games Over 500" in time_frame["qualifiers"] or "Current Opponent Games Over 500" in time_frame["qualifiers"] or needs_half or "score" in extra_stats or "record" in extra_stats:
+    if has_schedule_stat_qual or "Start Time" in time_frame["qualifiers"] or "Team Start Time" in time_frame["qualifiers"] or "Opponent Start Time" in time_frame["qualifiers"] or "Local Start Time" in time_frame["qualifiers"] or "Local Event Time" in time_frame["qualifiers"] or "Arena" in time_frame["qualifiers"] or "Overtime" in time_frame["qualifiers"] or "Exact Arena" in time_frame["qualifiers"] or "Time Zone" in time_frame["qualifiers"]  or "Exact Time Zone" in time_frame["qualifiers"] or "City" in time_frame["qualifiers"]  or "Exact City" in time_frame["qualifiers"] or "State" in time_frame["qualifiers"]  or "Exact State" in time_frame["qualifiers"] or "Country" in time_frame["qualifiers"]  or "Exact Country" in time_frame["qualifiers"] or "Result" in time_frame["qualifiers"] or "Previous Result" in time_frame["qualifiers"] or "Upcoming Result" in time_frame["qualifiers"] or "Elimination" in time_frame["qualifiers"] or "Clinching" in time_frame["qualifiers"] or "Elimination Or Clinching" in time_frame["qualifiers"] or "Winner Take All" in time_frame["qualifiers"] or "Ahead In Series" in time_frame["qualifiers"] or "Behind In Series" in time_frame["qualifiers"] or "Even In Series" in time_frame["qualifiers"] or "Series Team Wins" in time_frame["qualifiers"] or "Series Opponent Wins" in time_frame["qualifiers"] or "Series Score Margin" in time_frame["qualifiers"] or "Series Score Difference" in time_frame["qualifiers"] or "Round" in time_frame["qualifiers"] or "Series Game" in time_frame["qualifiers"] or "Final Team Score" in time_frame["qualifiers"] or "Final Opponent Score" in time_frame["qualifiers"] or "Final Score Margin" in time_frame["qualifiers"] or "Final Score Difference" in time_frame["qualifiers"] or "Team Game" in time_frame["qualifiers"] or "Team Game Reversed" in time_frame["qualifiers"] or "Games Rest" in time_frame["qualifiers"] or "Starts Rest" in time_frame["qualifiers"] or "Days In A Row" in time_frame["qualifiers"] or "Games In A Row" in time_frame["qualifiers"] or "Starts In A Row" in time_frame["qualifiers"] or "Previous Team Result" in time_frame["qualifiers"] or "Upcoming Team Result" in time_frame["qualifiers"] or "National Game" in time_frame["qualifiers"] or "Any National Game" in time_frame["qualifiers"] or "USA National Game" in time_frame["qualifiers"] or "Any USA National Game" in time_frame["qualifiers"] or "CAN National Game" in time_frame["qualifiers"] or "Any CAN National Game" in time_frame["qualifiers"] or "TV Network" in time_frame["qualifiers"] or "Raw TV Network" in time_frame["qualifiers"] or "National TV Network" in time_frame["qualifiers"] or "National Raw TV Network" in time_frame["qualifiers"] or "Any National TV Network" in time_frame["qualifiers"] or "Any National Raw TV Network" in time_frame["qualifiers"] or "Current Winning Opponent" in time_frame["qualifiers"] or "Current Losing Opponent" in time_frame["qualifiers"] or "Current Tied Opponent" in time_frame["qualifiers"] or "Current Winning Or Tied Opponent" in time_frame["qualifiers"] or "Current Losing Or Tied Opponent" in time_frame["qualifiers"] or "Current Winning Team" in time_frame["qualifiers"] or "Current Losing Team" in time_frame["qualifiers"] or "Current Tied Team" in time_frame["qualifiers"] or "Current Winning Or Tied Team" in time_frame["qualifiers"] or "Current Losing Or Tied Team" in time_frame["qualifiers"] or "Current Team Win Percentage" in time_frame["qualifiers"] or "Current Opponent Win Percentage" in time_frame["qualifiers"] or "Current Team Points Percentage" in time_frame["qualifiers"] or "Current Opponent Points Percentage" in time_frame["qualifiers"] or "Current Team Wins" in time_frame["qualifiers"] or "Current Team Losses" in time_frame["qualifiers"] or "Current Team Ties" in time_frame["qualifiers"] or "Current Team Points" in time_frame["qualifiers"] or "Current Opponent Wins" in time_frame["qualifiers"] or "Current Opponent Losses" in time_frame["qualifiers"] or "Current Opponent Ties" in time_frame["qualifiers"] or "Current Opponent Points" in time_frame["qualifiers"] or "Current Team Games Over 500" in time_frame["qualifiers"] or "Current Opponent Games Over 500" in time_frame["qualifiers"] or needs_half or "score" in extra_stats or "record" in extra_stats:
         all_rows, missing_games = handle_schedule_stats(player_data, all_rows, time_frame["qualifiers"], time_frame["playoffs"], missing_games)
     
     if "Winning Opponent" in time_frame["qualifiers"] or "Losing Opponent" in time_frame["qualifiers"] or "Tied Opponent" in time_frame["qualifiers"] or "Winning Or Tied Opponent" in time_frame["qualifiers"] or "Losing Or Tied Opponent" in time_frame["qualifiers"] or "Playoff Opponent" in time_frame["qualifiers"] or "Cup Winner Opponent" in time_frame["qualifiers"] or "Conference Winner Opponent" in time_frame["qualifiers"] or "Opponent Goals Rank" in time_frame["qualifiers"] or "Opponent Goals Allowed Rank" in time_frame["qualifiers"] or "Opponent Win Percentage" in time_frame["qualifiers"] or "Opponent Points Percentage" in time_frame["qualifiers"] or "Winning Team" in time_frame["qualifiers"] or "Losing Team" in time_frame["qualifiers"] or "Tied Team" in time_frame["qualifiers"] or "Winning Or Tied Team" in time_frame["qualifiers"] or "Losing Or Tied Team" in time_frame["qualifiers"] or "Playoff Team" in time_frame["qualifiers"] or "Cup Winner Team" in time_frame["qualifiers"] or "Conference Winner Team" in time_frame["qualifiers"] or "Team Goals Rank" in time_frame["qualifiers"] or "Team Goals Allowed Rank" in time_frame["qualifiers"] or "Team Win Percentage" in time_frame["qualifiers"] or "Team Points Percentage" in time_frame["qualifiers"] or "Team Wins" in time_frame["qualifiers"] or "Team Losses" in time_frame["qualifiers"] or "Team Ties" in time_frame["qualifiers"] or "Team Points" in time_frame["qualifiers"] or "Opponent Wins" in time_frame["qualifiers"] or "Opponent Losses" in time_frame["qualifiers"] or "Opponent Ties" in time_frame["qualifiers"] or "Opponent Points" in time_frame["qualifiers"] or "Team Conference" in time_frame["qualifiers"] or "Team Division" in time_frame["qualifiers"] or "Opponent Conference" in time_frame["qualifiers"] or "Opponent Division" in time_frame["qualifiers"] or "Interconference" in time_frame["qualifiers"] or "Intraconference" in time_frame["qualifiers"] or "Intradivision" in time_frame["qualifiers"] or "Interdivision" in time_frame["qualifiers"] or "Team Standings Rank" in time_frame["qualifiers"] or "Opponent Standings Rank" in time_frame["qualifiers"] or "Team Games Over 500" in time_frame["qualifiers"] or "Opponent Games Over 500" in time_frame["qualifiers"]:
@@ -15094,11 +15081,11 @@ def handle_player_data(player_data, time_frame, player_type, player_page, valid_
                 new_rows.append(row_data)
         all_rows = new_rows
     
-    if not "hide-advanced" in extra_stats or ("Game Number" in time_frame["qualifiers"] or "Attendance" in time_frame["qualifiers"] or "Start Time" in time_frame["qualifiers"] or "Team Start Time" in time_frame["qualifiers"] or "Opponent Start Time" in time_frame["qualifiers"] or "Local Start Time" in time_frame["qualifiers"] or "Exact Official" in time_frame["qualifiers"] or "Exact Referee" in time_frame["qualifiers"] or "Exact Linesman" in time_frame["qualifiers"] or "Exact Team Head Coach" in time_frame["qualifiers"] or "Exact Opponent Head Coach" in time_frame["qualifiers"] or "Official" in time_frame["qualifiers"] or "Referee" in time_frame["qualifiers"] or "Linesman" in time_frame["qualifiers"] or "Team Head Coach" in time_frame["qualifiers"] or "Opponent Head Coach" in time_frame["qualifiers"] or "fight" in extra_stats or "star" in extra_stats):
+    if not "hide-advanced" in extra_stats or ("Game Number" in time_frame["qualifiers"] or "Attendance" in time_frame["qualifiers"]  or "Exact Official" in time_frame["qualifiers"] or "Exact Referee" in time_frame["qualifiers"] or "Exact Linesman" in time_frame["qualifiers"] or "Exact Team Head Coach" in time_frame["qualifiers"] or "Exact Opponent Head Coach" in time_frame["qualifiers"] or "Official" in time_frame["qualifiers"] or "Referee" in time_frame["qualifiers"] or "Linesman" in time_frame["qualifiers"] or "Team Head Coach" in time_frame["qualifiers"] or "Opponent Head Coach" in time_frame["qualifiers"] or "fight" in extra_stats or "star" in extra_stats):
         if ("Event Stat" in time_frame["qualifiers"] or "Event Stat Reversed" in time_frame["qualifiers"] or "Event Stats" in time_frame["qualifiers"] or "Event Stats Reversed" in time_frame["qualifiers"] or "Starting Event Stat" in time_frame["qualifiers"] or "Starting Event Stat Reversed" in time_frame["qualifiers"] or "Starting Event Stats" in time_frame["qualifiers"] or "Starting Event Stats Reversed" in time_frame["qualifiers"]):
             player_data["stat_values"]["is_indv_shift_data"] = True
             all_rows, missing_games, missing_toi = handle_nhl_game_stats_single_thread(player_data, all_rows, time_frame, player_link, player_type, missing_games, missing_toi, extra_stats)
-        elif "Game Number" in time_frame["qualifiers"] or "Attendance" in time_frame["qualifiers"] or "Start Time" in time_frame["qualifiers"] or "Team Start Time" in time_frame["qualifiers"] or "Opponent Start Time" in time_frame["qualifiers"] or "Local Start Time" in time_frame["qualifiers"] or "Exact Referee" in time_frame["qualifiers"] or "Exact Linesman" in time_frame["qualifiers"] or "Exact Team Head Coach" in time_frame["qualifiers"] or "Exact Opponent Head Coach" in time_frame["qualifiers"] or "Official" in time_frame["qualifiers"] or "Referee" in time_frame["qualifiers"] or "Linesman" in time_frame["qualifiers"] or "Team Head Coach" in time_frame["qualifiers"] or "Opponent Head Coach" in time_frame["qualifiers"] or "fight" in extra_stats or "star" in extra_stats or "current-stats" in extra_stats:
+        elif "Game Number" in time_frame["qualifiers"] or "Attendance" in time_frame["qualifiers"] or "Exact Referee" in time_frame["qualifiers"] or "Exact Linesman" in time_frame["qualifiers"] or "Exact Team Head Coach" in time_frame["qualifiers"] or "Exact Opponent Head Coach" in time_frame["qualifiers"] or "Official" in time_frame["qualifiers"] or "Referee" in time_frame["qualifiers"] or "Linesman" in time_frame["qualifiers"] or "Team Head Coach" in time_frame["qualifiers"] or "Opponent Head Coach" in time_frame["qualifiers"] or "fight" in extra_stats or "star" in extra_stats or "current-stats" in extra_stats:
             player_data["stat_values"]["is_indv_shift_data"] = True
             all_rows, missing_games, missing_toi = handle_nhl_game_stats(player_data, all_rows, time_frame, player_link, player_type, missing_games, missing_toi, extra_stats)
 
@@ -17806,6 +17793,8 @@ def get_nhl_schedule(player_data, all_rows, qualifiers):
                 row_data["NHLGameLink"] = game_data["gamePk"]
                 row_data["Arena"] = unidecode.unidecode(game_data["venue"]["name"]).strip()
 
+                row_data["StartTime"] = dateutil.parser.parse(game_data["gameDate"])
+
                 row_data["Year"] = season
 
                 is_home = game_data["teams"]["home"]["team"]["id"] == team_id
@@ -19756,7 +19745,6 @@ def set_row_data(player_game_info, row_data):
     row_data["OtherOfficialID"] = player_game_info["OtherOfficialID"]
     row_data["TmHeadCoach"] = player_game_info["TmHeadCoach"]
     row_data["OppHeadCoach"] = player_game_info["OppHeadCoach"]
-    row_data["StartTime"] = player_game_info["StartTime"]
     row_data["Attendance"] = player_game_info["Attendance"]
 
 def get_game_data(index, player_data, row_data, player_id, player_type, time_frame, extra_stats):
@@ -20768,7 +20756,6 @@ def setup_game_data(player_data, row_data, player_id, player_type, time_frame):
         "OtherOfficialID" : [],
         "TmHeadCoach" : None,
         "OppHeadCoach" : None,
-        "StartTime" : None,
         "winning_goalie" : None,
         "losing_goalie" : None
     }
@@ -20806,8 +20793,6 @@ def setup_game_data(player_data, row_data, player_id, player_type, time_frame):
     game_data["team_goals"] = sub_data["liveData"]["linescore"]["teams"][game_data["team_str"]]["goals"]
     game_data["opp_goals"] = sub_data["liveData"]["linescore"]["teams"][game_data["opp_str"]]["goals"]
     game_data["is_shootout"] = "hasShootout" in sub_data["liveData"]["linescore"] and sub_data["liveData"]["linescore"]["hasShootout"]
-    
-    game_data["StartTime"] = dateutil.parser.parse(sub_data["gameData"]["datetime"]["dateTime"])
 
     for period in sub_data["liveData"]["linescore"]["periods"]:
         game_data["periods"].append(period["num"])
@@ -21095,7 +21080,6 @@ def setup_href_game_data(player_data, row_data, player_id, player_type, time_fra
             "OtherOfficialID" : [],
             "TmHeadCoach" : None,
             "OppHeadCoach" : None,
-            "StartTime" : None,
             "winning_goalie" : 1,
             "losing_goalie" : 1
         }
@@ -23612,105 +23596,6 @@ def perform_nhl_game_qualifiers(row, qualifiers):
                     return False
             else:
                 if not (row["Attendance"] >= qual_object["values"]["start_val"] and row["Attendance"] <= qual_object["values"]["end_val"]):
-                    return False
-    
-    if "Local Start Time" in qualifiers:
-        if "StartTime" not in row or row["StartTime"] == None:
-            return False
-        if "Arena" not in row or row["Arena"] == None:
-            return False
-
-        team_venue_obj = None
-        for venue_id in team_venues:
-            if row["Arena"] in team_venues[venue_id]["venues"]:
-                team_venue_obj = team_venues[venue_id]
-                break
-
-        val_to_check = team_venue_obj["time_zone"]
-
-        event_time = row["StartTime"].astimezone(pytz.timezone(val_to_check)).time().replace(microsecond=0)
-        for qual_object in qualifiers["Local Start Time"]:
-            stat_val = qual_object["values"]["start_val"]
-            end_val = qual_object["values"]["end_val"]
-
-            is_match = event_time >= stat_val and event_time <= end_val
-            if qual_object["negate"]:
-                if is_match:
-                    return False
-            else:
-                if not is_match:
-                    return False
-    
-    if "Start Time" in qualifiers:
-        if "StartTime" not in row or row["StartTime"] == None:
-            return False
-
-        for qual_object in qualifiers["Start Time"]:
-            stat_val = qual_object["values"]["start_val"]
-            end_val = qual_object["values"]["end_val"]
-            event_time = row["StartTime"].astimezone(pytz.timezone(qual_object["values"]["time_zone"])).time().replace(microsecond=0)
-            if end_val < stat_val:
-                is_match = event_time >= stat_val or event_time <= end_val
-            else:
-                is_match = event_time >= stat_val and event_time <= end_val
-
-            if qual_object["negate"]:
-                if is_match:
-                    return False
-            else:
-                if not is_match:
-                    return False
-    
-    if "Team Start Time" in qualifiers:
-        if "StartTime" not in row or row["StartTime"] == None:
-            return False
-
-        venue_obj = determine_venue_obj(row, True)
-        if not venue_obj:
-            return False
-
-        val_to_check = venue_obj["time_zone"]
-
-        event_time = row["StartTime"].astimezone(pytz.timezone(val_to_check)).time().replace(microsecond=0)
-        for qual_object in qualifiers["Team Start Time"]:
-            stat_val = qual_object["values"]["start_val"]
-            end_val = qual_object["values"]["end_val"]
-            if end_val < stat_val:
-                is_match = event_time >= stat_val or event_time <= end_val
-            else:
-                is_match = event_time >= stat_val and event_time <= end_val
-
-            if qual_object["negate"]:
-                if is_match:
-                    return False
-            else:
-                if not is_match:
-                    return False
-    
-    if "Opponent Start Time" in qualifiers:
-        if "StartTime" not in row or row["StartTime"] == None:
-            return False
-
-        venue_obj = determine_venue_obj(row, False)
-        if not venue_obj:
-            return False
-
-        val_to_check = venue_obj["time_zone"]
-
-        event_time = row["StartTime"].astimezone(pytz.timezone(val_to_check)).time().replace(microsecond=0)
-        for qual_object in qualifiers["Opponent Start Time"]:
-            stat_val = qual_object["values"]["start_val"]
-            end_val = qual_object["values"]["end_val"]
-            if end_val < stat_val:
-                is_match = event_time >= stat_val or event_time <= end_val
-            else:
-                is_match = event_time >= stat_val and event_time <= end_val
-
-            if qual_object["negate"]:
-                if is_match:
-                    return False
-            else:
-                if not is_match:
                     return False
     
     if "Official" in qualifiers:
@@ -32565,6 +32450,7 @@ def handle_schedule_stats(player_data, all_rows, qualifiers, is_playoffs, missin
                                 manual_row["TmGm"] = manual_info_row["Road TmGm"]
                             
                             manual_row["Per"] = manual_info_row["Per"]
+                            manual_row["StartTime"] = manual_info_row["StartTime"]
 
                             if row_data["is_playoffs"]:
                                 season_obj["playoffs"].append(manual_row)
@@ -32635,6 +32521,7 @@ def handle_schedule_stats(player_data, all_rows, qualifiers, is_playoffs, missin
                             row_data["Previous Team Result"] = data["Previous Team Result"]
                             row_data["Upcoming Team Result"] = data["Upcoming Team Result"]
                             row_data["Per"] = data["Per"]
+                            row_data["StartTime"] = data["StartTime"]
                             row_data["TmGmRev"] = max_team_games - data["TmGm"] + 1
 
                             if "IsNational" in data:
@@ -32865,6 +32752,7 @@ def handle_schedule_stats(player_data, all_rows, qualifiers, is_playoffs, missin
                         row_data["Previous Team Result"] = data["Previous Team Result"]
                         row_data["Upcoming Team Result"] = data["Upcoming Team Result"]
                         row_data["Per"] = data["Per"]
+                        row_data["StartTime"] = data["StartTime"]
                         row_data["TmGmRev"] = max_team_games - data["TmGm"] + 1
 
                         if "IsNational" in data:
@@ -33215,6 +33103,108 @@ def perform_schedule_qualifiers(row, qualifiers):
                     return False
             else:
                 if not has_match:
+                    return False
+
+    if "Local Start Time" in qualifiers:
+        if "StartTime" not in row or row["StartTime"] == None:
+            return False
+        if "Arena" not in row or row["Arena"] == None:
+            return False
+
+        team_venue_obj = None
+        for venue_id in team_venues:
+            if row["Arena"] in team_venues[venue_id]["venues"]:
+                team_venue_obj = team_venues[venue_id]
+                break
+
+        val_to_check = team_venue_obj["time_zone"]
+
+        event_time = row["StartTime"].astimezone(pytz.timezone(val_to_check)).time().replace(microsecond=0)
+        for qual_object in qualifiers["Local Start Time"]:
+            stat_val = qual_object["values"]["start_val"]
+            end_val = qual_object["values"]["end_val"]
+
+            is_match = event_time >= stat_val and event_time <= end_val
+            if qual_object["negate"]:
+                if is_match:
+                    return False
+            else:
+                if not is_match:
+                    return False
+    
+    if "Start Time" in qualifiers:
+        if "StartTime" not in row or row["StartTime"] == None:
+            return False
+
+        for qual_object in qualifiers["Start Time"]:
+            stat_val = qual_object["values"]["start_val"]
+            end_val = qual_object["values"]["end_val"]
+            event_time = row["StartTime"].astimezone(pytz.timezone(qual_object["values"]["time_zone"])).time().replace(microsecond=0)
+            print(row["StartTime"])
+            print(qual_object["values"]["time_zone"])
+            print(event_time)
+            if end_val < stat_val:
+                is_match = event_time >= stat_val or event_time <= end_val
+            else:
+                is_match = event_time >= stat_val and event_time <= end_val
+
+            if qual_object["negate"]:
+                if is_match:
+                    return False
+            else:
+                if not is_match:
+                    return False
+    
+    if "Team Start Time" in qualifiers:
+        if "StartTime" not in row or row["StartTime"] == None:
+            return False
+
+        venue_obj = determine_venue_obj(row, True)
+        if not venue_obj:
+            return False
+
+        val_to_check = venue_obj["time_zone"]
+
+        event_time = row["StartTime"].astimezone(pytz.timezone(val_to_check)).time().replace(microsecond=0)
+        for qual_object in qualifiers["Team Start Time"]:
+            stat_val = qual_object["values"]["start_val"]
+            end_val = qual_object["values"]["end_val"]
+            if end_val < stat_val:
+                is_match = event_time >= stat_val or event_time <= end_val
+            else:
+                is_match = event_time >= stat_val and event_time <= end_val
+
+            if qual_object["negate"]:
+                if is_match:
+                    return False
+            else:
+                if not is_match:
+                    return False
+    
+    if "Opponent Start Time" in qualifiers:
+        if "StartTime" not in row or row["StartTime"] == None:
+            return False
+
+        venue_obj = determine_venue_obj(row, False)
+        if not venue_obj:
+            return False
+
+        val_to_check = venue_obj["time_zone"]
+
+        event_time = row["StartTime"].astimezone(pytz.timezone(val_to_check)).time().replace(microsecond=0)
+        for qual_object in qualifiers["Opponent Start Time"]:
+            stat_val = qual_object["values"]["start_val"]
+            end_val = qual_object["values"]["end_val"]
+            if end_val < stat_val:
+                is_match = event_time >= stat_val or event_time <= end_val
+            else:
+                is_match = event_time >= stat_val and event_time <= end_val
+
+            if qual_object["negate"]:
+                if is_match:
+                    return False
+            else:
+                if not is_match:
                     return False
                     
     if "Series Game" in qualifiers:
