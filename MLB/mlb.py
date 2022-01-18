@@ -15664,7 +15664,7 @@ def handle_player_data(player_data, time_frame, player_type, player_page, valid_
 
     if not has_against_quals(extra_stats):
         if is_game_page:
-            fix_prob_data(all_rows, player_data, player_type, is_game)
+            fix_prob_data(all_rows, player_data, player_type, all_teams_unique)
         
     seasons_leading_start = 0
     seasons_leading_end = 0
@@ -23972,22 +23972,21 @@ def handle_missing_game_data(all_rows, player_data, player_type, time_frame, val
                             row_data["StartsPit"] += 1
                     break
 
-def fix_prob_data(all_rows, player_data, player_type, is_game):
+def fix_prob_data(all_rows, player_data, player_type, all_teams_unique):
     season_ranges = {
         True : [],
         False : []
     }
 
     for row_data in all_rows:
-        if is_game or row_data["is_playoffs"]:
-            row_data["WPA"] = 0
-            row_data["cWPA"] = 0
-            row_data["RE24"] = 0
+        row_data["WPA"] = 0
+        row_data["cWPA"] = 0
+        row_data["RE24"] = 0
     
     max_reg_year = 0
     max_playoff_year = 0
     for row_data in all_rows:
-        if is_game or row_data["is_playoffs"]:
+        if row_data["is_playoffs"] or "RawCrGm" in row_data:
             season_ranges[row_data["is_playoffs"]].append(row_data["RawCrGm"])
             if row_data["is_playoffs"]:
                 if row_data["Year"] > max_playoff_year:
@@ -23998,14 +23997,28 @@ def fix_prob_data(all_rows, player_data, player_type, is_game):
         
     if season_ranges[True] and max_playoff_year >= 1901:
         handle_prob_data(player_type, season_ranges[True], player_data, all_rows, True)
+
+    full_season_ranges = []
+    if not season_ranges[False] and all_teams_unique:
+        for row_data in all_rows:
+            if not row_data["is_playoffs"] and "RawCrGm" not in row_data:
+                if row_data["Year"] not in full_season_ranges:
+                    full_season_ranges.append(row_data["Year"])
+                    if row_data["Year"] > max_reg_year:
+                        max_reg_year = row_data["Year"]
     
-    if season_ranges[False] and max_reg_year >= 1916:
-        handle_prob_data(player_type, season_ranges[False], player_data, all_rows, False)
+    if max_reg_year >= 1916:
+        if season_ranges[False]:
+            handle_prob_data(player_type, season_ranges[False], player_data, all_rows, False)
+        elif full_season_ranges:
+            handle_season_prob_data(player_type, full_season_ranges, player_data, all_rows)
         
 def handle_prob_data(player_type, all_season_ranges, player_data, all_rows, is_post):
     the_table_name = "batting_gamelogs" if player_type["da_type"] == "Batter" else "pitching_gamelogs"
     if is_post:
         the_table_name += "_post"
+
+    all_season_ranges = sorted(all_season_ranges)
     
     is_consec = False
     if sorted(all_season_ranges) == list(range(min(all_season_ranges), max(all_season_ranges) + 1)):
@@ -24060,6 +24073,56 @@ def handle_prob_data(player_type, all_season_ranges, player_data, all_rows, is_p
                                 pot_row["RE24"] = 0
                             pot_row["RE24"] += float(re24_str)
                         break
+
+def handle_season_prob_data(player_type, all_season_ranges, player_data, all_rows):
+    the_table_name = "batting_win_probability" if player_type["da_type"] == "Batter" else "pitching_win_probability"
+
+    all_season_ranges = sorted(all_season_ranges)
+    
+    stat_sum_range = ",".join([str(season_range) for season_range in all_season_ranges]) if len(all_season_ranges) > 1 else str(all_season_ranges[0]) + "-" + str(all_season_ranges[0])
+    print(stat_sum_range)
+
+    request = urllib.request.Request(sum_stats_format.format(player_data["id"], the_table_name, stat_sum_range), headers=request_headers)
+    try:
+        response, player_page = url_request(request)
+    except urllib.error.HTTPError:
+        raise
+
+    table_name = "span_stats"
+
+    table = player_page.find("table", id=table_name)
+    if not table:
+        if not comments:
+            comments = player_page.find_all(string=lambda text: isinstance(text, Comment))
+        for c in comments:
+            temp_soup = BeautifulSoup(c, "lxml")
+            temp_table = temp_soup.find("table", id=table_name)
+            if temp_table:
+                table = temp_table
+                break
+
+    if table:
+        standard_table_rows = table.find("tbody").find_all("tr")
+        for i in range(len(standard_table_rows)):
+            row = standard_table_rows[i]
+            for pot_row in all_rows:
+                if pot_row["Year"] >= 1916 and pot_row["is_playoffs"] == False:
+                    wpa_str = row.find("td", {"data-stat" : "wpa_" + ("bat" if player_type["da_type"] == "Batter" else "def")}).find(text=True)
+                    if wpa_str:
+                        if "WPA" not in pot_row:
+                            pot_row["WPA"] = 0
+                        pot_row["WPA"] += float(wpa_str)
+                    cwpa_str = row.find("td", {"data-stat" : "cwpa_" + ("bat" if player_type["da_type"] == "Batter" else "def")}).find(text=True)
+                    if cwpa_str:
+                        if "cWPA" not in pot_row:
+                            pot_row["cWPA"] = 0
+                        pot_row["cWPA"] += float(cwpa_str[:-1]) / 100
+                    re24_str = row.find("td", {"data-stat" : "re24_" + ("bat" if player_type["da_type"] == "Batter" else "def")}).find(text=True)
+                    if re24_str:
+                        if "RE24" not in pot_row:
+                            pot_row["RE24"] = 0
+                        pot_row["RE24"] += float(re24_str)
+                    break
     
 def parse_row(row, time_frame, year, is_playoffs, player_type, header_values, previous_headers, table_index, table_name):
     date = None
