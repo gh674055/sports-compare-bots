@@ -34684,13 +34684,11 @@ def calculate_earliest_invalid_date(stat, player_type, data, formula, earliest_i
 
 def replace_formula(data, stat, formula, all_rows, earliest_invalid_date, player_type, real_stat, formula_matches):
     value = data[stat]
-    if isinstance(value, numbers.Number):
-        value = calculate_valid_value(stat, value, earliest_invalid_date, all_rows, real_stat)
-    elif real_stat != "custom_formula":
+    if not isinstance(value, numbers.Number) and real_stat != "custom_formula":
         return formula, formula_matches
 
     old_formula = formulas
-    formula, formula_matches = perform_replacement(formula_matches, stat.lower(), str(value), formula)
+    formula, formula_matches = perform_replacement(formula_matches, stat, value, formula, earliest_invalid_date, all_rows)
 
     if old_formula == formula and real_stat == "custom_formula":
         new_stat = None
@@ -34700,21 +34698,23 @@ def replace_formula(data, stat, formula, all_rows, earliest_invalid_date, player
                 break
 
         if new_stat:
-            formula, formula_matches = perform_replacement(formula_matches, new_stat.lower(), str(value), formula)
+            formula, formula_matches = perform_replacement(formula_matches, new_stat, value, formula, earliest_invalid_date, all_rows)
 
     return formula, formula_matches
 
-def perform_replacement(formula_matches, stat, value, formula):
+def perform_replacement(formula_matches, stat, value, formula, earliest_invalid_date, all_rows):
     for formula_match in formula_matches:
-        if formula_match.group() == stat:
+        if formula_match.group() == stat.lower():
+            if isinstance(value, numbers.Number):
+                value = str(calculate_valid_value(stat, value, earliest_invalid_date, all_rows))
             span = formula_match.span()
             formula = formula[:span[0]] + value + formula[span[1]:]
             formula_matches = list(re.finditer(r"(?:(?:[A-Za-z_:~])\d?|\d?(?:[A-Za-z_:~]))+", formula))
-            return perform_replacement(formula_matches, stat, value, formula)
+            return perform_replacement(formula_matches, stat, value, formula, earliest_invalid_date, all_rows)
     
     return formula, formula_matches
 
-def calculate_valid_value(stat, value, earliest_invalid_date, all_rows, real_stat):
+def calculate_valid_value(stat, value, earliest_invalid_date, all_rows):
     if not earliest_invalid_date:
         return value
 

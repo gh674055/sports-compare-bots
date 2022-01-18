@@ -6127,7 +6127,6 @@ def replace_formula(data, header, stat, formula, all_rows, earliest_invalid_date
             value = data[header][stat]
 
         if isinstance(value, (int, float)):
-            value = calculate_valid_value(stat, header, value, earliest_invalid_date, all_rows)
             header_match = r"(?:" + header.lower() + r")"
             if header == "Era Adjusted Passing":
                 header_match = r"(?:era adjusted passing|total)"
@@ -6135,25 +6134,26 @@ def replace_formula(data, header, stat, formula, all_rows, earliest_invalid_date
                 header_match = r"(?:scrimmage/all purpose|scrimmage)"
 
             old_formula = formulas
-            formula, formula_matches = perform_replacement(formula_matches, header_match + "~" + stat.lower(), str(value), formula)
+            formula, formula_matches = perform_replacement(formula_matches, header_match + "~" + stat, header, value, formula, earliest_invalid_date, all_rows)
             if old_formula == formula:
-                formula, formula_matches = perform_replacement(formula_matches, stat.lower(), str(value), formula)
+                formula, formula_matches = perform_replacement(formula_matches, stat, header, value, formula, earliest_invalid_date, all_rows)
         return formula, formula_matches
     else:
         value = data[header][stat]
         if isinstance(value, (int, float)):
-            value = calculate_valid_value(stat, header, value, earliest_invalid_date, all_rows)
-            return perform_replacement(formula_matches, stat.lower(), str(value), formula)
+            return perform_replacement(formula_matches, stat, header, value, formula, earliest_invalid_date, all_rows)
         else:
             return formula, formula_matches
 
-def perform_replacement(formula_matches, stat, value, formula):
+def perform_replacement(formula_matches, stat, header, value, formula, earliest_invalid_date, all_rows):
     for formula_match in formula_matches:
-        if formula_match.group() == stat:
+        if formula_match.group() == stat.lower():
+            if isinstance(value, (int, float)):
+                value = str(calculate_valid_value(stat, header, value, earliest_invalid_date, all_rows))
             span = formula_match.span()
             formula = formula[:span[0]] + value + formula[span[1]:]
             formula_matches = list(re.finditer(r"(?:(?:[A-Za-z_:~])\d?|\d?(?:[A-Za-z_:~]))+", formula))
-            return perform_replacement(formula_matches, stat, value, formula)
+            return perform_replacement(formula_matches, stat, header, value, formula, earliest_invalid_date, all_rows)
     
     return formula, formula_matches
             

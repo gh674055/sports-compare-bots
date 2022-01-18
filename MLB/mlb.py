@@ -13206,10 +13206,7 @@ def get_player(name, time_frames):
                 return matching_player["id"], player_page
     return None, None
 
-def combine_player_datas(player_datas, player_type, any_missing_games, any_missing_salary, any_missing_inf, time_frames, add_type, remove_duplicates, remove_duplicate_games, is_pitching_jaws, extra_stats):
-    # profile = cProfile.Profile()
-    # profile.enable()
-    
+def combine_player_datas(player_datas, player_type, any_missing_games, any_missing_salary, any_missing_inf, time_frames, add_type, remove_duplicates, remove_duplicate_games, is_pitching_jaws, extra_stats):    
     player_data = {
         "ids": [],
         "mlb_ids" : [],
@@ -14128,10 +14125,6 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
 
     if "hide-query" in extra_stats:
         player_data["stat_values"]["Raw Quals"] = "Query: ?????"
-
-    # ps = pstats.Stats(profile)
-    # ps.sort_stats(pstats.SortKey.TIME)
-    # ps.print_stats()
 
     return player_data
 
@@ -24155,7 +24148,7 @@ def parse_row(row, time_frame, year, is_playoffs, player_type, header_values, pr
                 
         row_data["is_playoffs"] = is_playoffs
 
-        if "Tm" in row_data:
+        if "Tm" in row_data and row_data["Tm"] != "TOT" and not "," in row_data["Tm"]:
             row_data["TmLg"] = get_team_league(row_data["Tm"], row_data["Year"])
         if "Opponent" in row_data:
             row_data["OppLg"] = get_team_league(row_data["Opponent"].upper(), row_data["Year"])
@@ -36193,6 +36186,7 @@ def result_call_back(qualifiers, count_info, new_rows, player_type, player_data,
         return
     # finally:
     #     ps = pstats.Stats(profile)
+    #     ps.sort_stats(pstats.SortKey.TIME)
     #     ps.print_stats()
 
 def handle_result_qualifiers(game_data, index, row_data, sub_missing_games, player_type, player_data, qualifiers, saved_row_data, count_info, extra_stats):
@@ -40606,13 +40600,11 @@ def calculate_earliest_invalid_data(stat, player_type, data, formula, earliest_i
 
 def replace_formula(data, stat, formula, all_rows, earliest_invalid_date, player_type, real_stat, formula_matches):
     value = data[stat]
-    if isinstance(value, numbers.Number):
-        value = calculate_valid_value(stat, value, earliest_invalid_date, all_rows)
-    elif real_stat != "custom_formula":
+    if not isinstance(value, numbers.Number) and real_stat != "custom_formula":
         return formula, formula_matches
 
     old_formula = formulas
-    formula, formula_matches = perform_replacement(formula_matches, stat.lower(), str(value), formula)
+    formula, formula_matches = perform_replacement(formula_matches, stat, value, formula, earliest_invalid_date, all_rows)
 
     if old_formula == formula and real_stat == "custom_formula":
         new_stat = None
@@ -40622,17 +40614,19 @@ def replace_formula(data, stat, formula, all_rows, earliest_invalid_date, player
                 break
 
         if new_stat:
-            formula, formula_matches = perform_replacement(formula_matches, new_stat.lower(), str(value), formula)
+            formula, formula_matches = perform_replacement(formula_matches, new_stat, value, formula, earliest_invalid_date, all_rows)
 
     return formula, formula_matches
 
-def perform_replacement(formula_matches, stat, value, formula):
+def perform_replacement(formula_matches, stat, value, formula, earliest_invalid_date, all_rows):
     for formula_match in formula_matches:
-        if formula_match.group() == stat:
+        if formula_match.group() == stat.lower():
+            if isinstance(value, numbers.Number):
+                value = str(calculate_valid_value(stat, value, earliest_invalid_date, all_rows))
             span = formula_match.span()
             formula = formula[:span[0]] + value + formula[span[1]:]
             formula_matches = list(re.finditer(r"(?:(?:[A-Za-z_:~])\d?|\d?(?:[A-Za-z_:~]))+", formula))
-            return perform_replacement(formula_matches, stat, value, formula)
+            return perform_replacement(formula_matches, stat, value, formula, earliest_invalid_date, all_rows)
     
     return formula, formula_matches
 
