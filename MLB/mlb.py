@@ -15897,6 +15897,8 @@ def get_live_game(player_link, player_data, player_type, time_frame):
             if game["status"]["detailedState"]:
                 if game["status"]["detailedState"] == "Cancelled" or game["status"]["detailedState"] == "Warmup" or game["status"]["detailedState"] == "Postponed" or game["status"]["detailedState"].startswith("Suspended"):
                     continue
+            if not "score" in game["teams"]["home"]:
+                continue
             ids_to_header[game["gamePk"]] = len(ids_to_header)
 
         if len(ids_to_header) > 1:
@@ -15921,6 +15923,8 @@ def get_live_game(player_link, player_data, player_type, time_frame):
             if latest_game["status"]["detailedState"]:
                 if latest_game["status"]["detailedState"] == "Cancelled" or latest_game["status"]["detailedState"] == "Warmup" or latest_game["status"]["detailedState"] == "Postponed" or latest_game["status"]["detailedState"].startswith("Suspended"):
                     continue
+            if not "score" in latest_game["teams"]["home"]:
+                continue
 
             latest_game["teamGameNumber"] = team_game_number
             latest_game["time_int"] = ids_to_header[latest_game["gamePk"]]
@@ -36401,6 +36405,8 @@ def get_mlb_game_links_schedule_links(player_data, player_type, player_link, all
                     if game["status"]["detailedState"]:
                         if game["status"]["detailedState"] == "Cancelled" or game["status"]["detailedState"] == "Warmup" or game["status"]["detailedState"] == "Postponed" or game["status"]["detailedState"].startswith("Suspended"):
                             continue
+                    if not "score" in game["teams"]["home"]:
+                        continue
                     ids_to_header[game["gamePk"]] = len(ids_to_header)
                 
                 if len(ids_to_header) > 1:
@@ -36418,6 +36424,8 @@ def get_mlb_game_links_schedule_links(player_data, player_type, player_link, all
                         if game["status"]["detailedState"]:
                             if game["status"]["detailedState"] == "Cancelled" or game["status"]["detailedState"] == "Warmup" or game["status"]["detailedState"] == "Postponed" or game["status"]["detailedState"].startswith("Suspended"):
                                 continue
+                        if not "score" in game["teams"]["home"]:
+                            continue
 
                         game["time_int"] = ids_to_header[game["gamePk"]]
                     
