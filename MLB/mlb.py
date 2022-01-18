@@ -25867,7 +25867,12 @@ def get_team_schedule(player_data, seasons, needs_reg_season, needs_playoffs, ne
                 playoff_game_counter += 1
                 team_info = player_page.find("div", {"id" : "meta"})
                 if team_info:
-                    postseason_item = team_info.find("strong", text="Postseason")
+                    postseason_item = None
+                    postseason_strongs = team_info.find_all("strong")
+                    for pot_strong in postseason_strongs:
+                        if str(pot_strong.find(text=True)).startswith("Postseason"):
+                            postseason_item = pot_strong
+                            break
                     if postseason_item:
                         postseason_parent = postseason_item.parent
                         if postseason_parent:
@@ -25891,7 +25896,7 @@ def get_team_schedule(player_data, seasons, needs_reg_season, needs_playoffs, ne
                                                 row_data = {}
                                                 row_data["Year"] = season_obj["Year"]
                                                 row_data["Tm"] = season_obj["Tm"]
-                                                row_data["DateTime"] = str(dateutil.parser.parse(date_row.find(text=True)).split(",")[1].strip() + " " + str(season_obj["Year"]))
+                                                row_data["DateTime"] = dateutil.parser.parse(date_row.find(text=True).split(",")[1].strip() + " " + str(season_obj["Year"]))
                                                 row_data["Date"] = row_data["DateTime"].date()
                                                 row_data["TmGm"] = playoff_game_counter
                                                 row_data["GameLink"] = table.find("td", {"class" : "gamelink"}).find("a")["href"]
