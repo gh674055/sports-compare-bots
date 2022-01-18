@@ -26418,6 +26418,22 @@ def handle_mlb_game_stats(all_rows, has_count_stat, qualifiers, player_data, pla
                 
             if not has_match:
                 games_to_skip.add(row_data["GameLink"])
+    if "Walk Off" in qualifiers:
+        for row_data in all_rows:
+            has_match = False
+            for qual_object in qualifiers["Walk Off"]:
+                if not qual_object["negate"]:
+                    if player_type["da_type"] == "Batter":
+                        if row_data["Location"] and row_data["Result"] == "W" and (row_data["Team Score"] - row_data["Opponent Score"]) <= 4:
+                            has_match = True
+                    else:
+                        if row_data["Location"] and row_data["Result"] == "L" and (row_data["Team Score"] - row_data["Opponent Score"]) <= -4:
+                            has_match = True
+                else:
+                    has_match = True
+                
+            if not has_match:
+                games_to_skip.add(row_data["GameLink"])
     for qual in ["Event Stat", "Event Stat Reversed", "Event Stats", "Event Stats Reversed", "Starting Event Stat", "Starting Event Stat Reversed", "Starting Event Stats", "Starting Event Stats Reversed", "Game Event Stat", "Game Event Stat Reversed", "Game Event Stats", "Game Event Stats Reversed", "Starting Game Event Stat", "Starting Game Event Stat Reversed", "Starting Game Event Stats", "Starting Game Event Stats Reversed"]:
         handle_event_stats(qual, all_rows, games_to_skip, qualifiers, player_type, player_data)
 
@@ -26759,6 +26775,22 @@ def handle_mlb_game_stats_single_thread(all_rows, has_count_stat, qualifiers, pl
                 if not qual_object["negate"]:
                     for player in qual_object["values"]:
                         if row_data["GameLink"] in player["games"]:
+                            has_match = True
+                else:
+                    has_match = True
+                
+            if not has_match:
+                games_to_skip.add(row_data["GameLink"])
+    if "Walk Off" in qualifiers:
+        for row_data in all_rows:
+            has_match = False
+            for qual_object in qualifiers["Walk Off"]:
+                if not qual_object["negate"]:
+                    if player_type["da_type"] == "Batter":
+                        if row_data["Location"] and row_data["Result"] == "W" and (row_data["Team Score"] - row_data["Opponent Score"]) <= 4:
+                            has_match = True
+                    else:
+                        if row_data["Location"] and row_data["Result"] == "W" and (row_data["Team Score"] - row_data["Opponent Score"]) <= -4:
                             has_match = True
                 else:
                     has_match = True
