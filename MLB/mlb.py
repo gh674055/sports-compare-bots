@@ -37291,52 +37291,53 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
             upcoming_event_type = None
             previous_player_event_type = None
             upcoming_player_event_type = None
-            for sub_index, sub_scoring_play in enumerate(sub_data["liveData"]["plays"]["allPlays"]):
-                if sub_scoring_play["result"]["type"] != "atBat" or "eventType" not in sub_scoring_play["result"]:
-                    continue
+            if "Previous Event Type" in qualifiers or "Upcoming Exact Event Type" in qualifiers or "Upcoming Player Event Type" in qualifiers or "Previous Exact Event Type" in qualifiers or "Previous Player Event Type" in qualifiers or "Previous Exact Player Event Type" in qualifiers or "Upcoming Event Type" in qualifiers or "Upcoming Exact Event Type" in qualifiers:
+                for sub_index, sub_scoring_play in enumerate(sub_data["liveData"]["plays"]["allPlays"]):
+                    if sub_scoring_play["result"]["type"] != "atBat" or "eventType" not in sub_scoring_play["result"]:
+                        continue
 
-                sub_inning = sub_scoring_play["about"]["inning"]
-                sub_is_top_inning = sub_scoring_play["about"]["isTopInning"]
+                    sub_inning = sub_scoring_play["about"]["inning"]
+                    sub_is_top_inning = sub_scoring_play["about"]["isTopInning"]
 
-                event_type = sub_scoring_play["result"]["eventType"]
-                if event_type in ["field_out", "double_play", "triple_play", "fielders_choice", "fielders_choice_out", "force_out", "cs_double_play"]:
-                    event_type = "out"
-                elif event_type in ["field_error"]:
-                    event_type = "error"
-                elif event_type in ["strike_out", "strikeout_double_play", "strikeout_triple_play"]:
-                    event_type = "strikeout"
-                elif event_type in ["sac_fly_double_play"]:
-                    event_type = "sac_fly"
-                elif event_type in ["sac_bunt_double_play"]:
-                    event_type = "sac_bunt"
+                    event_type = sub_scoring_play["result"]["eventType"]
+                    if event_type in ["field_out", "double_play", "triple_play", "fielders_choice", "fielders_choice_out", "force_out", "cs_double_play"]:
+                        event_type = "out"
+                    elif event_type in ["field_error"]:
+                        event_type = "error"
+                    elif event_type in ["strike_out", "strikeout_double_play", "strikeout_triple_play"]:
+                        event_type = "strikeout"
+                    elif event_type in ["sac_fly_double_play"]:
+                        event_type = "sac_fly"
+                    elif event_type in ["sac_bunt_double_play"]:
+                        event_type = "sac_bunt"
 
-                if event_type not in event_type_stat_mappings or event_type in ["stolen_base", "caught_stealing", "run_scored", "pick_off"]:
-                    event_type = "no_stats"
+                    if event_type not in event_type_stat_mappings or event_type in ["stolen_base", "caught_stealing", "run_scored", "pick_off"]:
+                        event_type = "no_stats"
 
-                if event_type == "home_run" and "description" in sub_scoring_play["result"] and sub_scoring_play["result"]["description"] and "inside-the-park" in sub_scoring_play["result"]["description"]:
-                    event_type = "inside_the_park_home_run"
+                    if event_type == "home_run" and "description" in sub_scoring_play["result"] and sub_scoring_play["result"]["description"] and "inside-the-park" in sub_scoring_play["result"]["description"]:
+                        event_type = "inside_the_park_home_run"
 
-                if sub_inning == inning and sub_is_top_inning == is_top_inning:
-                    if sub_index < index:
-                        previous_event_type = event_type
-                    elif sub_index > index:
-                        if not upcoming_event_type:
-                            upcoming_event_type = event_type
-                
-                if player_type["da_type"] == "Batter":
-                    if sub_scoring_play["matchup"]["batter"]["id"] == player_data["mlb_id"]:
+                    if sub_inning == inning and sub_is_top_inning == is_top_inning:
                         if sub_index < index:
-                            previous_player_event_type = event_type
+                            previous_event_type = event_type
                         elif sub_index > index:
-                            if not upcoming_player_event_type:
-                                upcoming_player_event_type = event_type
-                else:
-                    if sub_scoring_play["matchup"]["pitcher"]["id"] == player_data["mlb_id"]:
-                        if sub_index < index:
-                            previous_player_event_type = event_type
-                        elif sub_index > index:
-                            if not upcoming_player_event_type:
-                                upcoming_player_event_type = event_type
+                            if not upcoming_event_type:
+                                upcoming_event_type = event_type
+                    
+                    if player_type["da_type"] == "Batter":
+                        if sub_scoring_play["matchup"]["batter"]["id"] == player_data["mlb_id"]:
+                            if sub_index < index:
+                                previous_player_event_type = event_type
+                            elif sub_index > index:
+                                if not upcoming_player_event_type:
+                                    upcoming_player_event_type = event_type
+                    else:
+                        if sub_scoring_play["matchup"]["pitcher"]["id"] == player_data["mlb_id"]:
+                            if sub_index < index:
+                                previous_player_event_type = event_type
+                            elif sub_index > index:
+                                if not upcoming_player_event_type:
+                                    upcoming_player_event_type = event_type
 
             counts = [{
                 "balls" : 0,
