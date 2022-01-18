@@ -23979,9 +23979,10 @@ def fix_prob_data(all_rows, player_data, player_type, all_teams_unique):
     }
 
     for row_data in all_rows:
-        row_data["WPA"] = 0
-        row_data["cWPA"] = 0
-        row_data["RE24"] = 0
+        if row_data["is_playoffs"] or "RawCrGm" in row_data or all_teams_unique:
+            row_data["WPA"] = 0
+            row_data["cWPA"] = 0
+            row_data["RE24"] = 0
     
     max_reg_year = 0
     max_playoff_year = 0
@@ -24080,7 +24081,6 @@ def handle_season_prob_data(player_type, all_season_ranges, player_data, all_row
     all_season_ranges = sorted(all_season_ranges)
     
     stat_sum_range = ",".join([str(season_range) for season_range in all_season_ranges]) if len(all_season_ranges) > 1 else str(all_season_ranges[0]) + "-" + str(all_season_ranges[0])
-    print(stat_sum_range)
 
     request = urllib.request.Request(sum_stats_format.format(player_data["id"], the_table_name, stat_sum_range), headers=request_headers)
     try:
