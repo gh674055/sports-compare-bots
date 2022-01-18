@@ -19888,7 +19888,8 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
 
     scoring_plays = []
     if row_data["Year"] < 2001 or has_api_quals(time_frame["qualifiers"]):
-        scoring_plays = sub_data["liveData"]["plays"]["allPlays"]
+        if sub_data:
+            scoring_plays = sub_data["liveData"]["plays"]["allPlays"]
     
         if "hide-href" not in extra_stats and not scoring_plays and not has_api_quals(time_frame["qualifiers"]) and (not "Shot On" in time_frame["qualifiers"] and not "Shot By" in time_frame["qualifiers"] and not "Shot On First Name" in time_frame["qualifiers"] and not "Shot By First Name" in time_frame["qualifiers"] and not "Shot On Last Name" in time_frame["qualifiers"] and not "Shot By Last Name" in time_frame["qualifiers"] and not "Shot On Birth Country" in time_frame["qualifiers"] and not "Shot By Birth Country" in time_frame["qualifiers"] and not "Shot On Nationality" in time_frame["qualifiers"] and not "Shot By Nationality" in time_frame["qualifiers"] and not "Facing Lefty" in time_frame["qualifiers"] and not "Facing Righty" in time_frame["qualifiers"]):
             game_data, missing_games, sub_data = setup_href_game_data(player_data, row_data, player_id, player_type, time_frame, game_data)
@@ -20178,7 +20179,7 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
         upcoming_event_type = None
         previous_player_event_type = None
         upcoming_player_event_type = None
-        if "Previous Event Type" in time_frame["qualifiers"] or "Upcoming Exact Event Type" in time_frame["qualifiers"] or "Upcoming Player Event Type" in time_frame["qualifiers"] or  "Previous Exact Event Type" in time_frame["qualifiers"] or "Previous Player Event Type" in time_frame["qualifiers"] or "Previous Exact Player Event Type" in time_frame["qualifiers"] or "Upcoming Event Type" in time_frame["qualifiers"] or "Upcoming Exact Event Type" in time_frame["qualifiers"]:
+        if "Previous Event Type" in time_frame["qualifiers"] or "Upcoming Exact Event Type" in time_frame["qualifiers"] or "Upcoming Player Event Type" in time_frame["qualifiers"] or "Previous Exact Event Type" in time_frame["qualifiers"] or "Previous Player Event Type" in time_frame["qualifiers"] or "Previous Exact Player Event Type" in time_frame["qualifiers"] or "Upcoming Event Type" in time_frame["qualifiers"] or "Upcoming Exact Event Type" in time_frame["qualifiers"]:
             for sub_event_id, sub_scoring_play in enumerate(scoring_plays):
                 event_type = sub_scoring_play["result"]["event"]
                 if event_type in ["Goal", "Shot", "Missed Shot", "Penalty", "Hit", "Blocked Shot", "Faceoff"]:
@@ -33532,9 +33533,6 @@ def perform_schedule_qualifiers(row, qualifiers):
             stat_val = qual_object["values"]["start_val"]
             end_val = qual_object["values"]["end_val"]
             event_time = row["StartTime"].astimezone(pytz.timezone(qual_object["values"]["time_zone"])).time().replace(microsecond=0)
-            print(row["StartTime"])
-            print(qual_object["values"]["time_zone"])
-            print(event_time)
             if end_val < stat_val:
                 is_match = event_time >= stat_val or event_time <= end_val
             else:
