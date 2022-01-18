@@ -18326,6 +18326,7 @@ def result_call_back(time_frame, count_info, new_rows, player_type, player_data,
         return
     # finally:
     #     ps = pstats.Stats(profile)
+    #     ps.sort_stats(pstats.SortKey.TIME)
     #     ps.print_stats()
 
 def handle_result_qualifiers(game_data, row_data, sub_missing_games, time_frame, index, saved_row_data, count_info, player_type, player_data, player_link, extra_stats):
@@ -34718,7 +34719,7 @@ def calculate_valid_value(stat, value, earliest_invalid_date, all_rows, real_sta
         return value
 
     for row_data in all_rows:
-        if stat in row_data:
+        if stat in row_data and row_data[stat]:
             date = row_data["Year"]
             if date < earliest_invalid_date:
                 value = value - row_data[stat]

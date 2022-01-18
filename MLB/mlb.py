@@ -138,7 +138,7 @@ all_months_re = r"(?:" + "|".join([month + "-?" for month in all_months]) + r")+
 all_days = [day.lower() for day in calendar.day_name[0:len(calendar.day_name)] + calendar.day_abbr[0:len(calendar.day_abbr)]]
 all_days_re = r"(?:" + "|".join([day + "-?" for day in all_days]) + r")+"
 
-string_stats = ["Tm"]
+string_stats = ["Tm", "TmLg"]
 
 pitcher_overrides = [150449, 660271]
 
@@ -175,6 +175,10 @@ headers = {
             "display" : False
         },
         "Tm" : {
+            "positive" : True,
+            "display" : False
+        },
+        "TmLg" : {
             "positive" : True,
             "display" : False
         },
@@ -2134,6 +2138,10 @@ headers = {
             "display" : False
         },
         "Tm" : {
+            "positive" : True,
+            "display" : False
+        },
+        "TmLg" : {
             "positive" : True,
             "display" : False
         },
@@ -12218,7 +12226,7 @@ def handle_name_threads(sub_name, parse_time_frames, index, player_type, remove_
             for row in player_data["stat_values"]["all_rows"]:
                 team = row["Tm"]
                 year = str(row["Year"])
-                sleague = get_team_league(team, year)
+                sleague = row["TmLg"]
                 team_franchise = team_main_abbr[sleague][year][team]
                 if team_franchise not in franchises:
                     franchises[team_franchise] = set()
@@ -13199,6 +13207,9 @@ def get_player(name, time_frames):
     return None, None
 
 def combine_player_datas(player_datas, player_type, any_missing_games, any_missing_salary, any_missing_inf, time_frames, add_type, remove_duplicates, remove_duplicate_games, is_pitching_jaws, extra_stats):
+    # profile = cProfile.Profile()
+    # profile.enable()
+    
     player_data = {
         "ids": [],
         "mlb_ids" : [],
@@ -14117,6 +14128,10 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
 
     if "hide-query" in extra_stats:
         player_data["stat_values"]["Raw Quals"] = "Query: ?????"
+
+    # ps = pstats.Stats(profile)
+    # ps.sort_stats(pstats.SortKey.TIME)
+    # ps.print_stats()
 
     return player_data
 
@@ -15710,7 +15725,7 @@ def get_team_map_info(player_data, player_type, valid_teams, comment_obj):
         team_ranges[row_data["Tm"]][row_data["Year"]][len(team_ranges[row_data["Tm"]][row_data["Year"]]) - 1]["end"] = row_data["DateTime"]
         last_team = row_data["Tm"]
 
-        sleague = get_team_league(row_data["Tm"], row_data["Year"])
+        sleague = row_data["TmLg"]
         team_franchise = team_main_abbr[sleague][str(row_data["Year"])][row_data["Tm"]]
         if team_franchise not in franc_map:
             franc_map[team_franchise] = row_data["DateTime"]
@@ -16082,6 +16097,9 @@ def determine_row_data(game_data, player_type, player_data, player_id, current_t
     if "Opponent" not in row_data:
         logger.warn("#" + str(threading.get_ident()) + "#   " + "Unable to get MLB live game link for BRef ID : " + player_data["id"] + " and team/year " + parsed_team_name + "/" +  str(row_data["Year"]) + ". Cannot retrieve MLB live data")
         return
+
+    row_data["TmLg"] = get_team_league(row_data["Tm"], row_data["Year"])
+    row_data["OppLg"] = get_team_league(row_data["Opponent"].upper(), row_data["Year"])
 
     if str(row_data["Date"]) in special_doubleheaders and row_data["Tm"] in special_doubleheaders[str(row_data["Date"])]["single_teams"]:
         row_data["DateTime"] = game_datetime.replace(hour=0)
@@ -16681,8 +16699,8 @@ def handle_season_only_stats(player_page, player_data, player_type, time_frame, 
     team_franchise = None
     for row in all_rows:
         year = str(row["Year"])
-        team = row["Tm"].upper()
-        sleague = get_team_league(team, year)
+        team = row["Tm"]
+        sleague = row["TmLg"]
         team_franchise = team_main_abbr[sleague][year][team]
         if team_franchise not in teams_map:
             teams_map[team_franchise] = {}
@@ -17817,7 +17835,7 @@ def perform_qualifier(player_data, player_type, row, time_frame, all_rows):
     if "Facing Former Franchise" in qualifiers:
         year = str(row["Year"])
         team = row["Opponent"].upper()
-        sleague = get_team_league(team, year)
+        sleague = row["OppLg"]
         team_franchise = team_main_abbr[sleague][year][team]
 
         for qual_object in qualifiers["Facing Former Franchise"]:
@@ -17853,7 +17871,7 @@ def perform_qualifier(player_data, player_type, row, time_frame, all_rows):
     if "With New Franchise" in qualifiers:
         year = str(row["Year"])
         team = row["Opponent"].upper()
-        sleague = get_team_league(team, year)
+        sleague = row["OppLg"]
         team_franchise = team_main_abbr[sleague][year][team]
 
         for qual_object in qualifiers["With New Franchise"]:
@@ -18139,7 +18157,7 @@ def perform_qualifier(player_data, player_type, row, time_frame, all_rows):
     if "Team Franchise" in qualifiers:
         year = str(row["Year"])
         team = row["Tm"].upper()
-        sleague = get_team_league(team, year)
+        sleague = row["TmLg"]
         team_franchise = team_main_abbr[sleague][year][team]
 
         for qual_object in qualifiers["Team Franchise"]:
@@ -18153,7 +18171,7 @@ def perform_qualifier(player_data, player_type, row, time_frame, all_rows):
     if "Opponent Franchise" in qualifiers:
         year = str(row["Year"])
         team = row["Opponent"].upper()
-        sleague = get_team_league(team, year)
+        sleague = row["OppLg"]
         team_franchise = team_main_abbr[sleague][year][team]
 
         for qual_object in qualifiers["Opponent Franchise"]:
@@ -18214,7 +18232,7 @@ def perform_qualifier(player_data, player_type, row, time_frame, all_rows):
 
         year = str(row["Previous Row"]["Year"])
         team = row["Previous Row"]["Tm"].upper()
-        sleague = get_team_league(team, year)
+        sleague = row["Previous Row"]["TmLg"]
         team_franchise = team_main_abbr[sleague][year][team]
 
         for qual_object in qualifiers["Previous Team Franchise"]:
@@ -18231,7 +18249,7 @@ def perform_qualifier(player_data, player_type, row, time_frame, all_rows):
 
         year = str(row["Previous Row"]["Year"])
         team = row["Previous Row"]["Opponent"].upper()
-        sleague = get_team_league(team, year)
+        sleague = row["Previous Row"]["OppLg"]
         team_franchise = team_main_abbr[sleague][year][team]
 
         for qual_object in qualifiers["Previous Opponent Franchise"]:
@@ -18248,7 +18266,7 @@ def perform_qualifier(player_data, player_type, row, time_frame, all_rows):
 
         year = str(row["Upcoming Row"]["Year"])
         team = row["Upcoming Row"]["Tm"].upper()
-        sleague = get_team_league(team, year)
+        sleague = row["Upcoming Row"]["TmLg"]
         team_franchise = team_main_abbr[sleague][year][team]
 
         for qual_object in qualifiers["Upcoming Team Franchise"]:
@@ -18265,7 +18283,7 @@ def perform_qualifier(player_data, player_type, row, time_frame, all_rows):
             
         year = str(row["Upcoming Row"]["Year"])
         team = row["Upcoming Row"]["Opponent"].upper()
-        sleague = get_team_league(team, year)
+        sleague = row["Upcoming Row"]["OppLg"]
         team_franchise = team_main_abbr[sleague][year][team]
 
         for qual_object in qualifiers["Upcoming Opponent Franchise"]:
@@ -18277,9 +18295,7 @@ def perform_qualifier(player_data, player_type, row, time_frame, all_rows):
                     return False
 
     if "Team League" in qualifiers:
-        year = str(row["Year"])
-        team = row["Tm"]
-        sleague = get_team_league(team, year)
+        sleague = row["TmLg"]
 
         for qual_object in qualifiers["Team League"]:
             if qual_object["negate"]:
@@ -18290,9 +18306,7 @@ def perform_qualifier(player_data, player_type, row, time_frame, all_rows):
                     return False
 
     if "Opponent League" in qualifiers:
-        year = str(row["Year"])
-        team = row["Opponent"].upper()
-        sleague = get_team_league(team, year)
+        sleague = row["OppLg"]
 
         for qual_object in qualifiers["Opponent League"]:
             if qual_object["negate"]:
@@ -18305,9 +18319,7 @@ def perform_qualifier(player_data, player_type, row, time_frame, all_rows):
     if "Previous Team League" in qualifiers:
         if not row["Previous Row"]:
             return False
-        year = str(row["Year"])
-        team = row["Previous Row"]["Tm"]
-        sleague = get_team_league(team, year)
+        sleague = row["Previous Row"]["TmLg"]
 
         for qual_object in qualifiers["Previous Team League"]:
             if qual_object["negate"]:
@@ -18320,9 +18332,7 @@ def perform_qualifier(player_data, player_type, row, time_frame, all_rows):
     if "Previous Opponent League" in qualifiers:
         if not row["Previous Row"]:
             return False
-        year = str(row["Year"])
-        team = row["Previous Row"]["Opponent"].upper()
-        sleague = get_team_league(team, year)
+        sleague = row["Previous Row"]["OppLg"]
 
         for qual_object in qualifiers["Previous Opponent League"]:
             if qual_object["negate"]:
@@ -18335,9 +18345,7 @@ def perform_qualifier(player_data, player_type, row, time_frame, all_rows):
     if "Upcoming Team League" in qualifiers:
         if not row["Upcoming Row"]:
             return False
-        year = str(row["Year"])
-        team = row["Upcoming Row"]["Tm"]
-        sleague = get_team_league(team, year)
+        sleague = row["Upcoming Row"]["TmLg"]
 
         for qual_object in qualifiers["Upcoming Team League"]:
             if qual_object["negate"]:
@@ -18350,9 +18358,7 @@ def perform_qualifier(player_data, player_type, row, time_frame, all_rows):
     if "Upcoming Opponent League" in qualifiers:
         if not row["Upcoming Row"]:
             return False
-        year = str(row["Year"])
-        team = row["Upcoming Row"]["Opponent"].upper()
-        sleague = get_team_league(team, year)
+        sleague = row["Upcoming Row"]["OppLg"]
 
         for qual_object in qualifiers["Upcoming Opponent League"]:
             if qual_object["negate"]:
@@ -18385,11 +18391,8 @@ def perform_qualifier(player_data, player_type, row, time_frame, all_rows):
                     return False
     
     if "Interleague" in qualifiers:
-        year = str(row["Year"])
-        team = row["Tm"]
-        opponent = row["Opponent"].upper()
-        sleague_team = get_team_league(team, year)
-        sleague_opponent = get_team_league(opponent, year)
+        sleague_team = row["TmLg"]
+        sleague_opponent = row["OppLg"]
 
         for qual_object in qualifiers["Interleague"]:
             if qual_object["negate"]:
@@ -18400,11 +18403,8 @@ def perform_qualifier(player_data, player_type, row, time_frame, all_rows):
                     return False
     
     if "Intraleague" in qualifiers:
-        year = str(row["Year"])
-        team = row["Tm"]
-        opponent = row["Opponent"].upper()
-        sleague_team = get_team_league(team, year)
-        sleague_opponent = get_team_league(opponent, year)
+        sleague_team = row["TmLg"]
+        sleague_opponent = row["OppLg"]
 
         for qual_object in qualifiers["Intraleague"]:
             if qual_object["negate"]:
@@ -20012,9 +20012,8 @@ def perform_qualifier(player_data, player_type, row, time_frame, all_rows):
     return True
 
 def determine_venue_obj(row, is_team):
-    year = str(row["Year"])
     team = row["Tm" if is_team else "Opponent"].upper()
-    sleague = get_team_league(team, year)
+    sleague = row["TmLg" if is_team else "OppLg"].upper()
 
     team_id = None
     for parsed_team_name in team_name_info:
@@ -24156,6 +24155,11 @@ def parse_row(row, time_frame, year, is_playoffs, player_type, header_values, pr
                 
         row_data["is_playoffs"] = is_playoffs
 
+        if "Tm" in row_data:
+            row_data["TmLg"] = get_team_league(row_data["Tm"], row_data["Year"])
+        if "Opponent" in row_data:
+            row_data["OppLg"] = get_team_league(row_data["Opponent"].upper(), row_data["Year"])
+
         if table_index == 0:
             if year or is_playoffs:
                 row_data.update({"G" : 1})
@@ -25770,19 +25774,6 @@ def perform_opponent_schedule_qualifiers(row, qualifiers):
                     return False
             else:
                 if not (row["OppLosses"] >= qual_object["values"]["start_val"] and row["OppLosses"] <= qual_object["values"]["end_val"]):
-                    return False
-
-    if "Opponent League" in qualifiers:
-        year = str(row["Year"])
-        team = row["Opponent"].upper()
-        sleague = get_team_league(team, year)
-
-        for qual_object in qualifiers["Opponent League"]:
-            if qual_object["negate"]:
-                if sleague.lower() in qual_object["values"]:
-                    return False
-            else:
-                if not sleague.lower() in qual_object["values"]:
                     return False
     
     if "Opponent Division" in qualifiers:
@@ -36654,9 +36645,7 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
     }
 
     if "MLBGameLink" not in row_data:
-        team = row_data["Tm"]
-        year = str(row_data["Year"])
-        sleague = get_team_league(team, year)
+        sleague = row_data["TmLg"]
         if sleague in ["AL", "NL"]:
             raise Exception("#" + str(threading.get_ident()) + "#   " + "Unable to get MLB game data for BRef ID : " + player_data["id"] + " and date " + str(row_data["DateTime"]) + ". Will be missing game")
         else:
@@ -39674,7 +39663,8 @@ def calculate_advanced_stats(data, all_rows, player_type, time_frames):
                         "AB" : 0,
                         "SF" : 0,
                         "SB" : 0,
-                        "CS" : 0
+                        "CS" : 0,
+                        "TmLg" : row_data["TmLg"]
                     }
 
                 yearly_woba_stats[year][team]["BB"] += row_data.get("BB", 0)
@@ -39694,6 +39684,7 @@ def calculate_advanced_stats(data, all_rows, player_type, time_frames):
                 yearly_woba_stats[year][team]["CS"] += row_data.get("CS", 0)
             except ZeroDivisionError:
                 pass
+
 
         if data["SO"]:
             season_index = 0
@@ -39721,7 +39712,7 @@ def calculate_advanced_stats(data, all_rows, player_type, time_frames):
             if constant_year not in park_factors or not park_factors[constant_year]:
                 constant_year = str(int(current_season) - 1)
             for team in yearly_woba_stats[year]:
-                sleague = get_team_league(team, constant_year)
+                sleague = yearly_woba_stats[year][team]["TmLg"]
                 if team not in park_factors[constant_year]:
                     total_wrcplus_weight -= yearly_woba_stats[year][team]["PA"]
                     total_sb_weight -= yearly_woba_stats[year][team]["SB"] + yearly_woba_stats[year][team]["CS"]
@@ -39749,7 +39740,7 @@ def calculate_advanced_stats(data, all_rows, player_type, time_frames):
                 if team not in park_factors[constant_year]:
                     continue
 
-                sleague = get_team_league(team, constant_year)
+                sleague = yearly_woba_stats[year][team]["TmLg"]
 
                 park_factor = park_factors[constant_year][team]["Basic (5yr)"]
                 if is_location:
@@ -40032,7 +40023,8 @@ def calculate_advanced_stats(data, all_rows, player_type, time_frames):
                                 "HBP_IP_ER" : 0,
                                 "BB_IP_ER" : 0,
                                 "SO_IP_ER" : 0,
-                                "SF_IP_ER" : 0
+                                "SF_IP_ER" : 0,
+                                "TmLg" : row_data["TmLg"]
                             }
 
                         yearly_woba_stats[year][team]["IP"] += row_data.get("IP", 0)
@@ -40233,7 +40225,7 @@ def calculate_advanced_stats(data, all_rows, player_type, time_frames):
                     if team not in park_factors[constant_year]:
                         continue
 
-                    sleague = get_team_league(team, constant_year)
+                    sleague = yearly_woba_stats[year][team]["TmLg"]
                     
                     park_factor = park_factors[constant_year][team]["Basic (5yr)"]
                     if park_factors[constant_year][team]["FIP"]:
@@ -40645,14 +40637,13 @@ def perform_replacement(formula_matches, stat, value, formula):
     return formula, formula_matches
 
 def calculate_valid_value(stat, value, earliest_invalid_data, all_rows):
-    if not earliest_invalid_data:
+    if not earliest_invalid_data or not earliest_invalid_data["any_invalid"]:
         return value
     else:
         for row_data in all_rows:
-            if stat in row_data:
+            if stat in row_data and row_data[stat]:
                 year = str(row_data["Year"])
-                team = row_data["Tm"]
-                sleague = get_team_league(team, year)
+                sleague = row_data["TmLg"]
                 
                 if sleague in earliest_invalid_data and int(year) < earliest_invalid_data[sleague]:
                     value = value - row_data[stat]
@@ -42361,9 +42352,7 @@ def is_invalid_stat(stat, player_type, data, count_inconsistent):
         rows_to_use = data["all_rows"] if "all_rows" in data else [data]
         for row in rows_to_use:
             date_start = row["DateTime"]
-            year = str(row["Year"])
-            team = row["Tm"]
-            sleague = get_team_league(team, year)
+            sleague = row["TmLg"]
             all_leagues.add(sleague)
 
             stat_obj_to_use = None

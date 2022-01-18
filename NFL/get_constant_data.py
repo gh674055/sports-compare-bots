@@ -6162,7 +6162,7 @@ def calculate_valid_value(stat, header, value, earliest_invalid_date, all_rows):
         return value
     else:
         for row_data in all_rows:
-            if header in row_data and stat in row_data[header]:
+            if header in row_data and stat in row_data[header] and row_data[header][stat]:
                 date = row_data["Shared"]["Year"]
                 if date < earliest_invalid_date:
                     value = value - row_data[header][stat]
