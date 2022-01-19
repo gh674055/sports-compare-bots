@@ -4380,6 +4380,12 @@ def handle_player_string(comment, player_type, is_fantasy, last_updated, hide_ta
                                     })
                                     
                             if qual_type:
+                                if "Time Zone" in qual_type:
+                                    new_values = []
+                                    for old_time_zone in qualifier_obj["values"]:
+                                        new_values.append(old_time_zone.lower().replace("_", ""))
+                                    qualifier_obj["values"] = new_values
+                                    
                                 if not qual_type in qualifiers:
                                     qualifiers[qual_type] = []
                                 qualifiers[qual_type].append(qualifier_obj)
