@@ -19506,7 +19506,7 @@ def determine_stat_value(player_game_info, all_events, qualifiers, og_row, playe
     oi_all_opp_goals_stats = ["GA", "PlusMinus", "EVGA"]
     oi_all_team_shots_stats = ["CF", "TmCF", "TtlCF"]
     oi_all_opp_shots_stats = ["CA", "OppCF", "TtlCF"]
-    oi_oi_all_team_shots_og_stats = ["oiTmS", "TmSF", "TtlSF"]
+    oi_all_team_shots_og_stats = ["oiTmS", "TmSF", "TtlSF"]
     oi_all_opp_shots_og_stats = ["oiOppS", "OppSF", "TtlSF"]
     oi_all_team_unblocked_shots_stats = ["FF", "TmFF", "TtlFF"]
     oi_all_opp_unblocked_shots_stats = ["FA", "OppFF", "TtlFF"]
