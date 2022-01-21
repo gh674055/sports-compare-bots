@@ -20715,7 +20715,7 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                 if "penaltySeverity" in scoring_play["result"] and scoring_play["result"]["penaltySeverity"] != "Penalty Shot":
                     pen_obj["penaltySeverity"] = scoring_play["result"]["penaltySeverity"] if scoring_play["result"]["penaltySeverity"] != "Game Misconduct" else "GameMisconduct"
             if "secondaryType" in scoring_play["result"]:
-                pen_obj["penaltyType"] = scoring_play["result"]["secondaryType"]
+                pen_obj["penaltyType"] = scoring_play["result"]["secondaryType"].title()
                 if not has_pen_sev:
                     pen_sev_string = scoring_play["result"]["secondaryType"] if scoring_play["result"]["secondaryType"] != "Game Misconduct" else "GameMisconduct"
                     if scoring_play["result"]["penaltyMinutes"] == 5:
@@ -20723,6 +20723,9 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                         pen_sev_string = "Major"
                     elif pen_sev_string == "Bench Minor":
                         pen_sev_string = "Minor"
+                    elif pen_sev_string == "Attempt To Injure":
+                        pen_sev_string = "Major"
+
                     if pen_sev_string in headers[player_type["da_type"]["type"]]:
                         pen_obj["penaltySeverity"] = pen_sev_string
                     else:
@@ -23478,6 +23481,11 @@ def get_older_html_play_data(scoring_plays, player_data, og_game_id, is_home, ga
                 if "(maj)" in penalty_type:
                     pen_severity = "Major"
                     penalty_type = penalty_type.replace("(maj)", "").strip()
+                    if not penalty_type:
+                        penalty_type = None
+                if "Match -" in penalty_type:
+                    pen_severity = "Match"
+                    penalty_type = penalty_type.replace("Match -", "").strip()
                     if not penalty_type:
                         penalty_type = None
 
