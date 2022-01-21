@@ -22519,19 +22519,19 @@ def get_html_play_data(scoring_plays, player_data, og_game_id, is_home, game_dat
                                 # scoring_play["opp_on_ice_pos"] = scoring_play["team_on_ice_pos"]
                                 # scoring_play["team_on_ice_pos"] = temp_array
 
-                            # team_on_ice_num = len(scoring_play["team_on_ice"])
-                            # if team_on_ice_num  > 6:
-                            #     team_on_ice_num = 6
-                            # opp_on_ice_num = len(scoring_play["opp_on_ice"])
-                            # if opp_on_ice_num  > 6:
-                            #     opp_on_ice_num = 6
-                            # if team_on_ice_num > 1 and opp_on_ice_num > 1:
-                            #     if team_on_ice_num > opp_on_ice_num:
-                            #         scoring_play["result"]["strength"]["code"] = "PPG"
-                            #     elif team_on_ice_num < opp_on_ice_num:
-                            #         scoring_play["result"]["strength"]["code"] = "SHG"
-                            #     else:
-                            #         scoring_play["result"]["strength"]["code"] = "EVEN"
+                            team_on_ice_num = len(scoring_play["team_on_ice"])
+                            if team_on_ice_num  > 6:
+                                team_on_ice_num = 6
+                            opp_on_ice_num = len(scoring_play["opp_on_ice"])
+                            if opp_on_ice_num  > 6:
+                                opp_on_ice_num = 6
+                            if team_on_ice_num > 1 and opp_on_ice_num > 1:
+                                if team_on_ice_num > opp_on_ice_num:
+                                    scoring_play["result"]["strength"]["code"] = "PPG"
+                                elif team_on_ice_num < opp_on_ice_num:
+                                    scoring_play["result"]["strength"]["code"] = "SHG"
+                                else:
+                                    scoring_play["result"]["strength"]["code"] = "EVEN"
                         
                         if not has_initial_plays or (real_event_type not in ("Goal", "Penalty") and row_year < 2010):
                             scoring_plays.append(scoring_play)
@@ -22845,19 +22845,19 @@ def get_old_html_play_data(scoring_plays, player_data, og_game_id, is_home, game
                     else:
                         goalie = game_data["team_numbers"].get(goalie_number, -1)
 
-                # team_on_ice_num = len(scoring_play["team_on_ice"])
-                # if team_on_ice_num  > 6:
-                #     team_on_ice_num = 6
-                # opp_on_ice_num = len(scoring_play["opp_on_ice"])
-                # if opp_on_ice_num  > 6:
-                #     opp_on_ice_num = 6
-                # if team_on_ice_num > 1 and opp_on_ice_num > 1:
-                #     if team_on_ice_num > opp_on_ice_num:
-                #         scoring_play["result"]["strength"]["code"] = "PPG"
-                #     elif team_on_ice_num < opp_on_ice_num:
-                #         scoring_play["result"]["strength"]["code"] = "SHG"
-                #     else:
-                #         scoring_play["result"]["strength"]["code"] = "EVEN"
+                team_on_ice_num = len(scoring_play["team_on_ice"])
+                if team_on_ice_num  > 6:
+                    team_on_ice_num = 6
+                opp_on_ice_num = len(scoring_play["opp_on_ice"])
+                if opp_on_ice_num  > 6:
+                    opp_on_ice_num = 6
+                if team_on_ice_num > 1 and opp_on_ice_num > 1:
+                    if team_on_ice_num > opp_on_ice_num:
+                        scoring_play["result"]["strength"]["code"] = "PPG"
+                    elif team_on_ice_num < opp_on_ice_num:
+                        scoring_play["result"]["strength"]["code"] = "SHG"
+                    else:
+                        scoring_play["result"]["strength"]["code"] = "EVEN"
 
                 if scorer:
                     scoring_play["players"].append({
@@ -23339,19 +23339,19 @@ def get_older_html_play_data(scoring_plays, player_data, og_game_id, is_home, ga
                         sub_player_id = game_data["team_numbers"].get(sub_player, -1)
                     scoring_play["opp_on_ice"].append(sub_player_id)
             
-            # team_on_ice_num = len(scoring_play["team_on_ice"])
-            # if team_on_ice_num  > 6:
-            #     team_on_ice_num = 6
-            # opp_on_ice_num = len(scoring_play["opp_on_ice"])
-            # if opp_on_ice_num  > 6:
-            #     opp_on_ice_num = 6
-            # if team_on_ice_num > 1 and opp_on_ice_num > 1:
-            #     if team_on_ice_num > opp_on_ice_num:
-            #         scoring_play["result"]["strength"]["code"] = "PPG"
-            #     elif team_on_ice_num < opp_on_ice_num:
-            #         scoring_play["result"]["strength"]["code"] = "SHG"
-            #     else:
-            #         scoring_play["result"]["strength"]["code"] = "EVEN"
+            team_on_ice_num = len(scoring_play["team_on_ice"])
+            if team_on_ice_num  > 6:
+                team_on_ice_num = 6
+            opp_on_ice_num = len(scoring_play["opp_on_ice"])
+            if opp_on_ice_num  > 6:
+                opp_on_ice_num = 6
+            if team_on_ice_num > 1 and opp_on_ice_num > 1:
+                if team_on_ice_num > opp_on_ice_num:
+                    scoring_play["result"]["strength"]["code"] = "PPG"
+                elif team_on_ice_num < opp_on_ice_num:
+                    scoring_play["result"]["strength"]["code"] = "SHG"
+                else:
+                    scoring_play["result"]["strength"]["code"] = "EVEN"
             
             if is_home_team:
                 home_goals += 1
