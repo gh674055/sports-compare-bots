@@ -20724,7 +20724,7 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                     elif pen_sev_string == "Bench Minor":
                         pen_sev_string = "Minor"
                     elif pen_sev_string == "Attempt To Injure":
-                        pen_sev_string = "Major"
+                        pen_sev_string = "Match"
 
                     if pen_sev_string in headers[player_type["da_type"]["type"]]:
                         pen_obj["penaltySeverity"] = pen_sev_string
