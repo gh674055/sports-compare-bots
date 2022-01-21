@@ -292,6 +292,10 @@ headers = {
             "positive" : True,
             "display" : False
         },
+        "Event": {
+            "positive" : True,
+            "display" : False
+        },
         "GP_TOI": {
             "positive" : True,
             "display" : False,
@@ -4447,6 +4451,10 @@ headers = {
             "positive" : True,
             "display" : False
         },
+        "Event": {
+            "positive" : True,
+            "display" : False
+        },
         "GP_TOI": {
             "positive" : True,
             "display" : False
@@ -6232,6 +6240,9 @@ qualifier_map = {
     "Year" : {},
     "Even Year" : {},
     "Odd Year" : {},
+    "Calendar Year" : {},
+    "Even Calendar Year" : {},
+    "Odd Calendar Year" : {},
     "Winning Opponent" : {},
     "Losing Opponent" : {},
     "Tied Opponent" : {},
@@ -6356,6 +6367,8 @@ qualifier_map = {
     "Upcoming Exact Player Event Type" : {},
     "Upcoming Event Type" : {},
     "Upcoming Exact Event Type" : {},
+    "Event Description" : {},
+    "Exact Event Description" : {},
     "Time After Event" : {},
     "Time Beore Event" : {},
     "Player Time After Event" : {},
@@ -7105,7 +7118,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                         for m in last_match:
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip() + " " + m.group(3)
                         
-                        last_match = re.finditer(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?((?:sub-query|event-sub-query|or-sub-query|or-event-sub-query|day-after-sub-query|day-before-sub-query|day-of-sub-query|game-after-sub-query|game-before-sub-query|season-sub-query|or-season-sub-query|season-after-sub-query|season-before-sub-query|exact-penalty-type|exact-penalty-severity|penalty-type|penalty-severity|w|(?:playing|starting)-with|a|(?:playing|starting)-against|(?:playing|starting)-same-game|prv-w|previous-playing-with|prv-a|previous-playing-against|upc-w|upcoming-playing-with|upc-a|upcoming-playing-against|(?:playing|starting)-same-opponents?|(?:playing|starting)-same-dates?|holidays?|dts|dates|arena|exact-arena|stadium|exact-stadium|opponent-city|opponent-exact-city|team-city|team-exact-city|city|exact-city|outoor-event|exact-outoor-event|shot-on-first-name|shot-by-first-name|shot-on-last-name|shot-by-last-name|shot-on|shot-by|on-ice-with|on-ice-against|on-line-with|on-line-against|assisted-on|assisted-with|points-with|assisted-by|primary-assisted-on|primary-assisted-with|primary-points-with|primary-assisted-by|hit-on|penalty-on|faceoff-against|fight-against|fighting-against|exact-official|exact-referee|exact-linesman|exact-team-head-coach|exact-opponent-head-coach|official|referee|linesman|team-head-coach|opponent-head-coach|event-time|start-time):(?<!\\)\(.*?(?<!\\)\))", time_frame)
+                        last_match = re.finditer(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?((?:sub-query|event-sub-query|or-sub-query|or-event-sub-query|day-after-sub-query|day-before-sub-query|day-of-sub-query|game-after-sub-query|game-before-sub-query|season-sub-query|or-season-sub-query|season-after-sub-query|season-before-sub-query|exact-penalty-type|exact-penalty-severity|penalty-type|penalty-severity|w|(?:playing|starting)-with|a|(?:playing|starting)-against|(?:playing|starting)-same-game|prv-w|previous-playing-with|prv-a|previous-playing-against|upc-w|upcoming-playing-with|upc-a|upcoming-playing-against|(?:playing|starting)-same-opponents?|(?:playing|starting)-same-dates?|holidays?|dts|dates|arena|exact-arena|stadium|exact-stadium|opponent-city|opponent-exact-city|team-city|team-exact-city|city|exact-city|event-description|exact-event-description|outoor-event|exact-outoor-event|shot-on-first-name|shot-by-first-name|shot-on-last-name|shot-by-last-name|shot-on|shot-by|on-ice-with|on-ice-against|on-line-with|on-line-against|assisted-on|assisted-with|points-with|assisted-by|primary-assisted-on|primary-assisted-with|primary-points-with|primary-assisted-by|hit-on|penalty-on|faceoff-against|fight-against|fighting-against|exact-official|exact-referee|exact-linesman|exact-team-head-coach|exact-opponent-head-coach|official|referee|linesman|team-head-coach|opponent-head-coach|event-time|start-time):(?<!\\)\(.*?(?<!\\)\))", time_frame)
                         for m in last_match:
                             qualifier_obj = {}
                             negate_str = m.group(1)
@@ -7182,6 +7195,18 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                             elif qualifier_str.startswith("exact-stadium:"):
                                 qual_str = "exact-stadium:"
                                 qual_type = "Exact Arena"
+                            elif qualifier_str.startswith("event-description:"):
+                                qual_str = "event-description:"
+                                qual_type = "Event Description"
+                                extra_stats.add("current-stats")
+                                extra_stats.add("current-stats-zone")
+                                extra_stats.add("show-stat-event")
+                            elif qualifier_str.startswith("exact-event-description:"):
+                                qual_str = "exact-event-description:"
+                                qual_type = "Exact Event Description"
+                                extra_stats.add("current-stats")
+                                extra_stats.add("current-stats-zone")
+                                extra_stats.add("show-stat-event")
                             elif qualifier_str.startswith("city:"):
                                 qual_str = "city:"
                                 qual_type = "City"
@@ -8393,7 +8418,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
 
                                 time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
                         
-                        last_match = re.finditer(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?(current-season-age|first-minutes?|current-minutes?|first-shots?|current-shots?|first-periods?|current-shots?|first-games?|current-games?|first-seasons?|current-seasons?|last-minutes?|last-shots?|last-periods?|last-games?|last-seasons?|first-starts?|last-starts?|start-if-goalie|decision|current-age|rook|rookie|facing-former-franchise|facing-former-team|even-year|odd-year|interconference|intraconference|interdivision|intradivision|complete-games?|current-winning-opponents?|current-losing-opponents?|current-tied-opponents?|current-winning-or-tied-opponents?|current-losing-or-tied-opponents?|winning-opponents?|losing-opponents?|winning-or-tied-opponents?|losing-or-tied-opponents?|tied-opponents?|playoff-opponents?|cup-winner-opponent|conf-winner-opponent|current-winning-teams?|current-losing-teams?|current-tied-teams?|current-winning-or-tied-teams?|current-losing-or-tied-teams?|winning-teams?|losing-teams?|tied-teams?|winning-or-tied-teams?|losing-or-tied-teams?|playoff-teams?|cup-winner-team|conf-winner-team|penalty-shot|shootout|overtime|game-winning|offensive-zone|defensive-zone|neutral-zone|left-side|right-side|faceoff-circle|goalie-crease|goalie-circle|unassisted|even-skaters|team-goalie-pulled|opponent-goalie-pulled|more-skaters|less-skaters|power-play|short-handed|even-strength|facing-lefty|facing-righty|elimination-or-clinching|clinching-or-elimination|elimination(?:-games?)?|eliminating(?:-games?)?|clinching(?:-games?)?|clinch(?:-games?)?|winner-take-all|behind-in-series|ahead-in-series|even-in-series|(?:nhl(?: |-))?(?:finals?|championship)|stanley(?: |-)cup|stanley|cup|sc|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?(?:league|conference)(?:(?: |-)finals?|(?: |-)championship)|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?cf|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?second(?: |-)?round|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?sr|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?(?:league|conference) semi-?finals?|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?cs|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?first(?: |-)?round|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?fr|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?(?:league|conference) quarter-?finals?|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?cq|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?qr|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?qualify(?:ing|er)?(?:(?: |-)?round)?|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?pr|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?play(?:-| )?in(?:(?: |-)?round)?|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?rr|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?(?:round(?: |-)?)?robin|leading(:?-in-game)?|trailing(:?-in-game)?|tied(:?(?:-in)?-game)?|force-dates|first-half|second-half|pre-all-star|post-all-star|outdoors|indoors|winter-classic|heritage-classic|stadium-series|t:[\w-]+|o:[\w-]+|m:[\w-]+|d:[\w-]+|dt:[\w-]+|exact-shot-type:[\w-]+|shot-type:[\w-]+|game-misconduct|bench-minor|minor|major|match|misconduct|stick-infraction|tip-in|deflected|deflection|wrist-shot|slap-shot|snap-shot|back-hand|wrap-around|team-franchise:[\w-]+|opponent-franchise:[\w-]+|franchise:[\w-]+|tf:[\w-]+|of:[\w-]+|f:[\w-]+|team:[\w-]+|opponent:[\w-]+|new-moon|waning-crescent|third-quarter|waning-gibbous|full-moon|waxing-gibbous|first-quarter|waxing-crescent|tv-network:[\w-]+|raw-tv-network:[\w-]+|national-tv-network:[\w-]+|national-raw-tv-network:[\w-]+|any-national-tv-network:[\w-]+|any-national-raw-tv-network:[\w-]+|any-usa-national-game|usa-national-game|any-can-national-game|can-national-game|any-national-game|national-game|local-event-time:[\S-]+|local-start-time:[\S-]+|team-start-time:[\S-]+|opponent-start-time:[\S-]+|team-event-time:[\S-]+|opponent-event-time:[\S-]+|previous-event(?:-type)?:[\w-]+|previous-exact-event(?:-type)?:[\w-]+|upcoming-player-event(?:-type)?:[\w-]+|upcoming-exact-player-event(?:-type)?:[\w-]+|previous-player-event(?:-type)?:[\w-]+|previous-exact-player-event(?:-type)?:[\w-]+|upcoming-event(?:-type)?:[\w-]+|upcoming-exact-event(?:-type)?:[\w-]+|event(?:-type)?:[\w-]+|exact-event(?:-type)?:[\w-]+|team-central-european-time-zone|team-eastern-european-time-zone|team-japan-time-zone|team-hawaii-time-zone|team-greenwich-time-zone|team-australian-time-zone|team-atlantic-time-zone|team-eastern-time-zone|team-central-time-zone|team-mountain-time-zone|team-pacific-time-zone|opponent-central-european-time-zone|opponent-eastern-european-time-zone|opponent-japan-time-zone|opponent-hawaii-time-zone|opponent-greenwich-time-zone|opponent-australian-time-zone|opponent-atlantic-time-zone|opponent-eastern-time-zone|opponent-central-time-zone|opponent-mountain-time-zone|opponent-pacific-time-zone|central-european-time-zone|eastern-european-time-zone|japan-time-zone|hawaii-time-zone|greenwich-time-zone|australian-time-zone|atlantic-time-zone|eastern-time-zone|central-time-zone|mountain-time-zone|pacific-time-zone|time-zone:[\S-]+|exact-time-zone:[\S-]+|state:[\w-]+|exact-state:[\w-]+|province:[\w-]+|exact-province:[\w-]+|team-time-zone:[\S-]+|team-exact-time-zone:[\S-]+|team-state:[\w-]+|team-exact-state:[\w-]+|team-province:[\w-]+|team-exact-province:[\w-]+|opponent-time-zone:[\S-]+|opponent-exact-time-zone:[\S-]+|opponent-state:[\w-]+|opponent-exact-state:[\w-]+|opponent-province:[\w-]+|opponent-exact-province:[\w-]+|shot-on-birth-country:[\w-]+|shot-by-birth-country:[\w-]+|shot-on-nationality:[\w-]+|shot-by-nationality:[\w-]+|player-time-after-event:[\S-]+|player-time-before-event:[\S-]+|time-after-event:[\S-]+|time-before-event:[\S-]+|opponent-country:[\w-]+|opponent-exact-country:[\w-]+|team-country:[\w-]+|team-exact-country:[\w-]+|country:[\w-]+|exact-country:[\w-]+|month:[\w-]+|day:[\w-]+|date:[\w-]+|series-game:[\w-]+|gm:[\w-]+|game:[\w-]+|season-gm:[\w-]+|season-game:[\w-]+|season:[\w-]+|season-reversed:[\w-]+|seasons:[\w-]+|seasons-reversed:[\w-]+|crgm:[\w-]+|career-game-reversed:[\w-]+|team-game-reversed:[\w-]+|season-game-reversed:[\w-]+|game-reversed:[\w-]+|career-game:[\w-]+|tmgm:[\w-]+|team-game:[\w-]+|game-number:[\w-]+|season-number:[\w-]+|number:[\w-]+|dr:[\w-]+|starts-days-rest:[\w-]+|days-rest:[\w-]+|prv-dr:[\w-]+|previous-days-rest:[\w-]+|upc-dr:[\w-]+|upcoming-starts-days-rest:[\w-]+|upcoming-days-rest:[\w-]+|gr:[\w-]+|games-rest:[\w-]+|starts-rest:[\w-]+|prv-gr:[\w-]+|-?starts?|-?started|-?starting|-?ignore-starts?|-?ignore-started?|-?ignore-starting|previous-games-rest:[\w-]+|upc-gr:[\w-]+|upcoming-games-rest:[\w-]+|days-in-a-row:[\w-]+|games-in-a-row:[\w-]+|starts-in-a-row:[\w-]+|prv-t:[\w-]+|prv-o:[\w-]+|upc-t:[\w-]+|upc-o:[\w-]+|upcoming-same-opponent|previous-same-opponent|previous-franchise:[\w-]+|previous-team-franchise:[\w-]+|previous-opponent-franchise:[\w-]+|upcoming-franchise:[\w-]+|upcoming-team-franchise:[\w-]+|upcoming-opponent-franchise:[\w-]+|previous-team:[\w-]+|previous-opponent:[\w-]+|upcoming-team:[\w-]+|upcoming-opponent:[\w-]+|goalie-angle:[\S-]+|score:[\S-]+|final-score:[\S-]+|previous-score:[\S-]+|upcoming-score:[\S-]+|final-team-score:[\w-]+|final-opponent-score:[\w-]+|final-score-margin:[\S-]+|final-score-difference:[\S-]+|team-score:[\w-]+|opponent-score:[\w-]+|score-margin:[\S-]+|score-difference:[\S-]+|penalty-minutes:[\w-]+|period:[\w-]+|raw-x-coordinate:[\S-]+|raw-y-coordinate:[\S-]+|raw-coordinates:[\S-]+|absolute-x-coordinate:[\w-]+|absolute-y-coordinate:[\w-]+|absolute-coordinates:[\w-]+|x-coordinate:[\S-]+|y-coordinate:[\S-]+|coordinates:[\S-]+|within-distance:[\S-]+|raw-within-distance:[\S-]+|absolute-within-distance:[\S-]+|team-skaters:[\w-]+|opponent-skaters:[\w-]+|team-players:[\w-]+|opponent-players:[\w-]+|period-time-remaining:[\S-]+|period-time:[\S-]+|season-st:[\S-]+|period-stat:[\S-]+|shift-stat:[\S-]+|season-stat:[\S-]+|season-prv-st:[\S-]+|season-previous-stat:[\S-]+|season-upc-st:[\S-]+|season-upcoming-stat:[\S-]+|st:[\S-]+|stat:[\S-]+|prv-st:[\S-]+|previous-stat:[\S-]+|upc-st:[\S-]+|upcoming-stat:[\S-]+|min-st:[\S-]+|min-stat:[\S-]+|max-st:[\S-]+|max-stat:[\S-]+|totalgames-st:[\S-]+|totalgames-stat:[\S-]+|max-str:[\S-]+|max-streak:[\S-]+|ctn-str:[\S-]+|count-streak:[\S-]+|q:[\S-]+|quickest:[\S-]+|s:[\S-]+|slowest:[\S-]+|individual-event-stat:[\S-]+|indv-event-stat:[\S-]+|ind-event-stat:[\S-]+|game-event-stat:[\S-]+|game-event-stat-reversed:[\S-]+|game-event-stats:[\S-]+|game-event-stats-reversed:[\S-]+|event-stat:[\S-]+|event-stat-reversed:[\S-]+|event-stats:[\S-]+|event-stats-reversed:[\S-]+|starting-game-event-stat:[\S-]+|starting-game-event-stat-reversed:[\S-]+|starting-game-event-stats:[\S-]+|starting-game-event-stats-reversed:[\S-]+|starting-event-stat:[\S-]+|starting-event-stat-reversed:[\S-]+|starting-event-stats:[\S-]+|starting-event-stats-reversed:[\S-]+|with-new-team|with-new-franchise|summer|spring|winter|fall|autumn|away|home|road|previous-away|previous-home|previous-road|upcoming-away|upcoming-home|upcoming-road|win(?:s)?|loss(?:es)?|tie(?:es)?|w-ot|w-so|l-ot|l-so|so|ot|w|l|t|prv-w|prv-l|prv-t|prv-w-ot|prv-w-so|prv-l-ot|prv-l-so|prv-so|prv-ot|upc-w|upc-l|upc-t|upc-w-ot|upc-w-so|upc-l-ot|upc-l-so|upc-so|upc-ot|previous-win(?:s)?|previous-loss(?:es)?|previous-tie(?:es)|upcoming-win(?:s)?|upcoming-loss(?:es)?|upcoming-tie(?:es)|prv-t-w|prv-t-l|prv-t-t|prv-t-w-ot|prv-t-w-so|prv-t-l-ot|prv-t-l-so|prv-t-so|prv-t-ot|upc-t-w|upc-t-l|upc-t-t|upc-t-w-ot|upc-t-w-so|upc-t-l-ot|upc-t-l-so|upc-t-so|upc-t-ot|previous-team-win(?:s)?|previous-team-loss(?:es)?|previous-team-tie(?:es)|upcoming-team-win(?:s)?|upcoming-team-loss(?:es)?|upcoming-team-tie(?:es)|series-team-wins:[\w-]+|series-opponent-wins:[\w-]+|series-score-margin:[\S-]+|series-score-difference:[\S-]+|series-score:[\w-]+|current-team-wins:[\w-]+|current-team-losses:[\w-]+|current-team-ties:[\w-]+|current-team-points:[\w-]+|current-team-games-over-500:[\S-]+|current-opponent-wins:[\w-]+|current-opponent-losses:[\w-]+|current-opponent-ties:[\w-]+|current-opponent-points:[\w-]+|current-opponent-games-over-500:[\S-]+|attendance:[\w-]+|team-wins:[\w-]+|team-losses:[\w-]+|team-ties:[\w-]+|team-points:[\w-]+|team-games-over-500:[\S-]+|opponent-wins:[\w-]+|opponent-losses:[\w-]+|opponent-ties:[\w-]+|opponent-points:[\w-]+|opponent-games-over-500:[\S-]+|opponent-goals?-rank:[\S-]+|opponent-standings-rank:[\S-]+|opponent-goals?-allowed-rank:[\S-]+|current-opponent-win(?:ning)?-percent:[\S-]+|opponent-win(?:ning)?-percent:[\S-]+|current-opponent-points-percent:[\S-]+|opponent-points-percent:[\S-]+|team-goals?-rank:[\S-]+|team-standings-rank:[\S-]+|team-goals?-allowed-rank:[\S-]+|years?:[\w-]+|current-team-win(?:ning)?-percent:[\S-]+|team-win(?:ning)?-percent:[\S-]+|current-team-points-percent:[\S-]+|team-points-percent:[\S-]+|early-?afternoon|late-?afternoon|morning|early|afternoon|day|night(?:time)?|evening|late|team-conference:[\S-]+|opponent-conference:[\S-]+|team-division:[\S-]+|opponent-division:[\S-]+|birthda(?:y|te)|skat(?:(?:er)|(?:ing))|position:[\S-]+|left-wing(?:er)?|right-wing(?:er)?|center|defense(?:man)?|wing(?:er)?|forward|goalie|skater|" + all_months_re + r"|" + all_days_re + r")(?!\S+)", time_frame)
+                        last_match = re.finditer(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?(current-season-age|first-minutes?|current-minutes?|first-shots?|current-shots?|first-periods?|current-shots?|first-games?|current-games?|first-seasons?|current-seasons?|last-minutes?|last-shots?|last-periods?|last-games?|last-seasons?|first-starts?|last-starts?|start-if-goalie|decision|current-age|rook|rookie|facing-former-franchise|facing-former-team|even-calendar-year|odd-calendar-year|even-year|odd-year|interconference|intraconference|interdivision|intradivision|complete-games?|current-winning-opponents?|current-losing-opponents?|current-tied-opponents?|current-winning-or-tied-opponents?|current-losing-or-tied-opponents?|winning-opponents?|losing-opponents?|winning-or-tied-opponents?|losing-or-tied-opponents?|tied-opponents?|playoff-opponents?|cup-winner-opponent|conf-winner-opponent|current-winning-teams?|current-losing-teams?|current-tied-teams?|current-winning-or-tied-teams?|current-losing-or-tied-teams?|winning-teams?|losing-teams?|tied-teams?|winning-or-tied-teams?|losing-or-tied-teams?|playoff-teams?|cup-winner-team|conf-winner-team|penalty-shot|shootout|overtime|game-winning|offensive-zone|defensive-zone|neutral-zone|left-side|right-side|faceoff-circle|goalie-crease|goalie-circle|unassisted|even-skaters|team-goalie-pulled|opponent-goalie-pulled|more-skaters|less-skaters|power-play|short-handed|even-strength|facing-lefty|facing-righty|elimination-or-clinching|clinching-or-elimination|elimination(?:-games?)?|eliminating(?:-games?)?|clinching(?:-games?)?|clinch(?:-games?)?|winner-take-all|behind-in-series|ahead-in-series|even-in-series|(?:nhl(?: |-))?(?:finals?|championship)|stanley(?: |-)cup|stanley|cup|sc|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?(?:league|conference)(?:(?: |-)finals?|(?: |-)championship)|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?cf|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?second(?: |-)?round|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?sr|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?(?:league|conference) semi-?finals?|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?cs|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?first(?: |-)?round|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?fr|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?(?:league|conference) quarter-?finals?|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?cq|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?qr|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?qualify(?:ing|er)?(?:(?: |-)?round)?|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?pr|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?play(?:-| )?in(?:(?: |-)?round)?|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?rr|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?(?:round(?: |-)?)?robin|leading(:?-in-game)?|trailing(:?-in-game)?|tied(:?(?:-in)?-game)?|force-dates|first-half|second-half|pre-all-star|post-all-star|outdoors|indoors|winter-classic|heritage-classic|stadium-series|t:[\w-]+|o:[\w-]+|m:[\w-]+|d:[\w-]+|dt:[\w-]+|exact-shot-type:[\w-]+|shot-type:[\w-]+|game-misconduct|bench-minor|minor|major|match|misconduct|stick-infraction|tip-in|deflected|deflection|wrist-shot|slap-shot|snap-shot|back-hand|wrap-around|team-franchise:[\w-]+|opponent-franchise:[\w-]+|franchise:[\w-]+|tf:[\w-]+|of:[\w-]+|f:[\w-]+|team:[\w-]+|opponent:[\w-]+|new-moon|waning-crescent|third-quarter|waning-gibbous|full-moon|waxing-gibbous|first-quarter|waxing-crescent|tv-network:[\w-]+|raw-tv-network:[\w-]+|national-tv-network:[\w-]+|national-raw-tv-network:[\w-]+|any-national-tv-network:[\w-]+|any-national-raw-tv-network:[\w-]+|any-usa-national-game|usa-national-game|any-can-national-game|can-national-game|any-national-game|national-game|local-event-time:[\S-]+|local-start-time:[\S-]+|team-start-time:[\S-]+|opponent-start-time:[\S-]+|team-event-time:[\S-]+|opponent-event-time:[\S-]+|previous-event(?:-type)?:[\w-]+|previous-exact-event(?:-type)?:[\w-]+|upcoming-player-event(?:-type)?:[\w-]+|upcoming-exact-player-event(?:-type)?:[\w-]+|previous-player-event(?:-type)?:[\w-]+|previous-exact-player-event(?:-type)?:[\w-]+|upcoming-event(?:-type)?:[\w-]+|upcoming-exact-event(?:-type)?:[\w-]+|event(?:-type)?:[\w-]+|exact-event(?:-type)?:[\w-]+|team-central-european-time-zone|team-eastern-european-time-zone|team-japan-time-zone|team-hawaii-time-zone|team-greenwich-time-zone|team-australian-time-zone|team-atlantic-time-zone|team-eastern-time-zone|team-central-time-zone|team-mountain-time-zone|team-pacific-time-zone|opponent-central-european-time-zone|opponent-eastern-european-time-zone|opponent-japan-time-zone|opponent-hawaii-time-zone|opponent-greenwich-time-zone|opponent-australian-time-zone|opponent-atlantic-time-zone|opponent-eastern-time-zone|opponent-central-time-zone|opponent-mountain-time-zone|opponent-pacific-time-zone|central-european-time-zone|eastern-european-time-zone|japan-time-zone|hawaii-time-zone|greenwich-time-zone|australian-time-zone|atlantic-time-zone|eastern-time-zone|central-time-zone|mountain-time-zone|pacific-time-zone|time-zone:[\S-]+|exact-time-zone:[\S-]+|state:[\w-]+|exact-state:[\w-]+|province:[\w-]+|exact-province:[\w-]+|team-time-zone:[\S-]+|team-exact-time-zone:[\S-]+|team-state:[\w-]+|team-exact-state:[\w-]+|team-province:[\w-]+|team-exact-province:[\w-]+|opponent-time-zone:[\S-]+|opponent-exact-time-zone:[\S-]+|opponent-state:[\w-]+|opponent-exact-state:[\w-]+|opponent-province:[\w-]+|opponent-exact-province:[\w-]+|shot-on-birth-country:[\w-]+|shot-by-birth-country:[\w-]+|shot-on-nationality:[\w-]+|shot-by-nationality:[\w-]+|player-time-after-event:[\S-]+|player-time-before-event:[\S-]+|time-after-event:[\S-]+|time-before-event:[\S-]+|opponent-country:[\w-]+|opponent-exact-country:[\w-]+|team-country:[\w-]+|team-exact-country:[\w-]+|country:[\w-]+|exact-country:[\w-]+|month:[\w-]+|day:[\w-]+|date:[\w-]+|series-game:[\w-]+|gm:[\w-]+|game:[\w-]+|season-gm:[\w-]+|season-game:[\w-]+|season:[\w-]+|season-reversed:[\w-]+|seasons:[\w-]+|seasons-reversed:[\w-]+|crgm:[\w-]+|career-game-reversed:[\w-]+|team-game-reversed:[\w-]+|season-game-reversed:[\w-]+|game-reversed:[\w-]+|career-game:[\w-]+|tmgm:[\w-]+|team-game:[\w-]+|game-number:[\w-]+|season-number:[\w-]+|number:[\w-]+|dr:[\w-]+|starts-days-rest:[\w-]+|days-rest:[\w-]+|prv-dr:[\w-]+|previous-days-rest:[\w-]+|upc-dr:[\w-]+|upcoming-starts-days-rest:[\w-]+|upcoming-days-rest:[\w-]+|gr:[\w-]+|games-rest:[\w-]+|starts-rest:[\w-]+|prv-gr:[\w-]+|-?starts?|-?started|-?starting|-?ignore-starts?|-?ignore-started?|-?ignore-starting|previous-games-rest:[\w-]+|upc-gr:[\w-]+|upcoming-games-rest:[\w-]+|days-in-a-row:[\w-]+|games-in-a-row:[\w-]+|starts-in-a-row:[\w-]+|prv-t:[\w-]+|prv-o:[\w-]+|upc-t:[\w-]+|upc-o:[\w-]+|upcoming-same-opponent|previous-same-opponent|previous-franchise:[\w-]+|previous-team-franchise:[\w-]+|previous-opponent-franchise:[\w-]+|upcoming-franchise:[\w-]+|upcoming-team-franchise:[\w-]+|upcoming-opponent-franchise:[\w-]+|previous-team:[\w-]+|previous-opponent:[\w-]+|upcoming-team:[\w-]+|upcoming-opponent:[\w-]+|goalie-angle:[\S-]+|score:[\S-]+|final-score:[\S-]+|previous-score:[\S-]+|upcoming-score:[\S-]+|final-team-score:[\w-]+|final-opponent-score:[\w-]+|final-score-margin:[\S-]+|final-score-difference:[\S-]+|team-score:[\w-]+|opponent-score:[\w-]+|score-margin:[\S-]+|score-difference:[\S-]+|penalty-minutes:[\w-]+|period:[\w-]+|raw-x-coordinate:[\S-]+|raw-y-coordinate:[\S-]+|raw-coordinates:[\S-]+|absolute-x-coordinate:[\w-]+|absolute-y-coordinate:[\w-]+|absolute-coordinates:[\w-]+|x-coordinate:[\S-]+|y-coordinate:[\S-]+|coordinates:[\S-]+|within-distance:[\S-]+|raw-within-distance:[\S-]+|absolute-within-distance:[\S-]+|team-skaters:[\w-]+|opponent-skaters:[\w-]+|team-players:[\w-]+|opponent-players:[\w-]+|period-time-remaining:[\S-]+|period-time:[\S-]+|period-stat:[\S-]+|shift-stat:[\S-]+|prv-season-st:[\S-]+|previous-season-stat:[\S-]+|upc-season-st:[\S-]+|upcoming-season-stat:[\S-]+|season-st:[\S-]+|season-stat:[\S-]+|st:[\S-]+|stat:[\S-]+|prv-st:[\S-]+|previous-stat:[\S-]+|upc-st:[\S-]+|upcoming-stat:[\S-]+|min-st:[\S-]+|min-stat:[\S-]+|max-st:[\S-]+|max-stat:[\S-]+|totalgames-st:[\S-]+|totalgames-stat:[\S-]+|max-str:[\S-]+|max-streak:[\S-]+|ctn-str:[\S-]+|count-streak:[\S-]+|q:[\S-]+|quickest:[\S-]+|s:[\S-]+|slowest:[\S-]+|individual-event-stat:[\S-]+|indv-event-stat:[\S-]+|ind-event-stat:[\S-]+|game-event-stat:[\S-]+|game-event-stat-reversed:[\S-]+|game-event-stats:[\S-]+|game-event-stats-reversed:[\S-]+|event-stat:[\S-]+|event-stat-reversed:[\S-]+|event-stats:[\S-]+|event-stats-reversed:[\S-]+|starting-game-event-stat:[\S-]+|starting-game-event-stat-reversed:[\S-]+|starting-game-event-stats:[\S-]+|starting-game-event-stats-reversed:[\S-]+|starting-event-stat:[\S-]+|starting-event-stat-reversed:[\S-]+|starting-event-stats:[\S-]+|starting-event-stats-reversed:[\S-]+|with-new-team|with-new-franchise|summer|spring|winter|fall|autumn|away|home|road|previous-away|previous-home|previous-road|upcoming-away|upcoming-home|upcoming-road|win(?:s)?|loss(?:es)?|tie(?:es)?|w-ot|w-so|l-ot|l-so|so|ot|w|l|t|prv-w|prv-l|prv-t|prv-w-ot|prv-w-so|prv-l-ot|prv-l-so|prv-so|prv-ot|upc-w|upc-l|upc-t|upc-w-ot|upc-w-so|upc-l-ot|upc-l-so|upc-so|upc-ot|previous-win(?:s)?|previous-loss(?:es)?|previous-tie(?:es)|upcoming-win(?:s)?|upcoming-loss(?:es)?|upcoming-tie(?:es)|prv-t-w|prv-t-l|prv-t-t|prv-t-w-ot|prv-t-w-so|prv-t-l-ot|prv-t-l-so|prv-t-so|prv-t-ot|upc-t-w|upc-t-l|upc-t-t|upc-t-w-ot|upc-t-w-so|upc-t-l-ot|upc-t-l-so|upc-t-so|upc-t-ot|previous-team-win(?:s)?|previous-team-loss(?:es)?|previous-team-tie(?:es)|upcoming-team-win(?:s)?|upcoming-team-loss(?:es)?|upcoming-team-tie(?:es)|series-team-wins:[\w-]+|series-opponent-wins:[\w-]+|series-score-margin:[\S-]+|series-score-difference:[\S-]+|series-score:[\w-]+|current-team-wins:[\w-]+|current-team-losses:[\w-]+|current-team-ties:[\w-]+|current-team-points:[\w-]+|current-team-games-over-500:[\S-]+|current-opponent-wins:[\w-]+|current-opponent-losses:[\w-]+|current-opponent-ties:[\w-]+|current-opponent-points:[\w-]+|current-opponent-games-over-500:[\S-]+|attendance:[\w-]+|team-wins:[\w-]+|team-losses:[\w-]+|team-ties:[\w-]+|team-points:[\w-]+|team-games-over-500:[\S-]+|opponent-wins:[\w-]+|opponent-losses:[\w-]+|opponent-ties:[\w-]+|opponent-points:[\w-]+|opponent-games-over-500:[\S-]+|opponent-goals?-rank:[\S-]+|opponent-standings-rank:[\S-]+|opponent-goals?-allowed-rank:[\S-]+|current-opponent-win(?:ning)?-percent:[\S-]+|opponent-win(?:ning)?-percent:[\S-]+|current-opponent-points-percent:[\S-]+|opponent-points-percent:[\S-]+|team-goals?-rank:[\S-]+|team-standings-rank:[\S-]+|team-goals?-allowed-rank:[\S-]+|calendar-years?:[\w-]+|years?:[\w-]+|current-team-win(?:ning)?-percent:[\S-]+|team-win(?:ning)?-percent:[\S-]+|current-team-points-percent:[\S-]+|team-points-percent:[\S-]+|early-?afternoon|late-?afternoon|morning|early|afternoon|day|night(?:time)?|evening|late|team-conference:[\S-]+|opponent-conference:[\S-]+|team-division:[\S-]+|opponent-division:[\S-]+|birthda(?:y|te)|skat(?:(?:er)|(?:ing))|position:[\S-]+|left-wing(?:er)?|right-wing(?:er)?|center|defense(?:man)?|wing(?:er)?|forward|goalie|skater|" + all_months_re + r"|" + all_days_re + r")(?!\S+)", time_frame)
                         for m in last_match:
                             qualifier_obj = {}
                             
@@ -8720,6 +8745,10 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 qual_type = "Even Year"
                             elif qualifier_str == "odd-year":
                                 qual_type = "Odd Year"
+                            elif qualifier_str == "even-calendar-year":
+                                qual_type = "Even Calendar Year"
+                            elif qualifier_str == "odd-calendar-year":
+                                qual_type = "Odd Calendar Year"
                             elif qualifier_str == "national-game":
                                 qual_type = "National Game"
                             elif qualifier_str == "any-national-game":
@@ -9280,7 +9309,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                         "start_val" : ordinal_to_number(split_vals[0]),
                                         "end_val" : ordinal_to_number(split_vals[1])
                                     }
-                            elif qualifier_str.startswith("goalie-angle:") or qualifier_str.startswith("team-score:") or qualifier_str.startswith("opponent-score:") or qualifier_str.startswith("score-margin:") or qualifier_str.startswith("series-score-margin:") or qualifier_str.startswith("score-difference:") or qualifier_str.startswith("series-score-difference:") or qualifier_str.startswith("final-team-score:") or qualifier_str.startswith("final-opponent-score:") or qualifier_str.startswith("final-score-margin:") or qualifier_str.startswith("final-score-difference:") or qualifier_str.startswith("year") or qualifier_str.startswith("penalty-minutes:") or qualifier_str.startswith("period:") or qualifier_str.startswith("team-skaters:") or qualifier_str.startswith("opponent-skaters:") or qualifier_str.startswith("team-players:") or qualifier_str.startswith("opponent-players:") or qualifier_str.startswith("period-time-remaining:") or qualifier_str.startswith("period-time:") or qualifier_str.startswith("team-games-over-500:") or qualifier_str.startswith("opponent-games-over-500:") or qualifier_str.startswith("current-team-games-over-500:") or qualifier_str.startswith("current-opponent-games-over-500:"):
+                            elif qualifier_str.startswith("goalie-angle:") or qualifier_str.startswith("team-score:") or qualifier_str.startswith("opponent-score:") or qualifier_str.startswith("score-margin:") or qualifier_str.startswith("series-score-margin:") or qualifier_str.startswith("score-difference:") or qualifier_str.startswith("series-score-difference:") or qualifier_str.startswith("final-team-score:") or qualifier_str.startswith("final-opponent-score:") or qualifier_str.startswith("final-score-margin:") or qualifier_str.startswith("final-score-difference:") or qualifier_str.startswith("calendar-year") or qualifier_str.startswith("year") or qualifier_str.startswith("penalty-minutes:") or qualifier_str.startswith("period:") or qualifier_str.startswith("team-skaters:") or qualifier_str.startswith("opponent-skaters:") or qualifier_str.startswith("team-players:") or qualifier_str.startswith("opponent-players:") or qualifier_str.startswith("period-time-remaining:") or qualifier_str.startswith("period-time:") or qualifier_str.startswith("team-games-over-500:") or qualifier_str.startswith("opponent-games-over-500:") or qualifier_str.startswith("current-team-games-over-500:") or qualifier_str.startswith("current-opponent-games-over-500:"):
                                 if qualifier_str.startswith("team-score:"):
                                     qual_str = "team-score:"
                                     qual_type = "Team Score"
@@ -9300,6 +9329,12 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 elif qualifier_str.startswith("year:"):
                                     qual_str = "year:"
                                     qual_type = "Year"
+                                elif qualifier_str.startswith("calendar-years:"):
+                                    qual_str = "calendar-years:"
+                                    qual_type = "Calendar Year"
+                                elif qualifier_str.startswith("calendar-year:"):
+                                    qual_str = "calendar-year:"
+                                    qual_type = "Calendar Year"
                                 elif qualifier_str.startswith("score-margin:"):
                                     qual_str = "score-margin:"
                                     qual_type = "Score Margin"
@@ -9874,18 +9909,25 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                     qual_str = "event-type:"
                                     qual_type = "Event Type"
                                     extra_stats.add("current-stats")
+                                    extra_stats.add("current-stats-zone")
+                                    extra_stats.add("show-stat-event")
                                 elif qualifier_str.startswith("event:"):
                                     qual_str = "event:"
                                     qual_type = "Event Type"
                                     extra_stats.add("current-stats")
+                                    extra_stats.add("current-stats-zone")
+                                    extra_stats.add("show-stat-event")
                                 elif qualifier_str.startswith("exact-event-type:"):
                                     qual_str = "exact-event-type:"
                                     qual_type = "Exact Event Type"
                                     extra_stats.add("current-stats")
+                                    extra_stats.add("current-stats-zone")
+                                    extra_stats.add("show-stat-event")
                                 elif qualifier_str.startswith("exact-event:"):
                                     qual_str = "exact-event:"
                                     qual_type = "Exact Event Type"
                                     extra_stats.add("current-stats")
+                                    extra_stats.add("current-stats-zone")
                                 elif qualifier_str.startswith("previous-event-type:"):
                                     qual_str = "previous-event-type:"
                                     qual_type = "Previous Event Type"
@@ -10462,7 +10504,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                         qualifier_obj["values"]["start_val"] = qualifier_obj["values"]["start_val"] / 100
                                     if qualifier_obj["values"]["end_val"] > 1:
                                         qualifier_obj["values"]["end_val"] = qualifier_obj["values"]["end_val"] / 100
-                            elif qualifier_str.startswith("ind-event-stat:") or qualifier_str.startswith("indv-event-stat:") or qualifier_str.startswith("individual-event-stat:") or  qualifier_str.startswith("st:") or qualifier_str.startswith("period-stat:") or qualifier_str.startswith("shift-stat:") or qualifier_str.startswith("stat:") or qualifier_str.startswith("prv-st:") or qualifier_str.startswith("previous-stat:") or qualifier_str.startswith("upc-st:") or qualifier_str.startswith("upcoming-stat:") or qualifier_str.startswith("season-st:") or qualifier_str.startswith("season-stat:") or qualifier_str.startswith("season-prv-st:") or qualifier_str.startswith("season-previous-stat:") or qualifier_str.startswith("season-upc-st:") or qualifier_str.startswith("season-upcoming-stat:") or qualifier_str.startswith("totalgames-st:") or qualifier_str.startswith("totalgames-stat:"):
+                            elif qualifier_str.startswith("ind-event-stat:") or qualifier_str.startswith("indv-event-stat:") or qualifier_str.startswith("individual-event-stat:") or  qualifier_str.startswith("st:") or qualifier_str.startswith("period-stat:") or qualifier_str.startswith("shift-stat:") or qualifier_str.startswith("stat:") or qualifier_str.startswith("prv-st:") or qualifier_str.startswith("previous-stat:") or qualifier_str.startswith("upc-st:") or qualifier_str.startswith("upcoming-stat:") or qualifier_str.startswith("season-st:") or qualifier_str.startswith("season-stat:") or qualifier_str.startswith("prv-season-st:") or qualifier_str.startswith("previous-season-stat:") or qualifier_str.startswith("upc-season-st:") or qualifier_str.startswith("upcoming-season-stat:") or qualifier_str.startswith("totalgames-st:") or qualifier_str.startswith("totalgames-stat:"):
                                 if qualifier_str.startswith("ind-event-stat:"):
                                     qual_str = "ind-event-stat:"
                                     qual_type = "Individual Event Stat"
@@ -10511,17 +10553,17 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 elif qualifier_str.startswith("season-stat:"):
                                     qual_str = "season-stat:"
                                     qual_type = "Season Stat"
-                                elif qualifier_str.startswith("season-prv-st:"):
-                                    qual_str = "season-prv-st:"
+                                elif qualifier_str.startswith("prv-season-st:"):
+                                    qual_str = "prv-season-st:"
                                     qual_type = "Previous Season Stat"
-                                elif qualifier_str.startswith("season-previous-stat:"):
-                                    qual_str = "season-previous-stat:"
+                                elif qualifier_str.startswith("previous-season-stat:"):
+                                    qual_str = "previous-season-stat:"
                                     qual_type = "Previous Season Stat"
-                                elif qualifier_str.startswith("season-upc-st:"):
-                                    qual_str = "season-upc-st:"
+                                elif qualifier_str.startswith("upc-season-st:"):
+                                    qual_str = "upc-season-st:"
                                     qual_type = "Upcoming Season Stat"
-                                elif qualifier_str.startswith("season-upcoming-stat:"):
-                                    qual_str = "season-upcoming-stat:"
+                                elif qualifier_str.startswith("upcoming-season-stat:"):
+                                    qual_str = "upcoming-season-stat:"
                                     qual_type = "Upcoming Season Stat"
                                 elif qualifier_str.startswith("totalgames-st:"):
                                     qual_str = "totalgames-st:"
@@ -14484,7 +14526,7 @@ def determine_raw_str(subbb_frame):
                     else:
                         sub_sub_first = False
                     qual_str += qualifier_map[qualifier][not qual_obj["negate"]]
-                elif qualifier == "Rookie" or qualifier == "Facing Former Franchise" or qualifier == "Facing Former Team" or qualifier == "Previous Same Opponent" or qualifier == "Upcoming Same Opponent" or qualifier == "With New Team" or qualifier == "With New Franchise" or qualifier == "Even Year" or qualifier == "Odd Year" or qualifier == "Decision" or qualifier == "Interconference" or qualifier == "Intraconference" or qualifier == "Interdivision" or qualifier == "Intradivision" or qualifier == "First Half" or qualifier == "Second Half" or qualifier == "Post All-Star" or qualifier == "Pre All-Star" or qualifier == "Complete Game" or qualifier == "Penalty Shot" or qualifier == "Shootout" or qualifier == "Overtime" or qualifier == "Game Winning" or qualifier == "Offensive Zone" or qualifier == "Defensive Zone" or qualifier == "Neutral Zone" or qualifier == "Left Side" or qualifier == "Right Side" or qualifier == "Faceoff Circle" or qualifier == "Goalie Crease" or qualifier == "Goalie Circle" or qualifier == "Unassisted" or qualifier == "Even Skaters" or qualifier == "More Skaters" or qualifier == "Less Skaters" or qualifier == "Team Goalie Pulled" or qualifier == "Opponent Goalie Pulled" or qualifier == "Power Play" or qualifier == "Short Handed" or qualifier == "Even Strength" or qualifier == "Elimination" or qualifier == "Clinching" or qualifier == "Elimination Or Clinching" or qualifier == "Winner Take All" or qualifier == "Ahead In Series" or qualifier == "Behind In Series" or qualifier == "Even In Series" or qualifier == "Winning Opponent" or qualifier == "Losing Opponent" or qualifier == "Tied Opponent" or qualifier == "Winning Or Tied Opponent" or qualifier == "Losing Or Tied Opponent" or qualifier == "Current Winning Opponent" or qualifier == "Current Losing Opponent" or qualifier == "Current Tied Opponent" or qualifier == "Current Winning Or Tied Opponent" or qualifier == "Current Losing Or Tied Opponent" or qualifier == "Playoff Opponent"  or qualifier == "Cup Winner Opponent" or qualifier == "Conference Winner Opponent" or qualifier == "Winning Team" or qualifier == "Losing Team" or qualifier == "Tied Team" or qualifier == "Winning Or Tied Team" or qualifier == "Losing Or Tied Team" or qualifier == "Current Winning Team" or qualifier == "Current Losing Team" or qualifier == "Current Tied Team" or qualifier == "Current Winning Or Tied Team" or qualifier == "Current Losing Or Tied Team" or qualifier == "Playoff Team" or qualifier == "Cup Winner Team" or qualifier == "Conference Winner Team" or qualifier == "National Game" or qualifier == "Any National Game" or qualifier == "USA National Game" or qualifier == "Any USA National Game" or qualifier == "CAN National Game" or qualifier == "Any CAN National Game" or qualifier == "Facing Lefty" or qualifier == "Facing Righty" or qualifier == "Outdoors" or qualifier == "Indoors":
+                elif qualifier == "Rookie" or qualifier == "Facing Former Franchise" or qualifier == "Facing Former Team" or qualifier == "Previous Same Opponent" or qualifier == "Upcoming Same Opponent" or qualifier == "With New Team" or qualifier == "With New Franchise" or qualifier == "Even Calendar Year" or qualifier == "Odd Calendar Year" or qualifier == "Even Year" or qualifier == "Odd Year" or qualifier == "Decision" or qualifier == "Interconference" or qualifier == "Intraconference" or qualifier == "Interdivision" or qualifier == "Intradivision" or qualifier == "First Half" or qualifier == "Second Half" or qualifier == "Post All-Star" or qualifier == "Pre All-Star" or qualifier == "Complete Game" or qualifier == "Penalty Shot" or qualifier == "Shootout" or qualifier == "Overtime" or qualifier == "Game Winning" or qualifier == "Offensive Zone" or qualifier == "Defensive Zone" or qualifier == "Neutral Zone" or qualifier == "Left Side" or qualifier == "Right Side" or qualifier == "Faceoff Circle" or qualifier == "Goalie Crease" or qualifier == "Goalie Circle" or qualifier == "Unassisted" or qualifier == "Even Skaters" or qualifier == "More Skaters" or qualifier == "Less Skaters" or qualifier == "Team Goalie Pulled" or qualifier == "Opponent Goalie Pulled" or qualifier == "Power Play" or qualifier == "Short Handed" or qualifier == "Even Strength" or qualifier == "Elimination" or qualifier == "Clinching" or qualifier == "Elimination Or Clinching" or qualifier == "Winner Take All" or qualifier == "Ahead In Series" or qualifier == "Behind In Series" or qualifier == "Even In Series" or qualifier == "Winning Opponent" or qualifier == "Losing Opponent" or qualifier == "Tied Opponent" or qualifier == "Winning Or Tied Opponent" or qualifier == "Losing Or Tied Opponent" or qualifier == "Current Winning Opponent" or qualifier == "Current Losing Opponent" or qualifier == "Current Tied Opponent" or qualifier == "Current Winning Or Tied Opponent" or qualifier == "Current Losing Or Tied Opponent" or qualifier == "Playoff Opponent"  or qualifier == "Cup Winner Opponent" or qualifier == "Conference Winner Opponent" or qualifier == "Winning Team" or qualifier == "Losing Team" or qualifier == "Tied Team" or qualifier == "Winning Or Tied Team" or qualifier == "Losing Or Tied Team" or qualifier == "Current Winning Team" or qualifier == "Current Losing Team" or qualifier == "Current Tied Team" or qualifier == "Current Winning Or Tied Team" or qualifier == "Current Losing Or Tied Team" or qualifier == "Playoff Team" or qualifier == "Cup Winner Team" or qualifier == "Conference Winner Team" or qualifier == "National Game" or qualifier == "Any National Game" or qualifier == "USA National Game" or qualifier == "Any USA National Game" or qualifier == "CAN National Game" or qualifier == "Any CAN National Game" or qualifier == "Facing Lefty" or qualifier == "Facing Righty" or qualifier == "Outdoors" or qualifier == "Indoors":
                     if not sub_sub_first:
                         qual_str += " + "
                     else:
@@ -14564,7 +14606,7 @@ def determine_raw_str(subbb_frame):
                         qual_str += get_time_str(qual_obj["values"]["start_val"], False) + "°"
                     else:
                         qual_str += (get_time_str(qual_obj["values"]["start_val"], False)) + "° - " + (get_time_str(qual_obj["values"]["end_val"], False)) + "°"
-                elif qualifier == "Year":
+                elif qualifier == "Year" or qualifier == "Calendar Year":
                     if not sub_sub_first:
                         qual_str += " + "
                     else:
@@ -14780,7 +14822,7 @@ def determine_raw_str(subbb_frame):
                             else:
                                 if qualifier == "Team" or qualifier == "Opponent" or qualifier == "TV Network" or qualifier == "Raw TV Network" or qualifier == "National TV Network" or qualifier == "National Raw TV Network" or qualifier == "Any National TV Network" or qualifier == "Any National Raw TV Network" or qualifier == "Team Franchise" or qualifier == "Opponent Franchise" or qualifier == "Previous Team" or qualifier == "Previous Team Franchise" or qualifier == "Upcoming Team Franchise" or qualifier == "Previous Opponent Franchise" or qualifier == "Upcoming Opponent Franchise" or qualifier == "Upcoming Team" or qualifier == "Previous Opponent" or qualifier == "Upcoming Opponent" or qualifier == "Formula" or qualifier == "Season Formula" or qualifier == "Event Formula" or qualifier == "Position" or qualifier == "State" or qualifier == "Exact State" or qualifier == "Team State" or qualifier == "Team Exact State" or qualifier == "Opponent State" or qualifier == "Opponent Exact State" or qualifier == "Country" or qualifier == "Exact Country" or qualifier == "Team Country" or qualifier == "Team Exact Country" or qualifier == "Opponent Country" or qualifier == "Opponent Exact Country":
                                     sub_qualifier = sub_qualifier.upper()
-                                elif qualifier == "Holiday" or qualifier == "Event Type" or qualifier == "Exact Event Type" or qualifier == "Previous Event Type" or qualifier == "Upcoming Exact Event Type" or qualifier == "Upcoming Player Event Type" or qualifier == "Previous Exact Event Type" or qualifier == "Previous Player Event Type" or qualifier == "Previous Exact Player Event Type" or qualifier == "Upcoming Event Type" or qualifier == "Upcoming Exact Event Type" or qualifier == "City" or qualifier == "Exact City" or qualifier == "Team City" or qualifier == "Team Exact City" or qualifier == "Opponent City" or qualifier == "Opponent Exact City" or qualifier == "Outdoor Event" or qualifier == "Exact Outdoor Event" or qualifier == "Penalty Type" or qualifier == "Penalty Severity" or qualifier == "Shot Type" or qualifier == "Exact Penalty Type" or qualifier == "Exact Penalty Severity" or qualifier == "Exact Shot Type" or qualifier == "Moon Phase" or qualifier == "Exact Official" or qualifier == "Exact Referee" or qualifier == "Exact Linesman" or qualifier == "Exact Team Head Coach" or qualifier == "Exact Opponent Head Coach" or qualifier == "Official" or qualifier == "Referee" or qualifier == "Linesman" or qualifier == "Team Head Coach" or qualifier == "Opponent Head Coach" or qualifier == "Team Time Zone" or qualifier == "Team Exact Time Zone" or qualifier == "Opponent Time Zone" or qualifier == "Opponent Exact Time Zone" or qualifier == "Time Zone" or qualifier == "Exact Time Zone":
+                                elif qualifier == "Holiday" or qualifier == "Event Type" or qualifier == "Exact Event Type" or qualifier == "Previous Event Type" or qualifier == "Upcoming Exact Event Type" or qualifier == "Upcoming Player Event Type" or qualifier == "Previous Exact Event Type" or qualifier == "Previous Player Event Type" or qualifier == "Previous Exact Player Event Type" or qualifier == "Upcoming Event Type" or qualifier == "Upcoming Exact Event Type" or qualifier == "City" or qualifier == "Exact City" or qualifier == "Team City" or qualifier == "Team Exact City" or qualifier == "Opponent City" or qualifier == "Opponent Exact City" or qualifier == "Event Description" or qualifier == "Exact Event Description" or qualifier == "Outdoor Event" or qualifier == "Exact Outdoor Event" or qualifier == "Penalty Type" or qualifier == "Penalty Severity" or qualifier == "Shot Type" or qualifier == "Exact Penalty Type" or qualifier == "Exact Penalty Severity" or qualifier == "Exact Shot Type" or qualifier == "Moon Phase" or qualifier == "Exact Official" or qualifier == "Exact Referee" or qualifier == "Exact Linesman" or qualifier == "Exact Team Head Coach" or qualifier == "Exact Opponent Head Coach" or qualifier == "Official" or qualifier == "Referee" or qualifier == "Linesman" or qualifier == "Team Head Coach" or qualifier == "Opponent Head Coach" or qualifier == "Team Time Zone" or qualifier == "Team Exact Time Zone" or qualifier == "Opponent Time Zone" or qualifier == "Opponent Exact Time Zone" or qualifier == "Time Zone" or qualifier == "Exact Time Zone":
                                     sub_qualifier = sub_qualifier.title()
                                 elif qualifier == "Arena"  or qualifier == "Exact Arena":
                                     venue_id_to_use = None
@@ -15097,7 +15139,7 @@ def handle_player_data(player_data, time_frame, player_type, player_page, valid_
                     if not stat_obj["time_frame"] or not (stat_obj["time_frame"]["qual_type"] == "Seasons" or stat_obj["time_frame"]["qual_type"] == "Teams"):
                         is_qual_match = True
                         is_qual_match_excl_round = True
-    
+        
     is_game = not (time_frame["type"].startswith("season") or (time_frame["type"] == "date" and (isinstance(time_frame["time_start"], int) or isinstance(time_frame["time_end"], int)))) or is_qual_match
     is_game_page = is_game or time_frame["playoffs"]
     is_only_round = (time_frame["type"].startswith("season") or (time_frame["type"] == "date" and (isinstance(time_frame["time_start"], int) or isinstance(time_frame["time_end"], int)))) and "Round" in time_frame["qualifiers"] and not is_qual_match_excl_round
@@ -18564,6 +18606,7 @@ def perform_sub_nhl_period_qualifiers(row, qualifiers, player_game_info, player_
 
     events_to_skip = [
         "all_plays",
+        "all_raw_events",
         "goal",
         "assist",
         "goal_against",
@@ -18718,6 +18761,7 @@ def perform_sub_nhl_shift_qualifiers(row, qualifiers, player_game_info, player_t
 
     events_to_skip = [
         "all_plays",
+        "all_raw_events",
         "goal",
         "assist",
         "goal_against",
@@ -19749,7 +19793,7 @@ def determine_stat_value(player_game_info, all_events, qualifiers, og_row, playe
             if stat in missed_shot_stats:
                 if goal_event["event_name"] == "missed_shot":
                     if determine_event_match(goal_event, qualifiers, player_game_info, og_row):
-                        if goal_event["description"].endswith(" Goalpost") or goal_event["description"].endswith("Hit Crossbar"):
+                        if goal_event["description"] and (goal_event["description"].endswith(" Goalpost") or goal_event["description"].endswith("Hit Crossbar")):
                             row["PostBar"] += 1
                         if count_misses:
                             row["S"] += 1
@@ -20246,8 +20290,6 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
 
     faceoff_time_information = {}
     for event_id, scoring_play in enumerate(scoring_plays):
-        if "players" not in scoring_play or not scoring_play["players"]:
-            continue
         period_time = start_time_to_str(scoring_play["about"]["periodTime"])
         if row_data["is_playoffs"] or scoring_play["about"]["period"] <= 3:
             time_to_use = 1200
@@ -20351,468 +20393,470 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
             "teamGoals" : scoring_play["about"]["goals"][game_data["team_str"]],
             "oppGoals" : scoring_play["about"]["goals"][game_data["opp_str"]],
             "goalMargin" : scoring_play["about"]["goals"][game_data["team_str"]] - scoring_play["about"]["goals"][game_data["opp_str"]],
-            "description" : scoring_play["result"]["description"] if "description" in scoring_play["result"] else ""
+            "description" : scoring_play["result"]["description"] if "description" in scoring_play["result"] else None
         }
         
-        if scoring_play["result"]["event"] == "Goal":
-            player_scored = False
-            player_assisted = False
-            player_saved = False
-            is_primary = False
-            goalie = None
-            scorer = None
-            assists = []
-            first_assist = True
-            for score_player in scoring_play["players"]:
-                if score_player["playerType"] == "Scorer":
-                    if score_player["player"]["id"] == player_id or score_player["player"]["id"] == player_data["id"]:
-                        player_scored = True
-                    else:
-                        scorer = score_player["player"]["id"]
-                elif score_player["playerType"] == "Assist":
-                    if score_player["player"]["id"] == player_id or score_player["player"]["id"] == player_data["id"]:
-                        player_assisted = True
-                        if first_assist:
-                            is_primary = True
-                    else:
-                        assists.append(score_player["player"]["id"])
-                    first_assist = False
-                elif score_player["playerType"] == "Goalie":
-                    if score_player["player"]["id"] == player_id or score_player["player"]["id"] == player_data["id"]:
-                        player_saved = True
-                    else:
-                        goalie = score_player["player"]["id"]
-            
-            game_winning_goal = "gameWinningGoal" in scoring_play["result"] and scoring_play["result"]["gameWinningGoal"]
-            if scoring_play["about"]["period"] == 5 and game_data["is_shootout"]:
-                game_winning_goal = False
-                if scoring_play["team"]["id"] == game_data["team_id"]:
-                    if team_shootout_goal == shootout_game_winner:
-                        game_winning_goal = True
-                    team_shootout_goal += 1
-            
-            if scoring_play["team"]["id"] == game_data["team_id"]:
-                shared_data["teamGoals"] -= 1
-                shared_data["goalMargin"] -= 1
-            else:
-                shared_data["oppGoals"] -= 1
-                shared_data["goalMargin"] += 1
-
-            if game_winning_goal:
-                if not game_data["winning_goalie"]:
+        if "players" in scoring_play and scoring_play["players"]:
+            if scoring_play["result"]["event"] == "Goal":
+                player_scored = False
+                player_assisted = False
+                player_saved = False
+                is_primary = False
+                goalie = None
+                scorer = None
+                assists = []
+                first_assist = True
+                for score_player in scoring_play["players"]:
+                    if score_player["playerType"] == "Scorer":
+                        if score_player["player"]["id"] == player_id or score_player["player"]["id"] == player_data["id"]:
+                            player_scored = True
+                        else:
+                            scorer = score_player["player"]["id"]
+                    elif score_player["playerType"] == "Assist":
+                        if score_player["player"]["id"] == player_id or score_player["player"]["id"] == player_data["id"]:
+                            player_assisted = True
+                            if first_assist:
+                                is_primary = True
+                        else:
+                            assists.append(score_player["player"]["id"])
+                        first_assist = False
+                    elif score_player["playerType"] == "Goalie":
+                        if score_player["player"]["id"] == player_id or score_player["player"]["id"] == player_data["id"]:
+                            player_saved = True
+                        else:
+                            goalie = score_player["player"]["id"]
+                
+                game_winning_goal = "gameWinningGoal" in scoring_play["result"] and scoring_play["result"]["gameWinningGoal"]
+                if scoring_play["about"]["period"] == 5 and game_data["is_shootout"]:
+                    game_winning_goal = False
                     if scoring_play["team"]["id"] == game_data["team_id"]:
-                        for player in team_on_ice:
-                            if player in game_data["team_goalies"]:
-                                game_data["winning_goalie"] = player
-                                break
+                        if team_shootout_goal == shootout_game_winner:
+                            game_winning_goal = True
+                        team_shootout_goal += 1
+                
+                if scoring_play["team"]["id"] == game_data["team_id"]:
+                    shared_data["teamGoals"] -= 1
+                    shared_data["goalMargin"] -= 1
+                else:
+                    shared_data["oppGoals"] -= 1
+                    shared_data["goalMargin"] += 1
 
-                        if not game_data["winning_goalie"]:
-                            game_data["winning_goalie"] = determine_last_goalie(row_data, game_data, scoring_play["about"]["period"], period_time, "team")
-
-                        for player in opp_on_ice:
-                            if player in game_data["opp_goalies"]:
-                                game_data["losing_goalie"] = player
-                                break
-
-                        if not game_data["losing_goalie"]:
-                            game_data["losing_goalie"] = determine_last_goalie(row_data, game_data, scoring_play["about"]["period"], period_time, "opp")
-                    else:
-                        for player in opp_on_ice:
-                            if player in game_data["opp_goalies"]:
-                                game_data["winning_goalie"] = player
-                                break
-
-                        if not game_data["winning_goalie"]:
-                            game_data["winning_goalie"] = determine_last_goalie(row_data, game_data, scoring_play["about"]["period"], period_time, "opp")
-                        
-                        for player in team_on_ice:
-                            if player in game_data["team_goalies"]:
-                                game_data["losing_goalie"] = player
-                                break
-
-                        if not game_data["losing_goalie"]:
-                            game_data["losing_goalie"] = determine_last_goalie(row_data, game_data, scoring_play["about"]["period"], period_time, "team")
-
-            if player_scored:
-                game_data["goal"].append({**shared_data , **{
-                    "goalie" : goalie,
-                    "gameWinningGoal" : game_winning_goal,
-                    "emptyNet" : "emptyNet" in scoring_play["result"] and scoring_play["result"]["emptyNet"],
-                    "penaltyShot" : next_shot_penalty_shot,
-                    "firstGoal" : first_goal,
-                    "assists" : assists,
-                    "oppSide" : None if (not goalie or goalie not in game_data["player_side_map"]) else game_data["player_side_map"][goalie],
-                    "oppFirstName" : None if not goalie else game_data["player_first_name_map"][goalie],
-                    "oppLastName" : None if not goalie else game_data["player_last_name_map"][goalie],
-                    "oppBirthCountry" : None if not goalie else game_data["player_birth_country_map"][goalie],
-                    "oppNationality" : None if not goalie else game_data["player_nationality_map"][goalie],
-                    "shotType" : scoring_play["result"]["secondaryType"] if "secondaryType" in scoring_play["result"] else None
-                }})
-                # if len(assists) > 0:
-                #     primary_assist = assists[0]
-                #     player_name = game_data["player_names"][primary_assist]
-                #     if player_name not in stat_data["primary_assist"]:
-                #         stat_data["primary_assist"][player_name] = {
-                #             "a" : 0,
-                #             "p" : set()
-                #         }
-                #     stat_data["primary_assist"][player_name]["a"] += 1
-                #     stat_data["primary_assist"][player_name]["p"].add(primary_assist)
-                #     if player_name not in stat_data["all_assist"]:
-                #         stat_data["all_assist"][player_name] = {
-                #             "a" : 0,
-                #             "p" : set()
-                #         }
-                #     stat_data["all_assist"][player_name]["a"] += 1
-                #     stat_data["all_assist"][player_name]["p"].add(primary_assist)
-                #     if len(assists) > 1:
-                #         secondary_assist = assists[1]
-                #         player_name = game_data["player_names"][secondary_assist]
-                #         if player_name not in stat_data["all_assist"]:
-                #             stat_data["all_assist"][player_name] = {
-                #             "a" : 0,
-                #             "p" : set()
-                #         }
-                #         stat_data["all_assist"][player_name]["a"] += 1
-                #         stat_data["all_assist"][player_name]["p"].add(secondary_assist)
-            elif player_assisted:
-                game_data["assist"].append({**shared_data , **{
-                    "scorer" : scorer,
-                    "is_primary" : is_primary,
-                    "gameWinningGoal" : "gameWinningGoal" in scoring_play["result"] and scoring_play["result"]["gameWinningGoal"],
-                    "emptyNet" : "emptyNet" in scoring_play["result"] and scoring_play["result"]["emptyNet"],
-                    "assists" : assists,
-                    "shotType" : scoring_play["result"]["secondaryType"] if "secondaryType" in scoring_play["result"] else None
-                }})
-            elif player_saved:
-                game_data["goal_against"].append({**shared_data , **{
-                    "scorer" : scorer,
-                    "gameWinningGoal" : "gameWinningGoal" in scoring_play["result"] and scoring_play["result"]["gameWinningGoal"],
-                    "penaltyShot" : next_shot_penalty_shot,
-                    "oppSide" : None if scorer not in game_data["player_side_map"] else game_data["player_side_map"][scorer],
-                    "oppFirstName" : game_data["player_first_name_map"][scorer],
-                    "oppLastName" : game_data["player_last_name_map"][scorer],
-                    "oppBirthCountry" : game_data["player_birth_country_map"][scorer],
-                    "oppNationality" : game_data["player_nationality_map"][scorer],
-                    "shotType" : scoring_play["result"]["secondaryType"] if "secondaryType" in scoring_play["result"] else None
-                }})
-            
-            if game_data["shift_data"] or team_on_ice:
-                is_on_ice = is_player_on_ice(game_data["shift_data"], team_on_ice, opp_on_ice, scoring_play["about"]["period"], period_time, player_id, True)
-                if is_on_ice != None:
-                    if is_on_ice:
+                if game_winning_goal:
+                    if not game_data["winning_goalie"]:
                         if scoring_play["team"]["id"] == game_data["team_id"]:
-                            game_data["oi_all_team_goals"].append({**shared_data, **{}})
+                            for player in team_on_ice:
+                                if player in game_data["team_goalies"]:
+                                    game_data["winning_goalie"] = player
+                                    break
+
+                            if not game_data["winning_goalie"]:
+                                game_data["winning_goalie"] = determine_last_goalie(row_data, game_data, scoring_play["about"]["period"], period_time, "team")
+
+                            for player in opp_on_ice:
+                                if player in game_data["opp_goalies"]:
+                                    game_data["losing_goalie"] = player
+                                    break
+
+                            if not game_data["losing_goalie"]:
+                                game_data["losing_goalie"] = determine_last_goalie(row_data, game_data, scoring_play["about"]["period"], period_time, "opp")
+                        else:
+                            for player in opp_on_ice:
+                                if player in game_data["opp_goalies"]:
+                                    game_data["winning_goalie"] = player
+                                    break
+
+                            if not game_data["winning_goalie"]:
+                                game_data["winning_goalie"] = determine_last_goalie(row_data, game_data, scoring_play["about"]["period"], period_time, "opp")
+                            
+                            for player in team_on_ice:
+                                if player in game_data["team_goalies"]:
+                                    game_data["losing_goalie"] = player
+                                    break
+
+                            if not game_data["losing_goalie"]:
+                                game_data["losing_goalie"] = determine_last_goalie(row_data, game_data, scoring_play["about"]["period"], period_time, "team")
+
+                if player_scored:
+                    game_data["goal"].append({**shared_data , **{
+                        "goalie" : goalie,
+                        "gameWinningGoal" : game_winning_goal,
+                        "emptyNet" : "emptyNet" in scoring_play["result"] and scoring_play["result"]["emptyNet"],
+                        "penaltyShot" : next_shot_penalty_shot,
+                        "firstGoal" : first_goal,
+                        "assists" : assists,
+                        "oppSide" : None if (not goalie or goalie not in game_data["player_side_map"]) else game_data["player_side_map"][goalie],
+                        "oppFirstName" : None if not goalie else game_data["player_first_name_map"][goalie],
+                        "oppLastName" : None if not goalie else game_data["player_last_name_map"][goalie],
+                        "oppBirthCountry" : None if not goalie else game_data["player_birth_country_map"][goalie],
+                        "oppNationality" : None if not goalie else game_data["player_nationality_map"][goalie],
+                        "shotType" : scoring_play["result"]["secondaryType"] if "secondaryType" in scoring_play["result"] else None
+                    }})
+                    # if len(assists) > 0:
+                    #     primary_assist = assists[0]
+                    #     player_name = game_data["player_names"][primary_assist]
+                    #     if player_name not in stat_data["primary_assist"]:
+                    #         stat_data["primary_assist"][player_name] = {
+                    #             "a" : 0,
+                    #             "p" : set()
+                    #         }
+                    #     stat_data["primary_assist"][player_name]["a"] += 1
+                    #     stat_data["primary_assist"][player_name]["p"].add(primary_assist)
+                    #     if player_name not in stat_data["all_assist"]:
+                    #         stat_data["all_assist"][player_name] = {
+                    #             "a" : 0,
+                    #             "p" : set()
+                    #         }
+                    #     stat_data["all_assist"][player_name]["a"] += 1
+                    #     stat_data["all_assist"][player_name]["p"].add(primary_assist)
+                    #     if len(assists) > 1:
+                    #         secondary_assist = assists[1]
+                    #         player_name = game_data["player_names"][secondary_assist]
+                    #         if player_name not in stat_data["all_assist"]:
+                    #             stat_data["all_assist"][player_name] = {
+                    #             "a" : 0,
+                    #             "p" : set()
+                    #         }
+                    #         stat_data["all_assist"][player_name]["a"] += 1
+                    #         stat_data["all_assist"][player_name]["p"].add(secondary_assist)
+                elif player_assisted:
+                    game_data["assist"].append({**shared_data , **{
+                        "scorer" : scorer,
+                        "is_primary" : is_primary,
+                        "gameWinningGoal" : "gameWinningGoal" in scoring_play["result"] and scoring_play["result"]["gameWinningGoal"],
+                        "emptyNet" : "emptyNet" in scoring_play["result"] and scoring_play["result"]["emptyNet"],
+                        "assists" : assists,
+                        "shotType" : scoring_play["result"]["secondaryType"] if "secondaryType" in scoring_play["result"] else None
+                    }})
+                elif player_saved:
+                    game_data["goal_against"].append({**shared_data , **{
+                        "scorer" : scorer,
+                        "gameWinningGoal" : "gameWinningGoal" in scoring_play["result"] and scoring_play["result"]["gameWinningGoal"],
+                        "penaltyShot" : next_shot_penalty_shot,
+                        "oppSide" : None if scorer not in game_data["player_side_map"] else game_data["player_side_map"][scorer],
+                        "oppFirstName" : game_data["player_first_name_map"][scorer],
+                        "oppLastName" : game_data["player_last_name_map"][scorer],
+                        "oppBirthCountry" : game_data["player_birth_country_map"][scorer],
+                        "oppNationality" : game_data["player_nationality_map"][scorer],
+                        "shotType" : scoring_play["result"]["secondaryType"] if "secondaryType" in scoring_play["result"] else None
+                    }})
+                
+                if game_data["shift_data"] or team_on_ice:
+                    is_on_ice = is_player_on_ice(game_data["shift_data"], team_on_ice, opp_on_ice, scoring_play["about"]["period"], period_time, player_id, True)
+                    if is_on_ice != None:
+                        if is_on_ice:
+                            if scoring_play["team"]["id"] == game_data["team_id"]:
+                                game_data["oi_all_team_goals"].append({**shared_data, **{}})
+                                if row_data["Year"] >= 2007:
+                                    game_data["oi_all_team_shots"].append({**shared_data, **{}})
+                                    game_data["oi_all_team_shots_og"].append({**shared_data, **{}})
+                                    game_data["oi_all_team_unblocked_shots"].append({**shared_data, **{}})
+                            else:
+                                game_data["oi_all_opp_goals"].append({**shared_data, **{}})
+                                if row_data["Year"] >= 2007:
+                                    game_data["oi_all_opp_shots"].append({**shared_data, **{}})
+                                    game_data["oi_all_opp_shots_og"].append({**shared_data, **{}})
+                                    game_data["oi_all_opp_unblocked_shots"].append({**shared_data, **{}})
+
+                        if scoring_play["team"]["id"] == game_data["team_id"]:
+                            game_data["all_team_goals"].append({**shared_data, **{}})
                             if row_data["Year"] >= 2007:
+                                game_data["all_team_shots"].append({**shared_data, **{}})
+                                game_data["all_team_shots_og"].append({**shared_data, **{}})
+                                game_data["all_team_unblocked_shots"].append({**shared_data, **{}})
+                        else:
+                            game_data["all_opp_goals"].append({**shared_data, **{}})
+                            if row_data["Year"] >= 2007:
+                                game_data["all_opp_shots"].append({**shared_data, **{}})
+                                game_data["all_opp_shots_og"].append({**shared_data, **{}})
+                                game_data["all_opp_unblocked_shots"].append({**shared_data, **{}})
+
+                next_shot_penalty_shot = False
+                first_goal = False
+            elif scoring_play["result"]["event"] == "Shot":
+                player_shot = False
+                goalie = None
+                player_saved = False
+                scorer = None
+                for score_player in scoring_play["players"]:
+                    if score_player["playerType"] == "Shooter":
+                        if score_player["player"]["id"] == player_id or score_player["player"]["id"] == player_data["id"]:
+                            player_shot = True
+                        else:
+                            scorer = score_player["player"]["id"]
+                    elif score_player["playerType"] == "Goalie":
+                        if score_player["player"]["id"] == player_id or score_player["player"]["id"] == player_data["id"]:
+                            player_saved = True
+                        else:
+                            goalie = score_player["player"]["id"]
+                
+                if player_shot:
+                    game_data["shot"].append({**shared_data , **{
+                        "goalie" : goalie,
+                        "penaltyShot" : next_shot_penalty_shot,
+                        "oppSide" : None if (not goalie or goalie not in game_data["player_side_map"]) else game_data["player_side_map"][goalie],
+                        "oppFirstName" : None if not goalie else game_data["player_first_name_map"][goalie],
+                        "oppLastName" : None if not goalie else game_data["player_last_name_map"][goalie],
+                        "oppBirthCountry" : None if not goalie else game_data["player_birth_country_map"][goalie],
+                        "oppNationality" : None if not goalie else game_data["player_nationality_map"][goalie],
+                        "shotType" : scoring_play["result"]["secondaryType"] if "secondaryType" in scoring_play["result"] else None
+                    }})
+                elif player_saved:
+                    game_data["save_against"].append({**shared_data , **{
+                        "scorer" : scorer,
+                        "penaltyShot" : next_shot_penalty_shot,
+                        "oppSide" : None if scorer not in game_data["player_side_map"] else game_data["player_side_map"][scorer],
+                        "oppFirstName" : game_data["player_first_name_map"][scorer],
+                        "oppLastName" : game_data["player_last_name_map"][scorer],
+                        "oppBirthCountry" : game_data["player_birth_country_map"][scorer],
+                        "oppNationality" : game_data["player_nationality_map"][scorer],
+                        "shotType" : scoring_play["result"]["secondaryType"] if "secondaryType" in scoring_play["result"] else None
+                    }})
+
+                if game_data["shift_data"] or team_on_ice:
+                    is_on_ice = is_player_on_ice(game_data["shift_data"], team_on_ice, opp_on_ice, scoring_play["about"]["period"], period_time, player_id, True)
+                    if is_on_ice != None:
+                        if is_on_ice:
+                            if scoring_play["team"]["id"] == game_data["team_id"]:
                                 game_data["oi_all_team_shots"].append({**shared_data, **{}})
                                 game_data["oi_all_team_shots_og"].append({**shared_data, **{}})
                                 game_data["oi_all_team_unblocked_shots"].append({**shared_data, **{}})
-                        else:
-                            game_data["oi_all_opp_goals"].append({**shared_data, **{}})
-                            if row_data["Year"] >= 2007:
+                            else:
                                 game_data["oi_all_opp_shots"].append({**shared_data, **{}})
                                 game_data["oi_all_opp_shots_og"].append({**shared_data, **{}})
                                 game_data["oi_all_opp_unblocked_shots"].append({**shared_data, **{}})
 
-                    if scoring_play["team"]["id"] == game_data["team_id"]:
-                        game_data["all_team_goals"].append({**shared_data, **{}})
-                        if row_data["Year"] >= 2007:
+                        if scoring_play["team"]["id"] == game_data["team_id"]:
                             game_data["all_team_shots"].append({**shared_data, **{}})
                             game_data["all_team_shots_og"].append({**shared_data, **{}})
                             game_data["all_team_unblocked_shots"].append({**shared_data, **{}})
-                    else:
-                        game_data["all_opp_goals"].append({**shared_data, **{}})
-                        if row_data["Year"] >= 2007:
+                        else:
                             game_data["all_opp_shots"].append({**shared_data, **{}})
                             game_data["all_opp_shots_og"].append({**shared_data, **{}})
                             game_data["all_opp_unblocked_shots"].append({**shared_data, **{}})
 
-            next_shot_penalty_shot = False
-            first_goal = False
-        elif scoring_play["result"]["event"] == "Shot":
-            player_shot = False
-            goalie = None
-            player_saved = False
-            scorer = None
-            for score_player in scoring_play["players"]:
-                if score_player["playerType"] == "Shooter":
-                    if score_player["player"]["id"] == player_id or score_player["player"]["id"] == player_data["id"]:
-                        player_shot = True
-                    else:
-                        scorer = score_player["player"]["id"]
-                elif score_player["playerType"] == "Goalie":
-                    if score_player["player"]["id"] == player_id or score_player["player"]["id"] == player_data["id"]:
-                        player_saved = True
-                    else:
-                        goalie = score_player["player"]["id"]
-            
-            if player_shot:
-                game_data["shot"].append({**shared_data , **{
-                    "goalie" : goalie,
-                    "penaltyShot" : next_shot_penalty_shot,
-                    "oppSide" : None if (not goalie or goalie not in game_data["player_side_map"]) else game_data["player_side_map"][goalie],
-                    "oppFirstName" : None if not goalie else game_data["player_first_name_map"][goalie],
-                    "oppLastName" : None if not goalie else game_data["player_last_name_map"][goalie],
-                    "oppBirthCountry" : None if not goalie else game_data["player_birth_country_map"][goalie],
-                    "oppNationality" : None if not goalie else game_data["player_nationality_map"][goalie],
-                    "shotType" : scoring_play["result"]["secondaryType"] if "secondaryType" in scoring_play["result"] else None
-                }})
-            elif player_saved:
-                game_data["save_against"].append({**shared_data , **{
-                    "scorer" : scorer,
-                    "penaltyShot" : next_shot_penalty_shot,
-                    "oppSide" : None if scorer not in game_data["player_side_map"] else game_data["player_side_map"][scorer],
-                    "oppFirstName" : game_data["player_first_name_map"][scorer],
-                    "oppLastName" : game_data["player_last_name_map"][scorer],
-                    "oppBirthCountry" : game_data["player_birth_country_map"][scorer],
-                    "oppNationality" : game_data["player_nationality_map"][scorer],
-                    "shotType" : scoring_play["result"]["secondaryType"] if "secondaryType" in scoring_play["result"] else None
-                }})
+                next_shot_penalty_shot = False
+            elif scoring_play["result"]["event"] == "Missed Shot":
+                player_shot = False
+                goalie = None
+                player_saved = False
+                scorer = None
+                for score_player in scoring_play["players"]:
+                    if score_player["playerType"] == "Shooter":
+                        if score_player["player"]["id"] == player_id or score_player["player"]["id"] == player_data["id"]:
+                            player_shot = True
+                        else:
+                            scorer = score_player["player"]["id"]
+                    elif score_player["playerType"] == "Goalie" or score_player["playerType"] == "Unknown":
+                        if score_player["player"]["id"] == player_id or score_player["player"]["id"] == player_data["id"]:
+                            player_saved = True
+                        else:
+                            goalie = score_player["player"]["id"]
+                
+                if player_shot:
+                    game_data["missed_shot"].append({**shared_data , **{
+                        "goalie" : goalie,
+                        "penaltyShot" : next_shot_penalty_shot,
+                        "oppSide" : None if (not goalie or goalie not in game_data["player_side_map"]) else game_data["player_side_map"][goalie],
+                        "oppFirstName" : None if not goalie else game_data["player_first_name_map"][goalie],
+                        "oppLastName" : None if not goalie else game_data["player_last_name_map"][goalie],
+                        "oppBirthCountry" : None if not goalie else game_data["player_birth_country_map"][goalie],
+                        "oppNationality" : None if not goalie else game_data["player_nationality_map"][goalie]
+                    }})
+                elif player_saved:
+                    game_data["missed_shot_against"].append({**shared_data , **{
+                        "scorer" : scorer,
+                        "penaltyShot" : next_shot_penalty_shot,
+                        "oppSide" : None if scorer not in game_data["player_side_map"] else game_data["player_side_map"][scorer],
+                        "oppFirstName" : game_data["player_first_name_map"][scorer],
+                        "oppLastName" : game_data["player_last_name_map"][scorer],
+                        "oppBirthCountry" : game_data["player_birth_country_map"][scorer],
+                        "oppNationality" : game_data["player_nationality_map"][scorer]
+                    }})
 
-            if game_data["shift_data"] or team_on_ice:
+                if game_data["shift_data"] or team_on_ice:
+                    is_on_ice = is_player_on_ice(game_data["shift_data"], team_on_ice, opp_on_ice, scoring_play["about"]["period"], period_time, player_id, True)
+                    if is_on_ice != None:
+                        if is_on_ice:
+                            if scoring_play["team"]["id"] == game_data["team_id"]:
+                                game_data["oi_all_team_shots"].append({**shared_data, **{}})
+                                game_data["oi_all_team_unblocked_shots"].append({**shared_data, **{}})
+                            else:
+                                game_data["oi_all_opp_shots"].append({**shared_data, **{}})
+                                game_data["oi_all_opp_unblocked_shots"].append({**shared_data, **{}})
+
+                        if scoring_play["team"]["id"] == game_data["team_id"]:
+                            game_data["all_team_shots"].append({**shared_data, **{}})
+                            game_data["all_team_unblocked_shots"].append({**shared_data, **{}})
+                        else:
+                            game_data["all_opp_shots"].append({**shared_data, **{}})
+                            game_data["all_opp_unblocked_shots"].append({**shared_data, **{}})
+
+                next_shot_penalty_shot = False
+            elif scoring_play["result"]["event"] == "Penalty":
+                pen_obj = {**shared_data , **{
+                    "penalty_minutes" : scoring_play["result"]["penaltyMinutes"]
+                }}
+                player_penalty = False
+                player_penalty_drawn = False
+                penalty_against = None
+                penalty_for = None
+                for score_player in scoring_play["players"]:
+                    if score_player["playerType"] == "PenaltyOn":
+                        penalty_against = score_player["player"]["id"]
+                        if score_player["player"]["id"] == player_id or score_player["player"]["id"] == player_data["id"]:
+                            player_penalty = True
+                    elif score_player["playerType"] == "DrewBy":
+                        penalty_for = score_player["player"]["id"]
+                        if score_player["player"]["id"] == player_id or score_player["player"]["id"] == player_data["id"]:
+                            player_penalty_drawn = True
+                
+                pen_obj["penalty_for"] = penalty_for
+                pen_obj["penalty_against"] = penalty_against
+                
+                if "penaltySeverity" in scoring_play["result"] and scoring_play["result"]["penaltySeverity"]:
+                    scoring_play["result"]["penaltySeverity"] = scoring_play["result"]["penaltySeverity"].title()
+                
+                if "secondaryType" in scoring_play["result"] and scoring_play["result"]["secondaryType"]:
+                    scoring_play["result"]["secondaryType"] = scoring_play["result"]["secondaryType"].title()
+
+                if "penaltySeverity" in scoring_play["result"] and scoring_play["result"]["penaltySeverity"] == "Penalty Shot":
+                    next_shot_penalty_shot = True
+                
+                has_pen_sev = False
+                if "penaltySeverity" in scoring_play["result"]:
+                    has_pen_sev = True
+                    if "penaltySeverity" in scoring_play["result"] and scoring_play["result"]["penaltySeverity"] != "Penalty Shot":
+                        pen_obj["penaltySeverity"] = scoring_play["result"]["penaltySeverity"] if scoring_play["result"]["penaltySeverity"] != "Game Misconduct" else "GameMisconduct"
+                if "secondaryType" in scoring_play["result"]:
+                    pen_obj["penaltyType"] = scoring_play["result"]["secondaryType"].title()
+                    if not has_pen_sev:
+                        pen_sev_string = scoring_play["result"]["secondaryType"] if scoring_play["result"]["secondaryType"] != "Game Misconduct" else "GameMisconduct"
+                        if scoring_play["result"]["penaltyMinutes"] == 5:
+                            pen_obj["penaltyType"] = pen_sev_string
+                            pen_sev_string = "Major"
+                        elif pen_sev_string == "Bench Minor":
+                            pen_sev_string = "Minor"
+                        elif pen_sev_string in ["Attempt To Injure", "Deliberate Injury"]:
+                            pen_sev_string = "Match"
+
+                        if pen_sev_string in headers[player_type["da_type"]["type"]]:
+                            pen_obj["penaltySeverity"] = pen_sev_string
+                        else:
+                            pen_obj["penaltySeverity"] = "Minor"
+                    
+                    if "penaltySeverity" in pen_obj and pen_obj["penaltySeverity"] == "Minor" and scoring_play["result"]["penaltyMinutes"] == 5:
+                        pen_obj["penaltySeverity"] = "Major"
+
+                    pen_obj["penaltyType"] = pen_obj["penaltyType"].replace("Hi Stick", "High Stick").strip()
+                    pen_obj["penaltyType"] = pen_obj["penaltyType"].replace("Hi-Stick", "High-Stick").strip()
+                    
+                if player_penalty or player_penalty_drawn:
+                    if not (len(scoring_play["players"]) == 1 and "description" in scoring_play["result"] and scoring_play["result"]["description"] and " served by " in scoring_play["result"]["description"]) and pen_obj["penalty_minutes"]:
+                        pen_obj["player_penalty"] = player_penalty
+                        if "penaltyType" in pen_obj and pen_obj["penaltyType"] == "Fighting" and player_penalty:
+                            game_data["Fight"] += 1
+                        game_data["penalty"].append(pen_obj)
+                # if "penaltySeverity" in pen_obj:
+                #     stat_data["penalties"]["sev"].add(pen_obj["penaltySeverity"])
+                # if "penaltyType" in pen_obj:
+                #     stat_data["penalties"]["type"].add(pen_obj["penaltyType"])
+            elif scoring_play["result"]["event"] == "Hit":
+                hit_by = None
+                hit_against = None
+                for score_player in scoring_play["players"]:
+                    if score_player["playerType"] == "Hitter":
+                        hit_by = score_player["player"]["id"]
+                    elif score_player["playerType"] == "Hittee":
+                        hit_against = score_player["player"]["id"]
+                
+                if hit_by == player_id or hit_by == player_data["id"]:
+                    game_data["hit"].append({**shared_data , **{
+                        "hit_against" : hit_against
+                    }})
+                elif hit_against == player_id or hit_against == player_data["id"]:
+                    game_data["hit_taken"].append({**shared_data , **{
+                        "hit_by" : hit_by
+                    }})
+            elif scoring_play["result"]["event"] == "Blocked Shot":
+                player_block = False
+                player_shot = False
+                block_against = None
+                for score_player in scoring_play["players"]:
+                    if score_player["playerType"] == "Blocker":
+                        if score_player["player"]["id"] == player_id or score_player["player"]["id"] == player_data["id"]:
+                            player_block = True
+                    elif score_player["playerType"] == "Shooter":
+                        block_against = score_player["player"]["id"]
+                        if score_player["player"]["id"] == player_id or score_player["player"]["id"] == player_data["id"]:
+                            player_shot = True
+                
+                if player_block:
+                    game_data["block"].append({**shared_data , **{
+                        "block_against" : block_against
+                    }})
+                elif player_shot:
+                    game_data["blocked_shot"].append({**shared_data, **{}})
+
                 is_on_ice = is_player_on_ice(game_data["shift_data"], team_on_ice, opp_on_ice, scoring_play["about"]["period"], period_time, player_id, True)
                 if is_on_ice != None:
                     if is_on_ice:
-                        if scoring_play["team"]["id"] == game_data["team_id"]:
+                        if scoring_play["team"]["id"] != game_data["team_id"]:
                             game_data["oi_all_team_shots"].append({**shared_data, **{}})
-                            game_data["oi_all_team_shots_og"].append({**shared_data, **{}})
-                            game_data["oi_all_team_unblocked_shots"].append({**shared_data, **{}})
                         else:
                             game_data["oi_all_opp_shots"].append({**shared_data, **{}})
-                            game_data["oi_all_opp_shots_og"].append({**shared_data, **{}})
-                            game_data["oi_all_opp_unblocked_shots"].append({**shared_data, **{}})
 
-                    if scoring_play["team"]["id"] == game_data["team_id"]:
-                        game_data["all_team_shots"].append({**shared_data, **{}})
-                        game_data["all_team_shots_og"].append({**shared_data, **{}})
-                        game_data["all_team_unblocked_shots"].append({**shared_data, **{}})
-                    else:
-                        game_data["all_opp_shots"].append({**shared_data, **{}})
-                        game_data["all_opp_shots_og"].append({**shared_data, **{}})
-                        game_data["all_opp_unblocked_shots"].append({**shared_data, **{}})
-
-            next_shot_penalty_shot = False
-        elif scoring_play["result"]["event"] == "Missed Shot":
-            player_shot = False
-            goalie = None
-            player_saved = False
-            scorer = None
-            for score_player in scoring_play["players"]:
-                if score_player["playerType"] == "Shooter":
-                    if score_player["player"]["id"] == player_id or score_player["player"]["id"] == player_data["id"]:
-                        player_shot = True
-                    else:
-                        scorer = score_player["player"]["id"]
-                elif score_player["playerType"] == "Goalie" or score_player["playerType"] == "Unknown":
-                    if score_player["player"]["id"] == player_id or score_player["player"]["id"] == player_data["id"]:
-                        player_saved = True
-                    else:
-                        goalie = score_player["player"]["id"]
-            
-            if player_shot:
-                game_data["missed_shot"].append({**shared_data , **{
-                    "goalie" : goalie,
-                    "penaltyShot" : next_shot_penalty_shot,
-                    "oppSide" : None if (not goalie or goalie not in game_data["player_side_map"]) else game_data["player_side_map"][goalie],
-                    "oppFirstName" : None if not goalie else game_data["player_first_name_map"][goalie],
-                    "oppLastName" : None if not goalie else game_data["player_last_name_map"][goalie],
-                    "oppBirthCountry" : None if not goalie else game_data["player_birth_country_map"][goalie],
-                    "oppNationality" : None if not goalie else game_data["player_nationality_map"][goalie]
-                }})
-            elif player_saved:
-                game_data["missed_shot_against"].append({**shared_data , **{
-                    "scorer" : scorer,
-                    "penaltyShot" : next_shot_penalty_shot,
-                    "oppSide" : None if scorer not in game_data["player_side_map"] else game_data["player_side_map"][scorer],
-                    "oppFirstName" : game_data["player_first_name_map"][scorer],
-                    "oppLastName" : game_data["player_last_name_map"][scorer],
-                    "oppBirthCountry" : game_data["player_birth_country_map"][scorer],
-                    "oppNationality" : game_data["player_nationality_map"][scorer]
-                }})
-
-            if game_data["shift_data"] or team_on_ice:
-                is_on_ice = is_player_on_ice(game_data["shift_data"], team_on_ice, opp_on_ice, scoring_play["about"]["period"], period_time, player_id, True)
-                if is_on_ice != None:
-                    if is_on_ice:
-                        if scoring_play["team"]["id"] == game_data["team_id"]:
-                            game_data["oi_all_team_shots"].append({**shared_data, **{}})
-                            game_data["oi_all_team_unblocked_shots"].append({**shared_data, **{}})
-                        else:
-                            game_data["oi_all_opp_shots"].append({**shared_data, **{}})
-                            game_data["oi_all_opp_unblocked_shots"].append({**shared_data, **{}})
-
-                    if scoring_play["team"]["id"] == game_data["team_id"]:
-                        game_data["all_team_shots"].append({**shared_data, **{}})
-                        game_data["all_team_unblocked_shots"].append({**shared_data, **{}})
-                    else:
-                        game_data["all_opp_shots"].append({**shared_data, **{}})
-                        game_data["all_opp_unblocked_shots"].append({**shared_data, **{}})
-
-            next_shot_penalty_shot = False
-        elif scoring_play["result"]["event"] == "Penalty":
-            pen_obj = {**shared_data , **{
-                "penalty_minutes" : scoring_play["result"]["penaltyMinutes"]
-            }}
-            player_penalty = False
-            player_penalty_drawn = False
-            penalty_against = None
-            penalty_for = None
-            for score_player in scoring_play["players"]:
-                if score_player["playerType"] == "PenaltyOn":
-                    penalty_against = score_player["player"]["id"]
-                    if score_player["player"]["id"] == player_id or score_player["player"]["id"] == player_data["id"]:
-                        player_penalty = True
-                elif score_player["playerType"] == "DrewBy":
-                    penalty_for = score_player["player"]["id"]
-                    if score_player["player"]["id"] == player_id or score_player["player"]["id"] == player_data["id"]:
-                        player_penalty_drawn = True
-            
-            pen_obj["penalty_for"] = penalty_for
-            pen_obj["penalty_against"] = penalty_against
-            
-            if "penaltySeverity" in scoring_play["result"] and scoring_play["result"]["penaltySeverity"]:
-                scoring_play["result"]["penaltySeverity"] = scoring_play["result"]["penaltySeverity"].title()
-            
-            if "secondaryType" in scoring_play["result"] and scoring_play["result"]["secondaryType"]:
-                scoring_play["result"]["secondaryType"] = scoring_play["result"]["secondaryType"].title()
-
-            if "penaltySeverity" in scoring_play["result"] and scoring_play["result"]["penaltySeverity"] == "Penalty Shot":
-                next_shot_penalty_shot = True
-            
-            has_pen_sev = False
-            if "penaltySeverity" in scoring_play["result"]:
-                has_pen_sev = True
-                if "penaltySeverity" in scoring_play["result"] and scoring_play["result"]["penaltySeverity"] != "Penalty Shot":
-                    pen_obj["penaltySeverity"] = scoring_play["result"]["penaltySeverity"] if scoring_play["result"]["penaltySeverity"] != "Game Misconduct" else "GameMisconduct"
-            if "secondaryType" in scoring_play["result"]:
-                pen_obj["penaltyType"] = scoring_play["result"]["secondaryType"].title()
-                if not has_pen_sev:
-                    pen_sev_string = scoring_play["result"]["secondaryType"] if scoring_play["result"]["secondaryType"] != "Game Misconduct" else "GameMisconduct"
-                    if scoring_play["result"]["penaltyMinutes"] == 5:
-                        pen_obj["penaltyType"] = pen_sev_string
-                        pen_sev_string = "Major"
-                    elif pen_sev_string == "Bench Minor":
-                        pen_sev_string = "Minor"
-                    elif pen_sev_string in ["Attempt To Injure", "Deliberate Injury"]:
-                        pen_sev_string = "Match"
-
-                    if pen_sev_string in headers[player_type["da_type"]["type"]]:
-                        pen_obj["penaltySeverity"] = pen_sev_string
-                    else:
-                        pen_obj["penaltySeverity"] = "Minor"
-                
-                if "penaltySeverity" in pen_obj and pen_obj["penaltySeverity"] == "Minor" and scoring_play["result"]["penaltyMinutes"] == 5:
-                    pen_obj["penaltySeverity"] = "Major"
-
-                pen_obj["penaltyType"] = pen_obj["penaltyType"].replace("Hi Stick", "High Stick").strip()
-                pen_obj["penaltyType"] = pen_obj["penaltyType"].replace("Hi-Stick", "High-Stick").strip()
-                
-            if player_penalty or player_penalty_drawn:
-                if not (len(scoring_play["players"]) == 1 and "description" in scoring_play["result"] and " served by " in scoring_play["result"]["description"]) and pen_obj["penalty_minutes"]:
-                    pen_obj["player_penalty"] = player_penalty
-                    if "penaltyType" in pen_obj and pen_obj["penaltyType"] == "Fighting" and player_penalty:
-                        game_data["Fight"] += 1
-                    game_data["penalty"].append(pen_obj)
-            # if "penaltySeverity" in pen_obj:
-            #     stat_data["penalties"]["sev"].add(pen_obj["penaltySeverity"])
-            # if "penaltyType" in pen_obj:
-            #     stat_data["penalties"]["type"].add(pen_obj["penaltyType"])
-        elif scoring_play["result"]["event"] == "Hit":
-            hit_by = None
-            hit_against = None
-            for score_player in scoring_play["players"]:
-                if score_player["playerType"] == "Hitter":
-                    hit_by = score_player["player"]["id"]
-                elif score_player["playerType"] == "Hittee":
-                    hit_against = score_player["player"]["id"]
-            
-            if hit_by == player_id or hit_by == player_data["id"]:
-                game_data["hit"].append({**shared_data , **{
-                    "hit_against" : hit_against
-                }})
-            elif hit_against == player_id or hit_against == player_data["id"]:
-                game_data["hit_taken"].append({**shared_data , **{
-                    "hit_by" : hit_by
-                }})
-        elif scoring_play["result"]["event"] == "Blocked Shot":
-            player_block = False
-            player_shot = False
-            block_against = None
-            for score_player in scoring_play["players"]:
-                if score_player["playerType"] == "Blocker":
-                    if score_player["player"]["id"] == player_id or score_player["player"]["id"] == player_data["id"]:
-                        player_block = True
-                elif score_player["playerType"] == "Shooter":
-                    block_against = score_player["player"]["id"]
-                    if score_player["player"]["id"] == player_id or score_player["player"]["id"] == player_data["id"]:
-                        player_shot = True
-            
-            if player_block:
-                game_data["block"].append({**shared_data , **{
-                    "block_against" : block_against
-                }})
-            elif player_shot:
-                game_data["blocked_shot"].append({**shared_data, **{}})
-
-            is_on_ice = is_player_on_ice(game_data["shift_data"], team_on_ice, opp_on_ice, scoring_play["about"]["period"], period_time, player_id, True)
-            if is_on_ice != None:
-                if is_on_ice:
                     if scoring_play["team"]["id"] != game_data["team_id"]:
-                        game_data["oi_all_team_shots"].append({**shared_data, **{}})
+                        game_data["all_team_shots"].append({**shared_data, **{}})
                     else:
-                        game_data["oi_all_opp_shots"].append({**shared_data, **{}})
+                        game_data["all_opp_shots"].append({**shared_data, **{}})
+                next_shot_penalty_shot = False
+            elif scoring_play["result"]["event"] == "Faceoff":
+                player_faceoff_winner = False
+                player_faceoff_loser = False
+                faceoff_against = None
+                for score_player in scoring_play["players"]:
+                    if score_player["playerType"] == "Winner":
+                        if score_player["player"]["id"] == player_id or score_player["player"]["id"] == player_data["id"]:
+                            player_faceoff_winner = True
+                        else:
+                            faceoff_against = score_player["player"]["id"]
+                    elif score_player["playerType"] == "Loser":
+                        if score_player["player"]["id"] == player_id or score_player["player"]["id"] == player_data["id"]:
+                            player_faceoff_loser = True
+                        else:
+                            faceoff_against = score_player["player"]["id"]
 
-                if scoring_play["team"]["id"] != game_data["team_id"]:
-                    game_data["all_team_shots"].append({**shared_data, **{}})
-                else:
-                    game_data["all_opp_shots"].append({**shared_data, **{}})
-            next_shot_penalty_shot = False
-        elif scoring_play["result"]["event"] == "Faceoff":
-            player_faceoff_winner = False
-            player_faceoff_loser = False
-            faceoff_against = None
-            for score_player in scoring_play["players"]:
-                if score_player["playerType"] == "Winner":
-                    if score_player["player"]["id"] == player_id or score_player["player"]["id"] == player_data["id"]:
-                        player_faceoff_winner = True
-                    else:
-                        faceoff_against = score_player["player"]["id"]
-                elif score_player["playerType"] == "Loser":
-                    if score_player["player"]["id"] == player_id or score_player["player"]["id"] == player_data["id"]:
-                        player_faceoff_loser = True
-                    else:
-                        faceoff_against = score_player["player"]["id"]
+                if player_faceoff_winner:
+                    game_data["faceoff"].append({**shared_data , **{
+                        "winner" : True,
+                        "faceoff_against" : faceoff_against
+                    }})
+                elif player_faceoff_loser:
+                    game_data["faceoff"].append({**shared_data , **{
+                        "winner" : False,
+                        "faceoff_against" : faceoff_against
+                    }})
+                
+                is_on_ice = is_player_on_ice(game_data["shift_data"], team_on_ice, opp_on_ice, scoring_play["about"]["period"], period_time, player_id, True, is_faceoff=True)
+                if is_on_ice:
+                    game_data["all_faceoffs"].append({**shared_data , **{
+                        "winner" : True,
+                        "faceoff_against" : faceoff_against
+                    }})
 
-            if player_faceoff_winner:
-                game_data["faceoff"].append({**shared_data , **{
-                    "winner" : True,
-                    "faceoff_against" : faceoff_against
-                }})
-            elif player_faceoff_loser:
-                game_data["faceoff"].append({**shared_data , **{
-                    "winner" : False,
-                    "faceoff_against" : faceoff_against
-                }})
-            
-            is_on_ice = is_player_on_ice(game_data["shift_data"], team_on_ice, opp_on_ice, scoring_play["about"]["period"], period_time, player_id, True, is_faceoff=True)
-            if is_on_ice:
-                game_data["all_faceoffs"].append({**shared_data , **{
-                    "winner" : True,
-                    "faceoff_against" : faceoff_against
-                }})
+                if event_time:
+                    if scoring_play["about"]["period"] not in faceoff_time_information:
+                        faceoff_time_information[scoring_play["about"]["period"]] = {}
+                    faceoff_time_information[scoring_play["about"]["period"]][period_time] = event_time
+                elif ("Event Time" in time_frame["qualifiers"] or "Local Event Time" in time_frame["qualifiers"]):
+                    game_data["missing_toi"] = True
+            elif scoring_play["result"]["event"] == "Takeaway" or scoring_play["result"]["event"] == "Giveaway":
+                if scoring_play["players"][0]["player"]["id"] == player_id:
+                    game_data["takeaway"].append({**shared_data , **{
+                        "is_takeaway" : scoring_play["result"]["event"] == "Takeaway"
+                    }})
 
-            if event_time:
-                if scoring_play["about"]["period"] not in faceoff_time_information:
-                    faceoff_time_information[scoring_play["about"]["period"]] = {}
-                faceoff_time_information[scoring_play["about"]["period"]][period_time] = event_time
-            elif ("Event Time" in time_frame["qualifiers"] or "Local Event Time" in time_frame["qualifiers"]):
-                game_data["missing_toi"] = True
-        elif scoring_play["result"]["event"] == "Takeaway" or scoring_play["result"]["event"] == "Giveaway":
-            if scoring_play["players"][0]["player"]["id"] == player_id:
-                game_data["takeaway"].append({**shared_data , **{
-                    "is_takeaway" : scoring_play["result"]["event"] == "Takeaway"
-                }})
-
+        game_data["all_raw_events"].append(shared_data)
         game_data["all_plays"].append(scoring_play)
 
     shift_data = game_data["shift_data"]
@@ -20983,6 +21027,7 @@ def setup_game_data(player_data, row_data, player_id, player_type, time_frame):
         "team_names" : {},
         "opp_names" : {},
         "all_plays" : [],
+        "all_raw_events" : [],
         "goal" : [],
         "assist" : [],
         "goal_against" : [],
@@ -21308,6 +21353,7 @@ def setup_href_game_data(player_data, row_data, player_id, player_type, time_fra
             "team_names" : {},
             "opp_names" : {},
             "all_plays" : [],
+            "all_raw_events" : [],
             "goal" : [],
             "assist" : [],
             "goal_against" : [],
@@ -21937,71 +21983,77 @@ def get_html_play_data(scoring_plays, player_data, og_game_id, is_home, game_dat
                     elif event_type == "HIT":
                         real_event_type = "Hit"
                     
-                    if real_event_type:
-                        period = int(str(columns[1].text_content()).strip())
-                        strength = str(columns[2].text_content()).strip()
-                        time_start_str = str(columns[3].text).strip()    
-                        description_string = str(columns[5].text_content()).strip()
+                    period = int(str(columns[1].text_content()).strip())
+                    strength = str(columns[2].text_content()).strip()
+                    time_start_str = str(columns[3].text).strip()    
+                    description_string = str(columns[5].text_content()).strip()
 
+                    if "strength":
                         if strength == "EV":
                             strength = "EVEN"
                         elif strength == "PP":
                             strength = "PPG"
                         else:
                             strength = "SHG"
+                    else:
+                        strength = None
 
-                        team_id = None
-                        if len(description_string) >= 4:
-                            if description_string[0] == home_team_abbr[0] and description_string[1] == home_team_abbr[1] and description_string[2] == home_team_abbr[2]:
-                                if is_home:
-                                    is_team = True
-                                    is_home_team = True
-                                    team_id = game_data["team_id"]
-                                else:
-                                    is_team = False
-                                    team_id = game_data["opp_id"]
+                    team_id = None
+                    if len(description_string) >= 4:
+                        if description_string[0] == home_team_abbr[0] and description_string[1] == home_team_abbr[1] and description_string[2] == home_team_abbr[2]:
+                            if is_home:
+                                is_team = True
                                 is_home_team = True
-                            elif description_string[0] == away_team_abbr[0] and description_string[1] == away_team_abbr[1] and description_string[2] == away_team_abbr[2]:
-                                if is_home:
-                                    is_team = False
-                                    team_id = game_data["opp_id"]
-                                else:
-                                    is_team = True
-                                    team_id = game_data["team_id"]
-                                is_home_team = False
+                                team_id = game_data["team_id"]
+                            else:
+                                is_team = False
+                                team_id = game_data["opp_id"]
+                            is_home_team = True
+                        elif description_string[0] == away_team_abbr[0] and description_string[1] == away_team_abbr[1] and description_string[2] == away_team_abbr[2]:
+                            if is_home:
+                                is_team = False
+                                team_id = game_data["opp_id"]
+                            else:
+                                is_team = True
+                                team_id = game_data["team_id"]
+                            is_home_team = False
 
-                        zone = None
-                        if "Neu. Zone" in description_string:
-                            zone = "NZ"
-                        elif "Off. Zone" in description_string:
-                            zone = "OZ"
-                        elif "Def. Zone" in description_string:
-                            zone = "DZ"
+                    zone = None
+                    if "Neu. Zone" in description_string:
+                        zone = "NZ"
+                    elif "Off. Zone" in description_string:
+                        zone = "OZ"
+                    elif "Def. Zone" in description_string:
+                        zone = "DZ"
 
-                        player_numbers = get_player_numbers(description_string)
+                    player_numbers = get_player_numbers(description_string)
 
-                        scoring_play = {
-                            "players" : [],
-                            "about" : {
-                                "period" : period,
-                                "periodTime" : time_start_str,
-                                "goals" : {
-                                    "home" : home_goals,
-                                    "away" : away_goals
-                                }
-                            },
-                            "result" : {
-                                "event" : real_event_type,
-                                "strength" : {
-                                    "code" : strength
-                                }
-                            },
-                            "team" : {
-                                "id" : team_id
-                            },
-                            "zone" : zone
-                        }
+                    scoring_play = {
+                        "players" : [],
+                        "about" : {
+                            "period" : period,
+                            "periodTime" : time_start_str,
+                            "goals" : {
+                                "home" : home_goals,
+                                "away" : away_goals
+                            }
+                        },
+                        "result" : {
+                            "event" : real_event_type if real_event_type else event_type,
+                            "description" : description_string,
+                            "strength" : {
+                                "code" : strength
+                            }
+                        },
+                        "team" : {
+                            "id" : team_id
+                        },
+                        "zone" : zone
+                    }
 
+                    team_on_ice = None
+                    opp_on_ice = None
+                    if team_id:
                         if is_home_team:
                             team_on_ice = get_on_ice(columns[7], game_data["team_numbers"] if is_team else game_data["opp_numbers"], game_data["team_goalies"] if is_team else game_data["opp_goalies"])
                             opp_on_ice = get_on_ice(columns[6], game_data["opp_numbers"] if is_team else game_data["team_numbers"], game_data["opp_goalies"] if is_team else game_data["team_goalies"])
@@ -22009,437 +22061,435 @@ def get_html_play_data(scoring_plays, player_data, og_game_id, is_home, game_dat
                             team_on_ice = get_on_ice(columns[6], game_data["team_numbers"] if is_team else game_data["opp_numbers"], game_data["team_goalies"] if is_team else game_data["opp_goalies"])
                             opp_on_ice = get_on_ice(columns[7], game_data["opp_numbers"] if is_team else game_data["team_numbers"], game_data["opp_goalies"] if is_team else game_data["team_goalies"])
 
-                        if real_event_type == "Goal":
-                            if is_team:
-                                if player_numbers[0] not in game_data["team_numbers"] and player_numbers[0] in game_data["opp_numbers"]:
-                                    scorer = game_data["opp_numbers"].get(player_numbers[0], -1)
-                                    is_team = not is_team
-                                    is_home_team = not is_home_team
-                                    team_id = game_data["team_id"] if team_id == game_data["opp_id"] else game_data["opp_id"]
-                                    scoring_play["team"]["id"] = team_id
-                                else:
-                                    scorer = game_data["team_numbers"].get(player_numbers[0], -1)
+                    if real_event_type == "Goal":
+                        if is_team:
+                            if player_numbers[0] not in game_data["team_numbers"] and player_numbers[0] in game_data["opp_numbers"]:
+                                scorer = game_data["opp_numbers"].get(player_numbers[0], -1)
+                                is_team = not is_team
+                                is_home_team = not is_home_team
+                                team_id = game_data["team_id"] if team_id == game_data["opp_id"] else game_data["opp_id"]
+                                scoring_play["team"]["id"] = team_id
                             else:
-                                if player_numbers[0] not in game_data["opp_numbers"] and player_numbers[0] in game_data["team_numbers"]:
-                                    scorer = game_data["team_numbers"].get(player_numbers[0], -1)
-                                    is_team = not is_team
-                                    is_home_team = not is_home_team
-                                    team_id = game_data["team_id"] if team_id == game_data["opp_id"] else game_data["opp_id"]
-                                    scoring_play["team"]["id"] = team_id
-                                else:
-                                    scorer = game_data["opp_numbers"].get(player_numbers[0], -1)
-
-                            if is_home_team:
-                                home_goals += 1
+                                scorer = game_data["team_numbers"].get(player_numbers[0], -1)
+                        else:
+                            if player_numbers[0] not in game_data["opp_numbers"] and player_numbers[0] in game_data["team_numbers"]:
+                                scorer = game_data["team_numbers"].get(player_numbers[0], -1)
+                                is_team = not is_team
+                                is_home_team = not is_home_team
+                                team_id = game_data["team_id"] if team_id == game_data["opp_id"] else game_data["opp_id"]
+                                scoring_play["team"]["id"] = team_id
                             else:
-                                away_goals += 1
-                            
-                            scoring_play["about"]["goals"]["home"] = home_goals
-                            scoring_play["about"]["goals"]["away"] = away_goals
+                                scorer = game_data["opp_numbers"].get(player_numbers[0], -1)
 
-                            scoring_play["team_on_ice"] = []
-                            for pos in team_on_ice:
-                                for sub_player in team_on_ice[pos]:
-                                    if is_team:
-                                        sub_player_id = game_data["team_numbers"].get(sub_player, -1)
-                                    else:
-                                        sub_player_id = game_data["opp_numbers"].get(sub_player, -1)
-                                    scoring_play["team_on_ice"].append(sub_player_id)
-                            scoring_play["opp_on_ice"] = []
-                            for pos in opp_on_ice:
-                                for sub_player in opp_on_ice[pos]:
-                                    if is_team:
-                                        sub_player_id = game_data["opp_numbers"].get(sub_player, -1)
-                                    else:
-                                        sub_player_id = game_data["team_numbers"].get(sub_player, -1)
-                                    scoring_play["opp_on_ice"].append(sub_player_id)
+                        if is_home_team:
+                            home_goals += 1
+                        else:
+                            away_goals += 1
+                        
+                        scoring_play["about"]["goals"]["home"] = home_goals
+                        scoring_play["about"]["goals"]["away"] = away_goals
 
-                            if " Wrist," in description_string:
-                                scoring_play["result"]["secondaryType"] = "Wrist Shot"
-                            elif " Deflected," in description_string:
-                                scoring_play["result"]["secondaryType"] = "Deflected"
-                            elif " Slap," in description_string:
-                                scoring_play["result"]["secondaryType"] = "Slap Shot"
-                            elif " Snap," in description_string:
-                                scoring_play["result"]["secondaryType"] = "Snap Shot"
-                            elif " Tip-In," in description_string:
-                                scoring_play["result"]["secondaryType"] = "Tip-In"
-                            elif " Backhand," in description_string:
-                                scoring_play["result"]["secondaryType"] = "Backhand"
-                            elif " Wrap-around," in description_string:
-                                scoring_play["result"]["secondaryType"] = "Wrap-around"
-
-                            assist_1 = None
-                            assist_2 = None
-                            goalie = None
-
-                            if len(player_numbers) > 1:
+                        scoring_play["team_on_ice"] = []
+                        for pos in team_on_ice:
+                            for sub_player in team_on_ice[pos]:
                                 if is_team:
-                                    assist_1 = game_data["team_numbers"].get(player_numbers[1], -1)
+                                    sub_player_id = game_data["team_numbers"].get(sub_player, -1)
                                 else:
-                                    assist_1 = game_data["opp_numbers"].get(player_numbers[1], -1)
-
-                                if len(player_numbers) == 3:
-                                    if is_team:
-                                        assist_2 = game_data["team_numbers"].get(player_numbers[2], -1)
-                                    else:
-                                        assist_2 = game_data["opp_numbers"].get(player_numbers[2], -1)
-                            
-                            if opp_on_ice["G"]:
-                                goalie_number = opp_on_ice["G"][0]
+                                    sub_player_id = game_data["opp_numbers"].get(sub_player, -1)
+                                scoring_play["team_on_ice"].append(sub_player_id)
+                        scoring_play["opp_on_ice"] = []
+                        for pos in opp_on_ice:
+                            for sub_player in opp_on_ice[pos]:
                                 if is_team:
-                                    goalie = game_data["opp_numbers"].get(goalie_number, -1)
+                                    sub_player_id = game_data["opp_numbers"].get(sub_player, -1)
                                 else:
-                                    goalie = game_data["team_numbers"].get(goalie_number, -1)
-                            
+                                    sub_player_id = game_data["team_numbers"].get(sub_player, -1)
+                                scoring_play["opp_on_ice"].append(sub_player_id)
 
-                            if scorer:
-                                scoring_play["players"].append({
-                                    "playerType" :  "Scorer",
-                                    "player" : {
-                                        "id" : scorer
-                                    }
-                                })
+                        if " Wrist," in description_string:
+                            scoring_play["result"]["secondaryType"] = "Wrist Shot"
+                        elif " Deflected," in description_string:
+                            scoring_play["result"]["secondaryType"] = "Deflected"
+                        elif " Slap," in description_string:
+                            scoring_play["result"]["secondaryType"] = "Slap Shot"
+                        elif " Snap," in description_string:
+                            scoring_play["result"]["secondaryType"] = "Snap Shot"
+                        elif " Tip-In," in description_string:
+                            scoring_play["result"]["secondaryType"] = "Tip-In"
+                        elif " Backhand," in description_string:
+                            scoring_play["result"]["secondaryType"] = "Backhand"
+                        elif " Wrap-around," in description_string:
+                            scoring_play["result"]["secondaryType"] = "Wrap-around"
 
-                            if assist_1:
-                                scoring_play["players"].append({
-                                    "playerType" :  "Assist",
-                                    "player" : {
-                                        "id" : assist_1
-                                    }
-                                })
-                            
-                            if assist_2:
-                                scoring_play["players"].append({
-                                    "playerType" :  "Assist",
-                                    "player" : {
-                                        "id" : assist_2
-                                    }
-                                })
-                            
-                            if goalie:
-                                scoring_play["players"].append({
-                                    "playerType" :  "Goalie",
-                                    "player" : {
-                                        "id" : goalie
-                                    }
-                                })
-                            else:
-                                if opp_on_ice["S"]:
-                                    scoring_play["result"]["emptyNet"] = True
+                        assist_1 = None
+                        assist_2 = None
+                        goalie = None
 
-                            if game_winning_team == team_id:
-                                if team_goal == game_winner:
-                                    scoring_play["result"]["gameWinningGoal"] = True
-                                team_goal += 1                                
-                        elif real_event_type == "Shot" or real_event_type == "Missed Shot":
-                            if not player_numbers:
-                                player_numbers.append(re.search(r"\d+", description_string).group(0))
+                        if len(player_numbers) > 1:
                             if is_team:
-                                if player_numbers[0] not in game_data["team_numbers"] and player_numbers[0] in game_data["opp_numbers"]:
-                                    shooter = game_data["opp_numbers"].get(player_numbers[0], -1)
-                                    is_team = not is_team
-                                    is_home_team = not is_home_team
-                                    team_id = game_data["team_id"] if team_id == game_data["opp_id"] else game_data["opp_id"]
-                                    scoring_play["team"]["id"] = team_id
-                                else:
-                                    shooter = game_data["team_numbers"].get(player_numbers[0], -1)
+                                assist_1 = game_data["team_numbers"].get(player_numbers[1], -1)
                             else:
-                                if player_numbers[0] not in game_data["opp_numbers"] and player_numbers[0] in game_data["team_numbers"]:
-                                    shooter = game_data["team_numbers"].get(player_numbers[0], -1)
-                                    is_team = not is_team
-                                    is_home_team = not is_home_team
-                                    team_id = game_data["team_id"] if team_id == game_data["opp_id"] else game_data["opp_id"]
-                                    scoring_play["team"]["id"] = team_id
-                                else:
-                                    shooter = game_data["opp_numbers"].get(player_numbers[0], -1)
+                                assist_1 = game_data["opp_numbers"].get(player_numbers[1], -1)
 
-                            goalie = None
-                            if opp_on_ice["G"]:
-                                goalie_number = opp_on_ice["G"][0]
+                            if len(player_numbers) == 3:
                                 if is_team:
-                                    goalie = game_data["opp_numbers"].get(goalie_number, -1)
+                                    assist_2 = game_data["team_numbers"].get(player_numbers[2], -1)
                                 else:
-                                    goalie = game_data["team_numbers"].get(goalie_number, -1)
+                                    assist_2 = game_data["opp_numbers"].get(player_numbers[2], -1)
+                        
+                        if opp_on_ice["G"]:
+                            goalie_number = opp_on_ice["G"][0]
+                            if is_team:
+                                goalie = game_data["opp_numbers"].get(goalie_number, -1)
+                            else:
+                                goalie = game_data["team_numbers"].get(goalie_number, -1)
+                        
 
-                            if shooter:
-                                scoring_play["players"].append({
-                                    "playerType" :  "Shooter",
-                                    "player" : {
-                                        "id" : shooter
-                                    }
-                                })
-                            if goalie:
-                                scoring_play["players"].append({
-                                    "playerType" :  "Goalie",
-                                    "player" : {
-                                        "id" : goalie
-                                    }
-                                })
-                        elif real_event_type == "Missed Shot":
+                        if scorer:
+                            scoring_play["players"].append({
+                                "playerType" :  "Scorer",
+                                "player" : {
+                                    "id" : scorer
+                                }
+                            })
+
+                        if assist_1:
+                            scoring_play["players"].append({
+                                "playerType" :  "Assist",
+                                "player" : {
+                                    "id" : assist_1
+                                }
+                            })
+                        
+                        if assist_2:
+                            scoring_play["players"].append({
+                                "playerType" :  "Assist",
+                                "player" : {
+                                    "id" : assist_2
+                                }
+                            })
+                        
+                        if goalie:
+                            scoring_play["players"].append({
+                                "playerType" :  "Goalie",
+                                "player" : {
+                                    "id" : goalie
+                                }
+                            })
+                        else:
+                            if opp_on_ice["S"]:
+                                scoring_play["result"]["emptyNet"] = True
+
+                        if game_winning_team == team_id:
+                            if team_goal == game_winner:
+                                scoring_play["result"]["gameWinningGoal"] = True
+                            team_goal += 1                                
+                    elif real_event_type == "Shot" or real_event_type == "Missed Shot":
+                        if not player_numbers:
+                            player_numbers.append(re.search(r"\d+", description_string).group(0))
+                        if is_team:
+                            if player_numbers[0] not in game_data["team_numbers"] and player_numbers[0] in game_data["opp_numbers"]:
+                                shooter = game_data["opp_numbers"].get(player_numbers[0], -1)
+                                is_team = not is_team
+                                is_home_team = not is_home_team
+                                team_id = game_data["team_id"] if team_id == game_data["opp_id"] else game_data["opp_id"]
+                                scoring_play["team"]["id"] = team_id
+                            else:
+                                shooter = game_data["team_numbers"].get(player_numbers[0], -1)
+                        else:
+                            if player_numbers[0] not in game_data["opp_numbers"] and player_numbers[0] in game_data["team_numbers"]:
+                                shooter = game_data["team_numbers"].get(player_numbers[0], -1)
+                                is_team = not is_team
+                                is_home_team = not is_home_team
+                                team_id = game_data["team_id"] if team_id == game_data["opp_id"] else game_data["opp_id"]
+                                scoring_play["team"]["id"] = team_id
+                            else:
+                                shooter = game_data["opp_numbers"].get(player_numbers[0], -1)
+
+                        goalie = None
+                        if opp_on_ice["G"]:
+                            goalie_number = opp_on_ice["G"][0]
+                            if is_team:
+                                goalie = game_data["opp_numbers"].get(goalie_number, -1)
+                            else:
+                                goalie = game_data["team_numbers"].get(goalie_number, -1)
+
+                        if shooter:
+                            scoring_play["players"].append({
+                                "playerType" :  "Shooter",
+                                "player" : {
+                                    "id" : shooter
+                                }
+                            })
+                        if goalie:
+                            scoring_play["players"].append({
+                                "playerType" :  "Goalie",
+                                "player" : {
+                                    "id" : goalie
+                                }
+                            })
+                    elif real_event_type == "Missed Shot":
+                        if is_team:
+                            if player_numbers[0] not in game_data["team_numbers"] and player_numbers[0] in game_data["opp_numbers"]:
+                                shooter = game_data["opp_numbers"].get(player_numbers[0], -1)
+                                is_team = not is_team
+                                is_home_team = not is_home_team
+                                team_id = game_data["team_id"] if team_id == game_data["opp_id"] else game_data["opp_id"]
+                                scoring_play["team"]["id"] = team_id
+                            else:
+                                shooter = game_data["team_numbers"].get(player_numbers[0], -1)
+                        else:
+                            if player_numbers[0] not in game_data["opp_numbers"] and player_numbers[0] in game_data["team_numbers"]:
+                                shooter = game_data["team_numbers"].get(player_numbers[0], -1)
+                                is_team = not is_team
+                                is_home_team = not is_home_team
+                                team_id = game_data["team_id"] if team_id == game_data["opp_id"] else game_data["opp_id"]
+                                scoring_play["team"]["id"] = team_id
+                            else:
+                                shooter = game_data["opp_numbers"].get(player_numbers[0], -1)
+
+                        if shooter:
+                            scoring_play["players"].append({
+                                "playerType" :  "Shooter",
+                                "player" : {
+                                    "id" : shooter
+                                }
+                            })
+                    elif real_event_type == "Blocked Shot":
+                        if is_team:
+                            if player_numbers[0] not in game_data["team_numbers"] and player_numbers[0] in game_data["opp_numbers"]:
+                                shooter = game_data["opp_numbers"].get(player_numbers[0], -1)
+                                is_team = not is_team
+                                is_home_team = not is_home_team
+                                team_id = game_data["team_id"] if team_id == game_data["opp_id"] else game_data["opp_id"]
+                                scoring_play["team"]["id"] = team_id
+                            else:
+                                shooter = game_data["team_numbers"].get(player_numbers[0], -1)
+                        else:
+                            if player_numbers[0] not in game_data["opp_numbers"] and player_numbers[0] in game_data["team_numbers"]:
+                                shooter = game_data["team_numbers"].get(player_numbers[0], -1)
+                                is_team = not is_team
+                                is_home_team = not is_home_team
+                                team_id = game_data["team_id"] if team_id == game_data["opp_id"] else game_data["opp_id"]
+                                scoring_play["team"]["id"] = team_id
+                            else:
+                                shooter = game_data["opp_numbers"].get(player_numbers[0], -1)
+                        
+                        if is_team:
+                            blocker = game_data["opp_numbers"].get(player_numbers[1], -1)
+                        else:
+                            blocker = game_data["team_numbers"].get(player_numbers[1], -1)
+
+                        if shooter:
+                            scoring_play["players"].append({
+                                "playerType" :  "Shooter",
+                                "player" : {
+                                    "id" : shooter
+                                }
+                            })
+
+                        if blocker:
+                            scoring_play["players"].append({
+                                "playerType" :  "Blocker",
+                                "player" : {
+                                    "id" : blocker
+                                }
+                            })
+
+                        if team_id == game_data["team_id"]:
+                            scoring_play["team"]["id"] = game_data["opp_id"]
+                        else:
+                            scoring_play["team"]["id"] = game_data["team_id"]
+                    elif real_event_type == "Hit":
+                        if is_team:
+                            if player_numbers[0] not in game_data["team_numbers"] and player_numbers[0] in game_data["opp_numbers"]:
+                                hitter = game_data["opp_numbers"].get(player_numbers[0], -1)
+                                is_team = not is_team
+                                is_home_team = not is_home_team
+                                team_id = game_data["team_id"] if team_id == game_data["opp_id"] else game_data["opp_id"]
+                                scoring_play["team"]["id"] = team_id
+                            else:
+                                hitter = game_data["team_numbers"].get(player_numbers[0], -1)
+                        else:
+                            if player_numbers[0] not in game_data["opp_numbers"] and player_numbers[0] in game_data["team_numbers"]:
+                                hitter = game_data["team_numbers"].get(player_numbers[0], -1)
+                                is_team = not is_team
+                                is_home_team = not is_home_team
+                                team_id = game_data["team_id"] if team_id == game_data["opp_id"] else game_data["opp_id"]
+                                scoring_play["team"]["id"] = team_id
+                            else:
+                                hitter = game_data["opp_numbers"].get(player_numbers[0], -1)
+                        
+                        if is_team:
+                            hittee = game_data["opp_numbers"].get(player_numbers[1], -1)
+                        else:
+                            hittee = game_data["team_numbers"].get(player_numbers[1], -1)
+
+                        if hitter:
+                            scoring_play["players"].append({
+                                "playerType" :  "Hitter",
+                                "player" : {
+                                    "id" : hitter
+                                }
+                            })
+                        if hittee:
+                            scoring_play["players"].append({
+                                "playerType" :  "Hittee",
+                                "player" : {
+                                    "id" : hittee
+                                }
+                            })
+                    elif real_event_type == "Takeaway" or real_event_type == "Giveaway":
+                        if is_team:
+                            if player_numbers[0] not in game_data["team_numbers"] and player_numbers[0] in game_data["opp_numbers"]:
+                                player = game_data["opp_numbers"].get(player_numbers[0], -1)
+                                is_team = not is_team
+                                is_home_team = not is_home_team
+                                team_id = game_data["team_id"] if team_id == game_data["opp_id"] else game_data["opp_id"]
+                                scoring_play["team"]["id"] = team_id
+                            else:
+                                player = game_data["team_numbers"].get(player_numbers[0], -1)
+                        else:
+                            if player_numbers[0] not in game_data["opp_numbers"] and player_numbers[0] in game_data["team_numbers"]:
+                                player = game_data["team_numbers"].get(player_numbers[0], -1)
+                                is_team = not is_team
+                                is_home_team = not is_home_team
+                                team_id = game_data["team_id"] if team_id == game_data["opp_id"] else game_data["opp_id"]
+                                scoring_play["team"]["id"] = team_id
+                            else:
+                                player = game_data["opp_numbers"].get(player_numbers[0], -1)
+
+                        if player:
+                            scoring_play["players"].append({
+                                "playerType" :  "Player",
+                                "player" : {
+                                    "id" : player
+                                }
+                            })
+                    elif real_event_type == "Faceoff":
+                        if is_home:
+                            if player_numbers[1] not in game_data["team_numbers"] and player_numbers[1] in game_data["opp_numbers"]:
+                                home_player = game_data["opp_numbers"].get(player_numbers[1], -1)
+                                is_team = not is_team
+                                is_home_team = not is_home_team
+                                team_id = game_data["team_id"] if team_id == game_data["opp_id"] else game_data["opp_id"]
+                                scoring_play["team"]["id"] = team_id
+                            else:
+                                home_player = game_data["team_numbers"].get(player_numbers[1], -1)
+                        else:
+                            if player_numbers[1] not in game_data["opp_numbers"] and player_numbers[1] in game_data["team_numbers"]:
+                                home_player = game_data["team_numbers"].get(player_numbers[1], -1)
+                                is_team = not is_team
+                                is_home_team = not is_home_team
+                                team_id = game_data["team_id"] if team_id == game_data["opp_id"] else game_data["opp_id"]
+                                scoring_play["team"]["id"] = team_id
+                            else:
+                                home_player = game_data["opp_numbers"].get(player_numbers[1], -1)
+                        
+                        if not is_home:
+                            away_player = game_data["team_numbers"].get(player_numbers[0], -1)
+                        else:
+                            away_player = game_data["opp_numbers"].get(player_numbers[0], -1)
+
+                        winner = home_player if is_home_team else away_player
+                        loser = away_player if is_home_team else home_player
+
+                        if winner:
+                            scoring_play["players"].append({
+                                "playerType" :  "Winner",
+                                "player" : {
+                                    "id" : winner
+                                }
+                            })
+                        if loser:
+                            scoring_play["players"].append({
+                                "playerType" :  "Loser",
+                                "player" : {
+                                    "id" : loser
+                                }
+                            })
+                    elif real_event_type == "Penalty" and player_numbers and (len(player_numbers) > 1 or "Served By:" not in description_string) and re.search(r"(\S+)(?:\s+\((\S+)\))?\((\d+)\s+min\)", description_string):
+                        penalty_player = None
+                        if player_numbers:
                             if is_team:
                                 if player_numbers[0] not in game_data["team_numbers"] and player_numbers[0] in game_data["opp_numbers"]:
-                                    shooter = game_data["opp_numbers"].get(player_numbers[0], -1)
+                                    penalty_player = game_data["opp_numbers"].get(player_numbers[0], -1)
                                     is_team = not is_team
                                     is_home_team = not is_home_team
                                     team_id = game_data["team_id"] if team_id == game_data["opp_id"] else game_data["opp_id"]
                                     scoring_play["team"]["id"] = team_id
                                 else:
-                                    shooter = game_data["team_numbers"].get(player_numbers[0], -1)
+                                    penalty_player = game_data["team_numbers"].get(player_numbers[0], -1)
                             else:
                                 if player_numbers[0] not in game_data["opp_numbers"] and player_numbers[0] in game_data["team_numbers"]:
-                                    shooter = game_data["team_numbers"].get(player_numbers[0], -1)
+                                    penalty_player = game_data["team_numbers"].get(player_numbers[0], -1)
                                     is_team = not is_team
                                     is_home_team = not is_home_team
                                     team_id = game_data["team_id"] if team_id == game_data["opp_id"] else game_data["opp_id"]
                                     scoring_play["team"]["id"] = team_id
                                 else:
-                                    shooter = game_data["opp_numbers"].get(player_numbers[0], -1)
-
-                            if shooter:
-                                scoring_play["players"].append({
-                                    "playerType" :  "Shooter",
-                                    "player" : {
-                                        "id" : shooter
-                                    }
-                                })
-
-                            if "Goalpost" in description_string or "Hit Crossbar" in description_string:
-                                scoring_play["result"]["description"] = " Goalpost"
-                        elif real_event_type == "Blocked Shot":
+                                    penalty_player = game_data["opp_numbers"].get(player_numbers[0], -1)
+                        drew_by = None
+                        if len(player_numbers) > 1 and "Drawn By:" in description_string:
                             if is_team:
-                                if player_numbers[0] not in game_data["team_numbers"] and player_numbers[0] in game_data["opp_numbers"]:
-                                    shooter = game_data["opp_numbers"].get(player_numbers[0], -1)
-                                    is_team = not is_team
-                                    is_home_team = not is_home_team
-                                    team_id = game_data["team_id"] if team_id == game_data["opp_id"] else game_data["opp_id"]
-                                    scoring_play["team"]["id"] = team_id
-                                else:
-                                    shooter = game_data["team_numbers"].get(player_numbers[0], -1)
+                                if player_numbers[len(player_numbers) - 1] in game_data["opp_numbers"]:
+                                    drew_by = game_data["opp_numbers"].get(player_numbers[len(player_numbers) - 1], -1)
                             else:
-                                if player_numbers[0] not in game_data["opp_numbers"] and player_numbers[0] in game_data["team_numbers"]:
-                                    shooter = game_data["team_numbers"].get(player_numbers[0], -1)
-                                    is_team = not is_team
-                                    is_home_team = not is_home_team
-                                    team_id = game_data["team_id"] if team_id == game_data["opp_id"] else game_data["opp_id"]
-                                    scoring_play["team"]["id"] = team_id
-                                else:
-                                    shooter = game_data["opp_numbers"].get(player_numbers[0], -1)
-                            
-                            if is_team:
-                                blocker = game_data["opp_numbers"].get(player_numbers[1], -1)
-                            else:
-                                blocker = game_data["team_numbers"].get(player_numbers[1], -1)
+                                if player_numbers[len(player_numbers) - 1] in game_data["team_numbers"]:
+                                    drew_by = game_data["team_numbers"].get(player_numbers[len(player_numbers) - 1], -1)
+                        
+                        if penalty_player:
+                            scoring_play["players"].append({
+                                "playerType" :  "PenaltyOn",
+                                "player" : {
+                                    "id" : penalty_player
+                                }
+                            })
+                        
+                        if drew_by:
+                            scoring_play["players"].append({
+                                "playerType" :  "DrewBy",
+                                "player" : {
+                                    "id" : drew_by
+                                }
+                            })
+                        
+                        last_match = re.search(r"(?:\s+[^a-z]+\s+)(.+)(?:\s+\((\S+)\))?\((\d+)\s+min\)", description_string)
+                        penalty_type = last_match.group(1)
+                        pen_severity = last_match.group(2)
+                        penalty_minutes = int(last_match.group(3))
 
-                            if shooter:
-                                scoring_play["players"].append({
-                                    "playerType" :  "Shooter",
-                                    "player" : {
-                                        "id" : shooter
-                                    }
-                                })
-
-                            if blocker:
-                                scoring_play["players"].append({
-                                    "playerType" :  "Blocker",
-                                    "player" : {
-                                        "id" : blocker
-                                    }
-                                })
-
-                            if team_id == game_data["team_id"]:
-                                scoring_play["team"]["id"] = game_data["opp_id"]
-                            else:
-                                scoring_play["team"]["id"] = game_data["team_id"]
-                        elif real_event_type == "Hit":
-                            if is_team:
-                                if player_numbers[0] not in game_data["team_numbers"] and player_numbers[0] in game_data["opp_numbers"]:
-                                    hitter = game_data["opp_numbers"].get(player_numbers[0], -1)
-                                    is_team = not is_team
-                                    is_home_team = not is_home_team
-                                    team_id = game_data["team_id"] if team_id == game_data["opp_id"] else game_data["opp_id"]
-                                    scoring_play["team"]["id"] = team_id
-                                else:
-                                    hitter = game_data["team_numbers"].get(player_numbers[0], -1)
-                            else:
-                                if player_numbers[0] not in game_data["opp_numbers"] and player_numbers[0] in game_data["team_numbers"]:
-                                    hitter = game_data["team_numbers"].get(player_numbers[0], -1)
-                                    is_team = not is_team
-                                    is_home_team = not is_home_team
-                                    team_id = game_data["team_id"] if team_id == game_data["opp_id"] else game_data["opp_id"]
-                                    scoring_play["team"]["id"] = team_id
-                                else:
-                                    hitter = game_data["opp_numbers"].get(player_numbers[0], -1)
-                            
-                            if is_team:
-                                hittee = game_data["opp_numbers"].get(player_numbers[1], -1)
-                            else:
-                                hittee = game_data["team_numbers"].get(player_numbers[1], -1)
-
-                            if hitter:
-                                scoring_play["players"].append({
-                                    "playerType" :  "Hitter",
-                                    "player" : {
-                                        "id" : hitter
-                                    }
-                                })
-                            if hittee:
-                                scoring_play["players"].append({
-                                    "playerType" :  "Hittee",
-                                    "player" : {
-                                        "id" : hittee
-                                    }
-                                })
-                        elif real_event_type == "Takeaway" or real_event_type == "Giveaway":
-                            if is_team:
-                                if player_numbers[0] not in game_data["team_numbers"] and player_numbers[0] in game_data["opp_numbers"]:
-                                    player = game_data["opp_numbers"].get(player_numbers[0], -1)
-                                    is_team = not is_team
-                                    is_home_team = not is_home_team
-                                    team_id = game_data["team_id"] if team_id == game_data["opp_id"] else game_data["opp_id"]
-                                    scoring_play["team"]["id"] = team_id
-                                else:
-                                    player = game_data["team_numbers"].get(player_numbers[0], -1)
-                            else:
-                                if player_numbers[0] not in game_data["opp_numbers"] and player_numbers[0] in game_data["team_numbers"]:
-                                    player = game_data["team_numbers"].get(player_numbers[0], -1)
-                                    is_team = not is_team
-                                    is_home_team = not is_home_team
-                                    team_id = game_data["team_id"] if team_id == game_data["opp_id"] else game_data["opp_id"]
-                                    scoring_play["team"]["id"] = team_id
-                                else:
-                                    player = game_data["opp_numbers"].get(player_numbers[0], -1)
-
-                            if player:
-                                scoring_play["players"].append({
-                                    "playerType" :  "Player",
-                                    "player" : {
-                                        "id" : player
-                                    }
-                                })
-                        elif real_event_type == "Faceoff":
-                            if is_home:
-                                if player_numbers[1] not in game_data["team_numbers"] and player_numbers[1] in game_data["opp_numbers"]:
-                                    home_player = game_data["opp_numbers"].get(player_numbers[1], -1)
-                                    is_team = not is_team
-                                    is_home_team = not is_home_team
-                                    team_id = game_data["team_id"] if team_id == game_data["opp_id"] else game_data["opp_id"]
-                                    scoring_play["team"]["id"] = team_id
-                                else:
-                                    home_player = game_data["team_numbers"].get(player_numbers[1], -1)
-                            else:
-                                if player_numbers[1] not in game_data["opp_numbers"] and player_numbers[1] in game_data["team_numbers"]:
-                                    home_player = game_data["team_numbers"].get(player_numbers[1], -1)
-                                    is_team = not is_team
-                                    is_home_team = not is_home_team
-                                    team_id = game_data["team_id"] if team_id == game_data["opp_id"] else game_data["opp_id"]
-                                    scoring_play["team"]["id"] = team_id
-                                else:
-                                    home_player = game_data["opp_numbers"].get(player_numbers[1], -1)
-                            
-                            if not is_home:
-                                away_player = game_data["team_numbers"].get(player_numbers[0], -1)
-                            else:
-                                away_player = game_data["opp_numbers"].get(player_numbers[0], -1)
-
-                            winner = home_player if is_home_team else away_player
-                            loser = away_player if is_home_team else home_player
-
-                            if winner:
-                                scoring_play["players"].append({
-                                    "playerType" :  "Winner",
-                                    "player" : {
-                                        "id" : winner
-                                    }
-                                })
-                            if loser:
-                                scoring_play["players"].append({
-                                    "playerType" :  "Loser",
-                                    "player" : {
-                                        "id" : loser
-                                    }
-                                })
-                        elif real_event_type == "Penalty" and player_numbers and (len(player_numbers) > 1 or "Served By:" not in description_string) and re.search(r"(\S+)(?:\s+\((\S+)\))?\((\d+)\s+min\)", description_string):
-                            penalty_player = None
-                            if player_numbers:
-                                if is_team:
-                                    if player_numbers[0] not in game_data["team_numbers"] and player_numbers[0] in game_data["opp_numbers"]:
-                                        penalty_player = game_data["opp_numbers"].get(player_numbers[0], -1)
-                                        is_team = not is_team
-                                        is_home_team = not is_home_team
-                                        team_id = game_data["team_id"] if team_id == game_data["opp_id"] else game_data["opp_id"]
-                                        scoring_play["team"]["id"] = team_id
-                                    else:
-                                        penalty_player = game_data["team_numbers"].get(player_numbers[0], -1)
-                                else:
-                                    if player_numbers[0] not in game_data["opp_numbers"] and player_numbers[0] in game_data["team_numbers"]:
-                                        penalty_player = game_data["team_numbers"].get(player_numbers[0], -1)
-                                        is_team = not is_team
-                                        is_home_team = not is_home_team
-                                        team_id = game_data["team_id"] if team_id == game_data["opp_id"] else game_data["opp_id"]
-                                        scoring_play["team"]["id"] = team_id
-                                    else:
-                                        penalty_player = game_data["opp_numbers"].get(player_numbers[0], -1)
-                            drew_by = None
-                            if len(player_numbers) > 1 and "Drawn By:" in description_string:
-                                if is_team:
-                                    if player_numbers[len(player_numbers) - 1] in game_data["opp_numbers"]:
-                                        drew_by = game_data["opp_numbers"].get(player_numbers[len(player_numbers) - 1], -1)
-                                else:
-                                    if player_numbers[len(player_numbers) - 1] in game_data["team_numbers"]:
-                                        drew_by = game_data["team_numbers"].get(player_numbers[len(player_numbers) - 1], -1)
-                            
-                            if penalty_player:
-                                scoring_play["players"].append({
-                                    "playerType" :  "PenaltyOn",
-                                    "player" : {
-                                        "id" : penalty_player
-                                    }
-                                })
-                            
-                            if drew_by:
-                                scoring_play["players"].append({
-                                    "playerType" :  "DrewBy",
-                                    "player" : {
-                                        "id" : drew_by
-                                    }
-                                })
-                            
-                            last_match = re.search(r"(?:\s+[^a-z]+\s+)(.+)(?:\s+\((\S+)\))?\((\d+)\s+min\)", description_string)
-                            penalty_type = last_match.group(1)
-                            pen_severity = last_match.group(2)
-                            penalty_minutes = int(last_match.group(3))
-
-                            if penalty_type.startswith("PS-"):
-                                penalty_type = penalty_type.replace("PS-", "").strip()
-                                pen_severity = "Penalty Shot"
-                            
-                            if "(maj)" in penalty_type:
-                                pen_severity = "Major"
-                                penalty_type = penalty_type.replace("(maj)", "").strip()
-                                if not penalty_type:
-                                    penalty_type = None
-                            
-                            if penalty_type:
-                                penalty_type = re.sub(r"\(\d+ min\)", "", penalty_type).strip().title()
-                                penalty_type = penalty_type.replace("On Breakaway", "").strip()
-
-                            if penalty_type == "Match Penalty":
-                                pen_severity = "Match"
+                        if penalty_type.startswith("PS-"):
+                            penalty_type = penalty_type.replace("PS-", "").strip()
+                            pen_severity = "Penalty Shot"
+                        
+                        if "(maj)" in penalty_type:
+                            pen_severity = "Major"
+                            penalty_type = penalty_type.replace("(maj)", "").strip()
+                            if not penalty_type:
                                 penalty_type = None
-                            elif penalty_type in ("Game Misconduct", "Bench Minor", "Minor", "Major", "Match", "Misconduct"):
-                                pen_severity = penalty_type
-                                penalty_type = None
+                        
+                        if penalty_type:
+                            penalty_type = re.sub(r"\(\d+ min\)", "", penalty_type).strip().title()
+                            penalty_type = penalty_type.replace("On Breakaway", "").strip()
 
-                            scoring_play["result"]["penaltyMinutes"] = penalty_minutes
-                            if penalty_type:
-                                scoring_play["result"]["secondaryType"] = penalty_type
-                            if pen_severity:
-                                scoring_play["result"]["penaltySeverity"] = pen_severity
-                            else:
-                                scoring_play["result"]["penaltySeverity"] = "Minor"
+                        if penalty_type == "Match Penalty":
+                            pen_severity = "Match"
+                            penalty_type = None
+                        elif penalty_type in ("Game Misconduct", "Bench Minor", "Minor", "Major", "Match", "Misconduct"):
+                            pen_severity = penalty_type
+                            penalty_type = None
+
+                        scoring_play["result"]["penaltyMinutes"] = penalty_minutes
+                        if penalty_type:
+                            scoring_play["result"]["secondaryType"] = penalty_type
+                        if pen_severity:
+                            scoring_play["result"]["penaltySeverity"] = pen_severity
+                        else:
+                            scoring_play["result"]["penaltySeverity"] = "Minor"
 
 
+                    if team_id:
                         # if is_home_team:
                         #     scoring_play["team_on_ice_pos"] = get_on_ice_pos(columns[7], game_data["team_numbers"] if is_team else game_data["opp_numbers"])
                         #     scoring_play["opp_on_ice_pos"] = get_on_ice_pos(columns[6], game_data["opp_numbers"] if is_team else game_data["team_numbers"])
@@ -22481,20 +22531,20 @@ def get_html_play_data(scoring_plays, player_data, og_game_id, is_home, game_dat
                             else:
                                 scoring_play["result"]["strength"]["code"] = "EVEN"
 
-                        
-                        if not has_initial_plays or (real_event_type not in ("Goal", "Penalty") and row_year < 2010):
-                            scoring_plays.append(scoring_play)
-                        else:
-                            for sub_scoring_play in scoring_plays:
-                                if sub_scoring_play["result"]["event"] == real_event_type and int(sub_scoring_play["about"]["period"]) == int(scoring_play["about"]["period"]) and start_time_to_str(sub_scoring_play["about"]["periodTime"]) == start_time_to_str(scoring_play["about"]["periodTime"]):
-                                    sub_scoring_play["team_on_ice"] = scoring_play["team_on_ice"]
-                                    sub_scoring_play["opp_on_ice"] = scoring_play["opp_on_ice"]
-                                    #sub_scoring_play["team_on_ice_pos"] = scoring_play["team_on_ice_pos"]
-                                    #sub_scoring_play["opp_on_ice_pos"] = scoring_play["opp_on_ice_pos"]
-                                    sub_scoring_play["zone"] = scoring_play["zone"]
-                                    if real_event_type != "Goal":
-                                        sub_scoring_play["result"]["strength"] = scoring_play["result"]["strength"]
-                                    break
+                    
+                    if not has_initial_plays or (real_event_type not in ("Goal", "Penalty") and row_year < 2010):
+                        scoring_plays.append(scoring_play)
+                    else:
+                        for sub_scoring_play in scoring_plays:
+                            if sub_scoring_play["result"]["event"] == real_event_type and int(sub_scoring_play["about"]["period"]) == int(scoring_play["about"]["period"]) and start_time_to_str(sub_scoring_play["about"]["periodTime"]) == start_time_to_str(scoring_play["about"]["periodTime"]):
+                                sub_scoring_play["team_on_ice"] = scoring_play["team_on_ice"]
+                                sub_scoring_play["opp_on_ice"] = scoring_play["opp_on_ice"]
+                                #sub_scoring_play["team_on_ice_pos"] = scoring_play["team_on_ice_pos"]
+                                #sub_scoring_play["opp_on_ice_pos"] = scoring_play["opp_on_ice_pos"]
+                                sub_scoring_play["zone"] = scoring_play["zone"]
+                                if real_event_type != "Goal":
+                                    sub_scoring_play["result"]["strength"] = scoring_play["result"]["strength"]
+                                break
                             
     return scoring_plays
 
@@ -22651,450 +22701,450 @@ def get_old_html_play_data(scoring_plays, player_data, og_game_id, is_home, game
         elif event_type == "HIT":
             real_event_type = "Hit"
         
-        if real_event_type:
-            period = int(event[1])
-            strength = event[5]
-            time_start_str = event[2]  
-            description_string = event[6]
-            team_str = event[4]
+        period = int(event[1])
+        strength = event[5]
+        time_start_str = event[2]  
+        description_string = event[6]
+        team_str = event[4]
 
+        if strength:
             if strength == "EV":
                 strength = "EVEN"
             elif strength == "PP":
                 strength = "PPG"
             else:
                 strength = "SHG"
+        else:
+            strength = None
 
-            team_str_to_use = team_str if team_str and team_str != "N/A" else description_string
+        team_str_to_use = team_str if team_str and team_str != "N/A" else description_string
 
-            team_id = None
-            if team_str_to_use.startswith(home_team_abbr_to_use):
-                if is_home:
-                    is_team = True
-                    is_home_team = True
-                    team_id = game_data["team_id"]
-                else:
-                    is_team = False
-                    team_id = game_data["opp_id"]
+        team_id = None
+        if team_str_to_use.startswith(home_team_abbr_to_use):
+            if is_home:
+                is_team = True
                 is_home_team = True
-            elif team_str_to_use.startswith(away_team_abbr_to_use):
-                if is_home:
-                    is_team = False
-                    team_id = game_data["opp_id"]
-                else:
-                    is_team = True
-                    team_id = game_data["team_id"]
-                is_home_team = False
-
-            zone = None
-            if "neutral zone." in description_string:
-                zone = "NZ"
-            elif "offensive zone." in description_string:
-                zone = "OZ"
-            elif "defensive zone." in description_string:
-                zone = "DZ"
-
-            player_numbers = get_player_numbers_2(description_string, real_event_type)
-
-            scoring_play = {
-                "players" : [],
-                "about" : {
-                    "period" : period,
-                    "periodTime" : time_start_str,
-                    "goals" : {
-                        "home" : home_goals,
-                        "away" : away_goals
-                    }
-                },
-                "result" : {
-                    "event" : real_event_type,
-                    "strength" : {
-                        "code" : strength
-                    }
-                },
-                "team" : {
-                    "id" : team_id
-                },
-                "zone" : zone
-            }
-
-            if real_event_type == "Goal":
-                if is_team:
-                    if player_numbers[0] not in game_data["team_numbers"] and player_numbers[0] in game_data["opp_numbers"]:
-                        scorer = game_data["opp_numbers"].get(player_numbers[0], -1)
-                        is_team = not is_team
-                        is_home_team = not is_home_team
-                        team_id = game_data["team_id"] if team_id == game_data["opp_id"] else game_data["opp_id"]
-                        scoring_play["team"]["id"] = team_id
-                    else:
-                        scorer = game_data["team_numbers"].get(player_numbers[0], -1)
-                else:
-                    if player_numbers[0] not in game_data["opp_numbers"] and player_numbers[0] in game_data["team_numbers"]:
-                        scorer = game_data["team_numbers"].get(player_numbers[0], -1)
-                        is_team = not is_team
-                        is_home_team = not is_home_team
-                        team_id = game_data["team_id"] if team_id == game_data["opp_id"] else game_data["opp_id"]
-                        scoring_play["team"]["id"] = team_id
-                    else:
-                        scorer = game_data["opp_numbers"].get(player_numbers[0], -1)
-                
-                if is_home_team:
-                    home_goals += 1
-                else:
-                    away_goals += 1
-
-                scoring_play["about"]["goals"]["home"] = home_goals
-                scoring_play["about"]["goals"]["away"] = away_goals
-
-                assist_1 = None
-                assist_2 = None
-                goalie = None
-
-                if len(player_numbers) > 1:
-                    if is_team:
-                        assist_1 = game_data["team_numbers"].get(player_numbers[1], -1)
-                    else:
-                        assist_1 = game_data["opp_numbers"].get(player_numbers[1], -1)
-
-                    if len(player_numbers) == 3:
-                        if is_team:
-                            assist_2 = game_data["team_numbers"].get(player_numbers[2], -1)
-                        else:
-                            assist_2 = game_data["opp_numbers"].get(player_numbers[2], -1)
-                
-                team_on_ice = get_on_ice_2(event[8], game_data["team_numbers"] if is_team else game_data["opp_numbers"], game_data["team_goalies"] if is_team else game_data["opp_goalies"])
-                opp_on_ice = get_on_ice_2(event[10], game_data["opp_numbers"] if is_team else game_data["team_numbers"], game_data["opp_goalies"] if is_team else game_data["team_goalies"])
-
-                scoring_play["team_on_ice"] = []
-                for pos in team_on_ice:
-                    for sub_player in team_on_ice[pos]:
-                        if is_team:
-                            sub_player_id = game_data["team_numbers"].get(sub_player, -1)
-                        else:
-                            sub_player_id = game_data["opp_numbers"].get(sub_player, -1)
-                        scoring_play["team_on_ice"].append(sub_player_id)
-                scoring_play["opp_on_ice"] = []
-                for pos in opp_on_ice:
-                    for sub_player in opp_on_ice[pos]:
-                        if is_team:
-                            sub_player_id = game_data["opp_numbers"].get(sub_player, -1)
-                        else:
-                            sub_player_id = game_data["team_numbers"].get(sub_player, -1)
-                        scoring_play["opp_on_ice"].append(sub_player_id)
-                
-                if opp_on_ice["G"]:
-                    goalie_number = opp_on_ice["G"][0]
-                    if is_team:
-                        goalie = game_data["opp_numbers"].get(goalie_number, -1)
-                    else:
-                        goalie = game_data["team_numbers"].get(goalie_number, -1)
-
-                if len(scoring_play["team_on_ice"]) > 1 and len(scoring_play["opp_on_ice"]) > 1:
-                    if len(scoring_play["team_on_ice"]) > len(scoring_play["opp_on_ice"]):
-                        scoring_play["result"]["strength"]["code"] = "PPG"
-                    elif len(scoring_play["team_on_ice"]) < len(scoring_play["opp_on_ice"]):
-                        scoring_play["result"]["strength"]["code"] = "SHG"
-                    else:
-                        scoring_play["result"]["strength"]["code"] = "EVEN"
-
-                if scorer:
-                    scoring_play["players"].append({
-                        "playerType" :  "Scorer",
-                        "player" : {
-                            "id" : scorer
-                        }
-                    })
-
-                if assist_1:
-                    scoring_play["players"].append({
-                        "playerType" :  "Assist",
-                        "player" : {
-                            "id" : assist_1
-                        }
-                    })
-                
-                if assist_2:
-                    scoring_play["players"].append({
-                        "playerType" :  "Assist",
-                        "player" : {
-                            "id" : assist_2
-                        }
-                    })
-                
-                if goalie:
-                    scoring_play["players"].append({
-                        "playerType" :  "Goalie",
-                        "player" : {
-                            "id" : goalie
-                        }
-                    })
-                else:
-                    if opp_on_ice["S"]:
-                        scoring_play["result"]["emptyNet"] = True
-
-                if game_winning_team == team_id:
-                    if team_goal == game_winner:
-                        scoring_play["result"]["gameWinningGoal"] = True
-                    team_goal += 1                  
-            elif real_event_type == "Shot" or real_event_type == "Missed Shot":
-                if not player_numbers:
-                    player_numbers.append(re.search(r"\d+", description_string).group(0))
-                if is_team:
-                    if player_numbers[0] not in game_data["team_numbers"] and player_numbers[0] in game_data["opp_numbers"]:
-                        shooter = game_data["opp_numbers"].get(player_numbers[0], -1)
-                        is_team = not is_team
-                        is_home_team = not is_home_team
-                        team_id = game_data["team_id"] if team_id == game_data["opp_id"] else game_data["opp_id"]
-                        scoring_play["team"]["id"] = team_id
-                    else:
-                        shooter = game_data["team_numbers"].get(player_numbers[0], -1)
-                else:
-                    if player_numbers[0] not in game_data["opp_numbers"] and player_numbers[0] in game_data["team_numbers"]:
-                        shooter = game_data["team_numbers"].get(player_numbers[0], -1)
-                        is_team = not is_team
-                        is_home_team = not is_home_team
-                        team_id = game_data["team_id"] if team_id == game_data["opp_id"] else game_data["opp_id"]
-                        scoring_play["team"]["id"] = team_id
-                    else:
-                        shooter = game_data["opp_numbers"].get(player_numbers[0], -1)                    
-
-                if shooter:
-                    scoring_play["players"].append({
-                        "playerType" :  "Shooter",
-                        "player" : {
-                            "id" : shooter
-                        }
-                    })
-            elif real_event_type == "Missed Shot":
-                if is_team:
-                    if player_numbers[0] not in game_data["team_numbers"] and player_numbers[0] in game_data["opp_numbers"]:
-                        shooter = game_data["opp_numbers"].get(player_numbers[0], -1)
-                        is_team = not is_team
-                        is_home_team = not is_home_team
-                        team_id = game_data["team_id"] if team_id == game_data["opp_id"] else game_data["opp_id"]
-                        scoring_play["team"]["id"] = team_id
-                    else:
-                        shooter = game_data["team_numbers"].get(player_numbers[0], -1)
-                else:
-                    if player_numbers[0] not in game_data["opp_numbers"] and player_numbers[0] in game_data["team_numbers"]:
-                        shooter = game_data["team_numbers"].get(player_numbers[0], -1)
-                        is_team = not is_team
-                        is_home_team = not is_home_team
-                        team_id = game_data["team_id"] if team_id == game_data["opp_id"] else game_data["opp_id"]
-                        scoring_play["team"]["id"] = team_id
-                    else:
-                        shooter = game_data["opp_numbers"].get(player_numbers[0], -1)
-
-                if shooter:
-                    scoring_play["players"].append({
-                        "playerType" :  "Shooter",
-                        "player" : {
-                            "id" : shooter
-                        }
-                    })
-
-                if "Goalpost" in description_string or "Hit Crossbar" in description_string:
-                    scoring_play["result"]["description"] = " Goalpost"
-            elif real_event_type == "Blocked Shot":
-                if is_team:
-                    if player_numbers[0] not in game_data["team_numbers"] and player_numbers[0] in game_data["opp_numbers"]:
-                        blocker = game_data["opp_numbers"].get(player_numbers[0], -1)
-                        is_team = not is_team
-                        is_home_team = not is_home_team
-                        team_id = game_data["team_id"] if team_id == game_data["opp_id"] else game_data["opp_id"]
-                        scoring_play["team"]["id"] = team_id
-                    else:
-                        blocker = game_data["team_numbers"].get(player_numbers[0], -1)
-                else:
-                    if player_numbers[0] not in game_data["opp_numbers"] and player_numbers[0] in game_data["team_numbers"]:
-                        blocker = game_data["team_numbers"].get(player_numbers[0], -1)
-                        is_team = not is_team
-                        is_home_team = not is_home_team
-                        team_id = game_data["team_id"] if team_id == game_data["opp_id"] else game_data["opp_id"]
-                        scoring_play["team"]["id"] = team_id
-                    else:
-                        blocker = game_data["opp_numbers"].get(player_numbers[0], -1)
-
-                if blocker:
-                    scoring_play["players"].append({
-                        "playerType" :  "Blocker",
-                        "player" : {
-                            "id" : blocker
-                        }
-                    })
-
-                if team_id == game_data["team_id"]:
-                    scoring_play["team"]["id"] = game_data["opp_id"]
-                else:
-                    scoring_play["team"]["id"] = game_data["team_id"]
-            elif real_event_type == "Hit":
-                if is_team:
-                    if player_numbers[0] not in game_data["team_numbers"] and player_numbers[0] in game_data["opp_numbers"]:
-                        hitter = game_data["opp_numbers"].get(player_numbers[0], -1)
-                        is_team = not is_team
-                        is_home_team = not is_home_team
-                        team_id = game_data["team_id"] if team_id == game_data["opp_id"] else game_data["opp_id"]
-                        scoring_play["team"]["id"] = team_id
-                    else:
-                        hitter = game_data["team_numbers"].get(player_numbers[0], -1)
-                else:
-                    if player_numbers[0] not in game_data["opp_numbers"] and player_numbers[0] in game_data["team_numbers"]:
-                        hitter = game_data["team_numbers"].get(player_numbers[0], -1)
-                        is_team = not is_team
-                        is_home_team = not is_home_team
-                        team_id = game_data["team_id"] if team_id == game_data["opp_id"] else game_data["opp_id"]
-                        scoring_play["team"]["id"] = team_id
-                    else:
-                        hitter = game_data["opp_numbers"].get(player_numbers[0], -1)
-
-                if hitter:
-                    scoring_play["players"].append({
-                        "playerType" :  "Hitter",
-                        "player" : {
-                            "id" : hitter
-                        }
-                    })
-            elif real_event_type == "Takeaway" or real_event_type == "Giveaway":
-                if is_team:
-                    if player_numbers[0] not in game_data["team_numbers"] and player_numbers[0] in game_data["opp_numbers"]:
-                        player = game_data["opp_numbers"].get(player_numbers[0], -1)
-                        is_team = not is_team
-                        is_home_team = not is_home_team
-                        team_id = game_data["team_id"] if team_id == game_data["opp_id"] else game_data["opp_id"]
-                        scoring_play["team"]["id"] = team_id
-                    else:
-                        player = game_data["team_numbers"].get(player_numbers[0], -1)
-                else:
-                    if player_numbers[0] not in game_data["opp_numbers"] and player_numbers[0] in game_data["team_numbers"]:
-                        player = game_data["team_numbers"].get(player_numbers[0], -1)
-                        is_team = not is_team
-                        is_home_team = not is_home_team
-                        team_id = game_data["team_id"] if team_id == game_data["opp_id"] else game_data["opp_id"]
-                        scoring_play["team"]["id"] = team_id
-                    else:
-                        player = game_data["opp_numbers"].get(player_numbers[0], -1)
-
-                if player:
-                    scoring_play["players"].append({
-                        "playerType" :  "Player",
-                        "player" : {
-                            "id" : player
-                        }
-                    })
-            elif real_event_type == "Faceoff":
-                if is_home:
-                    if player_numbers[1] not in game_data["team_numbers"] and player_numbers[1] in game_data["opp_numbers"]:
-                        home_player = game_data["opp_numbers"].get(player_numbers[1], -1)
-                        is_team = not is_team
-                        is_home_team = not is_home_team
-                        team_id = game_data["team_id"] if team_id == game_data["opp_id"] else game_data["opp_id"]
-                        scoring_play["team"]["id"] = team_id
-                    else:
-                        home_player = game_data["team_numbers"].get(player_numbers[1], -1)
-                else:
-                    if player_numbers[1] not in game_data["opp_numbers"] and player_numbers[1] in game_data["team_numbers"]:
-                        home_player = game_data["team_numbers"].get(player_numbers[1], -1)
-                        is_team = not is_team
-                        is_home_team = not is_home_team
-                        team_id = game_data["team_id"] if team_id == game_data["opp_id"] else game_data["opp_id"]
-                        scoring_play["team"]["id"] = team_id
-                    else:
-                        home_player = game_data["opp_numbers"].get(player_numbers[1], -1)
-                
-                if not is_home:
-                    away_player = game_data["team_numbers"].get(player_numbers[0], -1)
-                else:
-                    away_player = game_data["opp_numbers"].get(player_numbers[0], -1)
-
-                winner = home_player if is_home_team else away_player
-                loser = away_player if is_home_team else home_player
-
-                if winner:
-                    scoring_play["players"].append({
-                        "playerType" :  "Winner",
-                        "player" : {
-                            "id" : winner
-                        }
-                    })
-                if loser:
-                    scoring_play["players"].append({
-                        "playerType" :  "Loser",
-                        "player" : {
-                            "id" : loser
-                        }
-                    })
-            elif real_event_type == "Penalty" and re.search(r",\s+(.*),\s+(\d+) min", description_string):
-                penalty_player = None
-                if player_numbers:
-                    if is_team:
-                        if player_numbers[0] not in game_data["team_numbers"] and player_numbers[0] in game_data["opp_numbers"]:
-                            penalty_player = game_data["opp_numbers"].get(player_numbers[0], -1)
-                            is_team = not is_team
-                            is_home_team = not is_home_team
-                            team_id = game_data["team_id"] if team_id == game_data["opp_id"] else game_data["opp_id"]
-                            scoring_play["team"]["id"] = team_id
-                        else:
-                            penalty_player = game_data["team_numbers"].get(player_numbers[0], -1)
-                    else:
-                        if player_numbers[0] not in game_data["opp_numbers"] and player_numbers[0] in game_data["team_numbers"]:
-                            penalty_player = game_data["team_numbers"].get(player_numbers[0], -1)
-                            is_team = not is_team
-                            is_home_team = not is_home_team
-                            team_id = game_data["team_id"] if team_id == game_data["opp_id"] else game_data["opp_id"]
-                            scoring_play["team"]["id"] = team_id
-                        else:
-                            penalty_player = game_data["opp_numbers"].get(player_numbers[0], -1)
-                
-                if penalty_player:
-                    scoring_play["players"].append({
-                        "playerType" :  "PenaltyOn",
-                        "player" : {
-                            "id" : penalty_player
-                        }
-                    })
-                
-                last_match = re.search(r",\s+(.*),\s+(\d+) min", description_string)
-                penalty_minutes = int(last_match.group(2))
-
-                pen_severity = None
-                penalty_type = last_match.group(1)
-                if "(maj)" in penalty_type:
-                    pen_severity = "Major"
-                    penalty_type = penalty_type.replace("(maj)", "").strip()
-                    if not penalty_type:
-                        penalty_type = None
-                
-                if penalty_type:
-                    penalty_type = re.sub(r"\(\d+ min\)", "", penalty_type).strip().title()
-                    penalty_type = penalty_type.replace("On Breakaway", "").strip()
-
-                if penalty_type == "Match Penalty":
-                    pen_severity = "Match"
-                    penalty_type = None
-                elif penalty_type in ("Game Misconduct", "Bench Minor", "Minor", "Major", "Match", "Misconduct"):
-                    pen_severity = penalty_type
-                    penalty_type = None
-            
-                scoring_play["result"]["penaltyMinutes"] = penalty_minutes
-                if penalty_type:
-                    scoring_play["result"]["secondaryType"] = penalty_type
-                if pen_severity:
-                    scoring_play["result"]["penaltySeverity"] = pen_severity
-                else:
-                    scoring_play["result"]["penaltySeverity"] = "Minor"
-            
-            if not has_initial_plays or real_event_type not in ("Goal", "Penalty"):
-                scoring_plays.append(scoring_play)
+                team_id = game_data["team_id"]
             else:
-                for sub_scoring_play in scoring_plays:
-                    if sub_scoring_play["result"]["event"] == real_event_type and int(sub_scoring_play["about"]["period"]) == int(scoring_play["about"]["period"]) and start_time_to_str(sub_scoring_play["about"]["periodTime"]) == start_time_to_str(scoring_play["about"]["periodTime"]):
-                        if real_event_type == "Goal":
-                            sub_scoring_play["team_on_ice"] = scoring_play["team_on_ice"]
-                            sub_scoring_play["opp_on_ice"] = scoring_play["opp_on_ice"]
-                        sub_scoring_play["zone"] = scoring_play["zone"]
-                        if real_event_type != "Goal":
-                            sub_scoring_play["result"]["strength"] = scoring_play["result"]["strength"]
-                        break
+                is_team = False
+                team_id = game_data["opp_id"]
+            is_home_team = True
+        elif team_str_to_use.startswith(away_team_abbr_to_use):
+            if is_home:
+                is_team = False
+                team_id = game_data["opp_id"]
+            else:
+                is_team = True
+                team_id = game_data["team_id"]
+            is_home_team = False
+
+        zone = None
+        if "neutral zone." in description_string:
+            zone = "NZ"
+        elif "offensive zone." in description_string:
+            zone = "OZ"
+        elif "defensive zone." in description_string:
+            zone = "DZ"
+
+        player_numbers = get_player_numbers_2(description_string, real_event_type)
+
+        scoring_play = {
+            "players" : [],
+            "about" : {
+                "period" : period,
+                "periodTime" : time_start_str,
+                "goals" : {
+                    "home" : home_goals,
+                    "away" : away_goals
+                }
+            },
+            "result" : {
+                "event" : real_event_type if real_event_type else event_type,
+                "description" : description_string,
+                "strength" : {
+                    "code" : strength
+                }
+            },
+            "team" : {
+                "id" : team_id
+            },
+            "zone" : zone
+        }
+
+        if real_event_type == "Goal":
+            if is_team:
+                if player_numbers[0] not in game_data["team_numbers"] and player_numbers[0] in game_data["opp_numbers"]:
+                    scorer = game_data["opp_numbers"].get(player_numbers[0], -1)
+                    is_team = not is_team
+                    is_home_team = not is_home_team
+                    team_id = game_data["team_id"] if team_id == game_data["opp_id"] else game_data["opp_id"]
+                    scoring_play["team"]["id"] = team_id
+                else:
+                    scorer = game_data["team_numbers"].get(player_numbers[0], -1)
+            else:
+                if player_numbers[0] not in game_data["opp_numbers"] and player_numbers[0] in game_data["team_numbers"]:
+                    scorer = game_data["team_numbers"].get(player_numbers[0], -1)
+                    is_team = not is_team
+                    is_home_team = not is_home_team
+                    team_id = game_data["team_id"] if team_id == game_data["opp_id"] else game_data["opp_id"]
+                    scoring_play["team"]["id"] = team_id
+                else:
+                    scorer = game_data["opp_numbers"].get(player_numbers[0], -1)
+            
+            if is_home_team:
+                home_goals += 1
+            else:
+                away_goals += 1
+
+            scoring_play["about"]["goals"]["home"] = home_goals
+            scoring_play["about"]["goals"]["away"] = away_goals
+
+            assist_1 = None
+            assist_2 = None
+            goalie = None
+
+            if len(player_numbers) > 1:
+                if is_team:
+                    assist_1 = game_data["team_numbers"].get(player_numbers[1], -1)
+                else:
+                    assist_1 = game_data["opp_numbers"].get(player_numbers[1], -1)
+
+                if len(player_numbers) == 3:
+                    if is_team:
+                        assist_2 = game_data["team_numbers"].get(player_numbers[2], -1)
+                    else:
+                        assist_2 = game_data["opp_numbers"].get(player_numbers[2], -1)
+            
+            team_on_ice = get_on_ice_2(event[8], game_data["team_numbers"] if is_team else game_data["opp_numbers"], game_data["team_goalies"] if is_team else game_data["opp_goalies"])
+            opp_on_ice = get_on_ice_2(event[10], game_data["opp_numbers"] if is_team else game_data["team_numbers"], game_data["opp_goalies"] if is_team else game_data["team_goalies"])
+
+            scoring_play["team_on_ice"] = []
+            for pos in team_on_ice:
+                for sub_player in team_on_ice[pos]:
+                    if is_team:
+                        sub_player_id = game_data["team_numbers"].get(sub_player, -1)
+                    else:
+                        sub_player_id = game_data["opp_numbers"].get(sub_player, -1)
+                    scoring_play["team_on_ice"].append(sub_player_id)
+            scoring_play["opp_on_ice"] = []
+            for pos in opp_on_ice:
+                for sub_player in opp_on_ice[pos]:
+                    if is_team:
+                        sub_player_id = game_data["opp_numbers"].get(sub_player, -1)
+                    else:
+                        sub_player_id = game_data["team_numbers"].get(sub_player, -1)
+                    scoring_play["opp_on_ice"].append(sub_player_id)
+            
+            if opp_on_ice["G"]:
+                goalie_number = opp_on_ice["G"][0]
+                if is_team:
+                    goalie = game_data["opp_numbers"].get(goalie_number, -1)
+                else:
+                    goalie = game_data["team_numbers"].get(goalie_number, -1)
+
+            if len(scoring_play["team_on_ice"]) > 1 and len(scoring_play["opp_on_ice"]) > 1:
+                if len(scoring_play["team_on_ice"]) > len(scoring_play["opp_on_ice"]):
+                    scoring_play["result"]["strength"]["code"] = "PPG"
+                elif len(scoring_play["team_on_ice"]) < len(scoring_play["opp_on_ice"]):
+                    scoring_play["result"]["strength"]["code"] = "SHG"
+                else:
+                    scoring_play["result"]["strength"]["code"] = "EVEN"
+
+            if scorer:
+                scoring_play["players"].append({
+                    "playerType" :  "Scorer",
+                    "player" : {
+                        "id" : scorer
+                    }
+                })
+
+            if assist_1:
+                scoring_play["players"].append({
+                    "playerType" :  "Assist",
+                    "player" : {
+                        "id" : assist_1
+                    }
+                })
+            
+            if assist_2:
+                scoring_play["players"].append({
+                    "playerType" :  "Assist",
+                    "player" : {
+                        "id" : assist_2
+                    }
+                })
+            
+            if goalie:
+                scoring_play["players"].append({
+                    "playerType" :  "Goalie",
+                    "player" : {
+                        "id" : goalie
+                    }
+                })
+            else:
+                if opp_on_ice["S"]:
+                    scoring_play["result"]["emptyNet"] = True
+
+            if game_winning_team == team_id:
+                if team_goal == game_winner:
+                    scoring_play["result"]["gameWinningGoal"] = True
+                team_goal += 1                  
+        elif real_event_type == "Shot" or real_event_type == "Missed Shot":
+            if not player_numbers:
+                player_numbers.append(re.search(r"\d+", description_string).group(0))
+            if is_team:
+                if player_numbers[0] not in game_data["team_numbers"] and player_numbers[0] in game_data["opp_numbers"]:
+                    shooter = game_data["opp_numbers"].get(player_numbers[0], -1)
+                    is_team = not is_team
+                    is_home_team = not is_home_team
+                    team_id = game_data["team_id"] if team_id == game_data["opp_id"] else game_data["opp_id"]
+                    scoring_play["team"]["id"] = team_id
+                else:
+                    shooter = game_data["team_numbers"].get(player_numbers[0], -1)
+            else:
+                if player_numbers[0] not in game_data["opp_numbers"] and player_numbers[0] in game_data["team_numbers"]:
+                    shooter = game_data["team_numbers"].get(player_numbers[0], -1)
+                    is_team = not is_team
+                    is_home_team = not is_home_team
+                    team_id = game_data["team_id"] if team_id == game_data["opp_id"] else game_data["opp_id"]
+                    scoring_play["team"]["id"] = team_id
+                else:
+                    shooter = game_data["opp_numbers"].get(player_numbers[0], -1)                    
+
+            if shooter:
+                scoring_play["players"].append({
+                    "playerType" :  "Shooter",
+                    "player" : {
+                        "id" : shooter
+                    }
+                })
+        elif real_event_type == "Missed Shot":
+            if is_team:
+                if player_numbers[0] not in game_data["team_numbers"] and player_numbers[0] in game_data["opp_numbers"]:
+                    shooter = game_data["opp_numbers"].get(player_numbers[0], -1)
+                    is_team = not is_team
+                    is_home_team = not is_home_team
+                    team_id = game_data["team_id"] if team_id == game_data["opp_id"] else game_data["opp_id"]
+                    scoring_play["team"]["id"] = team_id
+                else:
+                    shooter = game_data["team_numbers"].get(player_numbers[0], -1)
+            else:
+                if player_numbers[0] not in game_data["opp_numbers"] and player_numbers[0] in game_data["team_numbers"]:
+                    shooter = game_data["team_numbers"].get(player_numbers[0], -1)
+                    is_team = not is_team
+                    is_home_team = not is_home_team
+                    team_id = game_data["team_id"] if team_id == game_data["opp_id"] else game_data["opp_id"]
+                    scoring_play["team"]["id"] = team_id
+                else:
+                    shooter = game_data["opp_numbers"].get(player_numbers[0], -1)
+
+            if shooter:
+                scoring_play["players"].append({
+                    "playerType" :  "Shooter",
+                    "player" : {
+                        "id" : shooter
+                    }
+                })
+        elif real_event_type == "Blocked Shot":
+            if is_team:
+                if player_numbers[0] not in game_data["team_numbers"] and player_numbers[0] in game_data["opp_numbers"]:
+                    blocker = game_data["opp_numbers"].get(player_numbers[0], -1)
+                    is_team = not is_team
+                    is_home_team = not is_home_team
+                    team_id = game_data["team_id"] if team_id == game_data["opp_id"] else game_data["opp_id"]
+                    scoring_play["team"]["id"] = team_id
+                else:
+                    blocker = game_data["team_numbers"].get(player_numbers[0], -1)
+            else:
+                if player_numbers[0] not in game_data["opp_numbers"] and player_numbers[0] in game_data["team_numbers"]:
+                    blocker = game_data["team_numbers"].get(player_numbers[0], -1)
+                    is_team = not is_team
+                    is_home_team = not is_home_team
+                    team_id = game_data["team_id"] if team_id == game_data["opp_id"] else game_data["opp_id"]
+                    scoring_play["team"]["id"] = team_id
+                else:
+                    blocker = game_data["opp_numbers"].get(player_numbers[0], -1)
+
+            if blocker:
+                scoring_play["players"].append({
+                    "playerType" :  "Blocker",
+                    "player" : {
+                        "id" : blocker
+                    }
+                })
+
+            if team_id == game_data["team_id"]:
+                scoring_play["team"]["id"] = game_data["opp_id"]
+            else:
+                scoring_play["team"]["id"] = game_data["team_id"]
+        elif real_event_type == "Hit":
+            if is_team:
+                if player_numbers[0] not in game_data["team_numbers"] and player_numbers[0] in game_data["opp_numbers"]:
+                    hitter = game_data["opp_numbers"].get(player_numbers[0], -1)
+                    is_team = not is_team
+                    is_home_team = not is_home_team
+                    team_id = game_data["team_id"] if team_id == game_data["opp_id"] else game_data["opp_id"]
+                    scoring_play["team"]["id"] = team_id
+                else:
+                    hitter = game_data["team_numbers"].get(player_numbers[0], -1)
+            else:
+                if player_numbers[0] not in game_data["opp_numbers"] and player_numbers[0] in game_data["team_numbers"]:
+                    hitter = game_data["team_numbers"].get(player_numbers[0], -1)
+                    is_team = not is_team
+                    is_home_team = not is_home_team
+                    team_id = game_data["team_id"] if team_id == game_data["opp_id"] else game_data["opp_id"]
+                    scoring_play["team"]["id"] = team_id
+                else:
+                    hitter = game_data["opp_numbers"].get(player_numbers[0], -1)
+
+            if hitter:
+                scoring_play["players"].append({
+                    "playerType" :  "Hitter",
+                    "player" : {
+                        "id" : hitter
+                    }
+                })
+        elif real_event_type == "Takeaway" or real_event_type == "Giveaway":
+            if is_team:
+                if player_numbers[0] not in game_data["team_numbers"] and player_numbers[0] in game_data["opp_numbers"]:
+                    player = game_data["opp_numbers"].get(player_numbers[0], -1)
+                    is_team = not is_team
+                    is_home_team = not is_home_team
+                    team_id = game_data["team_id"] if team_id == game_data["opp_id"] else game_data["opp_id"]
+                    scoring_play["team"]["id"] = team_id
+                else:
+                    player = game_data["team_numbers"].get(player_numbers[0], -1)
+            else:
+                if player_numbers[0] not in game_data["opp_numbers"] and player_numbers[0] in game_data["team_numbers"]:
+                    player = game_data["team_numbers"].get(player_numbers[0], -1)
+                    is_team = not is_team
+                    is_home_team = not is_home_team
+                    team_id = game_data["team_id"] if team_id == game_data["opp_id"] else game_data["opp_id"]
+                    scoring_play["team"]["id"] = team_id
+                else:
+                    player = game_data["opp_numbers"].get(player_numbers[0], -1)
+
+            if player:
+                scoring_play["players"].append({
+                    "playerType" :  "Player",
+                    "player" : {
+                        "id" : player
+                    }
+                })
+        elif real_event_type == "Faceoff":
+            if is_home:
+                if player_numbers[1] not in game_data["team_numbers"] and player_numbers[1] in game_data["opp_numbers"]:
+                    home_player = game_data["opp_numbers"].get(player_numbers[1], -1)
+                    is_team = not is_team
+                    is_home_team = not is_home_team
+                    team_id = game_data["team_id"] if team_id == game_data["opp_id"] else game_data["opp_id"]
+                    scoring_play["team"]["id"] = team_id
+                else:
+                    home_player = game_data["team_numbers"].get(player_numbers[1], -1)
+            else:
+                if player_numbers[1] not in game_data["opp_numbers"] and player_numbers[1] in game_data["team_numbers"]:
+                    home_player = game_data["team_numbers"].get(player_numbers[1], -1)
+                    is_team = not is_team
+                    is_home_team = not is_home_team
+                    team_id = game_data["team_id"] if team_id == game_data["opp_id"] else game_data["opp_id"]
+                    scoring_play["team"]["id"] = team_id
+                else:
+                    home_player = game_data["opp_numbers"].get(player_numbers[1], -1)
+            
+            if not is_home:
+                away_player = game_data["team_numbers"].get(player_numbers[0], -1)
+            else:
+                away_player = game_data["opp_numbers"].get(player_numbers[0], -1)
+
+            winner = home_player if is_home_team else away_player
+            loser = away_player if is_home_team else home_player
+
+            if winner:
+                scoring_play["players"].append({
+                    "playerType" :  "Winner",
+                    "player" : {
+                        "id" : winner
+                    }
+                })
+            if loser:
+                scoring_play["players"].append({
+                    "playerType" :  "Loser",
+                    "player" : {
+                        "id" : loser
+                    }
+                })
+        elif real_event_type == "Penalty" and re.search(r",\s+(.*),\s+(\d+) min", description_string):
+            penalty_player = None
+            if player_numbers:
+                if is_team:
+                    if player_numbers[0] not in game_data["team_numbers"] and player_numbers[0] in game_data["opp_numbers"]:
+                        penalty_player = game_data["opp_numbers"].get(player_numbers[0], -1)
+                        is_team = not is_team
+                        is_home_team = not is_home_team
+                        team_id = game_data["team_id"] if team_id == game_data["opp_id"] else game_data["opp_id"]
+                        scoring_play["team"]["id"] = team_id
+                    else:
+                        penalty_player = game_data["team_numbers"].get(player_numbers[0], -1)
+                else:
+                    if player_numbers[0] not in game_data["opp_numbers"] and player_numbers[0] in game_data["team_numbers"]:
+                        penalty_player = game_data["team_numbers"].get(player_numbers[0], -1)
+                        is_team = not is_team
+                        is_home_team = not is_home_team
+                        team_id = game_data["team_id"] if team_id == game_data["opp_id"] else game_data["opp_id"]
+                        scoring_play["team"]["id"] = team_id
+                    else:
+                        penalty_player = game_data["opp_numbers"].get(player_numbers[0], -1)
+            
+            if penalty_player:
+                scoring_play["players"].append({
+                    "playerType" :  "PenaltyOn",
+                    "player" : {
+                        "id" : penalty_player
+                    }
+                })
+            
+            last_match = re.search(r",\s+(.*),\s+(\d+) min", description_string)
+            penalty_minutes = int(last_match.group(2))
+
+            pen_severity = None
+            penalty_type = last_match.group(1)
+            if "(maj)" in penalty_type:
+                pen_severity = "Major"
+                penalty_type = penalty_type.replace("(maj)", "").strip()
+                if not penalty_type:
+                    penalty_type = None
+            
+            if penalty_type:
+                penalty_type = re.sub(r"\(\d+ min\)", "", penalty_type).strip().title()
+                penalty_type = penalty_type.replace("On Breakaway", "").strip()
+
+            if penalty_type == "Match Penalty":
+                pen_severity = "Match"
+                penalty_type = None
+            elif penalty_type in ("Game Misconduct", "Bench Minor", "Minor", "Major", "Match", "Misconduct"):
+                pen_severity = penalty_type
+                penalty_type = None
+        
+            scoring_play["result"]["penaltyMinutes"] = penalty_minutes
+            if penalty_type:
+                scoring_play["result"]["secondaryType"] = penalty_type
+            if pen_severity:
+                scoring_play["result"]["penaltySeverity"] = pen_severity
+            else:
+                scoring_play["result"]["penaltySeverity"] = "Minor"
+        
+        if not has_initial_plays or real_event_type not in ("Goal", "Penalty"):
+            scoring_plays.append(scoring_play)
+        else:
+            for sub_scoring_play in scoring_plays:
+                if sub_scoring_play["result"]["event"] == real_event_type and int(sub_scoring_play["about"]["period"]) == int(scoring_play["about"]["period"]) and start_time_to_str(sub_scoring_play["about"]["periodTime"]) == start_time_to_str(scoring_play["about"]["periodTime"]):
+                    if real_event_type == "Goal":
+                        sub_scoring_play["team_on_ice"] = scoring_play["team_on_ice"]
+                        sub_scoring_play["opp_on_ice"] = scoring_play["opp_on_ice"]
+                    sub_scoring_play["zone"] = scoring_play["zone"]
+                    if real_event_type != "Goal":
+                        sub_scoring_play["result"]["strength"] = scoring_play["result"]["strength"]
+                    break
                             
     return scoring_plays
 
@@ -24298,7 +24348,7 @@ def perform_metadata_quals(qualifiers, player_type, row, player_game_info, nhl_p
                     row["TSA"] += 1
         for goal_event in player_game_info["missed_shot"]:
             if perform_metadata_qual("missed_shot", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], skip_career_events=skip_career_events):
-                if goal_event["description"].endswith(" Goalpost") or goal_event["description"].endswith("Hit Crossbar"):
+                if goal_event["description"] and (goal_event["description"].endswith(" Goalpost") or goal_event["description"].endswith("Hit Crossbar")):
                     row["PostBar"] += 1
                 if count_misses:
                     row["S"] += 1
@@ -24485,6 +24535,10 @@ def perform_metadata_quals(qualifiers, player_type, row, player_game_info, nhl_p
         if perform_metadata_qual("all_opp_shots_og", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], is_off_ice=True, skip_career_events=skip_career_events):
             row["offISA"] += 1
             row["OppSF"] += 1
+
+    for period in player_game_info["all_raw_events"]:
+        if perform_metadata_qual("raw_event", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], is_off_ice=True, skip_career_events=skip_career_events):
+            row["Event"] += 1
 
     for period in player_game_info["all_events"]:
         for period_time in player_game_info["all_events"][period]:
@@ -25058,9 +25112,48 @@ def perform_metadata_qual(event_name, goal_event, qualifiers, player_game_info, 
         if "Exact Shot Type" in qualifiers:
             if not perform_sub_metadata_qual(goal_event, "exactShotType", qualifiers["Exact Shot Type"], player_game_info, year):
                 return False
+    
+    if "Event Description" in qualifiers:
+        event_type = goal_event["description"]
+        if not event_type:
+            return
+
+        for qual_object in qualifiers["Event Description"]:
+            has_match = False
+            for stadium in qual_object["values"]:
+                if stadium in event_type.lower().replace("_", ""):
+                    has_match = True
+                    break
+            if qual_object["negate"]:
+                if has_match:
+                    return False
+            else:
+                if not has_match:
+                    return False
+    
+    if "Exact Event Description" in qualifiers:
+        event_type = goal_event["description"]
+        if not event_type:
+            return
+            
+        for qual_object in qualifiers["Exact Event Description"]:
+            has_match = False
+            for stadium in qual_object["values"]:
+                if stadium == event_type.lower().replace("_", ""):
+                    has_match = True
+                    break
+            if qual_object["negate"]:
+                if has_match:
+                    return False
+            else:
+                if not has_match:
+                    return False
 
     if "Event Type" in qualifiers:
-        event_type = goal_event["event_name"]
+        event_types = get_event_type(goal_event, player_game_info)
+        if not event_types:
+            return
+
         for qual_object in qualifiers["Event Type"]:
             has_match = False
             for stadium in qual_object["values"]:
@@ -25075,7 +25168,10 @@ def perform_metadata_qual(event_name, goal_event, qualifiers, player_game_info, 
                     return False
     
     if "Exact Event Type" in qualifiers:
-        event_type =  goal_event["event_type"]
+        event_types = get_event_type(goal_event, player_game_info)
+        if not event_types:
+            return
+
         for qual_object in qualifiers["Exact Event Type"]:
             has_match = False
             for stadium in qual_object["values"]:
@@ -25867,6 +25963,27 @@ def perform_metadata_qual(event_name, goal_event, qualifiers, player_game_info, 
 
     return True
 
+def get_event_type(goal_event, player_game_info):
+    if goal_event["event_name"] in ["shift_events", "all_shift_events"]:
+        return None
+        
+    player_id = player_game_info["player_id"]
+
+    event_id = goal_event["event_id"]
+
+    event_type = None
+    for sub_event_id, sub_scoring_play in enumerate(player_game_info["all_plays"]):
+        if sub_event_id == event_id:
+            event_type = sub_scoring_play["result"]["event"]
+            if event_type in ["Goal", "Shot", "Missed Shot", "Penalty", "Hit", "Blocked Shot", "Faceoff", "Takeaway", "Giveaway"]:
+                event_type = [event_type]
+                if sub_scoring_play["team"]["id"] == player_game_info["team_id"]:
+                    event_type.append("Team" + event_type)
+                else:
+                    event_type.append("Opp" + event_type)
+    
+    return event_type
+
 def get_event_info(goal_event, player_game_info, event_type_to_get):
     player_id = player_game_info["player_id"]
 
@@ -25877,6 +25994,12 @@ def get_event_info(goal_event, player_game_info, event_type_to_get):
     previous_player_event_type = None
     upcoming_player_event_type = None
     for sub_event_id, sub_scoring_play in enumerate(player_game_info["all_plays"]):
+        sub_period = sub_scoring_play["about"]["period"]
+        if sub_period < goal_event["period"]:
+            continue
+        if sub_period > goal_event["period"]:
+            break
+        
         sub_period_time = None
         if goal_event["event_name"] in ["shift_events", "all_shift_events"]:
             sub_period_time = start_time_to_str(sub_scoring_play["about"]["periodTime"])
@@ -25891,12 +26014,6 @@ def get_event_info(goal_event, player_game_info, event_type_to_get):
                     break
                 if previous_player_event_type and event_type_to_get == "previous_player_event_type":
                     break
-
-        sub_period = sub_scoring_play["about"]["period"]
-        if sub_period < goal_event["period"]:
-            continue
-        if sub_period > goal_event["period"]:
-            break
 
         event_type = sub_scoring_play["result"]["event"]
 
@@ -26740,6 +26857,7 @@ def perform_crease_qual(event, qualifiers):
 
 def clear_row_attrs(row, player_type):
     row["Per"] = 0
+    row["Event"] = 0
     row["TOI"] = 0
     row["offITOI"] = 0
     row["TtlTOI"] = 0
@@ -28281,10 +28399,38 @@ def perform_qualifier(player_data, player_type, row, time_frame, all_rows):
                 if not is_even:
                     return False
     
-    
     if "Odd Year" in qualifiers:
         is_odd = row["Year"] % 2 == 1
         for qual_object in qualifiers["Odd Year"]:
+            if qual_object["negate"]:
+                if is_odd:
+                    return False
+            else:
+                if not is_odd:
+                    return False
+    
+    if "Calendar Year" in qualifiers:
+        for qual_object in qualifiers["Calendar Year"]:
+            if qual_object["negate"]:
+                if row["Date"].year >= qual_object["values"]["start_val"] and row["Date"].year <= qual_object["values"]["end_val"]:
+                    return False
+            else:
+                if not (row["Date"].year >= qual_object["values"]["start_val"] and row["Date"].year <= qual_object["values"]["end_val"]):
+                    return False
+
+    if "Even Calendar Year" in qualifiers:
+        is_even = row["Date"].year % 2 == 0
+        for qual_object in qualifiers["Even Calendar Year"]:
+            if qual_object["negate"]:
+                if is_even:
+                    return False
+            else:
+                if not is_even:
+                    return False
+    
+    if "Odd Calendar Year" in qualifiers:
+        is_odd = row["Date"].year % 2 == 1
+        for qual_object in qualifiers["Odd Calendar Year"]:
             if qual_object["negate"]:
                 if is_odd:
                     return False
@@ -30152,7 +30298,7 @@ def handle_season_stats(all_rows, player_data, player_type, qualifiers):
             upcoming_row = None
             if season + 1 in season_row_map:
                 upcoming_row = season_row_map[season + 1]["comb_row"]
-
+        
         add_row = True
         if "Season Stat" in qualifiers:
             for qual_object in qualifiers["Season Stat"]:    
@@ -30185,7 +30331,7 @@ def handle_season_stats(all_rows, player_data, player_type, qualifiers):
         if add_row and "Previous Season Stat" in qualifiers:
             if not previous_row:
                 add_row = False
-                break
+                continue
             for qual_object in qualifiers["Previous Season Stat"]:
                 has_match = False
                 for sub_qual_object in qual_object["values"]:
@@ -30216,7 +30362,7 @@ def handle_season_stats(all_rows, player_data, player_type, qualifiers):
         if add_row and "Upcoming Season Stat" in qualifiers:
             if not upcoming_row:
                 add_row = False
-                break
+                continue
             for qual_object in qualifiers["Upcoming Season Stat"]:                    
                 has_match = False
                 for sub_qual_object in qual_object["values"]:
