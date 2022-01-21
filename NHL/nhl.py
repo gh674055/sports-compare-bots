@@ -19720,6 +19720,7 @@ def determine_stat_value(player_game_info, all_events, qualifiers, og_row, playe
     save_against_stats = ["SV", "SA", "EVSH", "PPSH", "SHGA"]
     missed_shot_against_stats = ["SV", "SA"]
     toi_stats = ["TOI", "EVTOI", "PPTOI", "SHTOI"]
+    event_stats = ["Event"]
 
     if count_misses:
         missed_shot_stats.append("S")
@@ -19993,6 +19994,11 @@ def determine_stat_value(player_game_info, all_events, qualifiers, og_row, playe
                 if determine_event_match(goal_event, qualifiers, player_game_info, og_row, is_off_ice=True):
                     row["offISA"] += 1
                     row["OppSF"] += 1
+
+        if stat in event_stats:
+            for goal_event in player_game_info["all_raw_events"]:
+                if perform_metadata_qual("raw_event", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], skip_career_events=skip_career_events):
+                    row["Event"] += 1
 
         if stat in toi_stats:
             if goal_event["event_name"] == "shift_events":
@@ -22513,14 +22519,19 @@ def get_html_play_data(scoring_plays, player_data, og_game_id, is_home, game_dat
                                 # scoring_play["opp_on_ice_pos"] = scoring_play["team_on_ice_pos"]
                                 # scoring_play["team_on_ice_pos"] = temp_array
 
-                            if len(scoring_play["team_on_ice"]) > 1 and len(scoring_play["opp_on_ice"]) > 1:
-                                if len(scoring_play["team_on_ice"]) > len(scoring_play["opp_on_ice"]):
-                                    scoring_play["result"]["strength"]["code"] = "PPG"
-                                elif len(scoring_play["team_on_ice"]) < len(scoring_play["opp_on_ice"]):
-                                    scoring_play["result"]["strength"]["code"] = "SHG"
-                                else:
-                                    scoring_play["result"]["strength"]["code"] = "EVEN"
-
+                            # team_on_ice_num = len(scoring_play["team_on_ice"])
+                            # if team_on_ice_num  > 6:
+                            #     team_on_ice_num = 6
+                            # opp_on_ice_num = len(scoring_play["opp_on_ice"])
+                            # if opp_on_ice_num  > 6:
+                            #     opp_on_ice_num = 6
+                            # if team_on_ice_num > 1 and opp_on_ice_num > 1:
+                            #     if team_on_ice_num > opp_on_ice_num:
+                            #         scoring_play["result"]["strength"]["code"] = "PPG"
+                            #     elif team_on_ice_num < opp_on_ice_num:
+                            #         scoring_play["result"]["strength"]["code"] = "SHG"
+                            #     else:
+                            #         scoring_play["result"]["strength"]["code"] = "EVEN"
                         
                         if not has_initial_plays or (real_event_type not in ("Goal", "Penalty") and row_year < 2010):
                             scoring_plays.append(scoring_play)
@@ -22834,13 +22845,19 @@ def get_old_html_play_data(scoring_plays, player_data, og_game_id, is_home, game
                     else:
                         goalie = game_data["team_numbers"].get(goalie_number, -1)
 
-                if len(scoring_play["team_on_ice"]) > 1 and len(scoring_play["opp_on_ice"]) > 1:
-                    if len(scoring_play["team_on_ice"]) > len(scoring_play["opp_on_ice"]):
-                        scoring_play["result"]["strength"]["code"] = "PPG"
-                    elif len(scoring_play["team_on_ice"]) < len(scoring_play["opp_on_ice"]):
-                        scoring_play["result"]["strength"]["code"] = "SHG"
-                    else:
-                        scoring_play["result"]["strength"]["code"] = "EVEN"
+                # team_on_ice_num = len(scoring_play["team_on_ice"])
+                # if team_on_ice_num  > 6:
+                #     team_on_ice_num = 6
+                # opp_on_ice_num = len(scoring_play["opp_on_ice"])
+                # if opp_on_ice_num  > 6:
+                #     opp_on_ice_num = 6
+                # if team_on_ice_num > 1 and opp_on_ice_num > 1:
+                #     if team_on_ice_num > opp_on_ice_num:
+                #         scoring_play["result"]["strength"]["code"] = "PPG"
+                #     elif team_on_ice_num < opp_on_ice_num:
+                #         scoring_play["result"]["strength"]["code"] = "SHG"
+                #     else:
+                #         scoring_play["result"]["strength"]["code"] = "EVEN"
 
                 if scorer:
                     scoring_play["players"].append({
@@ -23322,13 +23339,19 @@ def get_older_html_play_data(scoring_plays, player_data, og_game_id, is_home, ga
                         sub_player_id = game_data["team_numbers"].get(sub_player, -1)
                     scoring_play["opp_on_ice"].append(sub_player_id)
             
-            if len(scoring_play["team_on_ice"]) > 1 and len(scoring_play["opp_on_ice"]) > 1:
-                if len(scoring_play["team_on_ice"]) > len(scoring_play["opp_on_ice"]):
-                    scoring_play["result"]["strength"]["code"] = "PPG"
-                elif len(scoring_play["team_on_ice"]) < len(scoring_play["opp_on_ice"]):
-                    scoring_play["result"]["strength"]["code"] = "SHG"
-                else:
-                    scoring_play["result"]["strength"]["code"] = "EVEN"
+            # team_on_ice_num = len(scoring_play["team_on_ice"])
+            # if team_on_ice_num  > 6:
+            #     team_on_ice_num = 6
+            # opp_on_ice_num = len(scoring_play["opp_on_ice"])
+            # if opp_on_ice_num  > 6:
+            #     opp_on_ice_num = 6
+            # if team_on_ice_num > 1 and opp_on_ice_num > 1:
+            #     if team_on_ice_num > opp_on_ice_num:
+            #         scoring_play["result"]["strength"]["code"] = "PPG"
+            #     elif team_on_ice_num < opp_on_ice_num:
+            #         scoring_play["result"]["strength"]["code"] = "SHG"
+            #     else:
+            #         scoring_play["result"]["strength"]["code"] = "EVEN"
             
             if is_home_team:
                 home_goals += 1
@@ -23813,7 +23836,7 @@ def get_player_numbers(desc_string):
 
 def get_player_numbers_2(desc_string, real_event_type):
     numbers = []
-    if real_event_type == "Penalty" and desc_string.startswith("Team Penalty"):
+    if (real_event_type == "Penalty" and desc_string.startswith("Team Penalty")) or real_event_type == "Stoppage":
         return numbers
     if real_event_type != "Faceoff":
         match = re.search(r"^\d+ ", desc_string)
@@ -24518,8 +24541,8 @@ def perform_metadata_quals(qualifiers, player_type, row, player_game_info, nhl_p
             row["offISA"] += 1
             row["OppSF"] += 1
 
-    for period in player_game_info["all_raw_events"]:
-        if perform_metadata_qual("raw_event", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], is_off_ice=True, skip_career_events=skip_career_events):
+    for goal_event in player_game_info["all_raw_events"]:
+        if perform_metadata_qual("raw_event", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], skip_career_events=skip_career_events):
             row["Event"] += 1
 
     for period in player_game_info["all_events"]:
@@ -24599,40 +24622,52 @@ def get_on_ice_info(player_game_info, goal_event, period, second, needs_team, ne
     if needs_team:
         if has_team_shift_data:
             if needs_goalies:
-                for player in player_game_info["team_goalies"]:
-                    is_on_ice = is_player_on_ice(shift_data, team_on_ice, opp_on_ice, period, second, player, True, is_faceoff)
-                    if is_on_ice:
-                        team_goalies += 1
-                        if team_goalies == 1:
-                            break
-
-            if needs_skaters:
-                for player in player_game_info["team_players"]:
-                    if player not in player_game_info["team_goalies"]:
+                if team_on_ice:
+                    for player in team_on_ice:
+                        if player in player_game_info["team_goalies"]:
+                            team_goalies += 1
+                else:
+                    for player in player_game_info["team_goalies"]:
                         is_on_ice = is_player_on_ice(shift_data, team_on_ice, opp_on_ice, period, second, player, True, is_faceoff)
                         if is_on_ice:
+                            team_goalies += 1
+
+            if needs_skaters:
+                if team_on_ice:
+                    for player in team_on_ice:
+                        if player not in player_game_info["team_goalies"]:
                             team_skaters += 1
-                            if team_skaters == 6:
-                                break
+                else:
+                    for player in player_game_info["team_players"]:
+                        if player not in player_game_info["team_goalies"]:
+                            is_on_ice = is_player_on_ice(shift_data, team_on_ice, opp_on_ice, period, second, player, True, is_faceoff)
+                            if is_on_ice:
+                                team_skaters += 1
 
     if needs_opp:
         if has_opp_shift_data:
-            if needs_goalies:             
-                for player in player_game_info["opp_goalies"]:
-                    is_on_ice = is_player_on_ice(shift_data, team_on_ice, opp_on_ice, period, second, player, False, is_faceoff)
-                    if is_on_ice:
-                        opp_goalies += 1
-                        if opp_goalies == 1:
-                            break
+            if needs_goalies:
+                if opp_on_ice:
+                    for player in opp_on_ice:
+                        if player in player_game_info["opp_goalies"]:
+                            opp_goalies += 1
+                else:       
+                    for player in player_game_info["opp_goalies"]:
+                            is_on_ice = is_player_on_ice(shift_data, team_on_ice, opp_on_ice, period, second, player, False, is_faceoff)
+                            if is_on_ice:
+                                opp_goalies += 1
 
             if needs_skaters:
-                for player in player_game_info["opp_players"]:
-                    if player not in player_game_info["opp_goalies"]:
-                        is_on_ice = is_player_on_ice(shift_data, team_on_ice, opp_on_ice, period, second, player, False, is_faceoff)
-                        if is_on_ice:
+                if opp_on_ice:
+                    for player in opp_on_ice:
+                        if player not in player_game_info["opp_goalies"]:
                             opp_skaters += 1
-                            if opp_skaters == 6:
-                                break
+                else:
+                    for player in player_game_info["opp_players"]:
+                        if player not in player_game_info["opp_goalies"]:
+                            is_on_ice = is_player_on_ice(shift_data, team_on_ice, opp_on_ice, period, second, player, False, is_faceoff)
+                            if is_on_ice:
+                                opp_skaters += 1
 
     return team_skaters, team_goalies, opp_skaters, opp_goalies, has_team_shift_data, has_opp_shift_data
 
