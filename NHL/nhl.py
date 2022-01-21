@@ -19881,9 +19881,9 @@ def determine_stat_value(player_game_info, all_events, qualifiers, og_row, playe
                         strength = determine_strength(player_game_info, goal_event["period"], goal_event["periodTime"], goal_event)
                         if strength:
                             if strength == "PP":
-                                strength == "SH"
+                                strength = "SH"
                             elif strength == "SH":
-                                strength == "PP"
+                                strength = "PP"
                             row[strength + "GA"] += 1
                             row[strength + "SH"] += 1
                         if row["Year"] >= 2007:
@@ -19894,9 +19894,9 @@ def determine_stat_value(player_game_info, all_events, qualifiers, og_row, playe
                         strength = determine_strength(player_game_info, goal_event["period"], goal_event["periodTime"], goal_event)
                         if strength:
                             if strength == "PP":
-                                strength == "SH"
+                                strength = "SH"
                             elif strength == "SH":
-                                strength == "PP"
+                                strength = "PP"
                             row[strength + "SH"] += 1
                         row["SV"] += 1
                         row["SA"] += 1
@@ -24436,9 +24436,9 @@ def perform_metadata_quals(qualifiers, player_type, row, player_game_info, nhl_p
                 strength = determine_strength(player_game_info, goal_event["period"], goal_event["periodTime"], goal_event)
                 if strength:
                     if strength == "PP":
-                        strength == "SH"
+                        strength = "SH"
                     elif strength == "SH":
-                        strength == "PP"
+                        strength = "PP"
                     row[strength + "GA"] += 1
                     row[strength + "SH"] += 1
                 if row["Year"] >= 2007:
@@ -24448,9 +24448,9 @@ def perform_metadata_quals(qualifiers, player_type, row, player_game_info, nhl_p
                 strength = determine_strength(player_game_info, goal_event["period"], goal_event["periodTime"], goal_event)
                 if strength:
                     if strength == "PP":
-                        strength == "SH"
+                        strength = "SH"
                     elif strength == "SH":
-                        strength == "PP"
+                        strength = "PP"
                     row[strength + "SH"] += 1
                 row["SV"] += 1
                 row["SA"] += 1
