@@ -20735,7 +20735,7 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                 pen_obj["penaltyType"] = pen_obj["penaltyType"].replace("Hi-Stick", "High-Stick").strip()
                 
             if player_penalty or player_penalty_drawn:
-                if not (len(scoring_play["players"]) == 1 and "description" in scoring_play["result"] and " served by " in scoring_play["result"]["description"]):
+                if not (len(scoring_play["players"]) == 1 and "description" in scoring_play["result"] and " served by " in scoring_play["result"]["description"]) and pen_obj["penalty_minutes"]:
                     pen_obj["player_penalty"] = player_penalty
                     if "penaltyType" in pen_obj and pen_obj["penaltyType"] == "Fighting" and player_penalty:
                         game_data["Fight"] += 1
@@ -35031,41 +35031,69 @@ def print_player_data(player_datas, player_type, highest_vals, lowest_vals, has_
     
     if player_type["da_type"]["type"] == "Skater" and "Advanced" in all_headers:
         if (set(all_headers["Advanced"].keys()) in ({"Player_Score", "GP_Score", "PEN", "PEN/60M"}, {"Player_Score", "GP_Score", "PEN"})) or "Penalty On" in extra_stats:
+            del_advanced = True
             if "PEN" in all_headers["Advanced"]:
-                pen_obj = all_headers["Advanced"]["PEN"]
-                del all_headers["Advanced"]["PEN"]
-                all_headers["Standard"]["PEN"] = pen_obj
-            if "PEN/60M" in all_headers["Advanced"]:
-                pen_obj = all_headers["Advanced"]["PEN/60M"]
-                del all_headers["Advanced"]["PEN/60M"]
-                all_headers["Per Game/60 Minutes"]["PEN/60M"] = pen_obj
-            del all_headers["Advanced"]
+                if "Standard" in all_headers:
+                    pen_obj = all_headers["Advanced"]["PEN"]
+                    del all_headers["Advanced"]["PEN"]
+                    all_headers["Standard"]["PEN"] = pen_obj
+                else:
+                    del_advanced = False
+            if "PEN/60M" in all_headers["Advanced"] and "Per Game/60 Minutes" in all_headers:
+                if "Per Game/60 Minutes" in all_headers:
+                    pen_obj = all_headers["Advanced"]["PEN/60M"]
+                    del all_headers["Advanced"]["PEN/60M"]
+                    all_headers["Per Game/60 Minutes"]["PEN/60M"] = pen_obj
+                else:
+                    del_advanced = False
+            if del_advanced:
+                del all_headers["Advanced"]
         elif "Penalty" in extra_stats or "Penalty Sev" in extra_stats:
+            del_advanced = True
             if "PenDrawn" in all_headers["Advanced"]:
-                pen_obj = all_headers["Advanced"]["PenDrawn"]
-                del all_headers["Advanced"]["PenDrawn"]
-                all_headers["Standard"]["PenDrawn"] = pen_obj
-            if "PenDrawn/60M" in all_headers["Advanced"]:
-                pen_obj = all_headers["Advanced"]["PenDrawn/60M"]
-                del all_headers["Advanced"]["PenDrawn/60M"]
-                all_headers["Per Game/60 Minutes"]["PenDrawn/60M"] = pen_obj
+                if "Standard" in all_headers:
+                    pen_obj = all_headers["Advanced"]["PenDrawn"]
+                    del all_headers["Advanced"]["PenDrawn"]
+                    all_headers["Standard"]["PenDrawn"] = pen_obj
+                else:
+                    del_advanced = False
+            if "PenDrawn/60M" in all_headers["Advanced"] and "Per Game/60 Minutes" in all_headers:
+                if "Per Game/60 Minutes" in all_headers:
+                    pen_obj = all_headers["Advanced"]["PenDrawn/60M"]
+                    del all_headers["Advanced"]["PenDrawn/60M"]
+                    all_headers["Per Game/60 Minutes"]["PenDrawn/60M"] = pen_obj
+                else:
+                    del_advanced = False
             if "PEN" in all_headers["Advanced"]:
-                pen_obj = all_headers["Advanced"]["PEN"]
-                del all_headers["Advanced"]["PEN"]
-                all_headers["Standard"]["PEN"] = pen_obj
-            if "PEN/60M" in all_headers["Advanced"]:
-                pen_obj = all_headers["Advanced"]["PEN/60M"]
-                del all_headers["Advanced"]["PEN/60M"]
-                all_headers["Per Game/60 Minutes"]["PEN/60M"] = pen_obj
+                if "Standard" in all_headers:
+                    pen_obj = all_headers["Advanced"]["PEN"]
+                    del all_headers["Advanced"]["PEN"]
+                    all_headers["Standard"]["PEN"] = pen_obj
+                else:
+                    del_advanced = False
+            if "PEN/60M" in all_headers["Advanced"] and "Per Game/60 Minutes" in all_headers:
+                if "Per Game/60 Minutes" in all_headers:
+                    pen_obj = all_headers["Advanced"]["PEN/60M"]
+                    del all_headers["Advanced"]["PEN/60M"]
+                    all_headers["Per Game/60 Minutes"]["PEN/60M"] = pen_obj
+                else:
+                    del_advanced = False
             if "NetPEN" in all_headers["Advanced"]:
-                pen_obj = all_headers["Advanced"]["NetPEN"]
-                del all_headers["Advanced"]["NetPEN"]
-                all_headers["Standard"]["NetPEN"] = pen_obj
-            if "NetPEN/60M" in all_headers["Advanced"]:
-                pen_obj = all_headers["Advanced"]["NetPEN/60M"]
-                del all_headers["Advanced"]["NetPEN/60M"]
-                all_headers["Per Game/60 Minutes"]["NetPEN/60M"] = pen_obj
-            del all_headers["Advanced"]
+                if "Standard" in all_headers:
+                    pen_obj = all_headers["Advanced"]["NetPEN"]
+                    del all_headers["Advanced"]["NetPEN"]
+                    all_headers["Standard"]["NetPEN"] = pen_obj
+                else:
+                    del_advanced = False
+            if "NetPEN/60M" in all_headers["Advanced"] and "Per Game/60 Minutes" in all_headers:
+                if "Per Game/60 Minutes" in all_headers:
+                    pen_obj = all_headers["Advanced"]["NetPEN/60M"]
+                    del all_headers["Advanced"]["NetPEN/60M"]
+                    all_headers["Per Game/60 Minutes"]["NetPEN/60M"] = pen_obj
+                else:
+                    del_advanced = False
+            if del_advanced:
+                del all_headers["Advanced"]
 
     error_getting_adv = False
     for player_data in player_datas:
@@ -35410,41 +35438,69 @@ def get_reddit_player_table(player_datas, player_type, debug_mode, original_comm
     
     if player_type["da_type"]["type"] == "Skater" and "Advanced" in all_headers:
         if (set(all_headers["Advanced"].keys()) in ({"Player_Score", "GP_Score", "PEN", "PEN/60M"}, {"Player_Score", "GP_Score", "PEN"})) or "Penalty On" in extra_stats:
+            del_advanced = True
             if "PEN" in all_headers["Advanced"]:
-                pen_obj = all_headers["Advanced"]["PEN"]
-                del all_headers["Advanced"]["PEN"]
-                all_headers["Standard"]["PEN"] = pen_obj
-            if "PEN/60M" in all_headers["Advanced"]:
-                pen_obj = all_headers["Advanced"]["PEN/60M"]
-                del all_headers["Advanced"]["PEN/60M"]
-                all_headers["Per Game/60 Minutes"]["PEN/60M"] = pen_obj
-            del all_headers["Advanced"]
+                if "Standard" in all_headers:
+                    pen_obj = all_headers["Advanced"]["PEN"]
+                    del all_headers["Advanced"]["PEN"]
+                    all_headers["Standard"]["PEN"] = pen_obj
+                else:
+                    del_advanced = False
+            if "PEN/60M" in all_headers["Advanced"] and "Per Game/60 Minutes" in all_headers:
+                if "Per Game/60 Minutes" in all_headers:
+                    pen_obj = all_headers["Advanced"]["PEN/60M"]
+                    del all_headers["Advanced"]["PEN/60M"]
+                    all_headers["Per Game/60 Minutes"]["PEN/60M"] = pen_obj
+                else:
+                    del_advanced = False
+            if del_advanced:
+                del all_headers["Advanced"]
         elif "Penalty" in extra_stats or "Penalty Sev" in extra_stats:
+            del_advanced = True
             if "PenDrawn" in all_headers["Advanced"]:
-                pen_obj = all_headers["Advanced"]["PenDrawn"]
-                del all_headers["Advanced"]["PenDrawn"]
-                all_headers["Standard"]["PenDrawn"] = pen_obj
-            if "PenDrawn/60M" in all_headers["Advanced"]:
-                pen_obj = all_headers["Advanced"]["PenDrawn/60M"]
-                del all_headers["Advanced"]["PenDrawn/60M"]
-                all_headers["Per Game/60 Minutes"]["PenDrawn/60M"] = pen_obj
+                if "Standard" in all_headers:
+                    pen_obj = all_headers["Advanced"]["PenDrawn"]
+                    del all_headers["Advanced"]["PenDrawn"]
+                    all_headers["Standard"]["PenDrawn"] = pen_obj
+                else:
+                    del_advanced = False
+            if "PenDrawn/60M" in all_headers["Advanced"] and "Per Game/60 Minutes" in all_headers:
+                if "Per Game/60 Minutes" in all_headers:
+                    pen_obj = all_headers["Advanced"]["PenDrawn/60M"]
+                    del all_headers["Advanced"]["PenDrawn/60M"]
+                    all_headers["Per Game/60 Minutes"]["PenDrawn/60M"] = pen_obj
+                else:
+                    del_advanced = False
             if "PEN" in all_headers["Advanced"]:
-                pen_obj = all_headers["Advanced"]["PEN"]
-                del all_headers["Advanced"]["PEN"]
-                all_headers["Standard"]["PEN"] = pen_obj
-            if "PEN/60M" in all_headers["Advanced"]:
-                pen_obj = all_headers["Advanced"]["PEN/60M"]
-                del all_headers["Advanced"]["PEN/60M"]
-                all_headers["Per Game/60 Minutes"]["PEN/60M"] = pen_obj
+                if "Standard" in all_headers:
+                    pen_obj = all_headers["Advanced"]["PEN"]
+                    del all_headers["Advanced"]["PEN"]
+                    all_headers["Standard"]["PEN"] = pen_obj
+                else:
+                    del_advanced = False
+            if "PEN/60M" in all_headers["Advanced"] and "Per Game/60 Minutes" in all_headers:
+                if "Per Game/60 Minutes" in all_headers:
+                    pen_obj = all_headers["Advanced"]["PEN/60M"]
+                    del all_headers["Advanced"]["PEN/60M"]
+                    all_headers["Per Game/60 Minutes"]["PEN/60M"] = pen_obj
+                else:
+                    del_advanced = False
             if "NetPEN" in all_headers["Advanced"]:
-                pen_obj = all_headers["Advanced"]["NetPEN"]
-                del all_headers["Advanced"]["NetPEN"]
-                all_headers["Standard"]["NetPEN"] = pen_obj
-            if "NetPEN/60M" in all_headers["Advanced"]:
-                pen_obj = all_headers["Advanced"]["NetPEN/60M"]
-                del all_headers["Advanced"]["NetPEN/60M"]
-                all_headers["Per Game/60 Minutes"]["NetPEN/60M"] = pen_obj
-            del all_headers["Advanced"]
+                if "Standard" in all_headers:
+                    pen_obj = all_headers["Advanced"]["NetPEN"]
+                    del all_headers["Advanced"]["NetPEN"]
+                    all_headers["Standard"]["NetPEN"] = pen_obj
+                else:
+                    del_advanced = False
+            if "NetPEN/60M" in all_headers["Advanced"] and "Per Game/60 Minutes" in all_headers:
+                if "Per Game/60 Minutes" in all_headers:
+                    pen_obj = all_headers["Advanced"]["NetPEN/60M"]
+                    del all_headers["Advanced"]["NetPEN/60M"]
+                    all_headers["Per Game/60 Minutes"]["NetPEN/60M"] = pen_obj
+                else:
+                    del_advanced = False
+            if del_advanced:
+                del all_headers["Advanced"]
 
     all_unique_quals = True
     quals = None
