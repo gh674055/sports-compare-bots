@@ -37292,7 +37292,7 @@ def is_invalid_stat(stat, player_type, data, count_inconsistent, player_data):
                         return current_season
 
                 if player_data["stat_values"]["is_href_data"]:
-                    if (stat in header_shift_stats + report_2_stats + report_3_stats + report_stats + game_report_stats) or "TOI" in stat or "/60M" in stat or "GAA" in stat or stat == "GP/GP":
+                    if (stat in header_shift_stats + report_2_stats + report_3_stats + report_stats + game_report_stats + strength_stats) or "TOI" in stat or "/60M" in stat or "GAA" in stat or stat == "GP/GP":
                         return current_season
 
                 if stat in header_shift_stats or "TOI" in stat or "/60M" in stat or "GAA" in stat or stat == "GP/GP":
