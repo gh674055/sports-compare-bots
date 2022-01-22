@@ -20152,7 +20152,7 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
 
     game_data["scoring_play_data"] = scoring_play_data
     
-    if row_data["Year"] >= 2007 and "hide-toi" not in extra_stats:
+    if row_data["Year"] >= 2007 and "hide-toi" not in extra_stats and "href" not in extra_stats:
         game_data["shift_data"] = get_html_shift_data(row_data["NHLGameLink"], row_data["Location"], game_data, player_data, row_data["Year"])
         #if not game_data["shift_data"]:
         #    game_data["shift_data"], missing_games = get_shift_data(row_data["NHLGameLink"], game_data["team_id"], missing_games)
