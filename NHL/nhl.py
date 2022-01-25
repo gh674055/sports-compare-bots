@@ -21993,16 +21993,16 @@ def get_html_shift_data(og_game_id, is_home, game_data, player_data, row_year):
                     player_number = player_text.split()[0].strip()
                     if is_team:
                         if player_number not in game_data["team_numbers"] and player_number in game_data["opp_numbers"]:
-                            current_player_id = game_data["opp_numbers"].get(player_number, -1)
+                            current_player_id = game_data["opp_numbers"].get(player_number, None)
                             is_team = False
                         else:
-                            current_player_id = game_data["team_numbers"].get(player_number, -1)
+                            current_player_id = game_data["team_numbers"].get(player_number, None)
                     else:
                         if player_number not in game_data["opp_numbers"] and player_number in game_data["team_numbers"]:
-                            current_player_id = game_data["team_numbers"].get(player_number, -1)
+                            current_player_id = game_data["team_numbers"].get(player_number, None)
                             is_team = True
                         else:
-                            current_player_id = game_data["opp_numbers"].get(player_number, -1)
+                            current_player_id = game_data["opp_numbers"].get(player_number, None)
             elif len(columns) == 6:
                 if row.get("class") and ("evenColor" in row.get("class") or "oddColor" in row.get("class")) and current_player_id:
                     num_events += 1
@@ -22160,7 +22160,7 @@ def get_html_play_data(scoring_plays, player_data, og_game_id, is_home, game_dat
             return []
         else:
             raise
-    
+        
     if not player_page_xml.getroot():
         return []
 
@@ -22339,23 +22339,9 @@ def get_html_play_data(scoring_plays, player_data, og_game_id, is_home, game_dat
 
                         if real_event_type == "Goal":
                             if is_team:
-                                if player_numbers[0] not in game_data["team_numbers"] and player_numbers[0] in game_data["opp_numbers"]:
-                                    scorer = game_data["opp_numbers"].get(player_numbers[0], -1)
-                                    is_team = not is_team
-                                    is_home_team = not is_home_team
-                                    team_id = game_data["team_id"] if team_id == game_data["opp_id"] else game_data["opp_id"]
-                                    scoring_play["team"]["id"] = team_id
-                                else:
-                                    scorer = game_data["team_numbers"].get(player_numbers[0], -1)
+                                scorer = game_data["team_numbers"].get(player_numbers[0], None)
                             else:
-                                if player_numbers[0] not in game_data["opp_numbers"] and player_numbers[0] in game_data["team_numbers"]:
-                                    scorer = game_data["team_numbers"].get(player_numbers[0], -1)
-                                    is_team = not is_team
-                                    is_home_team = not is_home_team
-                                    team_id = game_data["team_id"] if team_id == game_data["opp_id"] else game_data["opp_id"]
-                                    scoring_play["team"]["id"] = team_id
-                                else:
-                                    scorer = game_data["opp_numbers"].get(player_numbers[0], -1)
+                                scorer = game_data["opp_numbers"].get(player_numbers[0], None)
 
                             if is_home_team:
                                 home_goals += 1
@@ -22369,17 +22355,17 @@ def get_html_play_data(scoring_plays, player_data, og_game_id, is_home, game_dat
                             for pos in team_on_ice:
                                 for sub_player in team_on_ice[pos]:
                                     if is_team:
-                                        sub_player_id = game_data["team_numbers"].get(sub_player, -1)
+                                        sub_player_id = game_data["team_numbers"].get(sub_player, None)
                                     else:
-                                        sub_player_id = game_data["opp_numbers"].get(sub_player, -1)
+                                        sub_player_id = game_data["opp_numbers"].get(sub_player, None)
                                     scoring_play["team_on_ice"].append(sub_player_id)
                             scoring_play["opp_on_ice"] = []
                             for pos in opp_on_ice:
                                 for sub_player in opp_on_ice[pos]:
                                     if is_team:
-                                        sub_player_id = game_data["opp_numbers"].get(sub_player, -1)
+                                        sub_player_id = game_data["opp_numbers"].get(sub_player, None)
                                     else:
-                                        sub_player_id = game_data["team_numbers"].get(sub_player, -1)
+                                        sub_player_id = game_data["team_numbers"].get(sub_player, None)
                                     scoring_play["opp_on_ice"].append(sub_player_id)
 
                             if " Wrist," in description_string:
@@ -22403,22 +22389,22 @@ def get_html_play_data(scoring_plays, player_data, og_game_id, is_home, game_dat
 
                             if len(player_numbers) > 1:
                                 if is_team:
-                                    assist_1 = game_data["team_numbers"].get(player_numbers[1], -1)
+                                    assist_1 = game_data["team_numbers"].get(player_numbers[1], None)
                                 else:
-                                    assist_1 = game_data["opp_numbers"].get(player_numbers[1], -1)
+                                    assist_1 = game_data["opp_numbers"].get(player_numbers[1], None)
 
                                 if len(player_numbers) == 3:
                                     if is_team:
-                                        assist_2 = game_data["team_numbers"].get(player_numbers[2], -1)
+                                        assist_2 = game_data["team_numbers"].get(player_numbers[2], None)
                                     else:
-                                        assist_2 = game_data["opp_numbers"].get(player_numbers[2], -1)
+                                        assist_2 = game_data["opp_numbers"].get(player_numbers[2], None)
                             
                             if opp_on_ice["G"]:
                                 goalie_number = opp_on_ice["G"][0]
                                 if is_team:
-                                    goalie = game_data["opp_numbers"].get(goalie_number, -1)
+                                    goalie = game_data["opp_numbers"].get(goalie_number, None)
                                 else:
-                                    goalie = game_data["team_numbers"].get(goalie_number, -1)
+                                    goalie = game_data["team_numbers"].get(goalie_number, None)
                             
 
                             if scorer:
@@ -22464,31 +22450,17 @@ def get_html_play_data(scoring_plays, player_data, og_game_id, is_home, game_dat
                             if not player_numbers:
                                 player_numbers.append(re.search(r"\d+", description_string).group(0))
                             if is_team:
-                                if player_numbers[0] not in game_data["team_numbers"] and player_numbers[0] in game_data["opp_numbers"]:
-                                    shooter = game_data["opp_numbers"].get(player_numbers[0], -1)
-                                    is_team = not is_team
-                                    is_home_team = not is_home_team
-                                    team_id = game_data["team_id"] if team_id == game_data["opp_id"] else game_data["opp_id"]
-                                    scoring_play["team"]["id"] = team_id
-                                else:
-                                    shooter = game_data["team_numbers"].get(player_numbers[0], -1)
+                                shooter = game_data["team_numbers"].get(player_numbers[0], None)
                             else:
-                                if player_numbers[0] not in game_data["opp_numbers"] and player_numbers[0] in game_data["team_numbers"]:
-                                    shooter = game_data["team_numbers"].get(player_numbers[0], -1)
-                                    is_team = not is_team
-                                    is_home_team = not is_home_team
-                                    team_id = game_data["team_id"] if team_id == game_data["opp_id"] else game_data["opp_id"]
-                                    scoring_play["team"]["id"] = team_id
-                                else:
-                                    shooter = game_data["opp_numbers"].get(player_numbers[0], -1)
+                                shooter = game_data["opp_numbers"].get(player_numbers[0], None)
 
                             goalie = None
                             if opp_on_ice["G"]:
                                 goalie_number = opp_on_ice["G"][0]
                                 if is_team:
-                                    goalie = game_data["opp_numbers"].get(goalie_number, -1)
+                                    goalie = game_data["opp_numbers"].get(goalie_number, None)
                                 else:
-                                    goalie = game_data["team_numbers"].get(goalie_number, -1)
+                                    goalie = game_data["team_numbers"].get(goalie_number, None)
 
                             if shooter:
                                 scoring_play["players"].append({
@@ -22506,23 +22478,9 @@ def get_html_play_data(scoring_plays, player_data, og_game_id, is_home, game_dat
                                 })
                         elif real_event_type == "Missed Shot":
                             if is_team:
-                                if player_numbers[0] not in game_data["team_numbers"] and player_numbers[0] in game_data["opp_numbers"]:
-                                    shooter = game_data["opp_numbers"].get(player_numbers[0], -1)
-                                    is_team = not is_team
-                                    is_home_team = not is_home_team
-                                    team_id = game_data["team_id"] if team_id == game_data["opp_id"] else game_data["opp_id"]
-                                    scoring_play["team"]["id"] = team_id
-                                else:
-                                    shooter = game_data["team_numbers"].get(player_numbers[0], -1)
+                                shooter = game_data["team_numbers"].get(player_numbers[0], None)
                             else:
-                                if player_numbers[0] not in game_data["opp_numbers"] and player_numbers[0] in game_data["team_numbers"]:
-                                    shooter = game_data["team_numbers"].get(player_numbers[0], -1)
-                                    is_team = not is_team
-                                    is_home_team = not is_home_team
-                                    team_id = game_data["team_id"] if team_id == game_data["opp_id"] else game_data["opp_id"]
-                                    scoring_play["team"]["id"] = team_id
-                                else:
-                                    shooter = game_data["opp_numbers"].get(player_numbers[0], -1)
+                                shooter = game_data["opp_numbers"].get(player_numbers[0], None)
 
                             if shooter:
                                 scoring_play["players"].append({
@@ -22533,28 +22491,14 @@ def get_html_play_data(scoring_plays, player_data, og_game_id, is_home, game_dat
                                 })
                         elif real_event_type == "Blocked Shot":
                             if is_team:
-                                if player_numbers[0] not in game_data["team_numbers"] and player_numbers[0] in game_data["opp_numbers"]:
-                                    shooter = game_data["opp_numbers"].get(player_numbers[0], -1)
-                                    is_team = not is_team
-                                    is_home_team = not is_home_team
-                                    team_id = game_data["team_id"] if team_id == game_data["opp_id"] else game_data["opp_id"]
-                                    scoring_play["team"]["id"] = team_id
-                                else:
-                                    shooter = game_data["team_numbers"].get(player_numbers[0], -1)
+                                shooter = game_data["team_numbers"].get(player_numbers[0], None)
                             else:
-                                if player_numbers[0] not in game_data["opp_numbers"] and player_numbers[0] in game_data["team_numbers"]:
-                                    shooter = game_data["team_numbers"].get(player_numbers[0], -1)
-                                    is_team = not is_team
-                                    is_home_team = not is_home_team
-                                    team_id = game_data["team_id"] if team_id == game_data["opp_id"] else game_data["opp_id"]
-                                    scoring_play["team"]["id"] = team_id
-                                else:
-                                    shooter = game_data["opp_numbers"].get(player_numbers[0], -1)
+                                shooter = game_data["opp_numbers"].get(player_numbers[0], None)
                             
                             if is_team:
-                                blocker = game_data["opp_numbers"].get(player_numbers[1], -1)
+                                blocker = game_data["opp_numbers"].get(player_numbers[1], None)
                             else:
-                                blocker = game_data["team_numbers"].get(player_numbers[1], -1)
+                                blocker = game_data["team_numbers"].get(player_numbers[1], None)
 
                             if shooter:
                                 scoring_play["players"].append({
@@ -22578,28 +22522,14 @@ def get_html_play_data(scoring_plays, player_data, og_game_id, is_home, game_dat
                                 scoring_play["team"]["id"] = game_data["team_id"]
                         elif real_event_type == "Hit":
                             if is_team:
-                                if player_numbers[0] not in game_data["team_numbers"] and player_numbers[0] in game_data["opp_numbers"]:
-                                    hitter = game_data["opp_numbers"].get(player_numbers[0], -1)
-                                    is_team = not is_team
-                                    is_home_team = not is_home_team
-                                    team_id = game_data["team_id"] if team_id == game_data["opp_id"] else game_data["opp_id"]
-                                    scoring_play["team"]["id"] = team_id
-                                else:
-                                    hitter = game_data["team_numbers"].get(player_numbers[0], -1)
+                                hitter = game_data["team_numbers"].get(player_numbers[0], None)
                             else:
-                                if player_numbers[0] not in game_data["opp_numbers"] and player_numbers[0] in game_data["team_numbers"]:
-                                    hitter = game_data["team_numbers"].get(player_numbers[0], -1)
-                                    is_team = not is_team
-                                    is_home_team = not is_home_team
-                                    team_id = game_data["team_id"] if team_id == game_data["opp_id"] else game_data["opp_id"]
-                                    scoring_play["team"]["id"] = team_id
-                                else:
-                                    hitter = game_data["opp_numbers"].get(player_numbers[0], -1)
+                                hitter = game_data["opp_numbers"].get(player_numbers[0], None)
                             
                             if is_team:
-                                hittee = game_data["opp_numbers"].get(player_numbers[1], -1)
+                                hittee = game_data["opp_numbers"].get(player_numbers[1], None)
                             else:
-                                hittee = game_data["team_numbers"].get(player_numbers[1], -1)
+                                hittee = game_data["team_numbers"].get(player_numbers[1], None)
 
                             if hitter:
                                 scoring_play["players"].append({
@@ -22617,23 +22547,9 @@ def get_html_play_data(scoring_plays, player_data, og_game_id, is_home, game_dat
                                 })
                         elif real_event_type == "Takeaway" or real_event_type == "Giveaway":
                             if is_team:
-                                if player_numbers[0] not in game_data["team_numbers"] and player_numbers[0] in game_data["opp_numbers"]:
-                                    player = game_data["opp_numbers"].get(player_numbers[0], -1)
-                                    is_team = not is_team
-                                    is_home_team = not is_home_team
-                                    team_id = game_data["team_id"] if team_id == game_data["opp_id"] else game_data["opp_id"]
-                                    scoring_play["team"]["id"] = team_id
-                                else:
-                                    player = game_data["team_numbers"].get(player_numbers[0], -1)
+                                player = game_data["team_numbers"].get(player_numbers[0], None)
                             else:
-                                if player_numbers[0] not in game_data["opp_numbers"] and player_numbers[0] in game_data["team_numbers"]:
-                                    player = game_data["team_numbers"].get(player_numbers[0], -1)
-                                    is_team = not is_team
-                                    is_home_team = not is_home_team
-                                    team_id = game_data["team_id"] if team_id == game_data["opp_id"] else game_data["opp_id"]
-                                    scoring_play["team"]["id"] = team_id
-                                else:
-                                    player = game_data["opp_numbers"].get(player_numbers[0], -1)
+                                player = game_data["opp_numbers"].get(player_numbers[0], None)
 
                             if player:
                                 scoring_play["players"].append({
@@ -22644,28 +22560,14 @@ def get_html_play_data(scoring_plays, player_data, og_game_id, is_home, game_dat
                                 })
                         elif real_event_type == "Faceoff":
                             if is_home:
-                                if player_numbers[1] not in game_data["team_numbers"] and player_numbers[1] in game_data["opp_numbers"]:
-                                    home_player = game_data["opp_numbers"].get(player_numbers[1], -1)
-                                    is_team = not is_team
-                                    is_home_team = not is_home_team
-                                    team_id = game_data["team_id"] if team_id == game_data["opp_id"] else game_data["opp_id"]
-                                    scoring_play["team"]["id"] = team_id
-                                else:
-                                    home_player = game_data["team_numbers"].get(player_numbers[1], -1)
+                                home_player = game_data["team_numbers"].get(player_numbers[1], None)
                             else:
-                                if player_numbers[1] not in game_data["opp_numbers"] and player_numbers[1] in game_data["team_numbers"]:
-                                    home_player = game_data["team_numbers"].get(player_numbers[1], -1)
-                                    is_team = not is_team
-                                    is_home_team = not is_home_team
-                                    team_id = game_data["team_id"] if team_id == game_data["opp_id"] else game_data["opp_id"]
-                                    scoring_play["team"]["id"] = team_id
-                                else:
-                                    home_player = game_data["opp_numbers"].get(player_numbers[1], -1)
+                                home_player = game_data["opp_numbers"].get(player_numbers[1], None)
                             
                             if not is_home:
-                                away_player = game_data["team_numbers"].get(player_numbers[0], -1)
+                                away_player = game_data["team_numbers"].get(player_numbers[0], None)
                             else:
-                                away_player = game_data["opp_numbers"].get(player_numbers[0], -1)
+                                away_player = game_data["opp_numbers"].get(player_numbers[0], None)
 
                             winner = home_player if is_home_team else away_player
                             loser = away_player if is_home_team else home_player
@@ -22688,31 +22590,17 @@ def get_html_play_data(scoring_plays, player_data, og_game_id, is_home, game_dat
                             penalty_player = None
                             if player_numbers:
                                 if is_team:
-                                    if player_numbers[0] not in game_data["team_numbers"] and player_numbers[0] in game_data["opp_numbers"]:
-                                        penalty_player = game_data["opp_numbers"].get(player_numbers[0], -1)
-                                        is_team = not is_team
-                                        is_home_team = not is_home_team
-                                        team_id = game_data["team_id"] if team_id == game_data["opp_id"] else game_data["opp_id"]
-                                        scoring_play["team"]["id"] = team_id
-                                    else:
-                                        penalty_player = game_data["team_numbers"].get(player_numbers[0], -1)
+                                    penalty_player = game_data["team_numbers"].get(player_numbers[0], None)
                                 else:
-                                    if player_numbers[0] not in game_data["opp_numbers"] and player_numbers[0] in game_data["team_numbers"]:
-                                        penalty_player = game_data["team_numbers"].get(player_numbers[0], -1)
-                                        is_team = not is_team
-                                        is_home_team = not is_home_team
-                                        team_id = game_data["team_id"] if team_id == game_data["opp_id"] else game_data["opp_id"]
-                                        scoring_play["team"]["id"] = team_id
-                                    else:
-                                        penalty_player = game_data["opp_numbers"].get(player_numbers[0], -1)
+                                    penalty_player = game_data["opp_numbers"].get(player_numbers[0], None)
                             drew_by = None
                             if len(player_numbers) > 1 and "Drawn By:" in description_string:
                                 if is_team:
                                     if player_numbers[len(player_numbers) - 1] in game_data["opp_numbers"]:
-                                        drew_by = game_data["opp_numbers"].get(player_numbers[len(player_numbers) - 1], -1)
+                                        drew_by = game_data["opp_numbers"].get(player_numbers[len(player_numbers) - 1], None)
                                 else:
                                     if player_numbers[len(player_numbers) - 1] in game_data["team_numbers"]:
-                                        drew_by = game_data["team_numbers"].get(player_numbers[len(player_numbers) - 1], -1)
+                                        drew_by = game_data["team_numbers"].get(player_numbers[len(player_numbers) - 1], None)
                             
                             if penalty_player:
                                 scoring_play["players"].append({
@@ -22770,17 +22658,17 @@ def get_html_play_data(scoring_plays, player_data, og_game_id, is_home, game_dat
                             for pos in team_on_ice:
                                 for sub_player in team_on_ice[pos]:
                                     if is_team:
-                                        sub_player_id = game_data["team_numbers"].get(sub_player, -1)
+                                        sub_player_id = game_data["team_numbers"].get(sub_player, None)
                                     else:
-                                        sub_player_id = game_data["opp_numbers"].get(sub_player, -1)
+                                        sub_player_id = game_data["opp_numbers"].get(sub_player, None)
                                     scoring_play["team_on_ice"].append(sub_player_id)
                             scoring_play["opp_on_ice"] = []
                             for pos in opp_on_ice:
                                 for sub_player in opp_on_ice[pos]:
                                     if is_team:
-                                        sub_player_id = game_data["opp_numbers"].get(sub_player, -1)
+                                        sub_player_id = game_data["opp_numbers"].get(sub_player, None)
                                     else:
-                                        sub_player_id = game_data["team_numbers"].get(sub_player, -1)
+                                        sub_player_id = game_data["team_numbers"].get(sub_player, None)
                                     scoring_play["opp_on_ice"].append(sub_player_id)
 
                             if real_event_type == "Blocked Shot":
@@ -23043,23 +22931,9 @@ def get_old_html_play_data(scoring_plays, player_data, og_game_id, is_home, game
 
             if real_event_type == "Goal":
                 if is_team:
-                    if player_numbers[0] not in game_data["team_numbers"] and player_numbers[0] in game_data["opp_numbers"]:
-                        scorer = game_data["opp_numbers"].get(player_numbers[0], -1)
-                        is_team = not is_team
-                        is_home_team = not is_home_team
-                        team_id = game_data["team_id"] if team_id == game_data["opp_id"] else game_data["opp_id"]
-                        scoring_play["team"]["id"] = team_id
-                    else:
-                        scorer = game_data["team_numbers"].get(player_numbers[0], -1)
+                    scorer = game_data["team_numbers"].get(player_numbers[0], None)
                 else:
-                    if player_numbers[0] not in game_data["opp_numbers"] and player_numbers[0] in game_data["team_numbers"]:
-                        scorer = game_data["team_numbers"].get(player_numbers[0], -1)
-                        is_team = not is_team
-                        is_home_team = not is_home_team
-                        team_id = game_data["team_id"] if team_id == game_data["opp_id"] else game_data["opp_id"]
-                        scoring_play["team"]["id"] = team_id
-                    else:
-                        scorer = game_data["opp_numbers"].get(player_numbers[0], -1)
+                    scorer = game_data["opp_numbers"].get(player_numbers[0], None)
                 
                 if is_home_team:
                     home_goals += 1
@@ -23075,15 +22949,15 @@ def get_old_html_play_data(scoring_plays, player_data, og_game_id, is_home, game
 
                 if len(player_numbers) > 1:
                     if is_team:
-                        assist_1 = game_data["team_numbers"].get(player_numbers[1], -1)
+                        assist_1 = game_data["team_numbers"].get(player_numbers[1], None)
                     else:
-                        assist_1 = game_data["opp_numbers"].get(player_numbers[1], -1)
+                        assist_1 = game_data["opp_numbers"].get(player_numbers[1], None)
 
                     if len(player_numbers) == 3:
                         if is_team:
-                            assist_2 = game_data["team_numbers"].get(player_numbers[2], -1)
+                            assist_2 = game_data["team_numbers"].get(player_numbers[2], None)
                         else:
-                            assist_2 = game_data["opp_numbers"].get(player_numbers[2], -1)
+                            assist_2 = game_data["opp_numbers"].get(player_numbers[2], None)
                 
                 team_on_ice = get_on_ice_2(event[8], game_data["team_numbers"] if is_team else game_data["opp_numbers"], game_data["team_goalies"] if is_team else game_data["opp_goalies"])
                 opp_on_ice = get_on_ice_2(event[10], game_data["opp_numbers"] if is_team else game_data["team_numbers"], game_data["opp_goalies"] if is_team else game_data["team_goalies"])
@@ -23092,25 +22966,25 @@ def get_old_html_play_data(scoring_plays, player_data, og_game_id, is_home, game
                 for pos in team_on_ice:
                     for sub_player in team_on_ice[pos]:
                         if is_team:
-                            sub_player_id = game_data["team_numbers"].get(sub_player, -1)
+                            sub_player_id = game_data["team_numbers"].get(sub_player, None)
                         else:
-                            sub_player_id = game_data["opp_numbers"].get(sub_player, -1)
+                            sub_player_id = game_data["opp_numbers"].get(sub_player, None)
                         scoring_play["team_on_ice"].append(sub_player_id)
                 scoring_play["opp_on_ice"] = []
                 for pos in opp_on_ice:
                     for sub_player in opp_on_ice[pos]:
                         if is_team:
-                            sub_player_id = game_data["opp_numbers"].get(sub_player, -1)
+                            sub_player_id = game_data["opp_numbers"].get(sub_player, None)
                         else:
-                            sub_player_id = game_data["team_numbers"].get(sub_player, -1)
+                            sub_player_id = game_data["team_numbers"].get(sub_player, None)
                         scoring_play["opp_on_ice"].append(sub_player_id)
                 
                 if opp_on_ice["G"]:
                     goalie_number = opp_on_ice["G"][0]
                     if is_team:
-                        goalie = game_data["opp_numbers"].get(goalie_number, -1)
+                        goalie = game_data["opp_numbers"].get(goalie_number, None)
                     else:
-                        goalie = game_data["team_numbers"].get(goalie_number, -1)
+                        goalie = game_data["team_numbers"].get(goalie_number, None)
 
                 team_on_ice_num = len(scoring_play["team_on_ice"])
                 if team_on_ice_num  > 6:
@@ -23169,23 +23043,9 @@ def get_old_html_play_data(scoring_plays, player_data, og_game_id, is_home, game
                 if not player_numbers:
                     player_numbers.append(re.search(r"\d+", description_string).group(0))
                 if is_team:
-                    if player_numbers[0] not in game_data["team_numbers"] and player_numbers[0] in game_data["opp_numbers"]:
-                        shooter = game_data["opp_numbers"].get(player_numbers[0], -1)
-                        is_team = not is_team
-                        is_home_team = not is_home_team
-                        team_id = game_data["team_id"] if team_id == game_data["opp_id"] else game_data["opp_id"]
-                        scoring_play["team"]["id"] = team_id
-                    else:
-                        shooter = game_data["team_numbers"].get(player_numbers[0], -1)
+                    shooter = game_data["team_numbers"].get(player_numbers[0], None)
                 else:
-                    if player_numbers[0] not in game_data["opp_numbers"] and player_numbers[0] in game_data["team_numbers"]:
-                        shooter = game_data["team_numbers"].get(player_numbers[0], -1)
-                        is_team = not is_team
-                        is_home_team = not is_home_team
-                        team_id = game_data["team_id"] if team_id == game_data["opp_id"] else game_data["opp_id"]
-                        scoring_play["team"]["id"] = team_id
-                    else:
-                        shooter = game_data["opp_numbers"].get(player_numbers[0], -1)                    
+                    shooter = game_data["opp_numbers"].get(player_numbers[0], None)                    
 
                 if shooter:
                     scoring_play["players"].append({
@@ -23196,23 +23056,9 @@ def get_old_html_play_data(scoring_plays, player_data, og_game_id, is_home, game
                     })
             elif real_event_type == "Missed Shot":
                 if is_team:
-                    if player_numbers[0] not in game_data["team_numbers"] and player_numbers[0] in game_data["opp_numbers"]:
-                        shooter = game_data["opp_numbers"].get(player_numbers[0], -1)
-                        is_team = not is_team
-                        is_home_team = not is_home_team
-                        team_id = game_data["team_id"] if team_id == game_data["opp_id"] else game_data["opp_id"]
-                        scoring_play["team"]["id"] = team_id
-                    else:
-                        shooter = game_data["team_numbers"].get(player_numbers[0], -1)
+                    shooter = game_data["team_numbers"].get(player_numbers[0], None)
                 else:
-                    if player_numbers[0] not in game_data["opp_numbers"] and player_numbers[0] in game_data["team_numbers"]:
-                        shooter = game_data["team_numbers"].get(player_numbers[0], -1)
-                        is_team = not is_team
-                        is_home_team = not is_home_team
-                        team_id = game_data["team_id"] if team_id == game_data["opp_id"] else game_data["opp_id"]
-                        scoring_play["team"]["id"] = team_id
-                    else:
-                        shooter = game_data["opp_numbers"].get(player_numbers[0], -1)
+                    shooter = game_data["opp_numbers"].get(player_numbers[0], None)
 
                 if shooter:
                     scoring_play["players"].append({
@@ -23223,23 +23069,9 @@ def get_old_html_play_data(scoring_plays, player_data, og_game_id, is_home, game
                     })
             elif real_event_type == "Blocked Shot":
                 if is_team:
-                    if player_numbers[0] not in game_data["team_numbers"] and player_numbers[0] in game_data["opp_numbers"]:
-                        blocker = game_data["opp_numbers"].get(player_numbers[0], -1)
-                        is_team = not is_team
-                        is_home_team = not is_home_team
-                        team_id = game_data["team_id"] if team_id == game_data["opp_id"] else game_data["opp_id"]
-                        scoring_play["team"]["id"] = team_id
-                    else:
-                        blocker = game_data["team_numbers"].get(player_numbers[0], -1)
+                    blocker = game_data["team_numbers"].get(player_numbers[0], None)
                 else:
-                    if player_numbers[0] not in game_data["opp_numbers"] and player_numbers[0] in game_data["team_numbers"]:
-                        blocker = game_data["team_numbers"].get(player_numbers[0], -1)
-                        is_team = not is_team
-                        is_home_team = not is_home_team
-                        team_id = game_data["team_id"] if team_id == game_data["opp_id"] else game_data["opp_id"]
-                        scoring_play["team"]["id"] = team_id
-                    else:
-                        blocker = game_data["opp_numbers"].get(player_numbers[0], -1)
+                    blocker = game_data["opp_numbers"].get(player_numbers[0], None)
 
                 if blocker:
                     scoring_play["players"].append({
@@ -23255,23 +23087,9 @@ def get_old_html_play_data(scoring_plays, player_data, og_game_id, is_home, game
                     scoring_play["team"]["id"] = game_data["team_id"]
             elif real_event_type == "Hit":
                 if is_team:
-                    if player_numbers[0] not in game_data["team_numbers"] and player_numbers[0] in game_data["opp_numbers"]:
-                        hitter = game_data["opp_numbers"].get(player_numbers[0], -1)
-                        is_team = not is_team
-                        is_home_team = not is_home_team
-                        team_id = game_data["team_id"] if team_id == game_data["opp_id"] else game_data["opp_id"]
-                        scoring_play["team"]["id"] = team_id
-                    else:
-                        hitter = game_data["team_numbers"].get(player_numbers[0], -1)
+                    hitter = game_data["team_numbers"].get(player_numbers[0], None)
                 else:
-                    if player_numbers[0] not in game_data["opp_numbers"] and player_numbers[0] in game_data["team_numbers"]:
-                        hitter = game_data["team_numbers"].get(player_numbers[0], -1)
-                        is_team = not is_team
-                        is_home_team = not is_home_team
-                        team_id = game_data["team_id"] if team_id == game_data["opp_id"] else game_data["opp_id"]
-                        scoring_play["team"]["id"] = team_id
-                    else:
-                        hitter = game_data["opp_numbers"].get(player_numbers[0], -1)
+                    hitter = game_data["opp_numbers"].get(player_numbers[0], None)
 
                 if hitter:
                     scoring_play["players"].append({
@@ -23282,23 +23100,9 @@ def get_old_html_play_data(scoring_plays, player_data, og_game_id, is_home, game
                     })
             elif real_event_type == "Takeaway" or real_event_type == "Giveaway":
                 if is_team:
-                    if player_numbers[0] not in game_data["team_numbers"] and player_numbers[0] in game_data["opp_numbers"]:
-                        player = game_data["opp_numbers"].get(player_numbers[0], -1)
-                        is_team = not is_team
-                        is_home_team = not is_home_team
-                        team_id = game_data["team_id"] if team_id == game_data["opp_id"] else game_data["opp_id"]
-                        scoring_play["team"]["id"] = team_id
-                    else:
-                        player = game_data["team_numbers"].get(player_numbers[0], -1)
+                    player = game_data["team_numbers"].get(player_numbers[0], None)
                 else:
-                    if player_numbers[0] not in game_data["opp_numbers"] and player_numbers[0] in game_data["team_numbers"]:
-                        player = game_data["team_numbers"].get(player_numbers[0], -1)
-                        is_team = not is_team
-                        is_home_team = not is_home_team
-                        team_id = game_data["team_id"] if team_id == game_data["opp_id"] else game_data["opp_id"]
-                        scoring_play["team"]["id"] = team_id
-                    else:
-                        player = game_data["opp_numbers"].get(player_numbers[0], -1)
+                    player = game_data["opp_numbers"].get(player_numbers[0], None)
 
                 if player:
                     scoring_play["players"].append({
@@ -23309,28 +23113,14 @@ def get_old_html_play_data(scoring_plays, player_data, og_game_id, is_home, game
                     })
             elif real_event_type == "Faceoff":
                 if is_home:
-                    if player_numbers[1] not in game_data["team_numbers"] and player_numbers[1] in game_data["opp_numbers"]:
-                        home_player = game_data["opp_numbers"].get(player_numbers[1], -1)
-                        is_team = not is_team
-                        is_home_team = not is_home_team
-                        team_id = game_data["team_id"] if team_id == game_data["opp_id"] else game_data["opp_id"]
-                        scoring_play["team"]["id"] = team_id
-                    else:
-                        home_player = game_data["team_numbers"].get(player_numbers[1], -1)
+                    home_player = game_data["team_numbers"].get(player_numbers[1], None)
                 else:
-                    if player_numbers[1] not in game_data["opp_numbers"] and player_numbers[1] in game_data["team_numbers"]:
-                        home_player = game_data["team_numbers"].get(player_numbers[1], -1)
-                        is_team = not is_team
-                        is_home_team = not is_home_team
-                        team_id = game_data["team_id"] if team_id == game_data["opp_id"] else game_data["opp_id"]
-                        scoring_play["team"]["id"] = team_id
-                    else:
-                        home_player = game_data["opp_numbers"].get(player_numbers[1], -1)
+                    home_player = game_data["opp_numbers"].get(player_numbers[1], None)
                 
                 if not is_home:
-                    away_player = game_data["team_numbers"].get(player_numbers[0], -1)
+                    away_player = game_data["team_numbers"].get(player_numbers[0], None)
                 else:
-                    away_player = game_data["opp_numbers"].get(player_numbers[0], -1)
+                    away_player = game_data["opp_numbers"].get(player_numbers[0], None)
 
                 winner = home_player if is_home_team else away_player
                 loser = away_player if is_home_team else home_player
@@ -23353,23 +23143,9 @@ def get_old_html_play_data(scoring_plays, player_data, og_game_id, is_home, game
                 penalty_player = None
                 if player_numbers:
                     if is_team:
-                        if player_numbers[0] not in game_data["team_numbers"] and player_numbers[0] in game_data["opp_numbers"]:
-                            penalty_player = game_data["opp_numbers"].get(player_numbers[0], -1)
-                            is_team = not is_team
-                            is_home_team = not is_home_team
-                            team_id = game_data["team_id"] if team_id == game_data["opp_id"] else game_data["opp_id"]
-                            scoring_play["team"]["id"] = team_id
-                        else:
-                            penalty_player = game_data["team_numbers"].get(player_numbers[0], -1)
+                        penalty_player = game_data["team_numbers"].get(player_numbers[0], None)
                     else:
-                        if player_numbers[0] not in game_data["opp_numbers"] and player_numbers[0] in game_data["team_numbers"]:
-                            penalty_player = game_data["team_numbers"].get(player_numbers[0], -1)
-                            is_team = not is_team
-                            is_home_team = not is_home_team
-                            team_id = game_data["team_id"] if team_id == game_data["opp_id"] else game_data["opp_id"]
-                            scoring_play["team"]["id"] = team_id
-                        else:
-                            penalty_player = game_data["opp_numbers"].get(player_numbers[0], -1)
+                        penalty_player = game_data["opp_numbers"].get(player_numbers[0], None)
                 
                 if penalty_player:
                     scoring_play["players"].append({
@@ -23568,23 +23344,9 @@ def get_older_html_play_data(scoring_plays, player_data, og_game_id, is_home, ga
             scorer_name = re.sub(r"\(\d+\)", "", str(columns[4].text_content()).strip().upper()).strip()
 
             if is_team:
-                if scorer_name not in game_data["team_names"] and scorer_name in game_data["opp_names"]:
-                    scorer = game_data["opp_names"].get(scorer_name, -1)
-                    is_team = not is_team
-                    is_home_team = not is_home_team
-                    team_id = game_data["team_id"] if team_id == game_data["opp_id"] else game_data["opp_id"]
-                    scoring_play["team"]["id"] = team_id
-                else:
-                    scorer = game_data["team_names"].get(scorer_name, -1)
+                scorer = game_data["team_names"].get(scorer_name, None)
             else:
-                if scorer_name not in game_data["opp_names"] and scorer_name in game_data["team_names"]:
-                    scorer = game_data["team_names"].get(scorer_name, -1)
-                    is_team = not is_team
-                    is_home_team = not is_home_team
-                    team_id = game_data["team_id"] if team_id == game_data["opp_id"] else game_data["opp_id"]
-                    scoring_play["team"]["id"] = team_id
-                else:
-                    scorer = game_data["opp_names"].get(scorer_name, -1)
+                scorer = game_data["opp_names"].get(scorer_name, None)
             
             team_on_ice = get_on_ice_3(str(columns[8].text_content()).strip() if is_home_team else str(columns[7].text_content()).strip(), game_data["team_numbers"] if is_team else game_data["opp_numbers"], game_data["team_goalies"] if is_team else game_data["opp_goalies"])
             opp_on_ice = get_on_ice_3(str(columns[7].text_content()).strip() if is_home_team else str(columns[8].text_content()).strip(), game_data["opp_numbers"] if is_team else game_data["team_numbers"], game_data["opp_goalies"] if is_team else game_data["team_goalies"])
@@ -23593,17 +23355,17 @@ def get_older_html_play_data(scoring_plays, player_data, og_game_id, is_home, ga
             for pos in team_on_ice:
                 for sub_player in team_on_ice[pos]:
                     if is_team:
-                        sub_player_id = game_data["team_numbers"].get(sub_player, -1)
+                        sub_player_id = game_data["team_numbers"].get(sub_player, None)
                     else:
-                        sub_player_id = game_data["opp_numbers"].get(sub_player, -1)
+                        sub_player_id = game_data["opp_numbers"].get(sub_player, None)
                     scoring_play["team_on_ice"].append(sub_player_id)
             scoring_play["opp_on_ice"] = []
             for pos in opp_on_ice:
                 for sub_player in opp_on_ice[pos]:
                     if is_team:
-                        sub_player_id = game_data["opp_numbers"].get(sub_player, -1)
+                        sub_player_id = game_data["opp_numbers"].get(sub_player, None)
                     else:
-                        sub_player_id = game_data["team_numbers"].get(sub_player, -1)
+                        sub_player_id = game_data["team_numbers"].get(sub_player, None)
                     scoring_play["opp_on_ice"].append(sub_player_id)
             
             team_on_ice_num = len(scoring_play["team_on_ice"])
@@ -23637,22 +23399,22 @@ def get_older_html_play_data(scoring_plays, player_data, og_game_id, is_home, ga
 
             if assist_1_name and assist_1_name != "UNASSISTED":
                 if is_team:
-                    assist_1 = game_data["team_names"].get(assist_1_name, -1)
+                    assist_1 = game_data["team_names"].get(assist_1_name, None)
                 else:
-                    assist_1 = game_data["opp_names"].get(assist_1_name, -1)
+                    assist_1 = game_data["opp_names"].get(assist_1_name, None)
 
                 if assist_2_name and assist_2_name != "UNASSISTED":
                     if is_team:
-                        assist_2 = game_data["team_names"].get(assist_2_name, -1)
+                        assist_2 = game_data["team_names"].get(assist_2_name, None)
                     else:
-                        assist_2 = game_data["opp_names"].get(assist_2_name, -1)
+                        assist_2 = game_data["opp_names"].get(assist_2_name, None)
             
             if opp_on_ice["G"]:
                 goalie_number = opp_on_ice["G"][0]
                 if is_team:
-                    goalie = game_data["opp_numbers"].get(goalie_number, -1)
+                    goalie = game_data["opp_numbers"].get(goalie_number, None)
                 else:
-                    goalie = game_data["team_numbers"].get(goalie_number, -1)
+                    goalie = game_data["team_numbers"].get(goalie_number, None)
             
 
             if scorer:
@@ -23756,23 +23518,9 @@ def get_older_html_play_data(scoring_plays, player_data, og_game_id, is_home, ga
                 player_number = str(penalty[3].text_content()).strip()
 
                 if is_team:
-                    if player_number not in game_data["team_numbers"] and player_number in game_data["opp_numbers"]:
-                        penalty_player = game_data["opp_numbers"].get(player_number, -1)
-                        is_team = not is_team
-                        is_home_team = not is_home_team
-                        team_id = game_data["team_id"] if team_id == game_data["opp_id"] else game_data["opp_id"]
-                        scoring_play["team"]["id"] = team_id
-                    else:
-                        penalty_player = game_data["team_numbers"].get(player_number, -1)
+                    penalty_player = game_data["team_numbers"].get(player_number, None)
                 else:
-                    if player_number not in game_data["opp_numbers"] and player_number in game_data["team_numbers"]:
-                        penalty_player = game_data["team_numbers"].get(player_number, -1)
-                        is_team = not is_team
-                        is_home_team = not is_home_team
-                        team_id = game_data["team_id"] if team_id == game_data["opp_id"] else game_data["opp_id"]
-                        scoring_play["team"]["id"] = team_id
-                    else:
-                        penalty_player = game_data["opp_numbers"].get(player_number, -1)
+                    penalty_player = game_data["opp_numbers"].get(player_number, None)
                 
                 if penalty_player:
                     scoring_play["players"].append({
@@ -24132,7 +23880,7 @@ def get_on_ice(table, numbers, goalies):
     for i in range(0, len(table_text), 2):
         number = table_text[i]
         position = table_text[i + 1]
-        player_id = numbers.get(number, -1)
+        player_id = numbers.get(number, None)
         if player_id:
             if player_id in goalies or position == "G":
                 on_ice_map["G"].append(number)
@@ -24149,7 +23897,7 @@ def get_on_ice_2(on_ice_str, numbers, goalies):
     match = re.search(r"^\d+ ", on_ice_str)
     if match:
         number = match.group(0).strip()
-        player_id = numbers.get(number, -1)
+        player_id = numbers.get(number, None)
         if player_id:
             if player_id in goalies:
                 on_ice_map["G"].append(number)
@@ -24159,7 +23907,7 @@ def get_on_ice_2(on_ice_str, numbers, goalies):
         match = re.finditer(r",\W+(\d+)", on_ice_str)
         for m in match:
             number = m.group(1).strip()
-            player_id = numbers.get(number, -1)
+            player_id = numbers.get(number, None)
             if player_id:
                 if player_id in goalies:
                     on_ice_map["G"].append(number)
@@ -24177,7 +23925,7 @@ def get_on_ice_3(on_ice_str, numbers, goalies):
     match = re.finditer(r"(\d+)", on_ice_str)
     for m in match:
         number = m.group(1).strip()
-        player_id = numbers.get(number, -1)
+        player_id = numbers.get(number, None)
         if player_id:
             if player_id in goalies:
                 on_ice_map["G"].append(number)
