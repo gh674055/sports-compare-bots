@@ -132,7 +132,7 @@ all_days_re = r"(?:" + "|".join([day + "-?" for day in all_days]) + r")+"
 
 string_stats = ["Tm"]
 
-skater_header_indv_shift_stats = ["CF", "CA", "CFPer", "CF/60M", "CA/60M", "FF", "FA", "FFPer", "SF/60M", "SA/60M", "oiOppS", "oiTmS", "SFPer", "FF/60M", "FA/60M", "offIGF", "offIGA", "offICF", "offICA", "offIFF", "offIFA", "offISF", "offISA", "offIGF/60M", "offICA/60M", "offIFF/60M" , "offISA/60M", "offIGA/60M", "offICF/60M", "offIFA/60M", "offISF/60M", "offIG/60M", "offIC/60M", "offIF/60M", "offIS/60M", "GFRel/60M", "CFRel/60M", "FFRel/60M", "SFRel/60M", "GARel/60M", "CARel/60M", "FARel/60M", "SARel/60M", "CFRelPer", "FFRelPer", "GFRelPer", "SFRelPer", "oiSPer", "oiSVPer", "PDO", "oiSRelPer", "oiSVRelPer", "PDORel", "OZ%", "TSA", "TSM", "TSB", "TSA/GP", "TSA/60M", "TSB/GP", "TSB/60M", "TSM/GP", "TSM/60M", "TS%", "SThr%", "offITOI", "offITOI/GP", "TltTOI", "TtlTOI/GP", "TOI%"]
+skater_header_indv_shift_stats = ["CF", "CA", "CFPer", "CF/60M", "CA/60M", "FF", "FA", "FFPer", "SF/60M", "SA/60M", "oiOppS", "oiTmS", "SFPer", "FF/60M", "FA/60M", "offIGF", "offIGA", "TmGF", "OppGF", "TtlGF", "GFDiff", "offICF", "offICA", "TmCF", "OppCF", "TtlCF", "CFDiff", "offIFF", "offIFA", "TmFF", "OppFF", "TtlFF", "FFDiff", "offISF", "offISA", "TmSF", "OppSF", "TtlSF", "SFDiff", "offIGF/60M", "offICA/60M", "offIFF/60M" , "offISA/60M", "offIGA/60M", "offICF/60M", "offIFA/60M", "offISF/60M", "offIG/60M", "offIC/60M", "offIF/60M", "offIS/60M", "GFRel/60M", "CFRel/60M", "FFRel/60M", "SFRel/60M", "GARel/60M", "CARel/60M", "FARel/60M", "SARel/60M", "CFRelPer", "FFRelPer", "GFRelPer", "SFRelPer", "oiSPer", "oiSVPer", "PDO", "oiSRelPer", "oiSVRelPer", "PDORel", "OZ%", "TSA", "TSM", "TSB", "TSA/GP", "TSA/60M", "TSB/GP", "TSB/60M", "TSM/GP", "TSM/60M", "TS%", "SThr%", "offITOI", "offITOI/GP", "TltTOI", "TtlTOI/GP", "TOI%"]
 goalie_header_indv_shift_stats = []
 
 headers = {
@@ -1416,7 +1416,7 @@ headers = {
             }
         },
         "offIGF" : {
-            "positive" : False,
+            "positive" : True,
             "display" : False,
             "type" : "Relative",
             "valid_since" : {
@@ -1433,7 +1433,16 @@ headers = {
                 "game" : 2009
             }
         },
-        "offICF" : {
+        "TmGF" : {
+            "positive" : True,
+            "display" : False,
+            "type" : "Relative",
+            "valid_since" : {
+                "season" : 2009,
+                "game" : 2009
+            }
+        },
+        "OppGF" : {
             "positive" : False,
             "display" : False,
             "type" : "Relative",
@@ -1442,7 +1451,70 @@ headers = {
                 "game" : 2009
             }
         },
+        "TtlGF" : {
+            "positive" : True,
+            "display" : False,
+            "type" : "Relative",
+            "valid_since" : {
+                "season" : 2009,
+                "game" : 2009
+            }
+        },
+        "GFDiff" : {
+            "positive" : False,
+            "display" : False,
+            "type" : "Relative",
+            "valid_since" : {
+                "season" : 2009,
+                "game" : 2009
+            }
+        },
+        "offICF" : {
+            "positive" : True,
+            "display" : False,
+            "type" : "Relative",
+            "valid_since" : {
+                "season" : 2009,
+                "game" : 2009
+            }
+        },
         "offICA" : {
+            "positive" : False,
+            "display" : False,
+            "type" : "Relative",
+            "valid_since" : {
+                "season" : 2009,
+                "game" : 2009
+            }
+        },
+        "TmCF" : {
+            "positive" : True,
+            "display" : False,
+            "type" : "Relative",
+            "valid_since" : {
+                "season" : 2009,
+                "game" : 2009
+            }
+        },
+        "OppCF" : {
+            "positive" : False,
+            "display" : False,
+            "type" : "Relative",
+            "valid_since" : {
+                "season" : 2009,
+                "game" : 2009
+            }
+        },
+        "TtlCF" : {
+            "positive" : True,
+            "display" : False,
+            "type" : "Relative",
+            "valid_since" : {
+                "season" : 2009,
+                "game" : 2009
+            }
+        },
+        "CFDiff" : {
             "positive" : False,
             "display" : False,
             "type" : "Relative",
@@ -1461,7 +1533,43 @@ headers = {
             }
         },
         "offIFA" : {
+            "positive" : False,
+            "display" : False,
+            "type" : "Relative",
+            "valid_since" : {
+                "season" : 2009,
+                "game" : 2009
+            }
+        },
+        "TmFF" : {
             "positive" : True,
+            "display" : False,
+            "type" : "Relative",
+            "valid_since" : {
+                "season" : 2009,
+                "game" : 2009
+            }
+        },
+        "OppFF" : {
+            "positive" : False,
+            "display" : False,
+            "type" : "Relative",
+            "valid_since" : {
+                "season" : 2009,
+                "game" : 2009
+            }
+        },
+        "TtlFF" : {
+            "positive" : True,
+            "display" : False,
+            "type" : "Relative",
+            "valid_since" : {
+                "season" : 2009,
+                "game" : 2009
+            }
+        },
+        "FFDiff" : {
+            "positive" : False,
             "display" : False,
             "type" : "Relative",
             "valid_since" : {
@@ -1479,7 +1587,43 @@ headers = {
             }
         },
         "offISA" : {
+            "positive" : False,
+            "display" : False,
+            "type" : "Relative",
+            "valid_since" : {
+                "season" : 2009,
+                "game" : 2009
+            }
+        },
+        "TmSF" : {
             "positive" : True,
+            "display" : False,
+            "type" : "Relative",
+            "valid_since" : {
+                "season" : 2009,
+                "game" : 2009
+            }
+        },
+        "OppSF" : {
+            "positive" : False,
+            "display" : False,
+            "type" : "Relative",
+            "valid_since" : {
+                "season" : 2009,
+                "game" : 2009
+            }
+        },
+        "TtlSF" : {
+            "positive" : True,
+            "display" : False,
+            "type" : "Relative",
+            "valid_since" : {
+                "season" : 2009,
+                "game" : 2009
+            }
+        },
+        "SFDiff" : {
+            "positive" : False,
             "display" : False,
             "type" : "Relative",
             "valid_since" : {
@@ -5367,6 +5511,114 @@ headers = {
             "valid_since" : {
                 "season" : 2016,
                 "game" : 2016
+            }
+        },
+        "TmCF" : {
+            "positive" : True,
+            "display" : False,
+            "type" : "Advanced",
+            "valid_since" : {
+                "season" : 2009,
+                "game" : 2009
+            }
+        },
+        "OppCF" : {
+            "positive" : False,
+            "display" : False,
+            "type" : "Advanced",
+            "valid_since" : {
+                "season" : 2009,
+                "game" : 2009
+            }
+        },
+        "TtlCF" : {
+            "positive" : True,
+            "display" : False,
+            "type" : "Advanced",
+            "valid_since" : {
+                "season" : 2009,
+                "game" : 2009
+            }
+        },
+        "CFDiff" : {
+            "positive" : False,
+            "display" : False,
+            "type" : "Advanced",
+            "valid_since" : {
+                "season" : 2009,
+                "game" : 2009
+            }
+        },
+        "TmFF" : {
+            "positive" : True,
+            "display" : False,
+            "type" : "Advanced",
+            "valid_since" : {
+                "season" : 2009,
+                "game" : 2009
+            }
+        },
+        "OppFF" : {
+            "positive" : False,
+            "display" : False,
+            "type" : "Advanced",
+            "valid_since" : {
+                "season" : 2009,
+                "game" : 2009
+            }
+        },
+        "TtlFF" : {
+            "positive" : True,
+            "display" : False,
+            "type" : "Advanced",
+            "valid_since" : {
+                "season" : 2009,
+                "game" : 2009
+            }
+        },
+        "FFDiff" : {
+            "positive" : False,
+            "display" : False,
+            "type" : "Advanced",
+            "valid_since" : {
+                "season" : 2009,
+                "game" : 2009
+            }
+        },
+        "TmSF" : {
+            "positive" : True,
+            "display" : False,
+            "type" : "Advanced",
+            "valid_since" : {
+                "season" : 2009,
+                "game" : 2009
+            }
+        },
+        "OppSF" : {
+            "positive" : False,
+            "display" : False,
+            "type" : "Advanced",
+            "valid_since" : {
+                "season" : 2009,
+                "game" : 2009
+            }
+        },
+        "TtlSF" : {
+            "positive" : True,
+            "display" : False,
+            "type" : "Advanced",
+            "valid_since" : {
+                "season" : 2009,
+                "game" : 2009
+            }
+        },
+        "SFDiff" : {
+            "positive" : False,
+            "display" : False,
+            "type" : "Advanced",
+            "valid_since" : {
+                "season" : 2009,
+                "game" : 2009
             }
         },
         "GP/Yr" : {
@@ -10753,14 +11005,20 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                     extra_stats.add("show-stat-shft")
                                     extra_stats.add("show-stat-toi/shft")
                                     extra_stats.add("hide-table-relative")
+                                elif stat == "team-goal":
+                                    stat = "TmGF"
                                 elif stat == "team-shot":
                                     stat = "TmSF"
                                 elif stat == "team-shot-attempt":
                                     stat = "TmCF"
+                                elif stat == "opp-goal":
+                                    stat = "OppGF"
                                 elif stat == "opp-shot":
                                     stat = "OppSF"
                                 elif stat == "opp-shot-attempt":
                                     stat = "OppCF"
+                                elif stat == "total-goal":
+                                    stat = "TtlGF"
                                 elif stat == "total-shot":
                                     stat = "TtlSF"
                                 elif stat == "total-shot-attempt":
@@ -11095,7 +11353,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
 
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
                     
-                        last_matches = re.finditer(r"\b(no(?:t|n)?(?: |-))?(first|1st|last|this|past)?(?: ?(\S*) (starting-)?(game-)?(minute|second|min|toi|shots?-faced|shots?-against|goals?-allowed|team-shot-attempt|team-shot|opp-shot-attempt|opp-shot|total-shot-attempt|total-shot|save|total-shot|shot|period|shift|goal|assist|point)s?)\b", time_frame)
+                        last_matches = re.finditer(r"\b(no(?:t|n)?(?: |-))?(first|1st|last|this|past)?(?: ?(\S*) (starting-)?(game-)?(minute|second|min|toi|shots?-faced|shots?-against|goals?-allowed|team-shot-attempt|team-goal|team-shot|opp-shot-attempt|opp-goal|opp-shot|total-shot-attempt|total-goal|total-shot|save|total-shot|shot|period|shift|goal|assist|point)s?)\b", time_frame)
                         for last_match in last_matches:
                             compare_type = last_match.group(2)
                             time_unit = last_match.group(3)
@@ -11146,14 +11404,20 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 extra_stats.add("show-stat-shft")
                                 extra_stats.add("show-stat-toi/shft")
                                 extra_stats.add("hide-table-relative")
+                            elif qual_type == "team-goal":
+                                stat = "TmGF"
                             elif qual_type == "team-shot":
                                 stat = "TmSF"
                             elif qual_type == "team-shot-attempt":
                                 stat = "TmCF"
+                            elif qual_type == "opp-goal":
+                                stat = "OppGF"
                             elif qual_type == "opp-shot":
                                 stat = "OppSF"
                             elif qual_type == "opp-shot-attempt":
                                 stat = "OppCF"
+                            elif qual_type == "total-goal":
+                                stat = "TtlGF"
                             elif qual_type == "total-shot":
                                 stat = "TtlSF"
                             elif qual_type == "total-shot-attempt":
@@ -19720,25 +19984,26 @@ def determine_stat_value(player_game_info, all_events, qualifiers, og_row, playe
     all_faceoff_stats = ["OZ", "NZ", "DZ"]
     takeaway_stats = ["TK", "GV"]
     penalty_stats = ["PIM", "PEN", "PenDrawn", "NetPEN", "Minor", "Major", "Misconduct", "GameMisconduct", "Match", "Fight"]
-    oi_all_team_goals_stats = ["GF", "PlusMinus", "EVGF", "PPGF", "SHGF"]
-    oi_all_opp_goals_stats = ["GA", "PlusMinus", "EVGA", "PPGA", "SHGA"]
-    oi_all_team_shots_stats = ["CF", "TmCF", "TtlCF"]
-    oi_all_opp_shots_stats = ["CA", "OppCF", "TtlCF"]
-    oi_all_team_shots_og_stats = ["oiTmS", "TmSF", "TtlSF"]
-    oi_all_opp_shots_og_stats = ["oiOppS", "OppSF", "TtlSF"]
-    oi_all_team_unblocked_shots_stats = ["FF", "TmFF", "TtlFF"]
-    oi_all_opp_unblocked_shots_stats = ["FA", "OppFF", "TtlFF"]
-    all_team_goals_stats = ["offIGF"]
-    all_opp_goals_stats = ["offIGA"]
-    all_team_shots_stats = ["offICF", "TmCF", "TtlCF",]
-    all_opp_shots_stats = ["offICA", "OppCF", "TtlCF",]
-    all_team_shots_og_stats = ["offISF", "TmSF", "TmSF"]
-    all_opp_shots_og_stats = ["offISA", "OppSF", "TmSF"]
-    all_team_unblocked_shots_stats = ["offIFF", "TmFF", "TtlFF"]
-    all_opp_unblocked_shots_stats = ["offIFA", "OppFF", "TtlFF"]
+    oi_all_team_goals_stats = ["GF", "PlusMinus", "EVGF", "PPGF", "SHGF", "TmGF", "TtlGF", "GFDiff"]
+    oi_all_opp_goals_stats = ["GA", "PlusMinus", "EVGA", "PPGA", "SHGA", "OppGF", "TtlGF", "GFDiff"]
+    oi_all_team_shots_stats = ["CF", "TmCF", "TtlCF", "CFDiff"]
+    oi_all_opp_shots_stats = ["CA", "OppCF", "TtlCF", "CFDiff"]
+    oi_all_team_shots_og_stats = ["oiTmS", "TmSF", "TtlSF", "SFDiff"]
+    oi_all_opp_shots_og_stats = ["oiOppS", "OppSF", "TtlSF", "SFDiff"]
+    oi_all_team_unblocked_shots_stats = ["FF", "TmFF", "TtlFF", "FFDiff"]
+    oi_all_opp_unblocked_shots_stats = ["FA", "OppFF", "TtlFF", "FFDiff"]
+    all_team_goals_stats = ["offIGF", "TmGF", "TtlGF", "GFDiff"]
+    all_opp_goals_stats = ["offIGA", "OppGF", "TtlGF", "GFDiff"]
+    all_team_shots_stats = ["offICF", "TmCF", "TtlCF", "CFDiff"]
+    all_opp_shots_stats = ["offICA", "OppCF", "TtlCF", "CFDiff"]
+    all_team_shots_og_stats = ["offISF", "TmSF", "TtlSF", "SFDiff"]
+    all_opp_shots_og_stats = ["offISA", "OppSF", "TtlSF", "SFDiff"]
+    all_team_unblocked_shots_stats = ["offIFF", "TmFF", "TtlFF", "FFDiff"]
+    all_opp_unblocked_shots_stats = ["offIFA", "OppFF", "TtlFF", "FFDiff"]
     goal_against_stats = ["GA", "SA", "EVGA", "EVSH", "PPGA", "PPSH", "SHGA", "SHSH"]
     save_against_stats = ["SV", "SA", "EVSH", "PPSH", "SHGA"]
     missed_shot_against_stats = ["SV", "SA"]
+    goalie_goal_against_stats = ["GF"]
     toi_stats = ["TOI", "EVTOI", "PPTOI", "SHTOI"]
     event_stats = ["Event"]
 
@@ -19894,6 +20159,26 @@ def determine_stat_value(player_game_info, all_events, qualifiers, og_row, playe
                                 row["Fight"] += 1
                         else:
                             row["PenDrawn"] += 1
+            if stat in oi_all_team_goals_stats:
+                if goal_event["event_name"] == "oi_all_team_goals":
+                    if determine_event_match(goal_event, qualifiers, player_game_info, og_row):
+                        row["GF"] += 1
+                        row["TmGF"] += 1
+                        strength = determine_strength(player_game_info, goal_event["period"], goal_event["periodTime"], goal_event)
+                        if strength:
+                            row[strength + "GF"] += 1
+                            if strength == "EV" or strength != "PP":
+                                row["PlusMinus"] += 1
+            if stat in oi_all_opp_goals_stats:
+                if goal_event["event_name"] == "oi_all_opp_goals":
+                    if determine_event_match(goal_event, qualifiers, player_game_info, og_row):
+                        row["GA"] += 1
+                        row["OppGF"] += 1
+                        strength = determine_strength(player_game_info, goal_event["period"], goal_event["periodTime"], goal_event)
+                        if strength:
+                            row[strength + "GA"] += 1
+                            if strength == "EV" or strength != "PP":
+                                row["PlusMinus"] -= 1
         else:                
             if stat in goal_against_stats:
                 if goal_event["event_name"] == "goal_against":
@@ -19927,25 +20212,11 @@ def determine_stat_value(player_game_info, all_events, qualifiers, og_row, playe
                         if determine_event_match(goal_event, qualifiers, player_game_info, og_row):
                             row["SV"] += 1
                             row["SA"] += 1
+            if stat in goalie_goal_against_stats:
+                if goal_event["event_name"] == "oi_all_team_goals":
+                    if determine_event_match(goal_event, qualifiers, player_game_info, og_row):
+                        row["GF"] += 1
 
-        if stat in oi_all_team_goals_stats:
-            if goal_event["event_name"] == "oi_all_team_goals":
-                if determine_event_match(goal_event, qualifiers, player_game_info, og_row):
-                    row["GF"] += 1
-                    strength = determine_strength(player_game_info, goal_event["period"], goal_event["periodTime"], goal_event)
-                    if strength:
-                        row[strength + "GF"] += 1
-                        if strength == "EV" or strength != "PP":
-                            row["PlusMinus"] += 1
-        if stat in oi_all_opp_goals_stats:
-            if goal_event["event_name"] == "oi_all_opp_goals":
-                if determine_event_match(goal_event, qualifiers, player_game_info, og_row):
-                    row["GA"] += 1
-                    strength = determine_strength(player_game_info, goal_event["period"], goal_event["periodTime"], goal_event)
-                    if strength:
-                        row[strength + "GA"] += 1
-                        if strength == "EV" or strength != "PP":
-                            row["PlusMinus"] -= 1
         if stat in oi_all_team_shots_og_stats:
             if goal_event["event_name"] == "oi_all_team_shots_og":
                 if determine_event_match(goal_event, qualifiers, player_game_info, og_row):
@@ -24413,6 +24684,7 @@ def perform_metadata_quals(qualifiers, player_type, row, player_game_info, nhl_p
         for goal_event in player_game_info["oi_all_team_goals"]:
             if perform_metadata_qual("oi_all_team_goals", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], skip_career_events=skip_career_events):
                 row["GF"] += 1
+                row["TmGF"] += 1
                 strength = determine_strength(player_game_info, goal_event["period"], goal_event["periodTime"], goal_event)
                 if strength:
                     row[strength + "GF"] += 1
@@ -24421,6 +24693,7 @@ def perform_metadata_quals(qualifiers, player_type, row, player_game_info, nhl_p
         for goal_event in player_game_info["oi_all_opp_goals"]:
             if perform_metadata_qual("oi_all_opp_goals", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], skip_career_events=skip_career_events):
                 row["GA"] += 1
+                row["OppGF"] += 1
                 strength = determine_strength(player_game_info, goal_event["period"], goal_event["periodTime"], goal_event)
                 if strength:
                     row[strength + "GA"] += 1
@@ -26850,46 +27123,37 @@ def clear_row_attrs(row, player_type):
     row["CA"] = 0
     row["FF"] = 0
     row["FA"] = 0
+    row["TmGF"] = 0
+    row["OppGF"] = 0
     row["TmSF"] = 0
     row["OppSF"] = 0
-    row["TtlSF"] = 0
     row["TmCF"] = 0
     row["OppCF"] = 0
-    row["TtlCF"] = 0
     row["TmFF"] = 0
     row["OppFF"] = 0
-    row["TtlFF"] = 0
 
     if player_type["da_type"]["type"] == "Skater":
         row["G"] = 0
         row["A"] = 0
-        row["P"] = 0
         row["A1"] = 0
         row["A2"] = 0
-        row["P1"] = 0
 
         row["PlusMinus"] = 0
 
         row["EVG"] = 0
         row["EVA"] = 0
-        row["EVP"] = 0
         row["EVA1"] = 0
         row["EVA2"] = 0
-        row["EVP1"] = 0
 
         row["PPG"] = 0
         row["PPA"] = 0
-        row["PPP"] = 0
         row["PPA1"] = 0
         row["PPA2"] = 0
-        row["PPP1"] = 0
 
         row["SHG"] = 0
         row["SHA"] = 0
-        row["SHP"] = 0
         row["SHA1"] = 0
         row["SHA2"] = 0
-        row["SHP1"] = 0
 
         row["S"] = 0
         row["WristS"] = 0
@@ -26927,13 +27191,11 @@ def clear_row_attrs(row, player_type):
         row["NZ"] = 0
         row["DZ"] = 0
 
-        row["HAT"] = 0
         row["GWG"] = 0
         row["OTG"] = 0
         row["1stG"] = 0
         row["ENG"] = 0
         row["ENA"] = 0
-        row["ENP"] = 0
 
         row["HIT"] = 0
         row["HITTkn"] = 0
@@ -26943,7 +27205,6 @@ def clear_row_attrs(row, player_type):
         row["PIM"] = 0
         row["PEN"] = 0
         row["PenDrawn"] = 0
-        row["NetPEN"] = 0
         row["Minor"] = 0
         row["Major"] = 0
         row["Match"] = 0
@@ -26992,9 +27253,15 @@ def calculate_row_attrs(row, player_type):
 
         row["NetPEN"] = row["PenDrawn"] - row["PEN"]
 
+        row["TtlGF"] = row["TmGF"] + row["OppGF"]
         row["TtlSF"] = row["TmSF"] + row["OppSF"]
         row["TtlCF"] = row["TmCF"] + row["OppCF"]
         row["TtlFF"] = row["TmFF"] + row["OppFF"]
+
+        row["GFDiff"] = row["TmGF"] - row["OppGF"]
+        row["SFDiff"] = row["TmSF"] - row["OppSF"]
+        row["CFDiff"] = row["TmCF"] - row["OppCF"]
+        row["FFDiff"] = row["TmFF"] - row["OppFF"]
 
 def handle_awards(player_page, player_data, player_type, time_frame, years_to_skip, years_to_skip_champ, all_rows):
     all_star_div = player_page.find("div", id="leaderboard_honors")
@@ -37285,13 +37552,13 @@ def is_invalid_stat(stat, player_type, data, count_inconsistent, player_data):
     if "YearStart" in data and stat in headers[player_type["da_type"]["type"]] and data["YearStart"]:
         if player_type["da_type"]["type"] == "Skater":
             header_shift_stats = ["Shft", "Shft/GP", "TOI/Shft"]
-            report_2_stats = ["PenDrawn", "NetPEN", "PostBar", "CF", "CA", "CFPer", "CF/60M", "CA/60M", "FF", "FA", "FFPer", "SF/60M", "SA/60M", "oiOppS", "oiTmS", "SFPer", "CFRelPer", "FFRelPer", "SFRelPer", "FF/60M", "FA/60M", "offICF", "offICA", "offIFF", "offIFA", "offISF", "offISA", "offICA/60M", "offIFF/60M" , "offISA/60M", "offICF/60M", "offIFA/60M", "offISF/60M", "offIC/60M", "offIF/60M", "offIS/60M", "CFRel/60M", "FFRel/60M", "SFRel/60M", "CARel/60M", "FARel/60M", "SARel/60M", "OZ%", "oiSPer", "oiSVPer", "PDO", "oiSRelPer", "oiSVRelPer", "PDORel", "TSA", "TSM", "TSB", "TSA/GP", "TSB/GP", "TSM/GP", "TS%", "SThr%"]
+            report_2_stats = ["PenDrawn", "NetPEN", "PostBar", "CF", "CA", "CFPer", "CF/60M", "CA/60M", "FF", "FA", "FFPer", "SF/60M", "SA/60M", "oiOppS", "oiTmS", "SFPer", "CFRelPer", "FFRelPer", "SFRelPer", "FF/60M", "FA/60M", "offICF", "offICA", "TmCF", "OppCF", "TmCF", "CFDiff", "offIFF", "offIFA", "TmSF", "OppSF", "TmSF", "SFDiff", "offISF", "offISA", "TmSF", "OppSF", "TmSF", "SFDiff", "offICA/60M", "offIFF/60M" , "offISA/60M", "offICF/60M", "offIFA/60M", "offISF/60M", "offIC/60M", "offIF/60M", "offIS/60M", "CFRel/60M", "FFRel/60M", "SFRel/60M", "CARel/60M", "FARel/60M", "SARel/60M", "OZ%", "oiSPer", "oiSVPer", "PDO", "oiSRelPer", "oiSVRelPer", "PDORel", "TSA", "TSM", "TSB", "TSA/GP", "TSB/GP", "TSM/GP", "TS%", "SThr%"]
             report_3_stats = ["TK", "GV", "TK/GV", "HIT", "HITTkn", "BLK"]
             strength_stats = ["PEN", "PEN/GP", "PIM", "PIM/GP", "OZFO%", "DZFO%", "OZFO/60M", "DZFO/60M", "OZFOW/60M", "DZFOW/60M", "FOW/GP", "FO/GP", "FOW", "FO", "FO%"]
             shot_on_stats = ["S", "S%", "S/GP"]
             shot_on_on_stats = ["S", "S%", "S/GP"]
             report_stats = ["OZFO%", "DZFO%", "OZFO/60M", "DZFO/60M",  "OZFOW/60M", "DZFOW/60M","FOW/GP", "FO/GP", "FOW", "FO", "FO%", "S", "S%", "S/GP"]
-            game_report_stats = ["PlusMinus", "GF", "EVGF", "PPGF", "SHGF", "GA", "EVGA", "PPGA", "SHGA", "IGP", "EVIGP", "IPP", "EVIPP", "GFPer", "EVGF%", "GF/60M", "GA/60M", "GFRelPer", "offIGF", "offIGA", "offIGF/60M", "offIGA/60M", "GFRel/60M", "offIG/60M", "GARel/60M"]
+            game_report_stats = ["PlusMinus", "GF", "EVGF", "PPGF", "SHGF", "GA", "EVGA", "PPGA", "SHGA", "IGP", "EVIGP", "IPP", "EVIPP", "GFPer", "EVGF%", "GF/60M", "GA/60M", "GFRelPer", "offIGF", "offIGA", "TmGF", "OppGF", "TmGF", "GFDiff", "offIGF/60M", "offIGA/60M", "GFRel/60M", "offIG/60M", "GARel/60M"]
             header_indv_shift_stats = skater_header_indv_shift_stats
         else:
             header_shift_stats = []
