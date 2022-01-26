@@ -1277,12 +1277,24 @@ headers = {
                 "game" : 1927
             }
         },
+        "IBB%" : {
+            "positive" : True,
+            "display" : False,
+            "round" : "percent",
+            "type" : "Per Game/Advanced"
+        },
         "HBP": {
             "positive" : True,
             "valid_since" : {
                 "season" : 1887,
                 "game" : 1887
             }
+        },
+        "HBP%" : {
+            "positive" : True,
+            "display" : False,
+            "round" : "percent",
+            "type" : "Per Game/Advanced"
         },
         "ROE": {
             "positive" : True,
@@ -3336,6 +3348,12 @@ headers = {
                 "game" : 1927
             }
         },
+        "IBB%" : {
+            "positive" : False,
+            "display" : False,
+            "round" : "percent",
+            "type" : "Per Game/Advanced"
+        },
         "SO%" : {
             "positive" : True,
             "round" : "percent",
@@ -3409,6 +3427,12 @@ headers = {
                 "season" : 1887,
                 "game" : 1887
             }
+        },
+        "HBP%" : {
+            "positive" : False,
+            "display" : False,
+            "round" : "percent",
+            "type" : "Per Game/Advanced"
         },
         "ROE": {
             "positive" : False,
@@ -4524,6 +4548,8 @@ formulas = {
         "BB-SO%" : "(BB - SO) / PA",
         "TTO%" : "(HR + BB + SO) / PA",
         "BB/SO" : "BB / SO",
+        "IBB%" : "IBB / PA",
+        "HBP%" : "HBP / PA",
         "H/162" : "H / (G / 162)",
         "2B/162" : "2B / (G / 162)",
         "3B/162" : "3B / (G / 162)",
@@ -4657,6 +4683,8 @@ formulas = {
         "SO-BB%" : "(SO - BB) / BF",
         "SO9" : "(9 * SO) / (IP)",
         "SO%" : "SO / BF",
+        "IBB%" : "IBB / PA",
+        "HBP%" : "HBP / PA",
         "SV%" : "SV / (SV + BSv)",
         "QS%" : "QS / GS",
         "CG%" : "CG / GS",
