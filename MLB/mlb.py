@@ -3366,6 +3366,17 @@ headers = {
                 "game" : 1927
             }
         },
+        "SO%" : {
+            "positive" : True,
+            "round" : "percent",
+            "type" : "Per Game/Advanced",
+            "display-value" : "K%"
+        },
+        "BB%" : {
+            "positive" : False,
+            "round" : "percent",
+            "type" : "Per Game/Advanced"
+        },
         "HBP": {
             "positive" : False,
             "valid_since" : {
@@ -3382,17 +3393,6 @@ headers = {
                 "season" : 1887,
                 "game" : 1887
             }
-        },
-        "SO%" : {
-            "positive" : True,
-            "round" : "percent",
-            "type" : "Per Game/Advanced",
-            "display-value" : "K%"
-        },
-        "BB%" : {
-            "positive" : False,
-            "round" : "percent",
-            "type" : "Per Game/Advanced"
         },
         "SO-BB%": {
             "positive" : True,
