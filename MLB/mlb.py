@@ -9809,7 +9809,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 qualifier_obj["values"]["start_val"] = qualifier_obj["values"]["start_val"].replace(microsecond=0)
                                 qualifier_obj["values"]["end_val"] = qualifier_obj["values"]["end_val"].replace(microsecond=0)
                             elif re.match(all_event_types_re, qualifier):
-                                qualifier_obj["values"] = re.split(r"(?<!\\)\-", qualifier_str)
+                                qualifier_obj["values"] = [qualifier_str]
                                 qual_type = "Exact Event Type"
                                 extra_stats.add("current-stats")
                             elif qualifier.startswith("m:") or qualifier.startswith("month:") or re.match(all_months_re, qualifier):
