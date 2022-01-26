@@ -1281,7 +1281,11 @@ headers = {
             "positive" : True,
             "display" : False,
             "round" : "percent",
-            "type" : "Per Game/Advanced"
+            "type" : "Per Game/Advanced",
+            "valid_since" : {
+                "season" : 1927,
+                "game" : 1927
+            }
         },
         "HBP": {
             "positive" : True,
@@ -1294,7 +1298,11 @@ headers = {
             "positive" : True,
             "display" : False,
             "round" : "percent",
-            "type" : "Per Game/Advanced"
+            "type" : "Per Game/Advanced",
+            "valid_since" : {
+                "season" : 1887,
+                "game" : 1887
+            }
         },
         "ROE": {
             "positive" : True,
@@ -3352,7 +3360,11 @@ headers = {
             "positive" : False,
             "display" : False,
             "round" : "percent",
-            "type" : "Per Game/Advanced"
+            "type" : "Per Game/Advanced",
+            "valid_since" : {
+                "season" : 1927,
+                "game" : 1927
+            }
         },
         "SO%" : {
             "positive" : True,
@@ -3432,7 +3444,10 @@ headers = {
             "positive" : False,
             "display" : False,
             "round" : "percent",
-            "type" : "Per Game/Advanced"
+            "type" : "Per Game/Advanced",
+            "valid_since" : {
+                "season" : 1887,
+                "game" : 1887
         },
         "ROE": {
             "positive" : False,
