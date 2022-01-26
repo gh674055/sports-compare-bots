@@ -25135,7 +25135,7 @@ def perform_metadata_qual(event_name, goal_event, qualifiers, player_game_info, 
         for qual_object in qualifiers["Event Description"]:
             has_match = False
             for stadium in qual_object["values"]:
-                if stadium in event_type.lower().replace("_", ""):
+                if stadium in event_type.lower():
                     has_match = True
                     break
             if qual_object["negate"]:
@@ -25153,7 +25153,7 @@ def perform_metadata_qual(event_name, goal_event, qualifiers, player_game_info, 
         for qual_object in qualifiers["Exact Event Description"]:
             has_match = False
             for stadium in qual_object["values"]:
-                if stadium == event_type.lower().replace("_", ""):
+                if stadium == event_type.lower():
                     has_match = True
                     break
             if qual_object["negate"]:
