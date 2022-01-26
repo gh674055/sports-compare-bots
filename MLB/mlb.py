@@ -3356,16 +3356,6 @@ headers = {
                 "game" : 1927
             }
         },
-        "IBB%" : {
-            "positive" : False,
-            "display" : False,
-            "round" : "percent",
-            "type" : "Per Game/Advanced",
-            "valid_since" : {
-                "season" : 1927,
-                "game" : 1927
-            }
-        },
         "SO%" : {
             "positive" : True,
             "round" : "percent",
@@ -3448,6 +3438,17 @@ headers = {
             "valid_since" : {
                 "season" : 1887,
                 "game" : 1887
+            }
+        },
+        "IBB%" : {
+            "positive" : False,
+            "display" : False,
+            "round" : "percent",
+            "type" : "Per Game/Advanced",
+            "valid_since" : {
+                "season" : 1927,
+                "game" : 1927
+            }
         },
         "ROE": {
             "positive" : False,
