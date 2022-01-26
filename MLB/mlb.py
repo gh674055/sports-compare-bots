@@ -3373,26 +3373,6 @@ headers = {
             "type" : "Per Game/Advanced",
             "display-value" : "K-BB%"
         },
-        "HBP%" : {
-            "positive" : False,
-            "display" : False,
-            "round" : "percent",
-            "type" : "Per Game/Advanced",
-            "valid_since" : {
-                "season" : 1887,
-                "game" : 1887
-            }
-        },
-        "IBB%" : {
-            "positive" : False,
-            "display" : False,
-            "round" : "percent",
-            "type" : "Per Game/Advanced",
-            "valid_since" : {
-                "season" : 1927,
-                "game" : 1927
-            }
-        },
         "HR%" : {
             "positive" : False,
             "round" : "percent",
@@ -3418,6 +3398,26 @@ headers = {
                 "season-np" : 1916,
                 "season" : 1901,
                 "game" : 1901
+            }
+        },
+        "IBB%" : {
+            "positive" : False,
+            "display" : False,
+            "round" : "percent",
+            "type" : "Per Game/Advanced",
+            "valid_since" : {
+                "season" : 1927,
+                "game" : 1927
+            }
+        },
+        "HBP%" : {
+            "positive" : False,
+            "display" : False,
+            "round" : "percent",
+            "type" : "Per Game/Advanced",
+            "valid_since" : {
+                "season" : 1887,
+                "game" : 1887
             }
         },
         "SB%": {
