@@ -18330,7 +18330,6 @@ def get_nhl_schedule(player_data, all_rows, qualifiers):
                 raise Exception("Unknown NHL team " + team_name)
             
             team_id = team_ids[team_name]
-            da_dates = []
 
             scheudle_url = nhl_team_schedule_url_format.format(team_id, year_str) + "&hydrate=linescore(all),"
             if "National Game" in qualifiers or "Any National Game" in qualifiers or "USA National Game" in qualifiers or "Any USA National Game" in qualifiers or "CAN National Game" in qualifiers or "Any CAN National Game" in qualifiers or "TV Network" in qualifiers or "Raw TV Network" in qualifiers or "National TV Network" in qualifiers or "National Raw TV Network" in qualifiers or "Any National TV Network" in qualifiers or "Any National Raw TV Network" in qualifiers:
@@ -18340,243 +18339,208 @@ def get_nhl_schedule(player_data, all_rows, qualifiers):
 
             request = urllib.request.Request(scheudle_url, headers=request_headers)
             data = url_request_json(request)
+            
+            game_number = 1
 
             for game in data["dates"]:
-                da_dates.append(game)
+                for game_data in game["games"]:
+                    linescore_game_data = game_data
+                    game_type = int(str(game_data["gamePk"])[4:6])
+                    if game_type != 2 and game_type != 3:
+                        continue
 
-            # for month_int in range(1, 13):
-            #     min_date = datetime.date(season, month_int, 1)
-            #     max_date = datetime.date(season, month_int, calendar.monthrange(season, month_int)[1])
+                    if game_data["season"] != year_str:
+                        continue
 
-            #     scheudle_url = nhl_team_schedule_url_format.format(team_id, urllib.parse.quote_plus(str(min_date)), urllib.parse.quote_plus(str(max_date))) + "&hydrate=linescore(all),"
-            #     if "National Game" in qualifiers or "Any National Game" in qualifiers or "USA National Game" in qualifiers or "Any USA National Game" in qualifiers or "CAN National Game" in qualifiers or "Any CAN National Game" in qualifiers or "TV Network" in qualifiers or "Raw TV Network" in qualifiers or "National TV Network" in qualifiers or "National Raw TV Network" in qualifiers or "Any National TV Network" in qualifiers or "Any National Raw TV Network" in qualifiers:
-            #         scheudle_url += "broadcasts(all),"
+                    if not "linescore" in linescore_game_data:
+                        linescore_game_data = url_request_json(urllib.request.Request("https://statsapi.web.nhl.com" + linescore_game_data["link"], headers=request_headers))["liveData"]
 
-            #     scheudle_url = scheudle_url[:-1]
+                    row_data = {}
+                    row_data["NHLGameLink"] = game_data["gamePk"]
+                    row_data["Arena"] = unidecode.unidecode(game_data["venue"]["name"]).strip()
 
-            #     request = urllib.request.Request(scheudle_url, headers=request_headers)
-            #     data = url_request_json(request)
+                    row_data["StartTime"] = dateutil.parser.parse(game_data["gameDate"])
 
-            #     for game in data["dates"]:
-            #         da_dates.append(game)
-                
-            #     min_date = datetime.date(season + 1, month_int, 1)
-            #     max_date = datetime.date(season + 1, month_int, calendar.monthrange(season + 1, month_int)[1])
+                    row_data["Year"] = season
 
-            #     scheudle_url = nhl_team_schedule_url_format.format(team_id, urllib.parse.quote_plus(str(min_date)), urllib.parse.quote_plus(str(max_date))) + "&hydrate=linescore(all),"
-            #     if "National Game" in qualifiers or "Any National Game" in qualifiers or "USA National Game" in qualifiers or "Any USA National Game" in qualifiers or "CAN National Game" in qualifiers or "Any CAN National Game" in qualifiers or "TV Network" in qualifiers or "Raw TV Network" in qualifiers or "National TV Network" in qualifiers or "National Raw TV Network" in qualifiers or "Any National TV Network" in qualifiers or "Any National Raw TV Network" in qualifiers:
-            #         scheudle_url += "broadcasts(all),"
+                    is_home = game_data["teams"]["home"]["team"]["id"] == team_id
+                    if is_home:
+                        player_team_id = game_data["teams"]["home"]["team"]["id"]
+                        player_opp_id = game_data["teams"]["away"]["team"]["id"]
+                    else:
+                        player_team_id = game_data["teams"]["away"]["team"]["id"]
+                        player_opp_id = game_data["teams"]["home"]["team"]["id"]
 
-            #     scheudle_url = scheudle_url[:-1]
+                    if player_team_id in team_ids_reversed:
+                        parsed_team_name = team_ids_reversed[player_team_id]
 
-            #     request = urllib.request.Request(scheudle_url, headers=request_headers)
-            #     data = url_request_json(request)
-
-            #     for game in data["dates"]:
-            #         da_dates.append(game)
-
-            game_number = 1
-            da_dates = sorted(da_dates, key = lambda game: dateutil.parser.parse(game["games"][0]["gameDate"]))
-
-            for game in da_dates:
-                game_data = game["games"][0]
-                linescore_game_data = game_data
-                game_type = int(str(game_data["gamePk"])[4:6])
-                if game_type != 2 and game_type != 3:
-                    continue
-
-                if game_data["season"] != year_str:
-                    continue
-
-                if not "linescore" in linescore_game_data:
-                    linescore_game_data = url_request_json(urllib.request.Request("https://statsapi.web.nhl.com" + linescore_game_data["link"], headers=request_headers))["liveData"]
-
-                row_data = {}
-                row_data["NHLGameLink"] = game_data["gamePk"]
-                row_data["Arena"] = unidecode.unidecode(game_data["venue"]["name"]).strip()
-
-                row_data["StartTime"] = dateutil.parser.parse(game_data["gameDate"])
-
-                row_data["Year"] = season
-
-                is_home = game_data["teams"]["home"]["team"]["id"] == team_id
-                if is_home:
-                    player_team_id = game_data["teams"]["home"]["team"]["id"]
-                    player_opp_id = game_data["teams"]["away"]["team"]["id"]
-                else:
-                    player_team_id = game_data["teams"]["away"]["team"]["id"]
-                    player_opp_id = game_data["teams"]["home"]["team"]["id"]
-
-                if player_team_id in team_ids_reversed:
-                    parsed_team_name = team_ids_reversed[player_team_id]
-
-                    if parsed_team_name in team_name_info:
-                        for abbr in team_name_info[parsed_team_name]:
-                            if row_data["Year"] in team_name_info[parsed_team_name][abbr]:
-                                row_data["Tm"] = abbr
-                                break
-                    
-                    if "Tm" not in row_data:
                         if parsed_team_name in team_name_info:
                             for abbr in team_name_info[parsed_team_name]:
-                                row_data["Tm"] = abbr
+                                if row_data["Year"] in team_name_info[parsed_team_name][abbr]:
+                                    row_data["Tm"] = abbr
+                                    break
+                        
+                        if "Tm" not in row_data:
+                            if parsed_team_name in team_name_info:
+                                for abbr in team_name_info[parsed_team_name]:
+                                    row_data["Tm"] = abbr
 
-                if player_opp_id in team_ids_reversed:
-                    parsed_opp_name = team_ids_reversed[player_opp_id]
-                    
-                    if parsed_opp_name in team_name_info:
-                        for abbr in team_name_info[parsed_opp_name]:
-                            if row_data["Year"] in team_name_info[parsed_opp_name][abbr]:
-                                row_data["Opponent"] = abbr.lower()
-                                break
-                    
-                    if "Opponent" not in row_data:
+                    if player_opp_id in team_ids_reversed:
+                        parsed_opp_name = team_ids_reversed[player_opp_id]
+                        
                         if parsed_opp_name in team_name_info:
                             for abbr in team_name_info[parsed_opp_name]:
-                                row_data["Opponent"] = abbr.lower()
-                else:
-                    logger.info("Unknown opponent " + str(player_opp_id) + " for year " + str(row_data["Year"]) + ". Skipping game")
-                    continue
-                
-                if "Tm" not in row_data:
-                    raise Exception("Unknown team " + str(player_team_id) + " for year " + str(row_data["Year"]))
-                if "Opponent" not in row_data:
-                    raise Exception("Unknown team " + str(player_opp_id) + " for year " + str(row_data["Year"]))
-
-                row_data["TmGm"] = game_number
-                game_number += 1
-
-                national_networks_to_skip = ["NHLN", "NHLN-US", "NHLN-CA", "NHL.TV", "ESPN+"]
-
-                is_national = False
-                is_us_national = False
-                is_ca_national = False
-                is_any_national = False
-                is_us_any_national = False
-                is_ca_any_national = False
-                tv_networks = []
-                national_tv_networks = []
-                any_national_tv_networks = []
-                if "broadcasts" in game_data and game_data["broadcasts"]:
-                    for broadcast in game_data["broadcasts"]:
-                        call_sign = broadcast["name"].split(" ")[0]
-                            
-                        if broadcast["type"] == "national":
-                            is_any_national = True
-                            if broadcast["site"] == "nhlCA":
-                                is_ca_any_national = True
-                            else:
-                                is_us_any_national = True
-                            if call_sign not in national_networks_to_skip:
-                                is_national = True
-                                if broadcast["site"] == "nhlCA":
-                                    is_ca_national = True
-                                else:
-                                    is_us_national = True
-                                national_tv_networks.append(call_sign.lower())
-                            any_national_tv_networks.append(call_sign.lower())
-                        tv_networks.append(call_sign.lower())
+                                if row_data["Year"] in team_name_info[parsed_opp_name][abbr]:
+                                    row_data["Opponent"] = abbr.lower()
+                                    break
+                        
+                        if "Opponent" not in row_data:
+                            if parsed_opp_name in team_name_info:
+                                for abbr in team_name_info[parsed_opp_name]:
+                                    row_data["Opponent"] = abbr.lower()
+                    else:
+                        logger.info("Unknown opponent " + str(player_opp_id) + " for year " + str(row_data["Year"]) + ". Skipping game")
+                        continue
                     
-                    row_data["IsNational"] = is_national
-                    row_data["AnyIsNational"] = is_any_national
-                    row_data["IsUSNational"] = is_us_national
-                    row_data["AnyIsUSNational"] = is_us_any_national
-                    row_data["IsCANational"] = is_ca_national
-                    row_data["AnyIsCANational"] = is_ca_any_national
-                    row_data["TVNetworks"] = tv_networks
-                    row_data["NationalTVNetworks"] = national_tv_networks
-                    row_data["AnyNationalTVNetworks"] = any_national_tv_networks
+                    if "Tm" not in row_data:
+                        raise Exception("Unknown team " + str(player_team_id) + " for year " + str(row_data["Year"]))
+                    if "Opponent" not in row_data:
+                        raise Exception("Unknown team " + str(player_opp_id) + " for year " + str(row_data["Year"]))
 
-                is_final = game_data["status"]["abstractGameState"] == "Final"
-                is_home = game_data["teams"]["home"]["team"]["id"] == team_id
-                team_str = "home" if is_home else "away"
-                opp_team_str = "away" if is_home else "home"
+                    row_data["TmGm"] = game_number
+                    game_number += 1
 
-                row_data["Team Score"] = linescore_game_data["linescore"]["teams"][team_str]["goals"]
-                row_data["Opponent Score"] = linescore_game_data["linescore"]["teams"][opp_team_str]["goals"]
-                row_data["Team Goals"] = row_data["Team Score"]
-                row_data["Opponent Goals"] = row_data["Opponent Score"]
-                row_data["Per"] = len(linescore_game_data["linescore"]["periods"])
+                    national_networks_to_skip = ["NHLN", "NHLN-US", "NHLN-CA", "NHL.TV", "ESPN+"]
 
-                is_shootout = False
-                if "hasShootout" in linescore_game_data["linescore"] and linescore_game_data["linescore"]["hasShootout"]:
-                    is_shootout = True
-                    row_data["Per"] -= 1
-                    if linescore_game_data["linescore"]["shootoutInfo"][team_str]["scores"] > linescore_game_data["linescore"]["shootoutInfo"][opp_team_str]["scores"]:
-                        row_data["Team Goals"] -= 1
-                    else:
-                        row_data["Opponent Goals"] -= 1
-                is_ot = False
-                if not is_shootout and len(linescore_game_data["linescore"]["periods"]) > 3:
-                    is_ot = True
+                    is_national = False
+                    is_us_national = False
+                    is_ca_national = False
+                    is_any_national = False
+                    is_us_any_national = False
+                    is_ca_any_national = False
+                    tv_networks = []
+                    national_tv_networks = []
+                    any_national_tv_networks = []
+                    if "broadcasts" in game_data and game_data["broadcasts"]:
+                        for broadcast in game_data["broadcasts"]:
+                            call_sign = broadcast["name"].split(" ")[0]
+                                
+                            if broadcast["type"] == "national":
+                                is_any_national = True
+                                if broadcast["site"] == "nhlCA":
+                                    is_ca_any_national = True
+                                else:
+                                    is_us_any_national = True
+                                if call_sign not in national_networks_to_skip:
+                                    is_national = True
+                                    if broadcast["site"] == "nhlCA":
+                                        is_ca_national = True
+                                    else:
+                                        is_us_national = True
+                                    national_tv_networks.append(call_sign.lower())
+                                any_national_tv_networks.append(call_sign.lower())
+                            tv_networks.append(call_sign.lower())
+                        
+                        row_data["IsNational"] = is_national
+                        row_data["AnyIsNational"] = is_any_national
+                        row_data["IsUSNational"] = is_us_national
+                        row_data["AnyIsUSNational"] = is_us_any_national
+                        row_data["IsCANational"] = is_ca_national
+                        row_data["AnyIsCANational"] = is_ca_any_national
+                        row_data["TVNetworks"] = tv_networks
+                        row_data["NationalTVNetworks"] = national_tv_networks
+                        row_data["AnyNationalTVNetworks"] = any_national_tv_networks
 
-                if is_home:
-                    row_data["CurrTmWins"] = game_data["teams"]["home"]["leagueRecord"]["wins"]
-                    row_data["CurrTmLosses"] = game_data["teams"]["home"]["leagueRecord"]["losses"]
-                    row_data["CurrTmTies"] = 0
-                    row_data["CurrTmOTLosses"] = 0
-                    if "ot" in game_data["teams"]["home"]["leagueRecord"]:
-                        row_data["CurrTmOTLosses"] += game_data["teams"]["home"]["leagueRecord"]["ot"]
-                    elif "ties" in game_data["teams"]["home"]["leagueRecord"]:
-                        row_data["CurrTmTies"] = game_data["teams"]["home"]["leagueRecord"]["ties"]
+                    is_final = game_data["status"]["abstractGameState"] == "Final"
+                    is_home = game_data["teams"]["home"]["team"]["id"] == team_id
+                    team_str = "home" if is_home else "away"
+                    opp_team_str = "away" if is_home else "home"
 
-                    row_data["CurrOppWins"] = game_data["teams"]["away"]["leagueRecord"]["wins"]
-                    row_data["CurrOppLosses"] = game_data["teams"]["away"]["leagueRecord"]["losses"]
-                    row_data["CurrOppTies"] = 0
-                    row_data["CurrOppOTLosses"] = 0
-                    if "ot" in game_data["teams"]["away"]["leagueRecord"]:
-                        row_data["CurrOppOTLosses"] += game_data["teams"]["away"]["leagueRecord"]["ot"]
-                    elif "ties" in game_data["teams"]["away"]["leagueRecord"]:
-                        row_data["CurrOppTies"] = game_data["teams"]["away"]["leagueRecord"]["ties"]
-                else:
-                    row_data["CurrTmWins"] = game_data["teams"]["away"]["leagueRecord"]["wins"]
-                    row_data["CurrTmLosses"] = game_data["teams"]["away"]["leagueRecord"]["losses"]
-                    row_data["CurrTmTies"] = 0
-                    row_data["CurrTmOTLosses"] = 0
-                    if "ot" in game_data["teams"]["away"]["leagueRecord"]:
-                        row_data["CurrTmOTLosses"] += game_data["teams"]["away"]["leagueRecord"]["ot"]
-                    elif "ties" in game_data["teams"]["away"]["leagueRecord"]:
-                        row_data["CurrTmTies"] = game_data["teams"]["away"]["leagueRecord"]["ties"]
+                    row_data["Team Score"] = linescore_game_data["linescore"]["teams"][team_str]["goals"]
+                    row_data["Opponent Score"] = linescore_game_data["linescore"]["teams"][opp_team_str]["goals"]
+                    row_data["Team Goals"] = row_data["Team Score"]
+                    row_data["Opponent Goals"] = row_data["Opponent Score"]
+                    row_data["Per"] = len(linescore_game_data["linescore"]["periods"])
 
-                    row_data["CurrOppWins"] = game_data["teams"]["home"]["leagueRecord"]["wins"]
-                    row_data["CurrOppLosses"] = game_data["teams"]["home"]["leagueRecord"]["losses"]
-                    row_data["CurrOppTies"] = 0
-                    row_data["CurrOppOTLosses"] = 0
-                    if "ot" in game_data["teams"]["home"]["leagueRecord"]:
-                        row_data["CurrOppOTLosses"] += game_data["teams"]["home"]["leagueRecord"]["ot"]
-                    elif "ties" in game_data["teams"]["home"]["leagueRecord"]:
-                        row_data["CurrOppTies"] = game_data["teams"]["home"]["leagueRecord"]["ties"]
-
-                if is_final:
-                    if row_data["Team Score"] > row_data["Opponent Score"]:
-                        result_str = "W"
-                        row_data["CurrTmWins"] -= 1
-                        if is_ot or is_shootout:
-                            row_data["CurrOppOTLosses"] -= 1
+                    is_shootout = False
+                    if "hasShootout" in linescore_game_data["linescore"] and linescore_game_data["linescore"]["hasShootout"]:
+                        is_shootout = True
+                        row_data["Per"] -= 1
+                        if linescore_game_data["linescore"]["shootoutInfo"][team_str]["scores"] > linescore_game_data["linescore"]["shootoutInfo"][opp_team_str]["scores"]:
+                            row_data["Team Goals"] -= 1
                         else:
-                            row_data["CurrOppLosses"] -= 1
-                    elif row_data["Team Score"] < row_data["Opponent Score"]:
-                        result_str = "L"
-                        row_data["CurrOppWins"] -= 1
-                        if is_ot or is_shootout:
-                            row_data["CurrTmOTLosses"] -= 1
-                        else:
-                            row_data["CurrTmLosses"] -= 1
+                            row_data["Opponent Goals"] -= 1
+                    is_ot = False
+                    if not is_shootout and len(linescore_game_data["linescore"]["periods"]) > 3:
+                        is_ot = True
+
+                    if is_home:
+                        row_data["CurrTmWins"] = game_data["teams"]["home"]["leagueRecord"]["wins"]
+                        row_data["CurrTmLosses"] = game_data["teams"]["home"]["leagueRecord"]["losses"]
+                        row_data["CurrTmTies"] = 0
+                        row_data["CurrTmOTLosses"] = 0
+                        if "ot" in game_data["teams"]["home"]["leagueRecord"]:
+                            row_data["CurrTmOTLosses"] += game_data["teams"]["home"]["leagueRecord"]["ot"]
+                        elif "ties" in game_data["teams"]["home"]["leagueRecord"]:
+                            row_data["CurrTmTies"] = game_data["teams"]["home"]["leagueRecord"]["ties"]
+
+                        row_data["CurrOppWins"] = game_data["teams"]["away"]["leagueRecord"]["wins"]
+                        row_data["CurrOppLosses"] = game_data["teams"]["away"]["leagueRecord"]["losses"]
+                        row_data["CurrOppTies"] = 0
+                        row_data["CurrOppOTLosses"] = 0
+                        if "ot" in game_data["teams"]["away"]["leagueRecord"]:
+                            row_data["CurrOppOTLosses"] += game_data["teams"]["away"]["leagueRecord"]["ot"]
+                        elif "ties" in game_data["teams"]["away"]["leagueRecord"]:
+                            row_data["CurrOppTies"] = game_data["teams"]["away"]["leagueRecord"]["ties"]
                     else:
-                        result_str = "T"
-                        row_data["CurrTmTies"] -= 1
-                        row_data["CurrOppTies"] -= 1
+                        row_data["CurrTmWins"] = game_data["teams"]["away"]["leagueRecord"]["wins"]
+                        row_data["CurrTmLosses"] = game_data["teams"]["away"]["leagueRecord"]["losses"]
+                        row_data["CurrTmTies"] = 0
+                        row_data["CurrTmOTLosses"] = 0
+                        if "ot" in game_data["teams"]["away"]["leagueRecord"]:
+                            row_data["CurrTmOTLosses"] += game_data["teams"]["away"]["leagueRecord"]["ot"]
+                        elif "ties" in game_data["teams"]["away"]["leagueRecord"]:
+                            row_data["CurrTmTies"] = game_data["teams"]["away"]["leagueRecord"]["ties"]
 
-                    if is_shootout:
-                        result_str += "-SO"
-                    elif len(linescore_game_data["linescore"]["periods"]) > 3:
-                        result_str += "-OT"
+                        row_data["CurrOppWins"] = game_data["teams"]["home"]["leagueRecord"]["wins"]
+                        row_data["CurrOppLosses"] = game_data["teams"]["home"]["leagueRecord"]["losses"]
+                        row_data["CurrOppTies"] = 0
+                        row_data["CurrOppOTLosses"] = 0
+                        if "ot" in game_data["teams"]["home"]["leagueRecord"]:
+                            row_data["CurrOppOTLosses"] += game_data["teams"]["home"]["leagueRecord"]["ot"]
+                        elif "ties" in game_data["teams"]["home"]["leagueRecord"]:
+                            row_data["CurrOppTies"] = game_data["teams"]["home"]["leagueRecord"]["ties"]
 
-                    row_data["Result"] = result_str
-                else:
-                    row_data["Result"] = None
-                
-                new_season_obj["regular_season" if game_type == 2 else "playoffs"].append(row_data)
+                    if is_final:
+                        if row_data["Team Score"] > row_data["Opponent Score"]:
+                            result_str = "W"
+                            row_data["CurrTmWins"] -= 1
+                            if is_ot or is_shootout:
+                                row_data["CurrOppOTLosses"] -= 1
+                            else:
+                                row_data["CurrOppLosses"] -= 1
+                        elif row_data["Team Score"] < row_data["Opponent Score"]:
+                            result_str = "L"
+                            row_data["CurrOppWins"] -= 1
+                            if is_ot or is_shootout:
+                                row_data["CurrTmOTLosses"] -= 1
+                            else:
+                                row_data["CurrTmLosses"] -= 1
+                        else:
+                            result_str = "T"
+                            row_data["CurrTmTies"] -= 1
+                            row_data["CurrOppTies"] -= 1
+
+                        if is_shootout:
+                            result_str += "-SO"
+                        elif len(linescore_game_data["linescore"]["periods"]) > 3:
+                            result_str += "-OT"
+
+                        row_data["Result"] = result_str
+                    else:
+                        row_data["Result"] = None
+                    
+                    new_season_obj["regular_season" if game_type == 2 else "playoffs"].append(row_data)
         
             if not season in season_objs:
                 season_objs[season] = []
@@ -32906,63 +32870,38 @@ def get_nhl_player_link(player_data):
 
             if sub_year == current_season:
                 try:
-                    da_dates = []
-                    
                     scheudle_url = nhl_team_schedule_url_format.format(team_id, year_str)
                     request = urllib.request.Request(scheudle_url, headers=request_headers)
                     data = url_request_json(request)
 
-                    for game in data["dates"]:
-                        da_dates.append(game)
-                
-                    # for month_int in range(1, (datetime.datetime.now().month + 1)):
-                    #     min_date = datetime.date(sub_year, month_int, 1)
-                    #     max_date = datetime.date(sub_year, month_int, calendar.monthrange(sub_year, month_int)[1])
-
-                    #     scheudle_url = nhl_team_schedule_url_format.format(team_id, urllib.parse.quote_plus(str(min_date)), urllib.parse.quote_plus(str(max_date)))
-                    #     request = urllib.request.Request(scheudle_url, headers=request_headers)
-                    #     data = url_request_json(request)
-
-                    #     for game in data["dates"]:
-                    #         da_dates.append(game)
-                        
-                    #     min_date = datetime.date(sub_year + 1, month_int, 1)
-                    #     max_date = datetime.date(sub_year + 1, month_int, calendar.monthrange(sub_year + 1, month_int)[1])
-
-                    #     scheudle_url = nhl_team_schedule_url_format.format(team_id, urllib.parse.quote_plus(str(min_date)), urllib.parse.quote_plus(str(max_date)))
-                    #     request = urllib.request.Request(scheudle_url, headers=request_headers)
-                    #     data = url_request_json(request)
-
-                    #     for game in data["dates"]:
-                    #         da_dates.append(game)
-
                     matching_players = []
                     parsed_people = set()
-                    for game in da_dates:
-                        game_type = int(str(game["games"][0]["gamePk"])[4:6])
-                        if game_type != 2 and game_type != 3:
-                            continue
+                    for da_date in data["dates"]:
+                        for game in da_date["games"]:
+                            game_type = int(str(game["gamePk"])[4:6])
+                            if game_type != 2 and game_type != 3:
+                                continue
 
-                        if str(game["games"][0]["season"]) == year_str:
-                            game_link = game["games"][0]["link"]
-                            request = urllib.request.Request("https://statsapi.web.nhl.com" + game_link, headers=request_headers)
-                            sub_data = url_request_json(request)
+                            if str(game["season"]) == year_str:
+                                game_link = game["link"]
+                                request = urllib.request.Request("https://statsapi.web.nhl.com" + game_link, headers=request_headers)
+                                sub_data = url_request_json(request)
 
-                            is_home = sub_data["gameData"]["teams"]["home"]["id"] == team_id
-                            team_str = "home" if is_home else "away"
+                                is_home = sub_data["gameData"]["teams"]["home"]["id"] == team_id
+                                team_str = "home" if is_home else "away"
 
-                            for person_str in sub_data["liveData"]["boxscore"]["teams"][team_str]["players"]:
-                                person = sub_data["liveData"]["boxscore"]["teams"][team_str]["players"][person_str]
-                                if person["person"]["id"] not in parsed_people:
-                                    parsed_people.add(person["person"]["id"])
-                                    if "birthDate" not in sub_data["gameData"]["players"][person_str]:
-                                        continue
-                                    if dateutil.parser.parse(sub_data["gameData"]["players"][person_str]["birthDate"]).date() == player_data["Birthday"]:
-                                        matching_players.append(sub_data["gameData"]["players"][person_str])
-                    
-                    if len(matching_players) == 1:
-                        logger.info("#" + str(threading.get_ident()) + "#   " + "Found NHL Player " + matching_players[0]["fullName"] + " (" + str(matching_players[0]["id"]) + ") by birthdate")
-                        return matching_players[0]["link"], matching_players[0]["fullName"], matching_players[0]["primaryPosition"]["abbreviation"], matching_players[0]["shootsCatches"] if ("shootsCatches" in matching_players[0] and matching_players[0]["shootsCatches"]) else None
+                                for person_str in sub_data["liveData"]["boxscore"]["teams"][team_str]["players"]:
+                                    person = sub_data["liveData"]["boxscore"]["teams"][team_str]["players"][person_str]
+                                    if person["person"]["id"] not in parsed_people:
+                                        parsed_people.add(person["person"]["id"])
+                                        if "birthDate" not in sub_data["gameData"]["players"][person_str]:
+                                            continue
+                                        if dateutil.parser.parse(sub_data["gameData"]["players"][person_str]["birthDate"]).date() == player_data["Birthday"]:
+                                            matching_players.append(sub_data["gameData"]["players"][person_str])
+                        
+                        if len(matching_players) == 1:
+                            logger.info("#" + str(threading.get_ident()) + "#   " + "Found NHL Player " + matching_players[0]["fullName"] + " (" + str(matching_players[0]["id"]) + ") by birthdate")
+                            return matching_players[0]["link"], matching_players[0]["fullName"], matching_players[0]["primaryPosition"]["abbreviation"], matching_players[0]["shootsCatches"] if ("shootsCatches" in matching_players[0] and matching_players[0]["shootsCatches"]) else None
                 except urllib.error.HTTPError:
                     raise
             else:
@@ -33012,85 +32951,60 @@ def get_nhl_player_link(player_data):
 
             if sub_year == current_season:
                 try:
-                    da_dates = []
-                    
                     scheudle_url = nhl_team_schedule_url_format.format(team_id, year_str)
                     request = urllib.request.Request(scheudle_url, headers=request_headers)
                     data = url_request_json(request)
 
-                    for game in data["dates"]:
-                        da_dates.append(game)
-
-                    # for month_int in range(1, (datetime.datetime.now().month + 1)):
-                    #     min_date = datetime.date(sub_year, month_int, 1)
-                    #     max_date = datetime.date(sub_year, month_int, calendar.monthrange(sub_year, month_int)[1])
-
-                    #     scheudle_url = nhl_team_schedule_url_format.format(team_id, urllib.parse.quote_plus(str(min_date)), urllib.parse.quote_plus(str(max_date)))
-                    #     request = urllib.request.Request(scheudle_url, headers=request_headers)
-                    #     data = url_request_json(request)
-
-                    #     for game in data["dates"]:
-                    #         da_dates.append(game)
-                        
-                    #     min_date = datetime.date(sub_year + 1, month_int, 1)
-                    #     max_date = datetime.date(sub_year + 1, month_int, calendar.monthrange(sub_year + 1, month_int)[1])
-
-                    #     scheudle_url = nhl_team_schedule_url_format.format(team_id, urllib.parse.quote_plus(str(min_date)), urllib.parse.quote_plus(str(max_date)))
-                    #     request = urllib.request.Request(scheudle_url, headers=request_headers)
-                    #     data = url_request_json(request)
-
-                    #     for game in data["dates"]:
-                    #         da_dates.append(game)
-
                     matching_players = []
                     parsed_people = set()
-                    for game in da_dates:
-                        game_type = int(str(game["games"][0]["gamePk"])[4:6])
-                        if game_type != 2 and game_type != 3:
-                            continue
+                    for da_date in data["dates"]:
+                        for game in da_date["games"]:
+                            game_type = int(str(game["gamePk"])[4:6])
+                            if game_type != 2 and game_type != 3:
+                                continue
 
-                        if str(game["games"][0]["season"]) == year_str:
-                            game_link = game["games"][0]["link"]
-                            request = urllib.request.Request("https://statsapi.web.nhl.com" + game_link, headers=request_headers)
-                            sub_data = url_request_json(request)
+                            if str(game["season"]) == year_str:
+                                game_link = game["link"]
+                                request = urllib.request.Request("https://statsapi.web.nhl.com" + game_link, headers=request_headers)
+                                sub_data = url_request_json(request)
 
-                            is_home = sub_data["gameData"]["teams"]["home"]["id"] == team_id
-                            team_str = "home" if is_home else "away"
+                                is_home = sub_data["gameData"]["teams"]["home"]["id"] == team_id
+                                team_str = "home" if is_home else "away"
 
-                            for person_str in sub_data["liveData"]["boxscore"]["teams"][team_str]["players"]:
-                                person = sub_data["liveData"]["boxscore"]["teams"][team_str]["players"][person_str]
-                                if person["person"]["id"] not in parsed_people:
-                                    parsed_people.add(person["person"]["id"])
-                                    if "birthDate" not in sub_data["gameData"]["players"][person_str]:
-                                        continue
-                                    if dateutil.parser.parse(sub_data["gameData"]["players"][person_str]["birthDate"]).date() == player_data["Birthday"]:
-                                        person = sub_data["gameData"]["players"][person_str]
-                                        is_position_match = person["primaryPosition"]["abbreviation"] == player_data["player_position"]
-                                
-                                        is_exact_match = False
-                                        is_first_last_match = False
-                                        is_last_match = False
-
-                                        player_name = person["fullName"]
-                                        if player_name == player_data["Player"]:
-                                            is_exact_match = True
-                                        else:
+                                for person_str in sub_data["liveData"]["boxscore"]["teams"][team_str]["players"]:
+                                    person = sub_data["liveData"]["boxscore"]["teams"][team_str]["players"][person_str]
+                                    if person["person"]["id"] not in parsed_people:
+                                        parsed_people.add(person["person"]["id"])
+                                        if "birthDate" not in sub_data["gameData"]["players"][person_str]:
+                                            continue
+                                        if dateutil.parser.parse(sub_data["gameData"]["players"][person_str]["birthDate"]).date() == player_data["Birthday"]:
+                                            person = sub_data["gameData"]["players"][person_str]
+                                            is_position_match = person["primaryPosition"]["abbreviation"] == player_data["player_position"]
+                                    
                                             is_exact_match = False
-                                            parsed_name = create_human_name(player_name)
-                                            real_human_name = create_human_name(player_data["Player"])
+                                            is_first_last_match = False
+                                            is_last_match = False
 
-                                            if parsed_name.first == real_human_name.first and parsed_name.last == real_human_name.last:
-                                                is_first_last_match = True
-                                            if parsed_name.last == real_human_name.last:
-                                                is_last_match = True
-                                        
-                                        matching_players.append({
-                                            "is_exact_match" : is_exact_match,
-                                            "is_first_last_match" : is_first_last_match,
-                                            "is_last_match" : is_last_match,
-                                            "is_position_match" : is_position_match,
-                                            "person" : person
-                                        })
+                                            player_name = person["fullName"]
+                                            if player_name == player_data["Player"]:
+                                                is_exact_match = True
+                                            else:
+                                                is_exact_match = False
+                                                parsed_name = create_human_name(player_name)
+                                                real_human_name = create_human_name(player_data["Player"])
+
+                                                if parsed_name.first == real_human_name.first and parsed_name.last == real_human_name.last:
+                                                    is_first_last_match = True
+                                                if parsed_name.last == real_human_name.last:
+                                                    is_last_match = True
+                                            
+                                            matching_players.append({
+                                                "is_exact_match" : is_exact_match,
+                                                "is_first_last_match" : is_first_last_match,
+                                                "is_last_match" : is_last_match,
+                                                "is_position_match" : is_position_match,
+                                                "person" : person
+                                            })
                                     
                     if matching_players:
                         matching_players.sort(key=lambda player: (-player["is_exact_match"], -player["is_first_last_match"], -player["is_last_match"], -player["is_position_match"]))
