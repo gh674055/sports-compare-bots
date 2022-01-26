@@ -3377,6 +3377,23 @@ headers = {
             "round" : "percent",
             "type" : "Per Game/Advanced"
         },
+        "HBP": {
+            "positive" : False,
+            "valid_since" : {
+                "season" : 1887,
+                "game" : 1887
+            }
+        },
+        "HBP%" : {
+            "positive" : False,
+            "display" : False,
+            "round" : "percent",
+            "type" : "Per Game/Advanced",
+            "valid_since" : {
+                "season" : 1887,
+                "game" : 1887
+            }
+        },
         "SO-BB%": {
             "positive" : True,
             "round" : 'percent',
@@ -3432,22 +3449,6 @@ headers = {
                 "game" : 1988,
                 "season" : 1988
             }
-        },
-        "HBP": {
-            "positive" : False,
-            "valid_since" : {
-                "season" : 1887,
-                "game" : 1887
-            }
-        },
-        "HBP%" : {
-            "positive" : False,
-            "display" : False,
-            "round" : "percent",
-            "type" : "Per Game/Advanced",
-            "valid_since" : {
-                "season" : 1887,
-                "game" : 1887
         },
         "ROE": {
             "positive" : False,
