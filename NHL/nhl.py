@@ -37279,7 +37279,7 @@ def is_against_header(header, over_header, extra_stats, player_type, has_toi_sta
                 return False
             if "type" in headers[player_type["da_type"]["type"]][header] and (headers[player_type["da_type"]["type"]][header]["type"] == "Awards/Honors"):
                 return True
-            if header.startswith("W") or header.startswith("L") or header.startswith("T") or header.startswith("OTL") or header.startswith("RO") or "PTS" in header or "SO" in header or "QS" in header or "RBS" in header or "CG" in header or header == "GS":
+            if header.startswith("W") or header.startswith("L") or header.startswith("T") or header.startswith("OTL") or header.startswith("RO") or "PTS" in header or "SO" in header or "QS" in header or "RBS" in header or "CG" in header or "GSAA" in header or "GA%-" in header or header == "GS":
                 return True
             #if header == "SVEvenStrength" or header == "SVPowerPlay" or header == "SVShorthanded":
                 #return True
