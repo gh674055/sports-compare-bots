@@ -1975,7 +1975,7 @@ headers = {
             }
         },
         "OZ%" : {
-            "positive" : True,
+            "positive" : False,
             "display" : False,
             "round" : "percent",
             "type" : "Advanced",
@@ -35617,6 +35617,8 @@ def print_player_data(player_datas, player_type, highest_vals, lowest_vals, has_
                         override_show = True
                     if header in ("GFRel/60M", "CFRel/60M", "FFRel/60M", "SFRel/60M", "GARel/60M", "CARel/60M", "FARel/60M", "SARel/60M", "GFRelPer", "CFRelPer", "FFRelPer", "SFRelPer"):
                         override_show = True
+                    if "P1" in header:
+                        override_show = True
                     if "TSA" in header or header == "SThr%" or header == "TS%" or header == "TOI%":
                         override_show = True
                     if "shift" in extra_stats and "Shft" in header:
@@ -36103,6 +36105,8 @@ def get_reddit_player_table(player_datas, player_type, debug_mode, original_comm
                     if header in ("GFRel/60M", "CFRel/60M", "FFRel/60M", "SFRel/60M", "GARel/60M", "CARel/60M", "FARel/60M", "SARel/60M", "GFRelPer", "CFRelPer", "FFRelPer", "SFRelPer"):
                         override_show = True
                     if "TSA" in header or header == "SThr%" or header == "TS%" or header == "TOI%":
+                        override_show = True
+                    if "P1" in header:
                         override_show = True
                     if "shift" in extra_stats and "Shft" in header:
                         override_show = True
@@ -36903,6 +36907,8 @@ def handle_table_data(player_data, player_type, over_header, header, highest_val
             override_show = True
         if header in ("GFRel/60M", "CFRel/60M", "FFRel/60M", "SFRel/60M", "GARel/60M", "CARel/60M", "FARel/60M", "SARel/60M", "GFRelPer", "CFRelPer", "FFRelPer", "SFRelPer"):
             override_show = True
+        if "P1" in header:
+            override_show = True
         if "TSA" in header or header == "SThr%" or header == "TS%" or header == "TOI%":
             override_show = True
         if "shift" in extra_stats and "Shft" in header:
@@ -37262,6 +37268,11 @@ def is_against_header(header, over_header, extra_stats, player_type, has_toi_sta
                 #return True
             if "type" in headers[player_type["da_type"]["type"]][header] and (headers[player_type["da_type"]["type"]][header]["type"] == "Advanced") and ("S%" in header or "EV" in header or "Post" in header):
                 if ("shot" not in extra_stats or not ("S%" in header)):
+                    return True
+            if "P1" in header:
+                if ("strength-stats" in extra_stats or "hide-strength" in extra_stats) and "strength" not in extra_stats:
+                    return False
+                else:
                     return True
         else:
             if header == "TOI/GP":
