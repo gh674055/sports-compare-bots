@@ -19008,7 +19008,7 @@ def is_period_match(period, qualifiers):
     
     return True
 
-def perform_sub_nhl_shift_qualifiers(row, qualifiers, player_game_info, player_type, player_data, player_link, saved_row_data, index):
+def perform_sub_nhl_shift_qualifiers(row, qualifiers, player_game_info, player_type, player_data, player_link, saved_row_data, index, extra_stats):
     clear_row_attrs(row, player_type)
     
     if not player_game_info or player_game_info["missing_data"]:
