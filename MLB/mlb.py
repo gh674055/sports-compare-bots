@@ -14210,7 +14210,7 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
     last_qual_str = None
     for subb_frame in time_frames:
         for subbb_frame in subb_frame:
-            qual_str = determine_raw_str(subbb_frame)
+            qual_str = determine_raw_str(subbb_frame, False)
             if not last_qual_str:
                 last_qual_str = qual_str
             if last_qual_str != qual_str:
@@ -14235,7 +14235,7 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
             if multiple_matches:
                 qual_str += "("
             
-            qual_str += determine_raw_str(subbb_frame)
+            qual_str += determine_raw_str(subbb_frame, False)
             
             if multiple_matches:
                 qual_str += ")"
@@ -14560,8 +14560,12 @@ def handle_multi_player_data(player_id, time_frames, player_type, player_page, r
 
     return player_data, any_missing_games, any_missing_salary, any_missing_inf
 
-def determine_raw_str(subbb_frame):
+def determine_raw_str(subbb_frame, skip_player_quals):
     qual_str = ""
+
+    non_player_str = None
+    if not skip_player_quals:
+        non_player_str = determine_raw_str(subbb_frame, True)
 
     if subbb_frame["type"].startswith("season"):
         if subbb_frame["type"].startswith("season-range"):
@@ -14629,6 +14633,10 @@ def determine_raw_str(subbb_frame):
         if qualifier == "Force Dates" or qualifier == "Ignore Start":
             continue
 
+        if skip_player_quals:
+            if qualifier == "Playing With" or qualifier == "Playing Against" or qualifier == "Playing Same Game" or qualifier == "Previous Playing With" or qualifier == "Previous Playing Against" or qualifier == "Upcoming Playing With" or qualifier == "Upcoming Playing Against" or qualifier == "Playing Same Opponents" or qualifier == "Playing Same Date" or qualifier == "Batting Against" or qualifier == "Pitching Against" or qualifier == "Driven In" or qualifier == "Batted In" or qualifier == "Back To Back With" or qualifier == "Batting Behind" or qualifier == "Batting In Front Of" or qualifier == "Batting Next To" or qualifier == "Caught By" or qualifier == "Stealing On" or qualifier == "On Field With" or qualifier == "On Field Against":
+                continue
+
         sub_sub_first = True
         if qual_str:
             qual_str += " - "
@@ -14683,7 +14691,8 @@ def determine_raw_str(subbb_frame):
                         if player_url_str == "No Player Match!":
                             qual_str += player_url_str + " (Searched Term: \"" + "+".join(player["search_term"]) + "\")"
                         else:
-                            qual_str += player_url_str + ((" (" + player["query"] + ")") if player["query"] != "Query: " else "")
+                            query = player["query"].replace("Query: ", "", 1)
+                            qual_str += player_url_str + ((" (" + query + ")") if query and query != non_player_str else "")
                 elif qualifier == "Batting Against First Name" or qualifier == "Pitching Against First Name" or qualifier == "Batting Against Birth Name" or qualifier == "Pitching Against Birth Name" or qualifier == "Batting Against First Or Birth Name" or qualifier == "Pitching Against First Or Birth Name" or qualifier == "Batting Against Last Name" or qualifier == "Pitching Against Last Name" or qualifier == "Batting Against Birth Country" or qualifier == "Pitching Against Birth Country":
                     for player in qual_obj["values"]:
                         if not sub_sub_first:
@@ -14718,7 +14727,8 @@ def determine_raw_str(subbb_frame):
                         if player_url_str == "No Player Match!":
                             qual_str += player_url_str + " (Searched Term: \"" + "+".join(player["search_term"]) + "\")"
                         else:
-                            qual_str += player_url_str + ((" (" + player["query"] + ")") if player["query"] != "Query: " else "")
+                            query = player["query"].replace("Query: ", "", 1)
+                            qual_str += player_url_str + ((" (" + query + ")") if query and query != non_player_str else "")
                 elif qualifier == "Days Rest" or qualifier == "Upcoming Days Rest" or qualifier == "Starts Days Rest" or qualifier == "Upcoming Starts Days Rest" or qualifier == "Start Days In A Row" or qualifier == "Game Days In A Row" or qualifier == "Days In A Row" or qualifier == "Games In A Row" or qualifier == "Starts In A Row" or qualifier == "Game Days Rest" or qualifier == "Start Days Rest" or qualifier == "Games Rest" or qualifier == "Starts Rest" or qualifier == "Inning Entered" or qualifier == "Outs Entered" or qualifier == "Outs Remaining Entered" or qualifier == "Men On Base Entered" or qualifier == "Men In Scoring Entered" or qualifier == "Team Score" or qualifier == "Ending Team Score" or qualifier == "Run Support" or qualifier == "Opponent Score" or qualifier == "Ending Opponent Score" or qualifier == "Previous Team Score" or qualifier == "Previous Opponent Score" or qualifier == "Final Team Score" or qualifier == "Team Pitch Count" or qualifier == "Game Pitch Count" or qualifier == "Pitch Count" or qualifier == "Pitcher Batters Faced" or qualifier == "Batter Plate Appearance" or qualifier == "Pitcher Batters Faced Reversed" or qualifier == "Batter Plate Appearance Reversed" or qualifier == "Starting Pitch Count" or qualifier == "At Bat Pitch Count" or qualifier == "Men On Base" or qualifier == "Final Opponent Score" or qualifier == "Upcoming Team Score" or qualifier == "Upcoming Opponent Score" or qualifier == "Series Team Wins" or qualifier == "Series Opponent Wins" or qualifier == "Series Score Margin" or qualifier == "Series Score Difference" or qualifier == "Season Number" or qualifier == "Game Number" or qualifier == "Ending Outs" or qualifier == "Outs" or qualifier == "Outs Remaining" or qualifier == "After Strikes" or qualifier == "After Balls" or qualifier == "Swinging On Strikes" or qualifier == "Swinging On Balls" or qualifier == "After Swinging On Strikes" or qualifier == "After Swinging On Balls" or qualifier == "Strikes" or qualifier == "Balls" or qualifier == "Runs" or qualifier == "Play Outs" or qualifier == "RBIs" or qualifier == "Number Drove In" or qualifier == "Pitch Speed" or qualifier == "Pitch Zone" or qualifier == "Pitch Spin" or qualifier == "Exit Velocity" or qualifier == "Hit Distance" or qualifier == "Launch Angle" or qualifier == "Number Of Men On Base" or qualifier == "Number Of Men In Scoring" or qualifier == "Team Wins" or qualifier == "Team Losses" or qualifier == "Opponent Wins" or qualifier == "Opponent Losses" or qualifier == "Current Team Wins" or qualifier == "Current Team Losses" or qualifier == "Current Opponent Wins" or qualifier == "Current Opponent Losses" or qualifier == "Team Games Over 500" or qualifier == "Opponent Games Over 500" or qualifier == "Current Team Games Over 500" or qualifier == "Current Opponent Games Over 500" or qualifier == "Hit X Coordinate" or qualifier == "Hit Y Coordinate" or qualifier == "Pitch X Coordinate" or qualifier == "Pitch Y Coordinate" or qualifier == "Absolute Pitch X Coordinate" or qualifier == "Absolute Pitch Y Coordinate" or qualifier == "Attendance":
                     if not sub_sub_first:
                         qual_str += " + "

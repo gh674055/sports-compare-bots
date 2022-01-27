@@ -7167,7 +7167,7 @@ def combine_player_datas(player_datas, player_type, any_missing_games, time_fram
     last_qual_str = None
     for subb_frame in time_frames:
         for subbb_frame in subb_frame:
-            qual_str = determine_raw_str(subbb_frame)
+            qual_str = determine_raw_str(subbb_frame, False)
             if not last_qual_str:
                 last_qual_str = qual_str
             if last_qual_str != qual_str:
@@ -7191,7 +7191,7 @@ def combine_player_datas(player_datas, player_type, any_missing_games, time_fram
             if multiple_matches:
                 qual_str += "("
             
-            qual_str += determine_raw_str(subbb_frame)
+            qual_str += determine_raw_str(subbb_frame, False)
             
             if multiple_matches:
                 qual_str += ")"
@@ -7291,8 +7291,12 @@ def combine_player_datas(player_datas, player_type, any_missing_games, time_fram
 
     return player_data
 
-def determine_raw_str(subbb_frame):
+def determine_raw_str(subbb_frame, skip_player_quals):
     qual_str = ""
+
+    non_player_str = None
+    if not skip_player_quals:
+        non_player_str = determine_raw_str(subbb_frame, True)
 
     if subbb_frame["type"].startswith("season"):
         if subbb_frame["type"].startswith("season-range"):
@@ -7359,6 +7363,10 @@ def determine_raw_str(subbb_frame):
     for qualifier in subbb_frame["qualifiers"]:
         if qualifier == "Force Dates" or qualifier == "Ignore Start":
             continue
+    
+        if skip_player_quals:
+            if qualifier == "Playing With" or qualifier == "Playing Against" or qualifier == "Previous Playing With" or qualifier == "Playing Same Game" or qualifier == "Previous Playing Against" or qualifier == "Upcoming Playing With" or qualifier == "Upcoming Playing Against" or qualifier == "Playing Same Opponents" or qualifier == "Playing Same Date" or qualifier == "Thrown To":
+                continue
 
         sub_sub_first = True
         if qual_str:
@@ -7420,7 +7428,8 @@ def determine_raw_str(subbb_frame):
                         if player_url_str == "No Player Match!":
                             qual_str += player_url_str + " (Searched Term: \"" + "+".join(player["search_term"]) + "\")"
                         else:
-                            qual_str += player_url_str + ((" (" + player["query"] + ")") if player["query"] != "Query: " else "")
+                            query = player["query"].replace("Query: ", "", 1)
+                            qual_str += player_url_str + ((" (" + query + ")") if query and query != non_player_str else "")
                 elif qualifier == "Sub Query" or qualifier == "Or Sub Query" or qualifier == "Day Of Sub Query" or qualifier == "Day After Sub Query" or qualifier == "Day Before Sub Query" or qualifier == "Game After Sub Query" or qualifier == "Game Before Sub Query" or qualifier == "Season Sub Query" or qualifier == "Or Season Sub Query" or qualifier == "Season After Sub Query" or qualifier == "Season Before Sub Query":
                     for player in qual_obj["values"]:
                         if not sub_sub_first:
