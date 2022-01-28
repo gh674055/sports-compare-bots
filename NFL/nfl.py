@@ -48,6 +48,7 @@ import tempfile
 import shutil
 import base64
 import pytz
+import requests
 from convertdate import holidays
 import inspect
 import numexpr
@@ -6311,13 +6312,13 @@ def url_request(request, timeout=30):
             time.sleep(time_to_wait)
         logger.info("#" + str(threading.get_ident()) + "#   " + "0")
 
-def url_request_lxml(request, timeout=30):
+def url_request_lxml(session, url, timeout=30):
     failed_counter = 0
     while(True):
         try:
-            response = urllib.request.urlopen(request, timeout=timeout)
-            bs = lxml.html.parse(response)
-            if not bs.getroot():
+            response = session.get(url, timeout=timeout)
+            bs = lxml.html.document_fromstring(response.text)
+            if not bs:
                 raise urllib.error.URLError("Page is empty!")
             return response, bs
         except Exception:
@@ -6326,7 +6327,7 @@ def url_request_lxml(request, timeout=30):
                 raise
 
         delay_step = 10
-        logger.info("#" + str(threading.get_ident()) + "#   " + "Retrying in " + str(retry_failure_delay) + " seconds to allow request to " + request.get_full_url() + " to chill")
+        logger.info("#" + str(threading.get_ident()) + "#   " + "Retrying in " + str(retry_failure_delay) + " seconds to allow request to " + url + " to chill")
         time_to_wait = int(math.ceil(float(retry_failure_delay)/float(delay_step)))
         for i in range(retry_failure_delay, 0, -time_to_wait):
             logger.info("#" + str(threading.get_ident()) + "#   " + str(i))
@@ -6352,7 +6353,25 @@ def url_request_bytes(request, timeout=30):
             time.sleep(time_to_wait)
         logger.info("#" + str(threading.get_ident()) + "#   " + "0")
 
-def url_request_json(request, timeout=30):
+def url_request_json(session, url, timeout=30):
+    failed_counter = 0
+    while(True):
+        try:
+            return session.get(url, timeout=timeout).json()
+        except Exception:
+            failed_counter += 1
+            if failed_counter > max_request_retries:
+                raise
+
+        delay_step = 10
+        logger.info("#" + str(threading.get_ident()) + "#   " + "Retrying in " + str(retry_failure_delay) + " seconds to allow " + url + " to chill")
+        time_to_wait = int(math.ceil(float(retry_failure_delay)/float(delay_step)))
+        for i in range(retry_failure_delay, 0, -time_to_wait):
+            logger.info("#" + str(threading.get_ident()) + "#   " + str(i))
+            time.sleep(time_to_wait)
+        logger.info("#" + str(threading.get_ident()) + "#   " + "0")
+
+def url_request_json_urlib(request, timeout=30):
     failed_counter = 0
     while(True):
         try:
@@ -8976,16 +8995,16 @@ def get_game_data(index, player_data, row_data, qualifiers, extra_stats):
         "fumbles" : []
     }
 
-    try:
-        request = urllib.request.Request("https://www.pro-football-reference.com" + row_data["Shared"]["GameLink"], headers=request_headers)
-        response, player_page_xml = url_request_lxml(request)
-    except urllib.error.HTTPError as err:
-        if err.status == 404:
-            missing_games = True
-            game_data["missing_data"] = True
-            return game_data, row_data, missing_games
-        else:
-            raise
+    with requests.Session() as s:
+        try:
+            response, player_page_xml = url_request_lxml(s, "https://www.pro-football-reference.com" + row_data["Shared"]["GameLink"])
+        except urllib.error.HTTPError as err:
+            if err.status == 404:
+                missing_games = True
+                game_data["missing_data"] = True
+                return game_data, row_data, missing_games
+            else:
+                raise
     
     scorebox = player_page_xml.xpath("//div[@class = 'scorebox']")[0]
     scor_divs = scorebox.xpath("./div")
@@ -22736,7 +22755,7 @@ def create_table_html(html_info, player_datas, original_comment, last_updated, c
                 "title" : comment_id
             }
             request = urllib.request.Request(url=imgur_upload_url, data=urllib.parse.urlencode(data).encode("utf-8"), headers=imgur_headers)
-            return url_request_json(request, timeout=30)["data"]["link"]
+            return url_request_json_urlib(request, timeout=30)["data"]["link"]
     finally:
         #logger.info("#" + str(threading.get_ident()) + "# " + dirpath)
         shutil.rmtree(dirpath)

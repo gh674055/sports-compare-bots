@@ -47,6 +47,7 @@ import tempfile
 import shutil
 import base64
 import pytz
+import requests
 try:
     from cairosvg import svg2png
 except OSError:
@@ -15135,305 +15136,306 @@ def handle_player_data(player_data, time_frame, player_type, player_page, valid_
 
     live_game = None
     player_link = None
-    try:
-        player_link = get_mlb_player_link(player_data)
-    except Exception:
-        pass
-    
-    if not player_link:
-        logger.warn("#" + str(threading.get_ident()) + "#   " + "Unable to get MLB player link for BRef ID : " + player_data["id"] + ". Cannot retrieve MLB API data")
-    else:
-        player_data["mlb_id"] = int(player_link.split('/')[-1])
-        player_data["player_link"] = player_link
-        if "hide-live" not in extra_stats and season_in_progress:
-            live_game = get_live_game(player_link, player_data, player_type, time_frame)
-
-    if "Rookie" in time_frame["qualifiers"]:
-        determine_rookie_years(player_page, player_type, time_frame["qualifiers"]["Rookie"])
-
-    playoff_data = None
-    if time_frame["playoffs"]:
-        playoff_data = parse_table(player_data, None, None, player_type)
-        if not (time_frame["type"] == "date" and (isinstance(time_frame["time_start"], int) or isinstance(time_frame["time_end"], int))):
-            valid_years = add_valid_playoff_years(valid_years, playoff_data, time_frame)
-
-    if time_frame["type"].startswith("season"):
-        if not valid_years:
-            time_frame["time_start"] = -1
-            time_frame["time_end"] = -1
-        elif time_frame["type"].startswith("season-range"):
-            if not time_frame["time_start"]:
-                time_index_end = time_frame["time_end"] - 1
-                time_index_start = time_index_end
-            elif not time_frame["time_end"]:
-                time_index_start = time_frame["time_start"] - 1
-                time_index_end = time_index_start
-            else:
-                time_index_start = time_frame["time_start"] - 1
-                time_index_end = time_frame["time_end"] - 1
-            
-            if time_frame["type"] == "season-range-reversed":
-                temp_time_index_end = time_index_end
-                time_index_end = len(valid_years) - time_index_start - 1
-                time_index_start = len(valid_years) - temp_time_index_end - time_index_start
-
-            if time_index_start < 0:
-                time_index_start = 0
-            if time_index_end < 0:
-                time_index_end = 0
-            if time_index_start > len(valid_years) - 1:
-                time_frame["time_start"] = -1
-                time_frame["time_end"] = -1
-            else:
-                if time_index_end > len(valid_years) - 1:
-                    time_index_end = len(valid_years) - 1
-                time_frame["time_start"] = valid_years[time_index_start]
-                time_frame["time_end"] = valid_years[time_index_end]
-        elif time_frame["time_start"]:
-            time_index = time_frame["time_start"]
-            time_frame["time_start"] = valid_years[0]
-            time_index = len(valid_years) - 1 if time_index > len(valid_years) else time_index - 1
-            time_frame["time_end"] = valid_years[time_index]
+    with requests.Session() as s:
+        try:
+            player_link = get_mlb_player_link(player_data, s)
+        except Exception:
+            pass
+        
+        if not player_link:
+            logger.warn("#" + str(threading.get_ident()) + "#   " + "Unable to get MLB player link for BRef ID : " + player_data["id"] + ". Cannot retrieve MLB API data")
         else:
-            time_index = len(valid_years) - time_frame["time_end"]
-            time_frame["time_end"] = valid_years[len(valid_years) - 1]
-            time_index = 0 if time_index < 0 else time_index
-            time_frame["time_start"] = valid_years[time_index]
-        time_frame["type"] = "date"
-    elif time_frame["type"] == "date":
-        if isinstance(time_frame["time_end"], dateutil.relativedelta.relativedelta):
-            if not player_data["game_valid_years"]:
+            player_data["mlb_id"] = int(player_link.split('/')[-1])
+            player_data["player_link"] = player_link
+            if "hide-live" not in extra_stats and season_in_progress:
+                live_game = get_live_game(player_link, player_data, player_type, time_frame, s)
+
+        if "Rookie" in time_frame["qualifiers"]:
+            determine_rookie_years(player_page, player_type, time_frame["qualifiers"]["Rookie"])
+
+        playoff_data = None
+        if time_frame["playoffs"]:
+            playoff_data = parse_table(player_data, None, None, player_type)
+            if not (time_frame["type"] == "date" and (isinstance(time_frame["time_start"], int) or isinstance(time_frame["time_end"], int))):
+                valid_years = add_valid_playoff_years(valid_years, playoff_data, time_frame)
+
+        if time_frame["type"].startswith("season"):
+            if not valid_years:
                 time_frame["time_start"] = -1
                 time_frame["time_end"] = -1
-            else:
-                first_year =  player_data["game_valid_years"][0]
-                temp_time_frame = {
-                    "type" : "date",
-                    "time_start" : first_year,
-                    "time_end" : first_year,
-                    "qualifiers" : []
-                }
-                temp_rows = parse_table(player_data, temp_time_frame, first_year, player_type)
-                if time_frame["playoffs"]:
-                    temp_rows = handle_playoffs_data(temp_rows, player_data, player_type, playoff_data, temp_time_frame)
-                if temp_rows:
-                    first_date = temp_rows[0]["Date"]
-
-                    if time_frame["time_end"].microseconds:
-                        if time_frame["time_end"].seconds == 1:
-                            first_date = first_date - datetime.timedelta(days=first_date.weekday()) + dateutil.relativedelta.relativedelta(years=0, months=0, weeks=1, days=0)
-                            time_frame["time_end"] = first_date + time_frame["time_end"]
-                        elif time_frame["time_end"].seconds == 2:
-                            first_date = datetime.datetime(first_date.year, first_date.month, 1).date() + dateutil.relativedelta.relativedelta(years=0, months=1, weeks=0, days=0)
-                            time_frame["time_end"] = first_date + time_frame["time_end"]
-                            original_day = time_frame["time_end"].day
-                            time_frame["time_end"] = time_frame["time_end"].replace(day=1)
-                            if original_day <= 15:
-                                time_frame["time_end"] = time_frame["time_end"].replace(month=(time_frame["time_end"].month - 1))
-                            time_frame["time_end"] = time_frame["time_end"].replace(day=calendar.monthrange(time_frame["time_end"].year, time_frame["time_end"].month)[1])
-                        elif time_frame["time_end"].seconds == 3:
-                           first_date = datetime.datetime(first_date.year, 1, 1).date() + dateutil.relativedelta.relativedelta(years=1, months=0, weeks=0, days=0)
-                           time_frame["time_end"] = first_date + time_frame["time_end"]
-                    else:
-                        time_frame["time_end"] = first_date + time_frame["time_end"]
-
-                    time_frame["time_start"] = first_date
+            elif time_frame["type"].startswith("season-range"):
+                if not time_frame["time_start"]:
+                    time_index_end = time_frame["time_end"] - 1
+                    time_index_start = time_index_end
+                elif not time_frame["time_end"]:
+                    time_index_start = time_frame["time_start"] - 1
+                    time_index_end = time_index_start
                 else:
+                    time_index_start = time_frame["time_start"] - 1
+                    time_index_end = time_frame["time_end"] - 1
+                
+                if time_frame["type"] == "season-range-reversed":
+                    temp_time_index_end = time_index_end
+                    time_index_end = len(valid_years) - time_index_start - 1
+                    time_index_start = len(valid_years) - temp_time_index_end - time_index_start
+
+                if time_index_start < 0:
+                    time_index_start = 0
+                if time_index_end < 0:
+                    time_index_end = 0
+                if time_index_start > len(valid_years) - 1:
                     time_frame["time_start"] = -1
                     time_frame["time_end"] = -1
-    
-    if time_frame["playoffs"] == "Only":
-        all_rows = handle_playoffs_data(all_rows, player_data, player_type, playoff_data, time_frame)
-    else:
-        if time_frame["type"] == "date" and (isinstance(time_frame["time_start"], int) or isinstance(time_frame["time_end"], int)):
-            if is_qual_match:
-                years_to_use = valid_years
-                if time_frame["time_start"] or time_frame["time_end"]:
-                    years_to_use = [valid_year for valid_year in valid_years if time_frame["time_start"] <= valid_year <= time_frame["time_end"]]
-
-                for year in years_to_use:
-                    all_rows += parse_table(player_data, time_frame, year, player_type)
+                else:
+                    if time_index_end > len(valid_years) - 1:
+                        time_index_end = len(valid_years) - 1
+                    time_frame["time_start"] = valid_years[time_index_start]
+                    time_frame["time_end"] = valid_years[time_index_end]
+            elif time_frame["time_start"]:
+                time_index = time_frame["time_start"]
+                time_frame["time_start"] = valid_years[0]
+                time_index = len(valid_years) - 1 if time_index > len(valid_years) else time_index - 1
+                time_frame["time_end"] = valid_years[time_index]
             else:
-                all_rows += parse_table(player_data, time_frame, None, player_type)
-                
-            if time_frame["playoffs"]:
-                all_rows = handle_playoffs_data(all_rows, player_data, player_type, playoff_data, time_frame)
+                time_index = len(valid_years) - time_frame["time_end"]
+                time_frame["time_end"] = valid_years[len(valid_years) - 1]
+                time_index = 0 if time_index < 0 else time_index
+                time_frame["time_start"] = valid_years[time_index]
+            time_frame["type"] = "date"
+        elif time_frame["type"] == "date":
+            if isinstance(time_frame["time_end"], dateutil.relativedelta.relativedelta):
+                if not player_data["game_valid_years"]:
+                    time_frame["time_start"] = -1
+                    time_frame["time_end"] = -1
+                else:
+                    first_year =  player_data["game_valid_years"][0]
+                    temp_time_frame = {
+                        "type" : "date",
+                        "time_start" : first_year,
+                        "time_end" : first_year,
+                        "qualifiers" : []
+                    }
+                    temp_rows = parse_table(player_data, temp_time_frame, first_year, player_type)
+                    if time_frame["playoffs"]:
+                        temp_rows = handle_playoffs_data(temp_rows, player_data, player_type, playoff_data, temp_time_frame)
+                    if temp_rows:
+                        first_date = temp_rows[0]["Date"]
+
+                        if time_frame["time_end"].microseconds:
+                            if time_frame["time_end"].seconds == 1:
+                                first_date = first_date - datetime.timedelta(days=first_date.weekday()) + dateutil.relativedelta.relativedelta(years=0, months=0, weeks=1, days=0)
+                                time_frame["time_end"] = first_date + time_frame["time_end"]
+                            elif time_frame["time_end"].seconds == 2:
+                                first_date = datetime.datetime(first_date.year, first_date.month, 1).date() + dateutil.relativedelta.relativedelta(years=0, months=1, weeks=0, days=0)
+                                time_frame["time_end"] = first_date + time_frame["time_end"]
+                                original_day = time_frame["time_end"].day
+                                time_frame["time_end"] = time_frame["time_end"].replace(day=1)
+                                if original_day <= 15:
+                                    time_frame["time_end"] = time_frame["time_end"].replace(month=(time_frame["time_end"].month - 1))
+                                time_frame["time_end"] = time_frame["time_end"].replace(day=calendar.monthrange(time_frame["time_end"].year, time_frame["time_end"].month)[1])
+                            elif time_frame["time_end"].seconds == 3:
+                                first_date = datetime.datetime(first_date.year, 1, 1).date() + dateutil.relativedelta.relativedelta(years=1, months=0, weeks=0, days=0)
+                                time_frame["time_end"] = first_date + time_frame["time_end"]
+                        else:
+                            time_frame["time_end"] = first_date + time_frame["time_end"]
+
+                        time_frame["time_start"] = first_date
+                    else:
+                        time_frame["time_start"] = -1
+                        time_frame["time_end"] = -1
+        
+        if time_frame["playoffs"] == "Only":
+            all_rows = handle_playoffs_data(all_rows, player_data, player_type, playoff_data, time_frame)
         else:
-            if valid_years:  
-                for year in range(time_frame["time_start"].year, time_frame["time_end"].year + 1):
-                    if year not in valid_years:
-                        continue
-                    all_rows += parse_table(player_data, time_frame, year, player_type)
-                
+            if time_frame["type"] == "date" and (isinstance(time_frame["time_start"], int) or isinstance(time_frame["time_end"], int)):
+                if is_qual_match:
+                    years_to_use = valid_years
+                    if time_frame["time_start"] or time_frame["time_end"]:
+                        years_to_use = [valid_year for valid_year in valid_years if time_frame["time_start"] <= valid_year <= time_frame["time_end"]]
+
+                    for year in years_to_use:
+                        all_rows += parse_table(player_data, time_frame, year, player_type)
+                else:
+                    all_rows += parse_table(player_data, time_frame, None, player_type)
+                    
                 if time_frame["playoffs"]:
                     all_rows = handle_playoffs_data(all_rows, player_data, player_type, playoff_data, time_frame)
+            else:
+                if valid_years:  
+                    for year in range(time_frame["time_start"].year, time_frame["time_end"].year + 1):
+                        if year not in valid_years:
+                            continue
+                        all_rows += parse_table(player_data, time_frame, year, player_type)
+                    
+                    if time_frame["playoffs"]:
+                        all_rows = handle_playoffs_data(all_rows, player_data, player_type, playoff_data, time_frame)
 
-    if not is_game and time_frame["playoffs"] != "Only" and player_type["da_type"] != "Batter":
-        handle_missing_game_data(all_rows, player_data, player_type, time_frame, valid_years)
-            
-    if not is_game:
-        handle_missing_reg_rows(player_page, player_data, all_rows, player_type, time_frame)
-    
-    if not is_game_page:
-        handle_missing_playoff_rows(player_page, player_data, valid_years, all_rows, player_type, time_frame)
-    
-    has_result_stat_qual = False
-    has_count_stat = False
-    for qualifier in time_frame["qualifiers"]:
-        if "Season" not in qualifier and "State" not in qualifier and "Facing" not in qualifier and ("Event Stat" not in qualifier or qualifier == "Individual Event Stat") and ("Stat" in qualifier or "Streak" in qualifier or "Stretch" in qualifier or ("Formula" in qualifier and qualifier != "Event Formula") or "Quickest" in qualifier or "Slowest" in qualifier):
-            for qual_object in time_frame["qualifiers"][qualifier]:
-                for sub_qual_object in qual_object["values"]:
-                    if "Formula" in qualifier:
-                        stats = qual_object["values"]
-                    else:
-                        if "stats" in sub_qual_object:
-                            stats = []
-                            for stat in sub_qual_object["stats"]:
-                                stats.append(stat["stat"])
-                        else:
-                            stats = [sub_qual_object["stat"]]
-                for stat in stats:
-                    if "tmh" in stat or "tmr" in stat or "tmrbi" in stat or "tmhr" in stat or "opph" in stat or "oppr" in stat or "opprbi" in stat or "opphr" in stat or "ttlh" in stat or "hdiff" in stat or "ttlr" in stat or "rdiff" in stat or "ttlrbi" in stat or "rbidiff" in stat or "ttlhr" in stat or "hrdiff" in stat or "gwrbi" in stat or "slam" in stat or "walkoff" in stat or "drivenin" in stat or "gwdrivenin" in stat:
-                        has_result_stat_qual = True
-                    if "gwrbi" in stat or "slam" in stat or "walkoff" in stat or "drivenin" in stat or "gwdrivenin" in stat:
-                        extra_stats.add("current-stats")
-                    for count_stat in count_stats:
-                        if count_stat.lower() in stat:
-                            has_count_stat = True
-                            break
-                    for header_stat in headers[player_type["da_type"]]:
-                        if "display-value" in headers[player_type["da_type"]][header_stat] and headers[player_type["da_type"]][header_stat]["display-value"].lower() == stat:
-                            stat = header_stat.lower()
-                            if "tmh" in stat or "tmr" in stat or "tmrbi" in stat or "tmhr" in stat or "opph" in stat or "oppr" in stat or "opprbi" in stat or "opphr" in stat or "ttlh" in stat or "hdiff" in stat or "ttlr" in stat or "rdiff" in stat or "ttlrbi" in stat or "rbidiff" in stat or "ttlhr" in stat or "hrdiff" in stat or "gwrbi" in stat or "slam" in stat or "walkoff" in stat or "drivenin" in stat or "gwdrivenin" in stat:
-                                has_result_stat_qual = True
-                            if "gwrbi" in stat or "slam" in stat or "walkoff" in stat or "drivenin" in stat or "gwdrivenin" in stat:
-                                extra_stats.add("current-stats")
-                            for count_stat in count_stats:
-                                if count_stat.lower() in stat:
-                                    has_count_stat = True
-                                    break
-                            break
+        if not is_game and time_frame["playoffs"] != "Only" and player_type["da_type"] != "Batter":
+            handle_missing_game_data(all_rows, player_data, player_type, time_frame, valid_years)
+                
+        if not is_game:
+            handle_missing_reg_rows(player_page, player_data, all_rows, player_type, time_frame)
         
-    add_play = False
-    for extra_stat in extra_stats:
-        if extra_stat.startswith("show-stat-"):
-            stat = extra_stat.split("show-stat-", 1)[1]
-            if "tmh" in stat or "tmr" in stat or "tmrbi" in stat or "tmhr" in stat or "opph" in stat or "oppr" in stat or "opprbi" in stat or "opphr" in stat or "ttlh" in stat or "hdiff" in stat or "ttlr" in stat or "rdiff" in stat or "ttlrbi" in stat or "rbidiff" in stat or "ttlhr" in stat or "hrdiff" in stat or "gwrbi" in stat or "slam" in stat or "walkoff" in stat or "drivenin" in stat or "gwdrivenin" in stat:
-                has_result_stat_qual = True
-            if "gwrbi" in stat or "slam" in stat or "walkoff" in stat or "drivenin" in stat or "gwdrivenin" in stat:
-                add_play = True
-            for count_stat in count_stats:
-                if count_stat.lower() in stat:
-                    has_count_stat = True
-                    break
-            for header_stat in headers[player_type["da_type"]]:
-                if "display-value" in headers[player_type["da_type"]][header_stat] and headers[player_type["da_type"]][header_stat]["display-value"].lower() == stat:
-                    stat = header_stat.lower()
-                    if "tmh" in stat or "tmr" in stat or "tmrbi" in stat or "tmhr" in stat or "opph" in stat or "oppr" in stat or "opprbi" in stat or "opphr" in stat or "ttlh" in stat or "hdiff" in stat or "ttlr" in stat or "rdiff" in stat or "ttlrbi" in stat or "rbidiff" in stat or "ttlhr" in stat or "hrdiff" in stat or "gwrbi" in stat or "slam" in stat or "walkoff" in stat or "drivenin" in stat or "gwdrivenin" in stat:
-                        has_result_stat_qual = True
-                    if "gwrbi" in stat or "slam" in stat or "walkoff" in stat or "drivenin" in stat or "gwdrivenin" in stat:
-                        add_play = True
-                    for count_stat in count_stats:
-                        if count_stat.lower() in stat:
-                            has_count_stat = True
-                            break
-                    break
+        if not is_game_page:
+            handle_missing_playoff_rows(player_page, player_data, valid_years, all_rows, player_type, time_frame)
+        
+        has_result_stat_qual = False
+        has_count_stat = False
+        for qualifier in time_frame["qualifiers"]:
+            if "Season" not in qualifier and "State" not in qualifier and "Facing" not in qualifier and ("Event Stat" not in qualifier or qualifier == "Individual Event Stat") and ("Stat" in qualifier or "Streak" in qualifier or "Stretch" in qualifier or ("Formula" in qualifier and qualifier != "Event Formula") or "Quickest" in qualifier or "Slowest" in qualifier):
+                for qual_object in time_frame["qualifiers"][qualifier]:
+                    for sub_qual_object in qual_object["values"]:
+                        if "Formula" in qualifier:
+                            stats = qual_object["values"]
+                        else:
+                            if "stats" in sub_qual_object:
+                                stats = []
+                                for stat in sub_qual_object["stats"]:
+                                    stats.append(stat["stat"])
+                            else:
+                                stats = [sub_qual_object["stat"]]
+                    for stat in stats:
+                        if "tmh" in stat or "tmr" in stat or "tmrbi" in stat or "tmhr" in stat or "opph" in stat or "oppr" in stat or "opprbi" in stat or "opphr" in stat or "ttlh" in stat or "hdiff" in stat or "ttlr" in stat or "rdiff" in stat or "ttlrbi" in stat or "rbidiff" in stat or "ttlhr" in stat or "hrdiff" in stat or "gwrbi" in stat or "slam" in stat or "walkoff" in stat or "drivenin" in stat or "gwdrivenin" in stat:
+                            has_result_stat_qual = True
+                        if "gwrbi" in stat or "slam" in stat or "walkoff" in stat or "drivenin" in stat or "gwdrivenin" in stat:
+                            extra_stats.add("current-stats")
+                        for count_stat in count_stats:
+                            if count_stat.lower() in stat:
+                                has_count_stat = True
+                                break
+                        for header_stat in headers[player_type["da_type"]]:
+                            if "display-value" in headers[player_type["da_type"]][header_stat] and headers[player_type["da_type"]][header_stat]["display-value"].lower() == stat:
+                                stat = header_stat.lower()
+                                if "tmh" in stat or "tmr" in stat or "tmrbi" in stat or "tmhr" in stat or "opph" in stat or "oppr" in stat or "opprbi" in stat or "opphr" in stat or "ttlh" in stat or "hdiff" in stat or "ttlr" in stat or "rdiff" in stat or "ttlrbi" in stat or "rbidiff" in stat or "ttlhr" in stat or "hrdiff" in stat or "gwrbi" in stat or "slam" in stat or "walkoff" in stat or "drivenin" in stat or "gwdrivenin" in stat:
+                                    has_result_stat_qual = True
+                                if "gwrbi" in stat or "slam" in stat or "walkoff" in stat or "drivenin" in stat or "gwdrivenin" in stat:
+                                    extra_stats.add("current-stats")
+                                for count_stat in count_stats:
+                                    if count_stat.lower() in stat:
+                                        has_count_stat = True
+                                        break
+                                break
+            
+        add_play = False
+        for extra_stat in extra_stats:
+            if extra_stat.startswith("show-stat-"):
+                stat = extra_stat.split("show-stat-", 1)[1]
+                if "tmh" in stat or "tmr" in stat or "tmrbi" in stat or "tmhr" in stat or "opph" in stat or "oppr" in stat or "opprbi" in stat or "opphr" in stat or "ttlh" in stat or "hdiff" in stat or "ttlr" in stat or "rdiff" in stat or "ttlrbi" in stat or "rbidiff" in stat or "ttlhr" in stat or "hrdiff" in stat or "gwrbi" in stat or "slam" in stat or "walkoff" in stat or "drivenin" in stat or "gwdrivenin" in stat:
+                    has_result_stat_qual = True
+                if "gwrbi" in stat or "slam" in stat or "walkoff" in stat or "drivenin" in stat or "gwdrivenin" in stat:
+                    add_play = True
+                for count_stat in count_stats:
+                    if count_stat.lower() in stat:
+                        has_count_stat = True
+                        break
+                for header_stat in headers[player_type["da_type"]]:
+                    if "display-value" in headers[player_type["da_type"]][header_stat] and headers[player_type["da_type"]][header_stat]["display-value"].lower() == stat:
+                        stat = header_stat.lower()
+                        if "tmh" in stat or "tmr" in stat or "tmrbi" in stat or "tmhr" in stat or "opph" in stat or "oppr" in stat or "opprbi" in stat or "opphr" in stat or "ttlh" in stat or "hdiff" in stat or "ttlr" in stat or "rdiff" in stat or "ttlrbi" in stat or "rbidiff" in stat or "ttlhr" in stat or "hrdiff" in stat or "gwrbi" in stat or "slam" in stat or "walkoff" in stat or "drivenin" in stat or "gwdrivenin" in stat:
+                            has_result_stat_qual = True
+                        if "gwrbi" in stat or "slam" in stat or "walkoff" in stat or "drivenin" in stat or "gwdrivenin" in stat:
+                            add_play = True
+                        for count_stat in count_stats:
+                            if count_stat.lower() in stat:
+                                has_count_stat = True
+                                break
+                        break
 
-    if add_play:
-        extra_stats.add("current-stats")
-    
-    all_dates = set()
-    if live_game:
-        if valid_years and max(valid_years) >= current_season:
-            temp_time_frame = {
-                "type" : "date",
-                "time_start" : current_season,
-                "time_end" : current_season,
-                "qualifiers" : {
-                    "Force Dates" : [{
-                        "negate" : False
-                    }]
+        if add_play:
+            extra_stats.add("current-stats")
+        
+        all_dates = set()
+        if live_game:
+            if valid_years and max(valid_years) >= current_season:
+                temp_time_frame = {
+                    "type" : "date",
+                    "time_start" : current_season,
+                    "time_end" : current_season,
+                    "qualifiers" : {
+                        "Force Dates" : [{
+                            "negate" : False
+                        }]
+                    }
                 }
-            }
-            last_game_rows = parse_table(player_data, temp_time_frame, current_season, player_type)
+                last_game_rows = parse_table(player_data, temp_time_frame, current_season, player_type)
+                if time_frame["playoffs"]:
+                    last_game_rows = handle_playoffs_data(last_game_rows, player_data, player_type, playoff_data, temp_time_frame)
+                all_dates.update(set([row["DateTime"] for row in last_game_rows]))
+            all_rows = handle_live_stats(player_type, player_data, player_link, time_frame, all_rows, live_game, all_dates, s)
+        
+        if is_game:
+            handle_date_row_data(all_rows)
+
+        if player_type["da_type"] != "Batter":
+            handle_no_hit(player_data, all_rows)
+        else:
+            handle_cycle(player_data, all_rows)
+        
+        pre_qual_teams = set([row["Tm"] for row in all_rows])
+        pre_qual_years = set([row["Year"] for row in all_rows])
+        pre_qual_teams_drs = set([row["Tm"] for row in all_rows if row["Year"] >= 2003])
+        pre_qual_teams_map = {}
+        for year in pre_qual_years:
+            pre_qual_teams_map[year] = set([row["Tm"] for row in all_rows if row["Year"] == year])
+        
+        needs_half = False
+        if "First Half" in time_frame["qualifiers"] or "Second Half" in time_frame["qualifiers"]:
+            for row in all_rows:
+                year = row["Year"]
+                if str(year) not in all_star_games:
+                    needs_half = True
+
+        needs_playoff_round_stats = False
+        needs_reg_season_round_stats = False
+        if "Elimination" in time_frame["qualifiers"] or "Clinching" in time_frame["qualifiers"] or "Elimination Or Clinching" in time_frame["qualifiers"] or "Winner Take All" in time_frame["qualifiers"] or "Ahead In Series" in time_frame["qualifiers"] or "Behind In Series" in time_frame["qualifiers"] or "Even In Series" in time_frame["qualifiers"] or "Series Team Wins" in time_frame["qualifiers"] or "Series Opponent Wins" in time_frame["qualifiers"] or "Series Score Margin" in time_frame["qualifiers"] or "Series Score Difference" in time_frame["qualifiers"]:
             if time_frame["playoffs"]:
-                last_game_rows = handle_playoffs_data(last_game_rows, player_data, player_type, playoff_data, temp_time_frame)
-            all_dates.update(set([row["DateTime"] for row in last_game_rows]))
-        all_rows = handle_live_stats(player_type, player_data, player_link, time_frame, all_rows, live_game, all_dates)
-    
-    if is_game:
-        handle_date_row_data(all_rows)
+                needs_playoff_round_stats = True
+            if not time_frame["playoffs"] or time_frame["playoffs"] == "Include":
+                needs_reg_season_round_stats = True
+        if "Series Game" in time_frame["qualifiers"]:
+            if not time_frame["playoffs"] or time_frame["playoffs"] == "Include":
+                needs_reg_season_round_stats = True
 
-    if player_type["da_type"] != "Batter":
-        handle_no_hit(player_data, all_rows)
-    else:
-        handle_cycle(player_data, all_rows)
-    
-    pre_qual_teams = set([row["Tm"] for row in all_rows])
-    pre_qual_years = set([row["Year"] for row in all_rows])
-    pre_qual_teams_drs = set([row["Tm"] for row in all_rows if row["Year"] >= 2003])
-    pre_qual_teams_map = {}
-    for year in pre_qual_years:
-        pre_qual_teams_map[year] = set([row["Tm"] for row in all_rows if row["Year"] == year])
-    
-    needs_half = False
-    if "First Half" in time_frame["qualifiers"] or "Second Half" in time_frame["qualifiers"]:
-        for row in all_rows:
-            year = row["Year"]
-            if str(year) not in all_star_games:
-                needs_half = True
+        if needs_playoff_round_stats or "Time" in time_frame["qualifiers"] or "Team Division" in time_frame["qualifiers"] or "Intradivision" in time_frame["qualifiers"] or "Interdivision" in time_frame["qualifiers"]  or "Team Game" in time_frame["qualifiers"] or "Team Game Reversed" in time_frame["qualifiers"] or "Game Days Rest" in time_frame["qualifiers"] or "Start Days Rest" in time_frame["qualifiers"] or "Games Rest" in time_frame["qualifiers"] or "Starts Rest" in time_frame["qualifiers"] or "Start Days In A Row" in time_frame["qualifiers"] or "Game Days In A Row" in time_frame["qualifiers"] or "Days In A Row" in time_frame["qualifiers"] or "Games In A Row" in time_frame["qualifiers"] or "Starts In A Row" in time_frame["qualifiers"] or "Previous Team Result" in time_frame["qualifiers"] or "Upcoming Team Result" in time_frame["qualifiers"] or needs_half:
+            all_rows = handle_schedule_stats(player_data, live_game, all_rows, time_frame["qualifiers"], time_frame["playoffs"], player_type, s)
+        
+        if "Winning Opponent" in time_frame["qualifiers"] or "Losing Opponent" in time_frame["qualifiers"] or "Tied Opponent" in time_frame["qualifiers"] or "Winning Or Tied Opponent" in time_frame["qualifiers"] or "Losing Or Tied Opponent" in time_frame["qualifiers"] or "Playoff Opponent" in time_frame["qualifiers"] or "WS Winner Opponent" in time_frame["qualifiers"] or "Pennant Winner Opponent" in time_frame["qualifiers"] or "Division Winner Opponent" in time_frame["qualifiers"] or "Opponent Runs Rank" in time_frame["qualifiers"] or "Team Standings Rank" in time_frame["qualifiers"] or "Opponent Standings Rank" in time_frame["qualifiers"] or "Opponent Runs Allowed Rank" in time_frame["qualifiers"] or "Opponent wRC+ Rank" in time_frame["qualifiers"] or "Opponent AVG Rank" in time_frame["qualifiers"] or "Opponent OBP Rank" in time_frame["qualifiers"] or "Opponent OPS Rank" in time_frame["qualifiers"] or "Opponent SLG Rank" in time_frame["qualifiers"] or "Opponent ERA- Rank" in time_frame["qualifiers"] or "Opponent ERA Rank" in time_frame["qualifiers"] or "Opponent Win Percentage" in time_frame["qualifiers"] or "Winning Team" in time_frame["qualifiers"] or "Losing Team" in time_frame["qualifiers"] or "Tied Team" in time_frame["qualifiers"] or "Winning Or Tied Team" in time_frame["qualifiers"] or "Losing Or Tied Team" in time_frame["qualifiers"] or "Playoff Team" in time_frame["qualifiers"] or "WS Winner Team" in time_frame["qualifiers"] or "Pennant Winner Team" in time_frame["qualifiers"] or "Division Winner Team" in time_frame["qualifiers"] or "Team Runs Rank" in time_frame["qualifiers"] or "Team Runs Allowed Rank" in time_frame["qualifiers"] or "Team wRC+ Rank" in time_frame["qualifiers"] or "Team SLG Rank" in time_frame["qualifiers"] or "Team AVG Rank" in time_frame["qualifiers"] or "Team OBP Rank" in time_frame["qualifiers"] or "Team OPS Rank" in time_frame["qualifiers"] or "Team ERA- Rank" in time_frame["qualifiers"] or "Team ERA Rank" in time_frame["qualifiers"] or "Team Win Percentage" in time_frame["qualifiers"] or "Team Wins" in time_frame["qualifiers"] or "Team Losses" in time_frame["qualifiers"] or "Opponent Wins" in time_frame["qualifiers"] or "Opponent Losses" in time_frame["qualifiers"] or "Opponent Division" in time_frame["qualifiers"] or "Intradivision" in time_frame["qualifiers"] or "Interdivision" in time_frame["qualifiers"] or "Team Games Over 500" in time_frame["qualifiers"] or "Opponent Games Over 500" in time_frame["qualifiers"]:
+            all_rows = handle_opponent_schedule_stats(all_rows, time_frame["qualifiers"])
 
-    needs_playoff_round_stats = False
-    needs_reg_season_round_stats = False
-    if "Elimination" in time_frame["qualifiers"] or "Clinching" in time_frame["qualifiers"] or "Elimination Or Clinching" in time_frame["qualifiers"] or "Winner Take All" in time_frame["qualifiers"] or "Ahead In Series" in time_frame["qualifiers"] or "Behind In Series" in time_frame["qualifiers"] or "Even In Series" in time_frame["qualifiers"] or "Series Team Wins" in time_frame["qualifiers"] or "Series Opponent Wins" in time_frame["qualifiers"] or "Series Score Margin" in time_frame["qualifiers"] or "Series Score Difference" in time_frame["qualifiers"]:
-        if time_frame["playoffs"]:
-            needs_playoff_round_stats = True
-        if not time_frame["playoffs"] or time_frame["playoffs"] == "Include":
-            needs_reg_season_round_stats = True
-    if "Series Game" in time_frame["qualifiers"]:
-        if not time_frame["playoffs"] or time_frame["playoffs"] == "Include":
-            needs_reg_season_round_stats = True
+        if "Intradivision" in time_frame["qualifiers"] or "Interdivision" in time_frame["qualifiers"]:
+            new_rows = []
+            for row in all_rows:
+                if perform_team_opponent_schedule_qualifiers(row, time_frame["qualifiers"]):
+                    new_rows.append(row)
+            all_rows = new_rows
 
-    if needs_playoff_round_stats or "Time" in time_frame["qualifiers"] or "Team Division" in time_frame["qualifiers"] or "Intradivision" in time_frame["qualifiers"] or "Interdivision" in time_frame["qualifiers"]  or "Team Game" in time_frame["qualifiers"] or "Team Game Reversed" in time_frame["qualifiers"] or "Game Days Rest" in time_frame["qualifiers"] or "Start Days Rest" in time_frame["qualifiers"] or "Games Rest" in time_frame["qualifiers"] or "Starts Rest" in time_frame["qualifiers"] or "Start Days In A Row" in time_frame["qualifiers"] or "Game Days In A Row" in time_frame["qualifiers"] or "Days In A Row" in time_frame["qualifiers"] or "Games In A Row" in time_frame["qualifiers"] or "Starts In A Row" in time_frame["qualifiers"] or "Previous Team Result" in time_frame["qualifiers"] or "Upcoming Team Result" in time_frame["qualifiers"] or needs_half:
-        all_rows = handle_schedule_stats(player_data, live_game, all_rows, time_frame["qualifiers"], time_frame["playoffs"], player_type)
-    
-    if "Winning Opponent" in time_frame["qualifiers"] or "Losing Opponent" in time_frame["qualifiers"] or "Tied Opponent" in time_frame["qualifiers"] or "Winning Or Tied Opponent" in time_frame["qualifiers"] or "Losing Or Tied Opponent" in time_frame["qualifiers"] or "Playoff Opponent" in time_frame["qualifiers"] or "WS Winner Opponent" in time_frame["qualifiers"] or "Pennant Winner Opponent" in time_frame["qualifiers"] or "Division Winner Opponent" in time_frame["qualifiers"] or "Opponent Runs Rank" in time_frame["qualifiers"] or "Team Standings Rank" in time_frame["qualifiers"] or "Opponent Standings Rank" in time_frame["qualifiers"] or "Opponent Runs Allowed Rank" in time_frame["qualifiers"] or "Opponent wRC+ Rank" in time_frame["qualifiers"] or "Opponent AVG Rank" in time_frame["qualifiers"] or "Opponent OBP Rank" in time_frame["qualifiers"] or "Opponent OPS Rank" in time_frame["qualifiers"] or "Opponent SLG Rank" in time_frame["qualifiers"] or "Opponent ERA- Rank" in time_frame["qualifiers"] or "Opponent ERA Rank" in time_frame["qualifiers"] or "Opponent Win Percentage" in time_frame["qualifiers"] or "Winning Team" in time_frame["qualifiers"] or "Losing Team" in time_frame["qualifiers"] or "Tied Team" in time_frame["qualifiers"] or "Winning Or Tied Team" in time_frame["qualifiers"] or "Losing Or Tied Team" in time_frame["qualifiers"] or "Playoff Team" in time_frame["qualifiers"] or "WS Winner Team" in time_frame["qualifiers"] or "Pennant Winner Team" in time_frame["qualifiers"] or "Division Winner Team" in time_frame["qualifiers"] or "Team Runs Rank" in time_frame["qualifiers"] or "Team Runs Allowed Rank" in time_frame["qualifiers"] or "Team wRC+ Rank" in time_frame["qualifiers"] or "Team SLG Rank" in time_frame["qualifiers"] or "Team AVG Rank" in time_frame["qualifiers"] or "Team OBP Rank" in time_frame["qualifiers"] or "Team OPS Rank" in time_frame["qualifiers"] or "Team ERA- Rank" in time_frame["qualifiers"] or "Team ERA Rank" in time_frame["qualifiers"] or "Team Win Percentage" in time_frame["qualifiers"] or "Team Wins" in time_frame["qualifiers"] or "Team Losses" in time_frame["qualifiers"] or "Opponent Wins" in time_frame["qualifiers"] or "Opponent Losses" in time_frame["qualifiers"] or "Opponent Division" in time_frame["qualifiers"] or "Intradivision" in time_frame["qualifiers"] or "Interdivision" in time_frame["qualifiers"] or "Team Games Over 500" in time_frame["qualifiers"] or "Opponent Games Over 500" in time_frame["qualifiers"]:
-        all_rows = handle_opponent_schedule_stats(all_rows, time_frame["qualifiers"])
+        if time_frame["qualifiers"]:
+            new_rows = []
+            for row_data in all_rows:
+                if perform_qualifier(player_data, player_type, row_data, time_frame, all_rows):
+                    new_rows.append(row_data)
+            all_rows = new_rows
 
-    if "Intradivision" in time_frame["qualifiers"] or "Interdivision" in time_frame["qualifiers"]:
-        new_rows = []
-        for row in all_rows:
-            if perform_team_opponent_schedule_qualifiers(row, time_frame["qualifiers"]):
-                new_rows.append(row)
-        all_rows = new_rows
+        if needs_reg_season_round_stats or "National Game" in time_frame["qualifiers"] or "Any National Game" in time_frame["qualifiers"] or "TV Network" in time_frame["qualifiers"] or "Radio Network" in time_frame["qualifiers"] or "Raw TV Network" in time_frame["qualifiers"] or "Raw Radio Network" in time_frame["qualifiers"] or "National TV Network" in time_frame["qualifiers"] or "National Raw TV Network" in time_frame["qualifiers"] or "Any National TV Network" in time_frame["qualifiers"] or "Any National Raw TV Network" in time_frame["qualifiers"] or "Current Winning Opponent" in time_frame["qualifiers"] or "Current Losing Opponent" in time_frame["qualifiers"] or "Current Tied Opponent" in time_frame["qualifiers"] or "Current Winning Or Tied Opponent" in time_frame["qualifiers"] or "Current Losing Or Tied Opponent" in time_frame["qualifiers"] or "Current Winning Team" in time_frame["qualifiers"] or "Current Losing Team" in time_frame["qualifiers"] or "Current Tied Team" in time_frame["qualifiers"] or "Current Winning Or Tied Team" in time_frame["qualifiers"] or "Current Losing Or Tied Team" in time_frame["qualifiers"] or "Current Team Win Percentage" in time_frame["qualifiers"] or "Current Opponent Win Percentage" in time_frame["qualifiers"] or "Current Team Wins" in time_frame["qualifiers"] or "Current Team Losses" in time_frame["qualifiers"] or "Current Opponent Wins" in time_frame["qualifiers"] or "Current Opponent Losses" in time_frame["qualifiers"] or "Current Team Games Over 500" in time_frame["qualifiers"] or "Current Opponent Games Over 500" in time_frame["qualifiers"] or "Attendance" in time_frame["qualifiers"] or "Stadium" in time_frame["qualifiers"] or "Exact Stadium" in time_frame["qualifiers"] or "Start Time" in time_frame["qualifiers"] or "Team Start Time" in time_frame["qualifiers"] or "Opponent Start Time" in time_frame["qualifiers"] or "Exact City" in time_frame["qualifiers"] or "City" in time_frame["qualifiers"] or "Exact State" in time_frame["qualifiers"] or "State" in time_frame["qualifiers"] or "Exact Country" in time_frame["qualifiers"] or "Country" in time_frame["qualifiers"] or "Surface" in time_frame["qualifiers"] or "Condition" in time_frame["qualifiers"] or "Temperature" in time_frame["qualifiers"] or "Wind" in time_frame["qualifiers"] or "Exact Umpire" in time_frame["qualifiers"] or "Exact Home Plate Umpire" in time_frame["qualifiers"] or "Umpire" in time_frame["qualifiers"] or "Home Plate Umpire" in time_frame["qualifiers"] or "Time Zone" in time_frame["qualifiers"] or "Exact Time Zone" in time_frame["qualifiers"] or "Local Start Time" in time_frame["qualifiers"] or "Local Event Time" in time_frame["qualifiers"] or "mlb-link" in extra_stats:
+            get_mlb_game_links_schedule_links(player_data, player_type, player_link, all_rows, time_frame["qualifiers"], s)
+        elif not "hide-advanced" in extra_stats or (has_result_stat_qual or "Game Number" in time_frame["qualifiers"] or "Run Support" in time_frame["qualifiers"] or "run-support-record" in extra_stats or "run-support" in extra_stats or "advanced-runner" in extra_stats or "exit-record" in extra_stats):
+            if ("Event Stat" in time_frame["qualifiers"] or "Event Stat Reversed" in time_frame["qualifiers"] or "Event Stats" in time_frame["qualifiers"] or "Event Stats Reversed" in time_frame["qualifiers"] or "Starting Event Stat" in time_frame["qualifiers"] or "Starting Event Stat Reversed" in time_frame["qualifiers"] or "Starting Event Stats" in time_frame["qualifiers"] or "Starting Event Stats Reversed" in time_frame["qualifiers"]):
+                get_mlb_game_links_schedule_links(player_data, player_type, player_link, all_rows, time_frame["qualifiers"], s)
+            elif has_result_stat_qual or "Game Number" in time_frame["qualifiers"] or "Run Support" in time_frame["qualifiers"] or "current-stats" in extra_stats or "run-support-record" in extra_stats or "run-support" in extra_stats or "advanced-runner" in extra_stats or "exit-record" in extra_stats:
+                get_mlb_game_links_schedule_links(player_data, player_type, player_link, all_rows, time_frame["qualifiers"], s)
+        
+        if "National Game" in time_frame["qualifiers"] or "Any National Game" in time_frame["qualifiers"] or "TV Network" in time_frame["qualifiers"] or "Radio Network" in time_frame["qualifiers"] or "Raw TV Network" in time_frame["qualifiers"] or "Raw Radio Network" in time_frame["qualifiers"] or "National TV Network" in time_frame["qualifiers"] or "National Raw TV Network" in time_frame["qualifiers"] or "Any National TV Network" in time_frame["qualifiers"] or "Any National Raw TV Network" in time_frame["qualifiers"] or "Current Winning Opponent" in time_frame["qualifiers"] or "Current Losing Opponent" in time_frame["qualifiers"] or "Current Tied Opponent" in time_frame["qualifiers"] or "Current Winning Or Tied Opponent" in time_frame["qualifiers"] or "Current Losing Or Tied Opponent" in time_frame["qualifiers"] or "Current Winning Team" in time_frame["qualifiers"] or "Current Losing Team" in time_frame["qualifiers"] or "Current Tied Team" in time_frame["qualifiers"] or "Current Winning Or Tied Team" in time_frame["qualifiers"] or "Current Losing Or Tied Team" in time_frame["qualifiers"] or "Current Team Win Percentage" in time_frame["qualifiers"] or "Current Opponent Win Percentage" in time_frame["qualifiers"] or "Current Team Wins" in time_frame["qualifiers"] or "Current Team Losses" in time_frame["qualifiers"] or "Current Opponent Wins" in time_frame["qualifiers"] or "Current Opponent Losses" in time_frame["qualifiers"] or "Current Team Games Over 500" in time_frame["qualifiers"] or "Current Opponent Games Over 500" in time_frame["qualifiers"] or "Attendance" in time_frame["qualifiers"] or "Stadium" in time_frame["qualifiers"] or "Exact Stadium" in time_frame["qualifiers"] or "Start Time" in time_frame["qualifiers"] or "Team Start Time" in time_frame["qualifiers"] or "Opponent Start Time" in time_frame["qualifiers"] or "Exact City" in time_frame["qualifiers"] or "City" in time_frame["qualifiers"] or "Exact State" in time_frame["qualifiers"] or "State" in time_frame["qualifiers"] or "Exact Country" in time_frame["qualifiers"] or "Country" in time_frame["qualifiers"] or "Surface" in time_frame["qualifiers"] or "Condition" in time_frame["qualifiers"] or "Temperature" in time_frame["qualifiers"] or "Wind" in time_frame["qualifiers"] or "Exact Umpire" in time_frame["qualifiers"] or "Exact Home Plate Umpire" in time_frame["qualifiers"] or "Umpire" in time_frame["qualifiers"] or "Home Plate Umpire" in time_frame["qualifiers"] or "Time Zone" in time_frame["qualifiers"] or "Exact Time Zone" in time_frame["qualifiers"] or "Local Start Time" in time_frame["qualifiers"] or "Local Event Time" in time_frame["qualifiers"]:
+            all_rows, missing_games = handle_mlb_schedule_stats(all_rows, time_frame["qualifiers"], player_data, player_type, missing_games, extra_stats)
 
-    if time_frame["qualifiers"]:
-        new_rows = []
-        for row_data in all_rows:
-            if perform_qualifier(player_data, player_type, row_data, time_frame, all_rows):
-                new_rows.append(row_data)
-        all_rows = new_rows
+        if needs_playoff_round_stats or needs_reg_season_round_stats:
+            new_rows = []
+            for row_data in all_rows:
+                if perform_round_qualifiers(row_data, time_frame["qualifiers"]):
+                    new_rows.append(row_data)
+            all_rows = new_rows
 
-    if needs_reg_season_round_stats or "National Game" in time_frame["qualifiers"] or "Any National Game" in time_frame["qualifiers"] or "TV Network" in time_frame["qualifiers"] or "Radio Network" in time_frame["qualifiers"] or "Raw TV Network" in time_frame["qualifiers"] or "Raw Radio Network" in time_frame["qualifiers"] or "National TV Network" in time_frame["qualifiers"] or "National Raw TV Network" in time_frame["qualifiers"] or "Any National TV Network" in time_frame["qualifiers"] or "Any National Raw TV Network" in time_frame["qualifiers"] or "Current Winning Opponent" in time_frame["qualifiers"] or "Current Losing Opponent" in time_frame["qualifiers"] or "Current Tied Opponent" in time_frame["qualifiers"] or "Current Winning Or Tied Opponent" in time_frame["qualifiers"] or "Current Losing Or Tied Opponent" in time_frame["qualifiers"] or "Current Winning Team" in time_frame["qualifiers"] or "Current Losing Team" in time_frame["qualifiers"] or "Current Tied Team" in time_frame["qualifiers"] or "Current Winning Or Tied Team" in time_frame["qualifiers"] or "Current Losing Or Tied Team" in time_frame["qualifiers"] or "Current Team Win Percentage" in time_frame["qualifiers"] or "Current Opponent Win Percentage" in time_frame["qualifiers"] or "Current Team Wins" in time_frame["qualifiers"] or "Current Team Losses" in time_frame["qualifiers"] or "Current Opponent Wins" in time_frame["qualifiers"] or "Current Opponent Losses" in time_frame["qualifiers"] or "Current Team Games Over 500" in time_frame["qualifiers"] or "Current Opponent Games Over 500" in time_frame["qualifiers"] or "Attendance" in time_frame["qualifiers"] or "Stadium" in time_frame["qualifiers"] or "Exact Stadium" in time_frame["qualifiers"] or "Start Time" in time_frame["qualifiers"] or "Team Start Time" in time_frame["qualifiers"] or "Opponent Start Time" in time_frame["qualifiers"] or "Exact City" in time_frame["qualifiers"] or "City" in time_frame["qualifiers"] or "Exact State" in time_frame["qualifiers"] or "State" in time_frame["qualifiers"] or "Exact Country" in time_frame["qualifiers"] or "Country" in time_frame["qualifiers"] or "Surface" in time_frame["qualifiers"] or "Condition" in time_frame["qualifiers"] or "Temperature" in time_frame["qualifiers"] or "Wind" in time_frame["qualifiers"] or "Exact Umpire" in time_frame["qualifiers"] or "Exact Home Plate Umpire" in time_frame["qualifiers"] or "Umpire" in time_frame["qualifiers"] or "Home Plate Umpire" in time_frame["qualifiers"] or "Time Zone" in time_frame["qualifiers"] or "Exact Time Zone" in time_frame["qualifiers"] or "Local Start Time" in time_frame["qualifiers"] or "Local Event Time" in time_frame["qualifiers"] or "mlb-link" in extra_stats:
-        get_mlb_game_links_schedule_links(player_data, player_type, player_link, all_rows, time_frame["qualifiers"])
-    elif not "hide-advanced" in extra_stats or (has_result_stat_qual or "Game Number" in time_frame["qualifiers"] or "Run Support" in time_frame["qualifiers"] or "run-support-record" in extra_stats or "run-support" in extra_stats or "advanced-runner" in extra_stats or "exit-record" in extra_stats):
-        if ("Event Stat" in time_frame["qualifiers"] or "Event Stat Reversed" in time_frame["qualifiers"] or "Event Stats" in time_frame["qualifiers"] or "Event Stats Reversed" in time_frame["qualifiers"] or "Starting Event Stat" in time_frame["qualifiers"] or "Starting Event Stat Reversed" in time_frame["qualifiers"] or "Starting Event Stats" in time_frame["qualifiers"] or "Starting Event Stats Reversed" in time_frame["qualifiers"]):
-            get_mlb_game_links_schedule_links(player_data, player_type, player_link, all_rows, time_frame["qualifiers"])
-        elif has_result_stat_qual or "Game Number" in time_frame["qualifiers"] or "Run Support" in time_frame["qualifiers"] or "current-stats" in extra_stats or "run-support-record" in extra_stats or "run-support" in extra_stats or "advanced-runner" in extra_stats or "exit-record" in extra_stats:
-            get_mlb_game_links_schedule_links(player_data, player_type, player_link, all_rows, time_frame["qualifiers"])
-    
-    if "National Game" in time_frame["qualifiers"] or "Any National Game" in time_frame["qualifiers"] or "TV Network" in time_frame["qualifiers"] or "Radio Network" in time_frame["qualifiers"] or "Raw TV Network" in time_frame["qualifiers"] or "Raw Radio Network" in time_frame["qualifiers"] or "National TV Network" in time_frame["qualifiers"] or "National Raw TV Network" in time_frame["qualifiers"] or "Any National TV Network" in time_frame["qualifiers"] or "Any National Raw TV Network" in time_frame["qualifiers"] or "Current Winning Opponent" in time_frame["qualifiers"] or "Current Losing Opponent" in time_frame["qualifiers"] or "Current Tied Opponent" in time_frame["qualifiers"] or "Current Winning Or Tied Opponent" in time_frame["qualifiers"] or "Current Losing Or Tied Opponent" in time_frame["qualifiers"] or "Current Winning Team" in time_frame["qualifiers"] or "Current Losing Team" in time_frame["qualifiers"] or "Current Tied Team" in time_frame["qualifiers"] or "Current Winning Or Tied Team" in time_frame["qualifiers"] or "Current Losing Or Tied Team" in time_frame["qualifiers"] or "Current Team Win Percentage" in time_frame["qualifiers"] or "Current Opponent Win Percentage" in time_frame["qualifiers"] or "Current Team Wins" in time_frame["qualifiers"] or "Current Team Losses" in time_frame["qualifiers"] or "Current Opponent Wins" in time_frame["qualifiers"] or "Current Opponent Losses" in time_frame["qualifiers"] or "Current Team Games Over 500" in time_frame["qualifiers"] or "Current Opponent Games Over 500" in time_frame["qualifiers"] or "Attendance" in time_frame["qualifiers"] or "Stadium" in time_frame["qualifiers"] or "Exact Stadium" in time_frame["qualifiers"] or "Start Time" in time_frame["qualifiers"] or "Team Start Time" in time_frame["qualifiers"] or "Opponent Start Time" in time_frame["qualifiers"] or "Exact City" in time_frame["qualifiers"] or "City" in time_frame["qualifiers"] or "Exact State" in time_frame["qualifiers"] or "State" in time_frame["qualifiers"] or "Exact Country" in time_frame["qualifiers"] or "Country" in time_frame["qualifiers"] or "Surface" in time_frame["qualifiers"] or "Condition" in time_frame["qualifiers"] or "Temperature" in time_frame["qualifiers"] or "Wind" in time_frame["qualifiers"] or "Exact Umpire" in time_frame["qualifiers"] or "Exact Home Plate Umpire" in time_frame["qualifiers"] or "Umpire" in time_frame["qualifiers"] or "Home Plate Umpire" in time_frame["qualifiers"] or "Time Zone" in time_frame["qualifiers"] or "Exact Time Zone" in time_frame["qualifiers"] or "Local Start Time" in time_frame["qualifiers"] or "Local Event Time" in time_frame["qualifiers"]:
-        all_rows, missing_games = handle_mlb_schedule_stats(all_rows, time_frame["qualifiers"], player_data, player_type, missing_games, extra_stats)
-
-    if needs_playoff_round_stats or needs_reg_season_round_stats:
-        new_rows = []
-        for row_data in all_rows:
-            if perform_round_qualifiers(row_data, time_frame["qualifiers"]):
-                new_rows.append(row_data)
-        all_rows = new_rows
-
-    if "Facing Stat Rank" in time_frame["qualifiers"] or "Facing League Stat Rank" in time_frame["qualifiers"] or "Facing AL Stat Rank" in time_frame["qualifiers"] or "Facing NL Stat Rank" in time_frame["qualifiers"] or "Facing Stat Percent" in time_frame["qualifiers"] or "Facing League Stat Percent" in time_frame["qualifiers"] or "Facing AL Stat Percent" in time_frame["qualifiers"] or "Facing NL Stat Percent" in time_frame["qualifiers"] or "Facing Stat" in time_frame["qualifiers"] or "Facing AL Stat" in time_frame["qualifiers"] or "Facing NL Stat" in time_frame["qualifiers"] or "Batting In Front Of Stat Rank" in time_frame["qualifiers"] or "Batting In Front Of League Stat Rank" in time_frame["qualifiers"] or "Batting In Front Of AL Stat Rank" in time_frame["qualifiers"] or "Batting In Front Of NL Stat Rank" in time_frame["qualifiers"] or "Batting In Front Of Stat Percent" in time_frame["qualifiers"] or "Batting In Front Of League Stat Percent" in time_frame["qualifiers"] or "Batting In Front Of AL Stat Percent" in time_frame["qualifiers"] or "Batting In Front Of NL Stat Percent" in time_frame["qualifiers"] or "Batting In Front Of Stat" in time_frame["qualifiers"] or "Batting In Front Of AL Stat" in time_frame["qualifiers"] or "Batting In Front Of NL Stat" in time_frame["qualifiers"] or "Batting Behind Stat Rank" in time_frame["qualifiers"] or "Batting Behind League Stat Rank" in time_frame["qualifiers"] or "Batting Behind AL Stat Rank" in time_frame["qualifiers"] or "Batting Behind NL Stat Rank" in time_frame["qualifiers"] or "Batting Behind Stat Percent" in time_frame["qualifiers"] or "Batting Behind League Stat Percent" in time_frame["qualifiers"] or "Batting Behind AL Stat Percent" in time_frame["qualifiers"] or "Batting Behind NL Stat Percent" in time_frame["qualifiers"] or "Batting Behind Stat" in time_frame["qualifiers"] or "Batting Behind AL Stat" in time_frame["qualifiers"] or "Batting Behind NL Stat" in time_frame["qualifiers"] or "Batting Next To Stat Rank" in time_frame["qualifiers"] or "Batting Next To League Stat Rank" in time_frame["qualifiers"] or "Batting Next To AL Stat Rank" in time_frame["qualifiers"] or "Batting Next To NL Stat Rank" in time_frame["qualifiers"] or "Batting Next To Stat Percent" in time_frame["qualifiers"] or "Batting Next To League Stat Percent" in time_frame["qualifiers"] or "Batting Next To AL Stat Percent" in time_frame["qualifiers"] or "Batting Next To NL Stat Percent" in time_frame["qualifiers"] or "Batting Next To Stat" in time_frame["qualifiers"] or "Batting Next To AL Stat" in time_frame["qualifiers"] or "Batting Next To NL Stat" in time_frame["qualifiers"]:
-        handle_stat_rank_stats(all_rows, time_frame["qualifiers"], player_type)
+        if "Facing Stat Rank" in time_frame["qualifiers"] or "Facing League Stat Rank" in time_frame["qualifiers"] or "Facing AL Stat Rank" in time_frame["qualifiers"] or "Facing NL Stat Rank" in time_frame["qualifiers"] or "Facing Stat Percent" in time_frame["qualifiers"] or "Facing League Stat Percent" in time_frame["qualifiers"] or "Facing AL Stat Percent" in time_frame["qualifiers"] or "Facing NL Stat Percent" in time_frame["qualifiers"] or "Facing Stat" in time_frame["qualifiers"] or "Facing AL Stat" in time_frame["qualifiers"] or "Facing NL Stat" in time_frame["qualifiers"] or "Batting In Front Of Stat Rank" in time_frame["qualifiers"] or "Batting In Front Of League Stat Rank" in time_frame["qualifiers"] or "Batting In Front Of AL Stat Rank" in time_frame["qualifiers"] or "Batting In Front Of NL Stat Rank" in time_frame["qualifiers"] or "Batting In Front Of Stat Percent" in time_frame["qualifiers"] or "Batting In Front Of League Stat Percent" in time_frame["qualifiers"] or "Batting In Front Of AL Stat Percent" in time_frame["qualifiers"] or "Batting In Front Of NL Stat Percent" in time_frame["qualifiers"] or "Batting In Front Of Stat" in time_frame["qualifiers"] or "Batting In Front Of AL Stat" in time_frame["qualifiers"] or "Batting In Front Of NL Stat" in time_frame["qualifiers"] or "Batting Behind Stat Rank" in time_frame["qualifiers"] or "Batting Behind League Stat Rank" in time_frame["qualifiers"] or "Batting Behind AL Stat Rank" in time_frame["qualifiers"] or "Batting Behind NL Stat Rank" in time_frame["qualifiers"] or "Batting Behind Stat Percent" in time_frame["qualifiers"] or "Batting Behind League Stat Percent" in time_frame["qualifiers"] or "Batting Behind AL Stat Percent" in time_frame["qualifiers"] or "Batting Behind NL Stat Percent" in time_frame["qualifiers"] or "Batting Behind Stat" in time_frame["qualifiers"] or "Batting Behind AL Stat" in time_frame["qualifiers"] or "Batting Behind NL Stat" in time_frame["qualifiers"] or "Batting Next To Stat Rank" in time_frame["qualifiers"] or "Batting Next To League Stat Rank" in time_frame["qualifiers"] or "Batting Next To AL Stat Rank" in time_frame["qualifiers"] or "Batting Next To NL Stat Rank" in time_frame["qualifiers"] or "Batting Next To Stat Percent" in time_frame["qualifiers"] or "Batting Next To League Stat Percent" in time_frame["qualifiers"] or "Batting Next To AL Stat Percent" in time_frame["qualifiers"] or "Batting Next To NL Stat Percent" in time_frame["qualifiers"] or "Batting Next To Stat" in time_frame["qualifiers"] or "Batting Next To AL Stat" in time_frame["qualifiers"] or "Batting Next To NL Stat" in time_frame["qualifiers"]:
+            handle_stat_rank_stats(all_rows, time_frame["qualifiers"], player_type, s)
 
     if not "hide-advanced" in extra_stats or (has_result_stat_qual or "Game Number" in time_frame["qualifiers"] or "Run Support" in time_frame["qualifiers"] or "run-support-record" in extra_stats or "run-support" in extra_stats or "advanced-runner" in extra_stats or "exit-record" in extra_stats):
         if ("Event Stat" in time_frame["qualifiers"] or "Event Stat Reversed" in time_frame["qualifiers"] or "Event Stats" in time_frame["qualifiers"] or "Event Stats Reversed" in time_frame["qualifiers"] or "Starting Event Stat" in time_frame["qualifiers"] or "Starting Event Stat Reversed" in time_frame["qualifiers"] or "Starting Event Stats" in time_frame["qualifiers"] or "Starting Event Stats Reversed" in time_frame["qualifiers"]):
@@ -16093,10 +16095,9 @@ def handle_date_row_data(all_rows):
             if row_data["Upcoming Row"]["Year"] != row_data["Year"]:
                 row_data["Upcoming Row"] = None
 
-def get_live_game(player_link, player_data, player_type, time_frame):
+def get_live_game(player_link, player_data, player_type, time_frame, s):
     player_id = int(player_link.split('/')[-1])
-    request = urllib.request.Request("https://statsapi.mlb.com" + player_link + "?hydrate=currentTeam,transactions", headers=request_headers)
-    sub_data = url_request_json(request)
+    sub_data = url_request_json(s, "https://statsapi.mlb.com" + player_link + "?hydrate=currentTeam,transactions")
 
     if "transactions" in sub_data["people"][0]:
         player_data["transactions"] = sub_data["people"][0]["transactions"]
@@ -16112,15 +16113,13 @@ def get_live_game(player_link, player_data, player_type, time_frame):
     #     max_date = datetime.date(current_season, month_int, calendar.monthrange(current_season, month_int)[1])
 
     #     scheudle_url = mlb_team_schedule_url_format.format(current_team, urllib.parse.quote_plus(str(min_date)), urllib.parse.quote_plus(str(max_date)))
-    #     request = urllib.request.Request(scheudle_url, headers=request_headers)
-    #     data = url_request_json(request)
+    #     data = url_request_json(s, scheudle_url)
 
     #     for game in data["dates"]:
     #         da_dates.append(game)
 
     scheudle_url = mlb_team_schedule_url_format.format(current_team, current_season)
-    request = urllib.request.Request(scheudle_url, headers=request_headers)
-    data = url_request_json(request)
+    data = url_request_json(s, scheudle_url)
 
     for game in data["dates"]:
         da_dates.append(game)
@@ -16176,8 +16175,7 @@ def get_live_game(player_link, player_data, player_type, time_frame):
             is_playoffs = latest_game["gameType"] in ("F", "D", "L", "W")
 
             if (year not in player_data["year_valid_years"]) or (not is_playoffs and year not in player_data["reg_year_valid_years"]):
-                request = urllib.request.Request("https://statsapi.mlb.com" + latest_game["link"], headers=request_headers)
-                sub_data = url_request_json(request)
+                sub_data = url_request_json(s, "https://statsapi.mlb.com" + latest_game["link"])
 
                 is_home = sub_data["gameData"]["teams"]["home"]["id"] == current_team
                 team_str = "home" if is_home else "away"
@@ -16206,12 +16204,12 @@ def get_live_game(player_link, player_data, player_type, time_frame):
     else:
         return None
 
-def handle_live_stats(player_type, player_data, player_link, time_frame, all_rows, live_game, all_dates):
+def handle_live_stats(player_type, player_data, player_link, time_frame, all_rows, live_game, all_dates, s):
     current_team, sub_datas = live_game[0], live_game[1]
     
     player_id = int(player_link.split('/')[-1])
     for game_data in sub_datas:
-        row_data = determine_row_data(game_data, player_type, player_data, player_id, current_team, all_dates, all_rows, time_frame)
+        row_data = determine_row_data(game_data, player_type, player_data, player_id, current_team, all_dates, all_rows, time_frame, s)
         if row_data:
             all_rows.append(row_data)
 
@@ -16219,7 +16217,7 @@ def handle_live_stats(player_type, player_data, player_link, time_frame, all_row
 
     return all_rows
 
-def determine_row_data(game_data, player_type, player_data, player_id, current_team, all_dates, all_rows, time_frame):
+def determine_row_data(game_data, player_type, player_data, player_id, current_team, all_dates, all_rows, time_frame, ):
     row_data = {}
     row_data["Year"] = int(game_data["season"])
 
@@ -16239,8 +16237,7 @@ def determine_row_data(game_data, player_type, player_data, player_id, current_t
     if not has_match:
         return None
 
-    request = urllib.request.Request("https://statsapi.mlb.com" + game_data["link"], headers=request_headers)
-    sub_data = url_request_json(request)
+    sub_data = url_request_json(s, "https://statsapi.mlb.com" + game_data["link"])
 
     game_type = sub_data["gameData"]["game"]["type"]
     is_home = sub_data["gameData"]["teams"]["home"]["id"] == current_team
@@ -23245,13 +23242,13 @@ def url_request(request, timeout=30):
             time.sleep(time_to_wait)
         logger.info("#" + str(threading.get_ident()) + "#   " + "0")
 
-def url_request_lxml(request, timeout=30):
+def url_request_lxml(session, url, timeout=30):
     failed_counter = 0
     while(True):
         try:
-            response = urllib.request.urlopen(request, timeout=timeout)
-            bs = lxml.html.parse(response)
-            if not bs.getroot():
+            response = session.get(url, timeout=timeout)
+            bs = lxml.html.document_fromstring(response.text)
+            if not bs:
                 raise urllib.error.URLError("Page is empty!")
             return response, bs
         except Exception:
@@ -23260,7 +23257,7 @@ def url_request_lxml(request, timeout=30):
                 raise
 
         delay_step = 10
-        logger.info("#" + str(threading.get_ident()) + "#   " + "Retrying in " + str(retry_failure_delay) + " seconds to allow request to " + request.get_full_url() + " to chill")
+        logger.info("#" + str(threading.get_ident()) + "#   " + "Retrying in " + str(retry_failure_delay) + " seconds to allow request to " + url + " to chill")
         time_to_wait = int(math.ceil(float(retry_failure_delay)/float(delay_step)))
         for i in range(retry_failure_delay, 0, -time_to_wait):
             logger.info("#" + str(threading.get_ident()) + "#   " + str(i))
@@ -23286,7 +23283,25 @@ def url_request_bytes(request, timeout=30):
             time.sleep(time_to_wait)
         logger.info("#" + str(threading.get_ident()) + "#   " + "0")
 
-def url_request_json(request, timeout=30):
+def url_request_json(session, url, timeout=30):
+    failed_counter = 0
+    while(True):
+        try:
+            return session.get(url, timeout=timeout).json()
+        except Exception:
+            failed_counter += 1
+            if failed_counter > max_request_retries:
+                raise
+
+        delay_step = 10
+        logger.info("#" + str(threading.get_ident()) + "#   " + "Retrying in " + str(retry_failure_delay) + " seconds to allow " + url + " to chill")
+        time_to_wait = int(math.ceil(float(retry_failure_delay)/float(delay_step)))
+        for i in range(retry_failure_delay, 0, -time_to_wait):
+            logger.info("#" + str(threading.get_ident()) + "#   " + str(i))
+            time.sleep(time_to_wait)
+        logger.info("#" + str(threading.get_ident()) + "#   " + "0")
+
+def url_request_json_urlib(request, timeout=30):
     failed_counter = 0
     while(True):
         try:
@@ -23748,7 +23763,7 @@ def get_player_hof(player_page):
     else:
         return False
 
-def get_mlb_player_link(player_data):
+def get_mlb_player_link(player_data, s):
     if player_data["id"] in manual_id_maps:
         return "/api/v1/people/" +  str(manual_id_maps[player_data["id"]])
         
@@ -23815,8 +23830,7 @@ def get_mlb_player_link(player_data):
                     da_dates = []
 
                     scheudle_url = mlb_team_schedule_url_format.format(team_id, sub_year)
-                    request = urllib.request.Request(scheudle_url, headers=request_headers)
-                    data = url_request_json(request)
+                    data = url_request_json(s, scheudle_url)
 
                     for game in data["dates"]:
                         da_dates.append(game)
@@ -23826,8 +23840,7 @@ def get_mlb_player_link(player_data):
                     #     max_date = datetime.date(sub_year, month_int, calendar.monthrange(sub_year, month_int)[1])
 
                     #     scheudle_url = mlb_team_schedule_url_format.format(team_id, urllib.parse.quote_plus(str(min_date)), urllib.parse.quote_plus(str(max_date)))
-                    #     request = urllib.request.Request(scheudle_url, headers=request_headers)
-                    #     data = url_request_json(request)
+                    #     data = url_request_json(s, scheudle_url)
 
                     #     for game in data["dates"]:
                     #         da_dates.append(game)
@@ -23842,8 +23855,7 @@ def get_mlb_player_link(player_data):
 
                             if str(game["season"]) == year_str:
                                 game_link = game["link"]
-                                request = urllib.request.Request("https://statsapi.mlb.com" + game_link, headers=request_headers)
-                                sub_data = url_request_json(request)
+                                sub_data = url_request_json(s, "https://statsapi.mlb.com" + game_link)
 
                                 is_home = sub_data["gameData"]["teams"]["home"]["id"] == team_id
                                 team_str = "home" if is_home else "away"
@@ -23863,9 +23875,8 @@ def get_mlb_player_link(player_data):
                 except urllib.error.HTTPError:
                     raise
             else:
-                request = urllib.request.Request(team_roster_url_format.format(team_id, year_str), headers=request_headers)
                 try:
-                    data = url_request_json(request)
+                    data = url_request_json(s, team_roster_url_format.format(team_id, year_str))
                 except urllib.error.HTTPError:
                     raise
 
@@ -23945,8 +23956,7 @@ def get_mlb_player_link(player_data):
                     da_dates = []
 
                     scheudle_url = mlb_team_schedule_url_format.format(team_id, sub_year)
-                    request = urllib.request.Request(scheudle_url, headers=request_headers)
-                    data = url_request_json(request)
+                    data = url_request_json(s, scheudle_url)
 
                     for game in data["dates"]:
                         da_dates.append(game)
@@ -23956,8 +23966,7 @@ def get_mlb_player_link(player_data):
                     #     max_date = datetime.date(sub_year, month_int, calendar.monthrange(sub_year, month_int)[1])
 
                     #     scheudle_url = mlb_team_schedule_url_format.format(team_id, urllib.parse.quote_plus(str(min_date)), urllib.parse.quote_plus(str(max_date)))
-                    #     request = urllib.request.Request(scheudle_url, headers=request_headers)
-                    #     data = url_request_json(request)
+                    #     data = url_request_json(s, scheudle_url)
 
                     #     for game in data["dates"]:
                     #         da_dates.append(game)
@@ -23972,8 +23981,7 @@ def get_mlb_player_link(player_data):
 
                             if str(game["season"]) == year_str:
                                 game_link = game["link"]
-                                request = urllib.request.Request("https://statsapi.mlb.com" + game_link, headers=request_headers)
-                                sub_data = url_request_json(request)
+                                sub_data = url_request_json(s, "https://statsapi.mlb.com" + game_link)
 
                                 is_home = sub_data["gameData"]["teams"]["home"]["id"] == team_id
                                 team_str = "home" if is_home else "away"
@@ -24027,9 +24035,8 @@ def get_mlb_player_link(player_data):
                 except urllib.error.HTTPError:
                     raise
             else:
-                request = urllib.request.Request(team_roster_url_format.format(team_id, year_str), headers=request_headers)
                 try:
-                    data = url_request_json(request)
+                    data = url_request_json(s, team_roster_url_format.format(team_id, year_str))
                 except urllib.error.HTTPError:
                     raise
 
@@ -24636,7 +24643,7 @@ def handle_playoffs_data(all_rows, player_data, player_type, playoff_data, time_
                 
     return all_rows + data_to_include
 
-def handle_schedule_stats(player_data, live_game, all_rows, qualifiers, is_playoffs, player_type):
+def handle_schedule_stats(player_data, live_game, all_rows, qualifiers, is_playoffs, player_type, s):
     all_rows = sorted(all_rows, key=lambda row: row["DateTime"])
     seasons = []
     for row_data in all_rows:
@@ -24647,7 +24654,7 @@ def handle_schedule_stats(player_data, live_game, all_rows, qualifiers, is_playo
             })
     
     player_data["team_games_map"] = {}
-    team_schedule = get_team_schedule(player_data, seasons, True, True, "Time" in qualifiers, is_playoffs, player_type)
+    team_schedule = get_team_schedule(player_data, seasons, True, True, "Time" in qualifiers, is_playoffs, player_type, s)
 
     all_dates = set()
     for year in team_schedule:
@@ -25379,7 +25386,7 @@ def handle_opponent_schedule_stats(all_rows, qualifiers):
             new_rows.append(row)
     return new_rows
 
-def handle_stat_rank_stats(all_rows, qualifiers, player_type):
+def handle_stat_rank_stats(all_rows, qualifiers, player_type, s):
     all_rows = sorted(all_rows, key=lambda row: row["DateTime"])
     seasons = []
     for row_data in all_rows:
@@ -25549,8 +25556,8 @@ def handle_stat_rank_stats(all_rows, qualifiers, player_type):
             func = globals().get(func_to_call)
             for qual_obj in qualifiers[qual_str]:
                 if "League" in qual_str:
-                    al_year_map_obj = func(qual_obj, stat_mapping, call_type, seasons, 103)
-                    nl_year_map_obj = func(qual_obj, stat_mapping, call_type, seasons, 104)
+                    al_year_map_obj = func(qual_obj, stat_mapping, call_type, seasons, 103, s)
+                    nl_year_map_obj = func(qual_obj, stat_mapping, call_type, seasons, 104, s)
                     if al_year_map_obj != None and nl_year_map_obj != None:
                         year_map_obj = {}
                         for year in al_year_map_obj:
@@ -25568,11 +25575,11 @@ def handle_stat_rank_stats(all_rows, qualifiers, player_type):
                         league_id = 103
                     elif "NL" in qual_str:
                         league_id = 104
-                    year_map_obj = func(qual_obj, stat_mapping, call_type, seasons, None)
+                    year_map_obj = func(qual_obj, stat_mapping, call_type, seasons, None, s)
                     if year_map_obj != None:
                         qual_obj["year_map_obj"] = year_map_obj
 
-def handle_facing_stat_rank_qual(qual_obj, stat_mapping, call_type, seasons, league):
+def handle_facing_stat_rank_qual(qual_obj, stat_mapping, call_type, seasons, league, s):
     if "reverse" in qual_obj and qual_obj["reverse"]:
         sort_str = "desc" if sort_str == "asc" else "asc"
 
@@ -25604,8 +25611,7 @@ def handle_facing_stat_rank_qual(qual_obj, stat_mapping, call_type, seasons, lea
             if league:
                 url_to_use += "&leagueIds=" + str(league)
 
-            request = urllib.request.Request(url_to_use, headers=request_headers)
-            data = url_request_json(request)
+            data = url_request_json(s, url_to_use)
 
             if data["stats"]:
                 if season_obj["Year"] not in year_map_obj:
@@ -25618,7 +25624,7 @@ def handle_facing_stat_rank_qual(qual_obj, stat_mapping, call_type, seasons, lea
     else:
         return None
 
-def handle_facing_stat_percent_qual(qual_obj, stat_mapping, call_type, seasons, league):
+def handle_facing_stat_percent_qual(qual_obj, stat_mapping, call_type, seasons, league, s):
     if "reverse" in qual_obj and qual_obj["reverse"]:
         sort_str = "desc" if sort_str == "asc" else "asc"
 
@@ -25646,8 +25652,7 @@ def handle_facing_stat_percent_qual(qual_obj, stat_mapping, call_type, seasons, 
             if league:
                 url_to_use += "&leagueIds=" + str(league)
 
-            request = urllib.request.Request(url_to_use, headers=request_headers)
-            data = url_request_json(request)
+            data = url_request_json(s, url_to_use)
 
             if data["stats"]:
                 if season_obj["Year"] not in year_map_obj:
@@ -25663,7 +25668,7 @@ def handle_facing_stat_percent_qual(qual_obj, stat_mapping, call_type, seasons, 
     else:
         return None
 
-def handle_facing_stat_qual(qual_obj, stat_mapping, call_type, seasons, league):
+def handle_facing_stat_qual(qual_obj, stat_mapping, call_type, seasons, league, s):
     year_map_obj = {}
     has_one_stat_match = False
     for season_obj in seasons:
@@ -25671,8 +25676,7 @@ def handle_facing_stat_qual(qual_obj, stat_mapping, call_type, seasons, league):
         if league:
             url_to_use += "&leagueIds=" + str(league)
 
-        request = urllib.request.Request(url_to_use, headers=request_headers)
-        data = url_request_json(request)
+        data = url_request_json(s, url_to_use)
 
         if data["stats"]:
             for player in data["stats"]:
@@ -26224,7 +26228,7 @@ def perform_team_opponent_schedule_qualifiers(row, qualifiers):
     
     return True
 
-def get_team_schedule(player_data, seasons, needs_reg_season, needs_playoffs, needs_time, is_playoffs, player_type):
+def get_team_schedule(player_data, seasons, needs_reg_season, needs_playoffs, needs_time, is_playoffs, player_type, s):
     season_objs = {}
 
     for season_obj in seasons:
@@ -26433,7 +26437,7 @@ def get_team_schedule(player_data, seasons, needs_reg_season, needs_playoffs, ne
                                             new_season_obj["playoffs"].append(row_data)
             
             if needs_time and is_playoffs:
-                get_mlb_game_links_schedule_links(player_data, player_type, player_data["player_link"], new_season_obj["playoffs"], {})
+                get_mlb_game_links_schedule_links(player_data, player_type, player_data["player_link"], new_season_obj["playoffs"], {}, s)
 
             new_season_obj["playoffs"] = sorted(new_season_obj["playoffs"], key=lambda row: row["DateTime"])
 
@@ -36691,7 +36695,7 @@ def set_row_data(player_game_info, row_data, player_type):
         elif row_data.get("GS", 0):
             row_data["ExitND"] = 1
 
-def get_mlb_game_links_schedule_links(player_data, player_type, player_link, all_rows, qualifiers):
+def get_mlb_game_links_schedule_links(player_data, player_type, player_link, all_rows, qualifiers, s):
     seasons = list(set([row["Year"] for row in all_rows]))
     for season in seasons:
         sub_year = season
@@ -36770,8 +36774,7 @@ def get_mlb_game_links_schedule_links(player_data, player_type, player_link, all
             else:
                 scheudle_url = scheudle_url[:-9]
 
-            request = urllib.request.Request(scheudle_url, headers=request_headers)
-            data = url_request_json(request)
+            data = url_request_json(s, scheudle_url)
 
             for game in data["dates"]:
                 da_dates.append(game)
@@ -36799,8 +36802,7 @@ def get_mlb_game_links_schedule_links(player_data, player_type, player_link, all
             #         scheudle_url = scheudle_url[:-1]
             #     else:
             #         scheudle_url = scheudle_url[:-9]
-            #     request = urllib.request.Request(scheudle_url, headers=request_headers)
-            #     data = url_request_json(request)
+            #     data = url_request_json(s, scheudle_url)
 
             #     for game in data["dates"]:
             #         da_dates.append(game)
@@ -37070,16 +37072,16 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
             return game_data, row_data, row_index, missing_games
     
     #print("https://statsapi.mlb.com/api/v1.1/game/" + str(row_data["MLBGameLink"]) + "/feed/live")
-    try:
-        request = urllib.request.Request("https://statsapi.mlb.com/api/v1.1/game/" + str(row_data["MLBGameLink"]) + "/feed/live", headers=request_headers)
-        sub_data = url_request_json(request)
-    except urllib.error.HTTPError as err:
-        if err.status == 404:
-            missing_games = True
-            game_data["missing_data"] = True
-            return game_data, row_data, row_index, missing_games
-        else:
-            raise
+    with requests.Session() as s:
+        try:
+            sub_data = url_request_json(s, "https://statsapi.mlb.com/api/v1.1/game/" + str(row_data["MLBGameLink"]) + "/feed/live")
+        except urllib.error.HTTPError as err:
+            if err.status == 404:
+                missing_games = True
+                game_data["missing_data"] = True
+                return game_data, row_data, row_index, missing_games
+            else:
+                raise
 
     team_position_map = {
         "PH" : set(),
@@ -42470,7 +42472,7 @@ def create_table_html(html_info, player_datas, player_type, original_comment, la
                 "title" : comment_id
             }
             request = urllib.request.Request(url=imgur_upload_url, data=urllib.parse.urlencode(data).encode("utf-8"), headers=imgur_headers)
-            return url_request_json(request, timeout=30)["data"]["link"]
+            return url_request_json_urlib(request, timeout=30)["data"]["link"]
     finally:
         #logger.info("#" + str(threading.get_ident()) + "# " + dirpath)
         shutil.rmtree(dirpath)
