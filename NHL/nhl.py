@@ -20358,7 +20358,7 @@ def set_row_data(player_game_info, row_data):
 def get_game_data(index, player_data, row_data, player_id, player_type, time_frame, extra_stats, s):
     game_data, missing_games, sub_data = setup_game_data(player_data, row_data, player_id, player_type, time_frame, s)
     if game_data["missing_data"]:
-        if "href" in extra_stats or ("hide-href" not in extra_stats and row_data["Year"] < 2001 and "Game Number" not in time_frame["qualifiers"] and "Attendance" not in time_frame["qualifiers"] and "Start Time" not in time_frame["qualifiers"] and "Team Start Time" not in time_frame["qualifiers"] and "Opponent Start Time" not in time_frame["qualifiers"] and "Local Start Time" not in time_frame["qualifiers"] and "Exact Referee" not in time_frame["qualifiers"] and "Exact Linesman" not in time_frame["qualifiers"] or "Exact Team Head Coach" not in time_frame["qualifiers"] and "Exact Opponent Head Coach" not in time_frame["qualifiers"] and "Official" not in time_frame["qualifiers"] and "Referee" not in time_frame["qualifiers"] and "Linesman" not in time_frame["qualifiers"] and "Team Head Coach" not in time_frame["qualifiers"] and "Opponent Head Coach" not in time_frame["qualifiers"] and "Shot On First Name" not in time_frame["qualifiers"] and "Shot By First Name" not in time_frame["qualifiers"] and "Shot On Last Name" not in time_frame["qualifiers"] and not "Shot By Last Name" in time_frame["qualifiers"] and "Shot On Birth Country" not in time_frame["qualifiers"] and "Shot By Birth Country" not in time_frame["qualifiers"] and "Shot On Nationality" not in time_frame["qualifiers"] and "Shot By Nationality" not in time_frame["qualifiers"] and "Facing Lefty" not in time_frame["qualifiers"] and "Facing Righty" not in time_frame["qualifiers"]):
+        if "href" in extra_stats or "hide-href" not in extra_stats:
             game_data, missing_games, sub_data = setup_href_game_data(player_data, row_data, player_id, player_type, time_frame, None, s)
             if game_data["missing_data"]:
                 return game_data, row_data, missing_games
@@ -20373,7 +20373,7 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
         if sub_data and not "href" in extra_stats:
             scoring_plays = sub_data["liveData"]["plays"]["allPlays"]
     
-        if "href" in extra_stats or ("hide-href" not in extra_stats and not scoring_plays and not has_api_quals(time_frame["qualifiers"]) and (not "Shot On" in time_frame["qualifiers"] and not "Shot By" in time_frame["qualifiers"] and not "Shot On First Name" in time_frame["qualifiers"] and not "Shot By First Name" in time_frame["qualifiers"] and not "Shot On Last Name" in time_frame["qualifiers"] and not "Shot By Last Name" in time_frame["qualifiers"] and not "Shot On Birth Country" in time_frame["qualifiers"] and not "Shot By Birth Country" in time_frame["qualifiers"] and not "Shot On Nationality" in time_frame["qualifiers"] and not "Shot By Nationality" in time_frame["qualifiers"] and not "Facing Lefty" in time_frame["qualifiers"] and not "Facing Righty" in time_frame["qualifiers"])):
+        if not scoring_plays and "href" in extra_stats or "hide-href" not in extra_stats
             game_data, missing_games, sub_data = setup_href_game_data(player_data, row_data, player_id, player_type, time_frame, game_data, s)
             if game_data["missing_data"]:
                 return game_data, row_data, missing_games
@@ -20382,10 +20382,28 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
     if row_data["Year"] >= 2001 and not has_api_quals(time_frame["qualifiers"]) and not "hide-play" in extra_stats and not "href" in extra_stats:
         if row_data["Year"] >= 2007:
             get_html_play_data(scoring_plays, player_data, row_data["NHLGameLink"], row_data["Location"], game_data, sub_data["gameData"]["status"]["abstractGameState"] == "Final", row_data["Year"], s)
+            if not scoring_plays:
+                missing_games = True
+                game_data["missing_data"] = True
+                get_old_html_play_data(scoring_plays, player_data, row_data["NHLGameLink"], row_data["Location"], game_data, True, row_data["Year"], s)
+                if not scoring_plays:
+                    get_older_html_play_data(scoring_plays, player_data, row_data["NHLGameLink"], row_data["Location"], game_data, True, row_data["Year"], s)
+                    if not scoring_plays and not "hide-href" not in extra_stats:
+                        get_href_html_play_data(scoring_plays, player_data, row_data["GameLink"], row_data["Location"], row_data["Tm"], row_data["Opponent"].upper(), game_data, True, s)
         elif row_data["Year"] >= 2003:
             get_old_html_play_data(scoring_plays, player_data, row_data["NHLGameLink"], row_data["Location"], game_data, True, row_data["Year"], s)
+            if not scoring_plays:
+                missing_games = True
+                game_data["missing_data"] = True
+                get_older_html_play_data(scoring_plays, player_data, row_data["NHLGameLink"], row_data["Location"], game_data, True, row_data["Year"], s)
+                if not scoring_plays and not "hide-href" not in extra_stats:
+                    get_href_html_play_data(scoring_plays, player_data, row_data["GameLink"], row_data["Location"], row_data["Tm"], row_data["Opponent"].upper(), game_data, True, s)
         elif row_data["Year"] >= 2001:
             get_older_html_play_data(scoring_plays, player_data, row_data["NHLGameLink"], row_data["Location"], game_data, True, row_data["Year"], s)
+            if not scoring_plays and not "hide-href" not in extra_stats:
+                missing_games = True
+                game_data["missing_data"] = True
+                get_href_html_play_data(scoring_plays, player_data, row_data["GameLink"], row_data["Location"], row_data["Tm"], row_data["Opponent"].upper(), game_data, True, s)
 
     if not scoring_plays:
         if "current-stats" in extra_stats:
