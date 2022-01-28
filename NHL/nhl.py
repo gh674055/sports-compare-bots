@@ -18027,7 +18027,7 @@ def handle_nhl_game_stats(player_data, all_rows, time_frame, player_link, player
                 
             if not has_match:
                 games_to_skip.add(row_data["NHLGameLink"])
-    if has_coordinate_quals(time_frame["qualifiers"]) or has_time_quals(time_frame["qualifiers"]):
+    if has_api_quals(time_frame["qualifiers"]) or has_time_quals(time_frame["qualifiers"]):
         for row_data in all_rows:
             if row_data["Year"] < 2010:
                 games_to_skip.add(row_data["NHLGameLink"])
@@ -18309,7 +18309,7 @@ def handle_nhl_game_stats_single_thread(player_data, all_rows, time_frame, playe
                 
             if not has_match:
                 games_to_skip.add(row_data["NHLGameLink"])
-    if has_coordinate_quals(time_frame["qualifiers"]) or has_time_quals(time_frame["qualifiers"]):
+    if has_api_quals(time_frame["qualifiers"]) or has_time_quals(time_frame["qualifiers"]):
         for row_data in all_rows:
             if row_data["Year"] < 2010:
                 games_to_skip.add(row_data["NHLGameLink"])
@@ -20372,6 +20372,11 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
     if row_data["Year"] < 2001 or has_api_quals(time_frame["qualifiers"]) or "href" in extra_stats:
         if sub_data and not "href" in extra_stats:
             scoring_plays = sub_data["liveData"]["plays"]["allPlays"]
+            if row_data["Year"] >= 2010:
+                if not scoring_plays or not has_period_event(game_data, scoring_plays):
+                    missing_games = True
+                    game_data["missing_data"] = True
+                    return game_data, row_data, missing_games
     
         if not scoring_plays and "href" in extra_stats or "hide-href" not in extra_stats:
             game_data, missing_games, sub_data = setup_href_game_data(player_data, row_data, player_id, player_type, time_frame, game_data, s)
@@ -20382,28 +20387,18 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
     if row_data["Year"] >= 2001 and not has_api_quals(time_frame["qualifiers"]) and not "hide-play" in extra_stats and not "href" in extra_stats:
         if row_data["Year"] >= 2007:
             get_html_play_data(scoring_plays, player_data, row_data["NHLGameLink"], row_data["Location"], game_data, sub_data["gameData"]["status"]["abstractGameState"] == "Final", row_data["Year"], s)
-            if not scoring_plays:
+            if not scoring_plays or not has_period_event(game_data, scoring_plays):
                 missing_games = True
                 game_data["missing_data"] = True
-                get_old_html_play_data(scoring_plays, player_data, row_data["NHLGameLink"], row_data["Location"], game_data, True, row_data["Year"], s)
-                if not scoring_plays:
-                    get_older_html_play_data(scoring_plays, player_data, row_data["NHLGameLink"], row_data["Location"], game_data, True, row_data["Year"], s)
-                    if not scoring_plays and not "hide-href" not in extra_stats:
-                        get_href_html_play_data(scoring_plays, player_data, row_data["GameLink"], row_data["Location"], row_data["Tm"], row_data["Opponent"].upper(), game_data, True, s)
+                return game_data, row_data, missing_games
         elif row_data["Year"] >= 2003:
             get_old_html_play_data(scoring_plays, player_data, row_data["NHLGameLink"], row_data["Location"], game_data, True, row_data["Year"], s)
-            if not scoring_plays:
+            if not scoring_plays or not has_period_event(game_data, scoring_plays):
                 missing_games = True
                 game_data["missing_data"] = True
-                get_older_html_play_data(scoring_plays, player_data, row_data["NHLGameLink"], row_data["Location"], game_data, True, row_data["Year"], s)
-                if not scoring_plays and not "hide-href" not in extra_stats:
-                    get_href_html_play_data(scoring_plays, player_data, row_data["GameLink"], row_data["Location"], row_data["Tm"], row_data["Opponent"].upper(), game_data, True, s)
+                return game_data, row_data, missing_games
         elif row_data["Year"] >= 2001:
             get_older_html_play_data(scoring_plays, player_data, row_data["NHLGameLink"], row_data["Location"], game_data, True, row_data["Year"], s)
-            if not scoring_plays and not "hide-href" not in extra_stats:
-                missing_games = True
-                game_data["missing_data"] = True
-                get_href_html_play_data(scoring_plays, player_data, row_data["GameLink"], row_data["Location"], row_data["Tm"], row_data["Opponent"].upper(), game_data, True, s)
 
     if not scoring_plays:
         if "current-stats" in extra_stats:
@@ -21266,6 +21261,17 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
             game_data["all_events"][goal_event["period"]][goal_event["periodTime"]].append(goal_event)
     
     return game_data, row_data, missing_games
+
+def has_period_event(game_data, scoring_plays):
+    for period in game_data["periods"]:
+        has_period_match = False
+        for scoring_play in scoring_plays:
+            if period == scoring_play["about"]["period"]:
+                has_period_match = True
+                break
+        if not has_period_match:
+            return False
+    return True
 
 def determine_last_goalie(row_data, game_data, period, periodTime, team_str):
     shift_data = game_data["shift_data"]
@@ -22820,7 +22826,18 @@ def get_old_html_play_data(scoring_plays, player_data, og_game_id, is_home, game
                     else:
                         new_line.append("")
                 events.append(new_line)
-
+            elif len(line_split) == 4:
+                if line_split[0] == "SO":
+                    new_line = []
+                    new_line.append(None)
+                    new_line.append(5)
+                    new_line.append(None)
+                    new_line.append(line_split[1].strip())
+                    new_line.append(line_split[2].strip())
+                    new_line.append("-")
+                    new_line.append(line_split[3].strip())
+                    events.append(new_line)
+                
     home_team_abbr_to_use = None
     away_team_abbr_to_use = None
     for event in events:
@@ -22968,32 +22985,32 @@ def get_old_html_play_data(scoring_plays, player_data, og_game_id, is_home, game
                         else:
                             assist_2 = game_data["opp_numbers"].get(player_numbers[2], None)
                 
-                team_on_ice = get_on_ice_2(event[8], game_data["team_numbers"] if is_team else game_data["opp_numbers"], game_data["team_goalies"] if is_team else game_data["opp_goalies"])
-                opp_on_ice = get_on_ice_2(event[10], game_data["opp_numbers"] if is_team else game_data["team_numbers"], game_data["opp_goalies"] if is_team else game_data["team_goalies"])
-
                 scoring_play["team_on_ice"] = []
-                for pos in team_on_ice:
-                    for sub_player in team_on_ice[pos]:
-                        if is_team:
-                            sub_player_id = game_data["team_numbers"].get(sub_player, None)
-                        else:
-                            sub_player_id = game_data["opp_numbers"].get(sub_player, None)
-                        scoring_play["team_on_ice"].append(sub_player_id)
                 scoring_play["opp_on_ice"] = []
-                for pos in opp_on_ice:
-                    for sub_player in opp_on_ice[pos]:
+                if len(event) > 7:
+                    team_on_ice = get_on_ice_2(event[8], game_data["team_numbers"] if is_team else game_data["opp_numbers"], game_data["team_goalies"] if is_team else game_data["opp_goalies"])
+                    opp_on_ice = get_on_ice_2(event[10], game_data["opp_numbers"] if is_team else game_data["team_numbers"], game_data["opp_goalies"] if is_team else game_data["team_goalies"])
+                    for pos in team_on_ice:
+                        for sub_player in team_on_ice[pos]:
+                            if is_team:
+                                sub_player_id = game_data["team_numbers"].get(sub_player, None)
+                            else:
+                                sub_player_id = game_data["opp_numbers"].get(sub_player, None)
+                            scoring_play["team_on_ice"].append(sub_player_id)
+                    for pos in opp_on_ice:
+                        for sub_player in opp_on_ice[pos]:
+                            if is_team:
+                                sub_player_id = game_data["opp_numbers"].get(sub_player, None)
+                            else:
+                                sub_player_id = game_data["team_numbers"].get(sub_player, None)
+                            scoring_play["opp_on_ice"].append(sub_player_id)
+                    
+                    if opp_on_ice["G"]:
+                        goalie_number = opp_on_ice["G"][0]
                         if is_team:
-                            sub_player_id = game_data["opp_numbers"].get(sub_player, None)
+                            goalie = game_data["opp_numbers"].get(goalie_number, None)
                         else:
-                            sub_player_id = game_data["team_numbers"].get(sub_player, None)
-                        scoring_play["opp_on_ice"].append(sub_player_id)
-                
-                if opp_on_ice["G"]:
-                    goalie_number = opp_on_ice["G"][0]
-                    if is_team:
-                        goalie = game_data["opp_numbers"].get(goalie_number, None)
-                    else:
-                        goalie = game_data["team_numbers"].get(goalie_number, None)
+                            goalie = game_data["team_numbers"].get(goalie_number, None)
 
                 team_on_ice_num = len(scoring_play["team_on_ice"])
                 if team_on_ice_num  > 6:
@@ -37191,9 +37208,6 @@ def has_against_quals_no_so(extra_stats):
 
 def has_api_quals(qualifiers):
     return "Event Time" in qualifiers or "Team Event Time" in qualifiers or "Opponent Event Time" in qualifiers or "Local Event Time" in qualifiers or "Coordinates" in qualifiers or "Within Distance" in qualifiers or "Raw Within Distance" in qualifiers or "Absolute Within Distance" in qualifiers or "Left Side" in qualifiers or "Right Side" in qualifiers or "Faceoff Circle" in qualifiers or "Goalie Crease" in qualifiers or "Goalie Circle" in qualifiers or "X Coordinate" in qualifiers or "Y Coordinate" in qualifiers or "Goalie Angle" in qualifiers or "Raw Coordinates" in qualifiers or "Raw X Coordinate" in qualifiers or "Raw Y Coordinate" in qualifiers or "Absolute Coordinates" in qualifiers or "Absolute X Coordinate" in qualifiers or "Absolute Y Coordinate" in qualifiers
-
-def has_coordinate_quals(qualifiers):
-    return "Coordinates" in qualifiers or "Within Distance" in qualifiers or "Raw Within Distance" in qualifiers or "Absolute Within Distance" in qualifiers or "Left Side" in qualifiers or "Right Side" in qualifiers or "Faceoff Circle" in qualifiers or "Goalie Crease" in qualifiers or "Goalie Circle" in qualifiers or "X Coordinate" in qualifiers or "Y Coordinate" in qualifiers or "Goalie Angle" in qualifiers or "Raw Coordinates" in qualifiers or "Raw X Coordinate" in qualifiers or "Raw Y Coordinate" in qualifiers or "Absolute Coordinates" in qualifiers or "Absolute X Coordinate" in qualifiers or "Absolute Y Coordinate" in qualifiers
 
 def has_time_quals(qualifiers):
     return "Event Time" in qualifiers or "Team Event Time" in qualifiers or "Opponent Event Time" in qualifiers or "Local Event Time" in qualifiers
