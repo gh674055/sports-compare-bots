@@ -8832,17 +8832,19 @@ def handle_nfl_game_stats(player_data, all_rows, qualifiers, extra_stats, missin
     if not count_info["total_count"]:
         return new_rows, count_info["missing_games"]
 
-    with ThreadPoolExecutor(max_workers=5) as sub_executor:
-        for index, row_data in enumerate(all_rows):
-            if "GameLink" in row_data["Shared"]:
-                if row_data["Shared"]["GameLink"]:
-                    if row_data["Shared"]["GameLink"] not in games_to_skip:
-                        future = sub_executor.submit(get_game_data, index, player_data, row_data, qualifiers, extra_stats)
-                        future.add_done_callback(functools.partial(result_call_back, qualifiers, count_info, new_rows, player_type, player_data, row_data, extra_stats))
+    
+    with requests.Session() as s:
+        with ThreadPoolExecutor(max_workers=5) as sub_executor:
+            for index, row_data in enumerate(all_rows):
+                if "GameLink" in row_data["Shared"]:
+                    if row_data["Shared"]["GameLink"]:
+                        if row_data["Shared"]["GameLink"] not in games_to_skip:
+                            future = sub_executor.submit(get_game_data, index, player_data, row_data, qualifiers, extra_stats, s)
+                            future.add_done_callback(functools.partial(result_call_back, qualifiers, count_info, new_rows, player_type, player_data, row_data, extra_stats))
+                    else:
+                        count_info["missing_games"] = True
                 else:
-                    count_info["missing_games"] = True
-            else:
-                new_rows.append(row_data)
+                    new_rows.append(row_data)
 
     if count_info["exception"]:
         raise count_info["exception"]
@@ -8951,7 +8953,7 @@ def set_row_data(player_data, player_game_info, row_data):
         if row_data["Shared"]["Start"]:
             row_data["Shared"]["Start-QB"] = True
 
-def get_game_data(index, player_data, row_data, qualifiers, extra_stats):
+def get_game_data(index, player_data, row_data, qualifiers, extra_stats, s):
     missing_games = False
     game_data = {
         "missing_data" : False,
@@ -8995,16 +8997,15 @@ def get_game_data(index, player_data, row_data, qualifiers, extra_stats):
         "fumbles" : []
     }
 
-    with requests.Session() as s:
-        try:
-            response, player_page_xml = url_request_lxml(s, "https://www.pro-football-reference.com" + row_data["Shared"]["GameLink"])
-        except urllib.error.HTTPError as err:
-            if err.status == 404:
-                missing_games = True
-                game_data["missing_data"] = True
-                return game_data, row_data, missing_games
-            else:
-                raise
+    try:
+        response, player_page_xml = url_request_lxml(s, "https://www.pro-football-reference.com" + row_data["Shared"]["GameLink"])
+    except urllib.error.HTTPError as err:
+        if err.status == 404:
+            missing_games = True
+            game_data["missing_data"] = True
+            return game_data, row_data, missing_games
+        else:
+            raise
     
     scorebox = player_page_xml.xpath("//div[@class = 'scorebox']")[0]
     scor_divs = scorebox.xpath("./div")

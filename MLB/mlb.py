@@ -15439,9 +15439,9 @@ def handle_player_data(player_data, time_frame, player_type, player_page, valid_
 
     if not "hide-advanced" in extra_stats or (has_result_stat_qual or "Game Number" in time_frame["qualifiers"] or "Run Support" in time_frame["qualifiers"] or "run-support-record" in extra_stats or "run-support" in extra_stats or "advanced-runner" in extra_stats or "exit-record" in extra_stats):
         if ("Event Stat" in time_frame["qualifiers"] or "Event Stat Reversed" in time_frame["qualifiers"] or "Event Stats" in time_frame["qualifiers"] or "Event Stats Reversed" in time_frame["qualifiers"] or "Starting Event Stat" in time_frame["qualifiers"] or "Starting Event Stat Reversed" in time_frame["qualifiers"] or "Starting Event Stats" in time_frame["qualifiers"] or "Starting Event Stats Reversed" in time_frame["qualifiers"]):
-            all_rows, missing_games = handle_mlb_game_stats_single_thread(all_rows, has_count_stat, time_frame["qualifiers"], player_data, player_type, missing_games, extra_stats)
+            all_rows, missing_games = handle_mlb_game_stats_single_thread(all_rows, has_count_stat, time_frame["qualifiers"], player_data, player_type, missing_games, extra_stats, s)
         elif has_result_stat_qual or "Game Number" in time_frame["qualifiers"] or "Run Support" in time_frame["qualifiers"] or "current-stats" in extra_stats or "run-support-record" in extra_stats or "run-support" in extra_stats or "advanced-runner" in extra_stats or "exit-record" in extra_stats:
-            all_rows, missing_games = handle_mlb_game_stats(all_rows, has_count_stat, time_frame["qualifiers"], player_data, player_type, missing_games, extra_stats)
+            all_rows, missing_games = handle_mlb_game_stats(all_rows, has_count_stat, time_frame["qualifiers"], player_data, player_type, missing_games, extra_stats, s)
 
     if time_frame["qualifiers"]:
         new_rows = []
@@ -16217,7 +16217,7 @@ def handle_live_stats(player_type, player_data, player_link, time_frame, all_row
 
     return all_rows
 
-def determine_row_data(game_data, player_type, player_data, player_id, current_team, all_dates, all_rows, time_frame, ):
+def determine_row_data(game_data, player_type, player_data, player_id, current_team, all_dates, all_rows, time_frame, s):
     row_data = {}
     row_data["Year"] = int(game_data["season"])
 
@@ -16464,7 +16464,7 @@ def determine_row_data(game_data, player_type, player_data, player_id, current_t
         row_data["Pit"] = game["pitchesThrown"]
 
         fake_row_data = copy.deepcopy(row_data)
-        fake_game_data, fake_row_data, fake_index, fake_sub_missing_games = get_live_game_data(-1, False, player_data, fake_row_data, player_type, {}, True)
+        fake_game_data, fake_row_data, fake_index, fake_sub_missing_games = get_live_game_data(-1, False, player_data, fake_row_data, player_type, {}, True, s)
         perform_sub_mlb_game_qualifiers(fake_row_data, player_data, {}, fake_game_data, player_type, True)
         row_data["GDP"] = fake_row_data["GDP"]
 
@@ -26448,7 +26448,7 @@ def get_team_schedule(player_data, seasons, needs_reg_season, needs_playoffs, ne
     
     return season_objs
 
-def handle_mlb_game_stats(all_rows, has_count_stat, qualifiers, player_data, player_type, missing_games, extra_stats):
+def handle_mlb_game_stats(all_rows, has_count_stat, qualifiers, player_data, player_type, missing_games, extra_stats, s):
     if not all_rows:
         return [], missing_games
 
@@ -26848,7 +26848,7 @@ def handle_mlb_game_stats(all_rows, has_count_stat, qualifiers, player_data, pla
     for qual in ["Event Stat", "Event Stat Reversed", "Event Stats", "Event Stats Reversed", "Starting Event Stat", "Starting Event Stat Reversed", "Starting Event Stats", "Starting Event Stats Reversed", "Game Event Stat", "Game Event Stat Reversed", "Game Event Stats", "Game Event Stats Reversed", "Starting Game Event Stat", "Starting Game Event Stat Reversed", "Starting Game Event Stats", "Starting Game Event Stats Reversed"]:
         handle_event_stats(qual, all_rows, games_to_skip, qualifiers, player_type, player_data)
 
-    return get_mlb_game_stats(all_rows, has_count_stat, qualifiers, games_to_skip, player_data, missing_games, player_type, extra_stats, True)
+    return get_mlb_game_stats(all_rows, has_count_stat, qualifiers, games_to_skip, player_data, missing_games, player_type, extra_stats, True, s)
 
 def handle_event_stats(qual, all_rows, games_to_skip, qualifiers, player_type, player_data):
     if qual in qualifiers:
@@ -26866,7 +26866,7 @@ def handle_event_stats(qual, all_rows, games_to_skip, qualifiers, player_type, p
             
             row_data["is_playoffs"] = prev_is_playofs
 
-def handle_mlb_game_stats_single_thread(all_rows, has_count_stat, qualifiers, player_data, player_type, missing_games, extra_stats):
+def handle_mlb_game_stats_single_thread(all_rows, has_count_stat, qualifiers, player_data, player_type, missing_games, extra_stats, ):
     if not all_rows:
         return [], missing_games
 
@@ -27211,7 +27211,7 @@ def handle_mlb_game_stats_single_thread(all_rows, has_count_stat, qualifiers, pl
     for qual in ["Event Stat", "Event Stat Reversed", "Event Stats", "Event Stats Reversed", "Starting Event Stat", "Starting Event Stat Reversed", "Starting Event Stats", "Starting Event Stats Reversed", "Game Event Stat", "Game Event Stat Reversed", "Game Event Stats", "Game Event Stats Reversed", "Starting Game Event Stat", "Starting Game Event Stat Reversed", "Starting Game Event Stats", "Starting Game Event Stats Reversed"]:
         handle_event_stats(qual, all_rows, games_to_skip, qualifiers, player_type, player_data)
 
-    return get_mlb_game_stats_single_thread(all_rows, has_count_stat, qualifiers, games_to_skip, player_data, missing_games, player_type, extra_stats)
+    return get_mlb_game_stats_single_thread(all_rows, has_count_stat, qualifiers, games_to_skip, player_data, missing_games, player_type, extra_stats, s)
 
 def setup_career_stats(row_data, player_game_info, saved_row_data, index, player_type, player_data, qualifiers):
     if not player_game_info or player_game_info["missing_data"]:
@@ -35513,7 +35513,7 @@ def perform_mlb_game_qualifiers(row, qualifiers):
     
     return True
 
-def get_mlb_game_stats(all_rows, has_count_stat, qualifiers, games_to_skip, player_data, missing_games, player_type, extra_stats, needs_plays):
+def get_mlb_game_stats(all_rows, has_count_stat, qualifiers, games_to_skip, player_data, missing_games, player_type, extra_stats, needs_plays, s):
     if needs_plays:
         logger.info("#" + str(threading.get_ident()) + "#   " + player_data["id"] + " starting game data")
     count_info = {
@@ -35531,7 +35531,7 @@ def get_mlb_game_stats(all_rows, has_count_stat, qualifiers, games_to_skip, play
     with ThreadPoolExecutor(max_workers=5) as sub_executor:
         for index, row_data in enumerate(sorted(all_rows, key=lambda row: row["DateTime"])):
             if row_data["GameLink"] not in games_to_skip:
-                future = sub_executor.submit(get_live_game_data, index, has_count_stat, player_data, row_data, player_type, qualifiers, needs_plays)
+                future = sub_executor.submit(get_live_game_data, index, has_count_stat, player_data, row_data, player_type, qualifiers, needs_plays, s)
                 future.add_done_callback(functools.partial(result_call_back, qualifiers, count_info, new_rows, player_type, player_data, needs_plays, row_data, extra_stats))
     
     if count_info["exception"]:
@@ -35542,7 +35542,7 @@ def get_mlb_game_stats(all_rows, has_count_stat, qualifiers, games_to_skip, play
 
     return sorted(new_rows, key=lambda row: row["DateTime"]), count_info["missing_games"]
 
-def get_mlb_game_stats_single_thread(all_rows, has_count_stat, qualifiers, games_to_skip, player_data, missing_games, player_type, extra_stats):
+def get_mlb_game_stats_single_thread(all_rows, has_count_stat, qualifiers, games_to_skip, player_data, missing_games, player_type, extra_stats, s):
     logger.info("#" + str(threading.get_ident()) + "#   " + player_data["id"] + " starting game data")
     count_info = {
         "current_percent" : 10,
@@ -35615,7 +35615,7 @@ def get_mlb_game_stats_single_thread(all_rows, has_count_stat, qualifiers, games
     for index, row_data in enumerate(sorted(all_rows, key=lambda row: row["DateTime"], reverse=is_reverse)):
         if row_data["GameLink"] not in games_to_skip:
             try:
-                game_data, row_data, index, sub_missing_games = get_live_game_data(index, has_count_stat, player_data, row_data, player_type, qualifiers, True)
+                game_data, row_data, index, sub_missing_games = get_live_game_data(index, has_count_stat, player_data, row_data, player_type, qualifiers, True, s)
                 has_match, raw_row_data = handle_result_qualifiers(game_data, index, row_data, sub_missing_games, player_type, player_data, qualifiers, saved_row_data, count_info, extra_stats)
                 
                 if stat not in raw_row_data:
@@ -37036,7 +37036,7 @@ def get_mlb_game_links_schedule_links(player_data, player_type, player_link, all
                                 row_data["SeriesOpponentWins"] = opponent_wins
                                 row_data["SeriesScore"] = team_wins - opponent_wins
     
-def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_type, qualifiers, needs_plays):
+def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_type, qualifiers, needs_plays, s):
     missing_games = False
     game_data = {
         "missing_data" : False,
@@ -37072,16 +37072,15 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
             return game_data, row_data, row_index, missing_games
     
     #print("https://statsapi.mlb.com/api/v1.1/game/" + str(row_data["MLBGameLink"]) + "/feed/live")
-    with requests.Session() as s:
-        try:
-            sub_data = url_request_json(s, "https://statsapi.mlb.com/api/v1.1/game/" + str(row_data["MLBGameLink"]) + "/feed/live")
-        except urllib.error.HTTPError as err:
-            if err.status == 404:
-                missing_games = True
-                game_data["missing_data"] = True
-                return game_data, row_data, row_index, missing_games
-            else:
-                raise
+    try:
+        sub_data = url_request_json(s, "https://statsapi.mlb.com/api/v1.1/game/" + str(row_data["MLBGameLink"]) + "/feed/live")
+    except urllib.error.HTTPError as err:
+        if err.status == 404:
+            missing_games = True
+            game_data["missing_data"] = True
+            return game_data, row_data, row_index, missing_games
+        else:
+            raise
 
     team_position_map = {
         "PH" : set(),
