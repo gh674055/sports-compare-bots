@@ -8059,7 +8059,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                             
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
                                                 
-                        last_match = re.finditer(r"\bhide(?: |-)?(name|year|season|live|date|query|queries|advanced|href|toi|play|strength)s?\b", time_frame)
+                        last_match = re.finditer(r"\bhide(?: |-)?(name|year|season|live|date|query|queries|advanced|href|missing|toi|play|strength)s?\b", time_frame)
                         for m in last_match:
                             if m.group(1) == "date" or m.group(1) == "season":
                                 extra_stats.add("hide-year")
@@ -18051,7 +18051,7 @@ def handle_event_stats(qual, all_rows, games_to_skip, time_frame, player_type, p
                 row_data["is_playoffs"] = None
             
             for qual_obj in time_frame["qualifiers"][qual]:
-                if is_invalid_stat(qual_obj["stat"], player_type, row_data, False, player_data):
+                if is_invalid_stat(qual_obj["stat"], player_type, row_data, False, player_data, True):
                     games_to_skip.add(row_data["NHLGameLink"])
             
             row_data["is_playoffs"] = prev_is_playofs
@@ -20025,8 +20025,8 @@ def determine_stat_value(player_game_info, all_events, qualifiers, og_row, playe
                             row["OTG"] += 1
                         if goal_event["firstGoal"]:
                             row["1stG"] += 1
-                        if row["Year"] >= 2003:
-                            if (not "Shot On" in qualifiers and not "Shot By" in qualifiers and not "Shot On First Name" in qualifiers and not "Shot By First Name" in qualifiers and not "Shot On Last Name" in qualifiers and not "Shot By Last Name" in qualifiers and not "Shot On Birth Country" in qualifiers and not "Shot By Birth Country" in qualifiers and not "Shot On Nationality" in qualifiers and not "Shot By Nationality" in qualifiers and not "Facing Lefty" in qualifiers and not "Facing Righty" in qualifiers) or row["Year"] >= 2007:
+                        if player_game_info["is_old_html_stats"]:
+                            if (not "Shot On" in qualifiers and not "Shot By" in qualifiers and not "Shot On First Name" in qualifiers and not "Shot By First Name" in qualifiers and not "Shot On Last Name" in qualifiers and not "Shot By Last Name" in qualifiers and not "Shot On Birth Country" in qualifiers and not "Shot By Birth Country" in qualifiers and not "Shot On Nationality" in qualifiers and not "Shot By Nationality" in qualifiers and not "Facing Lefty" in qualifiers and not "Facing Righty" in qualifiers) or player_game_info["is_html_stats"]:
                                 row["S"] += 1
                                 if goal_event["shotType"] == "Wrist Shot":
                                     row["WristS"] += 1
@@ -20049,7 +20049,7 @@ def determine_stat_value(player_game_info, all_events, qualifiers, og_row, playe
                                 elif goal_event["shotType"] == "Wrap-around":
                                     row["WrapS"] += 1
                                     row["WrapG"] += 1
-                                if row["Year"] >= 2007:
+                                if player_game_info["is_html_stats"]:
                                     row["TSA"] += 1
             if stat in shot_stats:
                 if goal_event["event_name"] == "shot":
@@ -20069,7 +20069,7 @@ def determine_stat_value(player_game_info, all_events, qualifiers, og_row, playe
                             row["BackS"] += 1
                         elif goal_event["shotType"] == "Wrap-around":
                             row["WrapS"] += 1
-                        if row["Year"] >= 2007:
+                        if player_game_info["is_html_stats"]:
                             row["TSA"] += 1
             if stat in missed_shot_stats:
                 if goal_event["event_name"] == "missed_shot":
@@ -20078,13 +20078,13 @@ def determine_stat_value(player_game_info, all_events, qualifiers, og_row, playe
                             row["PostBar"] += 1
                         if count_misses:
                             row["S"] += 1
-                        if row["Year"] >= 2007:
+                        if player_game_info["is_html_stats"]:
                             row["TSA"] += 1
                             row["TSM"] += 1
             if stat in blocked_shot_stats:                     
                 if goal_event["event_name"] == "blocked_shot":
                     if determine_event_match(goal_event, qualifiers, player_game_info, og_row):
-                        if row["Year"] >= 2007:
+                        if player_game_info["is_html_stats"]:
                             row["TSA"] += 1
                             row["TSB"] += 1
             if stat in assist_stats:
@@ -20165,7 +20165,7 @@ def determine_stat_value(player_game_info, all_events, qualifiers, og_row, playe
                         strength = determine_strength(player_game_info, goal_event["period"], goal_event["periodTime"], goal_event)
                         if strength:
                             row[strength + "GF"] += 1
-                            if strength == "EV" or strength != "PP":
+                            if strength == "EV" or strength == "SH":
                                 row["PlusMinus"] += 1
             if stat in oi_all_opp_goals_stats:
                 if goal_event["event_name"] == "oi_all_opp_goals":
@@ -20175,7 +20175,7 @@ def determine_stat_value(player_game_info, all_events, qualifiers, og_row, playe
                         strength = determine_strength(player_game_info, goal_event["period"], goal_event["periodTime"], goal_event)
                         if strength:
                             row[strength + "GA"] += 1
-                            if strength == "EV" or strength != "PP":
+                            if strength == "EV" or strength == "PP":
                                 row["PlusMinus"] -= 1
         else:                
             if stat in goal_against_stats:
@@ -20190,7 +20190,7 @@ def determine_stat_value(player_game_info, all_events, qualifiers, og_row, playe
                                 strength = "PP"
                             row[strength + "GA"] += 1
                             row[strength + "SH"] += 1
-                        if row["Year"] >= 2007:
+                        if player_game_info["is_html_stats"]:
                             row["SA"] += 1
             if stat in save_against_stats:
                 if goal_event["event_name"] == "save_against":
@@ -20354,6 +20354,12 @@ def set_row_data(player_game_info, row_data):
     row_data["TmHeadCoach"] = player_game_info["TmHeadCoach"]
     row_data["OppHeadCoach"] = player_game_info["OppHeadCoach"]
     row_data["Attendance"] = player_game_info["Attendance"]
+    row_data["is_api_stats"] = player_game_info["is_api_stats"]
+    row_data["is_html_stats"] = player_game_info["is_html_stats"]
+    row_data["is_old_html_stats"] = player_game_info["is_old_html_stats"]
+    row_data["is_older_html_stats"] = player_game_info["is_older_html_stats"]
+    row_data["is_href_stats"] = player_game_info["is_href_stats"]
+    row_data["is_toi_stats"] = player_game_info["is_toi_stats"]
 
 def get_game_data(index, player_data, row_data, player_id, player_type, time_frame, extra_stats, s):
     game_data, missing_games, sub_data = setup_game_data(player_data, row_data, player_id, player_type, time_frame, s)
@@ -20377,34 +20383,96 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                     missing_games = True
                     game_data["missing_data"] = True
                     return game_data, row_data, missing_games
+                else:
+                    game_data["is_api_stats"] = True
+            else:
+                if not scoring_plays:
+                    missing_games = True
+                    game_data["missing_data"] = True
+                    return game_data, row_data, missing_games
+                else:
+                    game_data["is_api_stats"] = True
     
         if not scoring_plays and "href" in extra_stats or "hide-href" not in extra_stats:
             game_data, missing_games, sub_data = setup_href_game_data(player_data, row_data, player_id, player_type, time_frame, game_data, s)
             if game_data["missing_data"]:
                 return game_data, row_data, missing_games
             get_href_html_play_data(scoring_plays, player_data, row_data["GameLink"], row_data["Location"], row_data["Tm"], row_data["Opponent"].upper(), game_data, True, s)
+            if not scoring_plays:
+                missing_games = True
+                game_data["missing_data"] = True
+                return game_data, row_data, missing_games
+            else:
+                game_data["is_href_stats"] = True
     
     if row_data["Year"] >= 2001 and not has_api_quals(time_frame["qualifiers"]) and not "hide-play" in extra_stats and not "href" in extra_stats:
         if row_data["Year"] >= 2007:
             get_html_play_data(scoring_plays, player_data, row_data["NHLGameLink"], row_data["Location"], game_data, sub_data["gameData"]["status"]["abstractGameState"] == "Final", row_data["Year"], s)
             if not scoring_plays or not has_period_event(game_data, scoring_plays):
-                missing_games = True
-                game_data["missing_data"] = True
-                return game_data, row_data, missing_games
+                if "hide-missing" in extra_stats:
+                    missing_games = True
+                    game_data["missing_data"] = True
+                    return game_data, row_data, missing_games
+                else:
+                    get_older_html_play_data(scoring_plays, player_data, row_data["NHLGameLink"], row_data["Location"], game_data, True, row_data["Year"], s)
+                    if not scoring_plays:
+                        get_href_html_play_data(scoring_plays, player_data, row_data["GameLink"], row_data["Location"], row_data["Tm"], row_data["Opponent"].upper(), game_data, True, s)
+                        if not scoring_plays:
+                            missing_games = True
+                            game_data["missing_data"] = True
+                            return game_data, row_data, missing_games
+                        else:
+                            game_data["is_href_stats"] = True
+                    else:
+                        game_data["is_older_html_stats"] = True
+                        game_data["is_href_stats"] = True
+            else:
+                game_data["is_html_stats"] = True
+                game_data["is_old_html_stats"] = True
+                game_data["is_older_html_stats"] = True
+                game_data["is_href_stats"] = True
         elif row_data["Year"] >= 2003:
             get_old_html_play_data(scoring_plays, player_data, row_data["NHLGameLink"], row_data["Location"], game_data, True, row_data["Year"], s)
             if not scoring_plays or not has_period_event(game_data, scoring_plays):
-                missing_games = True
-                game_data["missing_data"] = True
-                return game_data, row_data, missing_games
+                if "hide-missing" in extra_stats:
+                    missing_games = True
+                    game_data["missing_data"] = True
+                    return game_data, row_data, missing_games
+                else:
+                    get_older_html_play_data(scoring_plays, player_data, row_data["NHLGameLink"], row_data["Location"], game_data, True, row_data["Year"], s)
+                    if not scoring_plays:
+                        get_href_html_play_data(scoring_plays, player_data, row_data["GameLink"], row_data["Location"], row_data["Tm"], row_data["Opponent"].upper(), game_data, True, s)
+                        if not scoring_plays:
+                            missing_games = True
+                            game_data["missing_data"] = True
+                            return game_data, row_data, missing_games
+                        else:
+                            game_data["is_href_stats"] = True
+                    else:
+                        game_data["is_older_html_stats"] = True
+                        game_data["is_href_stats"] = True
+            else:
+                game_data["is_old_html_stats"] = True
+                game_data["is_older_html_stats"] = True
+                game_data["is_href_stats"] = True
         elif row_data["Year"] >= 2001:
             get_older_html_play_data(scoring_plays, player_data, row_data["NHLGameLink"], row_data["Location"], game_data, True, row_data["Year"], s)
-
-    if not scoring_plays:
-        if "current-stats" in extra_stats:
-            missing_games = True
-            game_data["missing_data"] = True
-            return game_data, row_data, missing_games
+            if not scoring_plays:
+                if "hide-missing" in extra_stats:
+                    missing_games = True
+                    game_data["missing_data"] = True
+                    return game_data, row_data, missing_games
+                else:
+                    get_href_html_play_data(scoring_plays, player_data, row_data["GameLink"], row_data["Location"], row_data["Tm"], row_data["Opponent"].upper(), game_data, True, s)
+                    if not scoring_plays:
+                        missing_games = True
+                        game_data["missing_data"] = True
+                        return game_data, row_data, missing_games
+                    else:
+                        game_data["is_href_stats"] = True
+            else:
+                game_data["is_older_html_stats"] = True
+                game_data["is_href_stats"] = True
 
     if row_data["NHLGameLink"] in missing_event_data:
         for scoring_play in scoring_plays:
@@ -20453,10 +20521,15 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
 
     game_data["scoring_play_data"] = scoring_play_data
     
-    if row_data["Year"] >= 2007 and "hide-toi" not in extra_stats and "href" not in extra_stats:
+    if row_data["Year"] >= 2007 and "hide-toi" not in extra_stats:
         game_data["shift_data"] = get_html_shift_data(row_data["NHLGameLink"], row_data["Location"], game_data, player_data, row_data["Year"], s)
         #if not game_data["shift_data"]:
         #    game_data["shift_data"], missing_games = get_shift_data(row_data["NHLGameLink"], game_data["team_id"], missing_games, s)
+
+        if game_data["shift_data"]:
+            if not has_period_shift_event(game_data, game_data["shift_data"]):
+                game_data["shift_data"] = {} 
+
         if not game_data["shift_data"]:
             game_data["missing_toi"] = True
             if has_shift_quals(time_frame["qualifiers"]):
@@ -20465,6 +20538,8 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                 return game_data, row_data, missing_games
 
         if game_data["shift_data"]:
+            game_data["is_toi_stats"] = True
+
             if not is_final and sub_data["liveData"]["linescore"]["currentPeriod"] == 1:
                 for player in sub_data["liveData"]["boxscore"]["teams"][game_data["team_str"]]["players"]:
                     player = sub_data["liveData"]["boxscore"]["teams"][game_data["team_str"]]["players"][player]
@@ -20831,26 +20906,26 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                         if is_on_ice:
                             if scoring_play["team"]["id"] == game_data["team_id"]:
                                 game_data["oi_all_team_goals"].append({**shared_data, **{}})
-                                if row_data["Year"] >= 2007:
+                                if game_data["is_html_stats"]:
                                     game_data["oi_all_team_shots"].append({**shared_data, **{}})
                                     game_data["oi_all_team_shots_og"].append({**shared_data, **{}})
                                     game_data["oi_all_team_unblocked_shots"].append({**shared_data, **{}})
                             else:
                                 game_data["oi_all_opp_goals"].append({**shared_data, **{}})
-                                if row_data["Year"] >= 2007:
+                                if game_data["is_html_stats"]:
                                     game_data["oi_all_opp_shots"].append({**shared_data, **{}})
                                     game_data["oi_all_opp_shots_og"].append({**shared_data, **{}})
                                     game_data["oi_all_opp_unblocked_shots"].append({**shared_data, **{}})
 
                         if scoring_play["team"]["id"] == game_data["team_id"]:
                             game_data["all_team_goals"].append({**shared_data, **{}})
-                            if row_data["Year"] >= 2007:
+                            if game_data["is_html_stats"]:
                                 game_data["all_team_shots"].append({**shared_data, **{}})
                                 game_data["all_team_shots_og"].append({**shared_data, **{}})
                                 game_data["all_team_unblocked_shots"].append({**shared_data, **{}})
                         else:
                             game_data["all_opp_goals"].append({**shared_data, **{}})
-                            if row_data["Year"] >= 2007:
+                            if game_data["is_html_stats"]:
                                 game_data["all_opp_shots"].append({**shared_data, **{}})
                                 game_data["all_opp_shots_og"].append({**shared_data, **{}})
                                 game_data["all_opp_unblocked_shots"].append({**shared_data, **{}})
@@ -21273,6 +21348,21 @@ def has_period_event(game_data, scoring_plays):
             return False
     return True
 
+def has_period_shift_event(game_data, shift_data):
+    for period in game_data["periods"]:
+        if period == 5 and game_data["is_shootout"]:
+            continue
+
+        has_period_match = False
+        for team_str in shift_data:
+            for player_id in shift_data[team_str]:
+                if period in shift_data[team_str][player_id]:
+                    has_period_match = True
+                    break
+        if not has_period_match:
+            return False
+    return True
+
 def determine_last_goalie(row_data, game_data, period, periodTime, team_str):
     shift_data = game_data["shift_data"]
     if not shift_data:
@@ -21387,7 +21477,13 @@ def setup_game_data(player_data, row_data, player_id, player_type, time_frame, s
         "TmHeadCoach" : None,
         "OppHeadCoach" : None,
         "winning_goalie" : None,
-        "losing_goalie" : None
+        "losing_goalie" : None,
+        "is_api_stats" : False,
+        "is_html_stats" : False,
+        "is_old_html_stats" : False,
+        "is_older_html_stats" : False,
+        "is_href_stats" : False,
+        "is_toi_stats" : False
     }
 
     missing_games = False
@@ -21564,20 +21660,17 @@ def get_html_game_stats(game_data, missing_games, row_data, s):
     except urllib.error.HTTPError as err:
         if err.status == 404:
             missing_games = True
-            game_data["missing_data"] = True
             return missing_games
         else:
             raise
 
     if not player_page_xml:
         missing_games = True
-        game_data["missing_data"] = True
         return missing_games
     
     game_info_table = player_page_xml.xpath("body//table[@id = 'GameInfo']")
     if not game_info_table:
         missing_games = True
-        game_data["missing_data"] = True
         return missing_games
 
     game_info_table_rows = []
@@ -21593,7 +21686,6 @@ def get_html_game_stats(game_data, missing_games, row_data, s):
                 pot_game_id = str(game_info_match.group(1))
                 if pot_game_id != game_id[2:]:
                     missing_games = True
-                    game_data["missing_data"] = True
                     return missing_games
             else:
                 try:
@@ -21603,7 +21695,6 @@ def get_html_game_stats(game_data, missing_games, row_data, s):
                         pot_year -= 1
                     if pot_year != row_year:
                         missing_games = True
-                        game_data["missing_data"] = True
                         return missing_games
                 except Exception:
                     try:
@@ -21711,7 +21802,13 @@ def setup_href_game_data(player_data, row_data, player_id, player_type, time_fra
             "TmHeadCoach" : None,
             "OppHeadCoach" : None,
             "winning_goalie" : 1,
-            "losing_goalie" : 1
+            "losing_goalie" : 1,
+            "is_api_stats" : False,
+            "is_html_stats" : False,
+            "is_old_html_stats" : False,
+            "is_older_html_stats" : False,
+            "is_href_stats" : False,
+            "is_toi_stats" : False
         }
 
     missing_games = False
@@ -22163,6 +22260,7 @@ def get_html_shift_data(og_game_id, is_home, game_data, player_data, row_year, s
     return shift_data
 
 def get_html_play_data(scoring_plays, player_data, og_game_id, is_home, game_data, is_final, row_year, s):
+    scoring_plays.clear()
     has_initial_plays =  bool(scoring_plays)
     try:
         game_id = str(og_game_id)
@@ -22359,10 +22457,11 @@ def get_html_play_data(scoring_plays, player_data, og_game_id, is_home, game_dat
                             else:
                                 scorer = game_data["opp_numbers"].get(player_numbers[0], None)
 
-                            if is_home_team:
-                                home_goals += 1
-                            else:
-                                away_goals += 1
+                            if not (period == 5 and game_data["is_shootout"]):
+                                if is_home_team:
+                                    home_goals += 1
+                                else:
+                                    away_goals += 1
                             
                             scoring_play["about"]["goals"]["home"] = home_goals
                             scoring_play["about"]["goals"]["away"] = away_goals
@@ -22692,19 +22791,20 @@ def get_html_play_data(scoring_plays, player_data, og_game_id, is_home, game_dat
                                 scoring_play["opp_on_ice"] = scoring_play["team_on_ice"]
                                 scoring_play["team_on_ice"] = temp_array
 
-                            team_on_ice_num = len(scoring_play["team_on_ice"])
-                            if team_on_ice_num  > 6:
-                                team_on_ice_num = 6
-                            opp_on_ice_num = len(scoring_play["opp_on_ice"])
-                            if opp_on_ice_num  > 6:
-                                opp_on_ice_num = 6
-                            if team_on_ice_num > 1 and opp_on_ice_num > 1:
-                                if team_on_ice_num > opp_on_ice_num:
-                                    scoring_play["result"]["strength"]["code"] = "PPG"
-                                elif team_on_ice_num < opp_on_ice_num:
-                                    scoring_play["result"]["strength"]["code"] = "SHG"
-                                else:
-                                    scoring_play["result"]["strength"]["code"] = "EVEN"
+                            if scoring_play["result"]["strength"]["code"] != "EVEN":
+                                team_on_ice_num = len(scoring_play["team_on_ice"])
+                                if team_on_ice_num  > 6:
+                                    team_on_ice_num = 6
+                                opp_on_ice_num = len(scoring_play["opp_on_ice"])
+                                if opp_on_ice_num  > 6:
+                                    opp_on_ice_num = 6
+                                if team_on_ice_num > 1 and opp_on_ice_num > 1:
+                                    if team_on_ice_num > opp_on_ice_num:
+                                        scoring_play["result"]["strength"]["code"] = "PPG"
+                                    elif team_on_ice_num < opp_on_ice_num:
+                                        scoring_play["result"]["strength"]["code"] = "SHG"
+                                    else:
+                                        scoring_play["result"]["strength"]["code"] = "EVEN"
                         
                         if not has_initial_plays or (real_event_type not in ("Goal", "Penalty") and row_year < 2010):
                             scoring_plays.append(scoring_play)
@@ -22721,6 +22821,7 @@ def get_html_play_data(scoring_plays, player_data, og_game_id, is_home, game_dat
     return scoring_plays
 
 def get_old_html_play_data(scoring_plays, player_data, og_game_id, is_home, game_data, is_final, row_year, s):
+    scoring_plays.clear()
     has_initial_plays =  bool(scoring_plays)
     try:
         game_id = str(og_game_id)
@@ -22802,41 +22903,49 @@ def get_old_html_play_data(scoring_plays, player_data, og_game_id, is_home, game
     events = []
     all_lines = table_text.split("\n")
     for index, line in enumerate(all_lines):
-        if index >= 6:
-            line_split = re.split(r"\s{2,}", line.strip(), 5)
-            if len(line_split) == 6:
-                new_line = []
-                new_line.append(line_split[0].strip())
-                new_line.append(line_split[1].strip())
-                third_line = line_split[2].strip().split(None, 1)
-                new_line.append(third_line[0].strip())
-                new_line.append(third_line[1].strip())
-                new_line.append(line_split[3].strip())
-                new_line.append(line_split[4].strip())
-                new_line.append(line_split[5].strip())
+        line_text = line.strip().replace("(*)", "").strip().replace("(!)", "").strip()
+        line_split = re.split(r"\s+", line_text, 6)
 
-                if new_line[3] == "GOAL":
-                    score_line_split = re.split(r"\s{2,}", all_lines[index + 1].strip(), 1)
-                    new_line.append(score_line_split[0][:-1])
-                    new_line.append(score_line_split[1])
-                    scored_on_line_split = re.split(r"\s{2,}", all_lines[index + 2].strip(), 1)
-                    new_line.append(scored_on_line_split[0][:-1])
-                    if len(scored_on_line_split) > 1:
-                        new_line.append(scored_on_line_split[1])
-                    else:
-                        new_line.append("")
-                events.append(new_line)
-            elif len(line_split) == 4:
-                if line_split[0] == "SO":
-                    new_line = []
-                    new_line.append(None)
-                    new_line.append(5)
-                    new_line.append(None)
-                    new_line.append(line_split[1].strip())
-                    new_line.append(line_split[2].strip())
-                    new_line.append("-")
-                    new_line.append(line_split[3].strip())
-                    events.append(new_line)
+        if line_split[0] == "SO":
+            if line_split[1] in ["MISSED", "BLOCKED"]:
+                line_split[1] = line_split[1] + " SHOT"
+                del line_split[2]
+
+            line_split[3:] = [' '.join(line_split[3:])]
+            if len(line_split) != 4:
+                raise Exception("Invalid shootout line")
+            new_line = []
+            new_line.append(None)
+            new_line.append(5)
+            new_line.append(None)
+            new_line.append(line_split[1].strip())
+            new_line.append(line_split[2].strip())
+            new_line.append("-")
+            new_line.append(line_split[3].strip())
+            events.append(new_line)
+        elif line_split[0].isdigit():
+            if line_split[3] in ["MISSED", "BLOCKED"]:
+                line_split[3] = line_split[3] + " SHOT"
+                del line_split[4]
+                indv_line_split = re.split(r"\s+", line_split[5], 1) 
+                del line_split[5]
+                line_split.extend(indv_line_split)
+
+            if len(line_split) != 7:
+                raise Exception("Invalid non-shootout line")
+
+            new_line = line_split
+            if new_line[3] == "GOAL":
+                score_line_split = re.split(r"\s{2,}", all_lines[index + 1].strip(), 1)
+                new_line.append(score_line_split[0][:-1])
+                new_line.append(score_line_split[1])
+                scored_on_line_split = re.split(r"\s{2,}", all_lines[index + 2].strip(), 1)
+                new_line.append(scored_on_line_split[0][:-1])
+                if len(scored_on_line_split) > 1:
+                    new_line.append(scored_on_line_split[1])
+                else:
+                    new_line.append("")
+            events.append(new_line)
                 
     home_team_abbr_to_use = None
     away_team_abbr_to_use = None
@@ -22857,11 +22966,6 @@ def get_old_html_play_data(scoring_plays, player_data, og_game_id, is_home, game
     
     for event in events:
         event_type = event[3]
-
-        if "(*)" in event_type:
-            event_type = event_type.replace("(*)", "").strip()
-        if "(!)" in event_type:
-            event_type = event_type.replace("(!)", "").strip()
 
         real_event_type = None
         if event_type == "GOAL":
@@ -22961,10 +23065,11 @@ def get_old_html_play_data(scoring_plays, player_data, og_game_id, is_home, game
                 else:
                     scorer = game_data["opp_numbers"].get(player_numbers[0], None)
                 
-                if is_home_team:
-                    home_goals += 1
-                else:
-                    away_goals += 1
+                if not (period == 5 and game_data["is_shootout"]):
+                    if is_home_team:
+                        home_goals += 1
+                    else:
+                        away_goals += 1
 
                 scoring_play["about"]["goals"]["home"] = home_goals
                 scoring_play["about"]["goals"]["away"] = away_goals
@@ -23012,19 +23117,20 @@ def get_old_html_play_data(scoring_plays, player_data, og_game_id, is_home, game
                         else:
                             goalie = game_data["team_numbers"].get(goalie_number, None)
 
-                team_on_ice_num = len(scoring_play["team_on_ice"])
-                if team_on_ice_num  > 6:
-                    team_on_ice_num = 6
-                opp_on_ice_num = len(scoring_play["opp_on_ice"])
-                if opp_on_ice_num  > 6:
-                    opp_on_ice_num = 6
-                if team_on_ice_num > 1 and opp_on_ice_num > 1:
-                    if team_on_ice_num > opp_on_ice_num:
-                        scoring_play["result"]["strength"]["code"] = "PPG"
-                    elif team_on_ice_num < opp_on_ice_num:
-                        scoring_play["result"]["strength"]["code"] = "SHG"
-                    else:
-                        scoring_play["result"]["strength"]["code"] = "EVEN"
+                if scoring_play["result"]["strength"]["code"] != "EVEN":
+                    team_on_ice_num = len(scoring_play["team_on_ice"])
+                    if team_on_ice_num  > 6:
+                        team_on_ice_num = 6
+                    opp_on_ice_num = len(scoring_play["opp_on_ice"])
+                    if opp_on_ice_num  > 6:
+                        opp_on_ice_num = 6
+                    if team_on_ice_num > 1 and opp_on_ice_num > 1:
+                        if team_on_ice_num > opp_on_ice_num:
+                            scoring_play["result"]["strength"]["code"] = "PPG"
+                        elif team_on_ice_num < opp_on_ice_num:
+                            scoring_play["result"]["strength"]["code"] = "SHG"
+                        else:
+                            scoring_play["result"]["strength"]["code"] = "EVEN"
 
                 if scorer:
                     scoring_play["players"].append({
@@ -23227,6 +23333,7 @@ def get_old_html_play_data(scoring_plays, player_data, og_game_id, is_home, game
     return scoring_plays
 
 def get_older_html_play_data(scoring_plays, player_data, og_game_id, is_home, game_data, is_final, row_year, s):
+    scoring_plays.clear()
     has_initial_plays =  bool(scoring_plays)
     try:
         game_id = str(og_game_id)
@@ -23312,7 +23419,11 @@ def get_older_html_play_data(scoring_plays, player_data, og_game_id, is_home, ga
     for index, row in enumerate(score_table.xpath(".//tr")):
         columns = row.xpath(".//td")
         if index > 1 and str(columns[0].text_content()).strip():
-            period = int(str(columns[1].text_content()).strip())
+            period_str = str(columns[1].text_content()).strip()
+            if period_str == "SO":
+                period = 5
+            else:
+                period = int(period_str)
             strength = str(columns[9].text_content()).strip()
             time_start_str = str(columns[2].text_content()).strip()
             team_str = str(columns[3].text_content()).strip()
@@ -23393,24 +23504,26 @@ def get_older_html_play_data(scoring_plays, player_data, og_game_id, is_home, ga
                         sub_player_id = game_data["team_numbers"].get(sub_player, None)
                     scoring_play["opp_on_ice"].append(sub_player_id)
             
-            team_on_ice_num = len(scoring_play["team_on_ice"])
-            if team_on_ice_num  > 6:
-                team_on_ice_num = 6
-            opp_on_ice_num = len(scoring_play["opp_on_ice"])
-            if opp_on_ice_num  > 6:
-                opp_on_ice_num = 6
-            if team_on_ice_num > 1 and opp_on_ice_num > 1:
-                if team_on_ice_num > opp_on_ice_num:
-                    scoring_play["result"]["strength"]["code"] = "PPG"
-                elif team_on_ice_num < opp_on_ice_num:
-                    scoring_play["result"]["strength"]["code"] = "SHG"
-                else:
-                    scoring_play["result"]["strength"]["code"] = "EVEN"
+            if scoring_play["result"]["strength"]["code"] != "EVEN":
+                team_on_ice_num = len(scoring_play["team_on_ice"])
+                if team_on_ice_num  > 6:
+                    team_on_ice_num = 6
+                opp_on_ice_num = len(scoring_play["opp_on_ice"])
+                if opp_on_ice_num  > 6:
+                    opp_on_ice_num = 6
+                if team_on_ice_num > 1 and opp_on_ice_num > 1:
+                    if team_on_ice_num > opp_on_ice_num:
+                        scoring_play["result"]["strength"]["code"] = "PPG"
+                    elif team_on_ice_num < opp_on_ice_num:
+                        scoring_play["result"]["strength"]["code"] = "SHG"
+                    else:
+                        scoring_play["result"]["strength"]["code"] = "EVEN"
             
-            if is_home_team:
-                home_goals += 1
-            else:
-                away_goals += 1
+            if not (period == 5 and game_data["is_shootout"]):
+                if is_home_team:
+                    home_goals += 1
+                else:
+                    away_goals += 1
             
             scoring_play["about"]["goals"]["home"] = home_goals
             scoring_play["about"]["goals"]["away"] = away_goals
@@ -23597,6 +23710,7 @@ def get_older_html_play_data(scoring_plays, player_data, og_game_id, is_home, ga
     return scoring_plays
 
 def get_href_html_play_data(scoring_plays, player_data, game_link, is_home, team_abbr, opp_abbr, game_data, is_final, s):
+    scoring_plays.clear()
     has_initial_plays =  bool(scoring_plays)
     try:
         response, player_page_xml = url_request_lxml(s, "https://www.hockey-reference.com" + game_link)
@@ -23644,9 +23758,12 @@ def get_href_html_play_data(scoring_plays, player_data, game_link, is_home, team
         for index, row in enumerate(score_table.xpath(".//tr")):
             if row.get("class") and "thead" in row.get("class"):
                 row_text = str(row.text_content()).strip()
-                period = int(ordinal_to_number(row_text.split()[0]))
-                if "OT" in row_text:
-                    period += 3
+                if row_text == "Shootout":
+                    period = 5
+                else:
+                    period = int(ordinal_to_number(row_text.split()[0]))
+                    if "OT" in row_text:
+                        period += 3
                 continue
 
             columns = row.xpath(".//td")
@@ -23706,29 +23823,37 @@ def get_href_html_play_data(scoring_plays, player_data, game_link, is_home, team
                 }
             }
 
-            scorer_link = columns[3].xpath(".//a")[0].get("href").split("/")
-            scorer = scorer_link[len(scorer_link) - 1][:-5]
-            
-            if is_home_team:
-                home_goals += 1
+            assist_1 = None
+            assist_2 = None
+            scorer = None
+            if period == 5 and game_data["is_shootout"]:
+                players = columns[2].xpath(".//a")
+                scorer_link = players[0].get("href").split("/")
+                scorer = scorer_link[len(scorer_link) - 1][:-5]
+
+                if not columns[2].xpath(".//strong"):
+                    scoring_play["result"]["event"] = "Shot"
             else:
-                away_goals += 1
+                if is_home_team:
+                    home_goals += 1
+                else:
+                    away_goals += 1
+
+                scorer_link = columns[3].xpath(".//a")[0].get("href").split("/")
+                scorer = scorer_link[len(scorer_link) - 1][:-5]
+
+                assist_links = columns[4].xpath(".//a")
+
+                if assist_links:
+                    assist_1_link = assist_links[0].get("href").split("/")
+                    assist_1 = assist_1_link[len(assist_1_link) - 1][:-5]
+
+                    if len(assist_links) > 1:
+                        assist_2_link = assist_links[1].get("href").split("/")
+                        assist_2 = assist_2_link[len(assist_2_link) - 1][:-5]
 
             scoring_play["about"]["goals"]["home"] = home_goals
             scoring_play["about"]["goals"]["away"] = away_goals
-
-            assist_1 = None
-            assist_2 = None
-
-            assist_links = columns[4].xpath(".//a")
-
-            if assist_links:
-                assist_1_link = assist_links[0].get("href").split("/")
-                assist_1 = assist_1_link[len(assist_1_link) - 1][:-5]
-
-                if len(assist_links) > 1:
-                    assist_2_link = assist_links[1].get("href").split("/")
-                    assist_2 = assist_2_link[len(assist_2_link) - 1][:-5]
 
             if scorer:
                 scoring_play["players"].append({
@@ -23770,9 +23895,12 @@ def get_href_html_play_data(scoring_plays, player_data, game_link, is_home, team
         for index, row in enumerate(pen_table.xpath(".//tr")):
             if row.get("class") and "thead" in row.get("class"):
                 row_text = str(row.text_content()).strip()
-                period = int(ordinal_to_number(row_text.split()[0]))
-                if "OT" in row_text:
-                    period += 3
+                if row_text == "Shootout":
+                    period = 5
+                else:
+                    period = int(ordinal_to_number(row_text.split()[0]))
+                    if "OT" in row_text:
+                        period += 3
                 continue
 
             columns = row.xpath(".//td")
@@ -24332,8 +24460,8 @@ def perform_metadata_quals(qualifiers, player_type, row, player_game_info, nhl_p
                     row["OTG"] += 1
                 if goal_event["firstGoal"]:
                     row["1stG"] += 1
-                if row["Year"] >= 2003:
-                    if (not "Shot On" in qualifiers and not "Shot By" in qualifiers and not "Shot On First Name" in qualifiers and not "Shot By First Name" in qualifiers and not "Shot On Last Name" in qualifiers and not "Shot By Last Name" in qualifiers and not "Shot On Birth Country" in qualifiers and not "Shot By Birth Country" in qualifiers and not "Shot On Nationality" in qualifiers and not "Shot By Nationality" in qualifiers and not "Facing Lefty" in qualifiers and not "Facing Righty" in qualifiers) or row["Year"] >= 2007:
+                if player_game_info["is_old_html_stats"]:
+                    if (not "Shot On" in qualifiers and not "Shot By" in qualifiers and not "Shot On First Name" in qualifiers and not "Shot By First Name" in qualifiers and not "Shot On Last Name" in qualifiers and not "Shot By Last Name" in qualifiers and not "Shot On Birth Country" in qualifiers and not "Shot By Birth Country" in qualifiers and not "Shot On Nationality" in qualifiers and not "Shot By Nationality" in qualifiers and not "Facing Lefty" in qualifiers and not "Facing Righty" in qualifiers) or player_game_info["is_html_stats"]:
                         row["S"] += 1
                         if goal_event["shotType"] == "Wrist Shot":
                             row["WristS"] += 1
@@ -24356,14 +24484,14 @@ def perform_metadata_quals(qualifiers, player_type, row, player_game_info, nhl_p
                         elif goal_event["shotType"] == "Wrap-around":
                             row["WrapS"] += 1
                             row["WrapG"] += 1
-                        if row["Year"] >= 2007:
+                        if player_game_info["is_html_stats"]:
                             row["TSA"] += 1
                 if needs_five_stats and is_five_toi(player_game_info, goal_event, goal_event["period"], goal_event["periodTime"]):
                     row["G_5v5"] += 1
-                    if row["Year"] >= 2003:
+                    if player_game_info["is_old_html_stats"]:
                         if (not "Shot On" in qualifiers and not "Shot By" in qualifiers and not "Facing Lefty" in qualifiers and not "Facing Righty" in qualifiers) or row["Year"] >= 2007:
                             row["S_5v5"] += 1
-                            if row["Year"] >= 2007:
+                            if player_game_info["is_html_stats"]:
                                 row["TSA_5v5"] += 1
         for goal_event in player_game_info["shot"]:
             if perform_metadata_qual("shot", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], skip_career_events=skip_career_events):
@@ -24382,11 +24510,11 @@ def perform_metadata_quals(qualifiers, player_type, row, player_game_info, nhl_p
                     row["BackS"] += 1
                 elif goal_event["shotType"] == "Wrap-around":
                     row["WrapS"] += 1
-                if row["Year"] >= 2007:
+                if player_game_info["is_html_stats"]:
                     row["TSA"] += 1
                 if needs_five_stats and is_five_toi(player_game_info, goal_event, goal_event["period"], goal_event["periodTime"]):
                     row["S_5v5"] += 1
-                    if row["Year"] >= 2007:
+                    if player_game_info["is_html_stats"]:
                         row["TSA_5v5"] += 1
         for goal_event in player_game_info["missed_shot"]:
             if perform_metadata_qual("missed_shot", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], skip_career_events=skip_career_events):
@@ -24394,7 +24522,7 @@ def perform_metadata_quals(qualifiers, player_type, row, player_game_info, nhl_p
                     row["PostBar"] += 1
                 if count_misses:
                     row["S"] += 1
-                if row["Year"] >= 2007:
+                if player_game_info["is_html_stats"]:
                     row["TSA"] += 1
                     row["TSM"] += 1
                     if needs_five_stats and is_five_toi(player_game_info, goal_event, goal_event["period"], goal_event["periodTime"]):
@@ -24402,7 +24530,7 @@ def perform_metadata_quals(qualifiers, player_type, row, player_game_info, nhl_p
                         row["TSM_5v5"] += 1
         for goal_event in player_game_info["blocked_shot"]:
             if perform_metadata_qual("blocked_shot", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], skip_career_events=skip_career_events):
-                if row["Year"] >= 2007:
+                if player_game_info["is_html_stats"]:
                     row["TSA"] += 1
                     row["TSB"] += 1
                     if needs_five_stats and is_five_toi(player_game_info, goal_event, goal_event["period"], goal_event["periodTime"]):
@@ -24483,7 +24611,7 @@ def perform_metadata_quals(qualifiers, player_type, row, player_game_info, nhl_p
                 strength = determine_strength(player_game_info, goal_event["period"], goal_event["periodTime"], goal_event)
                 if strength:
                     row[strength + "GF"] += 1
-                    if strength == "EV" or strength != "PP":
+                    if strength == "EV" or strength == "SH":
                         row["PlusMinus"] += 1
         for goal_event in player_game_info["oi_all_opp_goals"]:
             if perform_metadata_qual("oi_all_opp_goals", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], skip_career_events=skip_career_events):
@@ -24492,7 +24620,7 @@ def perform_metadata_quals(qualifiers, player_type, row, player_game_info, nhl_p
                 strength = determine_strength(player_game_info, goal_event["period"], goal_event["periodTime"], goal_event)
                 if strength:
                     row[strength + "GA"] += 1
-                    if strength == "EV" or strength != "PP":
+                    if strength == "EV" or strength == "PP":
                         row["PlusMinus"] -= 1
     else:
         for goal_event in player_game_info["goal_against"]:
@@ -24506,7 +24634,7 @@ def perform_metadata_quals(qualifiers, player_type, row, player_game_info, nhl_p
                         strength = "PP"
                     row[strength + "GA"] += 1
                     row[strength + "SH"] += 1
-                if row["Year"] >= 2007:
+                if player_game_info["is_html_stats"]:
                     row["SA"] += 1
         for goal_event in player_game_info["save_against"]:
             if perform_metadata_qual("save_against", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], skip_career_events=skip_career_events):
@@ -31572,7 +31700,7 @@ def comb_rows(matching_rows, player_data, player_type, lower=True, stats=None):
 
     headers_to_remove = set()
     for header in comb_row:
-        if is_invalid_stat(header, player_type, comb_row, False, player_data):
+        if is_invalid_stat(header, player_type, comb_row, False, player_data, True):
             headers_to_remove.add(header)
 
     for key in headers_to_remove:
@@ -32067,7 +32195,7 @@ def fill_row(row, player_data, player_type, lower=True, stats=None):
             row["is_playoffs"] = "Only"
         else:
             row["is_playoffs"] = None
-        if is_invalid_stat(header, player_type, row, False, player_data):
+        if is_invalid_stat(header, player_type, row, False, player_data, True):
             headers_to_remove.add(header)
         row["is_playoffs"] = prev_is_playofs
     
@@ -35192,7 +35320,7 @@ def calculate_formula(stat, player_type, formula, data, all_rows, player_data, s
 
     for sub_stat in data:
         if stat == "custom_formula" or (sub_stat != "Tm" and sub_stat != "Result" and sub_stat != "player_type" and sub_stat != "is_playoffs" and (not sub_stat in qualifier_map or sub_stat == "Team Score" or sub_stat == "Opponent Score")):
-            formula, formula_matches = replace_formula(data, sub_stat, formula, all_rows, earliest_invalid_date, player_type, stat, formula_matches)
+            formula, formula_matches = replace_formula(data, sub_stat, formula, all_rows, earliest_invalid_date, player_type, player_data, stat, formula_matches)
 
     try:
         if safe_eval:
@@ -35254,7 +35382,7 @@ def calculate_earliest_invalid_date(stat, player_type, data, formula, earliest_i
             break
 
     if has_match:
-        invalid_date = is_invalid_stat(stat, player_type, data, False, player_data)
+        invalid_date = is_invalid_stat(stat, player_type, data, False, player_data, False)
         if invalid_date:
             if not earliest_invalid_date or invalid_date == True or invalid_date > earliest_invalid_date:
                 return invalid_date
@@ -35268,19 +35396,19 @@ def calculate_earliest_invalid_date(stat, player_type, data, formula, earliest_i
         if new_stat:
             for formula_match in formula_matches:
                 if formula_match.group() == new_stat.lower():
-                    invalid_date = is_invalid_stat(stat, player_type, data, False, player_data)
+                    invalid_date = is_invalid_stat(stat, player_type, data, False, player_data, False)
                     if invalid_date:
                         if not earliest_invalid_date or invalid_date == True or invalid_date > earliest_invalid_date:
                             return invalid_date
                     break
 
-def replace_formula(data, stat, formula, all_rows, earliest_invalid_date, player_type, real_stat, formula_matches):
+def replace_formula(data, stat, formula, all_rows, earliest_invalid_date, player_type, player_data, real_stat, formula_matches):
     value = data[stat]
     if not isinstance(value, numbers.Number) and real_stat != "custom_formula":
         return formula, formula_matches
 
     old_formula = formulas
-    formula, formula_matches = perform_replacement(formula_matches, stat, value, formula, earliest_invalid_date, all_rows)
+    formula, formula_matches = perform_replacement(formula_matches, stat, value, formula, earliest_invalid_date, all_rows, player_data, player_type)
 
     if old_formula == formula and real_stat == "custom_formula":
         new_stat = None
@@ -35290,32 +35418,38 @@ def replace_formula(data, stat, formula, all_rows, earliest_invalid_date, player
                 break
 
         if new_stat:
-            formula, formula_matches = perform_replacement(formula_matches, new_stat, value, formula, earliest_invalid_date, all_rows)
+            formula, formula_matches = perform_replacement(formula_matches, new_stat, value, formula, earliest_invalid_date, all_rows, player_data, player_type)
 
     return formula, formula_matches
 
-def perform_replacement(formula_matches, stat, value, formula, earliest_invalid_date, all_rows):
+def perform_replacement(formula_matches, stat, value, formula, earliest_invalid_date, all_rows, player_data, player_type):
     for formula_match in formula_matches:
         if formula_match.group() == stat.lower():
             if isinstance(value, numbers.Number):
-                value = str(calculate_valid_value(stat, value, earliest_invalid_date, all_rows))
+                value = str(calculate_valid_value(stat, value, earliest_invalid_date, all_rows, player_data, player_type))
             span = formula_match.span()
             formula = formula[:span[0]] + value + formula[span[1]:]
             formula_matches = list(re.finditer(r"(?:(?:[A-Za-z_:~])\d?|\d?(?:[A-Za-z_:~]))+", formula))
-            return perform_replacement(formula_matches, stat, value, formula, earliest_invalid_date, all_rows)
+            return perform_replacement(formula_matches, stat, value, formula, earliest_invalid_date, all_rows, player_data, perform_replacement)
     
     return formula, formula_matches
 
-def calculate_valid_value(stat, value, earliest_invalid_date, all_rows):
-    if not earliest_invalid_date:
-        return value
+def calculate_valid_value(stat, value, earliest_invalid_date, all_rows, player_data, player_type):
+    if player_data["stat_values"]["is_shift_data"]:
+        for row_data in all_rows:
+            if stat in row_data and row_data[stat]:
+                if is_invalid_stat(stat, player_type, row_data, False, player_data, True):
+                    value = value - row_data[stat]
+    else:
+        if not earliest_invalid_date:
+            return value
 
-    for row_data in all_rows:
-        if stat in row_data and row_data[stat]:
-            date = row_data["Year"]
-            if date < earliest_invalid_date:
-                value = value - row_data[stat]
-    
+        for row_data in all_rows:
+            if stat in row_data and row_data[stat]:
+                date = row_data["Year"]
+                if date < earliest_invalid_date:
+                    value = value - row_data[stat]
+
     return value
 
 def print_player_data(player_datas, player_type, highest_vals, lowest_vals, has_playoffs, has_non_playoffs, has_toi_stats, debug_mode, extra_stats, has_one_player_games):
@@ -37117,7 +37251,7 @@ def handle_table_data(player_data, player_type, over_header, header, highest_val
                     else:
                         row["is_playoffs"] = None
 
-                    if not is_invalid_stat(header, player_type, row, False, player_data):
+                    if not is_invalid_stat(header, player_type, row, False, player_data, True):
                         has_valid_stat = True
                         break
             if not has_valid_stat:
@@ -37178,10 +37312,10 @@ def handle_table_data(player_data, player_type, over_header, header, highest_val
             if is_invalid_goalie_stat:
                 value += "*"
             elif header.startswith("GP"):
-                if player_data["stat_values"]["any_missing_games"] or is_invalid_stat(header, player_type, player_data["stat_values"], True, player_data):
+                if player_data["stat_values"]["any_missing_games"] or is_invalid_stat(header, player_type, player_data["stat_values"], True, player_data, True):
                     value += "*"
             elif "TOI" in header or header == "GP_5v5":
-                if player_data["stat_values"]["any_missing_toi"] or is_invalid_stat(header, player_type, player_data["stat_values"], True, player_data):
+                if player_data["stat_values"]["any_missing_toi"] or is_invalid_stat(header, player_type, player_data["stat_values"], True, player_data, True):
                     value += "*"
             elif header == "CurrentCap$":
                 if not og_value:
@@ -37192,7 +37326,7 @@ def handle_table_data(player_data, player_type, over_header, header, highest_val
             elif player_type["da_type"]["type"] == "Skater" and "type" in headers[player_type["da_type"]["type"]][header] and headers[player_type["da_type"]["type"]][header]["type"] == "Advanced" and header in ("EVxGF/60M", "EVxGA/60M", "EVxGF%"):
                 if missing_any_xg:
                     value += "*"
-            elif is_invalid_stat(header, player_type, player_data["stat_values"], True, player_data):
+            elif is_invalid_stat(header, player_type, player_data["stat_values"], True, player_data, True):
                 value += "*"
 
             if header in highest_vals and index in highest_vals[header]["players"] and not (header in lowest_vals and index in lowest_vals[header]["players"]):
@@ -37336,7 +37470,7 @@ def is_against_header(header, over_header, extra_stats, player_type, has_toi_sta
                 #return True
         return False
 
-def is_invalid_stat(stat, player_type, data, count_inconsistent, player_data):
+def is_invalid_stat(stat, player_type, data, count_inconsistent, player_data, count_play_stats):
     if "YearStart" in data and stat in headers[player_type["da_type"]["type"]] and data["YearStart"]:
         if player_type["da_type"]["type"] == "Skater":
             header_shift_stats = ["Shft", "Shft/GP", "TOI/Shft"]
@@ -37365,36 +37499,40 @@ def is_invalid_stat(stat, player_type, data, count_inconsistent, player_data):
                     if stat in header_indv_shift_stats:
                         return current_season
 
-                if player_data["stat_values"]["is_href_data"]:
-                    if (stat in header_shift_stats + report_2_stats + report_3_stats + report_stats + game_report_stats + strength_stats) or "TOI" in stat or "/60M" in stat or "GAA" in stat or stat == "GP/GP":
-                        return current_season
+                if count_play_stats:
+                    rows_to_use = data["all_rows"] if "all_rows" in data else [data]
+                    for row in rows_to_use:
+                        if player_data["stat_values"]["is_href_data"]:
+                            if (stat in header_shift_stats + report_2_stats + report_3_stats + report_stats + game_report_stats + strength_stats):
+                                return current_season
 
-                if stat in header_shift_stats or "TOI" in stat or "/60M" in stat or "GAA" in stat or stat == "GP/GP":
-                    if data["YearStart"][index] < 2007:
-                        return 2007
-                if player_data["stat_values"]["is_strength_data"] and stat in strength_stats:
-                    if data["YearStart"][index] < 2007:
-                        return 2007
-                if player_data["stat_values"]["is_shot_on_data"] and stat in shot_on_on_stats:
-                    if data["YearStart"][index] < 2007:
-                        return 2007
-                if player_data["stat_values"]["is_on_ice_data"] and (stat in report_3_stats or stat in strength_stats or stat in shot_on_stats):
-                    if data["YearStart"][index] < 2007:
-                        return 2007
-                if stat in report_2_stats:
-                    if data["YearStart"][index] < 2007:
-                        return 2007
-                if stat in report_3_stats:
-                    if data["YearStart"][index] < 2005:
-                        return 2005
-                if stat in report_stats:
-                    if data["YearStart"][index] < 2003:
-                        return 2003
-                if stat in game_report_stats:
-                    if data["YearStart"][index] < 2001:
-                        return 2001
-                
-                return None
+                        if stat in header_shift_stats or "TOI" in stat or "/60M" in stat or "GAA" in stat or stat == "GP/GP":
+                            if not row["is_toi_stats"]:
+                                return current_season
+                        if player_data["stat_values"]["is_strength_data"] and stat in strength_stats:
+                            if not row["is_html_stats"]:
+                                return current_season
+                        if player_data["stat_values"]["is_shot_on_data"] and stat in shot_on_on_stats:
+                            if not row["is_html_stats"]:
+                                return current_season
+                        if player_data["stat_values"]["is_on_ice_data"] and (stat in report_3_stats or stat in strength_stats or stat in shot_on_stats):
+                            if not row["is_html_stats"]:
+                                return current_season
+                        if stat in report_2_stats:
+                            if not row["is_html_stats"]:
+                                return current_season
+                        if stat in report_3_stats:
+                            if not row["is_old_html_stats"] or row["Year"] < 2005:
+                                return current_season
+                        if stat in report_stats:
+                            if not row["is_old_html_stats"]:
+                                return current_season
+                        if stat in game_report_stats:
+                            if not row["is_older_html_stats"]:
+                                return current_season
+                    return None
+                else:
+                    return None
             
             if player_data["stat_values"]["is_leading_data"]:
                 if stat in ("GF", "GA", "PPGF", "PPGA"):
