@@ -20375,7 +20375,7 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
         return game_data, row_data, missing_games
 
     scoring_plays = []
-    if row_data["Year"] < 2001 or has_api_quals(time_frame["qualifiers"]) or "href" in extra_stats:
+    if row_data["Year"] < 2000 or has_api_quals(time_frame["qualifiers"]) or "href" in extra_stats:
         if sub_data and not "href" in extra_stats:
             scoring_plays = sub_data["liveData"]["plays"]["allPlays"]
             if row_data["Year"] >= 2010:
@@ -20405,7 +20405,7 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
             else:
                 game_data["is_href_stats"] = True
     
-    if row_data["Year"] >= 2001 and not has_api_quals(time_frame["qualifiers"]) and not "hide-play" in extra_stats and not "href" in extra_stats:
+    if row_data["Year"] >= 2000 and not has_api_quals(time_frame["qualifiers"]) and not "hide-play" in extra_stats and not "href" in extra_stats:
         if row_data["Year"] >= 2007:
             get_html_play_data(scoring_plays, player_data, row_data["NHLGameLink"], row_data["Location"], game_data, sub_data["gameData"]["status"]["abstractGameState"] == "Final", row_data["Year"], s)
             if not scoring_plays or not has_period_event(game_data, scoring_plays):
@@ -20455,7 +20455,7 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                 game_data["is_old_html_stats"] = True
                 game_data["is_older_html_stats"] = True
                 game_data["is_href_stats"] = True
-        elif row_data["Year"] >= 2001:
+        elif row_data["Year"] >= 2000:
             get_older_html_play_data(scoring_plays, player_data, row_data["NHLGameLink"], row_data["Location"], game_data, True, row_data["Year"], s)
             if not scoring_plays:
                 if "hide-missing" in extra_stats:
@@ -21487,7 +21487,7 @@ def setup_game_data(player_data, row_data, player_id, player_type, time_frame, s
     }
 
     missing_games = False
-    if row_data["Year"] < 2001 and has_shift_quals(time_frame["qualifiers"]):
+    if row_data["Year"] < 2000 and has_shift_quals(time_frame["qualifiers"]):
         game_data["missing_data"] = True
         return game_data, missing_games, None
     
@@ -21812,7 +21812,7 @@ def setup_href_game_data(player_data, row_data, player_id, player_type, time_fra
         }
 
     missing_games = False
-    if row_data["Year"] < 2001 and has_shift_quals(time_frame["qualifiers"]):
+    if row_data["Year"] < 2000 and has_shift_quals(time_frame["qualifiers"]):
         game_data["missing_data"] = True
         return game_data, missing_games, None
     
