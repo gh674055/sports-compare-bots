@@ -20373,7 +20373,7 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
         if sub_data and not "href" in extra_stats:
             scoring_plays = sub_data["liveData"]["plays"]["allPlays"]
     
-        if not scoring_plays and "href" in extra_stats or "hide-href" not in extra_stats
+        if not scoring_plays and "href" in extra_stats or "hide-href" not in extra_stats:
             game_data, missing_games, sub_data = setup_href_game_data(player_data, row_data, player_id, player_type, time_frame, game_data, s)
             if game_data["missing_data"]:
                 return game_data, row_data, missing_games
