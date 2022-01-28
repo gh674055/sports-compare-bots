@@ -18319,7 +18319,7 @@ def handle_nhl_game_stats_single_thread(player_data, all_rows, time_frame, playe
     all_rows = sorted(all_rows, key=lambda row: row["Date"])
     return get_nhl_game_schedule_single_thread(player_data, all_rows, games_to_skip, player_link, player_type, time_frame, missing_games, missing_toi, extra_stats, s)
 
-def get_nhl_schedule(player_data, all_rows, qualifiers):
+def get_nhl_schedule(player_data, all_rows, qualifiers, s):
     season_objs = {}
     seasons = set(row_data["Year"] for row_data in all_rows)
     for season in seasons:
