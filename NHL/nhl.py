@@ -16732,7 +16732,7 @@ def handle_live_stats(player_type, player_data, player_link, time_frame, all_row
     game_data, sub_row_data, sub_missing_games = get_game_data(0, player_data, row_data, player_id, player_type, {"qualifiers" : qualifiers}, temp_extra_stats, s)
     if sub_missing_games:
         missing_games.append("[" + str(row_data["Date"]) + "](" + "https://www.nhl.com/gamecenter/" + str(row_data["NHLGameLink"]) + ")")
-    shift_data = game_data["shift_data"]
+    player_shift_data = game_data["player_shift_data"]
     has_match = perform_sub_nhl_game_qualifiers(row_data, qualifiers, game_data, player_type, player_link, None, -1, True, True, temp_extra_stats)[0]
     if not has_match:
         return all_rows
@@ -16752,8 +16752,8 @@ def handle_live_stats(player_type, player_data, player_link, time_frame, all_row
                         goalies.append(goalie)
 
         is_start = True
-        if shift_data:
-            is_start = is_player_on_ice(shift_data, None, None, 1, 1, player_id, True)
+        if player_shift_data:
+            is_start = is_player_on_ice(player_shift_data, None, None, 1, 1, player_id, True)
         else:
             for scoring_play in sub_data["liveData"]["plays"]["allPlays"]:
                 found_match = False
@@ -20342,25 +20342,20 @@ def determine_event_match(goal_event, qualifiers, player_game_info, row, is_face
             is_match = True
     return is_match
 
-def is_player_on_ice(shift_data, team_on_ice, opp_on_ice, period, period_time, player_id, is_team, is_faceoff=False):
+def is_player_on_ice(player_shift_data, team_on_ice, opp_on_ice, period, period_time, player_id, is_team, is_faceoff=False):
     if is_team and team_on_ice:
-        return player_id in team_on_ice
+        return player_id in team_on_ice["P"]
     elif not is_team and opp_on_ice:
-        return player_id in opp_on_ice
+        return player_id in opp_on_ice["P"]
         
-    team_str = "team" if is_team else "opp"
-    if not shift_data:
+    if not player_shift_data:
         return None
-    if player_id not in shift_data[team_str] or period not in shift_data[team_str][player_id]:
-        return False
-    for shift_event in shift_data[team_str][player_id][period]:
-        if is_faceoff:
-            if period_time >= shift_event["time_start"] - 1 and period_time <= shift_event["time_end"] - 1:
-                return True
-        else:
-            if period_time >= shift_event["time_start"] and period_time <= shift_event["time_end"]:
-                return True
-    return False
+
+    if is_faceoff:
+        period_time += 1
+
+    team_str = "team" if is_team else "opp"
+    return player_id in player_shift_data[team_str] and period in player_shift_data[team_str][player_id] and period_time in player_shift_data[team_str][player_id][period]
 
 def set_row_data(player_game_info, row_data):
     if not player_game_info:
@@ -20548,13 +20543,15 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
     game_data["scoring_play_data"] = scoring_play_data
     
     if row_data["Year"] >= 2007 and "hide-toi" not in extra_stats:
-        game_data["shift_data"] = get_html_shift_data(row_data["NHLGameLink"], row_data["Location"], game_data, player_data, row_data["Year"], s)
+        game_data["shift_data"], game_data["player_shift_data"], game_data["num_on_ice_data"] = get_html_shift_data(row_data["NHLGameLink"], row_data["Location"], game_data, player_data, row_data["Year"], s)
         #if not game_data["shift_data"]:
         #    game_data["shift_data"], missing_games = get_shift_data(row_data["NHLGameLink"], game_data["team_id"], missing_games, s)
 
         if game_data["shift_data"]:
             if not has_period_shift_event(game_data, game_data["shift_data"]):
                 game_data["shift_data"] = {} 
+                game_data["player_shift_data"] = {}
+                game_data["num_on_ice_data"] = {}
 
         if not game_data["shift_data"]:
             game_data["missing_toi"] = True
@@ -20577,14 +20574,47 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                                 game_data["shift_data"]["team"] = {}
                             if player["person"]["id"] not in game_data["shift_data"]["team"]:
                                 game_data["shift_data"]["team"][player["person"]["id"]] = {}
-                            if 1 not in game_data["shift_data"]["team"][player["person"]["id"]]:
-                                game_data["shift_data"]["team"][player["person"]["id"]][1] = []
+                                game_data["player_shift_data"]["team"][player["person"]["id"]] = {}
+                            if 1 not in game_data["num_on_ice_data"]:
+                                game_data["num_on_ice_data"][1] = {}
 
                             game_data["shift_data"]["team"][player["person"]["id"]][1] = [{
                                 "time_start" : 1,
                                 "time_end" : time_end,
                                 "period" : 1
                             }]
+
+                            if 1 in game_data["player_shift_data"]["team"][player["person"]["id"]]:
+                                for second in game_data["player_shift_data"]["team"][player["person"]["id"]][1]:
+                                    if second not in game_data["num_on_ice_data"][1]:
+                                        game_data["num_on_ice_data"][1][second] = {
+                                            "team_goalies" : 0,
+                                            "team_skaters" : 0,
+                                            "opp_goalies" : 0,
+                                            "opp_skaters" : 0
+                                        }
+
+                                    if player["person"]["id"] in game_data["team_goalies"]:
+                                        game_data["num_on_ice_data"][1][second]["team_goalies"] -= 1
+                                    else:
+                                        game_data["num_on_ice_data"][1][second]["team_skaters"] -= 1
+
+                            game_data["player_shift_data"]["team"][player["person"]["id"]][1] = set()
+                            for second in range(1, time_end + 1):
+                                game_data["player_shift_data"]["team"][player["person"]["id"]][1].add(second)
+
+                                if second not in game_data["num_on_ice_data"][1]:
+                                    game_data["num_on_ice_data"][1][second] = {
+                                        "team_goalies" : 0,
+                                        "team_skaters" : 0,
+                                        "opp_goalies" : 0,
+                                        "opp_skaters" : 0
+                                    }
+
+                                if player["person"]["id"] in game_data["team_goalies"]:
+                                    game_data["num_on_ice_data"][1][second]["team_goalies"] += 1
+                                else:
+                                    game_data["num_on_ice_data"][1][second]["team_skaters"] += 1
                 
                 for player in sub_data["liveData"]["boxscore"]["teams"][game_data["opp_str"]]["players"]:
                     player = sub_data["liveData"]["boxscore"]["teams"][game_data["opp_str"]]["players"][player]
@@ -20596,16 +20626,48 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                                 game_data["shift_data"]["opp"] = {}
                             if player["person"]["id"] not in game_data["shift_data"]["opp"]:
                                 game_data["shift_data"]["opp"][player["person"]["id"]] = {}
-                            if 1 not in game_data["shift_data"]["opp"][player["person"]["id"]]:
-                                game_data["shift_data"]["opp"][player["person"]["id"]][1] = []
+                                game_data["player_shift_data"]["opp"][player["person"]["id"]] = {}
+                            if 1 not in game_data["num_on_ice_data"]:
+                                game_data["num_on_ice_data"][1] = {}
 
                             game_data["shift_data"]["opp"][player["person"]["id"]][1] = [{
                                 "time_start" : 1,
                                 "time_end" : time_end,
                                 "period" : 1
                             }]
-                    
 
+                            if 1 in game_data["player_shift_data"]["opp"][player["person"]["id"]]:
+                                for second in game_data["player_shift_data"]["opp"][player["person"]["id"]][1]:
+                                    if second not in game_data["num_on_ice_data"][1]:
+                                        game_data["num_on_ice_data"][1][second] = {
+                                            "team_goalies" : 0,
+                                            "team_skaters" : 0,
+                                            "opp_goalies" : 0,
+                                            "opp_skaters" : 0
+                                        }
+
+                                    if player["person"]["id"] in game_data["opp_goalies"]:
+                                        game_data["num_on_ice_data"][1][second]["opp_goalies"] -= 1
+                                    else:
+                                        game_data["num_on_ice_data"][1][second]["opp_skaters"] -= 1
+
+                            game_data["player_shift_data"]["opp"][player["person"]["id"]][1] = set()
+                            for second in range(1, time_end + 1):
+                                game_data["player_shift_data"]["opp"][player["person"]["id"]][1].add(second)
+
+                                if second not in game_data["num_on_ice_data"][1]:
+                                    game_data["num_on_ice_data"][1][second] = {
+                                        "team_goalies" : 0,
+                                        "team_skaters" : 0,
+                                        "opp_goalies" : 0,
+                                        "opp_skaters" : 0
+                                    }
+
+                                if player["person"]["id"] in game_data["opp_goalies"]:
+                                    game_data["num_on_ice_data"][1][second]["opp_goalies"] += 1
+                                else:
+                                    game_data["num_on_ice_data"][1][second]["opp_skaters"] += 1
+                    
     next_shot_penalty_shot = False
     first_goal = True
     team_shootout_goal = 1
@@ -20830,10 +20892,9 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                 if game_winning_goal:
                     if not game_data["winning_goalie"]:
                         if scoring_play["team"]["id"] == game_data["team_id"]:
-                            for player in team_on_ice:
-                                if player in game_data["team_goalies"]:
-                                    game_data["winning_goalie"] = player
-                                    break
+                            for player in team_on_ice["G"]:
+                                game_data["winning_goalie"] = player
+                                break
 
                             if not game_data["winning_goalie"]:
                                 game_data["winning_goalie"] = determine_last_goalie(row_data, game_data, scoring_play["about"]["period"], period_time, "team")
@@ -20846,18 +20907,16 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                             if not game_data["losing_goalie"]:
                                 game_data["losing_goalie"] = determine_last_goalie(row_data, game_data, scoring_play["about"]["period"], period_time, "opp")
                         else:
-                            for player in opp_on_ice:
-                                if player in game_data["opp_goalies"]:
-                                    game_data["winning_goalie"] = player
-                                    break
+                            for player in opp_on_ice["G"]:
+                                game_data["winning_goalie"] = player
+                                break
 
                             if not game_data["winning_goalie"]:
                                 game_data["winning_goalie"] = determine_last_goalie(row_data, game_data, scoring_play["about"]["period"], period_time, "opp")
                             
-                            for player in team_on_ice:
-                                if player in game_data["team_goalies"]:
-                                    game_data["losing_goalie"] = player
-                                    break
+                            for player in team_on_ice["G"]:
+                                game_data["losing_goalie"] = player
+                                break
 
                             if not game_data["losing_goalie"]:
                                 game_data["losing_goalie"] = determine_last_goalie(row_data, game_data, scoring_play["about"]["period"], period_time, "team")
@@ -20926,8 +20985,8 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                         "shotType" : scoring_play["result"]["secondaryType"] if "secondaryType" in scoring_play["result"] else None
                     }})
                 
-                if game_data["shift_data"] or team_on_ice:
-                    is_on_ice = is_player_on_ice(game_data["shift_data"], team_on_ice, opp_on_ice, scoring_play["about"]["period"], period_time, player_id, True)
+                if game_data["player_shift_data"] or team_on_ice:
+                    is_on_ice = is_player_on_ice(game_data["player_shift_data"], team_on_ice, opp_on_ice, scoring_play["about"]["period"], period_time, player_id, True)
                     if is_on_ice != None:
                         if is_on_ice:
                             if scoring_play["team"]["id"] == game_data["team_id"]:
@@ -20998,8 +21057,8 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                         "shotType" : scoring_play["result"]["secondaryType"] if "secondaryType" in scoring_play["result"] else None
                     }})
 
-                if game_data["shift_data"] or team_on_ice:
-                    is_on_ice = is_player_on_ice(game_data["shift_data"], team_on_ice, opp_on_ice, scoring_play["about"]["period"], period_time, player_id, True)
+                if game_data["player_shift_data"] or team_on_ice:
+                    is_on_ice = is_player_on_ice(game_data["player_shift_data"], team_on_ice, opp_on_ice, scoring_play["about"]["period"], period_time, player_id, True)
                     if is_on_ice != None:
                         if is_on_ice:
                             if scoring_play["team"]["id"] == game_data["team_id"]:
@@ -21059,8 +21118,8 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                         "oppNationality" : game_data["player_nationality_map"][scorer]
                     }})
 
-                if game_data["shift_data"] or team_on_ice:
-                    is_on_ice = is_player_on_ice(game_data["shift_data"], team_on_ice, opp_on_ice, scoring_play["about"]["period"], period_time, player_id, True)
+                if game_data["player_shift_data"] or team_on_ice:
+                    is_on_ice = is_player_on_ice(game_data["player_shift_data"], team_on_ice, opp_on_ice, scoring_play["about"]["period"], period_time, player_id, True)
                     if is_on_ice != None:
                         if is_on_ice:
                             if scoring_play["team"]["id"] == game_data["team_id"]:
@@ -21183,18 +21242,20 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                 elif player_shot:
                     game_data["blocked_shot"].append({**shared_data, **{}})
 
-                is_on_ice = is_player_on_ice(game_data["shift_data"], team_on_ice, opp_on_ice, scoring_play["about"]["period"], period_time, player_id, True)
-                if is_on_ice != None:
-                    if is_on_ice:
-                        if scoring_play["team"]["id"] != game_data["team_id"]:
-                            game_data["oi_all_team_shots"].append({**shared_data, **{}})
-                        else:
-                            game_data["oi_all_opp_shots"].append({**shared_data, **{}})
+                if game_data["player_shift_data"] or team_on_ice:
+                    is_on_ice = is_player_on_ice(game_data["player_shift_data"], team_on_ice, opp_on_ice, scoring_play["about"]["period"], period_time, player_id, True)
+                    if is_on_ice != None:
+                        if is_on_ice:
+                            if scoring_play["team"]["id"] != game_data["team_id"]:
+                                game_data["oi_all_team_shots"].append({**shared_data, **{}})
+                            else:
+                                game_data["oi_all_opp_shots"].append({**shared_data, **{}})
 
-                    if scoring_play["team"]["id"] != game_data["team_id"]:
-                        game_data["all_team_shots"].append({**shared_data, **{}})
-                    else:
-                        game_data["all_opp_shots"].append({**shared_data, **{}})
+                        if scoring_play["team"]["id"] != game_data["team_id"]:
+                            game_data["all_team_shots"].append({**shared_data, **{}})
+                        else:
+                            game_data["all_opp_shots"].append({**shared_data, **{}})
+
                 next_shot_penalty_shot = False
             elif scoring_play["result"]["event"] == "Faceoff":
                 player_faceoff_winner = False
@@ -21223,12 +21284,13 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                         "faceoff_against" : faceoff_against
                     }})
                 
-                is_on_ice = is_player_on_ice(game_data["shift_data"], team_on_ice, opp_on_ice, scoring_play["about"]["period"], period_time, player_id, True, is_faceoff=True)
-                if is_on_ice:
-                    game_data["all_faceoffs"].append({**shared_data , **{
-                        "winner" : True,
-                        "faceoff_against" : faceoff_against
-                    }})
+                if game_data["player_shift_data"] or team_on_ice:
+                    is_on_ice = is_player_on_ice(game_data["player_shift_data"], team_on_ice, opp_on_ice, scoring_play["about"]["period"], period_time, player_id, True, is_faceoff=True)
+                    if is_on_ice:
+                        game_data["all_faceoffs"].append({**shared_data , **{
+                            "winner" : True,
+                            "faceoff_against" : faceoff_against
+                        }})
 
                 if event_time:
                     if scoring_play["about"]["period"] not in faceoff_time_information:
@@ -21485,6 +21547,8 @@ def setup_game_data(player_data, row_data, player_id, player_type, time_frame, s
         "is_shootout" : False,
         "period_length" : {},
         "shift_data" : {},
+        "player_shift_data" : {},
+        "num_on_ice_data" : {},
         "all_events" : {},
         "shift_events" : [],
         "all_shift_events" : [],
@@ -21810,6 +21874,8 @@ def setup_href_game_data(player_data, row_data, player_id, player_type, time_fra
             "is_shootout" : False,
             "period_length" : {},
             "shift_data" : {},
+            "player_shift_data" : {},
+            "num_on_ice_data" : {},
             "all_events" : {},
             "shift_events" : [],
             "all_shift_events" : [],
@@ -22050,8 +22116,12 @@ def get_shift_data(game_id, player_team_id, missing_games, s):
     return shift_data, missing_games
 
 def get_html_shift_data(og_game_id, is_home, game_data, player_data, row_year, s):
+    # profile = cProfile.Profile()
+    # profile.enable()
     num_events = 0
     shift_data = {}
+    player_shift_data = {}
+    num_on_ice_data = {}
     for team_str in ("H", "V"):
         try:
             game_id = str(og_game_id)
@@ -22062,18 +22132,18 @@ def get_html_shift_data(og_game_id, is_home, game_data, player_data, row_year, s
             response, player_page_xml = url_request_lxml(s, nhl_html_shifts_report_format.format(year_str, team_str, game_id))
         except urllib.error.HTTPError as err:
             if err.status == 404:
-                return {}
+                return {}, {}, {}
             else:
                 raise
         
         if not player_page_xml:
-            return {}
+            return {}, {}, {}
 
         period_length_obj = game_data["period_length"]
 
         game_info_table = player_page_xml.xpath("body//table[@id = 'GameInfo']")
         if not game_info_table:
-            return {}
+            return {}, {}, {}
 
         game_info_table_rows = []
         game_info_table = game_info_table[0]
@@ -22087,7 +22157,7 @@ def get_html_shift_data(og_game_id, is_home, game_data, player_data, row_year, s
                 if game_info_match:
                     pot_game_id = str(game_info_match.group(1))
                     if pot_game_id != game_id[2:]:
-                        return {}
+                        return {}, {}, {}
                 else:
                     try:
                         pot_date = dateutil.parser.parse(game_info_row_text)
@@ -22095,7 +22165,7 @@ def get_html_shift_data(og_game_id, is_home, game_data, player_data, row_year, s
                         if pot_date.month <= 8:
                             pot_year -= 1
                         if pot_year != row_year:
-                            return {}
+                            return {}, {}, {}
                     except Exception:
                         try:
                             game_info_row_text_split = game_info_row_text.split("/")
@@ -22105,7 +22175,7 @@ def get_html_shift_data(og_game_id, is_home, game_data, player_data, row_year, s
                                 if pot_date.month <= 8:
                                     pot_year -= 1
                                 if pot_year != row_year:
-                                    return []
+                                    return {}, {}, {}
                         except Exception:
                             pass
             
@@ -22132,17 +22202,9 @@ def get_html_shift_data(og_game_id, is_home, game_data, player_data, row_year, s
                 if player_text:
                     player_number = player_text.split()[0].strip()
                     if is_team:
-                        if player_number not in game_data["team_numbers"] and player_number in game_data["opp_numbers"]:
-                            current_player_id = game_data["opp_numbers"].get(player_number, None)
-                            is_team = False
-                        else:
-                            current_player_id = game_data["team_numbers"].get(player_number, None)
+                        current_player_id = game_data["team_numbers"].get(player_number, None)
                     else:
-                        if player_number not in game_data["opp_numbers"] and player_number in game_data["team_numbers"]:
-                            current_player_id = game_data["team_numbers"].get(player_number, None)
-                            is_team = True
-                        else:
-                            current_player_id = game_data["opp_numbers"].get(player_number, None)
+                        current_player_id = game_data["opp_numbers"].get(player_number, None)
             elif len(columns) == 6:
                 if row.get("class") and ("evenColor" in row.get("class") or "oddColor" in row.get("class")) and current_player_id:
                     num_events += 1
@@ -22177,16 +22239,43 @@ def get_html_shift_data(og_game_id, is_home, game_data, player_data, row_year, s
                                 crazy_period = period + 1
                                 if team_str not in shift_data:
                                     shift_data[team_str] = {}
+                                    player_shift_data[team_str] = {}
                                 if current_player_id not in shift_data[team_str]:
                                     shift_data[team_str][current_player_id] = {}
+                                    player_shift_data[team_str][current_player_id] = {}
                                 if crazy_period not in shift_data[team_str][current_player_id]:
                                     shift_data[team_str][current_player_id][crazy_period] = []
+                                    player_shift_data[team_str][current_player_id][crazy_period] = set()
+                                if crazy_period not in num_on_ice_data:
+                                    num_on_ice_data[crazy_period] = {}
 
                                 shift_data[team_str][current_player_id][crazy_period].append({
                                     "time_start" : 1,
                                     "time_end" : time_end,
                                     "period" : crazy_period
                                 })
+
+                                for second in range(1, time_end + 1):
+                                    player_shift_data[team_str][current_player_id][crazy_period].add(second)
+
+                                    if second not in num_on_ice_data[crazy_period]:
+                                        num_on_ice_data[crazy_period][second] = {
+                                            "team_goalies" : 0,
+                                            "team_skaters" : 0,
+                                            "opp_goalies" : 0,
+                                            "opp_skaters" : 0
+                                        }
+
+                                    if team_str == "team":
+                                        if current_player_id in game_data["team_goalies"]:
+                                            num_on_ice_data[crazy_period][second]["team_goalies"] += 1
+                                        else:
+                                            num_on_ice_data[crazy_period][second]["team_skaters"] += 1
+                                    else:
+                                        if current_player_id in game_data["opp_goalies"]:
+                                            num_on_ice_data[crazy_period][second]["opp_goalies"] += 1
+                                        else:
+                                            num_on_ice_data[crazy_period][second]["opp_skaters"] += 1
                             time_end = period_length_obj[period]
                         else:
                             continue
@@ -22199,17 +22288,17 @@ def get_html_shift_data(og_game_id, is_home, game_data, player_data, row_year, s
 
                     if team_str not in shift_data:
                         shift_data[team_str] = {}
+                        player_shift_data[team_str] = {}
                     if current_player_id not in shift_data[team_str]:
                         shift_data[team_str][current_player_id] = {}
+                        player_shift_data[team_str][current_player_id] = {}
                     if period not in shift_data[team_str][current_player_id]:
                         shift_data[team_str][current_player_id][period] = []
+                        player_shift_data[team_str][current_player_id][period] = set()
+                    if period not in num_on_ice_data:
+                        num_on_ice_data[period] = {}
 
-                    has_existing_match = False
-                    for shift_event in shift_data[team_str][current_player_id][period]:
-                        if shift_event["time_start"] == time_start:
-                            has_existing_match = True
-                            break
-                    if has_existing_match:
+                    if time_start in player_shift_data[team_str][current_player_id][period]:
                         continue
 
                     shift_data[team_str][current_player_id][period].append({
@@ -22217,6 +22306,28 @@ def get_html_shift_data(og_game_id, is_home, game_data, player_data, row_year, s
                         "time_end" : time_end,
                         "period" : period
                     })
+
+                    for second in range(time_start, time_end + 1):
+                        player_shift_data[team_str][current_player_id][period].add(second)
+
+                        if second not in num_on_ice_data[period]:
+                            num_on_ice_data[period][second] = {
+                                "team_goalies" : 0,
+                                "team_skaters" : 0,
+                                "opp_goalies" : 0,
+                                "opp_skaters" : 0
+                            }
+
+                        if team_str == "team":
+                            if current_player_id in game_data["team_goalies"]:
+                                num_on_ice_data[period][second]["team_goalies"] += 1
+                            else:
+                                num_on_ice_data[period][second]["team_skaters"] += 1
+                        else:
+                            if current_player_id in game_data["opp_goalies"]:
+                                num_on_ice_data[period][second]["opp_goalies"] += 1
+                            else:
+                                num_on_ice_data[period][second]["opp_skaters"] += 1
             elif len(columns) == 7:
                 if period_length_obj and row.get("class") and ("evenColor" in row.get("class") or "oddColor" in row.get("class")) and current_player_id:
                     period_str = str(columns[0].text).strip()
@@ -22237,14 +22348,62 @@ def get_html_shift_data(og_game_id, is_home, game_data, player_data, row_year, s
                         if time_duration == period_length_obj[period]:
                             if team_str not in shift_data:
                                 shift_data[team_str] = {}
+                                player_shift_data[team_str] = {}
                             if current_player_id not in shift_data[team_str]:
                                 shift_data[team_str][current_player_id] = {}
+                                player_shift_data[team_str][current_player_id] = {}
+                            if period not in num_on_ice_data:
+                                num_on_ice_data[period] = {}
 
                             shift_data[team_str][current_player_id][period] = [{
                                 "time_start" : 1,
                                 "time_end" : period_length_obj[period],
                                 "period" : period
                             }]
+
+                            if period in player_shift_data[team_str][current_player_id]:
+                                for second in player_shift_data[team_str][current_player_id][period]:
+                                    if second not in num_on_ice_data[period]:
+                                        num_on_ice_data[period][second] = {
+                                            "team_goalies" : 0,
+                                            "team_skaters" : 0,
+                                            "opp_goalies" : 0,
+                                            "opp_skaters" : 0
+                                        }
+
+                                    if team_str == "team":
+                                        if current_player_id in game_data["team_goalies"]:
+                                            num_on_ice_data[period][second]["team_goalies"] -= 1
+                                        else:
+                                            num_on_ice_data[period][second]["team_skaters"] -= 1
+                                    else:
+                                        if current_player_id in game_data["opp_goalies"]:
+                                            num_on_ice_data[period][second]["opp_goalies"] -= 1
+                                        else:
+                                            num_on_ice_data[period][second]["opp_skaters"] -= 1
+
+                            player_shift_data[team_str][current_player_id][period] = set()
+                            for second in range(1, period_length_obj[period] + 1):
+                                player_shift_data[team_str][current_player_id][period].add(second)
+
+                                if second not in num_on_ice_data[period]:
+                                    num_on_ice_data[period][second] = {
+                                        "team_goalies" : 0,
+                                        "team_skaters" : 0,
+                                        "opp_goalies" : 0,
+                                        "opp_skaters" : 0
+                                    }
+
+                                if team_str == "team":
+                                    if current_player_id in game_data["team_goalies"]:
+                                        num_on_ice_data[period][second]["team_goalies"] += 1
+                                    else:
+                                        num_on_ice_data[period][second]["team_skaters"] += 1
+                                else:
+                                    if current_player_id in game_data["opp_goalies"]:
+                                        num_on_ice_data[period][second]["opp_goalies"] += 1
+                                    else:
+                                        num_on_ice_data[period][second]["opp_skaters"] += 1
                         elif current_player_id in shift_data[team_str] and period in shift_data[team_str][current_player_id]:
                             if period == in_progress_period:
                                 total_on_ice = sum(shift["time_end"] - shift["time_start"] + 1 for shift in shift_data[team_str][current_player_id][period])
@@ -22257,33 +22416,156 @@ def get_html_shift_data(og_game_id, is_home, game_data, player_data, row_year, s
                                             "time_end" : period_length_obj[period],
                                             "period" : period
                                         })
+
+                                        for second in range(start_time, period_length_obj[period] + 1):
+                                            player_shift_data[team_str][current_player_id][period].add(second)
+
+                                            if second not in num_on_ice_data[period]:
+                                                num_on_ice_data[period][second] = {
+                                                    "team_goalies" : 0,
+                                                    "team_skaters" : 0,
+                                                    "opp_goalies" : 0,
+                                                    "opp_skaters" : 0
+                                                }
+
+                                            if team_str == "team":
+                                                if current_player_id in game_data["team_goalies"]:
+                                                    num_on_ice_data[period][second]["team_goalies"] += 1
+                                                else:
+                                                    num_on_ice_data[period][second]["team_skaters"] += 1
+                                            else:
+                                                if current_player_id in game_data["opp_goalies"]:
+                                                    num_on_ice_data[period][second]["opp_goalies"] += 1
+                                                else:
+                                                    num_on_ice_data[period][second]["opp_skaters"] += 1
                         else:
                             if period == in_progress_period:
                                 if team_str not in shift_data:
                                     shift_data[team_str] = {}
+                                    player_shift_data[team_str] = {}
                                 if current_player_id not in shift_data[team_str]:
                                     shift_data[team_str][current_player_id] = {}
+                                    player_shift_data[team_str][current_player_id] = {}
+                                if period not in num_on_ice_data:
+                                    num_on_ice_data[period] = {}
 
                                 shift_data[team_str][current_player_id][period] = [{
                                     "time_start" : 1,
                                     "time_end" : time_duration,
                                     "period" : period
                                 }]
+
+                                if period in player_shift_data[team_str][current_player_id]:
+                                    for second in player_shift_data[team_str][current_player_id][period]:
+                                        if second not in num_on_ice_data[period]:
+                                            num_on_ice_data[period][second] = {
+                                                "team_goalies" : 0,
+                                                "team_skaters" : 0,
+                                                "opp_goalies" : 0,
+                                                "opp_skaters" : 0
+                                            }
+
+                                        if team_str == "team":
+                                            if current_player_id in game_data["team_goalies"]:
+                                                num_on_ice_data[period][second]["team_goalies"] -= 1
+                                            else:
+                                                num_on_ice_data[period][second]["team_skaters"] -= 1
+                                        else:
+                                            if current_player_id in game_data["opp_goalies"]:
+                                                num_on_ice_data[period][second]["opp_goalies"] -= 1
+                                            else:
+                                                num_on_ice_data[period][second]["opp_skaters"] -= 1
+
+                                player_shift_data[team_str][current_player_id][period] = set()
+
+                                for second in range(1, time_duration + 1):
+                                    player_shift_data[team_str][current_player_id][period].add(second)
+
+                                    if second not in num_on_ice_data[period]:
+                                        num_on_ice_data[period][second] = {
+                                            "team_goalies" : 0,
+                                            "team_skaters" : 0,
+                                            "opp_goalies" : 0,
+                                            "opp_skaters" : 0
+                                        }
+
+                                    if team_str == "team":
+                                        if current_player_id in game_data["team_goalies"]:
+                                            num_on_ice_data[period][second]["team_goalies"] += 1
+                                        else:
+                                            num_on_ice_data[period][second]["team_skaters"] += 1
+                                    else:
+                                        if current_player_id in game_data["opp_goalies"]:
+                                            num_on_ice_data[period][second]["opp_goalies"] += 1
+                                        else:
+                                            num_on_ice_data[period][second]["opp_skaters"] += 1
                     else:
                         total_time_duration = sum(period_length_obj[period] for period in period_length_obj)
                         if time_duration == total_time_duration:
                             for period in period_length_obj:
                                 if team_str not in shift_data:
                                     shift_data[team_str] = {}
+                                    player_shift_data[team_str] = {}
                                 if current_player_id not in shift_data[team_str]:
                                     shift_data[team_str][current_player_id] = {}
+                                    player_shift_data[team_str][current_player_id] = {}
+                                if period not in num_on_ice_data:
+                                    num_on_ice_data[period] = {}
                                 shift_data[team_str][current_player_id][period] = [{
                                     "time_start" : 1,
                                     "time_end" : period_length_obj[period],
                                     "period" : period
                                 }]
 
-    return shift_data
+                                if period in player_shift_data[team_str][current_player_id]:
+                                    for second in player_shift_data[team_str][current_player_id][period]:
+                                        if second not in num_on_ice_data[period]:
+                                            num_on_ice_data[period][second] = {
+                                                "team_goalies" : 0,
+                                                "team_skaters" : 0,
+                                                "opp_goalies" : 0,
+                                                "opp_skaters" : 0
+                                            }
+
+                                        if team_str == "team":
+                                            if current_player_id in game_data["team_goalies"]:
+                                                num_on_ice_data[period][second]["team_goalies"] -= 1
+                                            else:
+                                                num_on_ice_data[period][second]["team_skaters"] -= 1
+                                        else:
+                                            if current_player_id in game_data["opp_goalies"]:
+                                                num_on_ice_data[period][second]["opp_goalies"] -= 1
+                                            else:
+                                                num_on_ice_data[period][second]["opp_skaters"] -= 1
+
+                                player_shift_data[team_str][current_player_id][period] = set()
+
+                                for second in range(1, period_length_obj[period] + 1):
+                                    player_shift_data[team_str][current_player_id][period].add(second)
+
+                                    if second not in num_on_ice_data[period]:
+                                        num_on_ice_data[period][second] = {
+                                            "team_goalies" : 0,
+                                            "team_skaters" : 0,
+                                            "opp_goalies" : 0,
+                                            "opp_skaters" : 0
+                                        }
+
+                                    if team_str == "team":
+                                        if current_player_id in game_data["team_goalies"]:
+                                            num_on_ice_data[period][second]["team_goalies"] += 1
+                                        else:
+                                            num_on_ice_data[period][second]["team_skaters"] += 1
+                                    else:
+                                        if current_player_id in game_data["opp_goalies"]:
+                                            num_on_ice_data[period][second]["opp_goalies"] += 1
+                                        else:
+                                            num_on_ice_data[period][second]["opp_skaters"] += 1
+
+    # ps = pstats.Stats(profile)
+    # ps.sort_stats(pstats.SortKey.TIME)
+    # ps.print_stats()
+    return shift_data, player_shift_data, num_on_ice_data
 
 def get_html_play_data(scoring_plays, player_data, og_game_id, is_home, game_data, is_final, row_year, s):
     scoring_plays.clear()
@@ -22467,15 +22749,13 @@ def get_html_play_data(scoring_plays, player_data, og_game_id, is_home, game_dat
                             "zone" : zone
                         }
 
-                        team_on_ice = None
-                        opp_on_ice = None
                         if team_id:
                             if is_home_team:
-                                team_on_ice = get_on_ice(columns[7], game_data["team_numbers"] if is_team else game_data["opp_numbers"], game_data["team_goalies"] if is_team else game_data["opp_goalies"])
-                                opp_on_ice = get_on_ice(columns[6], game_data["opp_numbers"] if is_team else game_data["team_numbers"], game_data["opp_goalies"] if is_team else game_data["team_goalies"])
+                                scoring_play["team_on_ice"] = get_on_ice(columns[7], game_data["team_numbers"] if is_team else game_data["opp_numbers"], game_data["team_goalies"] if is_team else game_data["opp_goalies"])
+                                scoring_play["opp_on_ice"] = get_on_ice(columns[6], game_data["opp_numbers"] if is_team else game_data["team_numbers"], game_data["opp_goalies"] if is_team else game_data["team_goalies"])
                             else:
-                                team_on_ice = get_on_ice(columns[6], game_data["team_numbers"] if is_team else game_data["opp_numbers"], game_data["team_goalies"] if is_team else game_data["opp_goalies"])
-                                opp_on_ice = get_on_ice(columns[7], game_data["opp_numbers"] if is_team else game_data["team_numbers"], game_data["opp_goalies"] if is_team else game_data["team_goalies"])
+                                scoring_play["team_on_ice"] = get_on_ice(columns[6], game_data["team_numbers"] if is_team else game_data["opp_numbers"], game_data["team_goalies"] if is_team else game_data["opp_goalies"])
+                                scoring_play["opp_on_ice"] = get_on_ice(columns[7], game_data["opp_numbers"] if is_team else game_data["team_numbers"], game_data["opp_goalies"] if is_team else game_data["team_goalies"])
 
                         if real_event_type == "Goal":
                             if is_team:
@@ -22491,23 +22771,6 @@ def get_html_play_data(scoring_plays, player_data, og_game_id, is_home, game_dat
                             
                             scoring_play["about"]["goals"]["home"] = home_goals
                             scoring_play["about"]["goals"]["away"] = away_goals
-
-                            scoring_play["team_on_ice"] = []
-                            for pos in team_on_ice:
-                                for sub_player in team_on_ice[pos]:
-                                    if is_team:
-                                        sub_player_id = game_data["team_numbers"].get(sub_player, None)
-                                    else:
-                                        sub_player_id = game_data["opp_numbers"].get(sub_player, None)
-                                    scoring_play["team_on_ice"].append(sub_player_id)
-                            scoring_play["opp_on_ice"] = []
-                            for pos in opp_on_ice:
-                                for sub_player in opp_on_ice[pos]:
-                                    if is_team:
-                                        sub_player_id = game_data["opp_numbers"].get(sub_player, None)
-                                    else:
-                                        sub_player_id = game_data["team_numbers"].get(sub_player, None)
-                                    scoring_play["opp_on_ice"].append(sub_player_id)
 
                             if " Wrist," in description_string:
                                 scoring_play["result"]["secondaryType"] = "Wrist Shot"
@@ -22540,14 +22803,9 @@ def get_html_play_data(scoring_plays, player_data, og_game_id, is_home, game_dat
                                     else:
                                         assist_2 = game_data["opp_numbers"].get(player_numbers[2], None)
                             
-                            if opp_on_ice["G"]:
-                                goalie_number = opp_on_ice["G"][0]
-                                if is_team:
-                                    goalie = game_data["opp_numbers"].get(goalie_number, None)
-                                else:
-                                    goalie = game_data["team_numbers"].get(goalie_number, None)
+                            if scoring_play["opp_on_ice"]["G"]:
+                                goalie = list(scoring_play["opp_on_ice"]["G"])[0]
                             
-
                             if scorer:
                                 scoring_play["players"].append({
                                     "playerType" :  "Scorer",
@@ -22580,7 +22838,7 @@ def get_html_play_data(scoring_plays, player_data, og_game_id, is_home, game_dat
                                     }
                                 })
                             else:
-                                if opp_on_ice["S"]:
+                                if scoring_play["opp_on_ice"]["S"]:
                                     scoring_play["result"]["emptyNet"] = True
 
                             if game_winning_team == team_id:
@@ -22596,12 +22854,8 @@ def get_html_play_data(scoring_plays, player_data, og_game_id, is_home, game_dat
                                 shooter = game_data["opp_numbers"].get(player_numbers[0], None)
 
                             goalie = None
-                            if opp_on_ice["G"]:
-                                goalie_number = opp_on_ice["G"][0]
-                                if is_team:
-                                    goalie = game_data["opp_numbers"].get(goalie_number, None)
-                                else:
-                                    goalie = game_data["team_numbers"].get(goalie_number, None)
+                            if scoring_play["opp_on_ice"]["G"]:
+                                goalie = list(scoring_play["opp_on_ice"]["G"])[0]
 
                             if shooter:
                                 scoring_play["players"].append({
@@ -22795,33 +23049,16 @@ def get_html_play_data(scoring_plays, player_data, og_game_id, is_home, game_dat
 
 
                         if team_id:
-                            scoring_play["team_on_ice"] = []
-                            for pos in team_on_ice:
-                                for sub_player in team_on_ice[pos]:
-                                    if is_team:
-                                        sub_player_id = game_data["team_numbers"].get(sub_player, None)
-                                    else:
-                                        sub_player_id = game_data["opp_numbers"].get(sub_player, None)
-                                    scoring_play["team_on_ice"].append(sub_player_id)
-                            scoring_play["opp_on_ice"] = []
-                            for pos in opp_on_ice:
-                                for sub_player in opp_on_ice[pos]:
-                                    if is_team:
-                                        sub_player_id = game_data["opp_numbers"].get(sub_player, None)
-                                    else:
-                                        sub_player_id = game_data["team_numbers"].get(sub_player, None)
-                                    scoring_play["opp_on_ice"].append(sub_player_id)
-
                             if real_event_type == "Blocked Shot":
                                 temp_array = scoring_play["opp_on_ice"]
                                 scoring_play["opp_on_ice"] = scoring_play["team_on_ice"]
                                 scoring_play["team_on_ice"] = temp_array
 
                             if scoring_play["result"]["strength"]["code"] != "EVEN":
-                                team_on_ice_num = len(scoring_play["team_on_ice"])
+                                team_on_ice_num = len(scoring_play["team_on_ice"]["P"])
                                 if team_on_ice_num  > 6:
                                     team_on_ice_num = 6
-                                opp_on_ice_num = len(scoring_play["opp_on_ice"])
+                                opp_on_ice_num = len(scoring_play["opp_on_ice"]["P"])
                                 if opp_on_ice_num  > 6:
                                     opp_on_ice_num = 6
                                 if team_on_ice_num > 1 and opp_on_ice_num > 1:
@@ -23116,38 +23353,28 @@ def get_old_html_play_data(scoring_plays, player_data, og_game_id, is_home, game
                         else:
                             assist_2 = game_data["opp_numbers"].get(player_numbers[2], None)
                 
-                scoring_play["team_on_ice"] = []
-                scoring_play["opp_on_ice"] = []
+                scoring_play["team_on_ice"] = {
+                    "G" : set(),
+                    "S" : set(),
+                    "P" : set()
+                }
+                scoring_play["opp_on_ice"] = {
+                    "G" : set(),
+                    "S" : set(),
+                    "P" : set()
+                }
                 if len(event) > 7:
-                    team_on_ice = get_on_ice_2(event[8], game_data["team_numbers"] if is_team else game_data["opp_numbers"], game_data["team_goalies"] if is_team else game_data["opp_goalies"])
-                    opp_on_ice = get_on_ice_2(event[10], game_data["opp_numbers"] if is_team else game_data["team_numbers"], game_data["opp_goalies"] if is_team else game_data["team_goalies"])
-                    for pos in team_on_ice:
-                        for sub_player in team_on_ice[pos]:
-                            if is_team:
-                                sub_player_id = game_data["team_numbers"].get(sub_player, None)
-                            else:
-                                sub_player_id = game_data["opp_numbers"].get(sub_player, None)
-                            scoring_play["team_on_ice"].append(sub_player_id)
-                    for pos in opp_on_ice:
-                        for sub_player in opp_on_ice[pos]:
-                            if is_team:
-                                sub_player_id = game_data["opp_numbers"].get(sub_player, None)
-                            else:
-                                sub_player_id = game_data["team_numbers"].get(sub_player, None)
-                            scoring_play["opp_on_ice"].append(sub_player_id)
-                    
-                    if opp_on_ice["G"]:
-                        goalie_number = opp_on_ice["G"][0]
-                        if is_team:
-                            goalie = game_data["opp_numbers"].get(goalie_number, None)
-                        else:
-                            goalie = game_data["team_numbers"].get(goalie_number, None)
+                    scoring_play["team_on_ice"] = get_on_ice_2(event[8], game_data["team_numbers"] if is_team else game_data["opp_numbers"], game_data["team_goalies"] if is_team else game_data["opp_goalies"])
+                    scoring_play["opp_on_ice"] = get_on_ice_2(event[10], game_data["opp_numbers"] if is_team else game_data["team_numbers"], game_data["opp_goalies"] if is_team else game_data["team_goalies"])
+
+                    if scoring_play["opp_on_ice"]["G"]:
+                        goalie = list(scoring_play["opp_on_ice"]["G"])[0]
 
                 if scoring_play["result"]["strength"]["code"] != "EVEN":
-                    team_on_ice_num = len(scoring_play["team_on_ice"])
+                    team_on_ice_num = len(scoring_play["team_on_ice"]["P"])
                     if team_on_ice_num  > 6:
                         team_on_ice_num = 6
-                    opp_on_ice_num = len(scoring_play["opp_on_ice"])
+                    opp_on_ice_num = len(scoring_play["opp_on_ice"]["P"])
                     if opp_on_ice_num  > 6:
                         opp_on_ice_num = 6
                     if team_on_ice_num > 1 and opp_on_ice_num > 1:
@@ -23190,7 +23417,7 @@ def get_old_html_play_data(scoring_plays, player_data, og_game_id, is_home, game
                         }
                     })
                 else:
-                    if opp_on_ice["S"]:
+                    if scoring_play["opp_on_ice"]["S"]:
                         scoring_play["result"]["emptyNet"] = True
 
                 if game_winning_team == team_id:
@@ -23510,41 +23737,24 @@ def get_older_html_play_data(scoring_plays, player_data, og_game_id, is_home, ga
             else:
                 scorer = game_data["opp_names"].get(scorer_name, None)
             
-            team_on_ice = get_on_ice_3(str(columns[8].text_content()).strip() if is_home_team else str(columns[7].text_content()).strip(), game_data["team_numbers"] if is_team else game_data["opp_numbers"], game_data["team_goalies"] if is_team else game_data["opp_goalies"])
-            opp_on_ice = get_on_ice_3(str(columns[7].text_content()).strip() if is_home_team else str(columns[8].text_content()).strip(), game_data["opp_numbers"] if is_team else game_data["team_numbers"], game_data["opp_goalies"] if is_team else game_data["team_goalies"])
-
-            scoring_play["team_on_ice"] = []
-            for pos in team_on_ice:
-                for sub_player in team_on_ice[pos]:
-                    if is_team:
-                        sub_player_id = game_data["team_numbers"].get(sub_player, None)
-                    else:
-                        sub_player_id = game_data["opp_numbers"].get(sub_player, None)
-                    scoring_play["team_on_ice"].append(sub_player_id)
-            scoring_play["opp_on_ice"] = []
-            for pos in opp_on_ice:
-                for sub_player in opp_on_ice[pos]:
-                    if is_team:
-                        sub_player_id = game_data["opp_numbers"].get(sub_player, None)
-                    else:
-                        sub_player_id = game_data["team_numbers"].get(sub_player, None)
-                    scoring_play["opp_on_ice"].append(sub_player_id)
+            scoring_play["team_on_ice"] = get_on_ice_3(str(columns[8].text_content()).strip() if is_home_team else str(columns[7].text_content()).strip(), game_data["team_numbers"] if is_team else game_data["opp_numbers"], game_data["team_goalies"] if is_team else game_data["opp_goalies"])
+            scoring_play["opp_on_ice"] = get_on_ice_3(str(columns[7].text_content()).strip() if is_home_team else str(columns[8].text_content()).strip(), game_data["opp_numbers"] if is_team else game_data["team_numbers"], game_data["opp_goalies"] if is_team else game_data["team_goalies"])
             
             if scoring_play["result"]["strength"]["code"] != "EVEN":
-                team_on_ice_num = len(scoring_play["team_on_ice"])
+                team_on_ice_num = len(scoring_play["team_on_ice"]["P"])
                 if team_on_ice_num  > 6:
                     team_on_ice_num = 6
-                opp_on_ice_num = len(scoring_play["opp_on_ice"])
+                opp_on_ice_num = len(scoring_play["opp_on_ice"]["P"])
                 if opp_on_ice_num  > 6:
                     opp_on_ice_num = 6
-                if team_on_ice_num > 1 and opp_on_ice_num > 1:
-                    if team_on_ice_num > opp_on_ice_num:
-                        scoring_play["result"]["strength"]["code"] = "PPG"
-                    elif team_on_ice_num < opp_on_ice_num:
-                        scoring_play["result"]["strength"]["code"] = "SHG"
-                    else:
-                        scoring_play["result"]["strength"]["code"] = "EVEN"
-            
+                    if team_on_ice_num > 1 and opp_on_ice_num > 1:
+                        if team_on_ice_num > opp_on_ice_num:
+                            scoring_play["result"]["strength"]["code"] = "PPG"
+                        elif team_on_ice_num < opp_on_ice_num:
+                            scoring_play["result"]["strength"]["code"] = "SHG"
+                        else:
+                            scoring_play["result"]["strength"]["code"] = "EVEN"
+                
             if not (period == 5 and game_data["is_shootout"]):
                 if is_home_team:
                     home_goals += 1
@@ -23573,13 +23783,8 @@ def get_older_html_play_data(scoring_plays, player_data, og_game_id, is_home, ga
                     else:
                         assist_2 = game_data["opp_names"].get(assist_2_name, None)
             
-            if opp_on_ice["G"]:
-                goalie_number = opp_on_ice["G"][0]
-                if is_team:
-                    goalie = game_data["opp_numbers"].get(goalie_number, None)
-                else:
-                    goalie = game_data["team_numbers"].get(goalie_number, None)
-            
+            if scoring_play["opp_on_ice"]["G"]:
+                goalie = list(scoring_play["opp_on_ice"]["G"])[0]
 
             if scorer:
                 scoring_play["players"].append({
@@ -23613,7 +23818,7 @@ def get_older_html_play_data(scoring_plays, player_data, og_game_id, is_home, ga
                     }
                 })
             else:
-                if opp_on_ice["S"]:
+                if scoring_play["opp_on_ice"]["S"]:
                     scoring_play["result"]["emptyNet"] = True
 
             if game_winning_team == team_id:
@@ -24048,8 +24253,9 @@ def get_player_numbers_2(desc_string, real_event_type):
 
 def get_on_ice(table, numbers, goalies):
     on_ice_map = {
-        "G" : [],
-        "S" : []
+        "G" : set(),
+        "S" : set(),
+        "P" : set()
     }
     table_text = str(table.text_content()).strip().split()
     if not table_text:
@@ -24061,16 +24267,18 @@ def get_on_ice(table, numbers, goalies):
         player_id = numbers.get(number, None)
         if player_id:
             if player_id in goalies or position == "G":
-                on_ice_map["G"].append(number)
+                on_ice_map["G"].add(player_id)
             else:
-                on_ice_map["S"].append(number)
+                on_ice_map["S"].add(player_id)
+            on_ice_map["P"].add(player_id)
     return on_ice_map
 
 
 def get_on_ice_2(on_ice_str, numbers, goalies):
     on_ice_map = {
-        "G" : [],
-        "S" : []
+        "G" : set(),
+        "S" : set(),
+        "P" : set()
     }
     match = re.search(r"^\d+ ", on_ice_str)
     if match:
@@ -24078,9 +24286,10 @@ def get_on_ice_2(on_ice_str, numbers, goalies):
         player_id = numbers.get(number, None)
         if player_id:
             if player_id in goalies:
-                on_ice_map["G"].append(number)
+                on_ice_map["G"].add(player_id)
             else:
-                on_ice_map["S"].append(number)
+                on_ice_map["S"].add(player_id)
+            on_ice_map["P"].add(player_id)
 
         match = re.finditer(r",\W+(\d+)", on_ice_str)
         for m in match:
@@ -24088,16 +24297,18 @@ def get_on_ice_2(on_ice_str, numbers, goalies):
             player_id = numbers.get(number, None)
             if player_id:
                 if player_id in goalies:
-                    on_ice_map["G"].append(number)
+                    on_ice_map["G"].add(player_id)
                 else:
-                    on_ice_map["S"].append(number)
+                    on_ice_map["S"].add(player_id)
+                on_ice_map["P"].add(player_id)
 
     return on_ice_map
 
 def get_on_ice_3(on_ice_str, numbers, goalies):
     on_ice_map = {
-        "G" : [],
-        "S" : []
+        "G" : set(),
+        "S" : set(),
+        "P" : set()
     }
 
     match = re.finditer(r"(\d+)", on_ice_str)
@@ -24106,9 +24317,10 @@ def get_on_ice_3(on_ice_str, numbers, goalies):
         player_id = numbers.get(number, None)
         if player_id:
             if player_id in goalies:
-                on_ice_map["G"].append(number)
+                on_ice_map["G"].add(player_id)
             else:
-                on_ice_map["S"].append(number)
+                on_ice_map["S"].add(player_id)
+            on_ice_map["P"].add(player_id)
 
     return on_ice_map
 
@@ -24764,8 +24976,8 @@ def perform_metadata_quals(qualifiers, player_type, row, player_game_info, nhl_p
     calculate_row_attrs(row, player_type)
 
 def calculate_toi(row, qualifiers, player_game_info, player_id, player_link, saved_row_data, player_type, index, skip_career_events, needs_five_stats, extra_stats):
-    shift_data = player_game_info["shift_data"]
-    if not shift_data or player_id not in shift_data["team"]:
+    player_shift_data = player_game_info["player_shift_data"]
+    if not player_shift_data or player_id not in player_shift_data["team"]:
         return
     
     row["GP_TOI"] = 1
@@ -24785,7 +24997,7 @@ def calculate_toi(row, qualifiers, player_game_info, player_id, player_link, sav
 
     matching_shifts = set()
     for shift_event in player_game_info["shift_events"]:
-        if not needs_on_ice or perform_on_ice_quals(qualifiers, shift_data, shift_event, row, shift_event["period"], shift_event["periodTime"], teammate_on_ice_quals, teammate_off_ice_quals):
+        if not needs_on_ice or perform_on_ice_quals(qualifiers, player_shift_data, shift_event, row, shift_event["period"], shift_event["periodTime"], teammate_on_ice_quals, teammate_off_ice_quals):
             if perform_metadata_qual("shift_events", shift_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], is_toi=True, skip_career_events=skip_career_events):
                 row["TOI"] += 1
                 row["TtlTOI"] += 1
@@ -24801,7 +25013,7 @@ def calculate_toi(row, qualifiers, player_game_info, player_id, player_link, sav
                     matching_shifts.add(shift_event["shift_index"])
     
     for shift_event in player_game_info["all_shift_events"]:
-        if not needs_on_ice or perform_on_ice_quals(qualifiers, shift_data, shift_event, row, shift_event["period"], shift_event["periodTime"], teammate_on_ice_quals, teammate_off_ice_quals):
+        if not needs_on_ice or perform_on_ice_quals(qualifiers, player_shift_data, shift_event, row, shift_event["period"], shift_event["periodTime"], teammate_on_ice_quals, teammate_off_ice_quals):
             if perform_metadata_qual("all_shift_events", shift_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], is_toi=True, is_off_ice=True, skip_career_events=skip_career_events):
                 row["offITOI"] += 1
                 row["TtlTOI"] += 1
@@ -24830,7 +25042,7 @@ def determine_strength(player_game_info, period, second, goal_event):
     return None
 
 def get_on_ice_info(player_game_info, goal_event, period, second, needs_team, needs_opp, needs_skaters, needs_goalies, is_faceoff=False):
-    shift_data = player_game_info["shift_data"]
+    player_shift_data = player_game_info["num_on_ice_data"]
     team_skaters = 0
     team_goalies = 0
     opp_skaters = 0
@@ -24838,58 +25050,28 @@ def get_on_ice_info(player_game_info, goal_event, period, second, needs_team, ne
     team_on_ice = goal_event["team_on_ice"] if "team_on_ice" in goal_event else None
     opp_on_ice = goal_event["opp_on_ice"] if "opp_on_ice" in goal_event else None
 
-    has_team_shift_data = bool(team_on_ice) or bool(shift_data)
-    has_opp_shift_data = bool(opp_on_ice) or bool(shift_data)
+    has_team_shift_data = (bool(team_on_ice["P"]) if team_on_ice else False) or bool(player_shift_data)
+    has_opp_shift_data = (bool(opp_on_ice["P"]) if opp_on_ice else False) or bool(player_shift_data)
 
     if needs_team:
         if has_team_shift_data:
-            if needs_goalies:
-                if team_on_ice:
-                    for player in team_on_ice:
-                        if player in player_game_info["team_goalies"]:
-                            team_goalies += 1
-                else:
-                    for player in player_game_info["team_goalies"]:
-                        is_on_ice = is_player_on_ice(shift_data, team_on_ice, opp_on_ice, period, second, player, True, is_faceoff)
-                        if is_on_ice:
-                            team_goalies += 1
-
-            if needs_skaters:
-                if team_on_ice:
-                    for player in team_on_ice:
-                        if player not in player_game_info["team_goalies"]:
-                            team_skaters += 1
-                else:
-                    for player in player_game_info["team_players"]:
-                        if player not in player_game_info["team_goalies"]:
-                            is_on_ice = is_player_on_ice(shift_data, team_on_ice, opp_on_ice, period, second, player, True, is_faceoff)
-                            if is_on_ice:
-                                team_skaters += 1
-
+            if team_on_ice:
+                team_goalies = len(team_on_ice["G"])
+                team_skaters = len(team_on_ice["S"])
+            else:
+                if period in player_shift_data and second in player_shift_data[period]:
+                    team_goalies = player_shift_data[period][second]["team_goalies"]
+                    team_skaters = player_shift_data[period][second]["team_skaters"]
+    
     if needs_opp:
         if has_opp_shift_data:
-            if needs_goalies:
-                if opp_on_ice:
-                    for player in opp_on_ice:
-                        if player in player_game_info["opp_goalies"]:
-                            opp_goalies += 1
-                else:       
-                    for player in player_game_info["opp_goalies"]:
-                            is_on_ice = is_player_on_ice(shift_data, team_on_ice, opp_on_ice, period, second, player, False, is_faceoff)
-                            if is_on_ice:
-                                opp_goalies += 1
-
-            if needs_skaters:
-                if opp_on_ice:
-                    for player in opp_on_ice:
-                        if player not in player_game_info["opp_goalies"]:
-                            opp_skaters += 1
-                else:
-                    for player in player_game_info["opp_players"]:
-                        if player not in player_game_info["opp_goalies"]:
-                            is_on_ice = is_player_on_ice(shift_data, team_on_ice, opp_on_ice, period, second, player, False, is_faceoff)
-                            if is_on_ice:
-                                opp_skaters += 1
+            if opp_on_ice:
+                opp_goalies = len(opp_on_ice["G"])
+                opp_skaters = len(opp_on_ice["S"])
+            else:
+                if period in player_shift_data and second in player_shift_data[period]:
+                    opp_goalies = player_shift_data[period][second]["opp_goalies"]
+                    opp_skaters = player_shift_data[period][second]["opp_skaters"]
 
     return team_skaters, team_goalies, opp_skaters, opp_goalies, has_team_shift_data, has_opp_shift_data
 
@@ -25633,27 +25815,27 @@ def perform_metadata_qual(event_name, goal_event, qualifiers, player_game_info, 
                     return False
 
     if "On Ice With" in qualifiers:
-        if not perform_sub_on_ice_qual(qualifiers["On Ice With"], player_game_info["shift_data"], goal_event, row, goal_event["period"], goal_event["periodTime"], True, is_faceoff, False):
+        if not perform_sub_on_ice_qual(qualifiers["On Ice With"], player_game_info["player_shift_data"], goal_event, row, goal_event["period"], goal_event["periodTime"], True, is_faceoff, False):
             return False
     
     if "On Ice Against" in qualifiers:
-        if not perform_sub_on_ice_qual(qualifiers["On Ice Against"], player_game_info["shift_data"], goal_event, row, goal_event["period"], goal_event["periodTime"], False, is_faceoff, False):
+        if not perform_sub_on_ice_qual(qualifiers["On Ice Against"], player_game_info["player_shift_data"], goal_event, row, goal_event["period"], goal_event["periodTime"], False, is_faceoff, False):
             return False
     
     if "On Line With" in qualifiers:
         if is_off_ice:
-            if not perform_sub_line_on_ice_qual(qualifiers["On Line With"], player_game_info["shift_data"], player_game_info["player_id"], goal_event, row, goal_event["period"], goal_event["periodTime"], True, is_faceoff):
+            if not perform_sub_line_on_ice_qual(qualifiers["On Line With"], player_game_info["player_shift_data"], player_game_info["player_id"], goal_event, row, goal_event["period"], goal_event["periodTime"], True, is_faceoff):
                 return False
         else:
-            if not perform_sub_on_ice_qual(qualifiers["On Line With"], player_game_info["shift_data"], goal_event, row, goal_event["period"], goal_event["periodTime"], True, is_faceoff, False):
+            if not perform_sub_on_ice_qual(qualifiers["On Line With"], player_game_info["player_shift_data"], goal_event, row, goal_event["period"], goal_event["periodTime"], True, is_faceoff, False):
                 return False
     
     if "On Line Against" in qualifiers:
         if is_off_ice:
-            if not perform_sub_line_on_ice_qual(qualifiers["On Line Against"], player_game_info["shift_data"], player_game_info["player_id"], goal_event, row, goal_event["period"], goal_event["periodTime"], False, is_faceoff):
+            if not perform_sub_line_on_ice_qual(qualifiers["On Line Against"], player_game_info["player_shift_data"], player_game_info["player_id"], goal_event, row, goal_event["period"], goal_event["periodTime"], False, is_faceoff):
                 return False
         else:
-            if not perform_sub_on_ice_qual(qualifiers["On Line Against"], player_game_info["shift_data"], goal_event, row, goal_event["period"], goal_event["periodTime"], False, is_faceoff, False):
+            if not perform_sub_on_ice_qual(qualifiers["On Line Against"], player_game_info["player_shift_data"], goal_event, row, goal_event["period"], goal_event["periodTime"], False, is_faceoff, False):
                 return False
 
     if "Team Score" in qualifiers:
@@ -26174,9 +26356,10 @@ def perform_metadata_qual(event_name, goal_event, qualifiers, player_game_info, 
     if is_off_ice and not ("On Line With" in qualifiers or "On Line Against" in qualifiers):
         team_on_ice = goal_event["team_on_ice"] if "team_on_ice" in goal_event else None
         opp_on_ice = goal_event["opp_on_ice"] if "opp_on_ice" in goal_event else None
-        is_on_ice = is_player_on_ice(player_game_info["shift_data"], team_on_ice, opp_on_ice, goal_event["period"], goal_event["periodTime"], player_game_info["player_id"], True)
-        if is_on_ice:
-            return False
+        if player_game_info["player_shift_data"] or team_on_ice:
+            is_on_ice = is_player_on_ice(player_game_info["player_shift_data"], team_on_ice, opp_on_ice, goal_event["period"], goal_event["periodTime"], player_game_info["player_id"], True)
+            if is_on_ice:
+                return False
 
     return True
 
@@ -26563,18 +26746,18 @@ def perform_stat_qual(goal_event, player_type, qualifiers):
     
     return True
 
-def perform_on_ice_quals(qualifiers, shift_data, goal_event, row, period, second, teammate_on_ice_quals, teammate_off_ice_quals):
+def perform_on_ice_quals(qualifiers, player_shift_data, goal_event, row, period, second, teammate_on_ice_quals, teammate_off_ice_quals):
     if teammate_on_ice_quals:
-        if not perform_sub_on_ice_qual(teammate_on_ice_quals, shift_data, goal_event, row, period, second, True, False, True):
+        if not perform_sub_on_ice_qual(teammate_on_ice_quals, player_shift_data, goal_event, row, period, second, True, False, True):
             return False
 
     if teammate_off_ice_quals:
-        if not perform_sub_on_ice_qual(teammate_off_ice_quals, shift_data, goal_event, row, period, second, False, False, True):
+        if not perform_sub_on_ice_qual(teammate_off_ice_quals, player_shift_data, goal_event, row, period, second, False, False, True):
             return False
 
     return True
 
-def perform_sub_on_ice_qual(qualifers, shift_data, goal_event, row, period, second, is_team, is_faceoff, skip_negative):
+def perform_sub_on_ice_qual(qualifers, player_shift_data, goal_event, row, period, second, is_team, is_faceoff, skip_negative):
     has_row_match = True
     team_on_ice = goal_event["team_on_ice"] if "team_on_ice" in goal_event else None
     opp_on_ice = goal_event["opp_on_ice"] if "opp_on_ice" in goal_event else None
@@ -26595,7 +26778,7 @@ def perform_sub_on_ice_qual(qualifers, shift_data, goal_event, row, period, seco
 
         has_match = False
         for player in qual_object["values"]:
-            is_on_ice = is_player_on_ice(shift_data, team_on_ice, opp_on_ice, period, second, player["nhl_id"], is_team, is_faceoff)
+            is_on_ice = is_player_on_ice(player_shift_data, team_on_ice, opp_on_ice, period, second, player["nhl_id"], is_team, is_faceoff)
             if is_on_ice:
                 has_match = True
         if negate:
@@ -26607,13 +26790,13 @@ def perform_sub_on_ice_qual(qualifers, shift_data, goal_event, row, period, seco
 
     return has_row_match
 
-def perform_sub_line_on_ice_qual(qualifers, shift_data, player_id, goal_event, row, period, second, is_team, is_faceoff):
+def perform_sub_line_on_ice_qual(qualifers, player_shift_data, player_id, goal_event, row, period, second, is_team, is_faceoff):
     team_on_ice = goal_event["team_on_ice"] if "team_on_ice" in goal_event else None
     opp_on_ice = goal_event["opp_on_ice"] if "opp_on_ice" in goal_event else None
-    has_row_match = perform_sub_on_ice_qual(qualifers, shift_data, goal_event, row, period, second, is_team, is_faceoff, False)
+    has_row_match = perform_sub_on_ice_qual(qualifers, player_shift_data, goal_event, row, period, second, is_team, is_faceoff, False)
 
     if has_row_match:
-        is_on_ice = is_player_on_ice(shift_data, team_on_ice, opp_on_ice, period, second, player_id, True, is_faceoff)
+        is_on_ice = is_player_on_ice(player_shift_data, team_on_ice, opp_on_ice, period, second, player_id, True, is_faceoff)
         if is_on_ice:
             has_row_match = False
     else:
