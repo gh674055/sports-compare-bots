@@ -37396,7 +37396,7 @@ def is_against_header(header, over_header, extra_stats, player_type, has_toi_sta
             if header == "TOI":
                 return False
 
-    if (header.startswith("EV") or header.startswith("PP") or header.startswith("SH") or header.endswith("EvenStrength") or header.endswith("PowerPlay") or header.endswith("Shorthanded") or "PIM" in header or "PEN" in header or "Pen" in header) and (("strength-stats" in extra_stats or "hide-strength" in extra_stats) and "strength" not in extra_stats):
+    if (header.startswith("EV") or header.startswith("PP") or header.startswith("SH") or header.endswith("EvenStrength") or header.endswith("PowerPlay") or header.endswith("Shorthanded") or "PIM" in header or "PEN" in header or "Pen" in header or ("type" in headers[player_type["da_type"]["type"]][header] and headers[player_type["da_type"]["type"]][header]["type"] == "Penalty")) and (("strength-stats" in extra_stats or "hide-strength" in extra_stats) and "strength" not in extra_stats):
         return True
     
     if "type" in headers[player_type["da_type"]["type"]][header] and headers[player_type["da_type"]["type"]][header]["type"] == "5v5":
