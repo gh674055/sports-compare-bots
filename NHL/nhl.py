@@ -20408,7 +20408,7 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                     game_data["is_api_stats"] = True
     
         if not scoring_plays and "href" in extra_stats or "hide-href" not in extra_stats:
-            game_data, missing_games, get_href_html_play_data(scoring_plays, player_data, row_data["GameLink"], row_data["Location"], row_data["Tm"], row_data["Opponent"].upper(), game_data, s)
+            game_data, missing_games, get_href_html_play_data(scoring_plays, player_data, player_type, time_frame, row_data, row_data["GameLink"], row_data["Location"], row_data["Tm"], row_data["Opponent"].upper(), game_data, s)
             if not scoring_plays:
                 missing_games = True
                 game_data["missing_data"] = True
@@ -20427,7 +20427,7 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                 else:
                     get_older_html_play_data(scoring_plays, player_data, row_data["NHLGameLink"], row_data["Location"], game_data, row_data["Year"], s)
                     if not scoring_plays:
-                        game_data, missing_games, get_href_html_play_data(scoring_plays, player_data, row_data["GameLink"], row_data["Location"], row_data["Tm"], row_data["Opponent"].upper(), game_data, s)
+                        game_data, missing_games, get_href_html_play_data(scoring_plays, player_data, player_type, time_frame, row_data, row_data["GameLink"], row_data["Location"], row_data["Tm"], row_data["Opponent"].upper(), game_data, s)
                         if not scoring_plays:
                             missing_games = True
                             game_data["missing_data"] = True
@@ -20452,7 +20452,7 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                 else:
                     get_older_html_play_data(scoring_plays, player_data, row_data["NHLGameLink"], row_data["Location"], game_data, row_data["Year"], s)
                     if not scoring_plays:
-                        get_href_html_play_data(scoring_plays, player_data, row_data["GameLink"], row_data["Location"], row_data["Tm"], row_data["Opponent"].upper(), game_data, s)
+                        get_href_html_play_data(scoring_plays, player_data, player_type, time_frame, row_data, row_data["GameLink"], row_data["Location"], row_data["Tm"], row_data["Opponent"].upper(), game_data, s)
                         if not scoring_plays:
                             missing_games = True
                             game_data["missing_data"] = True
@@ -20467,14 +20467,14 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                 game_data["is_older_html_stats"] = True
                 game_data["is_href_stats"] = True
         elif row_data["Year"] >= 2000:
-            get_older_html_play_data(scoring_plays, player_data, row_data["NHLGameLink"], row_data["Location"], game_data, row_data["Year"], s)
+            get_older_html_play_data(scoring_plays, player_data, player_type, time_frame, row_data, row_data["NHLGameLink"], row_data["Location"], game_data, row_data["Year"], s)
             if not scoring_plays:
                 if "hide-missing" in extra_stats:
                     missing_games = True
                     game_data["missing_data"] = True
                     return game_data, row_data, missing_games
                 else:
-                    get_href_html_play_data(scoring_plays, player_data, row_data["GameLink"], row_data["Location"], row_data["Tm"], row_data["Opponent"].upper(), game_data, s)
+                    get_href_html_play_data(scoring_plays, player_data, player_type, time_frame, row_data, row_data["GameLink"], row_data["Location"], row_data["Tm"], row_data["Opponent"].upper(), game_data, s)
                     if not scoring_plays:
                         missing_games = True
                         game_data["missing_data"] = True
@@ -23894,7 +23894,7 @@ def get_older_html_play_data(scoring_plays, player_data, og_game_id, is_home, ga
                 if not has_initial_plays:
                     scoring_plays.append(scoring_play)
                             
-def get_href_html_play_data(scoring_plays, player_data, game_link, is_home, team_abbr, opp_abbr, game_data, s):
+def get_href_html_play_data(scoring_plays, player_data, player_type, time_frame, row_data, game_link, is_home, team_abbr, opp_abbr, game_data, s):
     if not game_link:
         return game_data, missing_games
         
@@ -23912,7 +23912,7 @@ def get_href_html_play_data(scoring_plays, player_data, game_link, is_home, team
     if not player_page_xml:
         return game_data, missing_games
 
-    game_data, missing_games = setup_href_game_data(player_data, row_data, player_id, player_type, time_frame, player_page_xml)
+    game_data, missing_games = setup_href_game_data(player_data, row_data, player_data["nhl_id"], player_type, time_frame, player_page_xml)
     if game_data["missing_data"]:
         return game_data, missing_games
 
