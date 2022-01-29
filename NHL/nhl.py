@@ -20407,7 +20407,7 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                 else:
                     game_data["is_api_stats"] = True
     
-        if not scoring_plays and "href" in extra_stats or "hide-href" not in extra_stats:
+        if not scoring_plays and ("href" in extra_stats or "hide-href" not in extra_stats):
             game_data, missing_games, get_href_html_play_data(scoring_plays, player_data, player_type, time_frame, row_data, row_data["GameLink"], row_data["Location"], row_data["Tm"], row_data["Opponent"].upper(), game_data, s)
             if not scoring_plays:
                 missing_games = True
@@ -20427,13 +20427,18 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                 else:
                     get_older_html_play_data(scoring_plays, player_data, row_data["NHLGameLink"], row_data["Location"], game_data, row_data["Year"], s)
                     if not scoring_plays:
-                        game_data, missing_games, get_href_html_play_data(scoring_plays, player_data, player_type, time_frame, row_data, row_data["GameLink"], row_data["Location"], row_data["Tm"], row_data["Opponent"].upper(), game_data, s)
-                        if not scoring_plays:
+                        if "hide-href" in extra_stats:
                             missing_games = True
                             game_data["missing_data"] = True
                             return game_data, row_data, missing_games
                         else:
-                            game_data["is_href_stats"] = True
+                            game_data, missing_games, get_href_html_play_data(scoring_plays, player_data, player_type, time_frame, row_data, row_data["GameLink"], row_data["Location"], row_data["Tm"], row_data["Opponent"].upper(), game_data, s)
+                            if not scoring_plays:
+                                missing_games = True
+                                game_data["missing_data"] = True
+                                return game_data, row_data, missing_games
+                            else:
+                                game_data["is_href_stats"] = True
                     else:
                         game_data["is_older_html_stats"] = True
                         game_data["is_href_stats"] = True
@@ -20452,13 +20457,18 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                 else:
                     get_older_html_play_data(scoring_plays, player_data, row_data["NHLGameLink"], row_data["Location"], game_data, row_data["Year"], s)
                     if not scoring_plays:
-                        get_href_html_play_data(scoring_plays, player_data, player_type, time_frame, row_data, row_data["GameLink"], row_data["Location"], row_data["Tm"], row_data["Opponent"].upper(), game_data, s)
-                        if not scoring_plays:
+                        if "hide-href" in extra_stats:
                             missing_games = True
                             game_data["missing_data"] = True
                             return game_data, row_data, missing_games
                         else:
-                            game_data["is_href_stats"] = True
+                            game_data, missing_games, get_href_html_play_data(scoring_plays, player_data, player_type, time_frame, row_data, row_data["GameLink"], row_data["Location"], row_data["Tm"], row_data["Opponent"].upper(), game_data, s)
+                            if not scoring_plays:
+                                missing_games = True
+                                game_data["missing_data"] = True
+                                return game_data, row_data, missing_games
+                            else:
+                                game_data["is_href_stats"] = True
                     else:
                         game_data["is_older_html_stats"] = True
                         game_data["is_href_stats"] = True
@@ -20474,13 +20484,18 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                     game_data["missing_data"] = True
                     return game_data, row_data, missing_games
                 else:
-                    get_href_html_play_data(scoring_plays, player_data, player_type, time_frame, row_data, row_data["GameLink"], row_data["Location"], row_data["Tm"], row_data["Opponent"].upper(), game_data, s)
-                    if not scoring_plays:
+                    if "hide-href" in extra_stats:
                         missing_games = True
                         game_data["missing_data"] = True
                         return game_data, row_data, missing_games
                     else:
-                        game_data["is_href_stats"] = True
+                        game_data, missing_games, get_href_html_play_data(scoring_plays, player_data, player_type, time_frame, row_data, row_data["GameLink"], row_data["Location"], row_data["Tm"], row_data["Opponent"].upper(), game_data, s)
+                        if not scoring_plays:
+                            missing_games = True
+                            game_data["missing_data"] = True
+                            return game_data, row_data, missing_games
+                        else:
+                            game_data["is_href_stats"] = True
             else:
                 game_data["is_older_html_stats"] = True
                 game_data["is_href_stats"] = True
@@ -21539,7 +21554,7 @@ def setup_game_data(player_data, row_data, player_id, player_type, time_frame, s
     missing_games = False
     if row_data["Year"] < 2000 and has_shift_quals(time_frame["qualifiers"]):
         game_data["missing_data"] = True
-        return game_data, missing_games, None
+        return game_data, missing_games, []
     
     #print("https://statsapi.web.nhl.com/api/v1/game/" + str(row_data["NHLGameLink"]) + "/feed/live")
     try:
@@ -21548,7 +21563,7 @@ def setup_game_data(player_data, row_data, player_id, player_type, time_frame, s
         if err.status == 404:
             missing_games = True
             game_data["missing_data"] = True
-            return game_data, missing_games, None
+            return game_data, missing_games, []
         else:
             raise
 
@@ -21874,10 +21889,10 @@ def setup_href_game_data(player_data, row_data, player_id, player_type, time_fra
     missing_games = False
     if row_data["Year"] < 2000 and has_shift_quals(time_frame["qualifiers"]):
         game_data["missing_data"] = True
-        return game_data, missing_games, None
+        return game_data, missing_games
 
     if not player_page_xml:
-        return []
+        return game_data, missing_games
 
     game_data["team_str"] = "home" if row_data["Location"] else "away"
     game_data["opp_str"] = "away" if row_data["Location"] else "home"
@@ -21958,8 +21973,8 @@ def setup_href_game_data(player_data, row_data, player_id, player_type, time_fra
 
     scorebox = player_page_xml.xpath("//div[@class = 'scorebox']")[0]
     scor_divs = scorebox.xpath("./div")
-    home_team_div = scor_divs[0]
-    away_team_div = scor_divs[1]
+    home_team_div = scor_divs[1]
+    away_team_div = scor_divs[0]
 
     home_team_divs = home_team_div.xpath("./div")
     away_team_divs = away_team_div.xpath("./div")
