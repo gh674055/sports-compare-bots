@@ -8055,6 +8055,18 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                     extra_stats.add("show-only-stat-fight/gp")
                                     extra_stats.add("show-only-stat-fight/60m")
                                 elif "penalt" in m.group(2):
+                                    extra_stats.add("show-only-stat-pim")
+                                    extra_stats.add("show-only-stat-pen")
+                                    extra_stats.add("show-only-stat-pendrawn")
+                                    extra_stats.add("show-only-stat-netpen")
+                                    extra_stats.add("show-only-stat-pim/gp")
+                                    extra_stats.add("show-only-stat-pen/gp")
+                                    extra_stats.add("show-only-stat-pendrawn/gp")
+                                    extra_stats.add("show-only-stat-netpen/gp")
+                                    extra_stats.add("show-only-stat-pim/60m")
+                                    extra_stats.add("show-only-stat-pen/60m")
+                                    extra_stats.add("show-only-stat-pendrawn/60m")
+                                    extra_stats.add("show-only-stat-netpen/60m")
                                     extra_stats.add("show-only-table-penalty")
                             
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
