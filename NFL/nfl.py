@@ -1761,10 +1761,10 @@ def handle_player_string(comment, player_type, is_fantasy, last_updated, hide_ta
                                     for header in ("TmRec", "TmW/L%"):
                                         extra_stats.add("show-only-stat-" + header.lower())
                                 elif m.group(2) == "ats-record":
-                                    for header in ("ATS TmRec", "ATS TmW/L%", "Spread/G", "SpreadMargin/G"):
+                                    for header in ("ATS TmRec", "ATS TmW/L%", "Spread/G", "SpreadMargin/G", "TmRec", "TmW/L%"):
                                         extra_stats.add("show-only-stat-" + header.lower())
                                 elif m.group(2) == "ou-record":
-                                    for header in ("O/U TmRec", "O/U TmW/L%", "OverUnder/G", "OUMargin/G"):
+                                    for header in ("O/U TmRec", "O/U TmW/L%", "OverUnder/G", "OUMargin/G", "TmRec", "TmW/L%"):
                                         extra_stats.add("show-only-stat-" + header.lower())
                                 elif m.group(2) == "score":
                                     for header in ("TmScore", "OppScore", "TtlScore", "ScoreDiff", "TmScore/G", "OppScore/G", "TtlScore/G", "ScoreDiff/G"):
@@ -21719,9 +21719,9 @@ def print_player_data(player_datas, player_type, highest_vals, lowest_vals, has_
                     override_show = True
                 if header in ("TmRec", "TmW/L%") and "record" in extra_stats:
                     override_show = True
-                elif header in ("ATS TmRec", "ATS TmW/L%", "Spread/G", "SpreadMargin/G") and "ats-record" in extra_stats:
+                elif header in ("ATS TmRec", "ATS TmW/L%", "Spread/G", "SpreadMargin/G", "TmRec", "TmW/L%") and "ats-record" in extra_stats:
                     override_show = True
-                elif header in ("O/U TmRec", "O/U TmW/L%", "OverUnder/G", "OUMargin/G") and "ou-record" in extra_stats:
+                elif header in ("O/U TmRec", "O/U TmW/L%", "OverUnder/G", "OUMargin/G", "TmRec", "TmW/L%") and "ou-record" in extra_stats:
                     override_show = True
                 elif header in ("TmScore", "OppScore", "TtlScore", "ScoreDiff", "TmScore/G", "OppScore/G", "TtlScore/G", "ScoreDiff/G") and "score" in extra_stats:
                     override_show = True
@@ -22073,9 +22073,9 @@ def get_reddit_player_table(player_datas, player_type, is_fantasy, debug_mode, o
                     override_show = True
                 if header in ("TmRec", "TmW/L%") and "record" in extra_stats:
                     override_show = True
-                elif header in ("ATS TmRec", "ATS TmW/L%", "Spread/G", "SpreadMargin/G") and "ats-record" in extra_stats:
+                elif header in ("ATS TmRec", "ATS TmW/L%", "Spread/G", "SpreadMargin/G", "TmRec", "TmW/L%") and "ats-record" in extra_stats:
                     override_show = True
-                elif header in ("O/U TmRec", "O/U TmW/L%", "OverUnder/G", "OUMargin/G") and "ou-record" in extra_stats:
+                elif header in ("O/U TmRec", "O/U TmW/L%", "OverUnder/G", "OUMargin/G", "TmRec", "TmW/L%") and "ou-record" in extra_stats:
                     override_show = True
                 elif header in ("TmScore", "OppScore", "TtlScore", "ScoreDiff", "TmScore/G", "OppScore/G", "TtlScore/G", "ScoreDiff/G") and "score" in extra_stats:
                     override_show = True
@@ -22828,9 +22828,9 @@ def handle_table_data(player_data, player_type, header, over_header, highest_val
             override_show = True
         if header in ("TmRec", "TmW/L%") and "record" in extra_stats:
             override_show = True
-        elif header in ("ATS TmRec", "ATS TmW/L%", "Spread/G", "SpreadMargin/G") and "ats-record" in extra_stats:
+        elif header in ("ATS TmRec", "ATS TmW/L%", "Spread/G", "SpreadMargin/G", "TmRec", "TmW/L%") and "ats-record" in extra_stats:
             override_show = True
-        elif header in ("O/U TmRec", "O/U TmW/L%", "OverUnder/G", "OUMargin/G") and "ou-record" in extra_stats:
+        elif header in ("O/U TmRec", "O/U TmW/L%", "OverUnder/G", "OUMargin/G", "TmRec", "TmW/L%") and "ou-record" in extra_stats:
             override_show = True
         elif header in ("TmScore", "OppScore", "TtlScore", "ScoreDiff", "TmScore/G", "OppScore/G", "TtlScore/G", "ScoreDiff/G") and "score" in extra_stats:
             override_show = True
