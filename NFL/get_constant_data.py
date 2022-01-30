@@ -3397,7 +3397,7 @@ stat_groups = {
             "display" : False,
             "round" : 2
         },
-        "OUMargin" :{
+        "OverUnderMargin" :{
             "positive" : True,
             "display" : False
         },
@@ -5022,7 +5022,7 @@ formulas = {
         "Spread/G" : "RawSpread / G",
         "OverUnder/G" : "OverUnder / G",
         "SpreadMargin/G" : "SpreadMargin / G",
-        "OUMargin/G" : "OUMargin / G",
+        "OUMargin/G" : "OverUnderMargin / G",
         "TmScore" : "Special",
         "OppScore" : "Special",
         "TtlScore" : "TmScore + OppScore",
