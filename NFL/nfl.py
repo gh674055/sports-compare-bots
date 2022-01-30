@@ -5657,7 +5657,7 @@ def handle_name_threads(sub_name, parse_time_frames, index, player_type, is_fant
                     rows_count += 1
             
             if rows_count > 20:
-                raise CustomMessageException("Cannot show more than 20 games!")
+                raise get_constant_data.CustomMessageException("Cannot show more than 20 games!")
             
             if rows_count > 1:
                 for subb_player_data in sub_player_datas:
@@ -6930,7 +6930,7 @@ def combine_player_datas(player_datas, player_type, any_missing_games, time_fram
             if "date" in extra_stats:
                 dates = sorted(list(set([row["Shared"]["Date"] for row in sub_player_data["rows"]])))
                 if len(dates) > 20:
-                    raise CustomMessageException("Cannot show more than 20 dates!")
+                    raise get_constant_data.CustomMessageException("Cannot show more than 20 dates!")
 
                 for date_start in dates:
                     if isinstance(date_start, int):
