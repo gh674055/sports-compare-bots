@@ -27404,6 +27404,9 @@ def calculate_row_attrs(row, player_type):
         row["SHP"] = row["SHG"] + row["SHA"]
         row["SHP1"] = row["SHG"] + row["SHA1"]
 
+        row["P_5v5"] = row["G_5v5"] + row["A_5v5"]
+        row["P1_5v5"] = row["G_5v5"] + row["A1_5v5"]
+
         row["ENP"] = row["ENG"] + row["ENA"]
 
         row["HAT"] = int(row["G"] >= 3)
