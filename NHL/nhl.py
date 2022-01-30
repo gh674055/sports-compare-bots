@@ -24997,13 +24997,6 @@ def calculate_toi(row, qualifiers, player_game_info, player_id, player_link, sav
 
 def is_five_toi(player_game_info, goal_event, period, second):
     team_skaters, team_goalies, opp_skaters, opp_goalies, has_team_shift_data, has_opp_shift_data = get_on_ice_info(player_game_info, goal_event, period, second, True, True, True, True)
-    # if team_skaters + team_goalies == opp_skaters+ opp_goalies and not (team_skaters == 5 and team_goalies == 1 and opp_skaters == 5 and opp_goalies == 1):
-    #     print(seconds_to_str(second))
-    #     print(team_skaters)
-    #     print(team_goalies)
-    #     print(opp_skaters)
-    #     print(opp_goalies)
-    #     print("-------------------")
     return has_team_shift_data and has_opp_shift_data and team_skaters == 5 and team_goalies == 1 and opp_skaters == 5 and opp_goalies == 1
 
 def determine_strength(player_game_info, period, second, goal_event):
@@ -27377,6 +27370,37 @@ def clear_row_attrs(row, player_type):
         row["TSA_5v5"] = 0
         row["TSM_5v5"] = 0
         row["TSB_5v5"] = 0
+
+        row["P"] = 0
+        row["P1"] = 0
+
+        row["EVP"] = 0
+        row["EVP1"] = 0
+
+        row["PPP"] = 0
+        row["PPP1"] = 0
+
+        row["SHP"] = 0
+        row["SHP1"] = 0
+
+        row["P_5v5"] = 0
+        row["P1_5v5"] = 0
+
+        row["ENP"] = 0
+
+        row["HAT"] = 0
+
+        row["NetPEN"] = 0
+
+        row["TtlGF"] = 0
+        row["TtlSF"] = 0
+        row["TtlCF"] = 0
+        row["TtlFF"] = 0
+
+        row["GFDiff"] = 0
+        row["SFDiff"] = 0
+        row["CFDiff"] = 0
+        row["FFDiff"] = 0
     else:
         row["GA"] = 0
         row["GF"] = 0
