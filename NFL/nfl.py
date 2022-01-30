@@ -1761,10 +1761,10 @@ def handle_player_string(comment, player_type, is_fantasy, last_updated, hide_ta
                                     for header in ("TmRec", "TmW/L%"):
                                         extra_stats.add("show-only-stat-" + header.lower())
                                 elif m.group(2) == "ats-record":
-                                    for header in ("ATS TmRec", "ATS TmW/L%"):
+                                    for header in ("ATS TmRec", "ATS TmW/L%", "Spread/G", "SpreadMargin/G"):
                                         extra_stats.add("show-only-stat-" + header.lower())
                                 elif m.group(2) == "ou-record":
-                                    for header in ("O/U TmRec", "O/U TmW/L%"):
+                                    for header in ("O/U TmRec", "O/U TmW/L%", "OverUnder/G", "OUMargin/G"):
                                         extra_stats.add("show-only-stat-" + header.lower())
                                 elif m.group(2) == "score":
                                     for header in ("TmScore", "OppScore", "TtlScore", "ScoreDiff", "TmScore/G", "OppScore/G", "TtlScore/G", "ScoreDiff/G"):
@@ -4037,7 +4037,7 @@ def handle_player_string(comment, player_type, is_fantasy, last_updated, hide_ta
                                             "end_exclusive" : False
                                         })
                                     else:
-                                        split_vals = re.split(r"(?<!\\)\-", split_vals[1])
+                                        split_vals = re.split(r"(?<!\\)(?<!^)\-", split_vals[1], 1)
                                         if len(split_vals) == 1:
                                             end_exclusive = False
                                             if split_vals[0].endswith("exc"):
@@ -4160,7 +4160,7 @@ def handle_player_string(comment, player_type, is_fantasy, last_updated, hide_ta
                                         end_val = float("inf")
                                         subbb_stat = re.split(r"(?<!\\)\=", stat)
                                         if len(subbb_stat) > 1:
-                                            split_stats = re.split(r"(?<!\\)\-", subbb_stat[1])
+                                            split_stats = re.split(r"(?<!\\)(?<!^)\-", subbb_stat[1], 1)
                                             stat = subbb_stat[0]
                                             if qual_type == "Quickest" or qual_type == "Slowest":
                                                 start_val = ordinal_to_number(split_stats[0])
@@ -4226,7 +4226,7 @@ def handle_player_string(comment, player_type, is_fantasy, last_updated, hide_ta
                                                         over_stat = sub_sub_split_vals[0]
                                                         sub_stat = unescape_string(sub_sub_split_vals[1])
 
-                                                    sub_split_vals = re.split(r"(?<!\\)\-", sub_split_vals[1])
+                                                    sub_split_vals = re.split(r"(?<!\\)(?<!^)\-", sub_split_vals[1], 1)
                                                     if len(sub_split_vals) == 1:
                                                         start_val = ordinal_to_number(sub_split_vals[0])
                                                         if start_val > 0:
@@ -4278,7 +4278,7 @@ def handle_player_string(comment, player_type, is_fantasy, last_updated, hide_ta
                                                         over_stat = sub_sub_split_vals[0]
                                                         sub_stat = unescape_string(sub_sub_split_vals[1])
                                                     
-                                                    sub_split_vals = re.split(r"(?<!\\)\-", sub_split_vals[1])
+                                                    sub_split_vals = re.split(r"(?<!\\)(?<!^)\-", sub_split_vals[1], 1)
                                                     if len(sub_split_vals) == 1:
                                                         start_val = ordinal_to_number(sub_split_vals[0])
                                                         if start_val > 0:
@@ -4330,7 +4330,7 @@ def handle_player_string(comment, player_type, is_fantasy, last_updated, hide_ta
                                                         over_stat = sub_sub_split_vals[0]
                                                         sub_stat = unescape_string(sub_sub_split_vals[1])
                                                     
-                                                    sub_split_vals = re.split(r"(?<!\\)\-", sub_split_vals[1])
+                                                    sub_split_vals = re.split(r"(?<!\\)(?<!^)\-", sub_split_vals[1], 1)
                                                     if len(sub_split_vals) == 1:
                                                         start_val = ordinal_to_number(sub_split_vals[0])
                                                         if start_val > 0:
@@ -4376,7 +4376,7 @@ def handle_player_string(comment, player_type, is_fantasy, last_updated, hide_ta
                                                 over_stat = sub_sub_split_vals[0]
                                                 sub_stat = unescape_string(sub_sub_split_vals[1])
                                             
-                                            sub_split_vals = re.split(r"(?<!\\)\-", sub_split_vals[1])
+                                            sub_split_vals = re.split(r"(?<!\\)(?<!^)\-", sub_split_vals[1], 1)
                                             if len(sub_split_vals) == 1:
                                                 start_val = ordinal_to_number(sub_split_vals[0])
                                                 if start_val > 0:
@@ -7073,8 +7073,6 @@ def combine_player_datas(player_datas, player_type, any_missing_games, time_fram
                         if stat in parsed_stats[over_header]:
                             if isinstance(player_data["stat_values"][over_header][stat], numbers.Number):
                                 if abs(calculated_values["stat_values"][over_header][stat]):
-                                    if stat == "Rate":
-                                        print(str(player_data["stat_values"][over_header][stat]) + " " + str(calculated_values["stat_values"][over_header][stat]))
                                     player_data["stat_values"][over_header][stat] = (player_data["stat_values"][over_header][stat] - calculated_values["stat_values"][over_header][stat]) / abs(calculated_values["stat_values"][over_header][stat])
                                 else:
                                     if player_data["stat_values"][over_header][stat] > 0:
@@ -8250,6 +8248,30 @@ def handle_player_data(player_data, time_frame, player_type, player_page, is_fan
     pre_qual_teams_map_no_playoffs = {}
     for year in pre_qual_years_no_playoffs:
         pre_qual_teams_map_no_playoffs[year] = set([row["Shared"]["Tm"] for row in all_rows if row["Shared"]["Year"] == year and not row["Shared"]["is_playoffs"]])
+
+    has_spread_stat_qual = False
+    for qualifier in time_frame["qualifiers"]:
+        if "Season" not in qualifier and "State" not in qualifier and ("Stat" in qualifier or "Streak" in qualifier or "Stretch" in qualifier or ("Formula" in qualifier and qualifier != "Event Formula") or "Quickest" in qualifier or "Slowest" in qualifier):
+            for qual_object in time_frame["qualifiers"][qualifier]:
+                for sub_qual_object in qual_object["values"]:
+                    if "Formula" in qualifier:
+                        stats = qual_object["values"]
+                    else:
+                        if "stats" in sub_qual_object:
+                            stats = []
+                            for stat in sub_qual_object["stats"]:
+                                stats.append(stat["stat"])
+                        else:
+                            stats = [sub_qual_object["stat"]]
+                for stat in stats:
+                    if "spread" in stat or "overunder" in stat or "spreadmargin" in stat or "oumargin" in stat or "atsteamw" in stat or "atsteaml" in stat or "atsteamt" in stat or "ousteamw" in stat or "outeaml" in stat or "outeamt" in stat:
+                        has_spread_stat_qual = True
+
+    for extra_stat in extra_stats:
+        if extra_stat.startswith("show-stat-"):
+            stat = extra_stat.split("show-stat-", 1)[1]
+            if "spread" in stat or "overunder" in stat or "spreadmargin" in stat or "oumargin" in stat or "atsteamw" in stat or "atsteaml" in stat or "atsteamt" in stat or "ousteamw" in stat or "outeaml" in stat or "outeamt" in stat:
+                has_spread_stat_qual = True
     
     fix_first_downs(pre_qual_teams_map_no_playoffs, all_rows)
     
@@ -8280,7 +8302,7 @@ def handle_player_data(player_data, time_frame, player_type, player_page, is_fan
     if "Probable" in time_frame["qualifiers"] or "Questionable" in time_frame["qualifiers"] or "Doubtful" in time_frame["qualifiers"] or "Injured" in time_frame["qualifiers"] or "Injury" in time_frame["qualifiers"]:
         all_rows = handle_injury_stats(player_data, all_rows, time_frame["qualifiers"])
     
-    if "Spread" in time_frame["qualifiers"] or "Over/Under" in time_frame["qualifiers"] or "Spread Margin" in time_frame["qualifiers"] or "Over/Under Margin" in time_frame["qualifiers"] or "Underdog" in time_frame["qualifiers"] or "Favorite" in time_frame["qualifiers"] or "ats-record" in extra_stats or "ou-record" in extra_stats:
+    if has_spread_stat_qual or "Spread" in time_frame["qualifiers"] or "Over/Under" in time_frame["qualifiers"] or "Spread Margin" in time_frame["qualifiers"] or "Over/Under Margin" in time_frame["qualifiers"] or "Underdog" in time_frame["qualifiers"] or "Favorite" in time_frame["qualifiers"] or "ats-record" in extra_stats or "ou-record" in extra_stats:
         all_rows = handle_spread_stats(player_data, all_rows, time_frame["qualifiers"])
     
     if "Winning Opponent" in time_frame["qualifiers"] or "Losing Opponent" in time_frame["qualifiers"] or "Tied Opponent" in time_frame["qualifiers"] or "Winning Or Tied Opponent" in time_frame["qualifiers"] or "Losing Or Tied Opponent" in time_frame["qualifiers"] or "Playoff Opponent" in time_frame["qualifiers"] or "Champ Winner Opponent" in time_frame["qualifiers"] or "Conference Winner Opponent" in time_frame["qualifiers"] or "Division Winner Opponent" in time_frame["qualifiers"] or "Opponent Points Rank" in time_frame["qualifiers"] or "Opponent Points Allowed Rank" in time_frame["qualifiers"] or "Opponent Yards Rank" in time_frame["qualifiers"] or "Opponent Yards Allowed Rank" in time_frame["qualifiers"] or "Opponent Pass TD Rank" in time_frame["qualifiers"] or "Opponent Pass TD Allowed Rank" in time_frame["qualifiers"] or "Opponent Pass Yards Rank" in time_frame["qualifiers"] or "Opponent Pass Yards Allowed Rank" in time_frame["qualifiers"] or "Opponent Rush TD Rank" in time_frame["qualifiers"] or "Opponent Rush TD Allowed Rank" in time_frame["qualifiers"] or "Opponent Rush Yards Rank" in time_frame["qualifiers"] or "Opponent Rush Yards Allowed Rank" in time_frame["qualifiers"] or "Opponent ANY/A Rank" in time_frame["qualifiers"] or "Opponent ANY/A Allowed Rank" in time_frame["qualifiers"]  or "Opponent Passer Rating Rank" in time_frame["qualifiers"] or "Opponent Passer Rating Allowed Rank" in time_frame["qualifiers"] or "Opponent Fantasy Position Rank" in time_frame["qualifiers"] or "Team Win Percentage" in time_frame["qualifiers"] or "Team Wins" in time_frame["qualifiers"] or "Team Losses" in time_frame["qualifiers"] or "Team Ties" in time_frame["qualifiers"] or "Opponent Wins" in time_frame["qualifiers"] or "Opponent Losses" in time_frame["qualifiers"] or "Opponent Ties" in time_frame["qualifiers"] or "Team Games Over 500" in time_frame["qualifiers"] or "Opponent Games Over 500" in time_frame["qualifiers"] or "Winning Team" in time_frame["qualifiers"] or "Losing Team" in time_frame["qualifiers"] or "Tied Team" in time_frame["qualifiers"] or "Winning Or Tied Team" in time_frame["qualifiers"] or "Losing Or Tied Team" in time_frame["qualifiers"] or "Playoff Team" in time_frame["qualifiers"] or "Champ Winner Team" in time_frame["qualifiers"] or "Conference Winner Team" in time_frame["qualifiers"] or "Division Winner Team" in time_frame["qualifiers"] or "Team Points Rank" in time_frame["qualifiers"] or "Team Points Allowed Rank" in time_frame["qualifiers"] or "Team Yards Rank" in time_frame["qualifiers"] or "Team Yards Allowed Rank" in time_frame["qualifiers"] or "Team Pass TD Rank" in time_frame["qualifiers"] or "Team Pass TD Allowed Rank" in time_frame["qualifiers"] or "Team Pass Yards Rank" in time_frame["qualifiers"] or "Team Pass Yards Allowed Rank" in time_frame["qualifiers"] or "Team Rush TD Rank" in time_frame["qualifiers"] or "Team Rush TD Allowed Rank" in time_frame["qualifiers"] or "Team Rush Yards Rank" in time_frame["qualifiers"] or "Team Rush Yards Allowed Rank" in time_frame["qualifiers"] or "Team ANY/A Rank" in time_frame["qualifiers"] or "Team ANY/A Allowed Rank" in time_frame["qualifiers"]  or "Team Passer Rating Rank" in time_frame["qualifiers"] or "Team Passer Rating Allowed Rank" in time_frame["qualifiers"] or "Team Fantasy Position Rank" in time_frame["qualifiers"] or "Opponent Win Percentage" in time_frame["qualifiers"] or "Opponent League" in time_frame["qualifiers"] or "Opponent Conference" in time_frame["qualifiers"] or "Opponent Division" in time_frame["qualifiers"] or "Intraleague" in time_frame["qualifiers"] or "Interleague" in time_frame["qualifiers"] or "Intraconference" in time_frame["qualifiers"]  or "Interconference" in time_frame["qualifiers"] or "Intradivision" in time_frame["qualifiers"] or "Interdivision" in time_frame["qualifiers"]:
@@ -21695,9 +21717,9 @@ def print_player_data(player_datas, player_type, highest_vals, lowest_vals, has_
                     override_show = True
                 if header in ("TmRec", "TmW/L%") and "record" in extra_stats:
                     override_show = True
-                elif header in ("ATS TmRec", "ATS TmW/L%") and "ats-record" in extra_stats:
+                elif header in ("ATS TmRec", "ATS TmW/L%", "Spread/G", "SpreadMargin/G") and "ats-record" in extra_stats:
                     override_show = True
-                elif header in ("O/U TmRec", "O/U TmW/L%") and "ou-record" in extra_stats:
+                elif header in ("O/U TmRec", "O/U TmW/L%", "OverUnder/G", "OUMargin/G") and "ou-record" in extra_stats:
                     override_show = True
                 elif header in ("TmScore", "OppScore", "TtlScore", "ScoreDiff", "TmScore/G", "OppScore/G", "TtlScore/G", "ScoreDiff/G") and "score" in extra_stats:
                     override_show = True
@@ -22049,9 +22071,9 @@ def get_reddit_player_table(player_datas, player_type, is_fantasy, debug_mode, o
                     override_show = True
                 if header in ("TmRec", "TmW/L%") and "record" in extra_stats:
                     override_show = True
-                elif header in ("ATS TmRec", "ATS TmW/L%") and "ats-record" in extra_stats:
+                elif header in ("ATS TmRec", "ATS TmW/L%", "Spread/G", "SpreadMargin/G") and "ats-record" in extra_stats:
                     override_show = True
-                elif header in ("O/U TmRec", "O/U TmW/L%") and "ou-record" in extra_stats:
+                elif header in ("O/U TmRec", "O/U TmW/L%", "OverUnder/G", "OUMargin/G") and "ou-record" in extra_stats:
                     override_show = True
                 elif header in ("TmScore", "OppScore", "TtlScore", "ScoreDiff", "TmScore/G", "OppScore/G", "TtlScore/G", "ScoreDiff/G") and "score" in extra_stats:
                     override_show = True
@@ -22804,9 +22826,9 @@ def handle_table_data(player_data, player_type, header, over_header, highest_val
             override_show = True
         if header in ("TmRec", "TmW/L%") and "record" in extra_stats:
             override_show = True
-        elif header in ("ATS TmRec", "ATS TmW/L%") and "ats-record" in extra_stats:
+        elif header in ("ATS TmRec", "ATS TmW/L%", "Spread/G", "SpreadMargin/G") and "ats-record" in extra_stats:
             override_show = True
-        elif header in ("O/U TmRec", "O/U TmW/L%") and "ou-record" in extra_stats:
+        elif header in ("O/U TmRec", "O/U TmW/L%", "OverUnder/G", "OUMargin/G") and "ou-record" in extra_stats:
             override_show = True
         elif header in ("TmScore", "OppScore", "TtlScore", "ScoreDiff", "TmScore/G", "OppScore/G", "TtlScore/G", "ScoreDiff/G") and "score" in extra_stats:
             override_show = True

@@ -7520,7 +7520,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                             "end_val" : float("inf")
                                         })
                                     else:
-                                        split_vals = re.split(r"(?<!\\)\-", split_vals[1])
+                                        split_vals = re.split(r"(?<!\\)(?<!^)\-", split_vals[1], 1)
                                         if len(split_vals) == 1:
                                             the_val = ordinal_to_number(split_vals[0])
                                             if the_val > 0:
@@ -10359,7 +10359,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                             "end_exclusive" : False
                                         })
                                     else:
-                                        split_vals = re.split(r"(?<!\\)\-", split_vals[1])
+                                        split_vals = re.split(r"(?<!\\)(?<!^)\-", split_vals[1], 1)
                                         if len(split_vals) == 1:
                                             end_exclusive = False
                                             if split_vals[0].endswith("exc"):
@@ -10506,7 +10506,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                     time_start = 0
                                     time_end = 1
                                 else:
-                                    split_vals = re.split(r"(?<!\\)\-", split_vals[1])
+                                    split_vals = re.split(r"(?<!\\)(?<!^)\-", split_vals[1], 1)
                                     if len(split_vals) == 1:
                                         time_start = 0
                                         time_end = ordinal_to_number(split_vals[0])
@@ -10593,7 +10593,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                         end_val = float("inf")
                                         subbb_stat = re.split(r"(?<!\\)\=", stat)
                                         if len(subbb_stat) > 1:
-                                            split_stats = re.split(r"(?<!\\)\-", subbb_stat[1])
+                                            split_stats = re.split(r"(?<!\\)(?<!^)\-", subbb_stat[1], 1)
                                             stat = subbb_stat[0]
                                             if qual_type == "Quickest" or qual_type == "Slowest":
                                                 start_val = ordinal_to_number(split_stats[0])
@@ -10642,7 +10642,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                                 for value in values:
                                                     sub_split_vals = re.split(r"(?<!\\)\=", value)
                                                     sub_stat = unescape_string(sub_split_vals[0])
-                                                    sub_split_vals = re.split(r"(?<!\\)\-", sub_split_vals[1])
+                                                    sub_split_vals = re.split(r"(?<!\\)(?<!^)\-", sub_split_vals[1], 1)
                                                     
                                                     if len(sub_split_vals) == 1:
                                                         start_val = ordinal_to_number(sub_split_vals[0])
@@ -10684,7 +10684,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                                 for value in values:
                                                     sub_split_vals = re.split(r"(?<!\\)\=", value)
                                                     sub_stat = unescape_string(sub_split_vals[0])
-                                                    sub_split_vals = re.split(r"(?<!\\)\-", sub_split_vals[1])
+                                                    sub_split_vals = re.split(r"(?<!\\)(?<!^)\-", sub_split_vals[1], 1)
                                                     
                                                     if len(sub_split_vals) == 1:
                                                         start_val = ordinal_to_number(sub_split_vals[0])
@@ -10726,7 +10726,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                                 for value in values:
                                                     sub_split_vals = re.split(r"(?<!\\)\=", value)
                                                     sub_stat = unescape_string(sub_split_vals[0])
-                                                    sub_split_vals = re.split(r"(?<!\\)\-", sub_split_vals[1])
+                                                    sub_split_vals = re.split(r"(?<!\\)(?<!^)\-", sub_split_vals[1], 1)
                                                     
                                                     if len(sub_split_vals) == 1:
                                                         start_val = ordinal_to_number(sub_split_vals[0])
@@ -10762,7 +10762,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                         for value in values:
                                             sub_split_vals = re.split(r"(?<!\\)\=", value)
                                             sub_stat = unescape_string(sub_split_vals[0])
-                                            sub_split_vals = re.split(r"(?<!\\)\-", sub_split_vals[1])
+                                            sub_split_vals = re.split(r"(?<!\\)(?<!^)\-", sub_split_vals[1], 1)
                                             
                                             if len(sub_split_vals) == 1:
                                                 start_val = ordinal_to_number(sub_split_vals[0])
