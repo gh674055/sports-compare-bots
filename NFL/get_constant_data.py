@@ -3349,13 +3349,14 @@ stat_groups = {
             "round" : "percent",
             "display" : False
         },
-        "Spread" :{
+        "RawSpread" :{
             "positive" : False,
             "display" : False
         },
         "Spread/G" :{
             "positive" : False,
-            "display" : False
+            "display" : False,
+            "round" : 2
         },
         "SpreadMargin" :{
             "positive" : True,
@@ -3363,7 +3364,8 @@ stat_groups = {
         },
         "SpreadMargin/G" :{
             "positive" : True,
-            "display" : False
+            "display" : False,
+            "round" : 2
         },
         "OUTeamW" :{
             "positive" : True,
@@ -3392,7 +3394,8 @@ stat_groups = {
         },
         "OverUnder/G" :{
             "positive" : True,
-            "display" : False
+            "display" : False,
+            "round" : 2
         },
         "OUMargin" :{
             "positive" : True,
@@ -3400,7 +3403,8 @@ stat_groups = {
         },
         "OUMargin/G" :{
             "positive" : True,
-            "display" : False
+            "display" : False,
+            "round" : 2
         },
         "TmScore" :{
             "positive" : True,
@@ -5015,7 +5019,7 @@ formulas = {
         "ATS TmW/L%" : "ATSTeamW / (ATSTeamW + ATSTeamL)",
         "O/U TmRec" : "Special",
         "O/U TmW/L%" : "OUTeamW / (OUTeamW + OUTeamL)",
-        "Spread/G" : "Spread / G",
+        "Spread/G" : "RawSpread / G",
         "OverUnder/G" : "OverUnder / G",
         "SpreadMargin/G" : "SpreadMargin / G",
         "OUMargin/G" : "OUMargin / G",

@@ -19395,6 +19395,8 @@ def handle_spread_stats(player_data, all_rows, qualifiers):
                         if row_data["Shared"]["Year"] >= 1979:
                             row_data["Shared"]["OverUnder"] = None
                             row_data["Shared"]["OverUnderMargin"] = None
+                    
+                    row_data["Shared"]["RawSpread"] = row_data["Shared"]["Spread"]
     
     new_rows = []
     for row in all_rows:
