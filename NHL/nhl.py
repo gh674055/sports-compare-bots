@@ -24964,11 +24964,11 @@ def calculate_toi(row, qualifiers, player_game_info, player_id, player_link, sav
     teammate_on_ice_quals = []
     for on_ice_str in ["Assisted By", "Assisted On", "Assisted With", "Points With", "Primary Assisted By", "Primary Assisted On", "Primary Assisted With", "Primary Points With"]:
         if on_ice_str in qualifiers:
-            teammate_on_ice_quals.append(qualifiers[on_ice_str])
+            teammate_on_ice_quals.extend(qualifiers[on_ice_str])
     teammate_off_ice_quals = []
     for on_ice_str in ["Shot On", "Shot By", "Hit On", "Penalty On", "Faceoff Against", "Fight Against"]:
         if on_ice_str in qualifiers:
-            teammate_off_ice_quals.append(qualifiers[on_ice_str])
+            teammate_off_ice_quals.extend(qualifiers[on_ice_str])
 
     needs_on_ice = bool(teammate_on_ice_quals) or bool(teammate_off_ice_quals)
 
