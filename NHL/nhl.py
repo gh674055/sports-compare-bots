@@ -31863,6 +31863,12 @@ def comb_rows(matching_rows, player_data, player_type, lower=True, stats=None):
     year_start = 0
     year_end = 0
     is_playoffs = None
+    is_api_stats = True
+    is_html_stats = True
+    is_old_html_stats = True
+    is_older_html_stats = True
+    is_href_stats = True
+    is_toi_stats = True
     for row_data in matching_rows:
         for stat in row_data:
             if stat in comb_row and isinstance(row_data[stat], numbers.Number) and isinstance(comb_row[stat], numbers.Number) and (not stat in qualifier_map or stat == "Team Score" or stat == "Opponent Score") and not stat in formulas[player_type["da_type"]["type"]] and not stat in advanced_stats and row_data[stat] != 0:
@@ -31891,6 +31897,20 @@ def comb_rows(matching_rows, player_data, player_type, lower=True, stats=None):
         else:
             if is_playoffs:
                 is_playoffs = "Include"
+
+        if player_data["stat_values"]["is_indv_shift_data"]:
+            if not row_data["is_api_stats"]:
+                is_api_stats = False
+            if not row_data["is_html_stats"]:
+                is_html_stats = False
+            if not row_data["is_old_html_stats"]:
+                is_old_html_stats = False
+            if not row_data["is_older_html_stats"]:
+                is_older_html_stats = False
+            if not row_data["is_href_stats"]:
+                is_href_stats = False
+            if not row_data["is_toi_stats"]:
+                is_toi_stats = False
     
     if date_start:
         comb_row["DateStart"] = [date_start]
@@ -31909,6 +31929,14 @@ def comb_rows(matching_rows, player_data, player_type, lower=True, stats=None):
     else:
         comb_row["YearEnd"] = []
     comb_row["is_playoffs"] = is_playoffs
+
+    if player_data["stat_values"]["is_indv_shift_data"]:
+        comb_row["is_api_stats"] = is_api_stats
+        comb_row["is_html_stats"] = is_html_stats
+        comb_row["is_old_html_stats"] = is_old_html_stats
+        comb_row["is_older_html_stats"] = is_older_html_stats
+        comb_row["is_href_stats"] = is_href_stats
+        comb_row["is_toi_stats"] = is_toi_stats
 
     if stats == None or header in stats or set(stats).intersection(advanced_stats):
         calculate_advanced_stats(comb_row, matching_rows, player_type["da_type"]["type"], player_type["da_type"]["position"], player_data)
