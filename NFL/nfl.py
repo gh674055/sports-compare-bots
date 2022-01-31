@@ -16203,6 +16203,7 @@ def comb_rows(matching_rows, player_data, player_type, lower=True, stats=None):
     else:
         comb_row["Shared"]["YearEnd"] = []
     comb_row["Shared"]["is_playoffs"] = is_playoffs
+    comb_row["Shared"]["all_rows"] = matching_rows
 
     if "Scrimmage/All Purpose" in headers[player_type["da_type"]] and (stats == None or "Scrimmage/All Purpose" in stats):
         touches = 0.0

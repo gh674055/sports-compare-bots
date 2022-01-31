@@ -31929,6 +31929,7 @@ def comb_rows(matching_rows, player_data, player_type, lower=True, stats=None):
     else:
         comb_row["YearEnd"] = []
     comb_row["is_playoffs"] = is_playoffs
+    comb_row["all_rows"] = matching_rows
 
     if player_data["stat_values"]["is_indv_shift_data"]:
         comb_row["is_api_stats"] = is_api_stats
