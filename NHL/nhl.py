@@ -17672,14 +17672,15 @@ def get_opponent_schedule(seasons):
                     table = temp_table
                     break
 
-        standard_table_rows = table.find("tbody").find_all("tr")
-        for row in standard_table_rows:
-            all_cols = row.find_all("td")
-            round_name = str(all_cols[0].find(text=True))
-            if "Conference Finals" in round_name:
-                ws_winner_el = all_cols[2]
-                if ws_winner_el and ws_winner_el.find("a") and " over " in str(ws_winner_el.text):
-                    conf_winners.add(ws_winner_el.find("a")["href"].split("/")[2].strip().upper())
+        if table:
+            standard_table_rows = table.find("tbody").find_all("tr")
+            for row in standard_table_rows:
+                all_cols = row.find_all("td")
+                round_name = str(all_cols[0].find(text=True))
+                if "Conference Finals" in round_name:
+                    ws_winner_el = all_cols[2]
+                    if ws_winner_el and ws_winner_el.find("a") and " over " in str(ws_winner_el.text):
+                        conf_winners.add(ws_winner_el.find("a")["href"].split("/")[2].strip().upper())
         
         table_names = ["stats", "standings", "standings_CAM", "standings_WAL", "standings_EAS", "standings_WES"]
         team_obj[season_obj["Year"]] = {}
