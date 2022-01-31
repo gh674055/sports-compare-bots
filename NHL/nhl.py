@@ -13342,6 +13342,10 @@ def handle_the_quals(qualifiers, qual_str, subb_names, time_frame, key, comment_
 def sub_handle_the_quals(players, qualifier, qual_str, player_str, time_frame, key, comment_obj, players_map, extra_stats):
     new_search = False
 
+    is_raw_query = False
+    if "time_frame_str" not in qualifier:
+        is_raw_query = bool("Sub Query" in qual_str or re.search(r"(?<!\\)]", unescape_string(player_str)))
+
     player_str = determine_player_str(qualifier, player_str, time_frame, qual_str)
 
     player_type = {
@@ -13425,7 +13429,8 @@ def sub_handle_the_quals(players, qualifier, qual_str, player_str, time_frame, k
                 "missing_toi" : missing_toi,
                 "query" : player_data["stat_values"]["Raw Quals"],
                 "search_term" : player_data["stat_values"]["Search Term"],
-                "games" : player_games
+                "games" : player_games,
+                "is_raw_query" : is_raw_query
             })
             if "Event Sub Query" in qual_str:
                 players[len(players) - 1]["quals"] = player_data["quals"][index]
@@ -14592,7 +14597,7 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
     last_qual_str = None
     for subb_frame in time_frames:
         for subbb_frame in subb_frame:
-            qual_str = determine_raw_str(subbb_frame, False)
+            qual_str = determine_raw_str(subbb_frame)
             if not last_qual_str:
                 last_qual_str = qual_str
             if last_qual_str != qual_str:
@@ -14617,7 +14622,7 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
             if multiple_matches:
                 qual_str += "("
             
-            qual_str += determine_raw_str(subbb_frame, False)
+            qual_str += determine_raw_str(subbb_frame)
             
             if multiple_matches:
                 qual_str += ")"
@@ -14734,12 +14739,8 @@ def customGameDateSort(game_link):
     match = re.match(r"\[(.+)\]\(.+\)", game_link)
     return dateutil.parser.parse(match.group(1))
 
-def determine_raw_str(subbb_frame, skip_player_quals):
+def determine_raw_str(subbb_frame):
     qual_str = ""
-
-    non_player_str = None
-    if not skip_player_quals:
-        non_player_str = determine_raw_str(subbb_frame, True)
 
     if subbb_frame["type"].startswith("season"):
         if subbb_frame["type"].startswith("season-range"):
@@ -14820,10 +14821,6 @@ def determine_raw_str(subbb_frame, skip_player_quals):
         if qualifier == "Force Dates" or qualifier == "Ignore Start":
             continue
 
-        if skip_player_quals:
-            if qualifier == "Playing With" or qualifier == "Playing Against" or qualifier == "Playing Same Game" or qualifier == "Previous Playing With" or qualifier == "Previous Playing Against" or qualifier == "Upcoming Playing With" or qualifier == "Upcoming Playing Against" or qualifier == "Playing Same Opponents" or qualifier == "Playing Same Date" or qualifier == "Shot On" or qualifier == "Shot By" or qualifier == "On Ice With" or qualifier == "On Ice Against" or qualifier == "On Line With" or qualifier == "On Line Against" or qualifier == "Assisted On" or qualifier == "Assisted With" or qualifier == "Points With" or qualifier == "Assisted By" or qualifier == "Primary Assisted On" or qualifier == "Primary Assisted With" or qualifier == "Primary Points With" or qualifier == "Primary Assisted By" or qualifier == "Hit On" or qualifier == "Block On" or qualifier == "Penalty On" or qualifier == "Faceoff Against" or qualifier == "Fight Against":
-                continue
-
         sub_sub_first = True
         if qual_str:
             qual_str += " - "
@@ -14879,7 +14876,7 @@ def determine_raw_str(subbb_frame, skip_player_quals):
                             qual_str += player_url_str + " (Searched Term: \"" + "+".join(player["search_term"]) + "\")"
                         else:
                             query = player["query"].replace("Query: ", "", 1)
-                            qual_str += player_url_str + ((" (" + query + ")") if query and query != non_player_str else "")
+                            qual_str += player_url_str + ((" (" + query + ")") if query and player["is_raw_query"] else "")
                 elif qualifier == "Shot On First Name" or qualifier == "Shot By First Name" or qualifier == "Shot On Last Name" or qualifier == "Shot By Last Name":
                     for player in qual_obj["values"]:
                         if not sub_sub_first:
