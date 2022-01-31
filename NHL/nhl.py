@@ -12192,7 +12192,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
 
     if "hide-advanced" in extra_stats and "current-stats" in extra_stats:
         extra_stats.remove("current-stats")
-
+    
     best_games_table = 0
     worst_games_table = 0
     for extra_stat in extra_stats:
@@ -15738,13 +15738,12 @@ def handle_player_data(player_data, time_frame, player_type, player_page, valid_
                 new_rows.append(row_data)
         all_rows = new_rows
     
-    if "Game Number" in time_frame["qualifiers"] or "Attendance" in time_frame["qualifiers"]  or "Exact Official" in time_frame["qualifiers"] or "Exact Referee" in time_frame["qualifiers"] or "Exact Linesman" in time_frame["qualifiers"] or "Exact Team Head Coach" in time_frame["qualifiers"] or "Exact Opponent Head Coach" in time_frame["qualifiers"] or "Official" in time_frame["qualifiers"] or "Referee" in time_frame["qualifiers"] or "Linesman" in time_frame["qualifiers"] or "Team Head Coach" in time_frame["qualifiers"] or "Opponent Head Coach" in time_frame["qualifiers"] or "fight" in extra_stats or "star" in extra_stats:
-        if ("Event Stat" in time_frame["qualifiers"] or "Event Stat Reversed" in time_frame["qualifiers"] or "Event Stats" in time_frame["qualifiers"] or "Event Stats Reversed" in time_frame["qualifiers"] or "Starting Event Stat" in time_frame["qualifiers"] or "Starting Event Stat Reversed" in time_frame["qualifiers"] or "Starting Event Stats" in time_frame["qualifiers"] or "Starting Event Stats Reversed" in time_frame["qualifiers"]):
-            player_data["stat_values"]["is_indv_shift_data"] = True
-            all_rows, missing_games, missing_toi = handle_nhl_game_stats_single_thread(player_data, all_rows, time_frame, player_link, player_type, missing_games, missing_toi, extra_stats, s)
-        elif "Game Number" in time_frame["qualifiers"] or "Attendance" in time_frame["qualifiers"] or "Exact Referee" in time_frame["qualifiers"] or "Exact Linesman" in time_frame["qualifiers"] or "Exact Team Head Coach" in time_frame["qualifiers"] or "Exact Opponent Head Coach" in time_frame["qualifiers"] or "Official" in time_frame["qualifiers"] or "Referee" in time_frame["qualifiers"] or "Linesman" in time_frame["qualifiers"] or "Team Head Coach" in time_frame["qualifiers"] or "Opponent Head Coach" in time_frame["qualifiers"] or "fight" in extra_stats or "star" in extra_stats or "current-stats" in extra_stats:
-            player_data["stat_values"]["is_indv_shift_data"] = True
-            all_rows, missing_games, missing_toi = handle_nhl_game_stats(player_data, all_rows, time_frame, player_link, player_type, missing_games, missing_toi, extra_stats, s)
+    if ("Event Stat" in time_frame["qualifiers"] or "Event Stat Reversed" in time_frame["qualifiers"] or "Event Stats" in time_frame["qualifiers"] or "Event Stats Reversed" in time_frame["qualifiers"] or "Starting Event Stat" in time_frame["qualifiers"] or "Starting Event Stat Reversed" in time_frame["qualifiers"] or "Starting Event Stats" in time_frame["qualifiers"] or "Starting Event Stats Reversed" in time_frame["qualifiers"]):
+        player_data["stat_values"]["is_indv_shift_data"] = True
+        all_rows, missing_games, missing_toi = handle_nhl_game_stats_single_thread(player_data, all_rows, time_frame, player_link, player_type, missing_games, missing_toi, extra_stats, s)
+    elif "Game Number" in time_frame["qualifiers"] or "Attendance" in time_frame["qualifiers"] or "Exact Referee" in time_frame["qualifiers"] or "Exact Linesman" in time_frame["qualifiers"] or "Exact Team Head Coach" in time_frame["qualifiers"] or "Exact Opponent Head Coach" in time_frame["qualifiers"] or "Official" in time_frame["qualifiers"] or "Referee" in time_frame["qualifiers"] or "Linesman" in time_frame["qualifiers"] or "Team Head Coach" in time_frame["qualifiers"] or "Opponent Head Coach" in time_frame["qualifiers"] or "fight" in extra_stats or "star" in extra_stats or "current-stats" in extra_stats:
+        player_data["stat_values"]["is_indv_shift_data"] = True
+        all_rows, missing_games, missing_toi = handle_nhl_game_stats(player_data, all_rows, time_frame, player_link, player_type, missing_games, missing_toi, extra_stats, s)
 
     if time_frame["qualifiers"]:
         new_rows = []
