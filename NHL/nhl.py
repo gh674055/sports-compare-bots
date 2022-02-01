@@ -11031,6 +11031,8 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 
                                 if stat == "minute" or stat == "second" or stat == "min" or stat == "toi":
                                     stat = "TOI"
+                                elif stat == "total-minute" or stat == "total-second" or stat == "total-min" or stat == "total-toi":
+                                    stat = "TtlTOI"
                                 elif stat == "period":
                                     stat = "Per"
                                     extra_stats.add("show-stat-per")
@@ -11082,7 +11084,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 else:
                                     split_vals = re.split(r"(?<!\\)(?<!^)\-", split_vals[1], 1)
                                     if len(split_vals) > 1:
-                                        if stat == "TOI" and not unescape_string(split_vals[0]) == "second":
+                                        if "TOI" in stat and not "second" in unescape_string(split_vals[0]):
                                             period_time_spl = split_vals[0].split(":")
                                             if len(period_time_spl) > 1:
                                                 time_start = (int(ordinal_to_number(period_time_spl[0])) * 60) + int(ordinal_to_number(period_time_spl[1]))
@@ -11098,7 +11100,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                             time_end = ordinal_to_number(split_vals[1])
                                     else:
                                         time_start = 0
-                                        if stat == "TOI" and not unescape_string(split_vals[0]) == "second":
+                                        if "TOI" in stat and not "second" in unescape_string(split_vals[0]):
                                             period_time_spl = time_unit.split(":")
                                             if len(period_time_spl) > 1:
                                                 time_end = (int(ordinal_to_number(period_time_spl[0])) * 60) + int(ordinal_to_number(period_time_spl[1]))
@@ -11387,7 +11389,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
 
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
                     
-                        last_matches = re.finditer(r"\b(no(?:t|n)?(?: |-))?(first|1st|last|this|past)?(?: ?(\S*) (starting-)?(game-)?(minute|second|min|toi|shots?-faced|shots?-against|goals?-allowed|team-shot-attempt|team-goal|team-shot|opp-shot-attempt|opp-goal|opp-shot|total-shot-attempt|total-goal|total-shot|save|total-shot|shot|period|shift|goal|assist|point)s?)\b", time_frame)
+                        last_matches = re.finditer(r"\b(no(?:t|n)?(?: |-))?(first|1st|last|this|past)?(?: ?(\S*) (starting-)?(game-)?(total-minute|total-second|total-min|total-toi|minute|second|min|toi|shots?-faced|shots?-against|goals?-allowed|team-shot-attempt|team-goal|team-shot|opp-shot-attempt|opp-goal|opp-shot|total-shot-attempt|total-goal|total-shot|save|total-shot|shot|period|shift|goal|assist|point)s?)\b", time_frame)
                         for last_match in last_matches:
                             compare_type = last_match.group(2)
                             time_unit = last_match.group(3)
@@ -11430,6 +11432,8 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                             stat = None
                             if qual_type == "minute" or qual_type == "second" or qual_type == "min" or qual_type == "toi":
                                 stat = "TOI"
+                            elif qual_type == "total-minute" or qual_type == "total-second" or qual_type == "total-min" or qual_type == "total-toi":
+                                stat = "TtlTOI"
                             elif qual_type == "period":
                                 stat = "Per"
                                 extra_stats.add("show-stat-per")
@@ -14923,9 +14927,9 @@ def determine_raw_str(subbb_frame):
                         qual_str += "Not "
                     qual_str += qual_obj["stat"] + "="
                     if qual_obj["values"]["start_val"] == qual_obj["values"]["end_val"]:
-                        qual_str += get_time_str(qual_obj["values"]["start_val"], False, period=qual_obj["stat"] == "TOI")
+                        qual_str += get_time_str(qual_obj["values"]["start_val"], False, period="TOI" in qual_obj["stat"])
                     else:
-                        qual_str += (get_time_str(qual_obj["values"]["start_val"], False, period=qual_obj["stat"] == "TOI")) + "-" + (get_time_str(qual_obj["values"]["end_val"], False, period=qual_obj["stat"] == "TOI"))
+                        qual_str += (get_time_str(qual_obj["values"]["start_val"], False, period="TOI" in qual_obj["stat"])) + "-" + (get_time_str(qual_obj["values"]["end_val"], False, period="TOI" in qual_obj["stat"]))
                 elif qualifier == "Days Rest" or qualifier == "Upcoming Days Rest" or qualifier == "Starts Days Rest" or qualifier == "Upcoming Starts Days Rest" or qualifier == "Days In A Row" or qualifier == "Games In A Row" or qualifier == "Starts In A Row" or qualifier == "Games Rest" or qualifier == "Starts Rest" or qualifier == "Team Score" or qualifier == "Opponent Score" or qualifier == "Series Team Wins" or qualifier == "Series Opponent Wins" or qualifier == "Series Score Margin" or qualifier == "Series Score Difference" or qualifier == "Game Number" or qualifier == "Season Number" or qualifier == "Final Team Score" or qualifier == "Final Opponent Score" or qualifier == "Team Skaters" or qualifier == "Opponent Skaters" or qualifier == "Team Players" or qualifier == "Opponent Players" or qualifier == "Team Wins" or qualifier == "Team Losses" or qualifier == "Team Ties" or qualifier == "Team Points" or qualifier == "Opponent Wins" or qualifier == "Opponent Losses" or qualifier == "Opponent Ties" or qualifier == "Opponent Points" or qualifier == "Current Team Wins" or qualifier == "Current Team Losses" or qualifier == "Current Team Ties" or qualifier == "Current Team Points" or qualifier == "Current Opponent Wins" or qualifier == "Current Opponent Losses" or qualifier == "Current Opponent Ties" or qualifier == "Current Opponent Points" or qualifier == "Team Games Over 500" or qualifier == "Opponent Games Over 500" or qualifier == "Current Team Games Over 500" or qualifier == "Current Opponent Games Over 500" or qualifier == "X Coordinate" or qualifier == "Y Coordinate" or qualifier == "Raw X Coordinate" or qualifier == "Raw Y Coordinate" or qualifier == "Absolute X Coordinate" or qualifier == "Absolute Y Coordinate" or qualifier == "Attendance" or qualifier == "Penalty Minutes":
                     if not sub_sub_first:
                         qual_str += " + "
@@ -20035,7 +20039,8 @@ def determine_stat_value(player_game_info, all_events, qualifiers, og_row, playe
     save_against_stats = ["SV", "SA", "EVSH", "PPSH", "SHGA"]
     missed_shot_against_stats = ["SV", "SA"]
     goalie_goal_against_stats = ["GF"]
-    toi_stats = ["TOI", "EVTOI", "PPTOI", "SHTOI"]
+    toi_stats = ["TOI", "TtlTOI", "EVTOI", "PPTOI", "SHTOI"]
+    off_toi_stats = ["offITOI", "TtlTOI"]
     event_stats = ["Event"]
 
     if count_misses:
@@ -20326,28 +20331,24 @@ def determine_stat_value(player_game_info, all_events, qualifiers, og_row, playe
             if goal_event["event_name"] == "shift_events":
                 if determine_event_match(goal_event, qualifiers, player_game_info, og_row, is_toi=True):
                     row["TOI"] += 1
+                    row["TtlTOI"] += 1
                     if stat in ["EVTOI", "PPTOI", "SHTOI"]:
                         strength = determine_strength(player_game_info, goal_event["period"], goal_event["periodTime"], goal_event)
                         if strength:
                             row[strength + "TOI"] += 1
+
+        if stat in off_toi_stats:
+           if goal_event["event_name"] == "all_shift_events":
+                if determine_event_match(goal_event, qualifiers, player_game_info, og_row, is_toi=True, is_off_ice=True):
+                    row["offITOI"] += 1
+                    row["TtlTOI"] += 1
 
     calculate_row_attrs(row, player_type)
 
     return row[stat]
 
 def determine_event_match(goal_event, qualifiers, player_game_info, row, is_faceoff=False, is_toi=False, is_off_ice=False):
-    is_match = True
-    # is_match = goal_event["period"] == period and goal_event["periodTime"] == period_time
-    # if is_reverse:
-    #     if goal_event["period"]  period or (goal_event["period"] == period and goal_event["periodTime"] >= period_time):
-    #         is_match = True
-    # else:
-    #     if goal_event["period"] < period or (goal_event["period"] == period and goal_event["periodTime"] <= period_time):
-    #         is_match = True
-    if is_match:
-        if qualifiers and not perform_metadata_qual(goal_event["event_name"], goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], is_faceoff=is_faceoff, is_toi=is_toi, is_off_ice=is_off_ice, skip_career_events=True):
-            is_match = True
-    return is_match
+    return perform_metadata_qual(goal_event["event_name"], goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], is_faceoff=is_faceoff, is_toi=is_toi, is_off_ice=is_off_ice, skip_career_events=True)
 
 def is_player_on_ice(player_shift_data, team_on_ice, opp_on_ice, period, period_time, player_id, is_team, is_faceoff=False):
     if is_team and team_on_ice:
@@ -26420,6 +26421,8 @@ def perform_metadata_qual(event_name, goal_event, qualifiers, player_game_info, 
             is_on_ice = is_player_on_ice(player_game_info["player_shift_data"], team_on_ice, opp_on_ice, goal_event["period"], goal_event["periodTime"], player_game_info["player_id"], True)
             if is_on_ice:
                 return False
+        else:
+            return False
 
     return True
 
