@@ -5108,8 +5108,7 @@ headers = {
         "SHEvenStrength" : {
             "positive" : True,
             "round" : "percent",
-            "display-value" : "SH% EV",
-            "display" : False,
+            "display-value" : "EV SA%",
             "type" : "Advanced",
             "valid_since" : {
                 "season" : 1997,
@@ -5119,8 +5118,7 @@ headers = {
         "SHPowerPlay" : {
             "positive" : True,
             "round" : "percent",
-            "display-value" : "SH% PP",
-            "display" : False,
+            "display-value" : "PP SA%",
             "type" : "Advanced",
             "valid_since" : {
                 "season" : 1997,
@@ -5130,8 +5128,7 @@ headers = {
         "SHShorthanded" : {
             "positive" : True,
             "round" : "percent",
-            "display-value" : "SH% SH",
-            "display" : False,
+            "display-value" : "SH SA%",
             "type" : "Advanced",
             "valid_since" : {
                 "season" : 1997,
