@@ -20565,10 +20565,6 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
 
         if not game_data["shift_data"]:
             game_data["missing_toi"] = True
-            if has_shift_quals(time_frame["qualifiers"]):
-                missing_games = True
-                game_data["missing_data"] = True
-                return game_data, row_data, missing_games
 
         if game_data["shift_data"]:
             game_data["is_toi_stats"] = True
