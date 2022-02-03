@@ -20948,8 +20948,8 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                         "oppSide" : None if (not goalie or goalie not in game_data["player_side_map"]) else game_data["player_side_map"][goalie],
                         "oppFirstName" : None if not goalie else game_data["player_first_name_map"][goalie],
                         "oppLastName" : None if not goalie else game_data["player_last_name_map"][goalie],
-                        "oppBirthCountry" : None if not goalie else game_data["player_birth_country_map"][goalie],
-                        "oppNationality" : None if not goalie else game_data["player_nationality_map"][goalie],
+                        "oppBirthCountry" : None if not goalie or goalie not in game_data["player_birth_country_map"] else game_data["player_birth_country_map"][goalie],
+                        "oppNationality" : None if not goalie or goalie not in game_data["player_nationality_map"] else game_data["player_nationality_map"][goalie],
                         "shotType" : scoring_play["result"]["secondaryType"] if "secondaryType" in scoring_play["result"] else None
                     }})
                     # if len(assists) > 0:
@@ -20996,8 +20996,8 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                         "oppSide" : None if scorer not in game_data["player_side_map"] else game_data["player_side_map"][scorer],
                         "oppFirstName" : game_data["player_first_name_map"][scorer],
                         "oppLastName" : game_data["player_last_name_map"][scorer],
-                        "oppBirthCountry" : game_data["player_birth_country_map"][scorer],
-                        "oppNationality" : game_data["player_nationality_map"][scorer],
+                        "oppBirthCountry" : game_data["player_birth_country_map"][scorer] if scorer in game_data["player_birth_country_map"] else None,
+                        "oppNationality" : game_data["player_nationality_map"][scorer] if scorer in game_data["player_nationality_map"] else None,
                         "shotType" : scoring_play["result"]["secondaryType"] if "secondaryType" in scoring_play["result"] else None
                     }})
                 
@@ -21057,8 +21057,8 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                         "oppSide" : None if (not goalie or goalie not in game_data["player_side_map"]) else game_data["player_side_map"][goalie],
                         "oppFirstName" : None if not goalie else game_data["player_first_name_map"][goalie],
                         "oppLastName" : None if not goalie else game_data["player_last_name_map"][goalie],
-                        "oppBirthCountry" : None if not goalie else game_data["player_birth_country_map"][goalie],
-                        "oppNationality" : None if not goalie else game_data["player_nationality_map"][goalie],
+                        "oppBirthCountry" : None if not goalie or goalie not in game_data["player_birth_country_map"] else game_data["player_birth_country_map"][goalie],
+                        "oppNationality" : None if not goali or goalie not in game_data["player_nationality_map"] else game_data["player_nationality_map"][goalie],
                         "shotType" : scoring_play["result"]["secondaryType"] if "secondaryType" in scoring_play["result"] else None
                     }})
                 elif player_saved:
@@ -21068,8 +21068,8 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                         "oppSide" : None if scorer not in game_data["player_side_map"] else game_data["player_side_map"][scorer],
                         "oppFirstName" : game_data["player_first_name_map"][scorer],
                         "oppLastName" : game_data["player_last_name_map"][scorer],
-                        "oppBirthCountry" : game_data["player_birth_country_map"][scorer],
-                        "oppNationality" : game_data["player_nationality_map"][scorer],
+                        "oppBirthCountry" : game_data["player_birth_country_map"][scorer] if scorer in game_data["player_birth_country_map"] else None,
+                        "oppNationality" : game_data["player_nationality_map"][scorer] if scorer in game_data["player_nationality_map"] else None,
                         "shotType" : scoring_play["result"]["secondaryType"] if "secondaryType" in scoring_play["result"] else None
                     }})
 
@@ -21120,8 +21120,8 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                         "oppSide" : None if (not goalie or goalie not in game_data["player_side_map"]) else game_data["player_side_map"][goalie],
                         "oppFirstName" : None if not goalie else game_data["player_first_name_map"][goalie],
                         "oppLastName" : None if not goalie else game_data["player_last_name_map"][goalie],
-                        "oppBirthCountry" : None if not goalie else game_data["player_birth_country_map"][goalie],
-                        "oppNationality" : None if not goalie else game_data["player_nationality_map"][goalie]
+                        "oppBirthCountry" : None if not goalie or goalie not in game_data["player_birth_country_map"] else game_data["player_birth_country_map"][goalie],
+                        "oppNationality" : None if not goalie or goalie not in game_data["player_nationality_map"] else game_data["player_nationality_map"][goalie]
                     }})
                 elif player_saved:
                     game_data["missed_shot_against"].append({**shared_data , **{
@@ -21130,8 +21130,8 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                         "oppSide" : None if scorer not in game_data["player_side_map"] else game_data["player_side_map"][scorer],
                         "oppFirstName" : game_data["player_first_name_map"][scorer],
                         "oppLastName" : game_data["player_last_name_map"][scorer],
-                        "oppBirthCountry" : game_data["player_birth_country_map"][scorer],
-                        "oppNationality" : game_data["player_nationality_map"][scorer]
+                        "oppBirthCountry" : game_data["player_birth_country_map"][scorer] if scorer in game_data["player_birth_country_map"] else None,
+                        "oppNationality" : game_data["player_nationality_map"][scorer] if scorer in game_data["player_nationality_map"] else None
                     }})
 
                 if game_data["player_shift_data"] or team_on_ice:
@@ -21749,11 +21749,12 @@ def setup_game_data(player_data, row_data, player_id, player_type, time_frame, s
         game_data["player_names"][player["person"]["id"]] = sub_player["fullName"]
         game_data["player_first_name_map"][player["person"]["id"]] = sub_player["firstName"]
         game_data["player_last_name_map"][player["person"]["id"]] = sub_player["lastName"]
-        game_data["player_birth_country_map"][player["person"]["id"]] = sub_player["birthCountry"]
-        if "nationality" in sub_player:
-            game_data["player_nationality_map"][player["person"]["id"]] = sub_player["nationality"]
-        else:
-            game_data["player_nationality_map"][player["person"]["id"]] = sub_player["birthCountry"]
+        if "birthCountry" in sub_player:
+            game_data["player_birth_country_map"][player["person"]["id"]] = sub_player["birthCountry"]
+            if "nationality" in sub_player:
+                game_data["player_nationality_map"][player["person"]["id"]] = sub_player["nationality"]
+            else:
+                game_data["player_nationality_map"][player["person"]["id"]] = sub_player["birthCountry"]
         if player["position"]["code"] == "G":
             stat_str = "goalieStats"
             if stat_str not in player["stats"]:
