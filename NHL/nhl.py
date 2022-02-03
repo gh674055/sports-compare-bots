@@ -6345,6 +6345,8 @@ qualifier_map = {
     "Shot By Birth Country" : {},
     "Shot On Nationality" : {},
     "Shot By Nationality" : {},
+    "Assisted On First Name" : {},
+    "Assisted On Last Name" : {},
     "Facing Lefty" : {},
     "Facing Righty" : {},
     "Assisted On" : {},
@@ -7369,7 +7371,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                         for m in last_match:
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip() + " " + m.group(3)
                         
-                        last_match = re.finditer(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?((?:sub-query|event-sub-query|or-sub-query|or-event-sub-query|day-after-sub-query|day-before-sub-query|day-of-sub-query|game-after-sub-query|game-before-sub-query|season-sub-query|or-season-sub-query|season-after-sub-query|season-before-sub-query|exact-penalty-type|exact-penalty-severity|penalty-type|penalty-severity|w|(?:playing|starting)-with|a|(?:playing|starting)-against|(?:playing|starting)-same-game|prv-w|previous-playing-with|prv-a|previous-playing-against|upc-w|upcoming-playing-with|upc-a|upcoming-playing-against|(?:playing|starting)-same-opponents?|(?:playing|starting)-same-dates?|holidays?|dts|dates|arena|exact-arena|stadium|exact-stadium|opponent-city|opponent-exact-city|team-city|team-exact-city|city|exact-city|event-description|exact-event-description|outoor-event|exact-outoor-event|shot-on-first-name|shot-by-first-name|shot-on-last-name|shot-by-last-name|shot-on|shot-by|on-ice-with|on-ice-against|on-line-with|on-line-against|assisted-on|assisted-with|points-with|assisted-by|primary-assisted-on|primary-assisted-with|primary-points-with|primary-assisted-by|hit-on|penalty-on|faceoff-against|fight-against|fighting-against|exact-official|exact-referee|exact-linesman|exact-team-head-coach|exact-opponent-head-coach|official|referee|linesman|team-head-coach|opponent-head-coach|event-time|start-time):(?<!\\)\(.*?(?<!\\)\))", time_frame)
+                        last_match = re.finditer(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?((?:sub-query|event-sub-query|or-sub-query|or-event-sub-query|day-after-sub-query|day-before-sub-query|day-of-sub-query|game-after-sub-query|game-before-sub-query|season-sub-query|or-season-sub-query|season-after-sub-query|season-before-sub-query|exact-penalty-type|exact-penalty-severity|penalty-type|penalty-severity|w|(?:playing|starting)-with|a|(?:playing|starting)-against|(?:playing|starting)-same-game|prv-w|previous-playing-with|prv-a|previous-playing-against|upc-w|upcoming-playing-with|upc-a|upcoming-playing-against|(?:playing|starting)-same-opponents?|(?:playing|starting)-same-dates?|holidays?|dts|dates|arena|exact-arena|stadium|exact-stadium|opponent-city|opponent-exact-city|team-city|team-exact-city|city|exact-city|event-description|exact-event-description|outoor-event|exact-outoor-event|shot-on-first-name|shot-by-first-name|shot-on-last-name|shot-by-last-name|shot-on|shot-by|on-ice-with|on-ice-against|on-line-with|on-line-against|assisted-on-first-name|assisted-on-last-name|assisted-on|assisted-with|points-with|assisted-by|primary-assisted-on|primary-assisted-with|primary-points-with|primary-assisted-by|hit-on|penalty-on|faceoff-against|fight-against|fighting-against|exact-official|exact-referee|exact-linesman|exact-team-head-coach|exact-opponent-head-coach|official|referee|linesman|team-head-coach|opponent-head-coach|event-time|start-time):(?<!\\)\(.*?(?<!\\)\))", time_frame)
                         for m in last_match:
                             qualifier_obj = {}
                             negate_str = m.group(1)
@@ -7550,6 +7552,24 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 qual_str = "on-line-against:"
                                 qual_type = "On Line Against"
                                 extra_stats.add("current-stats")
+                            elif qualifier_str.startswith("assisted-on-first-name:"):
+                                qual_str = "assisted-on-first-name:"
+                                qual_type = "Assisted On First Name"
+                                player_type["da_type"] = {
+                                    "type" : "Skater"
+                                }
+                                extra_stats.add("Assisted On")
+                                extra_stats.add("current-stats")
+                                extra_stats.add("current-stats-zone")
+                            elif qualifier_str.startswith("assisted-on-last-name:"):
+                                qual_str = "assisted-on-last-name:"
+                                qual_type = "Assisted On Last Name"
+                                player_type["da_type"] = {
+                                    "type" : "Skater"
+                                }
+                                extra_stats.add("Assisted On")
+                                extra_stats.add("current-stats")
+                                extra_stats.add("current-stats-zone")
                             elif qualifier_str.startswith("assisted-on:"):
                                 qual_str = "assisted-on:"
                                 qual_type = "Assisted On"
@@ -14891,7 +14911,7 @@ def determine_raw_str(subbb_frame):
                         else:
                             query = player["query"].replace("Query: ", "", 1)
                             qual_str += player_url_str + ((" (" + query + ")") if query and player["is_raw_query"] else "")
-                elif qualifier == "Shot On First Name" or qualifier == "Shot By First Name" or qualifier == "Shot On Last Name" or qualifier == "Shot By Last Name":
+                elif qualifier == "Shot On First Name" or qualifier == "Shot By First Name" or qualifier == "Assisted On First Name" or qualifier == "Shot On Last Name" or qualifier == "Shot By Last Name" or qualifier == "Assisted On Last Name":
                     for player in qual_obj["values"]:
                         if not sub_sub_first:
                             qual_str += " + "
@@ -22165,7 +22185,6 @@ def get_shift_data(game_id, player_team_id, missing_games, s):
 def get_html_shift_data(og_game_id, is_home, game_data, player_data, row_year, s):
     # profile = cProfile.Profile()
     # profile.enable()
-    num_events = 0
     shift_data = {}
     player_shift_data = {}
     num_on_ice_data = {}
@@ -22254,7 +22273,6 @@ def get_html_shift_data(og_game_id, is_home, game_data, player_data, row_year, s
                         current_player_id = game_data["opp_numbers"].get(player_number, None)
             elif len(columns) == 6:
                 if row.get("class") and ("evenColor" in row.get("class") or "oddColor" in row.get("class")) and current_player_id:
-                    num_events += 1
                     period_str = str(columns[1].text).strip()
                     if period_str == "OT":
                         period = 4
@@ -26202,6 +26220,44 @@ def perform_metadata_qual(event_name, goal_event, qualifiers, player_game_info, 
 
         if not perform_sub_metadata_qual(goal_event, "oppNationality", qualifiers["Shot By Nationality"], player_game_info, year):
             return False
+
+    if "Assisted On First Name" in qualifiers:
+        if event_name != "assist":
+            return False
+
+        for qual_object in qualifiers["Assisted On First Name"]:
+            has_match = False
+            for player in qual_object["values"]:
+                name = re.sub(r"\s+", " ", re.sub(r"[^\w\-\s.']", "", player_game_info["player_first_name_map"][goal_event["scorer"]])).strip()
+                player = re.sub(r"\s+", " ", re.sub(r"[^\w\-\s.']", "", player)).strip()
+                if name.lower() == player:
+                    has_match = True
+
+            if qual_object["negate"]:
+                if has_match:
+                    return False
+            else:
+                if not has_match:
+                    return False
+    
+    if "Assisted On Last Name" in qualifiers:
+        if event_name != "assist":
+            return False
+
+        for qual_object in qualifiers["Assisted On Last Name"]:
+            has_match = False
+            for player in qual_object["values"]:
+                name = re.sub(r"\s+", " ", re.sub(r"[^\w\-\s.']", "", player_game_info["player_last_name_map"][goal_event["scorer"]])).strip()
+                player = re.sub(r"\s+", " ", re.sub(r"[^\w\-\s.']", "", player)).strip()
+                if name.lower() == player:
+                    has_match = True
+
+            if qual_object["negate"]:
+                if has_match:
+                    return False
+            else:
+                if not has_match:
+                    return False
 
     if "Event Time" in qualifiers:
         if "event_time" not in goal_event:
