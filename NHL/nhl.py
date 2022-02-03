@@ -21058,7 +21058,7 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                         "oppFirstName" : None if not goalie else game_data["player_first_name_map"][goalie],
                         "oppLastName" : None if not goalie else game_data["player_last_name_map"][goalie],
                         "oppBirthCountry" : None if not goalie or goalie not in game_data["player_birth_country_map"] else game_data["player_birth_country_map"][goalie],
-                        "oppNationality" : None if not goali or goalie not in game_data["player_nationality_map"] else game_data["player_nationality_map"][goalie],
+                        "oppNationality" : None if not goalie or goalie not in game_data["player_nationality_map"] else game_data["player_nationality_map"][goalie],
                         "shotType" : scoring_play["result"]["secondaryType"] if "secondaryType" in scoring_play["result"] else None
                     }})
                 elif player_saved:
