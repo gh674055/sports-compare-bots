@@ -40292,7 +40292,7 @@ def calculate_advanced_stats(data, all_rows, player_type, time_frames):
                 except ZeroDivisionError:
                     pass
 
-                if int(year) >= 1910 and (sleague == "NL" or int(year) >= 1913):
+                if int(year) >= 1910 and (sleague == "NL" or int(year) >= 1913) and yearly_woba_stats[year][team]["PA"]:
                     try:
                         bbmk_per = bb_per - k_per
                         if bbmk_per:
@@ -40802,14 +40802,16 @@ def calculate_advanced_stats(data, all_rows, player_type, time_frames):
                         except ZeroDivisionError:
                             pass
 
-                        try:
-                            kmbb_per = k_per - bb_per
-                            if kmbb_per:
-                                league_kmbb_per = league_k_per - league_bb_per
-                                kmbb_per_plus = 100 + (((kmbb_per - league_kmbb_per) / abs(league_kmbb_per)) * 100)
-                                total_KMBBPlus += kmbb_per_plus * (wrcplus_weight / total_wrcplus_weight)
-                        except ZeroDivisionError:
-                            pass
+
+                        if yearly_woba_stats[year][team]["BF"]:
+                            try:
+                                kmbb_per = k_per - bb_per
+                                if kmbb_per:
+                                    league_kmbb_per = league_k_per - league_bb_per
+                                    kmbb_per_plus = 100 + (((kmbb_per - league_kmbb_per) / abs(league_kmbb_per)) * 100)
+                                    total_KMBBPlus += kmbb_per_plus * (wrcplus_weight / total_wrcplus_weight)
+                            except ZeroDivisionError:
+                                pass
             
             data["HR%+"] = total_HRPlus
             data["SO%+"] = total_KPlus
