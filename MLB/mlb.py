@@ -26397,7 +26397,7 @@ def get_team_schedule(player_data, seasons, needs_reg_season, needs_playoffs, ne
                                 games = postseason_game_by_date.find_all("p", {"class" : "game"})
                                 for game in games:
                                     links = game.find_all("a")
-                                    if not links or links[2].find(text=True) == "Preview":
+                                    if len(links) != 3 or links[2].find(text=True) == "Preview":
                                         is_preview = True
                                         break
                                 if is_preview:
