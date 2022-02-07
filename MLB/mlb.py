@@ -1531,6 +1531,7 @@ headers = {
         "Fld%" : {
             "positive" : True,
             "round" : "percent",
+            "display" : False,
             "type" : "Defense/Value (Baseball Reference)"
         },
         "Rtot" : {
@@ -1559,7 +1560,6 @@ headers = {
         },
         "Rfield" : {
             "positive" : True,
-            "display" : False,
             "type" : "Defense/Value (Baseball Reference)"
         },
         "WAAPos" : {
@@ -1704,7 +1704,6 @@ headers = {
         },
         "Rfield/Yr" : {
             "positive" : True,
-            "display" : False,
             "round" : 1,
             "type" : "Defense/Value (Baseball Reference)"
         },
@@ -3864,6 +3863,7 @@ headers = {
         "Fld%" : {
             "positive" : True,
             "round" : "percent",
+            "display" : False,
             "type" : "Defense/Value (Baseball Reference)"
         },
         "Rdrs" : {
