@@ -1551,7 +1551,6 @@ headers = {
         },
         "Rbat" : {
             "positive" : True,
-            "display" : False,
             "type" : "Defense/Value (Baseball Reference)"
         },
         "Rbaser" : {
@@ -1695,7 +1694,6 @@ headers = {
         },
         "Rbat/Yr" : {
             "positive" : True,
-            "display" : False,
             "round" : 1,
             "type" : "Defense/Value (Baseball Reference)"
         },
@@ -1792,6 +1790,7 @@ headers = {
             "positive" : False,
             "round" : "dollar",
             "skipzero" : True,
+            "display" : False,
             "type" : "Defense/Value (Baseball Reference)",
             "display-value" : "$",
         },
@@ -1799,6 +1798,7 @@ headers = {
             "positive" : False,
             "round" : "dollar",
             "skipzero" : True,
+            "display" : False,
             "type" : "Defense/Value (Baseball Reference)"
         },
         "$/oWAR" : {
@@ -4084,6 +4084,7 @@ headers = {
         "Salary" : {
             "positive" : False,
             "skipzero" : True,
+            "display" : False,
             "round" : "dollar",
             "type" : "Defense/Value (Baseball Reference)",
             "display-value" : "$",
@@ -4091,6 +4092,7 @@ headers = {
         "$/Yr" : {
             "positive" : False,
             "skipzero" : True,
+            "display" : False,
             "round" : "dollar",
             "type" : "Defense/Value (Baseball Reference)"
         },
