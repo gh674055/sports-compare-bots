@@ -42799,7 +42799,7 @@ def handle_table_data(over_header, player_data, player_datas, player_type, heade
             if header == "G":
                 if player_data["stat_values"]["any_missing_games"]:
                     value += "*"
-            elif header in ("wOBA", "wSB", "wRC", "wRAA", "BRuns", "FIP") or header.endswith("-") or (header.endswith("+") and not header == "OPS+"):
+            elif header in ("wOBA", "wSB", "wRC", "wRAA", "BRuns", "FIP") or header.endswith("-") or (header.endswith("+") and not header == "OPS+" and not header == "ERA+"):
                 if not has_any_park_factors:
                     return "N/A"
                 
