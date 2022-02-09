@@ -20528,6 +20528,11 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                 game_data["is_older_html_stats"] = True
                 game_data["is_href_stats"] = True
 
+    if not game_data["is_older_html_stats"] and has_shift_quals(time_frame["qualifiers"]):
+        missing_games = True
+        game_data["missing_data"] = True
+        return game_data, row_data, missing_games
+
     if row_data["NHLGameLink"] in missing_event_data:
         for scoring_play in scoring_plays:
             if "eventIdx" in scoring_play["about"] and scoring_play["about"]["eventIdx"] in missing_event_data[row_data["NHLGameLink"]]:
