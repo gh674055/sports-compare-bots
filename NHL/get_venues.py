@@ -85,6 +85,9 @@ extra_names = {
     ],
     "great-western-forum" : [
         "The Forum"
+    ],
+    "staples-center" : [
+        "Crypto.com Arena"
     ]
 }
 

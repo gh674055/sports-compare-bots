@@ -5179,6 +5179,7 @@ qualifier_map = {
     "Month" : {},
     "Stadium" : {},
     "Exact Stadium" : {},
+    "Franchise Stadium" : {},
     "City" : {},
     "Exact City" : {},
     "State" : {},

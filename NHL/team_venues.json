@@ -1213,7 +1213,8 @@
         "state": "CA",
         "time_zone": "America/Los_Angeles",
         "venues": [
-            "STAPLES Center"
+            "STAPLES Center",
+            "Crypto.com Arena"
         ]
     },
     "t-mobile-arena": {
