@@ -26471,7 +26471,7 @@ def get_team_schedule(player_data, seasons, needs_reg_season, needs_playoffs, ne
                                             new_season_obj["playoffs"].append(row_data)
             
             if needs_time and is_playoffs:
-                get_href_mlb_game_stats(new_season_obj["playoffs"], {}, player_data, False, player_type, set(), s)
+                get_href_mlb_game_stats(new_season_obj["playoffs"], s)
 
             new_season_obj["playoffs"] = sorted(new_season_obj["playoffs"], key=lambda row: row["DateTime"])
 
@@ -35653,30 +35653,9 @@ def get_mlb_game_stats(all_rows, has_count_stat, qualifiers, games_to_skip, play
     return sorted(new_rows, key=lambda row: row["DateTime"]), count_info["missing_games"]
 
 
-def get_href_mlb_game_stats(all_rows, qualifiers, player_data, missing_games, player_type, extra_stats, s):
-    new_rows = []
-
-    count_info = {
-        "current_percent" : 10,
-        "count" : 1,
-        "total_count" : len(all_rows),
-        "missing_games" : missing_games,
-        "exception" : None
-    }
-    new_rows = []
-
-    if not count_info["total_count"]:
-        return new_rows, count_info["missing_games"]
-
-    with ThreadPoolExecutor(max_workers=5) as sub_executor:
-        for index, row_data in enumerate(sorted(all_rows, key=lambda row: row["DateTime"])):
-            future = sub_executor.submit(get_href_game_data, index, player_data, row_data, player_type, qualifiers, s)
-            future.add_done_callback(functools.partial(href_result_call_back, qualifiers, count_info, new_rows, player_type, player_data, row_data, extra_stats))
-    
-    if count_info["exception"]:
-        raise count_info["exception"]
-
-    return sorted(new_rows, key=lambda row: row["DateTime"]), count_info["missing_games"]
+def get_href_mlb_game_stats(all_rows, s):
+    for index, row_data in enumerate(sorted(all_rows, key=lambda row: row["DateTime"])):
+        get_href_game_data(row_data, s)
 
 def get_mlb_game_stats_single_thread(all_rows, has_count_stat, qualifiers, games_to_skip, player_data, missing_games, player_type, extra_stats, s):
     logger.info("#" + str(threading.get_ident()) + "#   " + player_data["id"] + " starting game data")
@@ -36788,47 +36767,6 @@ def result_call_back(qualifiers, count_info, new_rows, player_type, player_data,
             if count_info["total_count"] >= 10 and percent_complete >= count_info["current_percent"]:
                 if needs_plays:
                     logger.info("#" + str(threading.get_ident()) + "#   " + player_data["id"] + " game data " + str(count_info["current_percent"]) + "% complete")
-                count_info["current_percent"] += 10
-            count_info["count"] += 1
-        except Exception as err:
-            if not count_info["exception"]:
-                count_info["exception"] = err
-        return
-    # finally:
-    #     ps = pstats.Stats(profile)
-    #     ps.sort_stats(pstats.SortKey.TIME)
-    #     ps.print_stats()
-
-
-def href_result_call_back(qualifiers, count_info, new_rows, player_type, player_data, old_row_data, extra_stats, result):
-    # profile = cProfile.Profile()
-    # profile.enable()
-    try:
-        if result.exception():
-            logger.info("Error parsing date " + str(old_row_data["Date"]))
-            if not count_info["exception"]:
-                count_info["exception"] = result.exception()
-            percent_complete = 100 * (count_info["count"] / count_info["total_count"])
-            if count_info["total_count"] >= 10 and percent_complete >= count_info["current_percent"]:
-                count_info["current_percent"] += 10
-            count_info["count"] += 1
-            return
-
-        game_data, row_data, index, sub_missing_games = result.result()
-
-        if handle_href_result_qualifiers(game_data, index, row_data, sub_missing_games, player_type, player_data, qualifiers, count_info, extra_stats)[0]:
-            new_rows.append(row_data)
-
-        percent_complete = 100 * (count_info["count"] / count_info["total_count"])
-        if count_info["total_count"] >= 10 and percent_complete >= count_info["current_percent"]:
-            count_info["current_percent"] += 10
-        count_info["count"] += 1
-    except Exception as err:
-        try:
-            if not count_info["exception"]:
-                count_info["exception"] = err
-            percent_complete = 100 * (count_info["count"] / count_info["total_count"])
-            if count_info["total_count"] >= 10 and percent_complete >= count_info["current_percent"]:
                 count_info["current_percent"] += 10
             count_info["count"] += 1
         except Exception as err:
@@ -39776,21 +39714,13 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
     return game_data, row_data, row_index, missing_games
 
 
-def get_href_game_data(row_index, player_data, row_data, player_type, qualifiers, s):
-    missing_games = False
-    game_data = {
-        "missing_data" : False,
-        "Time" : None
-    }
-    
+def get_href_game_data(row_data, s):    
     #print("https://www.baseball-reference.com" + row["GameLink"])
     try:
         response, player_page_xml = url_request_lxml(s, "https://www.baseball-reference.com" + row_data["GameLink"])
     except urllib.error.HTTPError as err:
         if err.status == 404:
-            missing_games = True
-            game_data["missing_data"] = True
-            return game_data, row_data, missing_games
+            return
         else:
             raise
 
@@ -39802,11 +39732,9 @@ def get_href_game_data(row_index, player_data, row_data, player_type, qualifiers
     for scorebox_div in scorebox_divs:
         div_text = str(scorebox_div.text_content()).strip()
         if div_text.startswith("Day Game"):
-            game_data["Time"] = "D"
+            row_data["Time"] = "D"
         elif div_text.startswith("Night Game"):
-            game_data["Time"] = "N"
-        
-    return game_data, row_data, row_index, missing_games
+            row_data["Time"] = "N"
 
 def clear_data(row):
     row["Ing"] = 0
