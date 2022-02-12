@@ -5121,6 +5121,184 @@ league_data_mapping = {
                 "game" : 1913,
                 "season" : 1913
             }
+        },
+        "Inn" : {
+            "FL" : {
+                "inconsistent" : 1914,
+                "inconsistent-game" : 1914
+            },
+            "NN2-NAL" : {
+                "game" : 1947,
+                "season" : 1947,
+                "inconsistent" : 1933,
+                "inconsistent-game" : 1933
+            },
+            "NSL" : {
+                "game" : 1933,
+                "season" : 1933
+            },
+            "ECL" : {
+                "game" : 1926,
+                "season" : 1926,
+                "inconsistent" : 1923,
+                "inconsistent-game" : 1923
+            },
+            "NNL" : {
+                "game" : 1931,
+                "season" : 1931,
+                "inconsistent" : 1920,
+                "inconsistent-game" : 1920
+            }
+        },
+        "A" : {
+            "NN2-NAL" : {
+                "game" : 1947,
+                "season" : 1947,
+                "inconsistent" : 1933,
+                "inconsistent-game" : 1933
+            },
+            "NSL" : {
+                "game" : 1933,
+                "season" : 1933
+            },
+            "ECL" : {
+                "game" : 1926,
+                "season" : 1926,
+                "inconsistent" : 1923,
+                "inconsistent-game" : 1923
+            },
+            "NNL" : {
+                "game" : 1931,
+                "season" : 1931,
+                "inconsistent" : 1920,
+                "inconsistent-game" : 1920
+            }
+        },
+        "E" : {
+            "NN2-NAL" : {
+                "game" : 1947,
+                "season" : 1947,
+                "inconsistent" : 1933,
+                "inconsistent-game" : 1933
+            },
+            "NSL" : {
+                "game" : 1933,
+                "season" : 1933
+            },
+            "ECL" : {
+                "game" : 1926,
+                "season" : 1926,
+                "inconsistent" : 1923,
+                "inconsistent-game" : 1923
+            },
+            "NNL" : {
+                "game" : 1931,
+                "season" : 1931,
+                "inconsistent" : 1920,
+                "inconsistent-game" : 1920
+            }
+        },
+        "Fld%" : {
+            "NN2-NAL" : {
+                "game" : 1947,
+                "season" : 1947,
+                "inconsistent" : 1933,
+                "inconsistent-game" : 1933
+            },
+            "NSL" : {
+                "game" : 1933,
+                "season" : 1933
+            },
+            "ECL" : {
+                "game" : 1926,
+                "season" : 1926,
+                "inconsistent" : 1923,
+                "inconsistent-game" : 1923
+            },
+            "NNL" : {
+                "game" : 1931,
+                "season" : 1931,
+                "inconsistent" : 1920,
+                "inconsistent-game" : 1920
+            }
+        },
+        "PO" : {
+            "NN2-NAL" : {
+                "game" : 1947,
+                "season" : 1947,
+                "inconsistent" : 1933,
+                "inconsistent-game" : 1933
+            },
+            "NSL" : {
+                "game" : 1933,
+                "season" : 1933
+            },
+            "ECL" : {
+                "game" : 1926,
+                "season" : 1926,
+                "inconsistent" : 1923,
+                "inconsistent-game" : 1923
+            },
+            "NNL" : {
+                "game" : 1931,
+                "season" : 1931,
+                "inconsistent" : 1920,
+                "inconsistent-game" : 1920
+            }
+        },
+        "PB" : {
+             "NN2-NAL" : {
+                "game" : 1947,
+                "season" : 1947,
+                "inconsistent" : 1933,
+                "inconsistent-game" : 1933
+            },
+            "NSL" : {
+                "game" : 1933,
+                "season" : 1933
+            },
+            "ECL" : {
+                "game" : 1926,
+                "season" : 1926,
+                "inconsistent" : 1923,
+                "inconsistent-game" : 1923
+            },
+            "NNL" : {
+                "game" : 1931,
+                "season" : 1931,
+                "inconsistent" : 1920,
+                "inconsistent-game" : 1920
+            }
+        },
+        "FldStolenBases" : {
+            "NN2-NAL" : {
+                "game" : 1947,
+                "season" : 1947,
+                "inconsistent" : 1933,
+                "inconsistent-game" : 1933
+            },
+            "NNL" : {
+                "game" : 1931,
+                "season" : 1931,
+                "inconsistent" : 1920,
+                "inconsistent-game" : 1920
+            },
+            "ECL-NSL" : {
+                "game" : 1926,
+                "season" : 1926
+            }
+        },
+        "FldCaughtStealing" : {
+             "NNL-ECL-NSL-ANL-EWL-NN2-NAL" : {
+                "game" : 1949,
+                "season" : 1949
+            }
+        },
+        "FldCaughtStealing%" : {
+             "NNL-ECL-NSL-ANL-EWL-NN2-NAL" : {
+                "game" : 1949,
+                "season" : 1949
+            }
         }
     },
     "Pitcher" : {
@@ -5392,6 +5570,154 @@ league_data_mapping = {
             "AA-UA-PL-FL-NNL-ECL-ANL-NSL-EWL-NN2-NAL" : {
                 "game" : 1949,
                 "season" : 1949
+            }
+        },
+        "Inn" : {
+            "FL" : {
+                "inconsistent" : 1914,
+                "inconsistent-game" : 1914
+            },
+            "NN2-NAL" : {
+                "game" : 1947,
+                "season" : 1947,
+                "inconsistent" : 1933,
+                "inconsistent-game" : 1933
+            },
+            "NSL" : {
+                "game" : 1933,
+                "season" : 1933
+            },
+            "ECL" : {
+                "game" : 1926,
+                "season" : 1926,
+                "inconsistent" : 1923,
+                "inconsistent-game" : 1923
+            },
+            "NNL" : {
+                "game" : 1931,
+                "season" : 1931,
+                "inconsistent" : 1920,
+                "inconsistent-game" : 1920
+            }
+        },
+        "A" : {
+            "NN2-NAL" : {
+                "game" : 1947,
+                "season" : 1947,
+                "inconsistent" : 1933,
+                "inconsistent-game" : 1933
+            },
+            "NSL" : {
+                "game" : 1933,
+                "season" : 1933
+            },
+            "ECL" : {
+                "game" : 1926,
+                "season" : 1926,
+                "inconsistent" : 1923,
+                "inconsistent-game" : 1923
+            },
+            "NNL" : {
+                "game" : 1931,
+                "season" : 1931,
+                "inconsistent" : 1920,
+                "inconsistent-game" : 1920
+            }
+        },
+        "E" : {
+            "NN2-NAL" : {
+                "game" : 1947,
+                "season" : 1947,
+                "inconsistent" : 1933,
+                "inconsistent-game" : 1933
+            },
+            "NSL" : {
+                "game" : 1933,
+                "season" : 1933
+            },
+            "ECL" : {
+                "game" : 1926,
+                "season" : 1926,
+                "inconsistent" : 1923,
+                "inconsistent-game" : 1923
+            },
+            "NNL" : {
+                "game" : 1931,
+                "season" : 1931,
+                "inconsistent" : 1920,
+                "inconsistent-game" : 1920
+            }
+        },
+        "Fld%" : {
+            "NN2-NAL" : {
+                "game" : 1947,
+                "season" : 1947,
+                "inconsistent" : 1933,
+                "inconsistent-game" : 1933
+            },
+            "NSL" : {
+                "game" : 1933,
+                "season" : 1933
+            },
+            "ECL" : {
+                "game" : 1926,
+                "season" : 1926,
+                "inconsistent" : 1923,
+                "inconsistent-game" : 1923
+            },
+            "NNL" : {
+                "game" : 1931,
+                "season" : 1931,
+                "inconsistent" : 1920,
+                "inconsistent-game" : 1920
+            }
+        },
+        "PO" : {
+            "NN2-NAL" : {
+                "game" : 1947,
+                "season" : 1947,
+                "inconsistent" : 1933,
+                "inconsistent-game" : 1933
+            },
+            "NSL" : {
+                "game" : 1933,
+                "season" : 1933
+            },
+            "ECL" : {
+                "game" : 1926,
+                "season" : 1926,
+                "inconsistent" : 1923,
+                "inconsistent-game" : 1923
+            },
+            "NNL" : {
+                "game" : 1931,
+                "season" : 1931,
+                "inconsistent" : 1920,
+                "inconsistent-game" : 1920
+            }
+        },
+        "PB" : {
+             "NN2-NAL" : {
+                "game" : 1947,
+                "season" : 1947,
+                "inconsistent" : 1933,
+                "inconsistent-game" : 1933
+            },
+            "NSL" : {
+                "game" : 1933,
+                "season" : 1933
+            },
+            "ECL" : {
+                "game" : 1926,
+                "season" : 1926,
+                "inconsistent" : 1923,
+                "inconsistent-game" : 1923
+            },
+            "NNL" : {
+                "game" : 1931,
+                "season" : 1931,
+                "inconsistent" : 1920,
+                "inconsistent-game" : 1920
             }
         }
     }
@@ -15177,8 +15503,7 @@ def handle_player_data(player_data, time_frame, player_type, player_page, valid_
         else:
             player_data["mlb_id"] = int(player_link.split('/')[-1])
             player_data["player_link"] = player_link
-            if "hide-live" not in extra_stats and season_in_progress:
-                live_game = get_live_game(player_link, player_data, player_type, time_frame, s)
+            live_game = get_live_game(player_link, player_data, player_type, time_frame, "hide-live" not in extra_stats and season_in_progress, s)
 
         if "Rookie" in time_frame["qualifiers"]:
             determine_rookie_years(player_page, player_type, time_frame["qualifiers"]["Rookie"])
@@ -16123,12 +16448,15 @@ def handle_date_row_data(all_rows):
             if row_data["Upcoming Row"]["Year"] != row_data["Year"]:
                 row_data["Upcoming Row"] = None
 
-def get_live_game(player_link, player_data, player_type, time_frame, s):
+def get_live_game(player_link, player_data, player_type, time_frame, do_live, s):
     player_id = int(player_link.split('/')[-1])
     sub_data = url_request_json(s, "https://statsapi.mlb.com" + player_link + "?hydrate=currentTeam,transactions")
 
     if "transactions" in sub_data["people"][0]:
         player_data["transactions"] = sub_data["people"][0]["transactions"]
+
+    if not do_live:
+        return
 
     if "currentTeam" not in sub_data["people"][0] or not sub_data["people"][0]["active"]:
         return
@@ -42040,7 +42368,7 @@ def get_reddit_player_table(player_datas, player_type, debug_mode, original_comm
                 if "advanced-runner" in extra_stats:
                     if header == "BQS" or header == "IS" or header == "IR" or header == "IS%":
                         override_show = True
-
+                
                 if "for-pos" in all_headers[over_header][header]:
                     for player_data in player_datas:
                         if set(all_headers[over_header][header]["for-pos"]) & set(player_data["ind_type"]):
@@ -43004,6 +43332,8 @@ def is_invalid_stat(stat, player_type, data, count_inconsistent):
             if stat_obj_to_use:
                 date_to_use = None
                 if isinstance(date_start, int):
+                    if stat == "Inn" and date_start == 1933:
+                        print(stat_obj_to_use)
                     if "season" in stat_obj_to_use and date_start < stat_obj_to_use["season"]:
                         date_to_use = stat_obj_to_use["season"]
                     elif "season-np" in stat_obj_to_use and date_start < stat_obj_to_use["season-np"]:
@@ -43028,6 +43358,8 @@ def is_invalid_stat(stat, player_type, data, count_inconsistent):
                     elif count_inconsistent and "inconsistent-game" in stat_obj_to_use and (date_start if isinstance(date_start, int) else date_start.year) < stat_obj_to_use["inconsistent-game"]:
                         date_to_use = stat_obj_to_use["inconsistent-game"]
                 
+                if stat == "Inn" and date_start == 1933:
+                    print(date_to_use)
                 if date_to_use:
                     if sleague not in invalid_data or date_to_use < invalid_data[sleague]:
                         invalid_data[sleague] = date_to_use
