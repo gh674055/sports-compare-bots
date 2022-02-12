@@ -4798,10 +4798,10 @@ league_data_mapping = {
                 "game" : 1949
             },
             "NN2-NAL" : {
-                "game" : 1944,
-                "season" : 1944,
-                "inconsistent" : 1943,
-                "inconsistent-game" : 1943
+                "game" : 1943,
+                "season" : 1943,
+                "inconsistent" : 1944,
+                "inconsistent-game" : 1944
             }
         },
         "SB" : {
@@ -4822,16 +4822,16 @@ league_data_mapping = {
                 "season" : 1949
             },
             "ECL" : {
-                "game" : 1929,
-                "season" : 1929,
-                "inconsistent" : 1926,
-                "inconsistent-game" : 1926
+                "game" : 1926,
+                "season" : 1926,
+                "inconsistent" : 1929,
+                "inconsistent-game" : 1929
             },
             "NAL" : {
-                "game" : 1946,
-                "season" : 1946,
-                "inconsistent" : 1945,
-                "inconsistent-game" : 1945
+                "game" : 1945,
+                "season" : 1945,
+                "inconsistent" : 1946,
+                "inconsistent-game" : 1946
             }
         },
         "NS" : {
@@ -4840,16 +4840,16 @@ league_data_mapping = {
                 "season" : 1949
             },
             "ECL" : {
-                "game" : 1929,
-                "season" : 1929,
-                "inconsistent" : 1926,
-                "inconsistent-game" : 1926
+                "game" : 1926,
+                "season" : 1926,
+                "inconsistent" : 1929,
+                "inconsistent-game" : 1929
             },
             "NAL" : {
-                "game" : 1946,
-                "season" : 1946,
-                "inconsistent" : 1945,
-                "inconsistent-game" : 1945
+                "game" : 1945,
+                "season" : 1945,
+                "inconsistent" : 1946,
+                "inconsistent-game" : 1946
             }
         },
         "SB%" : {
@@ -4858,16 +4858,16 @@ league_data_mapping = {
                 "season" : 1949
             },
             "ECL" : {
-                "game" : 1929,
-                "season" : 1929,
-                "inconsistent" : 1926,
-                "inconsistent-game" : 1926
+                "game" : 1926,
+                "season" : 1926,
+                "inconsistent" : 1929,
+                "inconsistent-game" : 1929
             },
             "NAL" : {
-                "game" : 1946,
-                "season" : 1946,
-                "inconsistent" : 1945,
-                "inconsistent-game" : 1945
+                "game" : 1945,
+                "season" : 1945,
+                "inconsistent" : 1946,
+                "inconsistent-game" : 1946
             }
         },
         "wSB" : {
@@ -4876,16 +4876,16 @@ league_data_mapping = {
                 "season" : 1949
             },
             "ECL" : {
-                "game" : 1929,
-                "season" : 1929,
-                "inconsistent" : 1926,
-                "inconsistent-game" : 1926
+                "game" : 1926,
+                "season" : 1926,
+                "inconsistent" : 1929,
+                "inconsistent-game" : 1929
             },
             "NAL" : {
-                "game" : 1946,
-                "season" : 1946,
-                "inconsistent" : 1945,
-                "inconsistent-game" : 1945
+                "game" : 1945,
+                "season" : 1945,
+                "inconsistent" : 1946,
+                "inconsistent-game" : 1946
             }
         },
         "IBB" : {
@@ -4894,10 +4894,10 @@ league_data_mapping = {
                 "season" : 1949
             },
             "NN2-NAL" : {
-                "game" : 1946,
-                "season" : 1946,
-                "inconsistent" : 1945,
-                "inconsistent-game" : 1945
+                "game" : 1945,
+                "season" : 1945,
+                "inconsistent" : 1946,
+                "inconsistent-game" : 1946
             }
         },
         "HBP" : {
@@ -4910,118 +4910,118 @@ league_data_mapping = {
                 "inconsistent-game" : 1924
             },
             "NN2-NAL" : {
-                "game" : 1944,
-                "season" : 1944,
-                "inconsistent" : 1943,
-                "inconsistent-game" : 1943
+                "game" : 1943,
+                "season" : 1943,
+                "inconsistent" : 1944,
+                "inconsistent-game" : 1944
             }
         },
         "SO" : {
             "AA-UA" : {
-                "game" : 1891,
-                "season" : 1891,
-                "inconsistent" : 1890,
-                "inconsistent-game" : 1890
+                "game" : 1890,
+                "season" : 1890,
+                "inconsistent" : 1891,
+                "inconsistent-game" : 1891
             },
             "NNL-ANL-NSL-EWL-NN2-NAL" : {
                 "game" : 1949,
                 "season" : 1949
             },
             "ECL" : {
-                "game" : 1927,
-                "season" : 1927,
-                "inconsistent" : 1926,
-                "inconsistent-game" : 1926
+                "game" : 1926,
+                "season" : 1926,
+                "inconsistent" : 1927,
+                "inconsistent-game" : 1927
             }
         },
         "SO/162" : {
             "AA-UA" : {
-                "game" : 1891,
-                "season" : 1891,
-                "inconsistent" : 1890,
-                "inconsistent-game" : 1890
+                "game" : 1890,
+                "season" : 1890,
+                "inconsistent" : 1891,
+                "inconsistent-game" : 1891
             },
             "NNL-ANL-NSL-EWL-NN2-NAL" : {
                 "game" : 1949,
                 "season" : 1949
             },
             "ECL" : {
-                "game" : 1927,
-                "season" : 1927,
-                "inconsistent" : 1926,
-                "inconsistent-game" : 1926
+                "game" : 1926,
+                "season" : 1926,
+                "inconsistent" : 1927,
+                "inconsistent-game" : 1927
             }
         },
         "SO%" : {
             "AA-UA" : {
-                "game" : 1891,
-                "season" : 1891,
-                "inconsistent" : 1890,
-                "inconsistent-game" : 1890
+                "game" : 1890,
+                "season" : 1890,
+                "inconsistent" : 1891,
+                "inconsistent-game" : 1891
             },
             "NNL-ANL-NSL-EWL-NN2-NAL" : {
                 "game" : 1949,
                 "season" : 1949
             },
             "ECL" : {
-                "game" : 1927,
-                "season" : 1927,
-                "inconsistent" : 1926,
-                "inconsistent-game" : 1926
+                "game" : 1926,
+                "season" : 1926,
+                "inconsistent" : 1927,
+                "inconsistent-game" : 1927
             }
         },
         "BB-SO%" : {
-            "AA" : {
-                "game" : 1891,
-                "season" : 1891,
-                "inconsistent" : 1890,
-                "inconsistent-game" : 1890
+            "AA-UA" : {
+                "game" : 1890,
+                "season" : 1890,
+                "inconsistent" : 1891,
+                "inconsistent-game" : 1891
             },
             "NNL-ANL-NSL-EWL-NN2-NAL" : {
                 "game" : 1949,
                 "season" : 1949
             },
             "ECL" : {
-                "game" : 1927,
-                "season" : 1927,
-                "inconsistent" : 1926,
-                "inconsistent-game" : 1926
+                "game" : 1926,
+                "season" : 1926,
+                "inconsistent" : 1927,
+                "inconsistent-game" : 1927
             }
         },
         "BB/SO" : {
             "AA-UA" : {
-                "game" : 1891,
-                "season" : 1891,
-                "inconsistent" : 1890,
-                "inconsistent-game" : 1890
+                "game" : 1890,
+                "season" : 1890,
+                "inconsistent" : 1891,
+                "inconsistent-game" : 1891
             },
             "NNL-ANL-NSL-EWL-NN2-NAL" : {
                 "game" : 1949,
                 "season" : 1949
             },
             "ECL" : {
-                "game" : 1927,
-                "season" : 1927,
-                "inconsistent" : 1926,
-                "inconsistent-game" : 1926
+                "game" : 1926,
+                "season" : 1926,
+                "inconsistent" : 1927,
+                "inconsistent-game" : 1927
             }
         },
         "TTO%" : {
             "AA-UA" : {
-                "game" : 1891,
-                "season" : 1891,
-                "inconsistent" : 1890,
-                "inconsistent-game" : 1890
+                "game" : 1890,
+                "season" : 1890,
+                "inconsistent" : 1891,
+                "inconsistent-game" : 1891
             },
             "NNL-ANL-NSL-EWL-NN2-NAL" : {
                 "game" : 1949,
                 "season" : 1949
             },
             "ECL" : {
-                "game" : 1927,
-                "season" : 1927,
-                "inconsistent" : 1926,
-                "inconsistent-game" : 1926
+                "game" : 1926,
+                "season" : 1926,
+                "inconsistent" : 1927,
+                "inconsistent-game" : 1927
             }
         },
         "GDP" : {
@@ -5128,160 +5128,160 @@ league_data_mapping = {
                 "inconsistent-game" : 1914
             },
             "NN2-NAL" : {
-                "game" : 1947,
-                "season" : 1947,
-                "inconsistent" : 1933,
-                "inconsistent-game" : 1933
+                "game" : 1933,
+                "season" : 1933,
+                "inconsistent" : 1947,
+                "inconsistent-game" : 1947
             },
             "NSL" : {
                 "game" : 1933,
                 "season" : 1933
             },
             "ECL" : {
-                "game" : 1926,
-                "season" : 1926,
-                "inconsistent" : 1923,
-                "inconsistent-game" : 1923
+                "game" : 1923,
+                "season" : 1923,
+                "inconsistent" : 1926,
+                "inconsistent-game" : 1926
             },
             "NNL" : {
-                "game" : 1931,
-                "season" : 1931,
-                "inconsistent" : 1920,
-                "inconsistent-game" : 1920
+                "game" : 1920,
+                "season" : 1920,
+                "inconsistent" : 1931,
+                "inconsistent-game" : 1931
             }
         },
         "A" : {
             "NN2-NAL" : {
-                "game" : 1947,
-                "season" : 1947,
-                "inconsistent" : 1933,
-                "inconsistent-game" : 1933
+                "game" : 1933,
+                "season" : 1933,
+                "inconsistent" : 1947,
+                "inconsistent-game" : 1947
             },
             "NSL" : {
                 "game" : 1933,
                 "season" : 1933
             },
             "ECL" : {
-                "game" : 1926,
-                "season" : 1926,
-                "inconsistent" : 1923,
-                "inconsistent-game" : 1923
+                "game" : 1923,
+                "season" : 1923,
+                "inconsistent" : 1926,
+                "inconsistent-game" : 1926
             },
             "NNL" : {
-                "game" : 1931,
-                "season" : 1931,
-                "inconsistent" : 1920,
-                "inconsistent-game" : 1920
+                "game" : 1920,
+                "season" : 1920,
+                "inconsistent" : 1931,
+                "inconsistent-game" : 1931
             }
         },
         "E" : {
             "NN2-NAL" : {
-                "game" : 1947,
-                "season" : 1947,
-                "inconsistent" : 1933,
-                "inconsistent-game" : 1933
+                "game" : 1933,
+                "season" : 1933,
+                "inconsistent" : 1947,
+                "inconsistent-game" : 1947
             },
             "NSL" : {
                 "game" : 1933,
                 "season" : 1933
             },
             "ECL" : {
-                "game" : 1926,
-                "season" : 1926,
-                "inconsistent" : 1923,
-                "inconsistent-game" : 1923
+                "game" : 1923,
+                "season" : 1923,
+                "inconsistent" : 1926,
+                "inconsistent-game" : 1926
             },
             "NNL" : {
-                "game" : 1931,
-                "season" : 1931,
-                "inconsistent" : 1920,
-                "inconsistent-game" : 1920
+                "game" : 1920,
+                "season" : 1920,
+                "inconsistent" : 1931,
+                "inconsistent-game" : 1931
             }
         },
         "Fld%" : {
             "NN2-NAL" : {
-                "game" : 1947,
-                "season" : 1947,
-                "inconsistent" : 1933,
-                "inconsistent-game" : 1933
+                "game" : 1933,
+                "season" : 1933,
+                "inconsistent" : 1947,
+                "inconsistent-game" : 1947
             },
             "NSL" : {
                 "game" : 1933,
                 "season" : 1933
             },
             "ECL" : {
-                "game" : 1926,
-                "season" : 1926,
-                "inconsistent" : 1923,
-                "inconsistent-game" : 1923
+                "game" : 1923,
+                "season" : 1923,
+                "inconsistent" : 1926,
+                "inconsistent-game" : 1926
             },
             "NNL" : {
-                "game" : 1931,
-                "season" : 1931,
-                "inconsistent" : 1920,
-                "inconsistent-game" : 1920
+                "game" : 1920,
+                "season" : 1920,
+                "inconsistent" : 1931,
+                "inconsistent-game" : 1931
             }
         },
         "PO" : {
             "NN2-NAL" : {
-                "game" : 1947,
-                "season" : 1947,
-                "inconsistent" : 1933,
-                "inconsistent-game" : 1933
+                "game" : 1933,
+                "season" : 1933,
+                "inconsistent" : 1947,
+                "inconsistent-game" : 1947
             },
             "NSL" : {
                 "game" : 1933,
                 "season" : 1933
             },
             "ECL" : {
-                "game" : 1926,
-                "season" : 1926,
-                "inconsistent" : 1923,
-                "inconsistent-game" : 1923
+                "game" : 1923,
+                "season" : 1923,
+                "inconsistent" : 1926,
+                "inconsistent-game" : 1926
             },
             "NNL" : {
-                "game" : 1931,
-                "season" : 1931,
-                "inconsistent" : 1920,
-                "inconsistent-game" : 1920
+                "game" : 1920,
+                "season" : 1920,
+                "inconsistent" : 1931,
+                "inconsistent-game" : 1931
             }
         },
         "PB" : {
-             "NN2-NAL" : {
-                "game" : 1947,
-                "season" : 1947,
-                "inconsistent" : 1933,
-                "inconsistent-game" : 1933
+            "NN2-NAL" : {
+                "game" : 1933,
+                "season" : 1933,
+                "inconsistent" : 1947,
+                "inconsistent-game" : 1947
             },
             "NSL" : {
                 "game" : 1933,
                 "season" : 1933
             },
             "ECL" : {
-                "game" : 1926,
-                "season" : 1926,
-                "inconsistent" : 1923,
-                "inconsistent-game" : 1923
+                "game" : 1923,
+                "season" : 1923,
+                "inconsistent" : 1926,
+                "inconsistent-game" : 1926
             },
             "NNL" : {
-                "game" : 1931,
-                "season" : 1931,
-                "inconsistent" : 1920,
-                "inconsistent-game" : 1920
+                "game" : 1920,
+                "season" : 1920,
+                "inconsistent" : 1931,
+                "inconsistent-game" : 1931
             }
         },
         "FldStolenBases" : {
             "NN2-NAL" : {
-                "game" : 1947,
-                "season" : 1947,
-                "inconsistent" : 1933,
-                "inconsistent-game" : 1933
+                "game" : 1933,
+                "season" : 1933,
+                "inconsistent" : 1947,
+                "inconsistent-game" : 1947
             },
             "NNL" : {
-                "game" : 1931,
-                "season" : 1931,
-                "inconsistent" : 1920,
-                "inconsistent-game" : 1920
+                "game" : 1920,
+                "season" : 1920,
+                "inconsistent" : 1931,
+                "inconsistent-game" : 1931
             },
             "ECL-NSL" : {
                 "game" : 1926,
@@ -5344,16 +5344,16 @@ league_data_mapping = {
                 "season" : 1949
             },
             "NN2" : {
-                "game" : 1949,
-                "season" : 1949,
-                "inconsistent" : 1937,
-                "inconsistent-game" : 1937
+                "game" : 1937,
+                "season" : 1937,
+                "inconsistent" : 1949,
+                "inconsistent-game" : 1949
             },
             "NAL" : {
-                "game" : 1947,
-                "season" : 1947,
-                "inconsistent" : 1937,
-                "inconsistent-game" : 1937
+                "game" : 1937,
+                "season" : 1937,
+                "inconsistent" : 1947,
+                "inconsistent-game" : 1947
             }
         },
         "HBP" : {
@@ -5382,20 +5382,20 @@ league_data_mapping = {
                 "inconsistent-game" : 1923
             },
             "NNL" : {
-                "game" : 1931,
-                "season" : 1931,
-                "inconsistent" : 1920,
-                "inconsistent-game" : 1920
+                "game" : 1920,
+                "season" : 1920,
+                "inconsistent" : 1931,
+                "inconsistent-game" : 1931
             },
             "NSL" : {
                 "game" : 1949,
                 "season" : 1949
             },
             "NN2-NAL" : {
-                "game" : 1947,
-                "season" : 1947,
-                "inconsistent" : 1933,
-                "inconsistent-game" : 1933
+                "game" : 1933,
+                "season" : 1933,
+                "inconsistent" : 1947,
+                "inconsistent-game" : 1947
             }
         },
         "1B" : {
@@ -5418,32 +5418,32 @@ league_data_mapping = {
         },
         "HR" : {
             "NNL" : {
-                "game" : 1931,
-                "season" : 1931,
-                "inconsistent" : 1923,
-                "inconsistent-game" : 1923
+                "game" : 1923,
+                "season" : 1923,
+                "inconsistent" : 1931,
+                "inconsistent-game" : 1931
             },
             "ECL" : {
-                "game" : 1926,
-                "season" : 1926,
-                "inconsistent" : 1923,
-                "inconsistent-game" : 1923
+                "game" : 1923,
+                "season" : 1923,
+                "inconsistent" : 1926,
+                "inconsistent-game" : 1926
             },
             "NSL" : {
                 "game" : 1949,
                 "season" : 1949
             },
             "NN2" : {
-                "game" : 1947,
-                "season" : 1947,
-                "inconsistent" : 1933,
-                "inconsistent-game" : 1933
+                "game" : 1933,
+                "season" : 1933,
+                "inconsistent" : 1947,
+                "inconsistent-game" : 1947
             },
             "NAL" : {
-                "game" : 1947,
-                "season" : 1947,
-                "inconsistent" : 1937,
-                "inconsistent-game" : 1937
+                "game" : 1937,
+                "season" : 1937,
+                "inconsistent" : 1947,
+                "inconsistent-game" : 1947
             }
         },
         "TB" : {
@@ -5578,146 +5578,122 @@ league_data_mapping = {
                 "inconsistent-game" : 1914
             },
             "NN2-NAL" : {
-                "game" : 1947,
-                "season" : 1947,
-                "inconsistent" : 1933,
-                "inconsistent-game" : 1933
+                "game" : 1933,
+                "season" : 1933,
+                "inconsistent" : 1947,
+                "inconsistent-game" : 1947
             },
             "NSL" : {
                 "game" : 1933,
                 "season" : 1933
             },
             "ECL" : {
-                "game" : 1926,
-                "season" : 1926,
-                "inconsistent" : 1923,
-                "inconsistent-game" : 1923
+                "game" : 1923,
+                "season" : 1923,
+                "inconsistent" : 1926,
+                "inconsistent-game" : 1926
             },
             "NNL" : {
-                "game" : 1931,
-                "season" : 1931,
-                "inconsistent" : 1920,
-                "inconsistent-game" : 1920
+                "game" : 1920,
+                "season" : 1920,
+                "inconsistent" : 1931,
+                "inconsistent-game" : 1931
             }
         },
         "A" : {
             "NN2-NAL" : {
-                "game" : 1947,
-                "season" : 1947,
-                "inconsistent" : 1933,
-                "inconsistent-game" : 1933
+                "game" : 1933,
+                "season" : 1933,
+                "inconsistent" : 1947,
+                "inconsistent-game" : 1947
             },
             "NSL" : {
                 "game" : 1933,
                 "season" : 1933
             },
             "ECL" : {
-                "game" : 1926,
-                "season" : 1926,
-                "inconsistent" : 1923,
-                "inconsistent-game" : 1923
+                "game" : 1923,
+                "season" : 1923,
+                "inconsistent" : 1926,
+                "inconsistent-game" : 1926
             },
             "NNL" : {
-                "game" : 1931,
-                "season" : 1931,
-                "inconsistent" : 1920,
-                "inconsistent-game" : 1920
+                "game" : 1920,
+                "season" : 1920,
+                "inconsistent" : 1931,
+                "inconsistent-game" : 1931
             }
         },
         "E" : {
             "NN2-NAL" : {
-                "game" : 1947,
-                "season" : 1947,
-                "inconsistent" : 1933,
-                "inconsistent-game" : 1933
+                "game" : 1933,
+                "season" : 1933,
+                "inconsistent" : 1947,
+                "inconsistent-game" : 1947
             },
             "NSL" : {
                 "game" : 1933,
                 "season" : 1933
             },
             "ECL" : {
-                "game" : 1926,
-                "season" : 1926,
-                "inconsistent" : 1923,
-                "inconsistent-game" : 1923
+                "game" : 1923,
+                "season" : 1923,
+                "inconsistent" : 1926,
+                "inconsistent-game" : 1926
             },
             "NNL" : {
-                "game" : 1931,
-                "season" : 1931,
-                "inconsistent" : 1920,
-                "inconsistent-game" : 1920
+                "game" : 1920,
+                "season" : 1920,
+                "inconsistent" : 1931,
+                "inconsistent-game" : 1931
             }
         },
         "Fld%" : {
             "NN2-NAL" : {
-                "game" : 1947,
-                "season" : 1947,
-                "inconsistent" : 1933,
-                "inconsistent-game" : 1933
+                "game" : 1933,
+                "season" : 1933,
+                "inconsistent" : 1947,
+                "inconsistent-game" : 1947
             },
             "NSL" : {
                 "game" : 1933,
                 "season" : 1933
             },
             "ECL" : {
-                "game" : 1926,
-                "season" : 1926,
-                "inconsistent" : 1923,
-                "inconsistent-game" : 1923
+                "game" : 1923,
+                "season" : 1923,
+                "inconsistent" : 1926,
+                "inconsistent-game" : 1926
             },
             "NNL" : {
-                "game" : 1931,
-                "season" : 1931,
-                "inconsistent" : 1920,
-                "inconsistent-game" : 1920
+                "game" : 1920,
+                "season" : 1920,
+                "inconsistent" : 1931,
+                "inconsistent-game" : 1931
             }
         },
         "PO" : {
             "NN2-NAL" : {
-                "game" : 1947,
-                "season" : 1947,
-                "inconsistent" : 1933,
-                "inconsistent-game" : 1933
+                "game" : 1933,
+                "season" : 1933,
+                "inconsistent" : 1947,
+                "inconsistent-game" : 1947
             },
             "NSL" : {
                 "game" : 1933,
                 "season" : 1933
             },
             "ECL" : {
-                "game" : 1926,
-                "season" : 1926,
-                "inconsistent" : 1923,
-                "inconsistent-game" : 1923
+                "game" : 1923,
+                "season" : 1923,
+                "inconsistent" : 1926,
+                "inconsistent-game" : 1926
             },
             "NNL" : {
-                "game" : 1931,
-                "season" : 1931,
-                "inconsistent" : 1920,
-                "inconsistent-game" : 1920
-            }
-        },
-        "PB" : {
-             "NN2-NAL" : {
-                "game" : 1947,
-                "season" : 1947,
-                "inconsistent" : 1933,
-                "inconsistent-game" : 1933
-            },
-            "NSL" : {
-                "game" : 1933,
-                "season" : 1933
-            },
-            "ECL" : {
-                "game" : 1926,
-                "season" : 1926,
-                "inconsistent" : 1923,
-                "inconsistent-game" : 1923
-            },
-            "NNL" : {
-                "game" : 1931,
-                "season" : 1931,
-                "inconsistent" : 1920,
-                "inconsistent-game" : 1920
+                "game" : 1920,
+                "season" : 1920,
+                "inconsistent" : 1931,
+                "inconsistent-game" : 1931
             }
         }
     }
