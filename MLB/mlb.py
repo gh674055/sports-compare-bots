@@ -4850,8 +4850,8 @@ league_data_mapping = {
             "NAL" : {
                 "game" : 1945,
                 "season" : 1945,
-                "inconsistent" : 1946,
-                "inconsistent-game" : 1946
+                "inconsistent" : 1949,
+                "inconsistent-game" : 1949
             }
         },
         "NS" : {
@@ -4868,8 +4868,8 @@ league_data_mapping = {
             "NAL" : {
                 "game" : 1945,
                 "season" : 1945,
-                "inconsistent" : 1946,
-                "inconsistent-game" : 1946
+                "inconsistent" : 1949,
+                "inconsistent-game" : 1949
             }
         },
         "SB%" : {
@@ -4886,8 +4886,8 @@ league_data_mapping = {
             "NAL" : {
                 "game" : 1945,
                 "season" : 1945,
-                "inconsistent" : 1946,
-                "inconsistent-game" : 1946
+                "inconsistent" : 1949,
+                "inconsistent-game" : 1949
             }
         },
         "wSB" : {
