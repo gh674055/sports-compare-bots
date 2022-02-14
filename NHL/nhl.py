@@ -14746,6 +14746,9 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
         
         if "missing-game" in extra_stats:
             if player_data["stat_values"]["any_missing_games"]:
+                if len(layer_data["stat_values"]["any_missing_games"]) > 20:
+                    raise CustomMessageException("Cannot show more than 20 dates!")
+
                 player_data["stat_values"]["any_missing_games"] = sorted(player_data["stat_values"]["any_missing_games"], key=customGameDateSort)
                 player_data["stat_values"]["Raw Quals"] +=  " [Missing Games: " + " + ".join(player_data["stat_values"]["any_missing_games"]) + "]"
             else:
@@ -14753,6 +14756,9 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
     
         if "missing-toi" in extra_stats:
             if player_data["stat_values"]["any_missing_toi"]:
+                if len(layer_data["stat_values"]["any_missing_toi"]) > 20:
+                    raise CustomMessageException("Cannot show more than 20 dates!")
+
                 player_data["stat_values"]["any_missing_toi"] = sorted(player_data["stat_values"]["any_missing_toi"], key=customGameDateSort)
                 player_data["stat_values"]["Raw Quals"] +=  " [Missing TOI Games: " + " + ".join(player_data["stat_values"]["any_missing_toi"]) + "]"
             else:
@@ -37778,7 +37784,7 @@ def handle_table_data(player_data, player_type, over_header, header, highest_val
             elif header.startswith("GP"):
                 if player_data["stat_values"]["any_missing_games"] or is_invalid_stat(header, player_type, player_data["stat_values"], True, player_data, True):
                     value += "*"
-            elif "TOI" in header or header == "GP_5v5":
+            elif "TOI" in header:
                 if player_data["stat_values"]["any_missing_toi"] or is_invalid_stat(header, player_type, player_data["stat_values"], True, player_data, True):
                     value += "*"
             elif header == "CurrentCap$":

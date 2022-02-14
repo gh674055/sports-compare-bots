@@ -14783,6 +14783,9 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
 
         if "missing-game" in extra_stats:
             if player_data["stat_values"]["any_missing_games"]:
+                if len(layer_data["stat_values"]["any_missing_games"]) > 20:
+                    raise CustomMessageException("Cannot show more than 20 dates!")
+                    
                 player_data["stat_values"]["any_missing_games"] = sorted(player_data["stat_values"]["any_missing_games"], key=customGameDateSort)
                 player_data["stat_values"]["Raw Quals"] +=  " [Missing Games: " + " + ".join(player_data["stat_values"]["any_missing_games"]) + "]"
             else:
@@ -14790,6 +14793,9 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
     
         if "missing-pitch" in extra_stats:
             if player_data["stat_values"]["any_missing_pitch"]:
+                if len(layer_data["stat_values"]["any_missing_pitch"]) > 20:
+                    raise CustomMessageException("Cannot show more than 20 dates!")
+
                 player_data["stat_values"]["any_missing_pitch"] = sorted(player_data["stat_values"]["any_missing_pitch"], key=customGameDateSort)
                 player_data["stat_values"]["Raw Quals"] +=  " [Missing Pitch Data Games: " + " + ".join(player_data["stat_values"]["any_missing_pitch"]) + "]"
             else:
@@ -43368,6 +43374,9 @@ def handle_table_data(over_header, player_data, player_datas, player_type, heade
             
             if header == "G":
                 if player_data["stat_values"]["any_missing_games"]:
+                    value += "*"
+            elif header in count_stats:
+                if player_data["stat_values"]["any_missing_pitch"] or is_invalid_stat(header, player_type, player_data["stat_values"], True)["any_invalid"]:
                     value += "*"
             elif header in ("wOBA", "wSB", "wRC", "wRAA", "BRuns", "FIP") or header.endswith("-") or (header.endswith("+") and not header == "OPS+" and not header == "ERA+"):
                 if not has_any_park_factors:
