@@ -27332,7 +27332,7 @@ def handle_event_stats(qual, all_rows, games_to_skip, qualifiers, player_type, p
             
             row_data["is_playoffs"] = prev_is_playofs
 
-def handle_mlb_game_stats_single_thread(all_rows, has_count_stat, qualifiers, player_data, player_type, missing_games, extra_stats, ):
+def handle_mlb_game_stats_single_thread(all_rows, has_count_stat, qualifiers, player_data, player_type, missing_games, extra_stats, s):
     if not all_rows:
         return [], missing_games
 
