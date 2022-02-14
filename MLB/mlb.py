@@ -7708,7 +7708,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                             extra_stats.add(m.group(1))
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
                         
-                        last_match = re.finditer(r"\bshow(?: |-)?(only(?: |-)?)?(pitcher-record|record|slash|score|year|games?-count|seasons-leading|season|date|missing-game|missing-pitch|per-game|game|play|run-support|run-support-record|exit-record|statcast|advanced-runner|advanced|best-season|worst-season|team|franchise|number|award|driven-in|mlb-link)s?\b", time_frame)
+                        last_match = re.finditer(r"\bshow(?: |-)?(only(?: |-)?)?(pitcher-record|record|slash|score|year|games?-count|seasons-leading|season|date|missing-game-count|missing-pitch-count||missing-game|missing-pitch|per-game|game|play|run-support|run-support-record|exit-record|statcast|advanced-runner|advanced|best-season|worst-season|team|franchise|number|award|driven-in|mlb-link)s?\b", time_frame)
                         for m in last_match:
                             extra_stats.add(m.group(2))
                             if m.group(2) == "play":
@@ -14785,9 +14785,14 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
             if player_data["stat_values"]["any_missing_games"]:
                 if len(layer_data["stat_values"]["any_missing_games"]) > 20:
                     raise CustomMessageException("Cannot show more than 20 dates!")
-                    
+
                 player_data["stat_values"]["any_missing_games"] = sorted(player_data["stat_values"]["any_missing_games"], key=customGameDateSort)
                 player_data["stat_values"]["Raw Quals"] +=  " [Missing Games: " + " + ".join(player_data["stat_values"]["any_missing_games"]) + "]"
+            else:
+                player_data["stat_values"]["Raw Quals"] +=  " [No Missing Games!]"
+        elif "missing-game-count" in extra_stats:
+            if player_data["stat_values"]["any_missing_games"]:
+                player_data["stat_values"]["Raw Quals"] +=  " [" + len(layer_data["stat_values"]["any_missing_games"]) + " Missing Game(s)]"
             else:
                 player_data["stat_values"]["Raw Quals"] +=  " [No Missing Games!]"
     
@@ -14797,9 +14802,14 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
                     raise CustomMessageException("Cannot show more than 20 dates!")
 
                 player_data["stat_values"]["any_missing_pitch"] = sorted(player_data["stat_values"]["any_missing_pitch"], key=customGameDateSort)
-                player_data["stat_values"]["Raw Quals"] +=  " [Missing Pitch Data Games: " + " + ".join(player_data["stat_values"]["any_missing_pitch"]) + "]"
+                player_data["stat_values"]["Raw Quals"] +=  " [Missing Pitch Games: " + " + ".join(player_data["stat_values"]["any_missing_pitch"]) + "]"
             else:
-                player_data["stat_values"]["Raw Quals"] +=  " [No Missing Pitch Data Games!]"
+                player_data["stat_values"]["Raw Quals"] +=  " [No Missing Pitch Games!]"
+        elif "missing-pitch-count" in extra_stats:
+            if player_data["stat_values"]["any_missing_pitch"]:
+                player_data["stat_values"]["Raw Quals"] +=  " [" + len(layer_data["stat_values"]["any_missing_pitch"]) + " Missing Pitch Game(s)]"
+            else:
+                player_data["stat_values"]["Raw Quals"] +=  " [No Missing Pitch Games!]"
     
     player_data["stat_values"]["Raw Quals"] = player_data["stat_values"]["Raw Quals"].strip()
 

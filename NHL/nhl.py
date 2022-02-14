@@ -7984,7 +7984,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                             extra_stats.add(m.group(1))
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
                         
-                        last_match = re.finditer(r"\bshow(?: |-)?(only(?: |-)?)?(goalie-record|record|faceoff|slash|score|goal|year|games?-count|seasons-leading|season|date|per-game|game|adjusted|advanced|relative|missing-game|missing-toi|best-season|worst-season|ng|team|franchise|number|fight|penalty-taken|penalties-taken|penaltie|penalty|award|shot|shift|star|play|nhl-link|strength|toi|href)s?\b", time_frame)
+                        last_match = re.finditer(r"\bshow(?: |-)?(only(?: |-)?)?(goalie-record|record|faceoff|slash|score|goal|year|games?-count|seasons-leading|season|date|per-game|game|adjusted|advanced|relative|missing-game-count|missing-toi-count|missing-game|missing-toi|best-season|worst-season|ng|team|franchise|number|fight|penalty-taken|penalties-taken|penaltie|penalty|award|shot|shift|star|play|nhl-link|strength|toi|href)s?\b", time_frame)
                         for m in last_match:
                             if "penalt" in m.group(2):
                                 extra_stats.add("penalties")
@@ -14753,6 +14753,11 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
                 player_data["stat_values"]["Raw Quals"] +=  " [Missing Games: " + " + ".join(player_data["stat_values"]["any_missing_games"]) + "]"
             else:
                 player_data["stat_values"]["Raw Quals"] +=  " [No Missing Games!]"
+        elif "missing-game-count" in extra_stats:
+            if player_data["stat_values"]["any_missing_games"]:
+                player_data["stat_values"]["Raw Quals"] +=  " [" + len(layer_data["stat_values"]["any_missing_games"]) + " Missing Game(s)]"
+            else:
+                player_data["stat_values"]["Raw Quals"] +=  " [No Missing Games!]"
     
         if "missing-toi" in extra_stats:
             if player_data["stat_values"]["any_missing_toi"]:
@@ -14761,6 +14766,11 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
 
                 player_data["stat_values"]["any_missing_toi"] = sorted(player_data["stat_values"]["any_missing_toi"], key=customGameDateSort)
                 player_data["stat_values"]["Raw Quals"] +=  " [Missing TOI Games: " + " + ".join(player_data["stat_values"]["any_missing_toi"]) + "]"
+            else:
+                player_data["stat_values"]["Raw Quals"] +=  " [No Missing TOI Games!]"
+        elif "missing-toi-count" in extra_stats:
+            if player_data["stat_values"]["any_missing_toi"]:
+                player_data["stat_values"]["Raw Quals"] +=  " [" + len(layer_data["stat_values"]["any_missing_toi"]) + " Missing TOI Game(s)]"
             else:
                 player_data["stat_values"]["Raw Quals"] +=  " [No Missing TOI Games!]"
 
