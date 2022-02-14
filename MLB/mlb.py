@@ -7708,13 +7708,19 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                             extra_stats.add(m.group(1))
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
                         
-                        last_match = re.finditer(r"\bshow(?: |-)?(only(?: |-)?)?(pitcher-record|record|slash|score|year|games?-count|seasons-leading|season|date|missing-game-count|missing-pitch-count|missing-game|missing-pitch|per-game|game|play|run-support|run-support-record|exit-record|statcast|advanced-runner|advanced|best-season|worst-season|team|franchise|number|award|driven-in|mlb-link)s?\b", time_frame)
+                        last_match = re.finditer(r"\bshow(?: |-)?(only(?: |-)?)?(pitcher-record|record|slash|score|year|games?-count|seasons-leading|season|date|missing-games-count|missing-pitches-count|missing-game-count|missing-pitches-count|missing-pitch-count|missing-game|missing-pitches|missing-pitch|per-game|game|play|run-support|run-support-record|exit-record|statcast|advanced-runner|advanced|best-season|worst-season|team|franchise|number|award|driven-in|mlb-link)s?\b", time_frame)
                         for m in last_match:
                             extra_stats.add(m.group(2))
                             if m.group(2) == "play":
                                 extra_stats.add("current-stats")
                             elif m.group(2) == "season":
                                 extra_stats.add("year")
+                            elif m.group(2) == "missing-games-count":
+                                extra_stats.add("missing-game-count")
+                            elif m.group(2) == "missing-pitches":
+                                extra_stats.add("missing-pitches")
+                            elif m.group(2) == "missing-pitches-count":
+                                extra_stats.add("missing-pitches-count")
                             elif m.group(2) == "statcast" or m.group(2) == "advanced" or m.group(2) == "driven-in":
                                 extra_stats.add("current-stats")
                                 if m.group(2) == "driven-in":
@@ -14792,7 +14798,7 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
                 player_data["stat_values"]["Raw Quals"] +=  " [No Missing Games!]"
         elif "missing-game-count" in extra_stats:
             if player_data["stat_values"]["any_missing_games"]:
-                player_data["stat_values"]["Raw Quals"] +=  " [" + len(player_data["stat_values"]["any_missing_games"]) + " Missing Game(s)]"
+                player_data["stat_values"]["Raw Quals"] +=  " [" + str(len(player_data["stat_values"]["any_missing_games"])) + " Missing Game(s)]"
             else:
                 player_data["stat_values"]["Raw Quals"] +=  " [No Missing Games!]"
     
@@ -14807,7 +14813,7 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
                 player_data["stat_values"]["Raw Quals"] +=  " [No Missing Pitch Games!]"
         elif "missing-pitch-count" in extra_stats:
             if player_data["stat_values"]["any_missing_pitch"]:
-                player_data["stat_values"]["Raw Quals"] +=  " [" + len(player_data["stat_values"]["any_missing_pitch"]) + " Missing Pitch Game(s)]"
+                player_data["stat_values"]["Raw Quals"] +=  " [" + str(len(player_data["stat_values"]["any_missing_pitch"])) + " Missing Pitch Game(s)]"
             else:
                 player_data["stat_values"]["Raw Quals"] +=  " [No Missing Pitch Games!]"
     
