@@ -37579,10 +37579,11 @@ def get_mlb_game_links_schedule_links(player_data, player_type, player_link, all
                                 if row_data["is_playoffs"]:
                                     continue
 
-                                if is_home:
-                                    row_data["SeriesID"] = game["teams"]["home"]["seriesNumber"]
-                                else:
-                                    row_data["SeriesID"] = game["teams"]["away"]["seriesNumber"]
+                                if "seriesNumber" in game["teams"]["home"]:
+                                    if is_home:
+                                        row_data["SeriesID"] = game["teams"]["home"]["seriesNumber"]
+                                    else:
+                                        row_data["SeriesID"] = game["teams"]["away"]["seriesNumber"]
 
                                 row_data["RoundGame"] = game["seriesGameNumber"]
                                 row_data["SeriesLength"] = game["gamesInSeries"]
