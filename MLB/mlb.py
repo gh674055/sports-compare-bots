@@ -14783,7 +14783,7 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
 
         if "missing-game" in extra_stats:
             if player_data["stat_values"]["any_missing_games"]:
-                if len(layer_data["stat_values"]["any_missing_games"]) > 20:
+                if len(player_data["stat_values"]["any_missing_games"]) > 20:
                     raise CustomMessageException("Cannot show more than 20 dates!")
 
                 player_data["stat_values"]["any_missing_games"] = sorted(player_data["stat_values"]["any_missing_games"], key=customGameDateSort)
@@ -14792,13 +14792,13 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
                 player_data["stat_values"]["Raw Quals"] +=  " [No Missing Games!]"
         elif "missing-game-count" in extra_stats:
             if player_data["stat_values"]["any_missing_games"]:
-                player_data["stat_values"]["Raw Quals"] +=  " [" + len(layer_data["stat_values"]["any_missing_games"]) + " Missing Game(s)]"
+                player_data["stat_values"]["Raw Quals"] +=  " [" + len(player_data["stat_values"]["any_missing_games"]) + " Missing Game(s)]"
             else:
                 player_data["stat_values"]["Raw Quals"] +=  " [No Missing Games!]"
     
         if "missing-pitch" in extra_stats:
             if player_data["stat_values"]["any_missing_pitch"]:
-                if len(layer_data["stat_values"]["any_missing_pitch"]) > 20:
+                if len(player_data["stat_values"]["any_missing_pitch"]) > 20:
                     raise CustomMessageException("Cannot show more than 20 dates!")
 
                 player_data["stat_values"]["any_missing_pitch"] = sorted(player_data["stat_values"]["any_missing_pitch"], key=customGameDateSort)
@@ -14807,7 +14807,7 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
                 player_data["stat_values"]["Raw Quals"] +=  " [No Missing Pitch Games!]"
         elif "missing-pitch-count" in extra_stats:
             if player_data["stat_values"]["any_missing_pitch"]:
-                player_data["stat_values"]["Raw Quals"] +=  " [" + len(layer_data["stat_values"]["any_missing_pitch"]) + " Missing Pitch Game(s)]"
+                player_data["stat_values"]["Raw Quals"] +=  " [" + len(player_data["stat_values"]["any_missing_pitch"]) + " Missing Pitch Game(s)]"
             else:
                 player_data["stat_values"]["Raw Quals"] +=  " [No Missing Pitch Games!]"
     
