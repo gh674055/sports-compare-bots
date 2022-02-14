@@ -36222,7 +36222,7 @@ def get_mlb_game_stats_single_thread(all_rows, has_count_stat, qualifiers, games
                 if hit_end:
                     break
             except Exception:
-                logger.info("Error parsing date " + str(row_data["Date"]))
+                logger.info("Error parsing date " + str(row_data["Date"]) + " for player " + str(player_data["id"]))
                 raise
 
     logger.info("#" + str(threading.get_ident()) + "#   " + player_data["id"] + " completed game data")
@@ -37169,7 +37169,7 @@ def result_call_back(qualifiers, count_info, new_rows, player_type, player_data,
     # profile.enable()
     try:
         if result.exception():
-            logger.info("Error parsing date " + str(old_row_data["Date"]))
+            logger.info("Error parsing date " + str(old_row_data["Date"]) + " for player " + str(player_data["id"]))
             if not count_info["exception"]:
                 count_info["exception"] = result.exception()
             percent_complete = 100 * (count_info["count"] / count_info["total_count"])
@@ -37585,62 +37585,67 @@ def get_mlb_game_links_schedule_links(player_data, player_type, player_link, all
                                     else:
                                         row_data["SeriesID"] = game["teams"]["away"]["seriesNumber"]
 
-                                row_data["RoundGame"] = game["seriesGameNumber"]
-                                row_data["SeriesLength"] = game["gamesInSeries"]
+                                    row_data["RoundGame"] = game["seriesGameNumber"]
+                                    row_data["SeriesLength"] = game["gamesInSeries"]
 
-                                round_length = round(row_data["SeriesLength"] / 2)
-                                if row_data["SeriesLength"] % 2 == 0:
-                                    round_length += 1
-                                team_wins = 0
-                                opponent_wins = 0
-                                
-                                for previous_game in reversed(all_games[0:game_index]):
-                                    if previous_game["gameType"] in ("F", "D", "L", "W"):
-                                        continue
-
-                                    prev_is_home = previous_game["teams"]["home"]["team"]["id"] == team_id
-                                    prev_is_final = previous_game["status"]["abstractGameState"] == "Final"
+                                    round_length = round(row_data["SeriesLength"] / 2)
+                                    if row_data["SeriesLength"] % 2 == 0:
+                                        round_length += 1
+                                    team_wins = 0
+                                    opponent_wins = 0
                                     
-                                    prev_result = None
-                                    if is_home:
-                                        prev_series_id = previous_game["teams"]["home"]["seriesNumber"]
+                                    has_missing_game = False
+                                    for previous_game in reversed(all_games[0:game_index]):
+                                        if previous_game["gameType"] in ("F", "D", "L", "W"):
+                                            continue
 
-                                        if prev_is_final:
-                                            if previous_game["teams"]["home"]["score"] > previous_game["teams"]["away"]["score"]:
-                                                prev_result = "W"
-                                            elif previous_game["teams"]["home"]["score"] < previous_game["teams"]["away"]["score"]:
-                                                prev_result = "L"
-                                    else:
-                                        prev_series_id = previous_game["teams"]["away"]["seriesNumber"]
+                                        prev_is_home = previous_game["teams"]["home"]["team"]["id"] == team_id
+                                        prev_is_final = previous_game["status"]["abstractGameState"] == "Final"
+                                        
+                                        prev_result = None
+                                        if "seriesNumber" in previous_game["teams"]["home"]:
+                                            if is_home:
+                                                prev_series_id = previous_game["teams"]["home"]["seriesNumber"]
 
-                                        if prev_is_final:
-                                            if previous_game["teams"]["away"]["score"] > previous_game["teams"]["home"]["score"]:
-                                                prev_result = "W"
-                                            elif previous_game["teams"]["away"]["score"] < previous_game["teams"]["home"]["score"]:
-                                                prev_result = "L"
+                                                if prev_is_final:
+                                                    if previous_game["teams"]["home"]["score"] > previous_game["teams"]["away"]["score"]:
+                                                        prev_result = "W"
+                                                    elif previous_game["teams"]["home"]["score"] < previous_game["teams"]["away"]["score"]:
+                                                        prev_result = "L"
+                                            else:
+                                                prev_series_id = previous_game["teams"]["away"]["seriesNumber"]
 
-                                    if prev_series_id == row_data["SeriesID"]:
-                                        if prev_result == "W":
-                                            team_wins += 1
-                                        elif prev_result == "L":
-                                            opponent_wins += 1
-                            
-                                if opponent_wins > round_length or team_wins > round_length:
-                                    row_data["Clinching"] = False
-                                    row_data["Elimination"] = False
-                                else:
-                                    if opponent_wins == round_length - 1:  
-                                        row_data["Elimination"] = True
-                                    else:
-                                        row_data["Elimination"] = False
-                                    if team_wins == round_length - 1:
-                                        row_data["Clinching"] = True
-                                    else:
-                                        row_data["Clinching"] = False
+                                                if prev_is_final:
+                                                    if previous_game["teams"]["away"]["score"] > previous_game["teams"]["home"]["score"]:
+                                                        prev_result = "W"
+                                                    elif previous_game["teams"]["away"]["score"] < previous_game["teams"]["home"]["score"]:
+                                                        prev_result = "L"
+
+                                            if prev_series_id == row_data["SeriesID"]:
+                                                if prev_result == "W":
+                                                    team_wins += 1
+                                                elif prev_result == "L":
+                                                    opponent_wins += 1
+                                        else:
+                                            has_missing_game = True
                                 
-                                row_data["SeriesTeamWins"] = team_wins
-                                row_data["SeriesOpponentWins"] = opponent_wins
-                                row_data["SeriesScore"] = team_wins - opponent_wins
+                                    if not has_missing_game:
+                                        if opponent_wins > round_length or team_wins > round_length:
+                                            row_data["Clinching"] = False
+                                            row_data["Elimination"] = False
+                                        else:
+                                            if opponent_wins == round_length - 1:  
+                                                row_data["Elimination"] = True
+                                            else:
+                                                row_data["Elimination"] = False
+                                            if team_wins == round_length - 1:
+                                                row_data["Clinching"] = True
+                                            else:
+                                                row_data["Clinching"] = False
+                                        
+                                        row_data["SeriesTeamWins"] = team_wins
+                                        row_data["SeriesOpponentWins"] = opponent_wins
+                                        row_data["SeriesScore"] = team_wins - opponent_wins
     
 def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_type, qualifiers, needs_plays, s):
     missing_games = False
@@ -39991,7 +39996,7 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
                 if runner["details"]["movementReason"] == "r_pickoff" or runner["details"]["movementReason"] == "r_pickoff_caught_stealing" or runner["details"]["movementReason"] == "r_pickoff_2b" or runner["details"]["movementReason"] == "r_pickoff_caught_stealing_2b" or runner["details"]["movementReason"] == "r_pickoff_3b" or runner["details"]["movementReason"] == "r_pickoff_caught_stealing_3b" or runner["details"]["movementReason"] == "r_pickoff_home" or runner["details"]["movementReason"] == "r_pickoff_caught_stealing_home":
                     sb_data = sub_event_obj.copy()
                     sb_data["result"] = "pick_off"
-                    if runner["credits"][0]["player"] == player_data["mlb_id"] and runner["credits"][0]["position"]["abbreviation"] == "P":
+                    if runner["credits"] and runner["credits"][0]["player"] == player_data["mlb_id"] and runner["credits"][0]["position"]["abbreviation"] == "P":
                         game_data["pitching_events"].append(sb_data)
 
             if is_team_batting:

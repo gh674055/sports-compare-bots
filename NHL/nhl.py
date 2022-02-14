@@ -18828,7 +18828,7 @@ def get_nhl_game_schedule_single_thread(player_data, all_rows, games_to_skip, pl
                 if hit_end:
                     break
             except Exception:
-                logger.info("Error parsing date " + str(row_data["Date"]))
+                logger.info("Error parsing date " + str(row_data["Date"]) + " for player " + str(player_data["id"]))
                 raise
 
     logger.info("#" + str(threading.get_ident()) + "#   " + player_data["id"] + " completed game data")
@@ -18840,7 +18840,7 @@ def result_call_back(time_frame, count_info, new_rows, player_type, player_data,
     # profile.enable()
     try:
         if result.exception():
-            logger.info("Error parsing date " + str(old_row_data["Date"]))
+            logger.info("Error parsing date " + str(old_row_data["Date"]) + " for player " + str(player_data["id"]))
             if not count_info["exception"]:
                 count_info["exception"] = result.exception()
             percent_complete = 100 * (count_info["count"] / count_info["total_count"])

@@ -8881,7 +8881,7 @@ def handle_nfl_game_stats(player_data, all_rows, qualifiers, extra_stats, missin
 def result_call_back(qualifiers, count_info, new_rows, player_type, player_data, old_row_data, extra_stats, result):
     try:
         if result.exception():
-            logger.info("Error parsing date " + str(old_row_data["Shared"]["Date"]))
+            logger.info("Error parsing date " + str(old_row_data["Shared"]["Date"]) + " for player " + str(player_data["id"]))
             if not count_info["exception"]:
                 count_info["exception"] = result.exception()
             percent_complete = 100 * (count_info["count"] / count_info["total_count"])
