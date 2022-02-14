@@ -7984,7 +7984,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                             extra_stats.add(m.group(1))
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
                         
-                        last_match = re.finditer(r"\bshow(?: |-)?(only(?: |-)?)?(goalie-record|record|faceoff|slash|score|goal|year|games?-count|seasons-leading|season|date|per-game|game|adjusted|advanced|relative|missing-game|missing-toi|best-season|worst-season|ng|team|franchise|number|fight|penalty-taken|penalties-taken|penaltie|penalty|award|toi|shot|shift|star|play|nhl-link|strength|toi|href)s?\b", time_frame)
+                        last_match = re.finditer(r"\bshow(?: |-)?(only(?: |-)?)?(goalie-record|record|faceoff|slash|score|goal|year|games?-count|seasons-leading|season|date|per-game|game|adjusted|advanced|relative|missing-game|missing-toi|best-season|worst-season|ng|team|franchise|number|fight|penalty-taken|penalties-taken|penaltie|penalty|award|shot|shift|star|play|nhl-link|strength|toi|href)s?\b", time_frame)
                         for m in last_match:
                             if "penalt" in m.group(2):
                                 extra_stats.add("penalties")
@@ -16776,6 +16776,7 @@ def handle_live_stats(player_type, player_data, player_link, time_frame, all_row
     game_data, sub_row_data, sub_missing_games = get_game_data(0, player_data, row_data, player_id, player_type, {"qualifiers" : qualifiers}, temp_extra_stats, s)
     if sub_missing_games:
         missing_games.append("[" + str(row_data["Date"]) + "](" + "https://www.nhl.com/gamecenter/" + str(row_data["NHLGameLink"]) + ")")
+        return all_rows
     player_shift_data = game_data["player_shift_data"]
     has_match = perform_sub_nhl_game_qualifiers(row_data, qualifiers, game_data, player_type, player_link, None, -1, True, True, temp_extra_stats)[0]
     if not has_match:
@@ -18899,8 +18900,6 @@ def handle_result_qualifiers(game_data, row_data, sub_missing_games, time_frame,
         if sub_missing_games:
             if sub_missing_games:
                 count_info["missing_games"].append("[" + str(row_data["Date"]) + "](" + "https://www.nhl.com/gamecenter/" + str(row_data["NHLGameLink"]) + ")")
-            if row_data["Year"] >= 2007 and not row_data.get("GP_TOI", None):
-                count_info["missing_games"].append("[" + str(row_data["Date"]) + "](" + "https://www.nhl.com/gamecenter/" + str(row_data["NHLGameLink"]) + ")")
 
         if not perform_nhl_game_qualifiers(row_data, time_frame["qualifiers"]):
             return False, raw_row_data
@@ -18908,8 +18907,6 @@ def handle_result_qualifiers(game_data, row_data, sub_missing_games, time_frame,
     if "current-stats" in extra_stats:
         if sub_missing_games:
             if sub_missing_games:
-                count_info["missing_games"].append("[" + str(row_data["Date"]) + "](" + "https://www.nhl.com/gamecenter/" + str(row_data["NHLGameLink"]) + ")")
-            if row_data["Year"] >= 2007 and not row_data.get("GP_TOI", None):
                 count_info["missing_games"].append("[" + str(row_data["Date"]) + "](" + "https://www.nhl.com/gamecenter/" + str(row_data["NHLGameLink"]) + ")")
         
         if game_data["missing_toi"]:
@@ -18923,8 +18920,6 @@ def handle_result_qualifiers(game_data, row_data, sub_missing_games, time_frame,
         if sub_missing_games:
             if sub_missing_games:
                 count_info["missing_games"].append("[" + str(row_data["Date"]) + "](" + "https://www.nhl.com/gamecenter/" + str(row_data["NHLGameLink"]) + ")")
-            if row_data["Year"] >= 2007 and not row_data.get("GP_TOI", None):
-                count_info["missing_games"].append("[" + str(row_data["Date"]) + "](" + "https://www.nhl.com/gamecenter/" + str(row_data["NHLGameLink"]) + ")")
         
         if game_data["missing_toi"]:
             count_info["missing_toi"].append("[" + str(row_data["Date"]) + "](" + "https://www.nhl.com/gamecenter/" + str(row_data["NHLGameLink"]) + ")")
@@ -18936,8 +18931,6 @@ def handle_result_qualifiers(game_data, row_data, sub_missing_games, time_frame,
     if "Shift Stat" in time_frame["qualifiers"]:
         if sub_missing_games:
             if sub_missing_games:
-                count_info["missing_games"].append("[" + str(row_data["Date"]) + "](" + "https://www.nhl.com/gamecenter/" + str(row_data["NHLGameLink"]) + ")")
-            if row_data["Year"] >= 2007 and not row_data.get("GP_TOI", None):
                 count_info["missing_games"].append("[" + str(row_data["Date"]) + "](" + "https://www.nhl.com/gamecenter/" + str(row_data["NHLGameLink"]) + ")")
         
         if game_data["missing_toi"]:

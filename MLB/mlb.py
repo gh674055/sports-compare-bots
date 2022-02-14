@@ -6456,7 +6456,8 @@ missing_player_data = {
     "Deathday" : None,
     "stat_values" : {
         "Player" : ["No Player Match!"],
-        "any_missing_games" : False,
+        "any_missing_games" : [],
+        "any_missing_pitch" : [],
         "any_missing_salary" : False,
         "any_missing_inf" : False,
         "is_playoffs" : False,
@@ -7707,7 +7708,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                             extra_stats.add(m.group(1))
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
                         
-                        last_match = re.finditer(r"\bshow(?: |-)?(only(?: |-)?)?(pitcher-record|record|slash|score|year|games?-count|seasons-leading|season|date|per-game|game|play|run-support|run-support-record|exit-record|statcast|advanced-runner|advanced|best-season|worst-season|team|franchise|number|award|driven-in|mlb-link)s?\b", time_frame)
+                        last_match = re.finditer(r"\bshow(?: |-)?(only(?: |-)?)?(pitcher-record|record|slash|score|year|games?-count|seasons-leading|season|date|missing-game|missing-pitch|per-game|game|play|run-support|run-support-record|exit-record|statcast|advanced-runner|advanced|best-season|worst-season|team|franchise|number|award|driven-in|mlb-link)s?\b", time_frame)
                         for m in last_match:
                             extra_stats.add(m.group(2))
                             if m.group(2) == "play":
@@ -12991,7 +12992,8 @@ def handle_name_threads(sub_name, parse_time_frames, index, player_type, remove_
                             "Deathdays" : [subb_player_data["Deathday"]],
                             "is_playoffs" : subb_player_data["is_playoffs"],
                             "Player" : [subb_player_data["Player"]],
-                            "any_missing_games" : False,
+                            "any_missing_games" : [],
+                            "any_missing_pitch" : [],
                             "all_rows" : row
                         }
                     }
@@ -13395,11 +13397,9 @@ def sub_handle_the_quals(players, qualifier, real_player_type, qual_str, player_
     
     for player_data in player_datas:
         player_games = {}
-        missing_games = False
-        missing_salary = False
-        missing_inf = False
 
         missing_games = player_data["stat_values"]["any_missing_games"]
+        missing_pitch = player_data["stat_values"]["any_missing_pitch"]
         missing_salary = player_data["stat_values"]["any_missing_salary"]
         missing_inf = player_data["stat_values"]["any_missing_inf"]
         
@@ -13462,6 +13462,7 @@ def sub_handle_the_quals(players, qualifier, real_player_type, qual_str, player_
                 "mlb_id" : player_data["mlb_ids"][index],
                 "name" : player_name,
                 "missing_games" : missing_games,
+                "missing_pitch" : missing_pitch,
                 "missing_salary" : missing_salary,
                 "missing_inf" : missing_inf,
                 "query" : player_data["stat_values"]["Raw Quals"],
@@ -13605,7 +13606,8 @@ def handle_the_same_games_quals(sub_name, qual_str, subbb_frames, time_frame, pl
 
 def handle_multi_name_data(names, time_frames, player_type, remove_duplicates, remove_duplicate_games, is_pitching_jaws, extra_stats, comment_obj):
     player_datas = []
-    any_missing_games = False
+    any_missing_games = []
+    any_missing_pitch = []
     any_missing_salary = False
     any_missing_inf = False
 
@@ -13615,15 +13617,15 @@ def handle_multi_name_data(names, time_frames, player_type, remove_duplicates, r
         real_index = index if len(time_frames) > index else len(time_frames) - 1
         player_id, player_page = get_player(name, time_frames[real_index])
         if player_id and player_page:
-            player_data, missing_games, missing_salary, missing_inf = handle_multi_player_data(player_id, time_frames[real_index], player_type, player_page, remove_duplicates, remove_duplicate_games, is_pitching_jaws, extra_stats, comment_obj)
+            player_data, missing_games, missing_pitch, missing_salary, missing_inf = handle_multi_player_data(player_id, time_frames[real_index], player_type, player_page, remove_duplicates, remove_duplicate_games, is_pitching_jaws, extra_stats, comment_obj)
             player_data["Search Term"] = name
             for sub_frame in time_frames[real_index]:
                 if sub_frame["add_type"] == "minus":
                     add_type = "minus"
 
             player_datas.append(player_data)
-            if missing_games:
-                any_missing_games = True
+            any_missing_games += missing_games
+            any_missing_pitch += missing_pitch
             if missing_salary:
                 any_missing_salary = True
             if missing_inf:
@@ -13636,7 +13638,7 @@ def handle_multi_name_data(names, time_frames, player_type, remove_duplicates, r
     # if len(player_datas) > 1:
     #     add_type = "plus"
     
-    return combine_player_datas(player_datas, player_type, any_missing_games, any_missing_salary, any_missing_inf, time_frames, add_type, remove_duplicates, remove_duplicate_games, is_pitching_jaws, extra_stats), player_datas
+    return combine_player_datas(player_datas, player_type, any_missing_games, any_missing_pitch, any_missing_salary, any_missing_inf, time_frames, add_type, remove_duplicates, remove_duplicate_games, is_pitching_jaws, extra_stats), player_datas
 
 def get_player(name, time_frames):
     name = re.sub(r"\s+", " ", re.sub(r"[^\w\-\s.']", "", unidecode.unidecode(name))).strip()
@@ -13881,7 +13883,7 @@ def get_player(name, time_frames):
                 return matching_player["id"], player_page
     return None, None
 
-def combine_player_datas(player_datas, player_type, any_missing_games, any_missing_salary, any_missing_inf, time_frames, add_type, remove_duplicates, remove_duplicate_games, is_pitching_jaws, extra_stats):    
+def combine_player_datas(player_datas, player_type, any_missing_games, any_missing_pitch, any_missing_salary, any_missing_inf, time_frames, add_type, remove_duplicates, remove_duplicate_games, is_pitching_jaws, extra_stats):    
     player_data = {
         "ids": [],
         "mlb_ids" : [],
@@ -13909,8 +13911,8 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
             if "Sub Query" in time_frame["qualifiers"]:
                 for qualifier in time_frame["qualifiers"]["Sub Query"]:
                     for player in qualifier["values"]:
-                        if player["missing_games"]:
-                            any_missing_games = True
+                        any_missing_games += player["missing_games"]
+                        any_missing_pitch += player["missing_pitch"]
                         if player["missing_salary"]:
                             any_missing_salary = True
                         if player["missing_inf"]:
@@ -13918,8 +13920,8 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
             if "Event Sub Query" in time_frame["qualifiers"]:
                 for qualifier in time_frame["qualifiers"]["Event Sub Query"]:
                     for player in qualifier["values"]:
-                        if player["missing_games"]:
-                            any_missing_games = True
+                        any_missing_games += player["missing_games"]
+                        any_missing_pitch += player["missing_pitch"]
                         if player["missing_salary"]:
                             any_missing_salary = True
                         if player["missing_inf"]:
@@ -13927,8 +13929,8 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
             if "Or Sub Query" in time_frame["qualifiers"]:
                 for qualifier in time_frame["qualifiers"]["Or Sub Query"]:
                     for player in qualifier["values"]:
-                        if player["missing_games"]:
-                            any_missing_games = True
+                        any_missing_games += player["missing_games"]
+                        any_missing_pitch += player["missing_pitch"]
                         if player["missing_salary"]:
                             any_missing_salary = True
                         if player["missing_inf"]:
@@ -13936,8 +13938,8 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
             if "Or Event Sub Query" in time_frame["qualifiers"]:
                 for qualifier in time_frame["qualifiers"]["Or Event Sub Query"]:
                     for player in qualifier["values"]:
-                        if player["missing_games"]:
-                            any_missing_games = True
+                        any_missing_games += player["missing_games"]
+                        any_missing_pitch += player["missing_pitch"]
                         if player["missing_salary"]:
                             any_missing_salary = True
                         if player["missing_inf"]:
@@ -13945,8 +13947,8 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
             if "Day Of Sub Query" in time_frame["qualifiers"]:
                 for qualifier in time_frame["qualifiers"]["Day Of Sub Query"]:
                     for player in qualifier["values"]:
-                        if player["missing_games"]:
-                            any_missing_games = True
+                        any_missing_games += player["missing_games"]
+                        any_missing_pitch += player["missing_pitch"]
                         if player["missing_salary"]:
                             any_missing_salary = True
                         if player["missing_inf"]:
@@ -13954,8 +13956,8 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
             if "Day After Sub Query" in time_frame["qualifiers"]:
                 for qualifier in time_frame["qualifiers"]["Day After Sub Query"]:
                     for player in qualifier["values"]:
-                        if player["missing_games"]:
-                            any_missing_games = True
+                        any_missing_games += player["missing_games"]
+                        any_missing_pitch += player["missing_pitch"]
                         if player["missing_salary"]:
                             any_missing_salary = True
                         if player["missing_inf"]:
@@ -13963,8 +13965,8 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
             if "Day Before Sub Query" in time_frame["qualifiers"]:
                 for qualifier in time_frame["qualifiers"]["Day Before Sub Query"]:
                     for player in qualifier["values"]:
-                        if player["missing_games"]:
-                            any_missing_games = True
+                        any_missing_games += player["missing_games"]
+                        any_missing_pitch += player["missing_pitch"]
                         if player["missing_salary"]:
                             any_missing_salary = True
                         if player["missing_inf"]:
@@ -13972,8 +13974,8 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
             if "Game After Sub Query" in time_frame["qualifiers"]:
                 for qualifier in time_frame["qualifiers"]["Game After Sub Query"]:
                     for player in qualifier["values"]:
-                        if player["missing_games"]:
-                            any_missing_games = True
+                        any_missing_games += player["missing_games"]
+                        any_missing_pitch += player["missing_pitch"]
                         if player["missing_salary"]:
                             any_missing_salary = True
                         if player["missing_inf"]:
@@ -13981,8 +13983,8 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
             if "Game Before Sub Query" in time_frame["qualifiers"]:
                 for qualifier in time_frame["qualifiers"]["Game Before Sub Query"]:
                     for player in qualifier["values"]:
-                        if player["missing_games"]:
-                            any_missing_games = True
+                        any_missing_games += player["missing_games"]
+                        any_missing_pitch += player["missing_pitch"]
                         if player["missing_salary"]:
                             any_missing_salary = True
                         if player["missing_inf"]:
@@ -13990,8 +13992,8 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
             if "Season Sub Query" in time_frame["qualifiers"]:
                 for qualifier in time_frame["qualifiers"]["Season Sub Query"]:
                     for player in qualifier["values"]:
-                        if player["missing_games"]:
-                            any_missing_games = True
+                        any_missing_games += player["missing_games"]
+                        any_missing_pitch += player["missing_pitch"]
                         if player["missing_salary"]:
                             any_missing_salary = True
                         if player["missing_inf"]:
@@ -13999,8 +14001,8 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
             if "Or Season Sub Query" in time_frame["qualifiers"]:
                 for qualifier in time_frame["qualifiers"]["Or Season Sub Query"]:
                     for player in qualifier["values"]:
-                        if player["missing_games"]:
-                            any_missing_games = True
+                        any_missing_games += player["missing_games"]
+                        any_missing_pitch += player["missing_pitch"]
                         if player["missing_salary"]:
                             any_missing_salary = True
                         if player["missing_inf"]:
@@ -14008,8 +14010,8 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
             if "Season After Sub Query" in time_frame["qualifiers"]:
                 for qualifier in time_frame["qualifiers"]["Season After Sub Query"]:
                     for player in qualifier["values"]:
-                        if player["missing_games"]:
-                            any_missing_games = True
+                        any_missing_games += player["missing_games"]
+                        any_missing_pitch += player["missing_pitch"]
                         if player["missing_salary"]:
                             any_missing_salary = True
                         if player["missing_inf"]:
@@ -14017,8 +14019,8 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
             if "Season Before Sub Query" in time_frame["qualifiers"]:
                 for qualifier in time_frame["qualifiers"]["Season Before Sub Query"]:
                     for player in qualifier["values"]:
-                        if player["missing_games"]:
-                            any_missing_games = True
+                        any_missing_games += player["missing_games"]
+                        any_missing_pitch += player["missing_pitch"]
                         if player["missing_salary"]:
                             any_missing_salary = True
                         if player["missing_inf"]:
@@ -14026,8 +14028,8 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
             if "Day After Pitching" in time_frame["qualifiers"]:
                 for qualifier in time_frame["qualifiers"]["Day After Pitching"]:
                     for player in qualifier["values"]:
-                        if player["missing_games"]:
-                            any_missing_games = True
+                        any_missing_games += player["missing_games"]
+                        any_missing_pitch += player["missing_pitch"]
                         if player["missing_salary"]:
                             any_missing_salary = True
                         if player["missing_inf"]:
@@ -14035,8 +14037,8 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
             if "Day After Hitting" in time_frame["qualifiers"]:
                 for qualifier in time_frame["qualifiers"]["Day After Hitting"]:
                     for player in qualifier["values"]:
-                        if player["missing_games"]:
-                            any_missing_games = True
+                        any_missing_games += player["missing_games"]
+                        any_missing_pitch += player["missing_pitch"]
                         if player["missing_salary"]:
                             any_missing_salary = True
                         if player["missing_inf"]:
@@ -14044,8 +14046,8 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
             if "Day Before Pitching" in time_frame["qualifiers"]:
                 for qualifier in time_frame["qualifiers"]["Day Before Pitching"]:
                     for player in qualifier["values"]:
-                        if player["missing_games"]:
-                            any_missing_games = True
+                        any_missing_games += player["missing_games"]
+                        any_missing_pitch += player["missing_pitch"]
                         if player["missing_salary"]:
                             any_missing_salary = True
                         if player["missing_inf"]:
@@ -14053,8 +14055,8 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
             if "Day Before Hitting" in time_frame["qualifiers"]:
                 for qualifier in time_frame["qualifiers"]["Day Before Hitting"]:
                     for player in qualifier["values"]:
-                        if player["missing_games"]:
-                            any_missing_games = True
+                        any_missing_games += player["missing_games"]
+                        any_missing_pitch += player["missing_pitch"]
                         if player["missing_salary"]:
                             any_missing_salary = True
                         if player["missing_inf"]:
@@ -14062,8 +14064,8 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
             if "Playing With" in time_frame["qualifiers"]:
                 for qualifier in time_frame["qualifiers"]["Playing With"]:
                     for player in qualifier["values"]:
-                        if player["missing_games"]:
-                            any_missing_games = True
+                        any_missing_games += player["missing_games"]
+                        any_missing_pitch += player["missing_pitch"]
                         if player["missing_salary"]:
                             any_missing_salary = True
                         if player["missing_inf"]:
@@ -14071,8 +14073,8 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
             if "Previous Playing With" in time_frame["qualifiers"]:
                 for qualifier in time_frame["qualifiers"]["Previous Playing With"]:
                     for player in qualifier["values"]:
-                        if player["missing_games"]:
-                            any_missing_games = True
+                        any_missing_games += player["missing_games"]
+                        any_missing_pitch += player["missing_pitch"]
                         if player["missing_salary"]:
                             any_missing_salary = True
                         if player["missing_inf"]:
@@ -14080,8 +14082,8 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
             if "Upcoming Playing With" in time_frame["qualifiers"]:
                 for qualifier in time_frame["qualifiers"]["Upcoming Playing With"]:
                     for player in qualifier["values"]:
-                        if player["missing_games"]:
-                            any_missing_games = True
+                        any_missing_games += player["missing_games"]
+                        any_missing_pitch += player["missing_pitch"]
                         if player["missing_salary"]:
                             any_missing_salary = True
                         if player["missing_inf"]:
@@ -14089,8 +14091,8 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
             if "Playing Against" in time_frame["qualifiers"]:
                 for qualifier in time_frame["qualifiers"]["Playing Against"]:
                     for player in qualifier["values"]:
-                        if player["missing_games"]:
-                            any_missing_games = True
+                        any_missing_games += player["missing_games"]
+                        any_missing_pitch += player["missing_pitch"]
                         if player["missing_salary"]:
                             any_missing_salary = True
                         if player["missing_inf"]:
@@ -14098,8 +14100,8 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
             if "Previous Playing Against" in time_frame["qualifiers"]:
                 for qualifier in time_frame["qualifiers"]["Previous Playing Against"]:
                     for player in qualifier["values"]:
-                        if player["missing_games"]:
-                            any_missing_games = True
+                        any_missing_games += player["missing_games"]
+                        any_missing_pitch += player["missing_pitch"]
                         if player["missing_salary"]:
                             any_missing_salary = True
                         if player["missing_inf"]:
@@ -14107,8 +14109,8 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
             if "Upcoming Playing Against" in time_frame["qualifiers"]:
                 for qualifier in time_frame["qualifiers"]["Upcoming Playing Against"]:
                     for player in qualifier["values"]:
-                        if player["missing_games"]:
-                            any_missing_games = True
+                        any_missing_games += player["missing_games"]
+                        any_missing_pitch += player["missing_pitch"]
                         if player["missing_salary"]:
                             any_missing_salary = True
                         if player["missing_inf"]:
@@ -14116,8 +14118,8 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
             if "Playing Same Game" in time_frame["qualifiers"]:
                 for qualifier in time_frame["qualifiers"]["Playing Same Game"]:
                     for player in qualifier["values"]:
-                        if player["missing_games"]:
-                            any_missing_games = True
+                        any_missing_games += player["missing_games"]
+                        any_missing_pitch += player["missing_pitch"]
                         if player["missing_salary"]:
                             any_missing_salary = True
                         if player["missing_inf"]:
@@ -14125,8 +14127,8 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
             if "Playing Same Opponents" in time_frame["qualifiers"]:
                 for qualifier in time_frame["qualifiers"]["Playing Same Opponents"]:
                     for player in qualifier["values"]:
-                        if player["missing_games"]:
-                            any_missing_games = True
+                        any_missing_games += player["missing_games"]
+                        any_missing_pitch += player["missing_pitch"]
                         if player["missing_salary"]:
                             any_missing_salary = True
                         if player["missing_inf"]:
@@ -14134,8 +14136,8 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
             if "Playing Same Date" in time_frame["qualifiers"]:
                 for qualifier in time_frame["qualifiers"]["Playing Same Date"]:
                     for player in qualifier["values"]:
-                        if player["missing_games"]:
-                            any_missing_games = True
+                        any_missing_games += player["missing_games"]
+                        any_missing_pitch += player["missing_pitch"]
                         if player["missing_salary"]:
                             any_missing_salary = True
                         if player["missing_inf"]:
@@ -14143,8 +14145,8 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
             if "Batting Against" in time_frame["qualifiers"]:
                 for qualifier in time_frame["qualifiers"]["Batting Against"]:
                     for player in qualifier["values"]:
-                        if player["missing_games"]:
-                            any_missing_games = True
+                        any_missing_games += player["missing_games"]
+                        any_missing_pitch += player["missing_pitch"]
                         if player["missing_salary"]:
                             any_missing_salary = True
                         if player["missing_inf"]:
@@ -14152,8 +14154,8 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
             if "Pitching Against" in time_frame["qualifiers"]:
                 for qualifier in time_frame["qualifiers"]["Pitching Against"]:
                     for player in qualifier["values"]:
-                        if player["missing_games"]:
-                            any_missing_games = True
+                        any_missing_games += player["missing_games"]
+                        any_missing_pitch += player["missing_pitch"]
                         if player["missing_salary"]:
                             any_missing_salary = True
                         if player["missing_inf"]:
@@ -14161,8 +14163,8 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
             if "Driven In" in time_frame["qualifiers"]:
                 for qualifier in time_frame["qualifiers"]["Driven In"]:
                     for player in qualifier["values"]:
-                        if player["missing_games"]:
-                            any_missing_games = True
+                        any_missing_games += player["missing_games"]
+                        any_missing_pitch += player["missing_pitch"]
                         if player["missing_salary"]:
                             any_missing_salary = True
                         if player["missing_inf"]:
@@ -14170,8 +14172,8 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
             if "Batted In" in time_frame["qualifiers"]:
                 for qualifier in time_frame["qualifiers"]["Batted In"]:
                     for player in qualifier["values"]:
-                        if player["missing_games"]:
-                            any_missing_games = True
+                        any_missing_games += player["missing_games"]
+                        any_missing_pitch += player["missing_pitch"]
                         if player["missing_salary"]:
                             any_missing_salary = True
                         if player["missing_inf"]:
@@ -14179,8 +14181,8 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
             if "Back To Back With" in time_frame["qualifiers"]:
                 for qualifier in time_frame["qualifiers"]["Back To Back With"]:
                     for player in qualifier["values"]:
-                        if player["missing_games"]:
-                            any_missing_games = True
+                        any_missing_games += player["missing_games"]
+                        any_missing_pitch += player["missing_pitch"]
                         if player["missing_salary"]:
                             any_missing_salary = True
                         if player["missing_inf"]:
@@ -14188,8 +14190,8 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
             if "Batting In Front Of" in time_frame["qualifiers"]:
                 for qualifier in time_frame["qualifiers"]["Batting In Front Of"]:
                     for player in qualifier["values"]:
-                        if player["missing_games"]:
-                            any_missing_games = True
+                        any_missing_games += player["missing_games"]
+                        any_missing_pitch += player["missing_pitch"]
                         if player["missing_salary"]:
                             any_missing_salary = True
                         if player["missing_inf"]:
@@ -14197,8 +14199,8 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
             if "Batting Behind" in time_frame["qualifiers"]:
                 for qualifier in time_frame["qualifiers"]["Batting Behind"]:
                     for player in qualifier["values"]:
-                        if player["missing_games"]:
-                            any_missing_games = True
+                        any_missing_games += player["missing_games"]
+                        any_missing_pitch += player["missing_pitch"]
                         if player["missing_salary"]:
                             any_missing_salary = True
                         if player["missing_inf"]:
@@ -14206,8 +14208,8 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
             if "Batting Next To" in time_frame["qualifiers"]:
                 for qualifier in time_frame["qualifiers"]["Batting Next To"]:
                     for player in qualifier["values"]:
-                        if player["missing_games"]:
-                            any_missing_games = True
+                        any_missing_games += player["missing_games"]
+                        any_missing_pitch += player["missing_pitch"]
                         if player["missing_salary"]:
                             any_missing_salary = True
                         if player["missing_inf"]:
@@ -14215,8 +14217,8 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
             if "Caught By" in time_frame["qualifiers"]:
                 for qualifier in time_frame["qualifiers"]["Caught By"]:
                     for player in qualifier["values"]:
-                        if player["missing_games"]:
-                            any_missing_games = True
+                        any_missing_games += player["missing_games"]
+                        any_missing_pitch += player["missing_pitch"]
                         if player["missing_salary"]:
                             any_missing_salary = True
                         if player["missing_inf"]:
@@ -14224,8 +14226,8 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
             if "Stealing On" in time_frame["qualifiers"]:
                 for qualifier in time_frame["qualifiers"]["Stealing On"]:
                     for player in qualifier["values"]:
-                        if player["missing_games"]:
-                            any_missing_games = True
+                        any_missing_games += player["missing_games"]
+                        any_missing_pitch += player["missing_pitch"]
                         if player["missing_salary"]:
                             any_missing_salary = True
                         if player["missing_inf"]:
@@ -14233,8 +14235,8 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
             if "On Field With" in time_frame["qualifiers"]:
                 for qualifier in time_frame["qualifiers"]["On Field With"]:
                     for player in qualifier["values"]:
-                        if player["missing_games"]:
-                            any_missing_games = True
+                        any_missing_games += player["missing_games"]
+                        any_missing_pitch += player["missing_pitch"]
                         if player["missing_salary"]:
                             any_missing_salary = True
                         if player["missing_inf"]:
@@ -14242,8 +14244,8 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
             if "On Field Against" in time_frame["qualifiers"]:
                 for qualifier in time_frame["qualifiers"]["On Field Against"]:
                     for player in qualifier["values"]:
-                        if player["missing_games"]:
-                            any_missing_games = True
+                        any_missing_games += player["missing_games"]
+                        any_missing_pitch += player["missing_pitch"]
                         if player["missing_salary"]:
                             any_missing_salary = True
                         if player["missing_inf"]:
@@ -14265,6 +14267,7 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
                     is_playoffs = "Include"
 
     player_data["stat_values"]["any_missing_games"] = any_missing_games
+    player_data["stat_values"]["any_missing_pitch"] = any_missing_pitch
     player_data["stat_values"]["any_missing_salary"] = any_missing_salary
     player_data["stat_values"]["any_missing_inf"] = any_missing_inf
     player_data["stat_values"]["is_playoffs"] = is_playoffs
@@ -14777,6 +14780,20 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
                 player_data["stat_values"]["Raw Quals"] += " [Seasons In Top " + str(seasons_leading_end) + "]"
             else:
                 player_data["stat_values"]["Raw Quals"] +=  " [Seasons In Top " + str(seasons_leading_start) + "-" + str(seasons_leading_end) + "]"
+
+        if "missing-game" in extra_stats:
+            if player_data["stat_values"]["any_missing_games"]:
+                player_data["stat_values"]["any_missing_games"] = sorted(player_data["stat_values"]["any_missing_games"], key=customGameDateSort)
+                player_data["stat_values"]["Raw Quals"] +=  " [Missing Games: " + " + ".join(player_data["stat_values"]["any_missing_games"]) + "]"
+            else:
+                player_data["stat_values"]["Raw Quals"] +=  " [No Missing Games!]"
+    
+        if "missing-pitch" in extra_stats:
+            if player_data["stat_values"]["any_missing_pitch"]:
+                player_data["stat_values"]["any_missing_pitch"] = sorted(player_data["stat_values"]["any_missing_pitch"], key=customGameDateSort)
+                player_data["stat_values"]["Raw Quals"] +=  " [Missing Pitch Data Games: " + " + ".join(player_data["stat_values"]["any_missing_pitch"]) + "]"
+            else:
+                player_data["stat_values"]["Raw Quals"] +=  " [No Missing Pitch Data Games!]"
     
     player_data["stat_values"]["Raw Quals"] = player_data["stat_values"]["Raw Quals"].strip()
 
@@ -14802,6 +14819,10 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
         player_data["stat_values"]["Raw Quals"] = "Query: ?????"
 
     return player_data
+
+def customGameDateSort(game_link):
+    match = re.match(r"\[(.+)\]\(.+\)", game_link)
+    return dateutil.parser.parse(match.group(1))
 
 def calculate_values(all_rows, player_type, time_frames, og_player_data, extra_stats={}):
     has_own_jaws = False
@@ -14945,7 +14966,8 @@ def handle_multi_player_data(player_id, time_frames, player_type, player_page, r
     player_data["DateEnd"] = []
     player_data["is_playoffs"] = []
 
-    any_missing_games = False
+    any_missing_games = []
+    any_missing_pitch = []
     any_missing_salary = False
     any_missing_inf = False
     for time_frame in time_frames:
@@ -14955,7 +14977,7 @@ def handle_multi_player_data(player_id, time_frames, player_type, player_page, r
         if ("Game After Sub Query" in time_frame["qualifiers"] or "Game Before Sub Query" in time_frame["qualifiers"] or "Games Rest" in time_frame["qualifiers"] or "Starts Rest" in time_frame["qualifiers"] or "Games In A Row" in time_frame["qualifiers"] or "Starts In A Row" in time_frame["qualifiers"] or "Game Days Rest" in time_frame["qualifiers"] or "Start Days Rest" in time_frame["qualifiers"] or "Start Days In A Row" in time_frame["qualifiers"] or "Game Days In A Row" in time_frame["qualifiers"] or "Days Rest" in time_frame["qualifiers"] or "Starts Days Rest" in time_frame["qualifiers"] or "Upcoming Days Rest" in time_frame["qualifiers"] or "Upcoming Starts Days Rest" in time_frame["qualifiers"]) and not "all_games" in player_data:
             get_all_games(player_data, time_frame, player_type, comment_obj)
 
-        row, missing_games, missing_salary, missing_inf = handle_player_data(player_data, time_frame, player_type, player_page, valid_teams, valid_year_teams, is_pitching_jaws, extra_stats)
+        row, missing_games, missing_pitch, missing_salary, missing_inf = handle_player_data(player_data, time_frame, player_type, player_page, valid_teams, valid_year_teams, is_pitching_jaws, extra_stats)
 
         if remove_duplicates:
             current_dates = set([row_data["DateTime"] for row_data in player_data["rows"]])
@@ -15000,8 +15022,8 @@ def handle_multi_player_data(player_id, time_frames, player_type, player_page, r
         player_data["rows"] += row
         player_data["seperate_rows"] += [row]
 
-        if missing_games:
-            any_missing_games = True
+        any_missing_games += missing_games
+        any_missing_pitch += missing_pitch
         if missing_salary:
             any_missing_salary = True
         if missing_inf:
@@ -15027,7 +15049,7 @@ def handle_multi_player_data(player_id, time_frames, player_type, player_page, r
         
         logger.info("#" + str(threading.get_ident()) + "#   " + "Done with player " + player_id)
 
-    return player_data, any_missing_games, any_missing_salary, any_missing_inf
+    return player_data, any_missing_games, any_missing_pitch, any_missing_salary, any_missing_inf
 
 def determine_raw_str(subbb_frame):
     qual_str = ""
@@ -15578,16 +15600,13 @@ def handle_player_data(player_data, time_frame, player_type, player_page, valid_
                     is_only_round = True
                     break
 
-    missing_games = False
+    missing_games = []
+    missing_pitch = []
     valid_years = player_data["reg_year_valid_years"] if not time_frame["playoffs"] else player_data["year_valid_years"]
     if not (time_frame["type"] == "date" and (isinstance(time_frame["time_start"], int) or isinstance(time_frame["time_end"], int))) or is_qual_match:
         is_seasons = (time_frame["type"].startswith("season") and not is_qual_match) or time_frame["playoffs"] == "Only"
         if not is_seasons:
             valid_years = player_data["game_valid_years"]
-            if player_data["id"][len(player_data["id"]) - 1].isdigit():
-                if time_frame["playoffs"] != "Only":
-                    if min(player_data["year_valid_years"]) < 1901:
-                        missing_games = True
     
     missing_salary = False
     missing_inf = False
@@ -15896,9 +15915,9 @@ def handle_player_data(player_data, time_frame, player_type, player_page, valid_
             handle_stat_rank_stats(all_rows, time_frame["qualifiers"], player_type, s)
 
         if ("Event Stat" in time_frame["qualifiers"] or "Event Stat Reversed" in time_frame["qualifiers"] or "Event Stats" in time_frame["qualifiers"] or "Event Stats Reversed" in time_frame["qualifiers"] or "Starting Event Stat" in time_frame["qualifiers"] or "Starting Event Stat Reversed" in time_frame["qualifiers"] or "Starting Event Stats" in time_frame["qualifiers"] or "Starting Event Stats Reversed" in time_frame["qualifiers"]):
-            all_rows, missing_games = handle_mlb_game_stats_single_thread(all_rows, has_count_stat, time_frame["qualifiers"], player_data, player_type, missing_games, extra_stats, s)
+            all_rows, missing_games, missing_pitch = handle_mlb_game_stats_single_thread(all_rows, has_count_stat, time_frame["qualifiers"], player_data, player_type, missing_games, missing_pitch, extra_stats, s)
         elif has_result_stat_qual or "Game Number" in time_frame["qualifiers"] or "Run Support" in time_frame["qualifiers"] or "current-stats" in extra_stats or "run-support-record" in extra_stats or "run-support" in extra_stats or "advanced-runner" in extra_stats or "exit-record" in extra_stats:
-            all_rows, missing_games = handle_mlb_game_stats(all_rows, has_count_stat, time_frame["qualifiers"], player_data, player_type, missing_games, extra_stats, s)
+            all_rows, missing_games, missing_pitch = handle_mlb_game_stats(all_rows, has_count_stat, time_frame["qualifiers"], player_data, player_type, missing_games, missing_pitch, extra_stats, s)
 
     if time_frame["qualifiers"]:
         new_rows = []
@@ -16358,7 +16377,7 @@ def handle_player_data(player_data, time_frame, player_type, player_page, valid_
                     pos = position_map[pos]
                 player_data["ind_type"].add(pos)
 
-    return all_rows, missing_games, missing_salary, missing_inf
+    return all_rows, missing_games, missing_pitch, missing_salary, missing_inf
 
 def get_team_map_info(player_data, player_type, valid_teams, comment_obj):
     subbb_frames = [{
@@ -26914,9 +26933,9 @@ def get_team_schedule(player_data, seasons, needs_reg_season, needs_playoffs, ne
     
     return season_objs
 
-def handle_mlb_game_stats(all_rows, has_count_stat, qualifiers, player_data, player_type, missing_games, extra_stats, s):
+def handle_mlb_game_stats(all_rows, has_count_stat, qualifiers, player_data, player_type, missing_games, missing_pitch, extra_stats, s):
     if not all_rows:
-        return [], missing_games
+        return [], missing_games, missing_pitch
 
     games_to_skip = set()
     if "Batting Against" in qualifiers:
@@ -27314,7 +27333,7 @@ def handle_mlb_game_stats(all_rows, has_count_stat, qualifiers, player_data, pla
     for qual in ["Event Stat", "Event Stat Reversed", "Event Stats", "Event Stats Reversed", "Starting Event Stat", "Starting Event Stat Reversed", "Starting Event Stats", "Starting Event Stats Reversed", "Game Event Stat", "Game Event Stat Reversed", "Game Event Stats", "Game Event Stats Reversed", "Starting Game Event Stat", "Starting Game Event Stat Reversed", "Starting Game Event Stats", "Starting Game Event Stats Reversed"]:
         handle_event_stats(qual, all_rows, games_to_skip, qualifiers, player_type, player_data)
 
-    return get_mlb_game_stats(all_rows, has_count_stat, qualifiers, games_to_skip, player_data, missing_games, player_type, extra_stats, True, s)
+    return get_mlb_game_stats(all_rows, has_count_stat, qualifiers, games_to_skip, player_data, missing_games, missing_pitch, player_type, extra_stats, True, s)
 
 def handle_event_stats(qual, all_rows, games_to_skip, qualifiers, player_type, player_data):
     if qual in qualifiers:
@@ -27332,9 +27351,9 @@ def handle_event_stats(qual, all_rows, games_to_skip, qualifiers, player_type, p
             
             row_data["is_playoffs"] = prev_is_playofs
 
-def handle_mlb_game_stats_single_thread(all_rows, has_count_stat, qualifiers, player_data, player_type, missing_games, extra_stats, s):
+def handle_mlb_game_stats_single_thread(all_rows, has_count_stat, qualifiers, player_data, player_type, missing_games, missing_pitch, extra_stats, s):
     if not all_rows:
-        return [], missing_games
+        return [], missing_games, missing_pitch
 
     games_to_skip = set()
     if "Batting Against" in qualifiers:
@@ -27677,7 +27696,7 @@ def handle_mlb_game_stats_single_thread(all_rows, has_count_stat, qualifiers, pl
     for qual in ["Event Stat", "Event Stat Reversed", "Event Stats", "Event Stats Reversed", "Starting Event Stat", "Starting Event Stat Reversed", "Starting Event Stats", "Starting Event Stats Reversed", "Game Event Stat", "Game Event Stat Reversed", "Game Event Stats", "Game Event Stats Reversed", "Starting Game Event Stat", "Starting Game Event Stat Reversed", "Starting Game Event Stats", "Starting Game Event Stats Reversed"]:
         handle_event_stats(qual, all_rows, games_to_skip, qualifiers, player_type, player_data)
 
-    return get_mlb_game_stats_single_thread(all_rows, has_count_stat, qualifiers, games_to_skip, player_data, missing_games, player_type, extra_stats, s)
+    return get_mlb_game_stats_single_thread(all_rows, has_count_stat, qualifiers, games_to_skip, player_data, missing_games, missing_pitch, player_type, extra_stats, s)
 
 def setup_career_stats(row_data, player_game_info, saved_row_data, index, player_type, player_data, qualifiers):
     if not player_game_info or player_game_info["missing_data"]:
@@ -36055,7 +36074,7 @@ def perform_mlb_game_qualifiers(row, qualifiers):
     
     return True
 
-def get_mlb_game_stats(all_rows, has_count_stat, qualifiers, games_to_skip, player_data, missing_games, player_type, extra_stats, needs_plays, s):
+def get_mlb_game_stats(all_rows, has_count_stat, qualifiers, games_to_skip, player_data, missing_games, missing_pitch, player_type, extra_stats, needs_plays, s):
     if needs_plays:
         logger.info("#" + str(threading.get_ident()) + "#   " + player_data["id"] + " starting game data")
     count_info = {
@@ -36063,12 +36082,13 @@ def get_mlb_game_stats(all_rows, has_count_stat, qualifiers, games_to_skip, play
         "count" : 1,
         "total_count" : len(all_rows) - len(games_to_skip),
         "missing_games" : missing_games,
+        "missing_pitch" : missing_pitch,
         "exception" : None
     }
     new_rows = []
 
     if not count_info["total_count"]:
-        return new_rows, count_info["missing_games"]
+        return new_rows, count_info["missing_games"], count_info["missing_pitch"]
 
     with ThreadPoolExecutor(max_workers=5) as sub_executor:
         for index, row_data in enumerate(sorted(all_rows, key=lambda row: row["DateTime"])):
@@ -36082,26 +36102,27 @@ def get_mlb_game_stats(all_rows, has_count_stat, qualifiers, games_to_skip, play
     if needs_plays:
         logger.info("#" + str(threading.get_ident()) + "#   " + player_data["id"] + " completed game data")
 
-    return sorted(new_rows, key=lambda row: row["DateTime"]), count_info["missing_games"]
+    return sorted(new_rows, key=lambda row: row["DateTime"]), count_info["missing_games"], count_info["missing_pitch"]
 
 
 def get_href_mlb_game_stats(all_rows, s):
     for index, row_data in enumerate(sorted(all_rows, key=lambda row: row["DateTime"])):
         get_href_game_data(row_data, s)
 
-def get_mlb_game_stats_single_thread(all_rows, has_count_stat, qualifiers, games_to_skip, player_data, missing_games, player_type, extra_stats, s):
+def get_mlb_game_stats_single_thread(all_rows, has_count_stat, qualifiers, games_to_skip, player_data, missing_games, missing_pitch, player_type, extra_stats, s):
     logger.info("#" + str(threading.get_ident()) + "#   " + player_data["id"] + " starting game data")
     count_info = {
         "current_percent" : 10,
         "count" : 1,
         "total_count" : len(all_rows) - len(games_to_skip),
         "missing_games" : missing_games,
+        "missing_pitch" : missing_pitch,
         "exception" : None
     }
     new_rows = []
 
     if not count_info["total_count"]:
-        return new_rows, count_info["missing_games"]
+        return new_rows, count_info["missing_games"], count_info["missing_pitch"]
 
     event_stats_needed = {}
     event_start_stats_needed = {}
@@ -36162,8 +36183,8 @@ def get_mlb_game_stats_single_thread(all_rows, has_count_stat, qualifiers, games
     for index, row_data in enumerate(sorted(all_rows, key=lambda row: row["DateTime"], reverse=is_reverse)):
         if row_data["GameLink"] not in games_to_skip:
             try:
-                game_data, row_data, index, sub_missing_games = get_live_game_data(index, has_count_stat, player_data, row_data, player_type, qualifiers, True, s)
-                has_match, raw_row_data = handle_result_qualifiers(game_data, index, row_data, sub_missing_games, player_type, player_data, qualifiers, saved_row_data, count_info, extra_stats)
+                game_data, row_data, index, sub_missing_games, sub_missing_pitch = get_live_game_data(index, has_count_stat, player_data, row_data, player_type, qualifiers, True, s)
+                has_match, raw_row_data = handle_result_qualifiers(game_data, index, row_data, sub_missing_games, sub_missing_pitch, player_type, player_data, qualifiers, saved_row_data, count_info, extra_stats)
                 
                 if stat not in raw_row_data:
                     break
@@ -36227,13 +36248,13 @@ def get_mlb_game_stats_single_thread(all_rows, has_count_stat, qualifiers, games
 
     logger.info("#" + str(threading.get_ident()) + "#   " + player_data["id"] + " completed game data")
 
-    return sorted(new_rows, key=lambda row: row["DateTime"]), count_info["missing_games"]
+    return sorted(new_rows, key=lambda row: row["DateTime"]), count_info["missing_games"], count_info["missing_pitch"]
 
 def handle_mlb_schedule_stats(all_rows, qualifiers, player_data, player_type, missing_games, extra_stats):
     new_rows = []
     for row in all_rows:
         if "MLBGameLink" not in row:
-            missing_games = True
+            missing_games.append("[" + str(row_data["Date"]) + "](" + "https://www.mlb.com/gameday/" + str(row["MLBGameLink"]) + ")")
             continue
         if perform_mlb_schedule_qualifiers(row, qualifiers):
             new_rows.append(row)
@@ -37180,9 +37201,9 @@ def result_call_back(qualifiers, count_info, new_rows, player_type, player_data,
             count_info["count"] += 1
             return
 
-        game_data, row_data, index, sub_missing_games = result.result()
+        game_data, row_data, index, sub_missing_games, sub_missing_pitch = result.result()
 
-        if handle_result_qualifiers(game_data, index, row_data, sub_missing_games, player_type, player_data, qualifiers, None, count_info, extra_stats)[0]:
+        if handle_result_qualifiers(game_data, index, row_data, sub_missing_games, sub_missing_pitch, player_type, player_data, qualifiers, None, count_info, extra_stats)[0]:
             new_rows.append(row_data)
 
         percent_complete = 100 * (count_info["count"] / count_info["total_count"])
@@ -37210,7 +37231,7 @@ def result_call_back(qualifiers, count_info, new_rows, player_type, player_data,
     #     ps.sort_stats(pstats.SortKey.TIME)
     #     ps.print_stats()
 
-def handle_result_qualifiers(game_data, index, row_data, sub_missing_games, player_type, player_data, qualifiers, saved_row_data, count_info, extra_stats):
+def handle_result_qualifiers(game_data, index, row_data, sub_missing_games, sub_missing_pitch, player_type, player_data, qualifiers, saved_row_data, count_info, extra_stats):
     set_row_data(game_data, row_data, player_type)
 
     raw_row_data = row_data
@@ -37232,14 +37253,18 @@ def handle_result_qualifiers(game_data, index, row_data, sub_missing_games, play
 
     if "current-stats" in extra_stats:    
         if sub_missing_games:
-            count_info["missing_games"] = True
+            count_info["missing_games"].append("[" + str(row_data["Date"]) + "](" + "https://www.mlb.com/gameday/" + str(row_data["MLBGameLink"]) + ")")
+        if sub_missing_pitch:
+            count_info["missing_pitch"].append("[" + str(row_data["Date"]) + "](" + "https://www.mlb.com/gameday/" + str(row_data["MLBGameLink"]) + ")")
         has_match, raw_row_data = perform_sub_mlb_game_qualifiers(row_data, player_data, qualifiers, game_data, player_type, True)
         if not has_match:
             return False, raw_row_data
     
     if "Inning Stat" in qualifiers:
         if sub_missing_games:
-            count_info["missing_games"] = True
+            count_info["missing_games"].append("[" + str(row_data["Date"]) + "](" + "https://www.mlb.com/gameday/" + str(row_data["MLBGameLink"]) + ")")
+        if sub_missing_pitch:
+            count_info["missing_pitch"].append("[" + str(row_data["Date"]) + "](" + "https://www.mlb.com/gameday/" + str(row_data["MLBGameLink"]) + ")")
         has_match, raw_row_data = perform_sub_mlb_inning_qualifiers(row_data, player_data, qualifiers, game_data, player_type)
         if not has_match:
             return False, raw_row_data
@@ -37649,6 +37674,7 @@ def get_mlb_game_links_schedule_links(player_data, player_type, player_link, all
     
 def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_type, qualifiers, needs_plays, s):
     missing_games = False
+    missing_pitch = False
     game_data = {
         "missing_data" : False,
         "batting_events" : [],
@@ -37680,7 +37706,7 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
         else:
             missing_games = True
             game_data["missing_data"] = True
-            return game_data, row_data, row_index, missing_games
+            return game_data, row_data, row_index, missing_games, missing_pitch
     
     #print("https://statsapi.mlb.com/api/v1.1/game/" + str(row_data["MLBGameLink"]) + "/feed/live")
     try:
@@ -37689,7 +37715,7 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
         if err.status == 404:
             missing_games = True
             game_data["missing_data"] = True
-            return game_data, row_data, row_index, missing_games
+            return game_data, row_data, row_index, missing_games, missing_pitch
         else:
             raise
 
@@ -37753,7 +37779,7 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
         if not sub_data["liveData"]["plays"]["allPlays"]:
             missing_games = True
             game_data["missing_data"] = True
-            return game_data, row_data, row_index, missing_games
+            return game_data, row_data, row_index, missing_games, missing_pitch
 
         strike_zone_map = {}
         first_names = {}
@@ -37918,10 +37944,11 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
                     break
         
         if not has_count_data:
+            missing_pitch = True
             if has_count_stat or "Hit Location" in qualifiers or "Exact Hit Location" in qualifiers or "Bunting" in qualifiers or "Fastball" in qualifiers or "Out Of Zone" in qualifiers or "In Zone" in qualifiers or "Breaking" in qualifiers or "Offspeed" in qualifiers or "Swung At First Pitch" in qualifiers or "First Pitch" in qualifiers or "Batter Ahead" in qualifiers or "Even Count" in qualifiers or "Pitcher Ahead" in qualifiers or "After Batter Ahead" in qualifiers or "After Even Count" in qualifiers or "After Pitcher Ahead" in qualifiers or "Full Count" in qualifiers or "Swinging On Strikes" in qualifiers or "Swinging On Balls" in qualifiers or "After Swinging On Strikes" in qualifiers or "After Swinging On Balls" in qualifiers or "After Strikes" in qualifiers or "After Balls" in qualifiers or "Strikes" in qualifiers or "Balls" in qualifiers or "Pitch Speed" in qualifiers or "Pitch Zone" in qualifiers or "Pitch Spin" in qualifiers or "Exit Velocity" in qualifiers or "Hit Distance" in qualifiers or "Hit Coordinates" in qualifiers or "Hit Y Coordinate" in qualifiers or "Hit X Coordinate" in qualifiers or "Pitch Coordinates" in qualifiers or "Pitch Y Coordinate" in qualifiers or "Pitch X Coordinate" in qualifiers or "Absolute Pitch Coordinates" in qualifiers or "Absolute Pitch Y Coordinate" in qualifiers or "Absolute Pitch X Coordinate" in qualifiers or "Hit Within Distance" in qualifiers or "Pitch Within Distance" in qualifiers or "Absolute Pitch Within Distance" in qualifiers or "Launch Angle" in qualifiers or "Count" in qualifiers or "After Count" in qualifiers or "After Swinging On Count" in qualifiers or "Swinging On Count" in qualifiers or "Game Pitch Count" in qualifiers or "Team Pitch Count" in qualifiers or "Pitch Count" in qualifiers or "Batters Faced" in qualifiers or "Plate Appearances" in qualifiers or "Starting Pitch Count" in qualifiers or "At Bat Pitch Count" in qualifiers or "Pitch Type" in qualifiers or "Exact Pitch Type" in qualifiers or "Hit Trajectory" in qualifiers or "Hit Hardness" in qualifiers:
                 missing_games = True
                 game_data["missing_data"] = True
-                return game_data, row_data, row_index, missing_games
+                return game_data, row_data, row_index, missing_games, missing_pitch
 
         for index, scoring_play in enumerate(sub_data["liveData"]["plays"]["allPlays"]):
             if scoring_play["result"]["type"] != "atBat" or "eventType" not in scoring_play["result"]:
@@ -40149,7 +40176,7 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
             if index == len(all_events) - 1:
                 game_data["final_team_position_map"] = all_event["team_position_map"]
         
-    return game_data, row_data, row_index, missing_games
+    return game_data, row_data, row_index, missing_games, missing_pitch
 
 
 def get_href_game_data(row_data, s):    
