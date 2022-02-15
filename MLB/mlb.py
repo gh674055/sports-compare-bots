@@ -17285,7 +17285,7 @@ def handle_missing_reg_rows(player_page, player_data, all_rows, player_type, tim
                         if not perform_qualifier(player_data, player_type, row_data, time_frame, all_rows):
                             continue
                         if not row_data["Year"] in seasons:
-                            all_rows.append({"Year" : row_data["Year"], "Date" : row_data["Date"], "DateTime" : row_data["DateTime"], "Tm" : row_data["Tm"], "is_playoffs" : False, "fake_reg_row" : True})
+                            all_rows.append({"Year" : row_data["Year"], "Date" : row_data["Date"], "DateTime" : row_data["DateTime"], "Tm" : row_data["Tm"], "TmLg" : get_team_league(row_data["Tm"], row_data["Year"]), "is_playoffs" : False, "fake_reg_row" : True})
 
 def handle_missing_playoff_rows(player_page, player_data, valid_years, all_rows, player_type, time_frame):     
     table_names = ["batting_postseason", "pitching_postseason"]
@@ -17326,7 +17326,7 @@ def handle_missing_playoff_rows(player_page, player_data, valid_years, all_rows,
 
                     if row_data["Tm"] != "TOT":
                         if not row_data["Year"] in valid_years:
-                            all_rows.append({"Year" : row_data["Year"], "Date" : row_data["Date"], "DateTime" : row_data["DateTime"], "Tm" : row_data["Tm"], "is_playoffs" : False, "fake_playoff_row" : True})
+                            all_rows.append({"Year" : row_data["Year"], "Date" : row_data["Date"], "DateTime" : row_data["DateTime"], "Tm" : row_data["Tm"], "TmLg" : get_team_league(row_data["Tm"], row_data["Year"]), "is_playoffs" : False, "fake_playoff_row" : True})
                             valid_years.append(row_data["Year"])
 
 def handle_no_hit(player_data, all_rows):
