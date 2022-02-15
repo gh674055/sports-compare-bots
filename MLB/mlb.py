@@ -41805,13 +41805,10 @@ def calculate_war_7yr_multiplayer(player_datas, player_type, is_pitching_jaws):
                     if not row["Year"] in war_by_year:
                         war_by_year[row["Year"]] = 0
 
-                    if "WAR" in row:
-                        war_by_year[row["Year"]] = round_value(war_by_year[row["Year"]] + row.get("WAR", 0), 1)
+                    if not is_pitching_jaws:
+                        war_by_year[row["Year"]] = round_value(war_by_year[row["Year"]] + row.get("RawWARPos", 0), 1)
                     else:
-                        if not is_pitching_jaws:
-                            war_by_year[row["Year"]] = round_value(war_by_year[row["Year"]] + row.get("RawWARPos", 0), 1)
-                        else:
-                            war_by_year[row["Year"]] = round_value(war_by_year[row["Year"]] + (row.get("RawWARPitch", 0) + row.get("RawWARPos", 0)), 1)
+                        war_by_year[row["Year"]] = round_value(war_by_year[row["Year"]] + (row.get("RawWARPitch", 0) + row.get("RawWARPos", 0)), 1)
             
             all_wars += war_by_year.values()
 
@@ -41819,7 +41816,7 @@ def calculate_war_7yr_multiplayer(player_datas, player_type, is_pitching_jaws):
         top_7_war += war
         if index >= 6:
             break
-            
+    
     return top_7_war
 
 def calculate_manual_war_7yr(all_rows, player_data, player_type, time_frame, is_pitching_jaws):
