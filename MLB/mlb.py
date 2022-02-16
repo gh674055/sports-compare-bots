@@ -42196,7 +42196,7 @@ def print_player_data(player_datas, player_type, highest_vals, lowest_vals, has_
                      if header == "WalkOff":
                          override_show = True
                 if "statcast" in extra_stats:
-                    if header == "Chase%" or header == "EV" or header == "Spin" or header == "MPH" or header == "HardHit%" or header == "SwtSpt%" or header == "LA" or header == "HitDist" or header == "PutAway%" or header == "Whiff%":
+                    if header == "Pit" or header == "Chase%" or header == "EV" or header == "Spin" or header == "MPH" or header == "HardHit%" or header == "SwtSpt%" or header == "LA" or header == "HitDist" or header == "PutAway%" or header == "Whiff%":
                         override_show = True
                 if "run-support" in extra_stats:
                     if header == "RS9" or header == "RS":
@@ -42516,7 +42516,7 @@ def get_reddit_player_table(player_datas, player_type, debug_mode, original_comm
                      if header == "WalkOff":
                          override_show = True
                 if "statcast" in extra_stats:
-                    if header == "Chase%" or header == "EV" or header == "Spin" or header == "MPH" or header == "HardHit%" or header == "SwtSpt%" or header == "LA" or header == "HitDist" or header == "PutAway%" or header == "Whiff%":
+                    if header == "Pit" or header == "Chase%" or header == "EV" or header == "Spin" or header == "MPH" or header == "HardHit%" or header == "SwtSpt%" or header == "LA" or header == "HitDist" or header == "PutAway%" or header == "Whiff%":
                         override_show = True
                 if "run-support" in extra_stats:
                     if header == "RS9" or header == "RS":
@@ -43231,7 +43231,7 @@ def handle_table_data(over_header, player_data, player_datas, player_type, heade
         if header == "WalkOff":
             override_show = True
     if "statcast" in extra_stats:
-        if header == "Chase%" or header == "EV" or header == "Spin" or header == "MPH" or header == "HardHit%" or header == "SwtSpt%" or header == "LA" or header == "HitDist" or header == "PutAway%" or header == "Whiff%":
+        if header == "Pit" or header == "Chase%" or header == "EV" or header == "Spin" or header == "MPH" or header == "HardHit%" or header == "SwtSpt%" or header == "LA" or header == "HitDist" or header == "PutAway%" or header == "Whiff%":
             override_show = True
     if "run-support" in extra_stats:
         if header == "RS9" or header == "RS":
@@ -43388,7 +43388,7 @@ def handle_table_data(over_header, player_data, player_datas, player_type, heade
             if header == "G":
                 if player_data["stat_values"]["any_missing_games"]:
                     value += "*"
-            elif header in count_stats:
+            elif header == "Pit":
                 if player_data["stat_values"]["any_missing_pitch"] or is_invalid_stat(header, player_type, player_data["stat_values"], True)["any_invalid"]:
                     value += "*"
             elif header in ("wOBA", "wSB", "wRC", "wRAA", "BRuns", "FIP") or header.endswith("-") or (header.endswith("+") and not header == "OPS+" and not header == "ERA+"):
