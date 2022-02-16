@@ -9174,11 +9174,11 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 extra_stats.add("current-stats")
                             elif qualifier_str == "single-assist":
                                 qual_type = "Single Assist"
-                                extra_stats.add("Assisted By")
+                                extra_stats.add("scoring-stats")
                                 extra_stats.add("current-stats")
                             elif qualifier_str == "single-assisted":
                                 qual_type = "Single Assist"
-                                extra_stats.add("Assisted By")
+                                extra_stats.add("scoring-stats")
                                 extra_stats.add("current-stats")
                             elif qualifier_str == "facing-lefty":
                                 qual_type = "Facing Lefty"
@@ -20924,8 +20924,7 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                             player_assisted = True
                             if first_assist:
                                 is_primary = True
-                        else:
-                            assists.append(score_player["player"]["id"])
+                        assists.append(score_player["player"]["id"])
                         first_assist = False
                     elif score_player["playerType"] == "Goalie":
                         if score_player["player"]["id"] == player_id or score_player["player"]["id"] == player_data["id"]:
