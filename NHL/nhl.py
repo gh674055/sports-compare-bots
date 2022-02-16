@@ -20917,8 +20917,7 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                     if score_player["playerType"] == "Scorer":
                         if score_player["player"]["id"] == player_id or score_player["player"]["id"] == player_data["id"]:
                             player_scored = True
-                        else:
-                            scorer = score_player["player"]["id"]
+                        scorer = score_player["player"]["id"]
                     elif score_player["playerType"] == "Assist":
                         if score_player["player"]["id"] == player_id or score_player["player"]["id"] == player_data["id"]:
                             player_assisted = True
@@ -20929,8 +20928,7 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                     elif score_player["playerType"] == "Goalie":
                         if score_player["player"]["id"] == player_id or score_player["player"]["id"] == player_data["id"]:
                             player_saved = True
-                        else:
-                            goalie = score_player["player"]["id"]
+                        goalie = score_player["player"]["id"]
                 
                 game_winning_goal = "gameWinningGoal" in scoring_play["result"] and scoring_play["result"]["gameWinningGoal"]
                 if scoring_play["about"]["period"] == 5 and game_data["is_shootout"]:
@@ -21084,13 +21082,11 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                     if score_player["playerType"] == "Shooter":
                         if score_player["player"]["id"] == player_id or score_player["player"]["id"] == player_data["id"]:
                             player_shot = True
-                        else:
-                            scorer = score_player["player"]["id"]
+                        scorer = score_player["player"]["id"]
                     elif score_player["playerType"] == "Goalie":
                         if score_player["player"]["id"] == player_id or score_player["player"]["id"] == player_data["id"]:
                             player_saved = True
-                        else:
-                            goalie = score_player["player"]["id"]
+                        goalie = score_player["player"]["id"]
                 
                 if player_shot:
                     game_data["shot"].append({**shared_data , **{
@@ -21147,13 +21143,11 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                     if score_player["playerType"] == "Shooter":
                         if score_player["player"]["id"] == player_id or score_player["player"]["id"] == player_data["id"]:
                             player_shot = True
-                        else:
-                            scorer = score_player["player"]["id"]
+                        scorer = score_player["player"]["id"]
                     elif score_player["playerType"] == "Goalie" or score_player["playerType"] == "Unknown":
                         if score_player["player"]["id"] == player_id or score_player["player"]["id"] == player_data["id"]:
                             player_saved = True
-                        else:
-                            goalie = score_player["player"]["id"]
+                        goalie = score_player["player"]["id"]
                 
                 if player_shot:
                     game_data["missed_shot"].append({**shared_data , **{
