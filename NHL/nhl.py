@@ -133,7 +133,7 @@ all_days_re = r"(?:" + "|".join([day + "-?" for day in all_days]) + r")+"
 
 string_stats = ["Tm"]
 
-skater_header_indv_shift_stats = ["CF", "CA", "CFPer", "CF/60M", "CA/60M", "FF", "FA", "FFPer", "SF/60M", "SA/60M", "oiOppS", "oiTmS", "SFPer", "FF/60M", "FA/60M", "offIGF", "offIGA", "TmGF", "OppGF", "TtlGF", "GFDiff", "offICF", "offICA", "TmCF", "OppCF", "TtlCF", "CFDiff", "offIFF", "offIFA", "TmFF", "OppFF", "TtlFF", "FFDiff", "offISF", "offISA", "TmSF", "OppSF", "TtlSF", "SFDiff", "offIGF/60M", "offICA/60M", "offIFF/60M" , "offISA/60M", "offIGA/60M", "offICF/60M", "offIFA/60M", "offISF/60M", "offIG/60M", "offIC/60M", "offIF/60M", "offIS/60M", "GFRel/60M", "CFRel/60M", "FFRel/60M", "SFRel/60M", "GARel/60M", "CARel/60M", "FARel/60M", "SARel/60M", "CFRelPer", "FFRelPer", "GFRelPer", "SFRelPer", "oiSPer", "oiSVPer", "PDO", "oiSRelPer", "oiSVRelPer", "PDORel", "OZ%", "TSA", "TSM", "TSB", "TSA/GP", "TSA/60M", "TSB/GP", "TSB/60M", "TSM/GP", "TSM/60M", "TS%", "SThr%", "offITOI", "offITOI/GP", "TltTOI", "TtlTOI/GP", "TOI%"]
+skater_header_indv_shift_stats = ["CF", "CA", "CFPer", "CF/60M", "CA/60M", "FF", "FA", "FFPer", "SF/60M", "SA/60M", "oiOppS", "oiTmS", "SFPer", "FF/60M", "FA/60M", "offIGF", "offIGA", "TmGF", "OppGF", "TtlGF", "GFDiff", "offICF", "offICA", "TmCF", "OppCF", "TtlCF", "CFDiff", "offIFF", "offIFA", "TmFF", "OppFF", "TtlFF", "FFDiff", "offISF", "offISA", "TmSF", "OppSF", "TtlSF", "SFDiff", "offIGF/60M", "offICA/60M", "offIFF/60M" , "offISA/60M", "offIGA/60M", "offICF/60M", "offIFA/60M", "offISF/60M", "offIG/60M", "offIC/60M", "offIF/60M", "offIS/60M", "GFRel/60M", "CFRel/60M", "FFRel/60M", "SFRel/60M", "GARel/60M", "CARel/60M", "FARel/60M", "SARel/60M", "CFRelPer", "FFRelPer", "GFRelPer", "SFRelPer", "oiSPer", "oiSVPer", "PDO", "oiSRelPer", "oiSVRelPer", "PDORel", "OZ%", "TSA", "TSM", "TSB", "TSA/GP", "TSA/60M", "TSB/GP", "TSB/60M", "TSM/GP", "TSM/60M", "TS%", "SThr%", "offITOI", "offITOI/GP", "iTtlTOI", "iTtlTOI/GP", "TmTtlTOI", "TmTtlTOI/GP", "iTOI%", "TmTOI%"]
 goalie_header_indv_shift_stats = []
 
 headers = {
@@ -634,7 +634,7 @@ headers = {
                 "game" : 2009
             }
         },
-        "TtlTOI" : {
+        "iTtlTOI" : {
             "positive" : True,
             "round" : "time",
             "display" : False,
@@ -644,7 +644,7 @@ headers = {
                 "game" : 2009
             }
         },
-        "TtlTOI/GP" : {
+        "iTtlTOI/GP" : {
             "positive" : True,
             "round" : "time",
             "display" : False,
@@ -654,7 +654,37 @@ headers = {
                 "game" : 2009
             }
         },
-        "TOI%" : {
+        "TmTtlTOI" : {
+            "positive" : True,
+            "round" : "time",
+            "display" : False,
+            "type" : "Relative",
+            "valid_since" : {
+                "season" : 2009,
+                "game" : 2009
+            }
+        },
+        "TmTtlTOI/GP" : {
+            "positive" : True,
+            "round" : "time",
+            "display" : False,
+            "type" : "Relative",
+            "valid_since" : {
+                "season" : 2009,
+                "game" : 2009
+            }
+        },
+        "iTOI%" : {
+            "positive" : True,
+            "round" : "percent",
+            "display" : False,
+            "type" : "Relative",
+            "valid_since" : {
+                "season" : 2009,
+                "game" : 2009
+            }
+        },
+        "TmTOI%" : {
             "positive" : True,
             "round" : "percent",
             "display" : False,
@@ -5936,8 +5966,10 @@ formulas = {
         "BLK/GP" : "BLK / GP",
         "TOI/GP" : "TOI / GP_TOI",
         "offITOI/GP" : "offITOI / GP_TOI",
-        "TtlTOI/GP" : "ttlTOI / GP_TOI",
-        "TOI%" : "TOI / TtlTOI",
+        "iTtlTOI/GP" : "iTtlTOI / GP_TOI",
+        "TmTtlTOI/GP" : "TmTtlTOI / GP_TOI",
+        "iTOI%" : "TOI / iTtlTOI",
+        "TmTOI%" : "TOI / TmTtlTOI",
         "TOI/Shft" : "TOI / Shft",
         "Shft/GP" : "Shft / GP",
         "EVTOI/GP" : "EVTOI / GP_TOI",
@@ -7584,6 +7616,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 extra_stats.add("hide-stat-dzfow/60m")
                                 extra_stats.add("hide-stat-dzfo/60m")
                                 extra_stats.add("hide-stat-dzfo%")
+                                extra_stats.add("hide-stat-iTOI%")
                                 extra_stats.add("show-stat-advtoi")
                                 extra_stats.add("show-stat-advtoi/gp")
                                 player_type["da_type"] = {
@@ -7602,6 +7635,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 extra_stats.add("hide-stat-dzfow/60m")
                                 extra_stats.add("hide-stat-dzfo/60m")
                                 extra_stats.add("hide-stat-dzfo%")
+                                extra_stats.add("hide-stat-iTOI%")
                                 extra_stats.add("show-stat-advtoi")
                                 extra_stats.add("show-stat-advtoi/gp")
                                 player_type["da_type"] = {
@@ -8324,6 +8358,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 extra_stats.add("hide-stat-dzfow/60m")
                                 extra_stats.add("hide-stat-dzfo/60m")
                                 extra_stats.add("hide-stat-dzfo%")
+                                extra_stats.add("hide-stat-iTOI%")
                                 extra_stats.add("show-stat-advtoi")
                                 extra_stats.add("show-stat-advtoi/gp")
                                 player_type["da_type"] = {
@@ -8342,6 +8377,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 extra_stats.add("hide-stat-dzfow/60m")
                                 extra_stats.add("hide-stat-dzfo/60m")
                                 extra_stats.add("hide-stat-dzfo%")
+                                extra_stats.add("hide-stat-iTOI%")
                                 extra_stats.add("show-stat-advtoi")
                                 extra_stats.add("show-stat-advtoi/gp")
                                 player_type["da_type"] = {
@@ -11161,7 +11197,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 if stat == "minute" or stat == "second" or stat == "min" or stat == "toi":
                                     stat = "TOI"
                                 elif stat == "total-minute" or stat == "total-second" or stat == "total-min" or stat == "total-toi":
-                                    stat = "TtlTOI"
+                                    stat = "TmTtlTOI"
                                 elif stat == "period":
                                     stat = "Per"
                                     extra_stats.add("show-stat-per")
@@ -11562,7 +11598,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                             if qual_type == "minute" or qual_type == "second" or qual_type == "min" or qual_type == "toi":
                                 stat = "TOI"
                             elif qual_type == "total-minute" or qual_type == "total-second" or qual_type == "total-min" or qual_type == "total-toi":
-                                stat = "TtlTOI"
+                                stat = "TmTtlTOI"
                             elif qual_type == "period":
                                 stat = "Per"
                                 extra_stats.add("show-stat-per")
@@ -20177,8 +20213,8 @@ def determine_stat_value(player_game_info, all_events, qualifiers, og_row, playe
     save_against_stats = ["SV", "SA", "EVSH", "PPSH", "SHGA"]
     missed_shot_against_stats = ["SV", "SA"]
     goalie_goal_against_stats = ["GF"]
-    toi_stats = ["TOI", "TtlTOI", "EVTOI", "PPTOI", "SHTOI"]
-    off_toi_stats = ["offITOI", "TtlTOI"]
+    toi_stats = ["TOI", "iTtlTOI", "TmTtlTOI", "EVTOI", "PPTOI", "SHTOI"]
+    off_toi_stats = ["offITOI", "iTtlTOI"]
     event_stats = ["Event"]
 
     if count_misses:
@@ -20469,17 +20505,18 @@ def determine_stat_value(player_game_info, all_events, qualifiers, og_row, playe
             if goal_event["event_name"] == "shift_events":
                 if determine_event_match(goal_event, qualifiers, player_game_info, og_row, is_toi=True):
                     row["TOI"] += 1
-                    row["TtlTOI"] += 1
+                    row["TmTtlTOI"] += 1
                     if stat in ["EVTOI", "PPTOI", "SHTOI"]:
                         strength = determine_strength(player_game_info, goal_event["period"], goal_event["periodTime"], goal_event)
                         if strength:
                             row[strength + "TOI"] += 1
+                row["iTtlTOI"] += 1
 
         if stat in off_toi_stats:
            if goal_event["event_name"] == "all_shift_events":
                 if determine_event_match(goal_event, qualifiers, player_game_info, og_row, is_toi=True, is_off_ice=True):
                     row["offITOI"] += 1
-                    row["TtlTOI"] += 1
+                    row["TmTtlTOI"] += 1
 
     calculate_row_attrs(row, player_type)
 
@@ -25184,7 +25221,7 @@ def calculate_toi(row, qualifiers, player_game_info, player_id, player_link, sav
         if not needs_on_ice or perform_on_ice_quals(qualifiers, player_shift_data, shift_event, row, shift_event["period"], shift_event["periodTime"], teammate_on_ice_quals, teammate_off_ice_quals):
             if perform_metadata_qual("shift_events", shift_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], is_toi=True, skip_career_events=skip_career_events):
                 row["TOI"] += 1
-                row["TtlTOI"] += 1
+                row["TmTtlTOI"] += 1
                 if not ("strength-stats" in extra_stats or "hide-strength" in extra_stats) or "strength" in extra_stats:
                     strength = determine_strength(player_game_info, shift_event["period"], shift_event["periodTime"], shift_event)
                     if strength:
@@ -25195,12 +25232,13 @@ def calculate_toi(row, qualifiers, player_game_info, player_id, player_link, sav
                 if shift_event["shift_index"] not in matching_shifts:
                     row["Shft"] += 1
                     matching_shifts.add(shift_event["shift_index"])
+            row["iTtlTOI"] += 1
     
     for shift_event in player_game_info["all_shift_events"]:
         if not needs_on_ice or perform_on_ice_quals(qualifiers, player_shift_data, shift_event, row, shift_event["period"], shift_event["periodTime"], teammate_on_ice_quals, teammate_off_ice_quals):
             if perform_metadata_qual("all_shift_events", shift_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], is_toi=True, is_off_ice=True, skip_career_events=skip_career_events):
                 row["offITOI"] += 1
-                row["TtlTOI"] += 1
+                row["TmTtlTOI"] += 1
 
 def is_five_toi(player_game_info, goal_event, period, second):
     team_skaters, team_goalies, opp_skaters, opp_goalies, has_team_shift_data, has_opp_shift_data = get_on_ice_info(player_game_info, goal_event, period, second, True, True, True, True)
@@ -27505,7 +27543,8 @@ def clear_row_attrs(row, player_type):
     row["Event"] = 0
     row["TOI"] = 0
     row["offITOI"] = 0
-    row["TtlTOI"] = 0
+    row["iTtlTOI"] = 0
+    row["TmTtlTOI"] = 0
     row["EVTOI"] = 0
     row["PPTOI"] = 0
     row["SHTOI"] = 0
@@ -36390,7 +36429,7 @@ def print_player_data(player_datas, player_type, highest_vals, lowest_vals, has_
                         override_show = True
                     if "P1" in header:
                         override_show = True
-                    if "TSA" in header or header == "SThr%" or header == "TS%" or header == "TOI%":
+                    if "TSA" in header or header == "SThr%" or header == "TS%" or header == "iTOI%"  or header == "TmTOI%":
                         override_show = True
                     if "shift" in extra_stats and "Shft" in header:
                         override_show = True
@@ -36875,7 +36914,7 @@ def get_reddit_player_table(player_datas, player_type, debug_mode, original_comm
                         override_show = True
                     if header in ("GFRel/60M", "CFRel/60M", "FFRel/60M", "SFRel/60M", "GARel/60M", "CARel/60M", "FARel/60M", "SARel/60M", "GFRelPer", "CFRelPer", "FFRelPer", "SFRelPer"):
                         override_show = True
-                    if "TSA" in header or header == "SThr%" or header == "TS%" or header == "TOI%":
+                    if "TSA" in header or header == "SThr%" or header == "TS%" or header == "iTOI%"  or header == "TmTOI%":
                         override_show = True
                     if "P1" in header:
                         override_show = True
@@ -37680,7 +37719,7 @@ def handle_table_data(player_data, player_type, over_header, header, highest_val
             override_show = True
         if "P1" in header:
             override_show = True
-        if "TSA" in header or header == "SThr%" or header == "TS%" or header == "TOI%":
+        if "TSA" in header or header == "SThr%" or header == "TS%" or header == "iTOI%"  or header == "TmTOI%":
             override_show = True
         if "shift" in extra_stats and "Shft" in header:
             override_show = True
