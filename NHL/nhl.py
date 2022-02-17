@@ -7616,7 +7616,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 extra_stats.add("hide-stat-dzfow/60m")
                                 extra_stats.add("hide-stat-dzfo/60m")
                                 extra_stats.add("hide-stat-dzfo%")
-                                extra_stats.add("hide-stat-iTOI%")
+                                extra_stats.add("hide-stat-itoi%")
                                 extra_stats.add("show-stat-advtoi")
                                 extra_stats.add("show-stat-advtoi/gp")
                                 player_type["da_type"] = {
@@ -7635,7 +7635,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 extra_stats.add("hide-stat-dzfow/60m")
                                 extra_stats.add("hide-stat-dzfo/60m")
                                 extra_stats.add("hide-stat-dzfo%")
-                                extra_stats.add("hide-stat-iTOI%")
+                                extra_stats.add("hide-stat-itoi%")
                                 extra_stats.add("show-stat-advtoi")
                                 extra_stats.add("show-stat-advtoi/gp")
                                 player_type["da_type"] = {
@@ -8358,7 +8358,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 extra_stats.add("hide-stat-dzfow/60m")
                                 extra_stats.add("hide-stat-dzfo/60m")
                                 extra_stats.add("hide-stat-dzfo%")
-                                extra_stats.add("hide-stat-iTOI%")
+                                extra_stats.add("hide-stat-itoi%")
                                 extra_stats.add("show-stat-advtoi")
                                 extra_stats.add("show-stat-advtoi/gp")
                                 player_type["da_type"] = {
@@ -8377,7 +8377,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 extra_stats.add("hide-stat-dzfow/60m")
                                 extra_stats.add("hide-stat-dzfo/60m")
                                 extra_stats.add("hide-stat-dzfo%")
-                                extra_stats.add("hide-stat-iTOI%")
+                                extra_stats.add("hide-stat-itoi%")
                                 extra_stats.add("show-stat-advtoi")
                                 extra_stats.add("show-stat-advtoi/gp")
                                 player_type["da_type"] = {
