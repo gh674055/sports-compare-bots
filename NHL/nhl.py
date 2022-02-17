@@ -7586,16 +7586,6 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 extra_stats.add("hide-stat-dzfo%")
                                 extra_stats.add("show-stat-advtoi")
                                 extra_stats.add("show-stat-advtoi/gp")
-                                extra_stats.add("show-stat-gf")
-                                extra_stats.add("show-stat-ga")
-                                extra_stats.add("show-stat-cf")
-                                extra_stats.add("show-stat-ca")
-                                extra_stats.add("show-stat-ff")
-                                extra_stats.add("show-stat-fa")
-                                extra_stats.add("show-stat-sf")
-                                extra_stats.add("show-stat-sa")
-                                extra_stats.add("show-stat-sf")
-                                extra_stats.add("show-stat-sa")
                                 player_type["da_type"] = {
                                     "type" : "Skater"
                                 }
@@ -7614,16 +7604,6 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 extra_stats.add("hide-stat-dzfo%")
                                 extra_stats.add("show-stat-advtoi")
                                 extra_stats.add("show-stat-advtoi/gp")
-                                extra_stats.add("show-stat-gf")
-                                extra_stats.add("show-stat-ga")
-                                extra_stats.add("show-stat-cf")
-                                extra_stats.add("show-stat-ca")
-                                extra_stats.add("show-stat-ff")
-                                extra_stats.add("show-stat-fa")
-                                extra_stats.add("show-stat-sf")
-                                extra_stats.add("show-stat-sa")
-                                extra_stats.add("show-stat-sf")
-                                extra_stats.add("show-stat-sa")
                                 player_type["da_type"] = {
                                     "type" : "Skater"
                                 }
@@ -8346,16 +8326,6 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 extra_stats.add("hide-stat-dzfo%")
                                 extra_stats.add("show-stat-advtoi")
                                 extra_stats.add("show-stat-advtoi/gp")
-                                extra_stats.add("show-stat-gf")
-                                extra_stats.add("show-stat-ga")
-                                extra_stats.add("show-stat-cf")
-                                extra_stats.add("show-stat-ca")
-                                extra_stats.add("show-stat-ff")
-                                extra_stats.add("show-stat-fa")
-                                extra_stats.add("show-stat-sf")
-                                extra_stats.add("show-stat-sa")
-                                extra_stats.add("show-stat-sf")
-                                extra_stats.add("show-stat-sa")
                                 player_type["da_type"] = {
                                     "type" : "Skater"
                                 }
@@ -8374,16 +8344,6 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 extra_stats.add("hide-stat-dzfo%")
                                 extra_stats.add("show-stat-advtoi")
                                 extra_stats.add("show-stat-advtoi/gp")
-                                extra_stats.add("show-stat-gf")
-                                extra_stats.add("show-stat-ga")
-                                extra_stats.add("show-stat-cf")
-                                extra_stats.add("show-stat-ca")
-                                extra_stats.add("show-stat-ff")
-                                extra_stats.add("show-stat-fa")
-                                extra_stats.add("show-stat-sf")
-                                extra_stats.add("show-stat-sa")
-                                extra_stats.add("show-stat-sf")
-                                extra_stats.add("show-stat-sa")
                                 player_type["da_type"] = {
                                     "type" : "Skater"
                                 }
@@ -36424,7 +36384,7 @@ def print_player_data(player_datas, player_type, highest_vals, lowest_vals, has_
                     if header == "TOI" or header == "EVTOI" or header == "PPTOI" or header == "SHTOI":
                         override_show = True
                 if "current-stats" in extra_stats or "current-stats-zone" in extra_stats:
-                    if header in ("1stG", "PostBar", "Post/60M", "TK", "GV", "TK/GV", "TK/60M", "GV/60M", "GF/60M", "GA/60M", "GFPer", "CF/60M", "CA/60M", "CFPer", "FF/60M", "FA/60M", "FFPer", "SF/60M", "SA/60M", "SFPer", "OZ%", "oiSPer", "oiSVPer", "PDO", "oiSRelPer", "oiSVRelPer", "PDORel"):
+                    if header in ("1stG", "PostBar", "Post/60M", "TK", "GV", "TK/GV", "TK/60M", "GV/60M", "GF/60M", "GA/60M", "GF", "GA", "GFPer", "CF/60M", "CA/60M", "CFPer", "FF/60M", "FA/60M", "FFPer", "SF/60M", "SA/60M", "SFPer", "OZ%", "oiSPer", "oiSVPer", "PDO", "oiSRelPer", "oiSVRelPer", "PDORel"):
                         override_show = True
                     if header in ("GFRel/60M", "CFRel/60M", "FFRel/60M", "SFRel/60M", "GARel/60M", "CARel/60M", "FARel/60M", "SARel/60M", "GFRelPer", "CFRelPer", "FFRelPer", "SFRelPer"):
                         override_show = True
@@ -36911,7 +36871,7 @@ def get_reddit_player_table(player_datas, player_type, debug_mode, original_comm
                     if header == "TOI" or header == "EVTOI" or header == "PPTOI" or header == "SHTOI":
                         override_show = True
                 if "current-stats" in extra_stats or "current-stats-zone" in extra_stats:
-                    if header in ("1stG", "PostBar", "Post/60M", "TK", "GV", "TK/GV", "TK/60M", "GV/60M", "GF/60M", "GA/60M", "GFPer", "CF/60M", "CA/60M", "CFPer", "FF/60M", "FA/60M", "FFPer", "SF/60M", "SA/60M", "SFPer", "OZ%", "oiSPer", "oiSVPer", "PDO", "oiSRelPer", "oiSVRelPer", "PDORel"):
+                    if header in ("1stG", "PostBar", "Post/60M", "TK", "GV", "TK/GV", "TK/60M", "GV/60M", "GF/60M", "GA/60M", "GF", "GA", "GFPer", "CF/60M", "CA/60M", "CFPer", "FF/60M", "FA/60M", "FFPer", "SF/60M", "SA/60M", "SFPer", "OZ%", "oiSPer", "oiSVPer", "PDO", "oiSRelPer", "oiSVRelPer", "PDORel"):
                         override_show = True
                     if header in ("GFRel/60M", "CFRel/60M", "FFRel/60M", "SFRel/60M", "GARel/60M", "CARel/60M", "FARel/60M", "SARel/60M", "GFRelPer", "CFRelPer", "FFRelPer", "SFRelPer"):
                         override_show = True
@@ -37714,7 +37674,7 @@ def handle_table_data(player_data, player_type, over_header, header, highest_val
         if header == "TOI" or header == "EVTOI" or header == "PPTOI" or header == "SHTOI":
             override_show = True
     if "current-stats" in extra_stats or "current-stats-zone" in extra_stats:
-        if header in ("1stG", "PostBar", "Post/60M", "TK", "GV", "TK/GV", "TK/60M", "GV/60M", "GF/60M", "GA/60M", "GFPer", "CF/60M", "CA/60M", "CFPer", "FF/60M", "FA/60M", "FFPer", "SF/60M", "SA/60M", "SFPer", "OZ%", "oiSPer", "oiSVPer", "PDO", "oiSRelPer", "oiSVRelPer", "PDORel"):
+        if header in ("1stG", "PostBar", "Post/60M", "TK", "GV", "TK/GV", "TK/60M", "GV/60M", "GF/60M", "GA/60M", "GF", "GA", "GFPer", "CF/60M", "CA/60M", "CFPer", "FF/60M", "FA/60M", "FFPer", "SF/60M", "SA/60M", "SFPer", "OZ%", "oiSPer", "oiSVPer", "PDO", "oiSRelPer", "oiSVRelPer", "PDORel"):
             override_show = True
         if header in ("GFRel/60M", "CFRel/60M", "FFRel/60M", "SFRel/60M", "GARel/60M", "CARel/60M", "FARel/60M", "SARel/60M", "GFRelPer", "CFRelPer", "FFRelPer", "SFRelPer"):
             override_show = True
