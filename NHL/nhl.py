@@ -593,6 +593,17 @@ headers = {
                 "game" : 2009
             }
         },
+        "advTOI" : {
+            "positive" : True,
+            "round" : "time",
+            "display" : False,
+            "display-value" : "TOI",
+            "type" : "Advanced",
+            "valid_since" : {
+                "season" : 2009,
+                "game" : 2009
+            }
+        },
         "TOI/GP" : {
             "positive" : True,
             "round" : "time",
@@ -607,6 +618,17 @@ headers = {
             "round" : "time",
             "display" : False,
             "type" : "Relative",
+            "valid_since" : {
+                "season" : 2009,
+                "game" : 2009
+            }
+        },
+        "advTOI/GP" : {
+            "positive" : True,
+            "round" : "time",
+            "display" : False,
+            "display-value" : "TOI/GP",
+            "type" : "Advanced",
             "valid_since" : {
                 "season" : 2009,
                 "game" : 2009
@@ -1222,44 +1244,6 @@ headers = {
                 "game" : 2009
             }
         },
-        "oiTmS" : {
-            "positive" : True,
-            "display" : False,
-            "type" : "Advanced",
-            "display-value" :  "SF",
-            "valid_since" : {
-                "season" : 2009,
-                "game" : 2009
-            }
-        },
-        "oiOppS" : {
-            "positive" : False,
-            "display" : False,
-            "type" : "Advanced",
-            "display-value" :  "SA",
-            "valid_since" : {
-                "season" : 2009,
-                "game" : 2009
-            }
-        },
-        "FF" : {
-            "positive" : True,
-            "display" : False,
-            "type" : "Advanced",
-            "valid_since" : {
-                "season" : 2009,
-                "game" : 2009
-            }
-        },
-        "FA" : {
-            "positive" : False,
-            "display" : False,
-            "type" : "Advanced",
-            "valid_since" : {
-                "season" : 2009,
-                "game" : 2009
-            }
-        },
         "CF/60M" : {
             "positive" : True,
             "type" : "Advanced",
@@ -1294,6 +1278,24 @@ headers = {
             "positive" : True,
             "round" : "percent",
             "display-value" : "CF%",
+            "display" : False,
+            "type" : "Advanced",
+            "valid_since" : {
+                "season" : 2009,
+                "game" : 2009
+            }
+        },
+        "FF" : {
+            "positive" : True,
+            "display" : False,
+            "type" : "Advanced",
+            "valid_since" : {
+                "season" : 2009,
+                "game" : 2009
+            }
+        },
+        "FA" : {
+            "positive" : False,
             "display" : False,
             "type" : "Advanced",
             "valid_since" : {
@@ -1347,6 +1349,26 @@ headers = {
             "type" : "Advanced",
             "display" : False,
             "round" : 2,
+            "valid_since" : {
+                "season" : 2009,
+                "game" : 2009
+            }
+        },
+        "oiTmS" : {
+            "positive" : True,
+            "display" : False,
+            "type" : "Advanced",
+            "display-value" :  "SF",
+            "valid_since" : {
+                "season" : 2009,
+                "game" : 2009
+            }
+        },
+        "oiOppS" : {
+            "positive" : False,
+            "display" : False,
+            "type" : "Advanced",
+            "display-value" :  "SA",
             "valid_since" : {
                 "season" : 2009,
                 "game" : 2009
@@ -5921,6 +5943,8 @@ formulas = {
         "EVTOI/GP" : "EVTOI / GP_TOI",
         "PPTOI/GP" : "PPTOI / GP_TOI",
         "SHTOI/GP" : "SHTOI / GP_TOI",
+        "advTOI" : "TOI",
+        "advTOI/GP" : "TOI/GP",
         "PEN/GP" : "PEN / GP",
         "Minor/GP" : "Minor / GP",
         "Major/GP" : "Major / GP",
@@ -7551,10 +7575,58 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 qual_str = "on-line-with:"
                                 qual_type = "On Line With"
                                 extra_stats.add("current-stats")
+                                extra_stats.add("hide-table-standard")
+                                extra_stats.add("hide-table-per game/60 minutes")
+                                extra_stats.add("hide-stat-ipp")
+                                extra_stats.add("hide-stat-ozfow/60m")
+                                extra_stats.add("hide-stat-ozfo/60m")
+                                extra_stats.add("hide-stat-ozfo%")
+                                extra_stats.add("hide-stat-dzfow/60m")
+                                extra_stats.add("hide-stat-dzfo/60m")
+                                extra_stats.add("hide-stat-dzfo%")
+                                extra_stats.add("show-stat-advtoi")
+                                extra_stats.add("show-stat-advtoi/gp")
+                                extra_stats.add("show-stat-gf")
+                                extra_stats.add("show-stat-ga")
+                                extra_stats.add("show-stat-cf")
+                                extra_stats.add("show-stat-ca")
+                                extra_stats.add("show-stat-ff")
+                                extra_stats.add("show-stat-fa")
+                                extra_stats.add("show-stat-sf")
+                                extra_stats.add("show-stat-sa")
+                                extra_stats.add("show-stat-sf")
+                                extra_stats.add("show-stat-sa")
+                                player_type["da_type"] = {
+                                    "type" : "Skater"
+                                }
                             elif qualifier_str.startswith("on-line-against:"):
                                 qual_str = "on-line-against:"
                                 qual_type = "On Line Against"
                                 extra_stats.add("current-stats")
+                                extra_stats.add("hide-table-standard")
+                                extra_stats.add("hide-table-per game/60 minutes")
+                                extra_stats.add("hide-stat-ipp")
+                                extra_stats.add("hide-stat-ozfow/60m")
+                                extra_stats.add("hide-stat-ozfo/60m")
+                                extra_stats.add("hide-stat-ozfo%")
+                                extra_stats.add("hide-stat-dzfow/60m")
+                                extra_stats.add("hide-stat-dzfo/60m")
+                                extra_stats.add("hide-stat-dzfo%")
+                                extra_stats.add("show-stat-advtoi")
+                                extra_stats.add("show-stat-advtoi/gp")
+                                extra_stats.add("show-stat-gf")
+                                extra_stats.add("show-stat-ga")
+                                extra_stats.add("show-stat-cf")
+                                extra_stats.add("show-stat-ca")
+                                extra_stats.add("show-stat-ff")
+                                extra_stats.add("show-stat-fa")
+                                extra_stats.add("show-stat-sf")
+                                extra_stats.add("show-stat-sa")
+                                extra_stats.add("show-stat-sf")
+                                extra_stats.add("show-stat-sa")
+                                player_type["da_type"] = {
+                                    "type" : "Skater"
+                                }
                             elif qualifier_str.startswith("assisted-on-first-name:"):
                                 qual_str = "assisted-on-first-name:"
                                 qual_type = "Assisted On First Name"
@@ -8263,10 +8335,58 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 qual_str = "on-line-with"
                                 qual_type = "On Line With"
                                 extra_stats.add("current-stats")
+                                extra_stats.add("hide-table-standard")
+                                extra_stats.add("hide-table-per game/60 minutes")
+                                extra_stats.add("hide-stat-ipp")
+                                extra_stats.add("hide-stat-ozfow/60m")
+                                extra_stats.add("hide-stat-ozfo/60m")
+                                extra_stats.add("hide-stat-ozfo%")
+                                extra_stats.add("hide-stat-dzfow/60m")
+                                extra_stats.add("hide-stat-dzfo/60m")
+                                extra_stats.add("hide-stat-dzfo%")
+                                extra_stats.add("show-stat-advtoi")
+                                extra_stats.add("show-stat-advtoi/gp")
+                                extra_stats.add("show-stat-gf")
+                                extra_stats.add("show-stat-ga")
+                                extra_stats.add("show-stat-cf")
+                                extra_stats.add("show-stat-ca")
+                                extra_stats.add("show-stat-ff")
+                                extra_stats.add("show-stat-fa")
+                                extra_stats.add("show-stat-sf")
+                                extra_stats.add("show-stat-sa")
+                                extra_stats.add("show-stat-sf")
+                                extra_stats.add("show-stat-sa")
+                                player_type["da_type"] = {
+                                    "type" : "Skater"
+                                }
                             elif qualifier_str.startswith("on-line-against"):
                                 qual_str = "on-line-against"
                                 qual_type = "On Line Against"
                                 extra_stats.add("current-stats")
+                                extra_stats.add("hide-table-standard")
+                                extra_stats.add("hide-table-per game/60 minutes")
+                                extra_stats.add("hide-stat-ipp")
+                                extra_stats.add("hide-stat-ozfow/60m")
+                                extra_stats.add("hide-stat-ozfo/60m")
+                                extra_stats.add("hide-stat-ozfo%")
+                                extra_stats.add("hide-stat-dzfow/60m")
+                                extra_stats.add("hide-stat-dzfo/60m")
+                                extra_stats.add("hide-stat-dzfo%")
+                                extra_stats.add("show-stat-advtoi")
+                                extra_stats.add("show-stat-advtoi/gp")
+                                extra_stats.add("show-stat-gf")
+                                extra_stats.add("show-stat-ga")
+                                extra_stats.add("show-stat-cf")
+                                extra_stats.add("show-stat-ca")
+                                extra_stats.add("show-stat-ff")
+                                extra_stats.add("show-stat-fa")
+                                extra_stats.add("show-stat-sf")
+                                extra_stats.add("show-stat-sa")
+                                extra_stats.add("show-stat-sf")
+                                extra_stats.add("show-stat-sa")
+                                player_type["da_type"] = {
+                                    "type" : "Skater"
+                                }
                             elif qualifier_str.startswith("assisted-on"):
                                 qual_str = "assisted-on"
                                 qual_type = "Assisted On"
