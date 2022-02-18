@@ -21657,7 +21657,7 @@ def has_period_shift_event(game_data, shift_data):
         return True
 
     for period in game_data["periods"]:
-        if period == 5 and game_data["is_shootout"]:
+        if period > 3:
             continue
 
         has_period_match = False
@@ -36516,7 +36516,7 @@ def print_player_data(player_datas, player_type, highest_vals, lowest_vals, has_
                 display_over_header = "Penalties Taken"
 
             if debug_mode:
-                logger.info("#" + str(threading.get_ident()) + "#   " + over_header + "\n\n" + str(table))
+                logger.info("#" + str(threading.get_ident()) + "#   " + display_over_header + "\n\n" + str(table))
 
             html_info["tables"].append({
                 "title" : display_over_header,
@@ -37936,7 +37936,7 @@ def handle_table_data(player_data, player_type, over_header, header, highest_val
             elif header.startswith("GP"):
                 if player_data["stat_values"]["any_missing_games"] or is_invalid_stat(header, player_type, player_data["stat_values"], True, player_data, True):
                     value += "*"
-            elif "TOI" in header:
+            elif header == "TOI":
                 if player_data["stat_values"]["any_missing_toi"] or is_invalid_stat(header, player_type, player_data["stat_values"], True, player_data, True):
                     value += "*"
             elif header == "CurrentCap$":
