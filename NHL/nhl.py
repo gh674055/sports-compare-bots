@@ -22296,7 +22296,7 @@ def seconds_to_str(value):
 def get_shift_data(game_data, game_id, player_team_id, s):
     sub_data = url_request_json(s, nhl_shifts_report_format.format(game_id))
     if sub_data["total"] == 1000:
-        game_data["missing_toi"] = True
+        return {}, {}, {}
     shift_infos = sub_data["data"]
     shift_infos = sorted(shift_infos, key = lambda shift_info: (shift_info["period"], start_time_to_str(shift_info["startTime"])))
     shift_data = {}
