@@ -20734,10 +20734,15 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
     
     if row_data["Year"] >= 2007 and "hide-toi" not in extra_stats:
         game_data["shift_data"], game_data["player_shift_data"], game_data["num_on_ice_data"] = get_html_shift_data(row_data["NHLGameLink"], row_data["Location"], game_data, player_data, row_data["Year"], s)
-        #if not game_data["shift_data"]:
-        #    game_data["shift_data"], missing_games = get_shift_data(row_data["NHLGameLink"], game_data["team_id"], missing_games, s)
 
         if game_data["shift_data"]:
+            if not has_period_shift_event(game_data, game_data["shift_data"]):
+                game_data["shift_data"] = {} 
+                game_data["player_shift_data"] = {}
+                game_data["num_on_ice_data"] = {}
+
+        if not game_data["shift_data"] and game_data["is_final"]:
+            game_data["shift_data"], game_data["player_shift_data"], game_data["num_on_ice_data"] = get_shift_data(game_data, row_data["NHLGameLink"], game_data["team_id"], s)
             if not has_period_shift_event(game_data, game_data["shift_data"]):
                 game_data["shift_data"] = {} 
                 game_data["player_shift_data"] = {}
@@ -21657,7 +21662,7 @@ def has_period_shift_event(game_data, shift_data):
         return True
 
     for period in game_data["periods"]:
-        if period > 3:
+        if period == 5 and game_data["is_shootout"]:
             continue
 
         has_period_match = False
@@ -22288,13 +22293,15 @@ def seconds_to_str(value):
     minutes, seconds = divmod(round_value(value), 60)
     return ("{:02d}").format(minutes) + ":" + ("{:02d}").format(seconds)
 
-def get_shift_data(game_id, player_team_id, missing_games, s):
+def get_shift_data(game_data, game_id, player_team_id, s):
     sub_data = url_request_json(s, nhl_shifts_report_format.format(game_id))
     if sub_data["total"] == 1000:
-        missing_games = True
+        game_data["missing_toi"] = True
     shift_infos = sub_data["data"]
     shift_infos = sorted(shift_infos, key = lambda shift_info: (shift_info["period"], start_time_to_str(shift_info["startTime"])))
     shift_data = {}
+    player_shift_data = {}
+    num_on_ice_data = {}
     for shift_info in shift_infos:
         player_id = shift_info["playerId"]
         period = shift_info["period"]
@@ -22312,20 +22319,20 @@ def get_shift_data(game_id, player_team_id, missing_games, s):
         time_start += 1
 
         team_str = "team" if team_id == player_team_id else "opp"
-        
+
         if team_str not in shift_data:
             shift_data[team_str] = {}
+            player_shift_data[team_str] = {}
         if player_id not in shift_data[team_str]:
             shift_data[team_str][player_id] = {}
+            player_shift_data[team_str][player_id] = {}
         if period not in shift_data[team_str][player_id]:
             shift_data[team_str][player_id][period] = []
+            player_shift_data[team_str][player_id][period] = set()
+        if period not in num_on_ice_data:
+            num_on_ice_data[period] = {}
 
-        has_existing_match = False
-        for shift_event in shift_data[team_str][player_id][period]:
-            if shift_event["time_start"] == time_start:
-                has_existing_match = True
-                break
-        if has_existing_match:
+        if time_start in player_shift_data[team_str][player_id][period]:
             continue
 
         shift_data[team_str][player_id][period].append({
@@ -22334,7 +22341,29 @@ def get_shift_data(game_id, player_team_id, missing_games, s):
             "period" : period
         })
 
-    return shift_data, missing_games
+        for second in range(time_start, time_end + 1):
+            player_shift_data[team_str][player_id][period].add(second)
+
+            if second not in num_on_ice_data[period]:
+                num_on_ice_data[period][second] = {
+                    "team_goalies" : 0,
+                    "team_skaters" : 0,
+                    "opp_goalies" : 0,
+                    "opp_skaters" : 0
+                }
+
+            if team_str == "team":
+                if player_id in game_data["team_goalies"]:
+                    num_on_ice_data[period][second]["team_goalies"] += 1
+                else:
+                    num_on_ice_data[period][second]["team_skaters"] += 1
+            else:
+                if player_id in game_data["opp_goalies"]:
+                    num_on_ice_data[period][second]["opp_goalies"] += 1
+                else:
+                    num_on_ice_data[period][second]["opp_skaters"] += 1
+
+    return shift_data, player_shift_data, num_on_ice_data
 
 def get_html_shift_data(og_game_id, is_home, game_data, player_data, row_year, s):
     # profile = cProfile.Profile()
