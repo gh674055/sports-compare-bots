@@ -7652,12 +7652,16 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
 
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
 
-                        last_match = re.finditer(r"\bshow(?: |-)?(career(?: |-)?(year|season|game|team|franchise|number))s?\b", time_frame)
+                        last_match = re.finditer(r"\bshow(?: |-)?(career(?: |-)?(year|pitch-type|season|game|team|franchise|number))s?\b", time_frame)
                         for m in last_match:
                             if m.group(1) == "career-season":
                                 extra_stats.add("career-year")
                             else:
                                 extra_stats.add(m.group(1))
+                            if m.group(2) == "pitch-type":
+                                extra_stats.add("current-stats")
+                                extra_stats.add("show-stat-pit")
+                                extra_stats.add("show-stat-pit%")
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
                         
                         last_match = re.finditer(r"\b(show(?: |-)?only(?: |-)?table:)\(.+?\)", time_frame)
@@ -7705,11 +7709,15 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                             extra_stats.add(m.group(1))
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
                         
-                        last_match = re.finditer(r"\bshow(?: |-)?(only(?: |-)?)?(pitcher-record|record|slash|score|year|games?-count|seasons-leading|season|date|missing-games-count|missing-pitches-count|missing-game-count|missing-pitches-count|missing-pitch-count|missing-game|missing-pitches|missing-pitch|per-game|game|play|run-support|run-support-record|exit-record|statcast|advanced-runner|advanced|best-season|worst-season|team|franchise|number|award|driven-in|mlb-link)s?\b", time_frame)
+                        last_match = re.finditer(r"\bshow(?: |-)?(only(?: |-)?)?(pitcher-record|record|slash|score|year|pitch-type|games?-count|seasons-leading|season|date|missing-games-count|missing-pitches-count|missing-game-count|missing-pitches-count|missing-pitch-count|missing-game|missing-pitches|missing-pitch|per-game|game|play|run-support|run-support-record|exit-record|statcast|advanced-runner|advanced|best-season|worst-season|team|franchise|number|award|driven-in|mlb-link)s?\b", time_frame)
                         for m in last_match:
                             extra_stats.add(m.group(2))
                             if m.group(2) == "play":
                                 extra_stats.add("current-stats")
+                            elif m.group(2) == "pitch-type":
+                                extra_stats.add("current-stats")
+                                extra_stats.add("show-stat-pit")
+                                extra_stats.add("show-stat-pit%")
                             elif m.group(2) == "season":
                                 extra_stats.add("year")
                             elif m.group(2) == "missing-games-count":
@@ -12660,6 +12668,8 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
     franchise_table_career = "career-franchise" in extra_stats
     numbers_table = "number" in extra_stats
     numbers_table_career = "career-number" in extra_stats
+    pitch_type_table = "pitch-type" in extra_stats
+    pitch_type_table_career = "career-pitch-type" in extra_stats
 
     if comment_obj:
         comment_obj["total_players"] = name_count
@@ -12725,7 +12735,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
     
     player_datas.sort(key=lambda player_data: player_data["sort_index"])
 
-    if years_table or years_table_career or games_table or teams_table or teams_table_career or franchise_table or franchise_table_career or numbers_table or numbers_table_career:
+    if years_table or years_table_career or games_table or teams_table or teams_table_career or franchise_table or franchise_table_career or numbers_table or numbers_table_career or pitch_type_table or pitch_type_table_career:
         datas_by_index = {}
         for player_data in player_datas:
             if player_data["sort_index"] not in datas_by_index:
@@ -12780,6 +12790,9 @@ def handle_name_threads(sub_name, parse_time_frames, index, player_type, remove_
         franchise_table_career = "career-franchise" in extra_stats
         numbers_table = "number" in extra_stats
         numbers_table_career = "career-number" in extra_stats
+        pitch_type_table = "pitch-type" in extra_stats
+        pitch_type_table_career = "career-pitch-type" in extra_stats
+
         best_table = 0
         worst_table = 0
         for extra_stat in extra_stats:
@@ -12970,6 +12983,30 @@ def handle_name_threads(sub_name, parse_time_frames, index, player_type, remove_
             else:
                 games_table = False
                 games_table_career = False
+
+        if (pitch_type_table or pitch_type_table_career) and "all_rows" in player_data["stat_values"] and player_data["stat_values"]["all_rows"]:
+            pitch_types = set()
+            for row in player_data["stat_values"]["all_rows"]:
+                pitch_types.update(row["PitTypes"])
+            if len(pitch_types) > 1:
+                if comment_obj:
+                    comment_obj["total_players"] += len(pitch_types) * len(parse_time_frames[index]) * len(sub_names)
+                    
+                for pitch_type in sorted(pitch_types):
+                    clear_time_frames(parse_time_frames[index])
+                    for subbb_frames in parse_time_frames[index]:
+                        for time_frame in subbb_frames:
+                            time_frame["qualifiers"]["Exact Pitch Type"] = [{
+                                "negate" : False,
+                                "values" : [
+                                    pitch_type.lower()
+                                ]
+                            }]
+                    sub_player_data = handle_multi_name_data(sub_names, parse_time_frames[index], player_type, remove_duplicates, remove_duplicate_games, is_pitching_jaws, extra_stats, comment_obj)[0]
+                    player_datas.append(sub_player_data)
+            else:
+                pitch_type_table = False
+                pitch_type_table_career = False
         
         if (best_games_table or worst_games_table) and "all_rows" in player_data["stat_values"] and player_data["stat_values"]["all_rows"]:
             import numbers
@@ -13021,7 +13058,7 @@ def handle_name_threads(sub_name, parse_time_frames, index, player_type, remove_
 
         clear_time_frames(parse_time_frames[index])
 
-        if not games_table and not years_table and not teams_table and not franchise_table and not numbers_table and not best_table and not worst_table and not best_games_table and not worst_games_table:
+        if not games_table and not years_table and not teams_table and not franchise_table and not numbers_table and not pitch_type_table and not best_table and not worst_table and not best_games_table and not worst_games_table:
             player_datas.append(player_data)
         
         for player_data in player_datas:
@@ -31160,7 +31197,7 @@ def perform_sub_mlb_game_qualifiers(row, player_data, qualifiers, player_game_in
                             if pitch_speed == None:
                                 has_pitch_match = False
                     if has_pitch_match:
-                        if handle_da_mlb_quals(row, "batting_events" if player_type["da_type"] == "Batter" else "pitching_events", at_bat_event, qualifiers, player_data, player_type, player_game_info, skip_pitch_events=True):
+                        if handle_da_pitch_quals(row, "batting_events" if player_type["da_type"] == "Batter" else "pitching_events", at_bat_event, qualifiers, player_data, player_type, player_game_info, pitch_index + 1, skip_pitch_events=True):
                             row["TtlPit"] += 1
 
     if player_type["da_type"] != "Batter":
@@ -31706,6 +31743,8 @@ def add_pitch_row_numbers(row, at_bat_event, event_name, qualifiers, pitch_index
     }]
     if handle_count_qual(pitch_event_obj, two_str_qual, False, False):
         row["2StrPit"] += 1
+
+    row["PitTypes"].add(pitch_event_obj["pitch_types"][pitch_index].lower().replace("-", " "))
 
 def handle_da_mlb_quals(row, event_name, at_bat_event, qualifiers, player_data, player_type, player_game_info, skip_pitch_events=False, skip_career_events=False):
     if "Batting Against" in qualifiers:
@@ -40453,6 +40492,7 @@ def clear_data(row):
     row["CS"] = 0
     row["SB"] = 0
     row["NS"] = 0
+    row["PitTypes"] = set()
 
 def calculate_data(row, player_type):
     if player_type["da_type"] == "Batter":
