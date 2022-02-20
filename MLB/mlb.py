@@ -1684,34 +1684,28 @@ headers = {
         },
         "Rbat/Yr" : {
             "positive" : True,
-            "round" : 1,
             "type" : "Defense/Value (Baseball Reference)"
         },
         "Rbaser/Yr" : {
             "positive" : True,
-            "round" : 1,
             "type" : "Defense/Value (Baseball Reference)"
         },
         "Rfield/Yr" : {
             "positive" : True,
-            "round" : 1,
             "type" : "Defense/Value (Baseball Reference)"
         },
         "WAAPos/Yr" : {
             "positive" : True,
-            "round" : 1,
             "type" : "Defense/Value (Baseball Reference)",
             "display-value" : "Pos WAA/Yr"
         },
         "WAAPitch/Yr" : {
             "positive" : True,
-            "round" : 1,
             "type" : "Defense/Value (Baseball Reference)",
             "display-value" : "Pitch WAA/Yr"
         },
         "WAA/Yr" : {
             "positive" : True,
-            "round" : 1,
             "type" : "Defense/Value (Baseball Reference)"
         },
         "oWAR/Yr" : {
@@ -4011,37 +4005,31 @@ headers = {
         },
         "Rbat/Yr" : {
             "positive" : True,
-            "round" : 1,
             "display" : False,
             "type" : "Defense/Value (Baseball Reference)"
         },
         "Rbaser/Yr" : {
             "positive" : True,
-            "round" : 1,
             "display" : False,
             "type" : "Defense/Value (Baseball Reference)"
         },
         "Rfield/Yr" : {
             "positive" : True,
-            "round" : 1,
             "display" : False,
             "type" : "Defense/Value (Baseball Reference)"
         },
         "WAAPitch/Yr" : {
             "positive" : True,
-            "round" : 1,
             "type" : "Defense/Value (Baseball Reference)",
             "display-value" : "Pitch WAA/Yr"
         },
         "WAAPos/Yr" : {
             "positive" : True,
-            "round" : 1,
             "type" : "Defense/Value (Baseball Reference)",
             "display-value" : "Pos WAA/Yr"
         },
         "WAA/Yr" : {
             "positive" : True,
-            "round" : 1,
             "type" : "Defense/Value (Baseball Reference)"
         },
         "WARPitch/Yr" : {
@@ -14574,6 +14562,34 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
                 del row["WAR7yr"]
             if "Rdrs/yr" in row:
                 del row["Rdrs/yr"]
+            if "Rbat/Yr" in row:
+                del row["Rbat/Yr"]
+            if "Rbaser/Yr" in row:
+                del row["Rbaser/Yr"]
+            if "Rfield/Yr" in row:
+                del row["Rfield/Yr"]
+            if "oWAR/Yr" in row:
+                del row["oWAR/Yr"]
+            if "dWAR/Yr" in row:
+                del row["dWAR/Yr"]
+            if "WAAPos/Yr" in row:
+                del row["WAAPos/Yr"]
+            if "WARPos/Yr" in row:
+                del row["WARPos/Yr"]
+            if "WAAPitch/Yr" in row:
+                del row["WAAPitch/Yr"]
+            if "WARPitch/Yr" in row:
+                del row["WARPitch/Yr"]
+            if "WAA/Yr" in row:
+                del row["WAA/Yr"]
+            if "WAR/Yr" in row:
+                del row["WAR/Yr"]
+            if "WAAPos/162" in row:
+                del row["WAAPos/162"]
+            if "oWAR/162" in row:
+                del row["oWAR/162"]
+            if "dWAR/162" in row:
+                del row["dWAR/162"]
             if "WARPos/162" in row:
                 del row["WARPos/162"]
         all_rows[len(all_rows) - 1]["WAR7yr"] = calculate_war_7yr_multiplayer(player_datas, player_type, is_pitching_jaws)
@@ -14856,6 +14872,9 @@ def customGameDateSort(game_link):
 def calculate_values(all_rows, player_type, time_frames, og_player_data, extra_stats={}):
     has_own_jaws = False
     has_own_war162 = False
+    has_val_year_stats = False
+    has_war_year_stats = False
+    has_waa_year_stats = False
 
     player_data = {
         "stat_values" : {
@@ -14881,7 +14900,7 @@ def calculate_values(all_rows, player_type, time_frames, og_player_data, extra_s
 
     for row_data in all_rows:
         for stat in row_data:
-            if stat != "is_playoffs" and stat in player_data["stat_values"] and isinstance(row_data[stat], numbers.Number) and isinstance(player_data["stat_values"][stat], numbers.Number) and (seasons_leading or ((not stat in qualifier_map or stat == "Team Score" or stat == "Opponent Score") and (stat in ("JAWS", "WARPos/162") or not stat in formulas[player_type["da_type"]]) and not stat in advanced_stats["Batter"] and not stat in advanced_stats["Pitcher"])):
+            if stat != "is_playoffs" and stat in player_data["stat_values"] and isinstance(row_data[stat], numbers.Number) and isinstance(player_data["stat_values"][stat], numbers.Number) and (seasons_leading or ((not stat in qualifier_map or stat == "Team Score" or stat == "Opponent Score") and (stat in ("JAWS", "Rbat/Yr", "Rbaser/Yr", "Rfield/Yr", "oWAR/Yr", "dWAR/Yr", "WAAPos/Yr", "WARPos/Yr", "WAAPitch/Yr", "WARPitch/Yr", "WAA/Yr", "WAR/Yr", "WAAPos/162", "oWAR/162", "dWAR/162", "WARPos/162") or not stat in formulas[player_type["da_type"]]) and not stat in advanced_stats["Batter"] and not stat in advanced_stats["Pitcher"])):
                 if stat in decimal_stats:
                     player_data["stat_values"][stat] = round_value(player_data["stat_values"][stat] + row_data[stat], 1)
                 else:
@@ -14890,6 +14909,13 @@ def calculate_values(all_rows, player_type, time_frames, og_player_data, extra_s
                     has_own_jaws = True
                 elif stat == "WARPos/162":
                     has_own_war162 = True
+                elif stat in ["Rbat/Yr", "Rbaser/Yr", "Rfield/Yr", "oWAR/Yr", "dWAR/Yr", "WAAPos/Yr", "WARPos/Yr", "WAAPitch/Yr", "WARPitch/Yr"]:
+                    has_val_year_stats = True
+                elif stat == "WAA/Yr":
+                    has_waa_year_stats = True
+                elif stat == "WAR/Yr":
+                    has_war_year_stats = True
+
             elif stat in string_stats:
                 if not player_data["stat_values"][stat]:
                     player_data["stat_values"][stat] = ""
@@ -14943,9 +14969,15 @@ def calculate_values(all_rows, player_type, time_frames, og_player_data, extra_s
     for stat in formulas[player_type["da_type"]]:
         if stat == "JAWS" and has_own_jaws:
             continue
-        elif stat == "WARPos/162" and has_own_war162:
+        elif stat in ["WAAPos/162", "dWARPos/162", "oWARPos/162", "WARPos/162"] and has_own_war162:
             continue
-        
+        elif stat in ["Rbat/Yr", "Rbaser/Yr", "Rfield/Yr", "oWAR/Yr", "dWAR/Yr", "WAAPos/Yr", "WARPos/Yr", "WAAPitch/Yr", "WARPitch/Yr"] and has_val_year_stats:
+            continue
+        elif stat == "WAA/Yr" and has_waa_year_stats:
+            continue
+        elif stat == "WAR/Yr" and has_war_year_stats:
+            continue
+
         if not seasons_leading or stat == "TmRec":
             formula = formulas[player_type["da_type"]][stat]
             value = calculate_formula(stat, og_player_data, player_type, formula, player_data["stat_values"], all_rows)
@@ -17470,6 +17502,9 @@ def handle_season_only_stats(player_page, player_data, player_type, time_frame, 
     comments = None
     previous_headers = set()
     has_pitch_war = False
+    has_pos_war = False
+    has_pitch_waa = False
+    has_pos_waa = False
     for table_index, table_name in enumerate(split_table_names):
         table_has_teeam_quals = has_team_quals and not is_full_teams
 
@@ -17632,7 +17667,7 @@ def handle_season_only_stats(player_page, player_data, player_type, time_frame, 
                     
                     if not row_data:
                         continue
-                    
+
                     if (stat_sum_range and not table_has_teeam_quals) or row_data["Tm"] != "TOT":
                         for pot_row in reversed(all_rows):
                             if pot_row["Year"] == row_data["Year"] and ((stat_sum_range and not table_has_teeam_quals) or pot_row["Tm"] == row_data["Tm"]):
@@ -17650,8 +17685,14 @@ def handle_season_only_stats(player_page, player_data, player_type, time_frame, 
                                             pot_row[stat] += row_data[stat]
                                         
                                         if pot_row[stat]:
-                                            if stat == "WARPitch":
+                                            if stat == "WAAPitch":
+                                                has_pitch_waa = True
+                                            elif stat == "WAAPos":
+                                                has_pos_waa = True
+                                            elif stat == "WARPitch":
                                                 has_pitch_war = True
+                                            elif stat == "WARPos":
+                                                has_pos_war = True
                                         
                                         new_stat = "Slr" + stat
                                         if not new_stat in pot_row:
@@ -17669,6 +17710,52 @@ def handle_season_only_stats(player_page, player_data, player_type, time_frame, 
                                         else:
                                             pot_row[new_stat] += row_data[stat]
                                 break
+            
+            if stat_sum_range and not table_has_teeam_quals:
+                tfoot = table.find("tfoot")
+                if tfoot:
+                    total_rows = table.find("tfoot").find_all("tr")
+                    if total_rows:
+                        total_row = total_rows[0]
+
+                        pot_row = all_rows[len(all_rows) - 1]
+
+                        row_year = total_row.find("th")
+                        year_to_set = str(pot_row["Year"])
+                        row_year.string = year_to_set
+
+                        new_header_valus = header_values.copy()
+                        if "Tm" in header_values:
+                            header_values.remove("Tm")
+
+                        row_data = parse_row(total_row, time_frame, False, False, player_type, header_values, set(), table_index, split_table_names[table_index])
+
+                        for stat in row_data:
+                            if stat in headers[player_type["da_type"]] and (stat == "WPA" or stat == "cWPA" or stat == "RE24" or ("type" in headers[player_type["da_type"]][stat] and headers[player_type["da_type"]][stat]["type"].startswith("Defense"))):
+                                if stat == "Salary":
+                                    continue
+                                if table_name.endswith("win_probability") and stat != "WPA" and stat != "cWPA" and stat != "RE24":
+                                    continue
+                                new_stat = stat + "/Yr"
+                                if new_stat in headers[player_type["da_type"]]:
+                                    pot_row[new_stat] = row_data[stat]
+
+    
+    pot_row = all_rows[len(all_rows) - 1]
+    stat_keys = list(pot_row.keys())
+    for stat in stat_keys:
+        if stat == "WAAPos/Yr":
+            if not has_pitch_waa:
+                pot_row["WAA/Yr"] = pot_row[stat]
+        elif stat == "WAAPitch/Yr":
+            if not has_pos_waa:
+                pot_row["WAA/Yr"] = pot_row[stat]
+        elif stat == "WARPos/Yr":
+            if not has_pitch_war:
+                pot_row["WAR/Yr"] = pot_row[stat]
+        elif stat == "WARPitch/Yr":
+            if not has_pos_war:
+                pot_row["WAR/Yr"] = pot_row[stat]
 
     comments = None
     previous_headers = set()
@@ -17767,8 +17854,14 @@ def handle_season_only_stats(player_page, player_data, player_type, time_frame, 
                                             else:
                                                 pot_row[new_stat] += row_data[stat]
                                             if pot_row[new_stat]:
-                                                if stat == "WARPitch":
+                                                if stat == "WAAPitch":
+                                                    has_pitch_waa = True
+                                                elif stat == "WAAPos":
+                                                    has_pos_waa = True
+                                                elif stat == "WARPitch":
                                                     has_pitch_war = True
+                                                elif stat == "WARPos":
+                                                    has_pos_war = True
 
                                 break
                             
@@ -17820,6 +17913,27 @@ def handle_season_only_stats(player_page, player_data, player_type, time_frame, 
                 row["Rdrs/yr"] = 0
 
         all_rows[len(all_rows) - 1]["Rdrs/yr"] = int(drs_year_values[0]["val"])
+
+    if player_type["da_type"] == "Batter" and is_full_career:
+        table = player_page.find("table", id="batting_value")
+        if not table:
+            if not comments:
+                comments = player_page.find_all(string=lambda text: isinstance(text, Comment))
+            for c in comments:
+                temp_soup = BeautifulSoup(c, "lxml")
+                temp_table = temp_soup.find("table", id="batting_value")
+                if temp_table:
+                    table = temp_table
+                    break
+
+        if table:
+            total_rows = table.find("tfoot").find_all("tr")
+            if total_rows:
+                total_row = total_rows[1]
+                all_rows[len(all_rows) - 1]["WAAPos/162"] = float(total_row.find("td", {"data-stat" : "WAA"}).find(text=True))
+                all_rows[len(all_rows) - 1]["oWAR/162"] = float(total_row.find("td", {"data-stat" : "WAR_off"}).find(text=True))
+                all_rows[len(all_rows) - 1]["dWAR/162"] = float(total_row.find("td", {"data-stat" : "WAR_def"}).find(text=True))
+                all_rows[len(all_rows) - 1]["WARPos/162"] = float(total_row.find("td", {"data-stat" : "WAR"}).find(text=True))
     
     if is_full_career and player_data["player_jaws_position"]:
         allowed_car_war = False
@@ -17854,12 +17968,9 @@ def handle_season_only_stats(player_page, player_data, player_type, time_frame, 
                                     war_strong = str(jaws_strongs[1].find(text=True))
                                     war_7yr_strong = str(jaws_strongs[2].find(text=True))
                                     jaws_strong = str(jaws_strongs[3].find(text=True))
-                                    war_162_strong = str(jaws_strongs[len(jaws_strongs) - 1].find(text=True))
-                                    if war_strong and war_7yr_strong and jaws_strong and war_162_strong:
+                                    if war_strong and war_7yr_strong and jaws_strong:
                                         all_rows[len(all_rows) - 1]["WAR7yr"] = float(war_7yr_strong)
                                         all_rows[len(all_rows) - 1]["JAWS"] = float(jaws_strong)
-                                        if not is_pitching_jaws and (not player_data["player_jaws_position"].endswith("P") or not has_pitch_war):
-                                            all_rows[len(all_rows) - 1]["WARPos/162"] = float(war_162_strong)
     
     set_war = False
     if is_full_career or is_full_current_year:
