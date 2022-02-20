@@ -31744,7 +31744,9 @@ def add_pitch_row_numbers(row, at_bat_event, event_name, qualifiers, pitch_index
     if handle_count_qual(pitch_event_obj, two_str_qual, False, False):
         row["2StrPit"] += 1
 
-    row["PitTypes"].add(pitch_event_obj["pitch_types"][pitch_index].lower().replace("-", " "))
+    pitch_type = pitch_event_obj["pitch_types"][pitch_index]
+    if pitch_type:
+        row["PitTypes"].add(pitch_type.lower().replace("-", " "))
 
 def handle_da_mlb_quals(row, event_name, at_bat_event, qualifiers, player_data, player_type, player_game_info, skip_pitch_events=False, skip_career_events=False):
     if "Batting Against" in qualifiers:
