@@ -14574,6 +14574,8 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
                 del row["WAR7yr"]
             if "Rdrs/yr" in row:
                 del row["Rdrs/yr"]
+            if "WARPos/162" in row:
+                del row["WARPos/162"]
         all_rows[len(all_rows) - 1]["WAR7yr"] = calculate_war_7yr_multiplayer(player_datas, player_type, is_pitching_jaws)
     
     player_data["stat_values"]["all_rows"] = all_rows
@@ -14853,6 +14855,7 @@ def customGameDateSort(game_link):
 
 def calculate_values(all_rows, player_type, time_frames, og_player_data, extra_stats={}):
     has_own_jaws = False
+    has_own_war162 = False
 
     player_data = {
         "stat_values" : {
@@ -14878,13 +14881,15 @@ def calculate_values(all_rows, player_type, time_frames, og_player_data, extra_s
 
     for row_data in all_rows:
         for stat in row_data:
-            if stat != "is_playoffs" and stat in player_data["stat_values"] and isinstance(row_data[stat], numbers.Number) and isinstance(player_data["stat_values"][stat], numbers.Number) and (seasons_leading or ((not stat in qualifier_map or stat == "Team Score" or stat == "Opponent Score") and (stat in ("JAWS") or not stat in formulas[player_type["da_type"]]) and not stat in advanced_stats["Batter"] and not stat in advanced_stats["Pitcher"])):
+            if stat != "is_playoffs" and stat in player_data["stat_values"] and isinstance(row_data[stat], numbers.Number) and isinstance(player_data["stat_values"][stat], numbers.Number) and (seasons_leading or ((not stat in qualifier_map or stat == "Team Score" or stat == "Opponent Score") and (stat in ("JAWS", "WARPos/162") or not stat in formulas[player_type["da_type"]]) and not stat in advanced_stats["Batter"] and not stat in advanced_stats["Pitcher"])):
                 if stat in decimal_stats:
                     player_data["stat_values"][stat] = round_value(player_data["stat_values"][stat] + row_data[stat], 1)
                 else:
                     player_data["stat_values"][stat] += row_data[stat]
                 if stat == "JAWS":
                     has_own_jaws = True
+                elif stat == "WARPos/162":
+                    has_own_war162 = True
             elif stat in string_stats:
                 if not player_data["stat_values"][stat]:
                     player_data["stat_values"][stat] = ""
@@ -14937,6 +14942,8 @@ def calculate_values(all_rows, player_type, time_frames, og_player_data, extra_s
 
     for stat in formulas[player_type["da_type"]]:
         if stat == "JAWS" and has_own_jaws:
+            continue
+        elif stat == "WARPos/162" and has_own_war162:
             continue
         
         if not seasons_leading or stat == "TmRec":
@@ -17846,10 +17853,13 @@ def handle_season_only_stats(player_page, player_data, player_type, time_frame, 
                                     jaws_strongs = next_row.find_all("strong")
                                     war_strong = str(jaws_strongs[1].find(text=True))
                                     war_7yr_strong = str(jaws_strongs[2].find(text=True))
-                                    jaws_strong = str(jaws_strongs[3].find(text=True))        
-                                    if war_strong and war_7yr_strong and jaws_strong:
+                                    jaws_strong = str(jaws_strongs[3].find(text=True))
+                                    war_162_strong = str(jaws_strongs[len(jaws_strongs) - 1].find(text=True))
+                                    if war_strong and war_7yr_strong and jaws_strong and war_162_strong:
                                         all_rows[len(all_rows) - 1]["WAR7yr"] = float(war_7yr_strong)
                                         all_rows[len(all_rows) - 1]["JAWS"] = float(jaws_strong)
+                                        if not is_pitching_jaws and (not player_data["player_jaws_position"].endswith("P") or not has_pitch_war):
+                                            all_rows[len(all_rows) - 1]["WARPos/162"] = float(war_162_strong)
     
     set_war = False
     if is_full_career or is_full_current_year:
