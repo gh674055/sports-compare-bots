@@ -12978,7 +12978,7 @@ def handle_name_threads(sub_name, parse_time_frames, index, player_type, remove_
                         game_player_data["DateStart"] = [row["DateTime"]]
                         game_player_data["DateEnd"] = [row["DateTime"]]
 
-                        sub_player_data = combine_player_datas([game_player_data], player_type, False, False, False, parse_time_frames[index], "add", remove_duplicates, remove_duplicate_games, is_pitching_jaws, extra_stats)
+                        sub_player_data = combine_player_datas([game_player_data], player_type, False, False, False, False, parse_time_frames[index], "add", remove_duplicates, remove_duplicate_games, is_pitching_jaws, extra_stats)
                         player_datas.append(sub_player_data)
             else:
                 games_table = False
