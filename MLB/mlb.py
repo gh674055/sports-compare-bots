@@ -271,6 +271,10 @@ headers = {
             "positive" : True,
             "display" : False
         },
+        "WARPitchSeasons" : {
+            "positive" : True,
+            "display" : False
+        },
         "SlrSeasons" : {
             "positive" : True,
             "display" : False
@@ -2238,6 +2242,10 @@ headers = {
             "display" : False
         },
         "PitchSeasons" : {
+            "positive" : True,
+            "display" : False
+        },
+        "WARPitchSeasons" : {
             "positive" : True,
             "display" : False
         },
@@ -4576,8 +4584,8 @@ formulas = {
         "Rfield/Yr" : "Rfield / WARSeasons",
         "oWAR/Yr" : "oWAR / WARSeasons",
         "dWAR/Yr" : "dWAR / WARSeasons",
-        "WAAPitch/Yr" : "WAAPitch / PitchSeasons",
-        "WARPitch/Yr" : "WARPitch / PitchSeasons",
+        "WAAPitch/Yr" : "WAAPitch / WARPitchSeasons",
+        "WARPitch/Yr" : "WARPitch / WARPitchSeasons",
         "WAAPos/Yr" : "WAAPos / WARSeasons",
         "WARPos/Yr" : "WARPos / WARSeasons",
         "WAR/Yr" : "WAR / WARSeasons",
@@ -4707,8 +4715,8 @@ formulas = {
         "JAWS" : "(WARJAWS + WAR7yr) / 2",
         "oWAR/Yr" : "oWAR / WARSeasons",
         "dWAR/Yr" : "dWAR / WARSeasons",
-        "WAAPitch/Yr" : "WAAPitch / PitchSeasons",
-        "WARPitch/Yr" : "WARPitch / PitchSeasons",
+        "WAAPitch/Yr" : "WAAPitch / WARPitchSeasons",
+        "WARPitch/Yr" : "WARPitch / WARPitchSeasons",
         "WAAPos/Yr" : "WAAPos / WARSeasons",
         "WARPos/Yr" : "WARPos / WARSeasons",
         "Rbat/Yr" : "Rbat / WARSeasons",
@@ -14872,7 +14880,8 @@ def customGameDateSort(game_link):
 def calculate_values(all_rows, player_type, time_frames, og_player_data, extra_stats={}):
     has_own_jaws = False
     has_own_war162 = False
-    has_val_year_stats = False
+    has_pitch_val_year_stats = False
+    has_pos_val_year_stats = False
     has_war_year_stats = False
     has_waa_year_stats = False
 
@@ -14909,8 +14918,10 @@ def calculate_values(all_rows, player_type, time_frames, og_player_data, extra_s
                     has_own_jaws = True
                 elif stat == "WARPos/162":
                     has_own_war162 = True
-                elif stat in ["Rbat/Yr", "Rbaser/Yr", "Rfield/Yr", "oWAR/Yr", "dWAR/Yr", "WAAPos/Yr", "WARPos/Yr", "WAAPitch/Yr", "WARPitch/Yr"]:
-                    has_val_year_stats = True
+                elif stat in ["Rbat/Yr", "Rbaser/Yr", "Rfield/Yr", "oWAR/Yr", "dWAR/Yr", "WAAPos/Yr", "WARPos/Yr"]:
+                    has_pos_val_year_stats = True
+                elif stat in ["WAAPitch/Yr", "WARPitch/Yr"]:
+                    has_pitch_val_year_stats = True
                 elif stat == "WAA/Yr":
                     has_waa_year_stats = True
                 elif stat == "WAR/Yr":
@@ -14971,7 +14982,9 @@ def calculate_values(all_rows, player_type, time_frames, og_player_data, extra_s
             continue
         elif stat in ["WAAPos/162", "dWARPos/162", "oWARPos/162", "WARPos/162"] and has_own_war162:
             continue
-        elif stat in ["Rbat/Yr", "Rbaser/Yr", "Rfield/Yr", "oWAR/Yr", "dWAR/Yr", "WAAPos/Yr", "WARPos/Yr", "WAAPitch/Yr", "WARPitch/Yr"] and has_val_year_stats:
+        elif stat in ["Rbat/Yr", "Rbaser/Yr", "Rfield/Yr", "oWAR/Yr", "dWAR/Yr", "WAAPos/Yr", "WARPos/Yr"] and has_pos_val_year_stats:
+            continue
+        elif stat in ["WAAPitch/Yr", "WARPitch/Yr"] and has_pitch_val_year_stats:
             continue
         elif stat == "WAA/Yr" and has_waa_year_stats:
             continue
@@ -16090,6 +16103,8 @@ def handle_player_data(player_data, time_frame, player_type, player_page, valid_
                 
                 if not (("fake_playoff_row" in row and row["fake_playoff_row"]) or row["is_playoffs"]):
                     row["WARSeasons"] = 1
+                    if row["Year"] in player_data["pitch_valid_years"]:
+                        row["WARPitchSeasons"] = 1
                     if "Salary" in row:
                         row["SlrSeasons"] = 1
                         if "InflSalary" in row:
@@ -16142,6 +16157,8 @@ def handle_player_data(player_data, time_frame, player_type, player_page, valid_
                     
                     if not (("fake_playoff_row" in row and row["fake_playoff_row"]) or row["is_playoffs"]):
                         row["WARSeasons"] = 1
+                        if row["Year"] in player_data["pitch_valid_years"]:
+                            row["WARPitchSeasons"] = 1
                         if "Salary" in row:
                             row["SlrSeasons"] = 1
                             if "InflSalary" in row:
@@ -16343,6 +16360,8 @@ def handle_player_data(player_data, time_frame, player_type, player_page, valid_
 
             if not (("fake_playoff_row" in row and row["fake_playoff_row"]) or row["is_playoffs"]):
                 row["WARSeasons"] = 1
+                if row["Year"] in player_data["pitch_valid_years"]:
+                    row["WARPitchSeasons"] = 1
                 if "Salary" in row:
                     row["SlrSeasons"] = 1
                     if "InflSalary" in row:
@@ -17265,7 +17284,7 @@ def determine_row_data(game_data, player_type, player_data, player_id, current_t
     return row_data
 
 def fix_seasons(all_rows):
-    stats_to_fix = ["Seasons", "UniqueSeasons", "NonFakeSeasons", "PitchSeasons", "SlrSeasons", "RegularSeasons", "WARSeasons", "PlayoffSeasons", "AllStarSeasons"]
+    stats_to_fix = ["Seasons", "UniqueSeasons", "NonFakeSeasons", "PitchSeasons", "WARPitchSeasons", "SlrSeasons", "RegularSeasons", "WARSeasons", "PlayoffSeasons", "AllStarSeasons"]
     for stat_to_fix in stats_to_fix:
         years = set()
         for row in all_rows:
