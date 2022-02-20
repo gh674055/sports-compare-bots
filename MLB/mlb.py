@@ -13681,7 +13681,7 @@ def get_player(name, time_frames):
     if path[0] == "players":
         player_id = path[2][:-6]
         return player_id, player_page
-    elif path[0] == "register":
+    elif path[0] == "register" and path[1] == "player.fcgi":
         major_league_link = player_page.find("div", {"id" : "bottom_nav"}).find("p").find("a").get("href")
         path = major_league_link.split("/")
         if len(path) >= 4 and path[1] == "players":
