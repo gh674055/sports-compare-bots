@@ -16770,6 +16770,9 @@ def handle_season_stats_game(player_type, player_data, player_link, time_frame, 
                     row_data["GA"] += game["shortHandedGoalsAgainst"]
 
                 row_data["GD"] : row_data["GF"] - row_data["GA"]
+                row_data["EVGD"] : row_data["EVGF"] - row_data["EVGA"]
+                row_data["PPGD"] : row_data["PPGF"] - row_data["PPGA"]
+                row_data["SHGD"] : row_data["SHGF"] - row_data["SHGA"]
             elif report == "savesByStrength":
                 row_data["EVSH"] = game["evShotsAgainst"]
                 if row_data["EVSH"]:
@@ -20193,8 +20196,8 @@ def determine_stat_value(player_game_info, all_events, qualifiers, og_row, playe
     all_faceoff_stats = ["OZ", "NZ", "DZ"]
     takeaway_stats = ["TK", "GV"]
     penalty_stats = ["PIM", "PEN", "PenDrawn", "NetPEN", "Minor", "Major", "Misconduct", "GameMisconduct", "Match", "Fight"]
-    oi_all_team_goals_stats = ["GF", "PlusMinus", "EVGF", "PPGF", "SHGF", "TmGF", "TtlGF", "GFDiff"]
-    oi_all_opp_goals_stats = ["GA", "PlusMinus", "EVGA", "PPGA", "SHGA", "OppGF", "TtlGF", "GFDiff"]
+    oi_all_team_goals_stats = ["GF", "GD", "PlusMinus", "EVGF", "PPGF", "SHGF", "EVGD", "PPGD", "SHGD", "TmGF", "TtlGF", "GFDiff"]
+    oi_all_opp_goals_stats = ["GA", "GD", "PlusMinus", "EVGA", "PPGA", "SHGA", "EVGD", "PPGD", "SHGD", "OppGF", "TtlGF", "GFDiff"]
     oi_all_team_shots_stats = ["CF", "TmCF", "TtlCF", "CFDiff"]
     oi_all_opp_shots_stats = ["CA", "OppCF", "TtlCF", "CFDiff"]
     oi_all_team_shots_og_stats = ["oiTmS", "TmSF", "TtlSF", "SFDiff"]
@@ -20373,20 +20376,24 @@ def determine_stat_value(player_game_info, all_events, qualifiers, og_row, playe
                 if goal_event["event_name"] == "oi_all_team_goals":
                     if determine_event_match(goal_event, qualifiers, player_game_info, og_row):
                         row["GF"] += 1
+                        row["GD"] += 1
                         row["TmGF"] += 1
                         strength = determine_strength(player_game_info, goal_event["period"], goal_event["periodTime"], goal_event)
                         if strength:
                             row[strength + "GF"] += 1
+                            row[strength + "GD"] += 1
                             if strength == "EV" or strength == "SH":
                                 row["PlusMinus"] += 1
             if stat in oi_all_opp_goals_stats:
                 if goal_event["event_name"] == "oi_all_opp_goals":
                     if determine_event_match(goal_event, qualifiers, player_game_info, og_row):
                         row["GA"] += 1
+                        row["GD"] -= 1
                         row["OppGF"] += 1
                         strength = determine_strength(player_game_info, goal_event["period"], goal_event["periodTime"], goal_event)
                         if strength:
                             row[strength + "GA"] += 1
+                            row[strength + "GD"] -= 1
                             if strength == "EV" or strength == "PP":
                                 row["PlusMinus"] -= 1
         else:                
@@ -25095,19 +25102,23 @@ def perform_metadata_quals(qualifiers, player_type, row, player_game_info, nhl_p
         for goal_event in player_game_info["oi_all_team_goals"]:
             if perform_metadata_qual("oi_all_team_goals", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], skip_career_events=skip_career_events):
                 row["GF"] += 1
+                row["GD"] += 1
                 row["TmGF"] += 1
                 strength = determine_strength(player_game_info, goal_event["period"], goal_event["periodTime"], goal_event)
                 if strength:
                     row[strength + "GF"] += 1
+                    row[strength + "GD"] += 1
                     if strength == "EV" or strength == "SH":
                         row["PlusMinus"] += 1
         for goal_event in player_game_info["oi_all_opp_goals"]:
             if perform_metadata_qual("oi_all_opp_goals", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], skip_career_events=skip_career_events):
                 row["GA"] += 1
+                row["GD"] -= 1
                 row["OppGF"] += 1
                 strength = determine_strength(player_game_info, goal_event["period"], goal_event["periodTime"], goal_event)
                 if strength:
                     row[strength + "GA"] += 1
+                    row[strength + "GD"] -= 1
                     if strength == "EV" or strength == "PP":
                         row["PlusMinus"] -= 1
     else:
@@ -27697,6 +27708,10 @@ def clear_row_attrs(row, player_type):
         row["EVGA"] = 0
         row["PPGA"] = 0
         row["SHGA"] = 0
+        row["GD"] = 0
+        row["EVGD"] = 0
+        row["PPGD"] = 0
+        row["SHGD"] = 0
 
         row["G_5v5"] = 0
         row["A_5v5"] = 0
@@ -38135,7 +38150,7 @@ def is_invalid_stat(stat, player_type, data, count_inconsistent, player_data, co
             shot_on_stats = ["S", "S%", "S/GP"]
             shot_on_on_stats = ["S", "S%", "S/GP"]
             report_stats = ["OZFO%", "DZFO%", "OZFO/60M", "DZFO/60M",  "OZFOW/60M", "DZFOW/60M","FOW/GP", "FO/GP", "FOW", "FO", "FO%", "S", "S%", "S/GP"]
-            game_report_stats = ["PlusMinus", "GF", "EVGF", "PPGF", "SHGF", "GA", "EVGA", "PPGA", "SHGA", "IGP", "EVIGP", "IPP", "EVIPP", "GFPer", "EVGF%", "GF/60M", "GA/60M", "GFRelPer", "offIGF", "offIGA", "TmGF", "OppGF", "TmGF", "GFDiff", "offIGF/60M", "offIGA/60M", "GFRel/60M", "offIG/60M", "GARel/60M"]
+            game_report_stats = ["PlusMinus", "GF", "EVGF", "PPGF", "SHGF", "GA", "EVGA", "PPGA", "SHGA", "GD", "EVGD", "PPGD", "SHGD", "IGP", "EVIGP", "IPP", "EVIPP", "GFPer", "EVGF%", "GF/60M", "GA/60M", "GFRelPer", "offIGF", "offIGA", "TmGF", "OppGF", "TmGF", "GFDiff", "offIGF/60M", "offIGA/60M", "GFRel/60M", "offIG/60M", "GARel/60M"]
             header_indv_shift_stats = skater_header_indv_shift_stats
         else:
             header_shift_stats = []
