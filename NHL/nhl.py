@@ -36041,6 +36041,9 @@ def calculate_team_win_losses(data, all_rows, stat):
     return result_count
 
 def calculate_earliest_invalid_date(stat, player_type, data, formula, earliest_invalid_date, real_stat, player_data, formula_matches):
+    if real_stat in ["TmPTS", "TmPTS%", "TmW/L%", "PTS", "PTS%", "W/L%"]:
+        return
+
     has_match = False
     for formula_match in formula_matches:
         if formula_match.group() == stat.lower():
