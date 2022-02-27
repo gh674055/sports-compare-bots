@@ -15092,7 +15092,7 @@ def determine_raw_str(subbb_frame):
                             qual_str += player_url_str + ((" (" + query + ")") if query and player["is_raw_query"] else "")
                 elif qualifier == "On Line With" or qualifier == "On Line Against":
                     if not sub_sub_first:
-                        qual_str += " + "
+                        continue
                     else:
                         sub_sub_first = False
                     qual_str += str(not qual_obj["negate"])
