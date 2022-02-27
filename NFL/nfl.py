@@ -5099,12 +5099,6 @@ def handle_player_string(comment, player_type, is_fantasy, last_updated, hide_ta
                                         if not isinstance(time_start, int):
                                             if not playoffs:
                                                 playoffs = "Include"
-
-                                        if "Dates" in qualifiers:
-                                            for dat_obj in qualifiers["Dates"]:
-                                                for sub_dat_obj in dat_obj["values"]:
-                                                    sub_dat_obj["start_val"] = sub_dat_obj["start_val"].replace(year = time_start)
-                                                    sub_dat_obj["end_val"] = sub_dat_obj["end_val"].replace(year = time_start)
                                     
                                     if isinstance(time_start, int) and not isinstance(time_end, int):
                                         time_start = datetime.date(year=time_start, month=1, day=1)
