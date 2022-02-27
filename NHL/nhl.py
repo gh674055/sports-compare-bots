@@ -20608,10 +20608,6 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
     if not "current-stats" in extra_stats:
         return game_data, row_data, missing_games
 
-    if not "hide-href-quals" in extra_stats and not "hide-href" in extra_stats and not has_api_quals(time_frame["qualifiers"]) and not has_shift_quals(time_frame["qualifiers"]):
-        if ("Assisted By" in extra_stats or "Assisted On" in extra_stats or "Points On" in extra_stats or "scoring-stats" in extra_stats):
-            extra_stats.add("href")
-
     scoring_plays = []
     if row_data["Year"] < 2000 or has_api_quals(time_frame["qualifiers"]) or "href" in extra_stats:
         if all_plays and not "href" in extra_stats:
