@@ -22498,7 +22498,10 @@ def get_html_shift_data(og_game_id, is_home, game_data, player_data, row_year, s
                     elif period_str == "SO":
                         period = 5
                     else:
-                        period = int(period_str)
+                        if not period_str and in_progress_period:
+                            period = in_progress_period
+                        else:
+                            period = int(period_str)
                     time_start_str = str(columns[2].text_content()).strip()
                     time_end_str = str(columns[3].text_content()).strip()
                     duration = str(columns[4].text_content()).strip()
@@ -22622,7 +22625,10 @@ def get_html_shift_data(og_game_id, is_home, game_data, player_data, row_year, s
                     elif period_str == "SO":
                         period = 5
                     else:
-                        period = int(period_str)
+                        if not period_str and in_progress_period:
+                            period = in_progress_period
+                        else:
+                            period = int(period_str)
                     time_duration = str(columns[3].text_content()).strip()
                     if not time_duration:
                         continue
