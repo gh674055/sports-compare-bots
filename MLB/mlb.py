@@ -43504,7 +43504,7 @@ def handle_table_data(over_header, player_data, player_datas, player_type, heade
                 if len(players) > 1:
                     if player != "No Player Match!":
                         parsed_name = create_human_name(player)
-                        player = parsed_name.first
+                        player = parsed_name.last
 
                 if for_reddit and player_data["ids"]:
                     value += create_player_url_string(player, player_data["ids"][index], extra_stats)
