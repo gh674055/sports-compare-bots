@@ -12365,9 +12365,6 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
             }]])
     except BaseException:
         raise CustomMessageException("Invalid query format!")
-
-    if "hide-advanced" in extra_stats and "current-stats" in extra_stats:
-        extra_stats.remove("current-stats")
     
     best_games_table = 0
     worst_games_table = 0
@@ -15931,6 +15928,9 @@ def handle_player_data(player_data, time_frame, player_type, player_page, valid_
             extra_stats.add("star")
         if add_current_stats:
             extra_stats.add("current-stats")
+
+        if "hide-advanced" in extra_stats and "current-stats" in extra_stats:
+            extra_stats.remove("current-stats")
 
         needs_half = False
         if "First Half" in time_frame["qualifiers"] or "Second Half" in time_frame["qualifiers"]:
