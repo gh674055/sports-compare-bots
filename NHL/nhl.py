@@ -20730,14 +20730,14 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
     if row_data["Year"] >= 2000 and not has_api_quals(time_frame["qualifiers"]) and not "hide-play" in extra_stats and (not "href" in extra_stats or not game_data["is_final"]):
         if row_data["Year"] >= 2007:
             get_html_play_data(scoring_plays, player_data, row_data["NHLGameLink"], row_data["Location"], game_data, row_data["Year"], s)
-            if not scoring_plays or not has_period_event(game_data, scoring_plays):
+            if not scoring_plays or not has_period_event(game_data, scoring_plays) or not has_matching_goals(game_data, scoring_plays, all_plays):
                 if "hide-missing" in extra_stats:
                     missing_games = True
                     game_data["missing_data"] = True
                     return game_data, row_data, missing_games
                 else:
                     get_older_html_play_data(scoring_plays, player_data, row_data["NHLGameLink"], row_data["Location"], game_data, row_data["Year"], s)
-                    if not scoring_plays:
+                    if not scoring_plays or not has_matching_goals(game_data, scoring_plays, all_plays):
                         if "hide-href" in extra_stats:
                             missing_games = True
                             game_data["missing_data"] = True
@@ -20760,14 +20760,14 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                 game_data["is_href_stats"] = True
         elif row_data["Year"] >= 2003:
             get_old_html_play_data(scoring_plays, player_data, row_data["NHLGameLink"], row_data["Location"], game_data, row_data["Year"], s)
-            if not scoring_plays or not has_period_event(game_data, scoring_plays):
+            if not scoring_plays or not has_period_event(game_data, scoring_plays) or not has_matching_goals(game_data, scoring_plays, all_plays):
                 if "hide-missing" in extra_stats:
                     missing_games = True
                     game_data["missing_data"] = True
                     return game_data, row_data, missing_games
                 else:
                     get_older_html_play_data(scoring_plays, player_data, row_data["NHLGameLink"], row_data["Location"], game_data, row_data["Year"], s)
-                    if not scoring_plays:
+                    if not scoring_plays or not has_matching_goals(game_data, scoring_plays, all_plays):
                         if "hide-href" in extra_stats:
                             missing_games = True
                             game_data["missing_data"] = True
@@ -20789,7 +20789,7 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                 game_data["is_href_stats"] = True
         elif row_data["Year"] >= 2000:
             get_older_html_play_data(scoring_plays, player_data, row_data["NHLGameLink"], row_data["Location"], game_data, row_data["Year"], s)
-            if not scoring_plays:
+            if not scoring_plays or not has_matching_goals(game_data, scoring_plays, all_plays):
                 if "hide-missing" in extra_stats:
                     missing_games = True
                     game_data["missing_data"] = True
@@ -21785,6 +21785,46 @@ def has_period_event(game_data, scoring_plays):
             return False
     return True
 
+def has_matching_goals(game_data, scoring_plays, all_plays):
+    if not all_plays:
+        return True
+
+    if not game_data["is_final"]:
+        return True
+    
+    html_scoring_plays = []
+    api_scoring_plays = []
+
+    for scoring_play in scoring_plays:
+        if scoring_play["result"]["event"] == "Goal":
+            scorer = None
+            assists = []
+            for score_player in scoring_play["players"]:
+                if score_player["playerType"] == "Scorer":
+                    scorer = score_player["player"]["id"]
+                elif score_player["playerType"] == "Assist":
+                    assists.append(score_player["player"]["id"])
+            html_scoring_plays.append({
+                "scorer" : scorer,
+                "assists" : assists
+            })
+    
+    for scoring_play in all_plays:
+        if scoring_play["result"]["event"] == "Goal":
+            scorer = None
+            assists = []
+            for score_player in scoring_play["players"]:
+                if score_player["playerType"] == "Scorer":
+                    scorer = score_player["player"]["id"]
+                elif score_player["playerType"] == "Assist":
+                    assists.append(score_player["player"]["id"])
+            api_scoring_plays.append({
+                "scorer" : scorer,
+                "assists" : assists
+            })
+
+    return html_scoring_plays == api_scoring_plays
+
 def has_period_shift_event(game_data, shift_data):
     if not game_data["is_final"]:
         return True
@@ -22590,8 +22630,8 @@ def get_html_shift_data(og_game_id, is_home, game_data, player_data, row_year, s
                     elif period_str == "SO":
                         period = 5
                     else:
-                        if not period_str and in_progress_period:
-                            period = in_progress_period
+                        if not period_str:
+                            period = -1
                         else:
                             period = int(period_str)
                     time_start_str = str(columns[2].text_content()).strip()
@@ -22717,8 +22757,8 @@ def get_html_shift_data(og_game_id, is_home, game_data, player_data, row_year, s
                     elif period_str == "SO":
                         period = 5
                     else:
-                        if not period_str and in_progress_period:
-                            period = in_progress_period
+                        if not period_str:
+                            period = -1
                         else:
                             period = int(period_str)
                     time_duration = str(columns[3].text_content()).strip()
@@ -24054,7 +24094,10 @@ def get_older_html_play_data(scoring_plays, player_data, og_game_id, is_home, ga
             if period_str == "SO":
                 period = 5
             else:
-                period = int(period_str)
+                if not period_str:
+                    period = -1
+                else:
+                    period = int(period_str)
             strength = str(columns[9].text_content()).strip()
             time_start_str = str(columns[2].text_content()).strip()
             team_str = str(columns[3].text_content()).strip()
