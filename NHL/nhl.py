@@ -7430,7 +7430,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                         for m in last_match:
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip() + " " + m.group(3)
                         
-                        last_match = re.finditer(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?((?:sub-query|event-sub-query|or-sub-query|or-event-sub-query|day-after-sub-query|day-before-sub-query|day-of-sub-query|game-after-sub-query|game-before-sub-query|season-sub-query|or-season-sub-query|season-after-sub-query|season-before-sub-query|exact-penalty-type|exact-penalty-severity|penalty-type|penalty-severity|w|(?:playing|starting)-with|a|(?:playing|starting)-against|(?:playing|starting)-same-game|prv-w|previous-playing-with|prv-a|previous-playing-against|upc-w|upcoming-playing-with|upc-a|upcoming-playing-against|(?:playing|starting)-same-opponents?|(?:playing|starting)-same-dates?|holidays?|dts|dates|arena|exact-arena|stadium|exact-stadium|opponent-city|opponent-exact-city|team-city|team-exact-city|city|exact-city|event-description|exact-event-description|outoor-event|exact-outoor-event|shot-on-first-name|shot-by-first-name|shot-on-last-name|shot-by-last-name|shot-on|shot-by|on-ice-with|on-ice-against|on-line-with|on-line-against|assisted-on-first-name|assisted-on-last-name|assisted-on|assisted-with|points-with|assisted-by|primary-assisted-on|primary-assisted-with|primary-points-with|primary-assisted-by|hit-on|penalty-on|faceoff-against|fight-against|fighting-against|exact-official|exact-referee|exact-linesman|exact-team-head-coach|exact-opponent-head-coach|official|referee|linesman|team-head-coach|opponent-head-coach|event-time|start-time):(?<!\\)\(.*?(?<!\\)\))", time_frame)
+                        last_match = re.finditer(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?((?:sub-query|event-sub-query|or-sub-query|or-event-sub-query|day-after-sub-query|day-before-sub-query|day-of-sub-query|game-after-sub-query|game-before-sub-query|season-sub-query|or-season-sub-query|season-after-sub-query|season-before-sub-query|exact-penalty-type|exact-penalty-severity|penalty-type|penalty-severity|w|(?:playing|starting)-with|a|(?:playing|starting)-against|(?:playing|starting)-same-game|prv-w|previous-playing-with|prv-a|previous-playing-against|upc-w|upcoming-playing-with|upc-a|upcoming-playing-against|(?:playing|starting)-same-opponents?|(?:playing|starting)-same-dates?|holidays?|dts|dates|arena|exact-arena|stadium|exact-stadium|opponent-city|opponent-exact-city|team-city|team-exact-city|city|exact-city|event-description|exact-event-description|outoor-event|exact-outoor-event|shot-on-first-name|shot-by-first-name|shot-on-last-name|shot-by-last-name|shot-on|shot-by|on-ice-with|on-ice-against|assisted-on-first-name|assisted-on-last-name|assisted-on|assisted-with|points-with|assisted-by|primary-assisted-on|primary-assisted-with|primary-points-with|primary-assisted-by|hit-on|penalty-on|faceoff-against|fight-against|fighting-against|exact-official|exact-referee|exact-linesman|exact-team-head-coach|exact-opponent-head-coach|official|referee|linesman|team-head-coach|opponent-head-coach|event-time|start-time):(?<!\\)\(.*?(?<!\\)\))", time_frame)
                         for m in last_match:
                             qualifier_obj = {}
                             negate_str = m.group(1)
@@ -8504,7 +8504,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 qual_str = "playing-same-game:"
                                 qual_type = "Playing Same Game"
                             
-                            qualifier_obj["time_frame_str"] = re.sub(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?((?:(?:playing|starting)-with|(?:playing|starting)-against|(?:playing|starting)-same-game|prv-w|previous-playing-with|prv-a|previous-playing-against|upc-w|upcoming-playing-with|upc-a|upcoming-playing-against|(?:playing|starting)-same-opponents?|(?:playing|starting)-same-dates?|shot-on|shot-by|on-ice-with|on-ice-against|on-line-with|on-line-against|assisted-on|assisted-with|points-with|assisted-by|primary-assisted-on|primary-assisted-with|primary-points-with|primary-assisted-by|hit-on|block-on|penalty-on|faceoff-against|fight-against|fighting-against|-?starts?|-?started|-?starting|-?ignore-starts?|-?ignore-started?|-?ignore-starting|start-if-goalie))\b", "", og_time_str)
+                            qualifier_obj["time_frame_str"] = re.sub(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?((?:(?:playing|starting)-with|(?:playing|starting)-against|(?:playing|starting)-same-game|prv-w|previous-playing-with|prv-a|previous-playing-against|upc-w|upcoming-playing-with|upc-a|upcoming-playing-against|(?:playing|starting)-same-opponents?|(?:playing|starting)-same-dates?|shot-on|shot-by|on-ice-with|on-ice-against|on-line-with|on-line-against|assisted-on|assisted-with|points-with|assisted-by|primary-assisted-on|primary-assisted-with|primary-points-with|primary-assisted-by|hit-on|block-on|penalty-on|faceoff-against|fight-against|fighting-against|-?starts?|-?started|-?starting|-?ignore-starts?|-?ignore-started?|-?ignore-starting|start-if-goalie))(?!:)\b", "", og_time_str)
                             qualifier_obj["time_frame_str"] = re.sub(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?((?:qual-sub-query):(?<!\\)\(.*?(?<!\\)\))", "", qualifier_obj["time_frame_str"])
 
                             if not qual_type in qualifiers:
@@ -13704,7 +13704,7 @@ def handle_the_same_games_quals(sub_name, qual_str, subbb_frames, time_frame, pl
         min_value = float("inf")
         player_id, player_page = get_player(name, subbb_frames)
         if player_id and player_page:
-            player_data = handle_multi_player_data(player_id, subbb_frames, player_type, player_page, False, False, extra_stats, comment_obj)[0]
+            player_data = handle_multi_player_data(player_id, subbb_frames, player_type, player_page, False, False, False, extra_stats, comment_obj)[0]
             
             player_data["stat_values"] = {}
             player_data["stat_values"]["DateStart"] = player_data["DateStart"]
@@ -13871,11 +13871,18 @@ def handle_multi_name_data(names, time_frames, player_type, remove_duplicates, r
 
     add_type = "plus"
 
+    has_line_quals = False
+    for sub_time_frames in time_frames:
+        for time_frame in sub_time_frames:
+            if "On Line With" in time_frame["qualifiers"] or "On Line Against" in time_frame["qualifiers"]:
+                has_line_quals = True
+                break
+
     for index, name in enumerate(names):
         real_index = index if len(time_frames) > index else len(time_frames) - 1
         player_id, player_page = get_player(name, time_frames[real_index])
         if player_id and player_page:
-            player_data, missing_games, missing_toi = handle_multi_player_data(player_id, time_frames[real_index], player_type, player_page, remove_duplicates, remove_duplicate_games, extra_stats, comment_obj)
+            player_data, missing_games, missing_toi = handle_multi_player_data(player_id, time_frames[real_index], player_type, player_page, remove_duplicates, remove_duplicate_games, has_line_quals and index > 0, extra_stats, comment_obj)
             player_data["Search Term"] = name
             for sub_frame in time_frames[real_index]:
                 if sub_frame["add_type"] == "minus":
@@ -14080,6 +14087,13 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
                 seasons_leading = int(extra_stat.split("-")[2])
             else:
                 seasons_leading = 1
+
+    has_line_quals = False
+    for sub_time_frames in time_frames:
+        for time_frame in sub_time_frames:
+            if "On Line With" in time_frame["qualifiers"] or "On Line Against" in time_frame["qualifiers"]:
+                has_line_quals = True
+                break
                 
     player_data = {
         "ids": [],
@@ -14368,7 +14382,7 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
     player_hofs = []
     has_one_player = False
     is_indv_shift_data = True
-    for sub_player_data in player_datas:
+    for sub_player_index, sub_player_data in enumerate(player_datas):
         sub_range = ""
         raw_sub_range = ""
         raw_sub_time = ""
@@ -14570,43 +14584,14 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
                     raw_sub_time += " DIFF "
                 else:
                     raw_sub_time += " + "
-    
-        for index, year_start in enumerate(sub_player_data["YearStart"]):
-            if len(player_data["stat_values"]["YearStart"]) - 1 < index:
-                player_data["stat_values"]["YearStart"].append(year_start)
-            elif year_start < player_data["stat_values"]["YearStart"][index]:
-                player_data["stat_values"]["YearStart"][index] = year_start
-        for index, year_end in enumerate(sub_player_data["YearEnd"]):
-            if len(player_data["stat_values"]["YearEnd"]) - 1 < index:
-                player_data["stat_values"]["YearEnd"].append(year_end)
-            elif year_end > player_data["stat_values"]["YearEnd"][index]:
-                player_data["stat_values"]["YearEnd"][index] = year_end
-
-        player_data["stat_values"]["Raw Player"] += "{" + (sub_player_data["Player"] if "hide-name" not in extra_stats else "?????") +"} " + ("DIFF" if add_type == "minus" else "+") + " "
-        if raw_sub_range[:(-6 if add_type == "minus" else -3)]:
-            player_data["stat_values"]["Raw Range"] += "{" + raw_sub_range[:(-6 if add_type == "minus" else -3)] + "}"
-        else:
-            player_data["stat_values"]["Raw Range"] += "{No Matching Games!}"
         
-        if add_type == "minus":
-            player_data["stat_values"]["Raw Range"] += " DIFF "
-        else:
-            player_data["stat_values"]["Raw Range"] += " + "
-
-        if raw_sub_time[:(-6 if add_type == "minus" else -3)]:
-            player_data["stat_values"]["Raw Time"] += "{" + raw_sub_time[:(-6 if add_type == "minus" else -3)] + "}"
-
-            if add_type == "minus":
-                player_data["stat_values"]["Raw Time"] += " DIFF "
-            else:
-                player_data["stat_values"]["Raw Time"] += " + "
-
         if not multiple_matches and len(sub_player_data["DateEnd"]) > 1 and len(player_datas) > 1:
             multiple_matches = True
 
         player_data["ids"].append(sub_player_data["id"])
         player_data["nhl_ids"].append(sub_player_data["nhl_id"])
         player_data["stat_values"]["Player"].append((sub_player_data["Player"] if "hide-name" not in extra_stats else "?????"))
+        player_data["stat_values"]["Raw Player"] += "{" + (sub_player_data["Player"] if "hide-name" not in extra_stats else "?????") +"} " + ("DIFF" if add_type == "minus" else "+") + " "
         player_data["stat_values"]["Birthdays"].append(sub_player_data["Birthday"])
         player_data["stat_values"]["Deathdays"].append(sub_player_data["Deathday"])
         player_data["stat_values"]["Search Term"].append(sub_player_data["Search Term"])
@@ -14628,6 +14613,39 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
         player_numbers.append(sub_player_data["player_current_number"])
         player_flags.append(sub_player_data["player_flag"])
         player_hofs.append(sub_player_data["player_hof"])
+
+        if has_line_quals and sub_player_index > 0:
+            continue
+    
+        for index, year_start in enumerate(sub_player_data["YearStart"]):
+            if len(player_data["stat_values"]["YearStart"]) - 1 < index:
+                player_data["stat_values"]["YearStart"].append(year_start)
+            elif year_start < player_data["stat_values"]["YearStart"][index]:
+                player_data["stat_values"]["YearStart"][index] = year_start
+        for index, year_end in enumerate(sub_player_data["YearEnd"]):
+            if len(player_data["stat_values"]["YearEnd"]) - 1 < index:
+                player_data["stat_values"]["YearEnd"].append(year_end)
+            elif year_end > player_data["stat_values"]["YearEnd"][index]:
+                player_data["stat_values"]["YearEnd"][index] = year_end
+
+        if raw_sub_range[:(-6 if add_type == "minus" else -3)]:
+            player_data["stat_values"]["Raw Range"] += "{" + raw_sub_range[:(-6 if add_type == "minus" else -3)] + "}"
+        else:
+            player_data["stat_values"]["Raw Range"] += "{No Matching Games!}"
+        
+        if add_type == "minus":
+            player_data["stat_values"]["Raw Range"] += " DIFF "
+        else:
+            player_data["stat_values"]["Raw Range"] += " + "
+
+        if not has_line_quals:
+            if raw_sub_time[:(-6 if add_type == "minus" else -3)]:
+                player_data["stat_values"]["Raw Time"] += "{" + raw_sub_time[:(-6 if add_type == "minus" else -3)] + "}"
+
+                if add_type == "minus":
+                    player_data["stat_values"]["Raw Time"] += " DIFF "
+                else:
+                    player_data["stat_values"]["Raw Time"] += " + "
 
     if has_reg_season and has_playoffs:
         has_award_stats = False
@@ -15058,7 +15076,7 @@ def determine_raw_str(subbb_frame):
                     else:
                         sub_sub_first = False
                     qual_str += str(not qual_obj["negate"])
-                elif qualifier == "Playing With" or qualifier == "Playing Against" or qualifier == "Playing Same Game" or qualifier == "Previous Playing With" or qualifier == "Previous Playing Against" or qualifier == "Upcoming Playing With" or qualifier == "Upcoming Playing Against" or qualifier == "Playing Same Opponents" or qualifier == "Playing Same Date" or qualifier == "Shot On" or qualifier == "Shot By" or qualifier == "On Ice With" or qualifier == "On Ice Against" or qualifier == "On Line With" or qualifier == "On Line Against" or qualifier == "Assisted On" or qualifier == "Assisted With" or qualifier == "Points With" or qualifier == "Assisted By" or qualifier == "Primary Assisted On" or qualifier == "Primary Assisted With" or qualifier == "Primary Points With" or qualifier == "Primary Assisted By" or qualifier == "Hit On" or qualifier == "Block On" or qualifier == "Penalty On" or qualifier == "Faceoff Against" or qualifier == "Fight Against":
+                elif qualifier == "Playing With" or qualifier == "Playing Against" or qualifier == "Playing Same Game" or qualifier == "Previous Playing With" or qualifier == "Previous Playing Against" or qualifier == "Upcoming Playing With" or qualifier == "Upcoming Playing Against" or qualifier == "Playing Same Opponents" or qualifier == "Playing Same Date" or qualifier == "Shot On" or qualifier == "Shot By" or qualifier == "On Ice With" or qualifier == "On Ice Against" or qualifier == "Assisted On" or qualifier == "Assisted With" or qualifier == "Points With" or qualifier == "Assisted By" or qualifier == "Primary Assisted On" or qualifier == "Primary Assisted With" or qualifier == "Primary Points With" or qualifier == "Primary Assisted By" or qualifier == "Hit On" or qualifier == "Block On" or qualifier == "Penalty On" or qualifier == "Faceoff Against" or qualifier == "Fight Against":
                     for player in qual_obj["values"]:
                         if not sub_sub_first:
                             qual_str += " + "
@@ -15072,6 +15090,12 @@ def determine_raw_str(subbb_frame):
                         else:
                             query = player["query"].replace("Query: ", "", 1)
                             qual_str += player_url_str + ((" (" + query + ")") if query and player["is_raw_query"] else "")
+                elif qualifier == "On Line With" or qualifier == "On Line Against":
+                    if not sub_sub_first:
+                        qual_str += " + "
+                    else:
+                        sub_sub_first = False
+                    qual_str += str(not qual_obj["negate"])
                 elif qualifier == "Shot On First Name" or qualifier == "Shot By First Name" or qualifier == "Assisted On First Name" or qualifier == "Shot On Last Name" or qualifier == "Shot By Last Name" or qualifier == "Assisted On Last Name":
                     for player in qual_obj["values"]:
                         if not sub_sub_first:
@@ -15480,7 +15504,7 @@ def calculate_values(all_rows, player_type, og_player_data, extra_stats={}):
 
     return player_data
 
-def handle_multi_player_data(player_id, time_frames, player_type, player_page, remove_duplicates, remove_duplicate_games, extra_stats, comment_obj):
+def handle_multi_player_data(player_id, time_frames, player_type, player_page, remove_duplicates, remove_duplicate_games, skip_games, extra_stats, comment_obj):
     seasons_leading = 0
     for extra_stat in extra_stats:
         if extra_stat.startswith("seasons-leading"):
@@ -15558,7 +15582,7 @@ def handle_multi_player_data(player_id, time_frames, player_type, player_page, r
             get_team_map_info(player_data, player_type, valid_teams_raw_key, comment_obj)
         if ("Game After Sub Query" in time_frame["qualifiers"] or "Game Before Sub Query" in time_frame["qualifiers"] or "Games Rest" in time_frame["qualifiers"] or "Starts Rest" in time_frame["qualifiers"] or "Games In A Row" in time_frame["qualifiers"] or "Starts In A Row" in time_frame["qualifiers"] or "Game Days Rest" in time_frame["qualifiers"] or "Start Days Rest" in time_frame["qualifiers"] or "Start Days In A Row" in time_frame["qualifiers"] or "Game Days In A Row" in time_frame["qualifiers"] or "Days Rest" in time_frame["qualifiers"] or "Starts Days Rest" in time_frame["qualifiers"] or "Upcoming Days Rest" in time_frame["qualifiers"] or "Upcoming Starts Days Rest" in time_frame["qualifiers"]) and not "all_games" in player_data:
             get_all_games(player_data, time_frame, player_type, comment_obj)
-        row, missing_games, missing_toi = handle_player_data(player_data, time_frame, player_type, player_page, valid_teams, valid_year_teams, extra_stats)
+        row, missing_games, missing_toi = handle_player_data(player_data, time_frame, player_type, player_page, valid_teams, valid_year_teams, skip_games, extra_stats)
 
         if remove_duplicates:
             current_dates = set([row_data["Date"] for row_data in player_data["rows"]])
@@ -15636,7 +15660,7 @@ def handle_multi_player_data(player_id, time_frames, player_type, player_page, r
 
     return player_data, any_missing_games, any_missing_toi
 
-def handle_player_data(player_data, time_frame, player_type, player_page, valid_teams, valid_year_teams, extra_stats):
+def handle_player_data(player_data, time_frame, player_type, player_page, valid_teams, valid_year_teams, skip_games, extra_stats):
     time_frame = {
         "playoffs" : time_frame["playoffs"],
         "time_start" : time_frame["time_start"],
@@ -15694,6 +15718,11 @@ def handle_player_data(player_data, time_frame, player_type, player_page, valid_
         player_data["nhl_id"] = int(player_link.split('/')[-1])
         player_data["Player"] = player_name
         player_data["player_position"] = player_position
+
+        if skip_games:
+            player_data["stat_values"]["is_indv_shift_data"] = True
+            return [], [], []
+
         add_updated_years(player_link, player_data, time_frame, s)
 
         live_game = None
@@ -16244,7 +16273,7 @@ def get_team_map_info(player_data, player_type, valid_teams, comment_obj):
         else:
             raise
 
-    sub_player_data = handle_multi_player_data(player_data["id"], subbb_frames, player_type, player_page, False, False, set(), comment_obj)[0]
+    sub_player_data = handle_multi_player_data(player_data["id"], subbb_frames, player_type, player_page, False, False, False, set(), comment_obj)[0]
 
     teams_map = {}
     franc_map = {}
@@ -16354,7 +16383,7 @@ def get_all_games(player_data, time_frame, player_type, comment_obj):
         else:
             raise
 
-    sub_player_data = handle_multi_player_data(player_data["id"], subbb_frames, player_type, player_page, False, False, set(), comment_obj)[0]
+    sub_player_data = handle_multi_player_data(player_data["id"], subbb_frames, player_type, player_page, False, False, False, set(), comment_obj)[0]
 
     player_data["all_games"] = {}
     for row in sorted(sub_player_data["rows"], key=lambda row: row["Date"]):
@@ -26080,28 +26109,43 @@ def perform_metadata_qual(event_name, goal_event, qualifiers, player_game_info, 
                 if not (event_time >= qual_object["values"]["start_val"] and event_time <= qual_object["values"]["end_val"]):
                     return False
 
+    on_line_with_quals = []
+    on_line_against_quals = []
+
     if "On Ice With" in qualifiers:
-        if not perform_sub_on_ice_qual(qualifiers["On Ice With"], player_game_info["player_shift_data"], goal_event, row, goal_event["period"], goal_event["periodTime"], True, is_faceoff, False):
-            return False
+        if ("On Line With" in qualifiers or "On Line Against" in qualifiers):
+            on_line_with_quals.extend(qualifiers["On Ice With"])
+        else:
+            if not perform_sub_on_ice_qual(qualifiers["On Ice With"], player_game_info["player_shift_data"], goal_event, row, goal_event["period"], goal_event["periodTime"], True, is_faceoff, False):
+                return False
     
     if "On Ice Against" in qualifiers:
-        if not perform_sub_on_ice_qual(qualifiers["On Ice Against"], player_game_info["player_shift_data"], goal_event, row, goal_event["period"], goal_event["periodTime"], False, is_faceoff, False):
-            return False
+        if ("On Line With" in qualifiers or "On Line Against" in qualifiers):
+           on_line_against_quals.extend(qualifiers["On Ice Against"])
+        else:
+            if not perform_sub_on_ice_qual(qualifiers["On Ice Against"], player_game_info["player_shift_data"], goal_event, row, goal_event["period"], goal_event["periodTime"], False, is_faceoff, False):
+                return False
     
     if "On Line With" in qualifiers:
-        if is_off_ice:
-            if not perform_sub_line_on_ice_qual(qualifiers["On Line With"], player_game_info["player_shift_data"], player_game_info["player_id"], goal_event, row, goal_event["period"], goal_event["periodTime"], True, is_faceoff):
-                return False
-        else:
-            if not perform_sub_on_ice_qual(qualifiers["On Line With"], player_game_info["player_shift_data"], goal_event, row, goal_event["period"], goal_event["periodTime"], True, is_faceoff, False):
-                return False
+        on_line_with_quals.extend(qualifiers["On Line With"])
     
     if "On Line Against" in qualifiers:
+        on_line_against_quals.extend(qualifiers["On Line Against"])
+
+    if on_line_with_quals:
         if is_off_ice:
-            if not perform_sub_line_on_ice_qual(qualifiers["On Line Against"], player_game_info["player_shift_data"], player_game_info["player_id"], goal_event, row, goal_event["period"], goal_event["periodTime"], False, is_faceoff):
+            if not perform_sub_line_on_ice_qual(on_line_with_quals, player_game_info["player_shift_data"], player_game_info["player_id"], goal_event, row, goal_event["period"], goal_event["periodTime"], True, is_faceoff):
                 return False
         else:
-            if not perform_sub_on_ice_qual(qualifiers["On Line Against"], player_game_info["player_shift_data"], goal_event, row, goal_event["period"], goal_event["periodTime"], False, is_faceoff, False):
+            if not perform_sub_on_ice_qual(on_line_with_quals, player_game_info["player_shift_data"], goal_event, row, goal_event["period"], goal_event["periodTime"], True, is_faceoff, False):
+                return False
+    
+    if on_line_against_quals:
+        if is_off_ice:
+            if not perform_sub_line_on_ice_qual(on_line_against_quals, player_game_info["player_shift_data"], player_game_info["player_id"], goal_event, row, goal_event["period"], goal_event["periodTime"], False, is_faceoff):
+                return False
+        else:
+            if not perform_sub_on_ice_qual(on_line_against_quals, player_game_info["player_shift_data"], goal_event, row, goal_event["period"], goal_event["periodTime"], False, is_faceoff, False):
                 return False
 
     if "Team Score" in qualifiers:
@@ -36476,7 +36520,7 @@ def print_player_data(player_datas, player_type, highest_vals, lowest_vals, has_
                         override_show = True
                     if "P1" in header:
                         override_show = True
-                    if "TSA" in header or header == "SThr%" or header == "TS%" or header == "iTOI%"  or header == "TmTOI%":
+                    if "TSA" in header or header == "SThr%" or header == "TS%" or header == "iTOI%" or header == "TmTOI%":
                         override_show = True
                     if "shift" in extra_stats and "Shft" in header:
                         override_show = True
@@ -36961,7 +37005,7 @@ def get_reddit_player_table(player_datas, player_type, debug_mode, original_comm
                         override_show = True
                     if header in ("GFRel/60M", "CFRel/60M", "FFRel/60M", "SFRel/60M", "GARel/60M", "CARel/60M", "FARel/60M", "SARel/60M", "GFRelPer", "CFRelPer", "FFRelPer", "SFRelPer"):
                         override_show = True
-                    if "TSA" in header or header == "SThr%" or header == "TS%" or header == "iTOI%"  or header == "TmTOI%":
+                    if "TSA" in header or header == "SThr%" or header == "TS%" or header == "iTOI%" or header == "TmTOI%":
                         override_show = True
                     if "P1" in header:
                         override_show = True
@@ -37766,7 +37810,7 @@ def handle_table_data(player_data, player_type, over_header, header, highest_val
             override_show = True
         if "P1" in header:
             override_show = True
-        if "TSA" in header or header == "SThr%" or header == "TS%" or header == "iTOI%"  or header == "TmTOI%":
+        if "TSA" in header or header == "SThr%" or header == "TS%" or header == "iTOI%" or header == "TmTOI%":
             override_show = True
         if "shift" in extra_stats and "Shft" in header:
             override_show = True
