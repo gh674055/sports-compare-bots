@@ -2588,6 +2588,14 @@ headers = {
         "GWG" : {
             "positive" : True
         },
+        "GWA" : {
+            "positive" : True,
+            "display" : False
+        },
+        "GWP" : {
+            "positive" : True,
+            "display" : False
+        },
         "1stG" : {
             "positive" : True
         },
@@ -20213,11 +20221,11 @@ def determine_stat_value(player_game_info, all_events, qualifiers, og_row, playe
     if stat not in row:
         return -1
 
-    goal_stats = ["G", "EVG", "PPG", "SHG", "GWG", "ENG", "OTG", "P", "EVP", "PPP", "SHP", "GWP", "ENP", "P1", "EVP1", "PPP1", "SHP1", "GWP1", "ENP1", "OTP1", "1stG", "S", "WristS", "WristG", "DeflectS", "DeflectG", "SlapS" "SlapG", "TipS", "TipG", "BackS", "BackG", "WrapS", "WrapG", "TSA", "HAT"]
+    goal_stats = ["G", "EVG", "PPG", "SHG", "GWG", "GWP", "ENG", "OTG", "P", "EVP", "PPP", "SHP", "GWP", "ENP", "P1", "EVP1", "PPP1", "SHP1", "GWP1", "ENP1", "OTP1", "1stG", "S", "WristS", "WristG", "DeflectS", "DeflectG", "SlapS" "SlapG", "TipS", "TipG", "BackS", "BackG", "WrapS", "WrapG", "TSA", "HAT"]
     shot_stats = ["S", "WristS", "DeflectS", "SlapS", "TipS", "BackS", "WrapS", "TSA"]
     missed_shot_stats = ["PostBar", "TSA", "TSM"]
     blocked_shot_stats = ["TSA", "TSB"]
-    assist_stats = ["A", "A1", "A2", "EVA", "EVA1", "EVA2", "PPA", "PPA1", "PPA2", "SHA", "SHA1", "SHA2", "ENA", "ENA1", "ENA2", "P", "P1", "EVP", "EVP1", "PPP", "PPP1", "SHP", "SHP1", "ENP", "ENP1"]
+    assist_stats = ["GWA", "GWP", "A", "A1", "A2", "EVA", "EVA1", "EVA2", "PPA", "PPA1", "PPA2", "SHA", "SHA1", "SHA2", "ENA", "ENA1", "ENA2", "P", "P1", "EVP", "EVP1", "PPP", "PPP1", "SHP", "SHP1", "ENP", "ENP1"]
     hit_stats = ["HIT"]
     hit_taken_stats = ["HITTkn"]
     block_stats = ["BLK"]
@@ -20335,6 +20343,8 @@ def determine_stat_value(player_game_info, all_events, qualifiers, og_row, playe
                 if goal_event["event_name"] == "assist":
                     if determine_event_match(goal_event, qualifiers, player_game_info, og_row):
                         row["A"] += 1
+                        if goal_event["gameWinningGoal"]:
+                            row["GWA"] += 1
                         if goal_event["emptyNet"]:
                             row["ENA"] += 1
                         if goal_event["is_primary"]:
@@ -20696,7 +20706,7 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                 game_data["is_older_html_stats"] = True
                 game_data["is_href_stats"] = True
         elif row_data["Year"] >= 2000:
-            get_older_html_play_data(scoring_plays, player_data, player_type, time_frame, row_data, row_data["NHLGameLink"], row_data["Location"], game_data, row_data["Year"], s)
+            get_older_html_play_data(scoring_plays, player_data, row_data["NHLGameLink"], row_data["Location"], game_data, row_data["Year"], s)
             if not scoring_plays:
                 if "hide-missing" in extra_stats:
                     missing_games = True
@@ -25069,6 +25079,8 @@ def perform_metadata_quals(qualifiers, player_type, row, player_game_info, nhl_p
         for goal_event in player_game_info["assist"]:
             if perform_metadata_qual("assist", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], skip_career_events=skip_career_events):
                 row["A"] += 1
+                if goal_event["gameWinningGoal"]:
+                    row["GWA"] += 1
                 if goal_event["emptyNet"]:
                     row["ENA"] += 1
                 if goal_event["is_primary"]:
@@ -27730,6 +27742,7 @@ def clear_row_attrs(row, player_type):
         row["DZ"] = 0
 
         row["GWG"] = 0
+        row["GWA"] = 0
         row["OTG"] = 0
         row["1stG"] = 0
         row["ENG"] = 0
@@ -27790,6 +27803,7 @@ def clear_row_attrs(row, player_type):
         row["P1_5v5"] = 0
 
         row["ENP"] = 0
+        row["GWP"] = 0
 
         row["HAT"] = 0
 
@@ -27835,6 +27849,7 @@ def calculate_row_attrs(row, player_type):
         row["P1_5v5"] = row["G_5v5"] + row["A1_5v5"]
 
         row["ENP"] = row["ENG"] + row["ENA"]
+        row["GWP"] = row["GWG"] + row["GWA"]
 
         row["HAT"] = int(row["G"] >= 3)
 
@@ -38134,11 +38149,11 @@ def is_against_header(header, over_header, extra_stats, player_type, has_toi_sta
     if "Assisted By" in extra_stats:
         return header not in ("G", "Shft", "Shft/GP", "TOI", "TOI/Shft", "OTG", "EVTOI",  "PPTOI",  "SHTOI", "EVTOI/GP",  "PPTOI/GP",  "SHTOI/GP", "GWG", "1stG", "HAT", "ENG", "EVG", "AdjG", "PPG", "SHG", "G/GP", "EVG/GP", "PPG/GP", "SHG/GP", "G/GP", "G/60M", "EVG/60M", "PPG/60M", "SHG/60M")
     if "Assisted On" in extra_stats:
-        return header not in ("A", "A/GP", "A/60M", "Shft", "TOI", "Shft/GP", "TOI/Shft", "EVTOI",  "PPTOI",  "SHTOI", "EVTOI/GP",  "PPTOI/GP",  "SHTOI/GP", "ENA", "A1", "A1%", "A1/GP", "A1/60M", "AdjA", "EVA", "EVA/GP", "EVA/60M", "EVA1", "EVA1/60M", "EVA1%", "EVA1/GP", "SHA", "SHA/GP", "SHA/60M", "SHA1", "SHA1/60M", "SHA1%", "SHA1/GP", "PPA", "PPA/GP", "PPA/60M", "PPA1", "PPA1/60M", "PPA1%", "PPA1/GP")
+        return header not in ("A", "A/GP", "A/60M", "Shft", "TOI", "Shft/GP", "TOI/Shft", "EVTOI",  "PPTOI",  "SHTOI", "EVTOI/GP",  "PPTOI/GP",  "SHTOI/GP", "GWA", "ENA", "A1", "A1%", "A1/GP", "A1/60M", "AdjA", "EVA", "EVA/GP", "EVA/60M", "EVA1", "EVA1/60M", "EVA1%", "EVA1/GP", "SHA", "SHA/GP", "SHA/60M", "SHA1", "SHA1/60M", "SHA1%", "SHA1/GP", "PPA", "PPA/GP", "PPA/60M", "PPA1", "PPA1/60M", "PPA1%", "PPA1/GP")
     if "Points On" in extra_stats:
-        return header not in ("P", "P/GP", "P/60M", "P1", "P1/GP", "P1/60M", "Shft", "Shft/GP", "TOI", "TOI/Shft", "EVTOI",  "PPTOI",  "SHTOI", "EVTOI/GP",  "PPTOI/GP",  "SHTOI/GP", "ENP", "AdjP", "EVP", "EVP/GP", "EVP/60M", "SHP", "SHP/GP", "SHP/60M", "PPP", "PPP/GP", "PPP/60M", "EVP1", "EVP1/GP", "EVP1/60M", "SHP1", "SHP1/GP", "SHP1/60M", "PPP1", "PPP1/GP", "PPP1/60M")
+        return header not in ("P", "P/GP", "P/60M", "P1", "P1/GP", "P1/60M", "Shft", "Shft/GP", "TOI", "TOI/Shft", "EVTOI",  "PPTOI",  "SHTOI", "EVTOI/GP",  "PPTOI/GP",  "SHTOI/GP", "GWP", "ENP", "AdjP", "EVP", "EVP/GP", "EVP/60M", "SHP", "SHP/GP", "SHP/60M", "PPP", "PPP/GP", "PPP/60M", "EVP1", "EVP1/GP", "EVP1/60M", "SHP1", "SHP1/GP", "SHP1/60M", "PPP1", "PPP1/GP", "PPP1/60M")
     if "scoring-stats" in extra_stats:
-        return header not in ("G", "OTG", "Shft", "Shft/GP", "TOI", "TOI/Shft", "EVTOI",  "PPTOI",  "SHTOI", "EVTOI/GP",  "PPTOI/GP",  "SHTOI/GP", "GWG", "1stG", "HAT", "ENG", "ENA", "ENP", "EVG", "AdjG", "PPG", "SHG", "G/GP", "EVG/GP", "EVG/60M", "PPG/GP", "PPG/60M", "G/60M", "A", "A/GP", "A/60M", "A1", "A1%", "A1/GP", "A1/60M", "AdjA", "EVA", "SHA", "PPA", "P", "P/GP", "P/60M", "P1", "P1%", "P1/GP", "P1/60M", "AdjP", "EVP", "EVP/GP", "EVP/60M", "SHP", "PPP", "PPP/GP", "PPP/60M", "EVA1%", "EVP1%", "SHA1%", "SHP1%", "PPA1%", "PPP1%", "EVA1", "EVP1", "SHA1", "SHP1", "PPA1", "PPP1", "SHG/GP", "SHP/GP", "SHP/60M", "SHG/60M")
+        return header not in ("G", "OTG", "Shft", "Shft/GP", "TOI", "TOI/Shft", "EVTOI",  "PPTOI",  "SHTOI", "EVTOI/GP",  "PPTOI/GP",  "SHTOI/GP", "GWG", "GWA", "GWP", "1stG", "HAT", "ENG", "ENA", "ENP", "EVG", "AdjG", "PPG", "SHG", "G/GP", "EVG/GP", "EVG/60M", "PPG/GP", "PPG/60M", "G/60M", "A", "A/GP", "A/60M", "A1", "A1%", "A1/GP", "A1/60M", "AdjA", "EVA", "SHA", "PPA", "P", "P/GP", "P/60M", "P1", "P1%", "P1/GP", "P1/60M", "AdjP", "EVP", "EVP/GP", "EVP/60M", "SHP", "PPP", "PPP/GP", "PPP/60M", "EVA1%", "EVP1%", "SHA1%", "SHP1%", "PPA1%", "PPP1%", "EVA1", "EVP1", "SHA1", "SHP1", "PPA1", "PPP1", "SHG/GP", "SHP/GP", "SHP/60M", "SHG/60M")
     if "Hit On" in extra_stats:
         return header not in ("HIT", "HIT/GP", "HIT/60M")
     if "Block On" in extra_stats:
