@@ -21865,7 +21865,7 @@ def fix_goal_errors(player_data, player_type, time_frame, row_data, game_data, s
     if len(html_scoring_plays) == len(api_scoring_plays):
         for scoring_play in scoring_plays:
             if scoring_play["result"]["event"] == "Goal":
-                scoring_play["players"] = api_scoring_plays[index]
+                scoring_play["players"] = api_scoring_plays[index]["players"]
                 index += 1
 
 def has_period_shift_event(game_data, shift_data):
