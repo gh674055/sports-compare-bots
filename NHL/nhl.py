@@ -21882,7 +21882,9 @@ def fix_goal_errors(player_data, player_type, time_frame, row_data, game_data, s
                     break
             if not has_match:
                 plays_to_add.append(api_scoring_play)
-        scoring_plays.extend(plays_to_add)
+        if plays_to_add:
+            scoring_plays.extend(plays_to_add)
+            game_data["is_api_stats"] = True
 
 def has_period_shift_event(game_data, shift_data):
     if not game_data["is_final"]:
