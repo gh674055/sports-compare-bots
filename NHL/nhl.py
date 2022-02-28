@@ -21861,11 +21861,28 @@ def fix_goal_errors(player_data, player_type, time_frame, row_data, game_data, s
         if scoring_play["result"]["event"] == "Goal":
             api_scoring_plays.append(scoring_play)
 
+    all_have_match = True
     for html_scoring_play in html_scoring_plays:
+        has_match = False
         for api_scoring_play in api_scoring_plays:
             if html_scoring_play["about"]["period"] == api_scoring_play["about"]["period"] and start_time_to_str(html_scoring_play["about"]["periodTime"]) == start_time_to_str(api_scoring_play["about"]["periodTime"]):
                 html_scoring_play["players"] = api_scoring_play["players"]
+                has_match = True
                 break
+        if not has_match:
+            all_have_match = False
+    
+    if game_data["is_incomplete"] and all_have_match and len(api_scoring_plays) > len(html_scoring_plays):
+        plays_to_add = []
+        for api_scoring_play in api_scoring_plays:
+            has_match = False
+            for html_scoring_play in html_scoring_plays:
+                if html_scoring_play["about"]["period"] == api_scoring_play["about"]["period"] and start_time_to_str(html_scoring_play["about"]["periodTime"]) == start_time_to_str(api_scoring_play["about"]["periodTime"]):
+                    has_match = True
+                    break
+            if not has_match:
+                plays_to_add.append(api_scoring_play)
+        scoring_plays.extend(plays_to_add)
 
 def has_period_shift_event(game_data, shift_data):
     if not game_data["is_final"]:
@@ -21921,6 +21938,7 @@ def determine_last_goalie(row_data, game_data, period, periodTime, team_str):
 def setup_game_data(player_data, row_data, player_id, player_type, time_frame, s):
     game_data = {
         "is_final" : True,
+        "is_incomplete" : False,
         "Date" : row_data["Date"],
         "player_type" : player_type,
         "player_id" : player_id,
@@ -22257,6 +22275,7 @@ def get_html_game_stats(game_data, missing_games, row_data, s):
 def setup_href_game_data(player_data, row_data, player_id, player_type, time_frame, player_page_xml):
     game_data = {
         "is_final" : True,
+        "is_incomplete" : False,
         "Date" : row_data["Date"],
         "player_type" : player_type,
         "player_id" : player_id,
@@ -23087,6 +23106,19 @@ def get_html_play_data(scoring_plays, player_data, og_game_id, is_home, game_dat
                                 return []
                     except Exception:
                         pass
+        
+    in_progress_period = None
+    for game_info_row_text in game_info_table_rows:
+        period_match = re.match(r"period (\d) \((\S+) remaining\)", game_info_row_text)
+        if period_match:
+            in_progress_period = int(period_match.group(1))
+        else:
+            period_match = re.match(r"end of period (\d)", game_info_row_text)
+            if period_match:
+                in_progress_period = int(period_match.group(1))
+
+    if in_progress_period and game_data["is_final"]:
+        game_data["is_incomplete"] = True
 
     tables = player_page_xml.xpath("body/table")
     if not tables:
@@ -23602,6 +23634,19 @@ def get_old_html_play_data(scoring_plays, player_data, og_game_id, is_home, game
                     except Exception:
                         pass
 
+    in_progress_period = None
+    for game_info_row_text in game_info_table_rows:
+        period_match = re.match(r"period (\d) \((\S+) remaining\)", game_info_row_text)
+        if period_match:
+            in_progress_period = int(period_match.group(1))
+        else:
+            period_match = re.match(r"end of period (\d)", game_info_row_text)
+            if period_match:
+                in_progress_period = int(period_match.group(1))
+
+    if in_progress_period and game_data["is_final"]:
+        game_data["is_incomplete"] = True
+
     table = player_page_xml.xpath("body//table")[1]
     table_text = str(table.text_content())
     home_goals = 0
@@ -24101,6 +24146,19 @@ def get_older_html_play_data(scoring_plays, player_data, og_game_id, is_home, ga
                                 return []
                     except Exception:
                         pass
+    
+    in_progress_period = None
+    for game_info_row_text in game_info_table_rows:
+        period_match = re.match(r"period (\d) \((\S+) remaining\)", game_info_row_text)
+        if period_match:
+            in_progress_period = int(period_match.group(1))
+        else:
+            period_match = re.match(r"end of period (\d)", game_info_row_text)
+            if period_match:
+                in_progress_period = int(period_match.group(1))
+
+    if in_progress_period and game_data["is_final"]:
+        game_data["is_incomplete"] = True
 
     tables = player_page_xml.xpath("body//table")
     score_table = tables[1]
@@ -24131,7 +24189,7 @@ def get_older_html_play_data(scoring_plays, player_data, og_game_id, is_home, ga
     
     for index, row in enumerate(score_table.xpath(".//tr")):
         columns = row.xpath(".//td")
-        if index > 1 and str(columns[0].text_content()).strip():
+        if index > 1 and str(columns[0].text_content()).strip() and str(columns[0].text_content()).strip() != "-":
             period_str = str(columns[1].text_content()).strip()
             if period_str == "SO":
                 period = 5
