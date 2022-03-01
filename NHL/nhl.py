@@ -8377,7 +8377,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                             if qual_str.startswith("on-ice-with"):
                                 qual_type = "On Ice With " + qual_type
                             elif qual_str.startswith("on-ice-against"):
-                                qual_type = "On Ice With " + qual_type
+                                qual_type = "On Ice Against " + qual_type
                             elif qual_str.startswith("shot-by"):
                                 qual_type = "Shot By " + qual_type
                                 extra_stats.add("Shot By")
@@ -17608,8 +17608,8 @@ def get_live_game(player_link, player_data, player_type, time_frame, s):
         is_home = sub_data["gameData"]["teams"]["home"]["id"] == current_team
         team_str = "home" if is_home else "away"
 
-        #if player_id in sub_data["liveData"]["boxscore"]["teams"][team_str]["scratches"]:
-            #return
+        if player_id in sub_data["liveData"]["boxscore"]["teams"][team_str]["scratches"]:
+            return
 
         for player in sub_data["liveData"]["boxscore"]["teams"][team_str]["players"]:
             player = sub_data["liveData"]["boxscore"]["teams"][team_str]["players"][player]
@@ -18538,17 +18538,17 @@ def handle_stat_rank_stats(all_rows, qualifiers, player_type, s):
                     "teamAbbrevs": "Team"
                 },
                 "puckPossessions" : {
-                    "faceoffPct5v5": "FO%_5v5",
+                    "faceoffPct5v5": "FO%5v5",
                     "gamesPlayed": "GP",
-                    "goalsPct": "GF%_5v5",
-                    "individualSatForPer60": "TSA_5v5",
-                    "individualShotsForPer60": "TSA/60M_5v5",
+                    "goalsPct": "GF%5v5",
+                    "individualSatForPer60": "TSA5v5",
+                    "individualShotsForPer60": "TSA/60M5v5",
                     "onIceShootingPct": "oiS%",
                     "positionCode": "Pos",
                     "satPct": "oiSV%",
                     "shootsCatches": "Shoots",
                     "teamAbbrevs": "Tean",
-                    "timeOnIcePerGame5v5": "TOI/GP_5v5",
+                    "timeOnIcePerGame5v5": "TOI/GP5v5",
                     "usatPct": "FF%",
                     "zoneStartPct": "OZ%"
                 }, "summaryshooting" : {
@@ -18564,7 +18564,7 @@ def handle_stat_rank_stats(all_rows, qualifiers, player_type, s):
                     "satTotal": "CTotal",
                     "shootsCatches": "Shoots",
                     "teamAbbrevs": "Team",
-                    "timeOnIcePerGame5v5": "TOI/GP_5v5",
+                    "timeOnIcePerGame5v5": "TOI/GP5v5",
                     "usatAgainst": "FA",
                     "usatAhead": "FAhead",
                     "usatBehind": "FBehind",
@@ -18583,12 +18583,12 @@ def handle_stat_rank_stats(all_rows, qualifiers, player_type, s):
                     "satPercentageClose": 'CFClose%',
                     "satPercentageTied": "CFTied%",
                     "satRelative": "CFRel%",
-                    "shootingPct5v5": "S%_5v5",
+                    "shootingPct5v5": "S%5v5",
                     "shootsCatches": "Shoots",
                     "skaterSavePct5v5": "oiSV%",
                     "skaterShootingPlusSavePct5v5": "PDO",
                     "teamAbbrevs": "Team",
-                    "timeOnIcePerGame5v5": "TOI/GP_5v5",
+                    "timeOnIcePerGame5v5": "TOI/GP5v5",
                     "usatPercentage": "FF%",
                     "usatPercentageAhead": "FFAhead%",
                     "usatPercentageBehind": "FFBehind%",
@@ -18597,26 +18597,26 @@ def handle_stat_rank_stats(all_rows, qualifiers, player_type, s):
                     "usatRelative": "FFRel%",
                     "zoneStartPct5v5": "OZ%"
                 }, "scoringRates" : {
-                    "assists5v5": "A_5v5",
-                    "assistsPer605v5": "A/60M_5v5",
+                    "assists5v5": "A5v5",
+                    "assistsPer605v5": "A/60M5v5",
                     "gamesPlayed": "GP",
-                    "goals5v5": "G_5v5",
-                    "goalsPer605v5": "G/60M_5v5",
-                    "netMinorPenaltiesPer60": "NetMinor/60M_5v5",
+                    "goals5v5": "G5v5",
+                    "goalsPer605v5": "G/60M5v5",
+                    "netMinorPenaltiesPer60": "NetMinor/60M5v5",
                     "offensiveZoneStartPct5v5": "OZ%",
                     "onIceShootingPct5v5": "oiS%",
-                    "points5v5": "P_5v5",
-                    "pointsPer605v5": "P/60M_5v5",
+                    "points5v5": "P5v5",
+                    "pointsPer605v5": "P/60M5v5",
                     "positionCode": "Pos",
-                    "primaryAssists5v5": "A1_5v5",
-                    "primaryAssistsPer605v5": "A1/60M_5v5",
+                    "primaryAssists5v5": "A15v5",
+                    "primaryAssistsPer605v5": "A1/60M5v5",
                     "satPct": "CF%",
                     "satRelative5v5": "CFRel/60M",
-                    "secondaryAssists5v5": "A2_5v5",
+                    "secondaryAssists5v5": "A25v5",
                     "secondaryAssistsPer605v5": "A2_60M/5v5",
-                    "shootingPct5v5": "S%_5v5",
+                    "shootingPct5v5": "S%5v5",
                     "teamAbbrevs": "Team",
-                    "timeOnIcePerGame5v5": "TOI/GP_5v5"
+                    "timeOnIcePerGame5v5": "TOI/GP5v5"
                 }, "scoringpergame" : {
                     "assists": "A",
                     "assistsPerGame": "A/GP",
@@ -23638,6 +23638,9 @@ def setup_game_data(player_data, row_data, player_id, player_type, time_frame, e
     
     for player in sub_data["liveData"]["boxscore"]["teams"][game_data["team_str"]]["players"]:
         player = sub_data["liveData"]["boxscore"]["teams"][game_data["team_str"]]["players"][player]
+        if player["person"]["id"] in sub_data["liveData"]["boxscore"]["teams"][game_data["team_str"]]["scratches"]:
+            continue
+
         if player["position"]["code"] == "G":
             game_data["team_goalies"].add(player["person"]["id"])
         else:
@@ -23657,6 +23660,9 @@ def setup_game_data(player_data, row_data, player_id, player_type, time_frame, e
     
     for player in sub_data["liveData"]["boxscore"]["teams"][game_data["opp_str"]]["players"]:
         player = sub_data["liveData"]["boxscore"]["teams"][game_data["opp_str"]]["players"][player]
+        if player["person"]["id"] in sub_data["liveData"]["boxscore"]["teams"][game_data["opp_str"]]["scratches"]:
+            continue
+
         if player["position"]["code"] == "G":
             game_data["opp_goalies"].add(player["person"]["id"])
         else:
@@ -23688,8 +23694,12 @@ def setup_game_data(player_data, row_data, player_id, player_type, time_frame, e
                     string_to_use = opp_str
                     is_team = False
                     break
+
         sub_player = sub_data["gameData"]["players"][player]
         player = sub_data["liveData"]["boxscore"]["teams"][string_to_use]["players"][player]
+        if player["person"]["id"] in sub_data["liveData"]["boxscore"]["teams"][string_to_use]["scratches"]:
+            continue
+
         game_data["player_names"][player["person"]["id"]] = sub_player["fullName"]
         game_data["player_first_name_map"][player["person"]["id"]] = sub_player["firstName"]
         game_data["player_last_name_map"][player["person"]["id"]] = sub_player["lastName"]
@@ -26749,6 +26759,198 @@ def perform_sub_nhl_game_qualifiers(row, qualifiers, player_game_info, player_ty
 
             if not has_match:
                 has_row_match = False
+        if not has_row_match:
+            return False, row
+
+    if "On Ice With Stat" in qualifiers:
+        has_row_match = True
+        for qual_object in qualifiers["On Ice With Stat"]:
+            if row["Year"] not in qual_object["year_map_obj"]:
+                return False, row
+            if not qual_object["negate"]:
+                has_match = False
+                for player in qual_object["year_map_obj"][row["Year"]]:
+                    if player in player_game_info["team_players"]:
+                        has_match = True
+    
+                if not has_match:
+                    has_row_match = False
+        if not has_row_match:
+            return False, row
+                    
+    if "On Ice Against Stat" in qualifiers:
+        has_row_match = True
+        for qual_object in qualifiers["On Ice Against Stat"]:
+            if row["Year"] not in qual_object["year_map_obj"]:
+                return False, row
+            if not qual_object["negate"]:
+                has_match = False
+                for player in qual_object["year_map_obj"][row["Year"]]:
+                    if player in player_game_info["opp_players"]:
+                        has_match = True
+    
+                if not has_match:
+                    has_row_match = False
+        if not has_row_match:
+            return False, row
+
+    if "Shot On Stat" in qualifiers:
+        has_row_match = True
+        for qual_object in qualifiers["Shot On Stat"]:
+            if row["Year"] not in qual_object["year_map_obj"]:
+                return False, row
+            if not qual_object["negate"]:
+                has_match = False
+                for player in qual_object["year_map_obj"][row["Year"]]:
+                    if player in player_game_info["opp_goalies"]:
+                        has_match = True
+    
+                if not has_match:
+                    has_row_match = False
+        if not has_row_match:
+            return False, row
+
+    if "Shot By Stat" in qualifiers:
+        has_row_match = True
+        for qual_object in qualifiers["Shot By Stat"]:
+            if row["Year"] not in qual_object["year_map_obj"]:
+                return False, row
+            if not qual_object["negate"]:
+                has_match = False
+                for player in qual_object["year_map_obj"][row["Year"]]:
+                    if player in player_game_info["opp_players"]:
+                        has_match = True
+    
+                if not has_match:
+                    has_row_match = False
+        if not has_row_match:
+            return False, row
+
+    if "On Ice With Stat Rank" in qualifiers:
+        has_row_match = True
+        for qual_object in qualifiers["On Ice With Stat Rank"]:
+            if row["Year"] not in qual_object["year_map_obj"]:
+                return False, row
+            if not qual_object["negate"]:
+                has_match = False
+                for player in qual_object["year_map_obj"][row["Year"]]:
+                    if player in player_game_info["team_players"]:
+                        has_match = True
+    
+                if not has_match:
+                    has_row_match = False
+        if not has_row_match:
+            return False, row
+
+    if "On Ice Against Stat Rank" in qualifiers:
+        has_row_match = True
+        for qual_object in qualifiers["On Ice Against Stat Rank"]:
+            if row["Year"] not in qual_object["year_map_obj"]:
+                return False, row
+            if not qual_object["negate"]:
+                has_match = False
+                for player in qual_object["year_map_obj"][row["Year"]]:
+                    if player in player_game_info["opp_players"]:
+                        has_match = True
+    
+                if not has_match:
+                    has_row_match = False
+        if not has_row_match:
+            return False, row
+
+    if "Shot On Stat Rank" in qualifiers:
+        has_row_match = True
+        for qual_object in qualifiers["Shot On Stat Rank"]:
+            if row["Year"] not in qual_object["year_map_obj"]:
+                return False, row
+            if not qual_object["negate"]:
+                has_match = False
+                for player in qual_object["year_map_obj"][row["Year"]]:
+                    if player in player_game_info["opp_goalies"]:
+                        has_match = True
+    
+                if not has_match:
+                    has_row_match = False
+        if not has_row_match:
+            return False, row
+
+    if "Shot By Stat Rank" in qualifiers:
+        has_row_match = True
+        for qual_object in qualifiers["Shot By Stat Rank"]:
+            if row["Year"] not in qual_object["year_map_obj"]:
+                return False, row
+            if not qual_object["negate"]:
+                has_match = False
+                for player in qual_object["year_map_obj"][row["Year"]]:
+                    if player in player_game_info["opp_players"]:
+                        has_match = True
+    
+                if not has_match:
+                    has_row_match = False
+        if not has_row_match:
+            return False, row
+
+    if "On Ice With Stat Percent" in qualifiers:
+        has_row_match = True
+        for qual_object in qualifiers["On Ice With Stat Percent"]:
+            if row["Year"] not in qual_object["year_map_obj"]:
+                return False, row
+            if not qual_object["negate"]:
+                has_match = False
+                for player in qual_object["year_map_obj"][row["Year"]]:
+                    if player in player_game_info["team_players"]:
+                        has_match = True
+    
+                if not has_match:
+                    has_row_match = False
+        if not has_row_match:
+            return False, row
+
+    if "On Ice Against Stat Percent" in qualifiers:
+        has_row_match = True
+        for qual_object in qualifiers["On Ice Against Stat Percent"]:
+            if row["Year"] not in qual_object["year_map_obj"]:
+                return False, row
+            if not qual_object["negate"]:
+                has_match = False
+                for player in qual_object["year_map_obj"][row["Year"]]:
+                    if player in player_game_info["opp_players"]:
+                        has_match = True
+    
+                if not has_match:
+                    has_row_match = False
+        if not has_row_match:
+            return False, row
+
+    if "Shot On Stat Percent" in qualifiers:
+        has_row_match = True
+        for qual_object in qualifiers["Shot On Stat Percent"]:
+            if row["Year"] not in qual_object["year_map_obj"]:
+                return False, row
+            if not qual_object["negate"]:
+                has_match = False
+                for player in qual_object["year_map_obj"][row["Year"]]:
+                    if player in player_game_info["opp_goalies"]:
+                        has_match = True
+    
+                if not has_match:
+                    has_row_match = False
+        if not has_row_match:
+            return False, row
+                    
+    if "Shot By Stat Percent" in qualifiers:
+        has_row_match = True
+        for qual_object in qualifiers["Shot By Stat Percent"]:
+            if row["Year"] not in qual_object["year_map_obj"]:
+                return False, row
+            if not qual_object["negate"]:
+                has_match = False
+                for player in qual_object["year_map_obj"][row["Year"]]:
+                    if player in player_game_info["opp_players"]:
+                        has_match = True
+    
+                if not has_match:
+                    has_row_match = False
         if not has_row_match:
             return False, row
 
