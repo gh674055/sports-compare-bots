@@ -1381,7 +1381,69 @@ def handle_player_string(comment, player_type, is_fantasy, last_updated, hide_ta
                         for m in last_match:
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip() + " " + m.group(3)
 
-                        last_match = re.finditer(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?((?:sub-query|day-after-sub-query|or-sub-query|day-before-sub-query|day-of-sub-query|game-after-sub-query|game-before-sub-query|season-sub-query|or-season-sub-query|season-after-sub-query|season-before-sub-query|w|(?:playing|starting)-with|a|(?:playing|starting)-against|(?:playing|starting)-same-game|prv-w|previous-playing-with|prv-a|previous-playing-against|upc-w|upcoming-playing-with|upc-a|upcoming-playing-against|(?:playing|starting)-same-opponents?|(?:playing|starting)-same-dates?|holidays?|dts|dates|stadium|exact-stadium|arena|exact-arena|opponent-city|opponent-exact-city|team-city|team-exact-city|city|exact-city|surface|roof|thrown-to|injury|exact-official|exact-referee|exact-umpire|exact-team-head-coach|exact-opponent-head-coach|official|referee|umpire|team-head-coach|opponent-head-coach|start-time):(?<!\\)\(.*?(?<!\\)\))", time_frame)
+                        last_match = re.finditer(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?((?:sub-query|event-sub-query|or-sub-query|or-event-sub-query|day-after-sub-query|day-before-sub-query|day-of-sub-query|game-after-sub-query|game-before-sub-query|season-sub-query|or-season-sub-query|season-after-sub-query|season-before-sub-query):(?<!\\)\{.*?(?<!\\)\})", time_frame)
+                        for m in last_match:
+                            qualifier_obj = {}
+                            negate_str = m.group(1)
+                            if negate_str:
+                                qualifier_obj["negate"] = True
+                            else:
+                                qualifier_obj["negate"] = False
+
+                            qualifier_str = m.group(2)
+
+                            if qualifier_str.startswith("sub-query:"):
+                                qual_str = "sub-query:"
+                                qual_type = "Sub Query"
+                            elif qualifier_str.startswith("event-sub-query:"):
+                                qual_str = "event-sub-query:"
+                                qual_type = "Event Sub Query"
+                                extra_stats.add("current-stats")
+                            elif qualifier_str.startswith("or-sub-query:"):
+                                qual_str = "or-sub-query:"
+                                qual_type = "Or Sub Query"
+                            elif qualifier_str.startswith("or-event-sub-query:"):
+                                qual_str = "or-event-sub-query:"
+                                qual_type = "Or Event Sub Query"
+                                extra_stats.add("current-stats")
+                            elif qualifier_str.startswith("day-of-sub-query:"):
+                                qual_str = "day-of-sub-query:"
+                                qual_type = "Day Of Sub Query"
+                            elif qualifier_str.startswith("day-after-sub-query:"):
+                                qual_str = "day-after-sub-query:"
+                                qual_type = "Day After Sub Query"
+                            elif qualifier_str.startswith("day-before-sub-query:"):
+                                qual_str = "day-before-sub-query:"
+                                qual_type = "Day Before Sub Query"
+                            elif qualifier_str.startswith("game-after-sub-query:"):
+                                qual_str = "game-after-sub-query:"
+                                qual_type = "Game After Sub Query"
+                            elif qualifier_str.startswith("game-before-sub-query:"):
+                                qual_str = "game-before-sub-query:"
+                                qual_type = "Game Before Sub Query"
+                            elif qualifier_str.startswith("season-sub-query:"):
+                                qual_str = "season-sub-query:"
+                                qual_type = "Season Sub Query"
+                            elif qualifier_str.startswith("or-season-sub-query:"):
+                                qual_str = "or-season-sub-query:"
+                                qual_type = "Or Season Sub Query"
+                            elif qualifier_str.startswith("season-after-sub-query:"):
+                                qual_str = "season-after-sub-query:"
+                                qual_type = "Season After Sub Query"
+                            elif qualifier_str.startswith("season-before-sub-query:"):
+                                qual_str = "season-before-sub-query:"
+                                qual_type = "Season Before Sub Query"
+
+                            qualifier_obj["values"] = re.split(r"(?<!\\)\~", re.split(r"(?<!\\)" + qual_str, qualifier_str)[1].strip("{}"))
+                            qualifier_obj["values"] = [value.strip() for value in qualifier_obj["values"]]
+
+                            if not qual_type in qualifiers:
+                                qualifiers[qual_type] = []
+                            qualifiers[qual_type].append(qualifier_obj)
+
+                            time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
+
+                        last_match = re.finditer(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?((?:w|(?:playing|starting)-with|a|(?:playing|starting)-against|(?:playing|starting)-same-game|prv-w|previous-playing-with|prv-a|previous-playing-against|upc-w|upcoming-playing-with|upc-a|upcoming-playing-against|(?:playing|starting)-same-opponents?|(?:playing|starting)-same-dates?|holidays?|dts|dates|stadium|exact-stadium|arena|exact-arena|opponent-city|opponent-exact-city|team-city|team-exact-city|city|exact-city|surface|roof|thrown-to|injury|exact-official|exact-referee|exact-umpire|exact-team-head-coach|exact-opponent-head-coach|official|referee|umpire|team-head-coach|opponent-head-coach|start-time):(?<!\\)\(.*?(?<!\\)\))", time_frame)
                         for m in last_match:
                             qualifier_obj = {}
                             negate_str = m.group(1)
@@ -1398,209 +1460,175 @@ def handle_player_string(comment, player_type, is_fantasy, last_updated, hide_ta
                                     "negate" : False
                                 })
 
-                            if qualifier_str.startswith("sub-query:") or qualifier_str.startswith("or-sub-query:") or qualifier_str.startswith("day-after-sub-query:") or qualifier_str.startswith("day-before-sub-query:") or qualifier_str.startswith("day-of-sub-query:") or qualifier_str.startswith("game-after-sub-query:") or qualifier_str.startswith("game-before-sub-query:") or qualifier_str.startswith("season-sub-query:") or qualifier_str.startswith("or-season-sub-query:") or qualifier_str.startswith("season-after-sub-query:") or qualifier_str.startswith("season-before-sub-query:") or qualifier_str.startswith("w:") or qualifier_str.startswith("playing-with:") or qualifier_str.startswith("playing-same-game:") or qualifier_str.startswith("starting-same-game:") or qualifier_str.startswith("a:") or qualifier_str.startswith("playing-against:") or qualifier_str.startswith("prv-w:") or qualifier_str.startswith("previous-playing-with:") or qualifier_str.startswith("prv-a:") or qualifier_str.startswith("previous-playing-against:") or qualifier_str.startswith("upc-w:") or qualifier_str.startswith("upcoming-playing-with:") or qualifier_str.startswith("upc-a:") or qualifier_str.startswith("upcoming-playing-against:") or qualifier_str.startswith("playing-same-opponent:")  or qualifier_str.startswith("playing-same-opponents:") or qualifier_str.startswith("playing-same-date:") or qualifier_str.startswith("playing-same-dates:") or qualifier_str.startswith("holiday:") or qualifier_str.startswith("holidays:") or qualifier_str.startswith("dts:") or qualifier_str.startswith("dates:") or qualifier_str.startswith("injury:") or qualifier_str.startswith("stadium:") or qualifier_str.startswith("exact-stadium:") or qualifier_str.startswith("arena:") or qualifier_str.startswith("exact-arena:") or qualifier_str.startswith("city:") or qualifier_str.startswith("exact-city:") or qualifier_str.startswith("team-city:") or qualifier_str.startswith("team-exact-city:") or qualifier_str.startswith("opponent-city:") or qualifier_str.startswith("opponent-exact-city:") or qualifier_str.startswith("surface:") or qualifier_str.startswith("roof:") or qualifier_str.startswith("thrown-to:") or qualifier_str.startswith("official:") or qualifier_str.startswith("referee:") or qualifier_str.startswith("umpire:") or qualifier_str.startswith("team-head-coach:") or qualifier_str.startswith("opponent-head-coach:") or qualifier_str.startswith("official:") or qualifier_str.startswith("exact-referee:") or qualifier_str.startswith("exact-umpire:") or qualifier_str.startswith("exact-team-head-coach:") or qualifier_str.startswith("exact-opponent-head-coach:"):
-                                if qualifier_str.startswith("w:"):
-                                    qual_str = "w:"
-                                    qual_type = "Playing With"
-                                elif qualifier_str.startswith("playing-with:"):
-                                    qual_str = "playing-with:"
-                                    qual_type = "Playing With"
-                                elif qualifier_str.startswith("a:"):
-                                    qual_str = "a:"
-                                    qual_type = "Playing Against"
-                                elif qualifier_str.startswith("playing-against:"):
-                                    qual_str = "playing-against:"
-                                    qual_type = "Playing Against"
-                                elif qualifier_str.startswith("thrown-to:"):
-                                    qual_str = "thrown-to:"
-                                    qual_type = "Thrown To"
-                                    extra_stats.add("thrown-to")
-                                elif qualifier_str.startswith("prv-w:"):
-                                    qual_str = "prv-w:"
-                                    qual_type = "Previous Playing With"
-                                elif qualifier_str.startswith("previous-playing-with:"):
-                                    qual_str = "previous-playing-with:"
-                                    qual_type = "Previous Playing With"
-                                elif qualifier_str.startswith("prv-a:"):
-                                    qual_str = "playing-against:"
-                                    qual_type = "Previous Playing Against"
-                                elif qualifier_str.startswith("previous-playing-against:"):
-                                    qual_str = "previous-playing-against:"
-                                    qual_type = "Previous Playing Against"
-                                elif qualifier_str.startswith("upc-w:"):
-                                    qual_str = "playing-against:"
-                                    qual_type = "Upcoming Playing With"
-                                elif qualifier_str.startswith("upcoming-playing-with:"):
-                                    qual_str = "upcoming-playing-with:"
-                                    qual_type = "Upcoming Playing With"
-                                elif qualifier_str.startswith("upc-a:"):
-                                    qual_str = "upc-a:"
-                                    qual_type = "Upcoming Playing Against"
-                                elif qualifier_str.startswith("upcoming-playing-against:"):
-                                    qual_str = "upcoming-playing-against:"
-                                    qual_type = "Upcoming Playing Against"
-                                elif qualifier_str.startswith("playing-same-opponent:"):
-                                    qual_str = "playing-same-opponent:"
-                                    qual_type = "Playing Same Opponents"
-                                elif qualifier_str.startswith("playing-same-opponents:"):
-                                    qual_str = "playing-same-opponents:"
-                                    qual_type = "Playing Same Opponents"
-                                elif qualifier_str.startswith("playing-same-date:"):
-                                    qual_str = "playing-same-date:"
-                                    qual_type = "Playing Same Date"
-                                elif qualifier_str.startswith("playing-same-dates:"):
-                                    qual_str = "playing-same-dates:"
-                                    qual_type = "Playing Same Date"
-                                elif qualifier_str.startswith("stadium:"):
-                                    qual_str = "stadium:"
-                                    qual_type = "Stadium"
-                                elif qualifier_str.startswith("exact-stadium:"):
-                                    qual_str = "exact-stadium:"
-                                    qual_type = "Exact Stadium"
-                                elif qualifier_str.startswith("arena:"):
-                                    qual_str = "arena:"
-                                    qual_type = "Stadium"
-                                elif qualifier_str.startswith("exact-arena:"):
-                                    qual_str = "exact-arena:"
-                                    qual_type = "Exact Stadium"
-                                elif qualifier_str.startswith("city:"):
-                                    qual_str = "city:"
-                                    qual_type = "City"
-                                elif qualifier_str.startswith("exact-city:"):
-                                    qual_str = "exact-city:"
-                                    qual_type = "Exact City"
-                                elif qualifier_str.startswith("team-city:"):
-                                    qual_str = "team-city:"
-                                    qual_type = "Team City"
-                                elif qualifier_str.startswith("team-exact-city:"):
-                                    qual_str = "team-exact-city:"
-                                    qual_type = "Team Exact City"
-                                elif qualifier_str.startswith("opponent-city:"):
-                                    qual_str = "opponent-city:"
-                                    qual_type = "Opponent City"
-                                elif qualifier_str.startswith("opponent-exact-city:"):
-                                    qual_str = "opponent-exact-city:"
-                                    qual_type = "Opponent Exact City"
-                                elif qualifier_str.startswith("surface:"):
-                                    qual_str = "surface:"
-                                    qual_type = "Surface"
-                                elif qualifier_str.startswith("roof:"):
-                                    qual_str = "roof:"
-                                    qual_type = "Roof"
-                                elif qualifier_str.startswith("holiday:"):
-                                    qual_str = "holiday:"
-                                    qual_type = "Holiday"
-                                    if not playoffs:
-                                        playoffs = "Include"
-                                elif qualifier_str.startswith("holidays:"):
-                                    qual_str = "holidays:"
-                                    qual_type = "Holiday"
-                                    if not playoffs:
-                                        playoffs = "Include"
-                                elif qualifier_str.startswith("dts:"):
-                                    qual_str = "dts:"
-                                    qual_type = "Dates"
-                                elif qualifier_str.startswith("dates:"):
-                                    qual_str = "dates:"
-                                    qual_type = "Dates"
-                                elif qualifier_str.startswith("injury:"):
-                                    qual_str = "injury:"
-                                    qual_type = "Injury"
-                                elif qualifier_str.startswith("playing-same-game:"):
-                                    qual_str = "playing-same-game:"
-                                    qual_type = "Playing Same Game"
-                                elif qualifier_str.startswith("sub-query:"):
-                                    qual_str = "sub-query:"
-                                    qual_type = "Sub Query"
-                                elif qualifier_str.startswith("or-sub-query:"):
-                                    qual_str = "or-sub-query:"
-                                    qual_type = "Or Sub Query"
-                                elif qualifier_str.startswith("day-of-sub-query:"):
-                                    qual_str = "day-of-sub-query:"
-                                    qual_type = "Day Of Sub Query"
-                                elif qualifier_str.startswith("day-after-sub-query:"):
-                                    qual_str = "day-after-sub-query:"
-                                    qual_type = "Day After Sub Query"
-                                elif qualifier_str.startswith("day-before-sub-query:"):
-                                    qual_str = "day-before-sub-query:"
-                                    qual_type = "Day Before Sub Query"
-                                elif qualifier_str.startswith("game-after-sub-query:"):
-                                    qual_str = "game-after-sub-query:"
-                                    qual_type = "Game After Sub Query"
-                                elif qualifier_str.startswith("game-before-sub-query:"):
-                                    qual_str = "game-before-sub-query:"
-                                    qual_type = "Game Before Sub Query"
-                                elif qualifier_str.startswith("season-sub-query:"):
-                                    qual_str = "season-sub-query:"
-                                    qual_type = "Season Sub Query"
-                                elif qualifier_str.startswith("or-season-sub-query:"):
-                                    qual_str = "or-season-sub-query:"
-                                    qual_type = "Or Season Sub Query"
-                                elif qualifier_str.startswith("season-after-sub-query:"):
-                                    qual_str = "season-after-sub-query:"
-                                    qual_type = "Season After Sub Query"
-                                elif qualifier_str.startswith("season-before-sub-query:"):
-                                    qual_str = "season-before-sub-query:"
-                                    qual_type = "Season Before Sub Query"
-                                elif qualifier_str.startswith("official:"):
-                                    qual_str = "official:"
-                                    qual_type = "Official"
-                                elif qualifier_str.startswith("referee:"):
-                                    qual_str = "referee:"
-                                    qual_type = "Referee"
-                                elif qualifier_str.startswith("umpire:"):
-                                    qual_str = "umpire:"
-                                    qual_type = "Umpire"
-                                elif qualifier_str.startswith("team-head-coach:"):
-                                    qual_str = "team-head-coach:"
-                                    qual_type = "Team Head Coach"
-                                elif qualifier_str.startswith("opponent-head-coach:"):
-                                    qual_str = "opponent-head-coach:"
-                                    qual_type = "Opponent Head Coach"
-                                elif qualifier_str.startswith("official:"):
-                                    qual_str = "official:"
-                                    qual_type = "Exact Official"
-                                elif qualifier_str.startswith("exact-referee:"):
-                                    qual_str = "exact-referee:"
-                                    qual_type = "Exact Referee"
-                                elif qualifier_str.startswith("exact-umpire:"):
-                                    qual_str = "exact-umpire:"
-                                    qual_type = "Exact Umpire"
-                                elif qualifier_str.startswith("exact-team-head-coach:"):
-                                    qual_str = "exact-team-head-coach:"
-                                    qual_type = "Exact Team Head Coach"
-                                elif qualifier_str.startswith("exact-opponent-head-coach:"):
-                                    qual_str = "exact-opponent-head-coach:"
-                                    qual_type = "Exact Opponent Head Coach"
+                            if qualifier_str.startswith("w:"):
+                                qual_str = "w:"
+                                qual_type = "Playing With"
+                            elif qualifier_str.startswith("playing-with:"):
+                                qual_str = "playing-with:"
+                                qual_type = "Playing With"
+                            elif qualifier_str.startswith("a:"):
+                                qual_str = "a:"
+                                qual_type = "Playing Against"
+                            elif qualifier_str.startswith("playing-against:"):
+                                qual_str = "playing-against:"
+                                qual_type = "Playing Against"
+                            elif qualifier_str.startswith("thrown-to:"):
+                                qual_str = "thrown-to:"
+                                qual_type = "Thrown To"
+                                extra_stats.add("thrown-to")
+                            elif qualifier_str.startswith("prv-w:"):
+                                qual_str = "prv-w:"
+                                qual_type = "Previous Playing With"
+                            elif qualifier_str.startswith("previous-playing-with:"):
+                                qual_str = "previous-playing-with:"
+                                qual_type = "Previous Playing With"
+                            elif qualifier_str.startswith("prv-a:"):
+                                qual_str = "playing-against:"
+                                qual_type = "Previous Playing Against"
+                            elif qualifier_str.startswith("previous-playing-against:"):
+                                qual_str = "previous-playing-against:"
+                                qual_type = "Previous Playing Against"
+                            elif qualifier_str.startswith("upc-w:"):
+                                qual_str = "playing-against:"
+                                qual_type = "Upcoming Playing With"
+                            elif qualifier_str.startswith("upcoming-playing-with:"):
+                                qual_str = "upcoming-playing-with:"
+                                qual_type = "Upcoming Playing With"
+                            elif qualifier_str.startswith("upc-a:"):
+                                qual_str = "upc-a:"
+                                qual_type = "Upcoming Playing Against"
+                            elif qualifier_str.startswith("upcoming-playing-against:"):
+                                qual_str = "upcoming-playing-against:"
+                                qual_type = "Upcoming Playing Against"
+                            elif qualifier_str.startswith("playing-same-opponent:"):
+                                qual_str = "playing-same-opponent:"
+                                qual_type = "Playing Same Opponents"
+                            elif qualifier_str.startswith("playing-same-opponents:"):
+                                qual_str = "playing-same-opponents:"
+                                qual_type = "Playing Same Opponents"
+                            elif qualifier_str.startswith("playing-same-date:"):
+                                qual_str = "playing-same-date:"
+                                qual_type = "Playing Same Date"
+                            elif qualifier_str.startswith("playing-same-dates:"):
+                                qual_str = "playing-same-dates:"
+                                qual_type = "Playing Same Date"
+                            elif qualifier_str.startswith("stadium:"):
+                                qual_str = "stadium:"
+                                qual_type = "Stadium"
+                            elif qualifier_str.startswith("exact-stadium:"):
+                                qual_str = "exact-stadium:"
+                                qual_type = "Exact Stadium"
+                            elif qualifier_str.startswith("arena:"):
+                                qual_str = "arena:"
+                                qual_type = "Stadium"
+                            elif qualifier_str.startswith("exact-arena:"):
+                                qual_str = "exact-arena:"
+                                qual_type = "Exact Stadium"
+                            elif qualifier_str.startswith("city:"):
+                                qual_str = "city:"
+                                qual_type = "City"
+                            elif qualifier_str.startswith("exact-city:"):
+                                qual_str = "exact-city:"
+                                qual_type = "Exact City"
+                            elif qualifier_str.startswith("team-city:"):
+                                qual_str = "team-city:"
+                                qual_type = "Team City"
+                            elif qualifier_str.startswith("team-exact-city:"):
+                                qual_str = "team-exact-city:"
+                                qual_type = "Team Exact City"
+                            elif qualifier_str.startswith("opponent-city:"):
+                                qual_str = "opponent-city:"
+                                qual_type = "Opponent City"
+                            elif qualifier_str.startswith("opponent-exact-city:"):
+                                qual_str = "opponent-exact-city:"
+                                qual_type = "Opponent Exact City"
+                            elif qualifier_str.startswith("surface:"):
+                                qual_str = "surface:"
+                                qual_type = "Surface"
+                            elif qualifier_str.startswith("roof:"):
+                                qual_str = "roof:"
+                                qual_type = "Roof"
+                            elif qualifier_str.startswith("holiday:"):
+                                qual_str = "holiday:"
+                                qual_type = "Holiday"
+                                if not playoffs:
+                                    playoffs = "Include"
+                            elif qualifier_str.startswith("holidays:"):
+                                qual_str = "holidays:"
+                                qual_type = "Holiday"
+                                if not playoffs:
+                                    playoffs = "Include"
+                            elif qualifier_str.startswith("dts:"):
+                                qual_str = "dts:"
+                                qual_type = "Dates"
+                            elif qualifier_str.startswith("dates:"):
+                                qual_str = "dates:"
+                                qual_type = "Dates"
+                            elif qualifier_str.startswith("injury:"):
+                                qual_str = "injury:"
+                                qual_type = "Injury"
+                            elif qualifier_str.startswith("playing-same-game:"):
+                                qual_str = "playing-same-game:"
+                                qual_type = "Playing Same Game"
+                            elif qualifier_str.startswith("official:"):
+                                qual_str = "official:"
+                                qual_type = "Official"
+                            elif qualifier_str.startswith("referee:"):
+                                qual_str = "referee:"
+                                qual_type = "Referee"
+                            elif qualifier_str.startswith("umpire:"):
+                                qual_str = "umpire:"
+                                qual_type = "Umpire"
+                            elif qualifier_str.startswith("team-head-coach:"):
+                                qual_str = "team-head-coach:"
+                                qual_type = "Team Head Coach"
+                            elif qualifier_str.startswith("opponent-head-coach:"):
+                                qual_str = "opponent-head-coach:"
+                                qual_type = "Opponent Head Coach"
+                            elif qualifier_str.startswith("official:"):
+                                qual_str = "official:"
+                                qual_type = "Exact Official"
+                            elif qualifier_str.startswith("exact-referee:"):
+                                qual_str = "exact-referee:"
+                                qual_type = "Exact Referee"
+                            elif qualifier_str.startswith("exact-umpire:"):
+                                qual_str = "exact-umpire:"
+                                qual_type = "Exact Umpire"
+                            elif qualifier_str.startswith("exact-team-head-coach:"):
+                                qual_str = "exact-team-head-coach:"
+                                qual_type = "Exact Team Head Coach"
+                            elif qualifier_str.startswith("exact-opponent-head-coach:"):
+                                qual_str = "exact-opponent-head-coach:"
+                                qual_type = "Exact Opponent Head Coach"
 
-                                qualifier_obj["values"] = re.split(r"(?<!\\)\~", re.split(r"(?<!\\)" + qual_str, qualifier_str)[1].strip("()"))
-                                qualifier_obj["values"] = [value.strip() for value in qualifier_obj["values"]]
-                                if qual_type == "Dates":
-                                    new_values = []
-                                    for value in qualifier_obj["values"]:
-                                        replace_first_year = {
-                                            "replace" : False
-                                        }
+                            qualifier_obj["values"] = re.split(r"(?<!\\)\~", re.split(r"(?<!\\)" + qual_str, qualifier_str)[1].strip("()"))
+                            qualifier_obj["values"] = [value.strip() for value in qualifier_obj["values"]]
+                            if qual_type == "Dates":
+                                new_values = []
+                                for value in qualifier_obj["values"]:
+                                    replace_first_year = {
+                                        "replace" : False
+                                    }
 
-                                        if "to" in value:
-                                            dates = re.split(r"(?<!\\)to", value)
-                                            date1 = dateutil.parser.parse(dates[0].strip()).date()
-                                            date2 = dateutil.parser.parse(dates[1].strip()).date()
-                                            new_values = [date1 + datetime.timedelta(days=x) for x in range((date2-date1).days + 1)]
-                                            date1 = handle_string_year(dates[0], True, replace_first_year)
-                                            date2 = handle_string_year(dates[1], False, replace_first_year)
-                                            new_values.append({
-                                                "start_val" : date1,
-                                                "end_val" : date2,
-                                            })
-                                        else:
-                                            new_values.append(dateutil.parser.parse(value).date())
-                                            date1 = handle_string_year(value, True, replace_first_year)
-                                            new_values.append({
-                                                "start_val" : date1,
-                                                "end_val" : date1,
-                                            })
-                                    qualifier_obj["values"] = new_values
+                                    if "to" in value:
+                                        dates = re.split(r"(?<!\\)to", value)
+                                        date1 = dateutil.parser.parse(dates[0].strip()).date()
+                                        date2 = dateutil.parser.parse(dates[1].strip()).date()
+                                        new_values = [date1 + datetime.timedelta(days=x) for x in range((date2-date1).days + 1)]
+                                        date1 = handle_string_year(dates[0], True, replace_first_year)
+                                        date2 = handle_string_year(dates[1], False, replace_first_year)
+                                        new_values.append({
+                                            "start_val" : date1,
+                                            "end_val" : date2,
+                                        })
+                                    else:
+                                        new_values.append(dateutil.parser.parse(value).date())
+                                        date1 = handle_string_year(value, True, replace_first_year)
+                                        new_values.append({
+                                            "start_val" : date1,
+                                            "end_val" : date1,
+                                        })
+                                qualifier_obj["values"] = new_values
                             elif qualifier_str.startswith("start-time:"):
                                 if qualifier_str.startswith("start-time:"):
                                     qual_str = "start-time:"
