@@ -15591,7 +15591,7 @@ def determine_raw_str(subbb_frame):
                                 qual_str += get_time_str(sub_qualifier["start_val"], True)
                             else:
                                 qual_str += (get_time_str(sub_qualifier["start_val"], True)) + "-" + (get_time_str(sub_qualifier["end_val"], True))
-                            if "reverse" in qual_obj["values"] and qual_obj["values"]["reverse"]:
+                            if "reverse" in qual_obj and qual_obj["reverse"]:
                                 qual_str += " [Reverse]"
                             if "include_all_players" in qual_obj and qual_obj["include_all_players"]:
                                 qual_str += " [All Players]"
@@ -15603,7 +15603,7 @@ def determine_raw_str(subbb_frame):
                                 qual_str += get_time_str(sub_qualifier["start_val"], False, True)
                             else:
                                 qual_str += (get_time_str(sub_qualifier["start_val"], False, True)) + "-" + (get_time_str(sub_qualifier["end_val"], False, True))
-                            if "reverse" in qual_obj["values"] and qual_obj["values"]["reverse"]:
+                            if "reverse" in qual_obj and qual_obj["reverse"]:
                                 qual_str += " [Reverse]"
                             if "include_all_players" in qual_obj and qual_obj["include_all_players"]:
                                 qual_str += " [All Players]"
@@ -26262,9 +26262,6 @@ def handle_stat_rank_stats(all_rows, qualifiers, player_type, s):
                         qual_obj["year_map_obj"] = year_map_obj
 
 def handle_facing_stat_rank_qual(qual_obj, stat_mapping, call_type, seasons, league, s):
-    if "reverse" in qual_obj and qual_obj["reverse"]:
-        sort_str = "desc" if sort_str == "asc" else "asc"
-
     year_map_obj = {}
     has_one_stat_match = False
     for season_obj in seasons:
@@ -26281,6 +26278,9 @@ def handle_facing_stat_rank_qual(qual_obj, stat_mapping, call_type, seasons, lea
                     if not headers["Pitcher" if call_type == "Batter" else "Batter"][header]["positive"]:
                         sort_str = "asc"
                     break
+
+            if "reverse" in qual_obj and qual_obj["reverse"]:
+                sort_str = "desc" if sort_str == "asc" else "asc"
 
             offset = sub_qual_object["start_val"] - 1
             if offset < 0:
@@ -26307,9 +26307,6 @@ def handle_facing_stat_rank_qual(qual_obj, stat_mapping, call_type, seasons, lea
         return None
 
 def handle_facing_stat_percent_qual(qual_obj, stat_mapping, call_type, seasons, league, s):
-    if "reverse" in qual_obj and qual_obj["reverse"]:
-        sort_str = "desc" if sort_str == "asc" else "asc"
-
     year_map_obj = {}
     has_one_stat_match = False
     for season_obj in seasons:
@@ -26326,6 +26323,9 @@ def handle_facing_stat_percent_qual(qual_obj, stat_mapping, call_type, seasons, 
                     if not headers["Pitcher" if call_type == "Batter" else "Batter"][header]["positive"]:
                         sort_str = "asc"
                     break
+            
+            if "reverse" in qual_obj and qual_obj["reverse"]:
+                sort_str = "desc" if sort_str == "asc" else "asc"
 
             offset = 0
             limit = 1000000

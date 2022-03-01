@@ -5065,6 +5065,15 @@ headers = {
                 "game" : 1955
             }
         },
+        "EVSV" : {
+            "positive" : True,
+            "display" : False,
+            "type" : "Advanced",
+            "valid_since" : {
+                "season" : 1997,
+                "game" : 1997
+            }
+        },
         "EVSH" : {
             "positive" : True,
             "display" : False,
@@ -5075,6 +5084,52 @@ headers = {
             }
         },
         "EVGA" : {
+            "positive" : False,
+            "display" : False,
+            "type" : "Advanced"
+        },
+        "PPSV" : {
+            "positive" : True,
+            "display" : False,
+            "type" : "Advanced",
+            "valid_since" : {
+                "season" : 1997,
+                "game" : 1997
+            }
+        },
+        "PPSH" : {
+            "positive" : True,
+            "display" : False,
+            "type" : "Advanced",
+            "valid_since" : {
+                "season" : 1997,
+                "game" : 1997
+            }
+        },
+        "PPGA" : {
+            "positive" : False,
+            "display" : False,
+            "type" : "Advanced"
+        },
+        "SHSV" : {
+            "positive" : True,
+            "display" : False,
+            "type" : "Advanced",
+            "valid_since" : {
+                "season" : 1997,
+                "game" : 1997
+            }
+        },
+        "SHSH" : {
+            "positive" : True,
+            "display" : False,
+            "type" : "Advanced",
+            "valid_since" : {
+                "season" : 1997,
+                "game" : 1997
+            }
+        },
+        "SHGA" : {
             "positive" : False,
             "display" : False,
             "type" : "Advanced"
@@ -5117,20 +5172,6 @@ headers = {
                 "game" : 2016
             }
         },
-        "PPSH" : {
-            "positive" : True,
-            "display" : False,
-            "type" : "Advanced",
-            "valid_since" : {
-                "season" : 1997,
-                "game" : 1997
-            }
-        },
-        "PPGA" : {
-            "positive" : False,
-            "display" : False,
-            "type" : "Advanced"
-        },
         "SVPowerPlay" : {
             "positive" : True,
             "type" : "Advanced",
@@ -5140,20 +5181,6 @@ headers = {
                 "season" : 1997,
                 "game" : 1997
             }
-        },
-        "SHSH" : {
-            "positive" : True,
-            "display" : False,
-            "type" : "Advanced",
-            "valid_since" : {
-                "season" : 1997,
-                "game" : 1997
-            }
-        },
-        "SHGA" : {
-            "positive" : False,
-            "display" : False,
-            "type" : "Advanced"
         },
         "SVShorthanded" : {
             "positive" : True,
@@ -6409,6 +6436,18 @@ qualifier_map = {
     "Shot By Birth Country" : {},
     "Shot On Nationality" : {},
     "Shot By Nationality" : {},
+    "On Ice With Stat Rank" : {},
+    "On Ice With Stat Percent" : {},
+    "On Ice With Stat" : {},
+    "On Ice Against Stat Rank" : {},
+    "On Ice Against Stat Percent" : {},
+    "On Ice Against Stat" : {},
+    "Shot On Stat Rank" : {},
+    "Shot On Stat Percent" : {},
+    "Shot On Stat" : {},
+    "Shot By Stat Rank" : {},
+    "Shot By Stat Percent" : {},
+    "Shot By Stat" : {},
     "Assisted On First Name" : {},
     "Assisted On Last Name" : {},
     "Facing Lefty" : {},
@@ -8289,6 +8328,172 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 time_frame = re.sub(r"\s+", " ", time_frame.replace(last_match.group(0), "", 1)).strip()
 
                         time_frame = re.sub(r"\s+", " ", re.sub(r"(?:regular(?:-| )?season|playoffs?|post(?:-| )?seasons?)(?!-)", "", time_frame)).strip()
+
+                        last_match = re.finditer(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?((?:on-ice-with|on-ice-against|shot-by|shot-on)?-stat(?:-rank|-percent(?:age)?)?(?:-reversed?)?:[\S-]+)", time_frame)
+                        for m in last_match:
+                            qualifier_obj = {}
+                            
+                            negate_str = m.group(1)
+                            if negate_str:
+                                qualifier_obj["negate"] = True
+                            else:
+                                qualifier_obj["negate"] = False
+                            
+                            qualifier_str = m.group(2)
+                            qual_str_split = qualifier_str.split(":")
+                            qual_str = qual_str_split[0]
+
+                            num_players = {
+                                "start_val" : 1,
+                                "end_val" : float("inf")
+                            }
+                            filters = []
+                            if len(qual_str_split) > 2:
+                                num_players, filters = handle_post_qual_str(qual_str_split[2], num_players, filters)
+                                if len(qual_str_split) > 3:
+                                    num_players, filters = handle_post_qual_str(qual_str_split[3], num_players, filters)
+
+                            qualifier_obj["num_players"] = num_players
+                            qualifier_obj["filters"] = filters
+
+                            qual_type = ""
+
+                            if qual_str.startswith("on-ice-with"):
+                                qual_type = "On Ice With " + qual_type
+                            elif qual_str.startswith("on-ice-against"):
+                                qual_type = "On Ice With " + qual_type
+                            elif qual_str.startswith("shot-by"):
+                                qual_type = "Shot By " + qual_type
+                                extra_stats.add("Shot By")
+                                extra_stats.add("current-stats-zone")
+                            elif qual_str.startswith("shot-on"):
+                                qual_type = "Shot On " + qual_type
+                                extra_stats.add("Shot On")
+                                extra_stats.add("current-stats-zone")
+
+                            if "-stat-rank" in qual_str:
+                                qual_type += "Stat Rank"
+                                extra_stats.add("current-stats")
+                            elif  "-stat-percent" in qual_str:
+                                qual_type += "Stat Percent"
+                                extra_stats.add("current-stats")
+                            elif "-stat" in qual_str:
+                                qual_type += "Stat"
+                                extra_stats.add("current-stats")
+
+                            if "Stat Rank" in qual_type or "Stat Percent" in qual_type:
+                                reverse = "-reverse" in qual_str
+                                qualifier_obj["values"] = []
+
+                                split_vals = re.split(r"(?<!\\)\:", qualifier_str)
+                                qualifier_obj["reverse"] = reverse
+                                
+                                all_vals = re.split(r"(?<!\\)\;", split_vals[1])
+                                
+                                for val in all_vals:
+                                    split_vals = re.split(r"(?<!\\)\=", val)
+                                    stat = unescape_string(split_vals[0])
+
+                                    split_vals = re.split(r"(?<!\\)\-", split_vals[1])
+                                    if qual_type.endswith("Percent"):
+                                        if not split_vals[0].endswith("%"):
+                                            split_vals[0] += "%"
+                                        if len(split_vals) == 1:
+                                            qualifier_obj["values"].append({
+                                                "stat" : stat,
+                                                "start_val" : 0,
+                                                "end_val" : ordinal_to_number(split_vals[0])
+                                            })
+                                        else:
+                                            if not split_vals[1].endswith("%"):
+                                                split_vals[1] += "%"
+                                            qualifier_obj["values"].append({
+                                                "stat" : stat,
+                                                "start_val" : ordinal_to_number(split_vals[0]),
+                                                "end_val" : ordinal_to_number(split_vals[1])
+                                            })
+
+                                    else:
+                                        if len(split_vals) == 1:
+                                            qualifier_obj["values"].append({
+                                                "stat" : stat,
+                                                "start_val" : 1,
+                                                "end_val" : ordinal_to_number(split_vals[0])
+                                            })
+                                        else:
+                                            qualifier_obj["values"].append({
+                                                "stat" : stat,
+                                                "start_val" : ordinal_to_number(split_vals[0]),
+                                                "end_val" : ordinal_to_number(split_vals[1])
+                                            })
+                            elif "Stat" in qual_type:
+                                qualifier_obj["values"] = []
+
+                                split_vals = re.split(r"(?<!\\)\:", qualifier_str)
+                                
+                                all_vals = re.split(r"(?<!\\)\;", split_vals[1])
+                                
+                                for val in all_vals:
+                                    split_vals = re.split(r"(?<!\\)\=", val)
+                                    stat = unescape_string(split_vals[0])
+
+                                    if len(split_vals) == 1:
+                                        qualifier_obj["values"].append({
+                                            "stat" : stat,
+                                            "start_val" : 1,
+                                            "end_val" : float("inf")
+                                        })
+                                    else:
+                                        split_vals = re.split(r"(?<!\\)(?<!^)\-", split_vals[1], 1)
+
+                                        if "TOI" in stat.upper():
+                                            the_val_split = split_vals[0].split(":")
+                                            if len(the_val_split) > 1:
+                                                the_val = (int(ordinal_to_number(the_val_split[0])) * 60) + int(ordinal_to_number(the_val_split[1]))
+                                            else:
+                                                the_val = (int(ordinal_to_number(the_val_split[0])) * 60)
+                                        else:
+                                            the_val = ordinal_to_number(split_vals[0])
+
+                                        if len(split_vals) == 1:
+                                            if the_val > 0:
+                                                qualifier_obj["values"].append({
+                                                    "stat" : stat,
+                                                    "start_val" : the_val,
+                                                    "end_val" : float("inf")
+                                                })
+                                            elif the_val < 0:
+                                                qualifier_obj["values"].append({
+                                                    "stat" : stat,
+                                                    "start_val" : -float("inf"),
+                                                    "end_val" : the_val
+                                                })
+                                            else:
+                                                qualifier_obj["values"].append({
+                                                    "stat" : stat,
+                                                    "start_val" : the_val,
+                                                    "end_val" : the_val
+                                                })
+                                        else:
+                                            if "TOI" in stat.upper():
+                                                the_val_split = split_vals[1].split(":")
+                                                if len(the_val_split) > 1:
+                                                    the_val_2 = (int(ordinal_to_number(the_val_split[0])) * 60) + int(ordinal_to_number(the_val_split[1]))
+                                                else:
+                                                    the_val_2 = (int(ordinal_to_number(the_val_split[0])) * 60)
+                                            else:
+                                                the_val_2 = ordinal_to_number(split_vals[1])
+                                            qualifier_obj["values"].append({
+                                                "stat" : stat,
+                                                "start_val" : the_val,
+                                                "end_val" : the_val_2
+                                            })
+                            
+                            if not qual_type in qualifiers:
+                                qualifiers[qual_type] = []
+                            qualifiers[qual_type].append(qualifier_obj)
+
+                            time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
                         
                         last_match = re.finditer(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?((?:(?:playing|starting)-with|(?:playing|starting)-against|(?:playing|starting)-same-game|prv-w|previous-playing-with|prv-a|previous-playing-against|upc-w|upcoming-playing-with|upc-a|upcoming-playing-against|(?:playing|starting)-same-opponents?|(?:playing|starting)-same-dates?|shot-on-birth-country|shot-by-birth-country|shot-on-nationality|shot-by-nationality|shot-on|shot-by|on-ice-with|on-ice-against|on-ice-together|on-line-with|on-line-against|on-line-together|assisted-on|assisted-with|points-with|assisted-by|primary-assisted-on|primary-assisted-with|primary-points-with|primary-assisted-by|hit-on|block-on|penalty-on|faceoff-against|fight-against|fighting-against))\b", time_frame)
                         for m in last_match:
@@ -15007,6 +15212,73 @@ def customGameDateSort(game_link):
     match = re.match(r"\[(.+)\]\(.+\)", game_link)
     return dateutil.parser.parse(match.group(1))
 
+def handle_post_qual_str(pot_qual_str, num_players, filters):
+    if "=" in pot_qual_str:
+        all_vals = re.split(r"(?<!\\)\;", pot_qual_str)
+    
+        for val in all_vals:
+            split_vals = re.split(r"(?<!\\)\=", val)
+            stat = unescape_string(split_vals[0])
+            
+            split_vals = re.split(r"(?<!\\)\-", split_vals[1])
+            if "TOI" in stat.upper():
+                the_val_split = split_vals[0].split(":")
+                if len(the_val_split) > 1:
+                    the_val = (int(ordinal_to_number(the_val_split[0])) * 60) + int(ordinal_to_number(the_val_split[1]))
+                else:
+                    the_val = (int(ordinal_to_number(the_val_split[0])) * 60)
+            else:
+                the_val = ordinal_to_number(split_vals[0])
+
+            if len(split_vals) == 1:
+                if the_val > 0:
+                    filters.append({
+                        "stat" : stat,
+                        "start_val" : the_val,
+                        "end_val" : float("inf")
+                    })
+                elif the_val < 0:
+                    filters.append({
+                        "stat" : stat,
+                        "start_val" : -float("inf"),
+                        "end_val" : the_val
+                    })
+                else:
+                    filters.append({
+                        "stat" : stat,
+                        "start_val" : the_val,
+                        "end_val" : the_val
+                    })
+            else:
+                if "TOI" in stat.upper():
+                    the_val_split = split_vals[1].split(":")
+                    if len(the_val_split) > 1:
+                        the_val_2 = (int(ordinal_to_number(the_val_split[0])) * 60) + int(ordinal_to_number(the_val_split[1]))
+                    else:
+                        the_val_2 = (int(ordinal_to_number(the_val_split[0])) * 60)
+                else:
+                    the_val_2 = ordinal_to_number(split_vals[1])
+
+                filters.append({
+                    "stat" : stat,
+                    "start_val" : the_val,
+                    "end_val" : the_val_2
+                })
+    else:
+        split_vals = re.split(r"(?<!\\)\-", pot_qual_str)
+        if len(split_vals) == 1:
+            num_players = {
+                "start_val" : ordinal_to_number(split_vals[0]),
+                "end_val" : float("inf")
+            }
+        else:
+            num_players = {
+                "start_val" : ordinal_to_number(split_vals[0]),
+                "end_val" : ordinal_to_number(split_vals[1])
+            }
+    
+    return num_players, filters
+
 def determine_raw_str(subbb_frame):
     qual_str = ""
 
@@ -15416,6 +15688,70 @@ def determine_raw_str(subbb_frame):
                                     qual_str += get_time_str(sub_qualifier["start_val"], False)
                                 else:
                                     qual_str += (get_time_str(sub_qualifier["start_val"], False)) + "-" + (get_time_str(sub_qualifier["end_val"], False))
+                        elif qualifier == "On Ice With Stat Rank" or qualifier == "On Ice Against Stat Rank" or qualifier == "Shot On Stat Rank" or qualifier == "Shot By Stat Rank":
+                            qual_str += sub_qualifier["stat"].upper() + "="
+                            if sub_qualifier["start_val"] == sub_qualifier["end_val"]:
+                                qual_str += get_time_str(sub_qualifier["start_val"], True)
+                            else:
+                                qual_str += (get_time_str(sub_qualifier["start_val"], True)) + "-" + (get_time_str(sub_qualifier["end_val"], True))
+                            if "reverse" in qual_obj and qual_obj["reverse"]:
+                                qual_str += " [Reverse]"
+                            if qual_obj["filters"]:
+                                qual_str += " - Filters : "
+                                for filter_obj in qual_obj["filters"]:
+                                    qual_str += filter_obj["stat"].upper() + "="
+                                    if filter_obj["start_val"] == filter_obj["end_val"]:
+                                        qual_str += get_time_str(filter_obj["start_val"], False, period="TOI" in filter_obj["stat"].upper())
+                                    else:
+                                        qual_str += (get_time_str(filter_obj["start_val"], False, period="TOI" in filter_obj["stat"].upper())) + "-" + (get_time_str(filter_obj["end_val"], False, period="TOI" in filter_obj["stat"].upper()))
+                            if qual_obj["num_players"]["start_val"] != 1 or qual_obj["num_players"]["end_val"] != float("inf"):
+                                qual_str += " - Player Matches : "
+                                if qual_obj["num_players"]["start_val"] == qual_obj["num_players"]["end_val"]:
+                                    qual_str += get_time_str(qual_obj["num_players"]["start_val"], False)
+                                else:
+                                    qual_str += (get_time_str(qual_obj["num_players"]["start_val"], False)) + "-" + (get_time_str(qual_obj["num_players"]["end_val"], False))
+                        elif qualifier == "On Ice With Stat Percent" or qualifier == "On Ice Against Stat Percent" or qualifier == "Shot On Stat Percent" or qualifier == "Shot By Stat Percent":
+                            qual_str += sub_qualifier["stat"].upper() + "="
+                            if sub_qualifier["start_val"] == sub_qualifier["end_val"]:
+                                qual_str += get_time_str(sub_qualifier["start_val"], False, True)
+                            else:
+                                qual_str += (get_time_str(sub_qualifier["start_val"], False, True)) + "-" + (get_time_str(sub_qualifier["end_val"], False, True))
+                            if "reverse" in qual_obj and qual_obj["reverse"]:
+                                qual_str += " [Reverse]"
+                            if qual_obj["filters"]:
+                                qual_str += " - Filters : "
+                                for filter_obj in qual_obj["filters"]:
+                                    qual_str += filter_obj["stat"].upper() + "="
+                                    if filter_obj["start_val"] == filter_obj["end_val"]:
+                                        qual_str += get_time_str(filter_obj["start_val"], False, period="TOI" in filter_obj["stat"].upper())
+                                    else:
+                                        qual_str += (get_time_str(filter_obj["start_val"], False, period="TOI" in filter_obj["stat"].upper())) + "-" + (get_time_str(filter_obj["end_val"], False, period="TOI" in filter_obj["stat"].upper()))
+                            if qual_obj["num_players"]["start_val"] != 1 or qual_obj["num_players"]["end_val"] != float("inf"):
+                                qual_str += " - Player Matches : "
+                                if qual_obj["num_players"]["start_val"] == qual_obj["num_players"]["end_val"]:
+                                    qual_str += get_time_str(qual_obj["num_players"]["start_val"], False)
+                                else:
+                                    qual_str += (get_time_str(qual_obj["num_players"]["start_val"], False)) + "-" + (get_time_str(qual_obj["num_players"]["end_val"], False))
+                        elif qualifier == "On Ice With Stat" or qualifier == "On Ice Against Stat" or qualifier == "Shot On Stat" or qualifier == "Shot By Stat":
+                            qual_str += sub_qualifier["stat"].upper() + "="
+                            if sub_qualifier["start_val"] == sub_qualifier["end_val"]:
+                                qual_str += get_time_str(sub_qualifier["start_val"], False, period="TOI" in sub_qualifier["stat"].upper())
+                            else:
+                                qual_str += (get_time_str(sub_qualifier["start_val"], False, period="TOI" in sub_qualifier["stat"].upper())) + "-" + (get_time_str(sub_qualifier["end_val"], False, period="TOI" in sub_qualifier["stat"].upper()))
+                            if qual_obj["filters"]:
+                                qual_str += " - Filters : "
+                                for filter_obj in qual_obj["filters"]:
+                                    qual_str += filter_obj["stat"].upper() + "="
+                                    if filter_obj["start_val"] == filter_obj["end_val"]:
+                                        qual_str += get_time_str(filter_obj["start_val"], False, period="TOI" in filter_obj["stat"].upper())
+                                    else:
+                                        qual_str += (get_time_str(filter_obj["start_val"], False, period="TOI" in filter_obj["stat"].upper())) + "-" + (get_time_str(filter_obj["end_val"], False, period="TOI" in filter_obj["stat"].upper()))
+                            if qual_obj["num_players"]["start_val"] != 1 or qual_obj["num_players"]["end_val"] != float("inf"):
+                                qual_str += " - Player Matches : "
+                                if qual_obj["num_players"]["start_val"] == qual_obj["num_players"]["end_val"]:
+                                    qual_str += get_time_str(qual_obj["num_players"]["start_val"], False)
+                                else:
+                                    qual_str += (get_time_str(qual_obj["num_players"]["start_val"], False)) + "-" + (get_time_str(qual_obj["num_players"]["end_val"], False))
                         elif qualifier == "Min Stat" or qualifier == "Max Stat" or qualifier == "Max Streak" or qualifier == "Max Stretch" or qualifier == "Count Streak" or qualifier == "Max Streak Formula" or qualifier == "Count Streak Formula" or qualifier == "Quickest" or qualifier == "Slowest":
                             if "explain_str" in sub_qualifier and sub_qualifier["explain_str"]:
                                 for explain_str in sub_qualifier["explain_str"]:
@@ -16027,6 +16363,9 @@ def handle_player_data(player_data, time_frame, player_type, player_page, valid_
                 new_rows.append(row_data)
         all_rows = new_rows
     
+    if "On Ice With Stat Rank" in time_frame["qualifiers"] or "On Ice Against Stat Rank" in time_frame["qualifiers"] or "Shot On Stat Rank" in time_frame["qualifiers"] or "Shot By Stat Rank" in time_frame["qualifiers"] or "On Ice With Stat Percent" in time_frame["qualifiers"] or "On Ice Against Stat Percent" in time_frame["qualifiers"] or "Shot On Stat Percent" in time_frame["qualifiers"] or "Shot By Stat Percent" in time_frame["qualifiers"] or "On Ice With Stat" in time_frame["qualifiers"] or "On Ice Against Stat" in time_frame["qualifiers"] or "Shot On Stat" in time_frame["qualifiers"] or "Shot By Stat" in time_frame["qualifiers"]:
+        handle_stat_rank_stats(all_rows, time_frame["qualifiers"], player_type, s)
+    
     if ("Event Stat" in time_frame["qualifiers"] or "Event Stat Reversed" in time_frame["qualifiers"] or "Event Stats" in time_frame["qualifiers"] or "Event Stats Reversed" in time_frame["qualifiers"] or "Starting Event Stat" in time_frame["qualifiers"] or "Starting Event Stat Reversed" in time_frame["qualifiers"] or "Starting Event Stats" in time_frame["qualifiers"] or "Starting Event Stats Reversed" in time_frame["qualifiers"]):
         player_data["stat_values"]["is_indv_shift_data"] = True
         all_rows, missing_games, missing_toi = handle_nhl_game_stats_single_thread(player_data, all_rows, time_frame, player_link, player_type, missing_games, missing_toi, extra_stats, s)
@@ -16566,37 +16905,39 @@ def handle_season_stats_game(player_type, player_data, player_link, time_frame, 
         playoff_games = []
         reg_games = []
         start = 0
+        limit = 100
         while True:
             game_id = 3 if is_playoffs else 2
             games_to_use = playoff_games if is_playoffs else reg_games
             if report == "penaltyShots" or report == "shootout":
-                url_to_use = "https://api.nhle.com/stats/rest/en/" + player_key + "/" + report + "?isAggregate=false&isGame=true&start=" + str(start) +"&limit=100&cayenneExp=" + urllib.parse.quote_plus("seasonId<=\"" + str(end_date) + "\" and seasonId>=\"" + str(start_date) + "\" and gameTypeId=" + str(game_id) + " and playerId like \"" + str(player_id) + "\"")
+                url_to_use = "https://api.nhle.com/stats/rest/en/" + player_key + "/" + report + "?isAggregate=false&isGame=true&start=" + str(start) +"&sort=[{\"property\":\"gameDate\",\"direction\":\"ASC\"}]&limit=" + str(limit) + "&cayenneExp=" + urllib.parse.quote_plus("seasonId<=\"" + str(end_date) + "\" and seasonId>=\"" + str(start_date) + "\" and gameTypeId=" + str(game_id) + " and playerId like \"" + str(player_id) + "\"")
             else:
-                url_to_use = "https://api.nhle.com/stats/rest/en/" + player_key + "/" + report + "?isAggregate=false&isGame=true&start=" + str(start) +"&factCayenneExp=gamesPlayed>=1&sort=[{\"property\":\"gameDate\",\"direction\":\"ASC\"}]&limit=100&cayenneExp=" + urllib.parse.quote_plus("seasonId<=\"" + str(end_date) + "\" and seasonId>=\"" + str(start_date) + "\" and gameTypeId=" + str(game_id) + " and playerId like \"" + str(player_id) + "\"")
+                url_to_use = "https://api.nhle.com/stats/rest/en/" + player_key + "/" + report + "?isAggregate=false&isGame=true&start=" + str(start) +"&factCayenneExp=gamesPlayed>=1&sort=[{\"property\":\"gameDate\",\"direction\":\"ASC\"}]&limit=" + str(limit) + "&cayenneExp=" + urllib.parse.quote_plus("seasonId<=\"" + str(end_date) + "\" and seasonId>=\"" + str(start_date) + "\" and gameTypeId=" + str(game_id) + " and playerId like \"" + str(player_id) + "\"")
             try:
                 sub_data = url_request_json(s, url_to_use)
             except urllib.error.HTTPError:
                 raise
             games_to_use += sub_data["data"]
-            start += 100
+            start += limit
             if len(games_to_use) >= sub_data["total"] or not sub_data["data"]:
                 break
         
         if is_playoffs == "Include":
             sub_games = []
             start = 0
+            limit = 100
             while True:
                 game_id = 2
                 if report == "penaltyShots" or report == "shootout":
-                    url_to_use = "https://api.nhle.com/stats/rest/en/" + player_key + "/" + report + "?isAggregate=false&isGame=true&start=" + str(start) +"&limit=100&cayenneExp=" + urllib.parse.quote_plus("seasonId<=\"" + str(end_date) + "\" and seasonId>=\"" + str(start_date) + "\" and gameTypeId=" + str(game_id) + " and playerId like \"" + str(player_id) + "\"")
+                    url_to_use = "https://api.nhle.com/stats/rest/en/" + player_key + "/" + report + "?isAggregate=false&isGame=true&start=" + str(start) +"&sort=[{\"property\":\"gameDate\",\"direction\":\"ASC\"}]&limit=" + str(limit) + "&cayenneExp=" + urllib.parse.quote_plus("seasonId<=\"" + str(end_date) + "\" and seasonId>=\"" + str(start_date) + "\" and gameTypeId=" + str(game_id) + " and playerId like \"" + str(player_id) + "\"")
                 else:
-                    url_to_use = "https://api.nhle.com/stats/rest/en/" + player_key + "/" + report + "?isAggregate=false&isGame=true&start=" + str(start) +"&factCayenneExp=gamesPlayed>=1&sort=[{\"property\":\"gameDate\",\"direction\":\"ASC\"}]&limit=100&cayenneExp=" + urllib.parse.quote_plus("seasonId<=\"" + str(end_date) + "\" and seasonId>=\"" + str(start_date) + "\" and gameTypeId=" + str(game_id) + " and playerId like \"" + str(player_id) + "\"")
+                    url_to_use = "https://api.nhle.com/stats/rest/en/" + player_key + "/" + report + "?isAggregate=false&isGame=true&start=" + str(start) +"&factCayenneExp=gamesPlayed>=1&sort=[{\"property\":\"gameDate\",\"direction\":\"ASC\"}]&limit=" + str(limit) + "&cayenneExp=" + urllib.parse.quote_plus("seasonId<=\"" + str(end_date) + "\" and seasonId>=\"" + str(start_date) + "\" and gameTypeId=" + str(game_id) + " and playerId like \"" + str(player_id) + "\"")
                 try:
                     sub_data = url_request_json(s, url_to_use)
                 except urllib.error.HTTPError:
                     raise
                 sub_games += sub_data["data"]
-                start += 100
+                start += limit
                 if len(sub_games) >= sub_data["total"] or not sub_data["data"]:
                     break
             reg_games += sub_games
@@ -16872,14 +17213,17 @@ def handle_season_stats_game(player_type, player_data, player_link, time_frame, 
                 row_data["SHGD"] : row_data["SHGF"] - row_data["SHGA"]
             elif report == "savesByStrength":
                 row_data["EVSH"] = game["evShotsAgainst"]
+                row_data["EVSV"] = game["evSaves"]
                 if row_data["EVSH"]:
-                    row_data["EVGA"] = row_data["EVSH"] - game["evSaves"]
+                    row_data["EVGA"] = row_data["EVSH"] - row_data["EVSV"]
                 row_data["PPSH"] = game["ppShotsAgainst"]
+                row_data["PPSV"] = game["ppSaves"]
                 if row_data["PPSH"]:
-                    row_data["PPGA"] = row_data["PPSH"] - game["ppSaves"]
+                    row_data["PPGA"] = row_data["PPSH"] - row_data["PPSV"]
                 row_data["SHSH"] = game["shShotsAgainst"]
+                row_data["SHSV"] = game["shSaves"]
                 if row_data["SHSH"]:
-                    row_data["SHGA"] = row_data["SHSH"] - game["shSaves"]
+                    row_data["SHGA"] = row_data["SHSH"] - row_data["SHSV"]
             elif report == "advanced":
                 if player_type["da_type"]["type"] == "Skater":
                     if row_data["Year"] >= 2009:
@@ -17932,6 +18276,889 @@ def perform_opponent_schedule_qualifiers(row, qualifiers):
 
     return True
 
+def handle_stat_rank_stats(all_rows, qualifiers, player_type, s):
+    all_rows = sorted(all_rows, key=lambda row: row["Date"])
+    seasons = []
+    for row_data in all_rows:
+        if not row_data["Year"] in [season["Year"] for season in seasons]:
+            seasons.append({
+                "Year" : row_data["Year"]
+            })
+
+    for qual_str in qualifiers:
+        call_type = "skater"
+        if "Shot On" in qual_str:
+            call_type = "goalie"
+
+        if call_type == "skater":
+            stat_mapping = {
+                "summary" : {
+                    "assists": "A",
+                    "evGoals": "EVG",
+                    "evPoints": "EVP",
+                    "faceoffWinPct": "FO%",
+                    "gameWinningGoals": "GWG",
+                    "gamesPlayed": "GP",
+                    "goals": "G",
+                    "otGoals": "OTG",
+                    "penaltyMinutes": "PIM",
+                    "plusMinus": "PlusMinus",
+                    "points": "P",
+                    "pointsPerGame": "PPG",
+                    "positionCode": "POS",
+                    "ppGoals": "PPG",
+                    "ppPoints": "PPP",
+                    "shGoals": "SHG",
+                    "shPoints": "SHP",
+                    "shootingPct": "S%",
+                    "shootsCatches": "Shoots",
+                    "shots": "S",
+                    "teamAbbrevs": "Team",
+                    "timeOnIcePerGame": "TOI/GP"
+                },
+                "bios" : {
+                    "assists": "A",
+                    "birthCity": "City",
+                    "birthCountryCode": "County",
+                    "birthDate": "BirthDate",
+                    "birthStateProvinceCode": "State",
+                    "currentTeamAbbrev": "CurrTeam",
+                    "draftOverall": "DraftOverall",
+                    "draftRound": "DraftRound",
+                    "draftYear": "DraftYear",
+                    "firstSeasonForGameType": "FirstSeason",
+                    "gamesPlayed": "GP",
+                    "goals": "G",
+                    "height": "Height",
+                    "isInHallOfFameYn": "HOF",
+                    "nationalityCode": "Nationality",
+                    "points": "P",
+                    "positionCode": "POS",
+                    "shootsCatches": "Shoots",
+                    "weight": "Weight"
+                },
+                "faceoffpercentages" : {
+                    "defensiveZoneFaceoffPct": "DZFO%",
+                    "defensiveZoneFaceoffs": "DZFO",
+                    "evFaceoffPct": "EVFO%",
+                    "evFaceoffs": "EVFO",
+                    "faceoffWinPct": "FO%",
+                    "gamesPlayed": "GP",
+                    "neutralZoneFaceoffPct": "NZFO%",
+                    "neutralZoneFaceoffs": "NZFO",
+                    "offensiveZoneFaceoffPct": "OZFO%",
+                    "offensiveZoneFaceoffs": "OZFO",
+                    "positionCode": "POS",
+                    "ppFaceoffPct": "PPFO%",
+                    "ppFaceoffs": "PPFO",
+                    "shFaceoffPct": "SHFO%",
+                    "shFaceoffs": "SHFO",
+                    "shootsCatches": "Shoots",
+                    "teamAbbrevs": "Team",
+                    "timeOnIcePerGame": 1104,
+                    "totalFaceoffs": 1092
+                },
+                "faceoffwins" : {
+                    "defensiveZoneFaceoffLosses": "DZFOL",
+                    "defensiveZoneFaceoffWins": "DZFOW",
+                    "defensiveZoneFaceoffs": "DZFO",
+                    "evFaceoffs": "EVFO",
+                    "evFaceoffsLost": "EVFOL",
+                    "evFaceoffsWon": "EVFOW",
+                    "faceoffWinPct": "FO%",
+                    "gamesPlayed": "GP",
+                    "neutralZoneFaceoffLosses": "NZFOL",
+                    "neutralZoneFaceoffWins": "NZFOW",
+                    "neutralZoneFaceoffs": "NZFO",
+                    "offensiveZoneFaceoffLosses": "OZFOL",
+                    "offensiveZoneFaceoffWins": "OZFOW",
+                    "offensiveZoneFaceoffs": "OZFO",
+                    "positionCode": "Pos",
+                    "ppFaceoffs": "PPFO",
+                    "ppFaceoffsLost": "PPFOL",
+                    "ppFaceoffsWon": "PPFOW",
+                    "shFaceoffs": "SHFO",
+                    "shFaceoffsLost": "SHFOL",
+                    "shFaceoffsWon": "SHFOW",
+                    "teamAbbrevs": "Team",
+                    "totalFaceoffLosses": "FOL",
+                    "totalFaceoffWins": "FOW",
+                    "totalFaceoffs": "FO"
+                },
+                "goalsForAgainst" : {
+                    "assists": "A",
+                    "evenStrengthGoalDifference": "EVGD",
+                    "evenStrengthGoalsAgainst": "EVGA",
+                    "evenStrengthGoalsFor": "EVGF",
+                    "evenStrengthGoalsForPct": "EVGF%",
+                    "evenStrengthTimeOnIcePerGame": "EVTOI/GP",
+                    "gamesPlayed": "GP",
+                    "goals": "G",
+                    "points": "P",
+                    "positionCode": "Pos",
+                    "powerPlayGoalFor": "PPGF",
+                    "powerPlayGoalsAgainst": "PPGA",
+                    "powerPlayTimeOnIcePerGame": "PPTOI/GP",
+                    "shortHandedGoalsAgainst": "SHGA",
+                    "shortHandedGoalsFor": "SHGF",
+                    "shortHandedTimeOnIcePerGame": "SHTOI/GP",
+                    "teamAbbrevs": "Team"
+                }, "realtime" : {
+                    "blockedShots": "BLK",
+                    "blockedShotsPer60": "BLK/60M",
+                    "emptyNetAssists": "ENA",
+                    "emptyNetGoals": "ENG",
+                    "emptyNetPoints": "ENP",
+                    "firstGoals": "1stG",
+                    "gamesPlayed": "GP",
+                    "giveaways": "GA",
+                    "giveawaysPer60": "GA/60M",
+                    "hits": "HIT",
+                    "hitsPer60": "HIT/60M",
+                    "missedShotCrossbar": "Cross",
+                    "missedShotGoalpost": "Post",
+                    "missedShotOverNet": "OverNet",
+                    "missedShotWideOfNet": "WideNet",
+                    "missedShots": "TSM",
+                    "otGoals": "OTG",
+                    "positionCode": "Pos",
+                    "shootsCatches": "Shoots",
+                    "takeaways": "TK",
+                    "takeawaysPer60": "TK/60M",
+                    "teamAbbrevs": "Team",
+                    "timeOnIcePerGame": "TOI/GP"
+                }, "penalties" : {
+                    "assists": "A",
+                    "gameMisconductPenalties": "GameMisconduct",
+                    "gamesPlayed": "GP",
+                    "goals": "G",
+                    "majorPenalties": "Major",
+                    "matchPenalties": "Match",
+                    "minorPenalties": "Minor",
+                    "misconductPenalties": "Misconduct",
+                    "netPenalties": "NetPEN",
+                    "netPenaltiesPer60": "NetPEN/60M",
+                    "penalties": "PEN",
+                    "penaltiesDrawn": "PenDrawn",
+                    "penaltiesDrawnPer60": "PenDrawn/60M",
+                    "penaltiesTakenPer60": "PEN/60M",
+                    "penaltyMinutes": "PIM",
+                    "penaltyMinutesPerTimeOnIce": "PIM/TOI",
+                    "penaltySecondsPerGame": "PIM/GP",
+                    "points": "P",
+                    "positionCode": "Pos",
+                    "teamAbbrevs": "Team",
+                    "timeOnIcePerGame": "TOI/GP"
+                }, "penaltykill" : {
+                    "gamesPlayed": "GP",
+                    "positionCode": "Pos",
+                    "ppGoalsAgainstPer60": "PPGA/60M",
+                    "shAssists": "SHA",
+                    "shGoals": "SHG",
+                    "shGoalsPer60": "SHG/60M",
+                    "shIndividualSatFor": "SHTSA",
+                    "shIndividualSatForPer60": "SHTSA/60M",
+                    "shPoints": "SHP",
+                    "shPointsPer60": "SHP/60M",
+                    "shPrimaryAssists": "SHA1",
+                    "shPrimaryAssistsPer60": "SHA1/60M",
+                    "shSecondaryAssists": "SHA2",
+                    "shSecondaryAssistsPer60": "SHA2/60M",
+                    "shShootingPct": "SHS%",
+                    "shShots": "SHS",
+                    "shShotsPer60": "SHS/60M",
+                    "shTimeOnIce": "SHTOI",
+                    "shTimeOnIcePctPerGame": "SHTOI%",
+                    "shTimeOnIcePerGame": "SHTOI/GP",
+                    "teamAbbrevs": "Team"
+                },
+                "penaltyShots" : {
+                    "penaltyShotAttempts": "PSA",
+                    "penaltyShotShootingPct": "PS%",
+                    "penaltyShotsFailed": "PSF",
+                    "penaltyShotsGoals": "PSG",
+                    "positionCode": "Pos",
+                    "shootsCatches": "Shoots",
+                    "teamAbbrevs": "Team"
+                },
+                "powerplay" : {
+                    "gamesPlayed": "GP",
+                    "positionCode": "Pos",
+                    "ppAssists": "PPA",
+                    "ppGoals": "PPG",
+                    "ppGoalsForPer60": "PPGF/60M",
+                    "ppGoalsPer60": "PPG/60M",
+                    "ppIndividualSatFor": "PPTSA",
+                    "ppIndividualSatForPer60": "PPTSA/60M",
+                    "ppPoints": "PPP",
+                    "ppPointsPer60": "PPP/60M",
+                    "ppPrimaryAssists": "PPA1",
+                    "ppPrimaryAssistsPer60": "PPA1/60M",
+                    "ppSecondaryAssists": "PPA2",
+                    "ppSecondaryAssistsPer60": "PPA2/60M",
+                    "ppShootingPct": "PPS%",
+                    "ppShots": "PPS",
+                    "ppShotsPer60": "PPS/60M",
+                    "ppTimeOnIce": "PPTOI",
+                    "ppTimeOnIcePctPerGame": "PPTOI%",
+                    "ppTimeOnIcePerGame": "PPTOI/GP",
+                    "teamAbbrevs": "Team"
+                },
+                "puckPossessions" : {
+                    "faceoffPct5v5": "FO%_5v5",
+                    "gamesPlayed": "GP",
+                    "goalsPct": "GF%_5v5",
+                    "individualSatForPer60": "TSA_5v5",
+                    "individualShotsForPer60": "TSA/60M_5v5",
+                    "onIceShootingPct": "oiS%",
+                    "positionCode": "Pos",
+                    "satPct": "oiSV%",
+                    "shootsCatches": "Shoots",
+                    "teamAbbrevs": "Tean",
+                    "timeOnIcePerGame5v5": "TOI/GP_5v5",
+                    "usatPct": "FF%",
+                    "zoneStartPct": "OZ%"
+                }, "summaryshooting" : {
+                    "gamesPlayed": "GP",
+                    "positionCode": "Pos",
+                    "satAgainst": "CA",
+                    "satAhead": "CAhead",
+                    "satBehind": "CBehind",
+                    "satClose": "CClose",
+                    "satFor": "CF",
+                    "satRelative": "CFRel%",
+                    "satTied": "CTied",
+                    "satTotal": "CTotal",
+                    "shootsCatches": "Shoots",
+                    "teamAbbrevs": "Team",
+                    "timeOnIcePerGame5v5": "TOI/GP_5v5",
+                    "usatAgainst": "FA",
+                    "usatAhead": "FAhead",
+                    "usatBehind": "FBehind",
+                    "usatClose": "FClose",
+                    "usatFor": "FF",
+                    "usatRelative": "FFRel%",
+                    "usatTied": "FTied",
+                    "usatTotal": "FTotal"
+                },
+                "percentages" : {
+                    "gamesPlayed": "GP",
+                    "positionCode": "Pos",
+                    "satPercentage": "CF%",
+                    "satPercentageAhead": "CFAhead%",
+                    "satPercentageBehind": "CFBehind%",
+                    "satPercentageClose": 'CFClose%',
+                    "satPercentageTied": "CFTied%",
+                    "satRelative": "CFRel%",
+                    "shootingPct5v5": "S%_5v5",
+                    "shootsCatches": "Shoots",
+                    "skaterSavePct5v5": "oiSV%",
+                    "skaterShootingPlusSavePct5v5": "PDO",
+                    "teamAbbrevs": "Team",
+                    "timeOnIcePerGame5v5": "TOI/GP_5v5",
+                    "usatPercentage": "FF%",
+                    "usatPercentageAhead": "FFAhead%",
+                    "usatPercentageBehind": "FFBehind%",
+                    "usatPercentageTied": "FFTied%",
+                    "usatPrecentageClose": "FFClose%",
+                    "usatRelative": "FFRel%",
+                    "zoneStartPct5v5": "OZ%"
+                }, "scoringRates" : {
+                    "assists5v5": "A_5v5",
+                    "assistsPer605v5": "A/60M_5v5",
+                    "gamesPlayed": "GP",
+                    "goals5v5": "G_5v5",
+                    "goalsPer605v5": "G/60M_5v5",
+                    "netMinorPenaltiesPer60": "NetMinor/60M_5v5",
+                    "offensiveZoneStartPct5v5": "OZ%",
+                    "onIceShootingPct5v5": "oiS%",
+                    "points5v5": "P_5v5",
+                    "pointsPer605v5": "P/60M_5v5",
+                    "positionCode": "Pos",
+                    "primaryAssists5v5": "A1_5v5",
+                    "primaryAssistsPer605v5": "A1/60M_5v5",
+                    "satPct": "CF%",
+                    "satRelative5v5": "CFRel/60M",
+                    "secondaryAssists5v5": "A2_5v5",
+                    "secondaryAssistsPer605v5": "A2_60M/5v5",
+                    "shootingPct5v5": "S%_5v5",
+                    "teamAbbrevs": "Team",
+                    "timeOnIcePerGame5v5": "TOI/GP_5v5"
+                }, "scoringpergame" : {
+                    "assists": "A",
+                    "assistsPerGame": "A/GP",
+                    "blockedShots": "BLK",
+                    "blocksPerGame": "BLK/GP",
+                    "gamesPlayed": "GP",
+                    "goals": "G",
+                    "goalsPerGame": "G/GP",
+                    "hits": "HIT",
+                    "hitsPerGame": "HIT/GP",
+                    "penaltyMinutes": "PIM",
+                    "penaltyMinutesPerGame": "PIM/GP",
+                    "points": "P",
+                    "pointsPerGame": "P/GP",
+                    "positionCode": "Pos",
+                    "primaryAssistsPerGame": "A1/GP",
+                    "secondaryAssistsPerGame": "A2/GP",
+                    "shootsCatches": "Shoots",
+                    "shots": "S",
+                    "shotsPerGame": "S/GP",
+                    "teamAbbrevs": "Team",
+                    "timeOnIce": "TO",
+                    "timeOnIcePerGame": "TOI/GP",
+                    "totalPrimaryAssists": "A1",
+                    "totalSecondaryAssists": "A2"
+                }, "shootout" : {
+                    "careerShootoutGameDecidingGoals": "CrSOGWG",
+                    "careerShootoutGamesPlayed": "CrSOGP",
+                    "careerShootoutGoals": "CrSOG",
+                    "careerShootoutShootingPct": "CrSOS%",
+                    "careerShootoutShots": "CrSOS",
+                    "positionCode": "Pos",
+                    "shootoutGameDecidingGoals": "SOGWG",
+                    "shootoutGamesPlayed": "SOGP",
+                    "shootoutGoals": "SOG",
+                    "shootoutShootingPct": "SOS%",
+                    "shootoutShots": "SOS",
+                    "shootsCatches": "Shoots",
+                    "teamAbbrevs": "Team"
+                }, "shottype" : {
+                    "gamesPlayed": "GP",
+                    "goals": "G",
+                    "goalsBackhand": "BackG",
+                    "goalsDeflected": "DeflectG",
+                    "goalsSlap": "SlapG",
+                    "goalsSnap": "SnapG",
+                    "goalsTipIn": "TipG",
+                    "goalsWrapAround": "WrapG",
+                    "goalsWrist": "WristG",
+                    "shootingPct": "S%",
+                    "shootingPctBackhand": "BackS%",
+                    "shootingPctDeflected": "DeflectS%",
+                    "shootingPctSlap": "SlapS%",
+                    "shootingPctSnap": "SnapS%",
+                    "shootingPctTipIn": "TipS%",
+                    "shootingPctWrapAround": "WrapS%",
+                    "shootingPctWrist": "WristS%",
+                    "shots": "S",
+                    "shotsOnNetBackhand": "WristS",
+                    "shotsOnNetDeflected": "DeflectS",
+                    "shotsOnNetSlap": "SlapS",
+                    "shotsOnNetSnap": "SnapS",
+                    "shotsOnNetTipIn": "TipS",
+                    "shotsOnNetWrapAround": "WrapS",
+                    "shotsOnNetWrist": "WristS",
+                    "skaterFullName": "Alex Ovechkin",
+                    "teamAbbrevs": "WSH"
+                }, "timeonice" : {
+                    "evTimeOnIce": "EVTOI",
+                    "evTimeOnIcePerGame": "EVTOI/GP",
+                    "gamesPlayed": "GP",
+                    "otTimeOnIce": "OTTOI",
+                    "otTimeOnIcePerOtGame": "OTTOI/GP",
+                    "positionCode": "Pos",
+                    "ppTimeOnIce": "PPTOI",
+                    "ppTimeOnIcePerGame": "PPTOI/GP",
+                    "shTimeOnIce": "SHTOI",
+                    "shTimeOnIcePerGame": "SHTOI/GP",
+                    "shifts": "Shft",
+                    "shiftsPerGame": "Shft/GP",
+                    "shootsCatches": "Shoots",
+                    "teamAbbrevs": "Team",
+                    "timeOnIce": "TOI",
+                    "timeOnIcePerGame": "TOI/GP",
+                    "timeOnIcePerShift": "TOI/Shft"
+                }
+            }
+        else:
+            stat_mapping = {
+                "summary" : {
+                    "assists": "A",
+                    "gamesPlayed": "GP",
+                    "gamesStarted": "GS",
+                    "goals": "G",
+                    "goalsAgainst": "GA",
+                    "goalsAgainstAverage": "GAA",
+                    "losses": "L",
+                    "otLosses": "OTL",
+                    "penaltyMinutes": "PIM",
+                    "points": "P",
+                    "savePct": "SV%",
+                    "saves": "SV",
+                    "shootsCatches": "Catches",
+                    "shotsAgainst": "SA",
+                    "shutouts": "SO",
+                    "teamAbbrevs": "Team",
+                    "ties": "T",
+                    "timeOnIce": "TOI",
+                    "wins": "W"
+                },
+                "advanced" : {
+                    "completeGamePct": "CG%",
+                    "completeGames": "CG",
+                    "gamesPlayed": "GP",
+                    "gamesStarted": "GS",
+                    "goalsAgainst": "GA",
+                    "goalsAgainstAverage": "GAA",
+                    "goalsFor": "GF",
+                    "goalsForAverage": "GFA",
+                    "incompleteGames": "IG",
+                    "qualityStart": "QS",
+                    "qualityStartsPct": "QS%",
+                    "regulationLosses": "ROL",
+                    "regulationWins": "ROW",
+                    "savePct": "SV%",
+                    "shootsCatches": "Catches",
+                    "shotsAgainstPer60": "SA/60M",
+                    "teamAbbrevs": "Team"
+                },
+                "bio" : {
+                    "birthCity": "City",
+                    "birthCountryCode": "County",
+                    "birthDate": "BirthDate",
+                    "birthStateProvinceCode": "State",
+                    "currentTeamAbbrev": "CurrTeam",
+                    "draftOverall": "DraftOverall",
+                    "draftRound": "DraftRound",
+                    "draftYear": "DraftYear",
+                    "firstSeasonForGameType": "FirstSeason",
+                    "gamesPlayed": "GP",
+                    "height": "Height",
+                    "isInHallOfFameYn": "HOF",
+                    "nationalityCode": "Nationality",
+                    "points": "P",
+                    "positionCode": "POS",
+                    "shootsCatches": "Catches",
+                    "weight": "Weight",
+                    "otLosses": "OTL",
+                    "shutouts": "SO",
+                    "ties": "T",
+                    "wins": "W"
+                },
+                "daysrest" : {
+                    "gamesPlayed": "GP",
+                    "gamesPlayedDaysRest0": "GPDR0",
+                    "gamesPlayedDaysRest1": "GPDR1",
+                    "gamesPlayedDaysRest2": "GPDR2",
+                    "gamesPlayedDaysRest3": "GPDR3",
+                    "gamesPlayedDaysRest4Plus": "GPDR4Plus",
+                    "gamesStarted": "GS",
+                    "losses": "L",
+                    "otLosses": "OTK",
+                    "savePct": "SV%",
+                    "savePctDaysRest0": "SV%DR0",
+                    "savePctDaysRest1": "SV%DR1",
+                    "savePctDaysRest2": "SV%DR2",
+                    "savePctDaysRest3": "SV%DR3",
+                    "savePctDaysRest4Plus": "SV%DR4Plus",
+                    "shootsCatches": "Catches",
+                    "teamAbbrevs": "Team",
+                    "ties": "T",
+                    "wins": "W"
+                },
+                "penaltyShots" : {
+                    "gamesPlayed": "GP",
+                    "goalsAgainst": "GA",
+                    "penaltyShotSavePct": "PSSV%",
+                    "penaltyShotsAgainst": "PSSA",
+                    "penaltyShotsGoalsAgainst": "PSGA",
+                    "penaltyShotsSaves": "PSSV",
+                    "savePct": "SV%",
+                    "saves": "SV",
+                    "shootsCatches": "Catches",
+                    "shotsAgainst": "SA",
+                    "teamAbbrevs": "Team"
+                }, "savesByStrength" : {
+                    "evGoalsAgainst": "EVGA",
+                    "evSavePct": "EVSV%",
+                    "evSaves": "EVSV",
+                    "evShotsAgainst": "EVSA",
+                    "gamesPlayed": "GP",
+                    "gamesStarted": "GS",
+                    "goalsAgainst": "GA",
+                    "losses": "L",
+                    "otLosses": "OTL",
+                    "ppGoalsAgainst": "PPGA",
+                    "ppSavePct": "PPSV%",
+                    "ppSaves": "PPSV",
+                    "ppShotsAgainst": "PPSA",
+                    "savePct": "SV%",
+                    "saves": "SV",
+                    "shGoalsAgainst": "SHGA",
+                    "shSavePct": "SHV%",
+                    "shSaves": "SHSV",
+                    "shShotsAgainst": "SHSA",
+                    "shootsCatches": "Catches",
+                    "shotsAgainst": "SA",
+                    "teamAbbrevs": "Team",
+                    "ties": "T",
+                    "wins": "W"
+                }, "shootout" : {
+                    "careerShootoutGamesPlayed": "CrSOGP",
+                    "careerShootoutGoalsAllowed": "CrSOGA",
+                    "careerShootoutLosses": "CrSOL",
+                    "careerShootoutSavePct": "CrSOSV%",
+                    "careerShootoutSaves": "CrSOSV",
+                    "careerShootoutShotsAgainst": "CrSOSA",
+                    "careerShootoutWins": "CrSOW",
+                    "gamesPlayed": "GP",
+                    "lastName": "Demko",
+                    "shootoutGoalsAgainst": "SOGA",
+                    "shootoutLosses": "SOL",
+                    "shootoutSavePct": "SOSV%",
+                    "shootoutSaves": "SOSV",
+                    "shootoutShotsAgainst": "SOSA",
+                    "shootoutWins": "SOW",
+                    "shootsCatches": "Catches",
+                    "teamAbbrevs": "Team"
+                }, "startedVsRelieved" : {
+                    "gamesPlayed": "GP",
+                    "gamesRelieved": "GR",
+                    "gamesRelievedGoalsAgainst": "GRGA",
+                    "gamesRelievedLosses": "GRL",
+                    "gamesRelievedOtLosses": "GROTL",
+                    "gamesRelievedSavePct": "GRSV%",
+                    "gamesRelievedSaves": "GRSV",
+                    "gamesRelievedShotsAgainst": "GRSA",
+                    "gamesRelievedTies": "GRT",
+                    "gamesRelievedWins": "GRW",
+                    "gamesStarted": "GS",
+                    "gamesStartedGoalsAgainst": "GSGA",
+                    "gamesStartedLosses": "GSL",
+                    "gamesStartedOtLosses": "GSOTL",
+                    "gamesStartedSavePct": "GSSV%",
+                    "gamesStartedSaves": "GSSV",
+                    "gamesStartedShotsAgainst": "GSSA",
+                    "gamesStartedTies": "GST",
+                    "gamesStartedWins": "GSW",
+                    "losses": "L",
+                    "otLosses": "OTL",
+                    "savePct": "SV%",
+                    "shootsCatches": "Catches",
+                    "teamAbbrevs": "Team",
+                    "ties": "T",
+                    "wins": "W"
+                }
+            }
+        
+        new_stat_mappings = {}
+        for stat_key in stat_mapping:
+            new_stat_mappings[stat_key] = {v: k for k, v in stat_mapping[stat_key].items()}
+
+        stat_mapping = new_stat_mappings
+
+        func_to_call = None
+        if qual_str in ["On Ice With Stat Rank", "On Ice Against Stat Rank", "Shot On Stat Rank", "Shot By Stat Rank"]:
+            func_to_call = "handle_facing_stat_rank_qual"
+        elif qual_str in ["On Ice With Stat Percent", "On Ice Against Stat Percent", "Shot On Stat Percent", "Shot By Stat Percent"]:
+            func_to_call = "handle_facing_stat_percent_qual"
+        elif qual_str in ["On Ice With Stat", "On Ice Against Stat", "Shot On Stat", "Shot By Stat"]:
+            func_to_call = "handle_facing_stat_qual"
+
+        if func_to_call:
+            func = globals().get(func_to_call)
+            for qual_obj in qualifiers[qual_str]:
+                year_map_obj = func(qual_obj, stat_mapping, call_type, seasons, s)
+                if year_map_obj != None:
+                    qual_obj["year_map_obj"] = year_map_obj
+
+def handle_facing_stat_rank_qual(qual_obj, stat_mapping, call_type, seasons, s):
+    year_map_obj = {}
+    has_one_stat_match = False
+    filters = qual_obj["filters"]
+    for season_obj in seasons:
+        year_str = str(season_obj["Year"])
+        year_str += str(season_obj["Year"] + 1)
+
+        for sub_qual_object in qual_obj["values"]:
+            raw_stat = sub_qual_object["stat"].upper()
+
+            stat_name = None
+            report = None
+            filter_stats = []
+            for query_type in stat_mapping:
+                if raw_stat not in stat_mapping[query_type]:
+                    continue
+                has_all_filters = True
+                for filter_obj in filters:
+                    if filter_obj["stat"].upper() not in stat_mapping[query_type]:
+                        has_all_filters = False
+                        break
+                    filter_stats.append(stat_mapping[query_type][filter_obj["stat"].upper()])
+                if not has_all_filters:
+                    continue
+
+                report = query_type
+                stat_name = stat_mapping[query_type][raw_stat]
+
+            if not stat_name:
+                continue
+            
+            has_one_stat_match = True
+            
+            sort_str = "DESC"
+            for header in headers["Skater" if call_type == "skater" else "Goalie"].keys():
+                if header.upper() == raw_stat or ("display-value" in headers["Skater" if call_type == "skater" else "Goalie"][header] and header.upper() == raw_stat):
+                    if not headers["Skater" if call_type == "skater" else "Goalie"][header]["positive"]:
+                        sort_str = "ASC"
+                    break
+            
+            if "reverse" in qual_obj and qual_obj["reverse"]:
+                sort_str = "DESC" if sort_str == "ASC" else "ASC"
+
+            full_sort_str = "[{\"property\":\"" + stat_name + "\",\"direction\":\"" + sort_str + "\"},{\"property\":\"playerId\",\"direction\":\"ASC\"}]"
+
+            start = sub_qual_object["start_val"] - 1
+            if start < 0:
+                start = 0
+            limit = 100
+            real_limit = sub_qual_object["end_val"] - sub_qual_object["start_val"] + 1
+            if real_limit == float("inf"):
+                real_limit = 1000000
+
+            filter_str = ""
+            for filter_index, filter_obj in enumerate(filters):
+                start_val = filter_obj["start_val"]
+                if start_val == float("inf"):
+                    start_val = 1000000
+                elif start_val == -float("inf"):
+                    start_val = -1000000
+                end_val = filter_obj["end_val"]
+                if end_val == float("inf"):
+                    end_val = 1000000
+                elif end_val == -float("inf"):
+                    end_val = -1000000
+
+                filter_str += filter_stats[filter_index] + ">=" + str(start_val) + " and " + filter_stats[filter_index] + "<=" + str(end_val)
+                filter_str += " and "
+
+            if report == "penaltyShots" or report == "shootout":
+                filter_str = filter_str[:-5]
+            else:
+                filter_str += "gamesPlayed>=1"
+                
+            games_to_use = []
+            while True:
+                url_to_use = "https://api.nhle.com/stats/rest/en/" + call_type + "/" + report + "?isAggregate=false&isGame=false&start=" + str(start) +"&sort=" + full_sort_str + "&limit=" + str(limit) + "&cayenneExp=" + urllib.parse.quote_plus("seasonId<=\"" + year_str + "\" and seasonId>=\"" + year_str + "\" and gameTypeId=2")
+                if filter_str:
+                    url_to_use += "&factCayenneExp=" + filter_str
+
+                data = url_request_json(s, url_to_use)
+                    
+                for player in data["data"]:
+                    games_to_use.append(player)
+                    if len(games_to_use) >= real_limit:
+                        break
+
+                start += limit
+                if len(games_to_use) >= data["total"] or len(games_to_use) >= real_limit or not data["data"]:
+                    break
+  
+            for player in games_to_use:
+                if season_obj["Year"] not in year_map_obj:
+                    year_map_obj[season_obj["Year"]] = set()
+                year_map_obj[season_obj["Year"]].add(player["playerId"])
+
+    if has_one_stat_match:
+        return year_map_obj
+    else:
+        return None
+
+def handle_facing_stat_percent_qual(qual_obj, stat_mapping, call_type, seasons, s):
+    year_map_obj = {}
+    has_one_stat_match = False
+    filters = qual_obj["filters"]
+    for season_obj in seasons:
+        year_str = str(season_obj["Year"])
+        year_str += str(season_obj["Year"] + 1)
+
+        for sub_qual_object in qual_obj["values"]:
+            raw_stat = sub_qual_object["stat"].upper()
+
+            stat_name = None
+            report = None
+            filter_stats = []
+            for query_type in stat_mapping:
+                if raw_stat not in stat_mapping[query_type]:
+                    continue
+                has_all_filters = True
+                for filter_obj in filters:
+                    if filter_obj["stat"].upper() not in stat_mapping[query_type]:
+                        has_all_filters = False
+                        break
+                    filter_stats.append(stat_mapping[query_type][filter_obj["stat"].upper()])
+                if not has_all_filters:
+                    continue
+
+                report = query_type
+                stat_name = stat_mapping[query_type][raw_stat]
+
+            if not stat_name:
+                continue
+            
+            has_one_stat_match = True
+            
+            sort_str = "DESC"
+            for header in headers["Skater" if call_type == "skater" else "Goalie"].keys():
+                if header.upper() == raw_stat or ("display-value" in headers["Skater" if call_type == "skater" else "Goalie"][header] and header.upper() == raw_stat):
+                    if not headers["Skater" if call_type == "skater" else "Goalie"][header]["positive"]:
+                        sort_str = "ASC"
+                    break
+            
+            if "reverse" in qual_obj and qual_obj["reverse"]:
+                sort_str = "DESC" if sort_str == "ASC" else "ASC"
+
+            full_sort_str = "[{\"property\":\"" + stat_name + "\",\"direction\":\"" + sort_str + "\"},{\"property\":\"playerId\",\"direction\":\"ASC\"}]"
+
+            start = 0
+            limit = 1000000
+                
+            filter_str = ""
+            for filter_index, filter_obj in enumerate(filters):
+                start_val = filter_obj["start_val"]
+                if start_val == float("inf"):
+                    start_val = 1000000
+                elif start_val == -float("inf"):
+                    start_val = -1000000
+                end_val = filter_obj["end_val"]
+                if end_val == float("inf"):
+                    end_val = 1000000
+                elif end_val == -float("inf"):
+                    end_val = -1000000
+
+                filter_str += filter_stats[filter_index] + ">=" + str(start_val) + " and " + filter_stats[filter_index] + "<=" + str(end_val)
+                filter_str += " and "
+
+            if report == "penaltyShots" or report == "shootout":
+                filter_str = filter_str[:-5]
+            else:
+                filter_str += "gamesPlayed>=1"
+                
+            games_to_use = []
+            while True:
+                url_to_use = "https://api.nhle.com/stats/rest/en/" + call_type + "/" + report + "?isAggregate=false&isGame=false&start=" + str(start) +"&sort=" + full_sort_str + "&limit=" + str(limit) + "&cayenneExp=" + urllib.parse.quote_plus("seasonId<=\"" + year_str + "\" and seasonId>=\"" + year_str + "\" and gameTypeId=2")
+
+                if filter_str:
+                    url_to_use += "&factCayenneExp=" + filter_str
+                    
+                data = url_request_json(s, url_to_use)
+                    
+                games_to_use += data["data"]
+                start += limit
+                if len(games_to_use) >= data["total"] or not data["data"]:
+                    break
+
+            for index, player in enumerate(games_to_use):
+                if season_obj["Year"] not in year_map_obj:
+                    year_map_obj[season_obj["Year"]] = set()
+                rank = (index + 1) / len(games_to_use)
+
+                if rank >= sub_qual_object["start_val"] and rank <= sub_qual_object["end_val"]:
+                    year_map_obj[season_obj["Year"]].add(player["playerId"])
+
+    if has_one_stat_match:
+        return year_map_obj
+    else:
+        return None
+
+def handle_facing_stat_qual(qual_obj, stat_mapping, call_type, seasons, s):
+    year_map_obj = {}
+    has_one_stat_match = False
+    filters = qual_obj["filters"]
+    for season_obj in seasons:
+        year_str = str(season_obj["Year"])
+        year_str += str(season_obj["Year"] + 1)
+
+        for sub_qual_object in qual_obj["values"]:
+            raw_stat = sub_qual_object["stat"].upper()
+
+            stat_name = None
+            report = None
+            filter_stats = []
+            for query_type in stat_mapping:
+                if raw_stat not in stat_mapping[query_type]:
+                    continue
+                has_all_filters = True
+                for filter_obj in filters:
+                    if filter_obj["stat"].upper() not in stat_mapping[query_type]:
+                        has_all_filters = False
+                        break
+                    filter_stats.append(stat_mapping[query_type][filter_obj["stat"].upper()])
+                if not has_all_filters:
+                    continue
+
+                report = query_type
+                stat_name = stat_mapping[query_type][raw_stat]
+
+            if not stat_name:
+                continue
+            
+            has_one_stat_match = True
+            
+            sort_str = "DESC"
+            for header in headers["Skater" if call_type == "skater" else "Goalie"].keys():
+                if header.upper() == raw_stat or ("display-value" in headers["Skater" if call_type == "skater" else "Goalie"][header] and header.upper() == raw_stat):
+                    if not headers["Skater" if call_type == "skater" else "Goalie"][header]["positive"]:
+                        sort_str = "ASC"
+                    break
+            
+            if "reverse" in qual_obj and qual_obj["reverse"]:
+                sort_str = "DESC" if sort_str == "ASC" else "ASC"
+
+            start = 0
+            limit = 100
+                
+            filter_str = ""
+            for filter_index, filter_obj in enumerate(filters):
+                start_val = filter_obj["start_val"]
+                if start_val == float("inf"):
+                    start_val = 1000000
+                elif start_val == -float("inf"):
+                    start_val = -1000000
+                end_val = filter_obj["end_val"]
+                if end_val == float("inf"):
+                    end_val = 1000000
+                elif end_val == -float("inf"):
+                    end_val = -1000000
+
+                filter_str += filter_stats[filter_index] + ">=" + str(start_val) + " and " + filter_stats[filter_index] + "<=" + str(end_val)
+                filter_str += " and "
+
+            if report == "penaltyShots" or report == "shootout":
+                filter_str = filter_str[:-5]
+            else:
+                filter_str += "gamesPlayed>=1"
+                
+            games_to_use = []
+            while True:
+                url_to_use = "https://api.nhle.com/stats/rest/en/" + call_type + "/" + report + "?isAggregate=false&isGame=false&start=" + str(start) +"&sort=[{\"property\":\"playerId\",\"direction\":\"ASC\"}]&limit=" + str(limit) + "&cayenneExp=" + urllib.parse.quote_plus("seasonId<=\"" + year_str + "\" and seasonId>=\"" + year_str + "\" and gameTypeId=2")
+
+                if filter_str:
+                    url_to_use += "&factCayenneExp=" + filter_str
+                    
+                data = url_request_json(s, url_to_use)
+                    
+                games_to_use += data["data"]
+                start += limit
+                if len(games_to_use) >= data["total"] or not data["data"]:
+                    break
+
+            for player in games_to_use:
+                if season_obj["Year"] not in year_map_obj:
+                    year_map_obj[season_obj["Year"]] = set()
+
+                if player[stat_name] == None:
+                    player[stat_name] = 0
+
+                if float(player[stat_name]) >= sub_qual_object["start_val"] and float(player[stat_name]) <= sub_qual_object["end_val"]:
+                    year_map_obj[season_obj["Year"]].add(player["playerId"])
+            
+    if has_one_stat_match:
+        return year_map_obj
+    else:
+        return None
+
 def get_opponent_schedule(seasons):
     team_obj = {}
 
@@ -18342,6 +19569,66 @@ def handle_nhl_game_stats(player_data, all_rows, time_frame, player_link, player
                 
             if not has_match:
                 games_to_skip.add(row_data["NHLGameLink"])
+    if "On Ice With Stat" in time_frame["qualifiers"]:
+        for row_data in all_rows:
+            for qual_object in time_frame["qualifiers"]["On Ice With Stat"]:
+                if "year_map_obj" not in qual_object:
+                    games_to_skip.add(row_data["GameLink"])
+    if "On Ice Against Stat" in time_frame["qualifiers"]:
+        for row_data in all_rows:
+            for qual_object in time_frame["qualifiers"]["On Ice Against Stat"]:
+                if "year_map_obj" not in qual_object:
+                    games_to_skip.add(row_data["GameLink"])
+    if "Shot On Stat" in time_frame["qualifiers"]:
+        for row_data in all_rows:
+            for qual_object in time_frame["qualifiers"]["Shot On Stat"]:
+                if "year_map_obj" not in qual_object:
+                    games_to_skip.add(row_data["GameLink"])
+    if "Shot By Stat" in time_frame["qualifiers"]:
+        for row_data in all_rows:
+            for qual_object in time_frame["qualifiers"]["Shot By Stat"]:
+                if "year_map_obj" not in qual_object:
+                    games_to_skip.add(row_data["GameLink"])
+    if "On Ice With Stat Rank" in time_frame["qualifiers"]:
+        for row_data in all_rows:
+            for qual_object in time_frame["qualifiers"]["On Ice With Stat Rank"]:
+                if "year_map_obj" not in qual_object:
+                    games_to_skip.add(row_data["GameLink"])
+    if "On Ice Against Stat Rank" in time_frame["qualifiers"]:
+        for row_data in all_rows:
+            for qual_object in time_frame["qualifiers"]["On Ice Against Stat Rank"]:
+                if "year_map_obj" not in qual_object:
+                    games_to_skip.add(row_data["GameLink"])
+    if "Shot On Stat Rank" in time_frame["qualifiers"]:
+        for row_data in all_rows:
+            for qual_object in time_frame["qualifiers"]["Shot On Stat Rank"]:
+                if "year_map_obj" not in qual_object:
+                    games_to_skip.add(row_data["GameLink"])
+    if "Shot By Stat Rank" in time_frame["qualifiers"]:
+        for row_data in all_rows:
+            for qual_object in time_frame["qualifiers"]["Shot By Stat Rank"]:
+                if "year_map_obj" not in qual_object:
+                    games_to_skip.add(row_data["GameLink"])
+    if "On Ice With Stat Percent" in time_frame["qualifiers"]:
+        for row_data in all_rows:
+            for qual_object in time_frame["qualifiers"]["On Ice With Stat Percent"]:
+                if "year_map_obj" not in qual_object:
+                    games_to_skip.add(row_data["GameLink"])
+    if "On Ice Against Stat Percent" in time_frame["qualifiers"]:
+        for row_data in all_rows:
+            for qual_object in time_frame["qualifiers"]["On Ice Against Stat Percent"]:
+                if "year_map_obj" not in qual_object:
+                    games_to_skip.add(row_data["GameLink"])
+    if "Shot On Stat Percent" in time_frame["qualifiers"]:
+        for row_data in all_rows:
+            for qual_object in time_frame["qualifiers"]["Shot On Stat Percent"]:
+                if "year_map_obj" not in qual_object:
+                    games_to_skip.add(row_data["GameLink"])
+    if "Shot By Stat Percent" in time_frame["qualifiers"]:
+        for row_data in all_rows:
+            for qual_object in time_frame["qualifiers"]["Shot By Stat Percent"]:
+                if "year_map_obj" not in qual_object:
+                    games_to_skip.add(row_data["GameLink"])
     if "Overtime" in time_frame["qualifiers"]:
         for row_data in all_rows:
             has_match = False
@@ -18635,6 +19922,66 @@ def handle_nhl_game_stats_single_thread(player_data, all_rows, time_frame, playe
                 
             if not has_match:
                 games_to_skip.add(row_data["NHLGameLink"])
+    if "On Ice With Stat" in time_frame["qualifiers"]:
+        for row_data in all_rows:
+            for qual_object in time_frame["qualifiers"]["On Ice With Stat"]:
+                if "year_map_obj" not in qual_object:
+                    games_to_skip.add(row_data["GameLink"])
+    if "On Ice Against Stat" in time_frame["qualifiers"]:
+        for row_data in all_rows:
+            for qual_object in time_frame["qualifiers"]["On Ice Against Stat"]:
+                if "year_map_obj" not in qual_object:
+                    games_to_skip.add(row_data["GameLink"])
+    if "Shot On Stat" in time_frame["qualifiers"]:
+        for row_data in all_rows:
+            for qual_object in time_frame["qualifiers"]["Shot On Stat"]:
+                if "year_map_obj" not in qual_object:
+                    games_to_skip.add(row_data["GameLink"])
+    if "Shot By Stat" in time_frame["qualifiers"]:
+        for row_data in all_rows:
+            for qual_object in time_frame["qualifiers"]["Shot By Stat"]:
+                if "year_map_obj" not in qual_object:
+                    games_to_skip.add(row_data["GameLink"])
+    if "On Ice With Stat Rank" in time_frame["qualifiers"]:
+        for row_data in all_rows:
+            for qual_object in time_frame["qualifiers"]["On Ice With Stat Rank"]:
+                if "year_map_obj" not in qual_object:
+                    games_to_skip.add(row_data["GameLink"])
+    if "On Ice Against Stat Rank" in time_frame["qualifiers"]:
+        for row_data in all_rows:
+            for qual_object in time_frame["qualifiers"]["On Ice Against Stat Rank"]:
+                if "year_map_obj" not in qual_object:
+                    games_to_skip.add(row_data["GameLink"])
+    if "Shot On Stat Rank" in time_frame["qualifiers"]:
+        for row_data in all_rows:
+            for qual_object in time_frame["qualifiers"]["Shot On Stat Rank"]:
+                if "year_map_obj" not in qual_object:
+                    games_to_skip.add(row_data["GameLink"])
+    if "Shot By Stat Rank" in time_frame["qualifiers"]:
+        for row_data in all_rows:
+            for qual_object in time_frame["qualifiers"]["Shot By Stat Rank"]:
+                if "year_map_obj" not in qual_object:
+                    games_to_skip.add(row_data["GameLink"])
+    if "On Ice With Stat Percent" in time_frame["qualifiers"]:
+        for row_data in all_rows:
+            for qual_object in time_frame["qualifiers"]["On Ice With Stat Percent"]:
+                if "year_map_obj" not in qual_object:
+                    games_to_skip.add(row_data["GameLink"])
+    if "On Ice Against Stat Percent" in time_frame["qualifiers"]:
+        for row_data in all_rows:
+            for qual_object in time_frame["qualifiers"]["On Ice Against Stat Percent"]:
+                if "year_map_obj" not in qual_object:
+                    games_to_skip.add(row_data["GameLink"])
+    if "Shot On Stat Percent" in time_frame["qualifiers"]:
+        for row_data in all_rows:
+            for qual_object in time_frame["qualifiers"]["Shot On Stat Percent"]:
+                if "year_map_obj" not in qual_object:
+                    games_to_skip.add(row_data["GameLink"])
+    if "Shot By Stat Percent" in time_frame["qualifiers"]:
+        for row_data in all_rows:
+            for qual_object in time_frame["qualifiers"]["Shot By Stat Percent"]:
+                if "year_map_obj" not in qual_object:
+                    games_to_skip.add(row_data["GameLink"])
     if "Overtime" in time_frame["qualifiers"]:
         for row_data in all_rows:
             has_match = False
@@ -20290,7 +21637,7 @@ def get_shift_index(all_events):
 def determine_stat_value(player_game_info, all_events, qualifiers, og_row, player_type, player_link, stat):
     player_id = int(player_link.split('/')[-1])
     count_misses = False
-    if not "Shot On" in qualifiers and not "Shot By" in qualifiers and not "Shot On First Name" in qualifiers and not "Shot By First Name" in qualifiers and not "Shot On Last Name" in qualifiers and not "Shot By Last Name" in qualifiers and not "Shot On Birth Country" in qualifiers and not "Shot By Birth Country" in qualifiers and not "Shot On Nationality" in qualifiers and not "Shot By Nationality" in qualifiers and not "Facing Lefty" in qualifiers and not "Facing Righty" in qualifiers:
+    if not "Shot On" in player_game_info["extra_stats"] and not "Shot By" in player_game_info["extra_stats"]:
         if "Penalty Shot" in qualifiers or "Shootout" in qualifiers:
             count_misses = True
 
@@ -20331,8 +21678,8 @@ def determine_stat_value(player_game_info, all_events, qualifiers, og_row, playe
     all_opp_shots_og_stats = ["offISA", "OppSF", "TtlSF", "SFDiff"]
     all_team_unblocked_shots_stats = ["offIFF", "TmFF", "TtlFF", "FFDiff"]
     all_opp_unblocked_shots_stats = ["offIFA", "OppFF", "TtlFF", "FFDiff"]
-    goal_against_stats = ["GA", "SA", "EVGA", "EVSH", "PPGA", "PPSH", "SHGA", "SHSH"]
-    save_against_stats = ["SV", "SA", "EVSH", "PPSH", "SHGA"]
+    goal_against_stats = ["GA", "SA", "EVGA", "EVSV", "EVSH", "PPGA", "PPSV", "PPSH", "SHGA", "SHSV", "SHSH"]
+    save_against_stats = ["SV", "SA", "EVSH", "PPSH", "SHSH",  "EVSV", "PPSV", "SHSV"]
     missed_shot_against_stats = ["SV", "SA"]
     goalie_goal_against_stats = ["GF"]
     toi_stats = ["TOI", "iTtlTOI", "TmTtlTOI", "EVTOI", "PPTOI", "SHTOI"]
@@ -20360,7 +21707,7 @@ def determine_stat_value(player_game_info, all_events, qualifiers, og_row, playe
                         if goal_event["firstGoal"]:
                             row["1stG"] += 1
                         if player_game_info["is_old_html_stats"]:
-                            if (not "Shot On" in qualifiers and not "Shot By" in qualifiers and not "Shot On First Name" in qualifiers and not "Shot By First Name" in qualifiers and not "Shot On Last Name" in qualifiers and not "Shot By Last Name" in qualifiers and not "Shot On Birth Country" in qualifiers and not "Shot By Birth Country" in qualifiers and not "Shot On Nationality" in qualifiers and not "Shot By Nationality" in qualifiers and not "Facing Lefty" in qualifiers and not "Facing Righty" in qualifiers) or player_game_info["is_html_stats"]:
+                            if (not "Shot On" in player_game_info["extra_stats"] and not "Shot By" in player_game_info["extra_stats"]) or player_game_info["is_html_stats"]:
                                 row["S"] += 1
                                 if goal_event["shotType"] == "Wrist Shot":
                                     row["WristS"] += 1
@@ -20694,7 +22041,7 @@ def set_row_data(player_game_info, row_data):
     row_data["is_toi_stats"] = player_game_info["is_toi_stats"]
 
 def get_game_data(index, player_data, row_data, player_id, player_type, time_frame, extra_stats, s):
-    game_data, missing_games, all_plays = setup_game_data(player_data, row_data, player_id, player_type, time_frame, s)
+    game_data, missing_games, all_plays = setup_game_data(player_data, row_data, player_id, player_type, time_frame, extra_stats, s)
 
     if not "current-stats" in extra_stats:
         return game_data, row_data, missing_games
@@ -20725,7 +22072,7 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                     game_data["is_href_stats"] = True
     
         if not scoring_plays and ("href" in extra_stats or "hide-href" not in extra_stats):
-            game_data, missing_games = get_href_html_play_data(scoring_plays, player_data, player_type, time_frame, row_data, row_data["GameLink"], row_data["Location"], row_data["Tm"], row_data["Opponent"].upper(), game_data, missing_games, s)
+            game_data, missing_games = get_href_html_play_data(scoring_plays, player_data, player_type, time_frame, row_data, row_data["GameLink"], row_data["Location"], row_data["Tm"], row_data["Opponent"].upper(), game_data, extra_stats, missing_games, s)
             if not scoring_plays:
                 missing_games = True
                 game_data["missing_data"] = True
@@ -20752,7 +22099,7 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                                     game_data["missing_data"] = True
                                     return game_data, row_data, missing_games
                                 else:
-                                    game_data, missing_games = get_href_html_play_data(scoring_plays, player_data, player_type, time_frame, row_data, row_data["GameLink"], row_data["Location"], row_data["Tm"], row_data["Opponent"].upper(), game_data, missing_games, s)
+                                    game_data, missing_games = get_href_html_play_data(scoring_plays, player_data, player_type, time_frame, row_data, row_data["GameLink"], row_data["Location"], row_data["Tm"], row_data["Opponent"].upper(), game_data, extra_stats, missing_games, s)
                                     if not scoring_plays:
                                         missing_games = True
                                         game_data["missing_data"] = True
@@ -20779,7 +22126,7 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                                     game_data["missing_data"] = True
                                     return game_data, row_data, missing_games
                                 else:
-                                    game_data, missing_games = get_href_html_play_data(scoring_plays, player_data, player_type, time_frame, row_data, row_data["GameLink"], row_data["Location"], row_data["Tm"], row_data["Opponent"].upper(), game_data, missing_games, s)
+                                    game_data, missing_games = get_href_html_play_data(scoring_plays, player_data, player_type, time_frame, row_data, row_data["GameLink"], row_data["Location"], row_data["Tm"], row_data["Opponent"].upper(), game_data, extra_stats, missing_games, s)
                                     if not scoring_plays:
                                         missing_games = True
                                         game_data["missing_data"] = True
@@ -20815,7 +22162,7 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                                 game_data["missing_data"] = True
                                 return game_data, row_data, missing_games
                             else:
-                                game_data, missing_games = get_href_html_play_data(scoring_plays, player_data, player_type, time_frame, row_data, row_data["GameLink"], row_data["Location"], row_data["Tm"], row_data["Opponent"].upper(), game_data, missing_games, s)
+                                game_data, missing_games = get_href_html_play_data(scoring_plays, player_data, player_type, time_frame, row_data, row_data["GameLink"], row_data["Location"], row_data["Tm"], row_data["Opponent"].upper(), game_data, extra_stats, missing_games, s)
                                 if not scoring_plays:
                                     missing_games = True
                                     game_data["missing_data"] = True
@@ -20848,7 +22195,7 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                             game_data["missing_data"] = True
                             return game_data, row_data, missing_games
                         else:
-                            game_data, missing_games = get_href_html_play_data(scoring_plays, player_data, player_type, time_frame, row_data, row_data["GameLink"], row_data["Location"], row_data["Tm"], row_data["Opponent"].upper(), game_data, missing_games, s)
+                            game_data, missing_games = get_href_html_play_data(scoring_plays, player_data, player_type, time_frame, row_data, row_data["GameLink"], row_data["Location"], row_data["Tm"], row_data["Opponent"].upper(), game_data, extra_stats, missing_games, s)
                             if not scoring_plays:
                                 missing_games = True
                                 game_data["missing_data"] = True
@@ -21937,7 +23284,7 @@ def determine_last_goalie(row_data, game_data, period, periodTime, team_str):
     else:
         return None
             
-def setup_game_data(player_data, row_data, player_id, player_type, time_frame, s):
+def setup_game_data(player_data, row_data, player_id, player_type, time_frame, extra_stats, s):
     game_data = {
         "is_final" : True,
         "is_incomplete" : False,
@@ -21945,6 +23292,7 @@ def setup_game_data(player_data, row_data, player_id, player_type, time_frame, s
         "player_type" : player_type,
         "player_id" : player_id,
         "id" : player_data["id"],
+        "extra_stats" : extra_stats,
         "team_skaters" : set(),
         "team_goalies" : set(),
         "team_players" : set(),
@@ -22274,7 +23622,7 @@ def get_html_game_stats(game_data, missing_games, row_data, s):
 
     return missing_games
 
-def setup_href_game_data(player_data, row_data, player_id, player_type, time_frame, player_page_xml):
+def setup_href_game_data(player_data, row_data, player_id, player_type, time_frame, extra_stats, player_page_xml):
     game_data = {
         "is_final" : True,
         "is_incomplete" : False,
@@ -22282,6 +23630,7 @@ def setup_href_game_data(player_data, row_data, player_id, player_type, time_fra
         "player_type" : player_type,
         "player_id" : player_id,
         "id" : player_data["id"],
+        "extra_stats" : extra_stats,
         "team_skaters" : set(),
         "team_goalies" : set(),
         "team_players" : set(),
@@ -24461,7 +25810,7 @@ def get_older_html_play_data(scoring_plays, player_data, og_game_id, is_home, ga
                 if not has_initial_plays:
                     scoring_plays.append(scoring_play)
                             
-def get_href_html_play_data(scoring_plays, player_data, player_type, time_frame, row_data, game_link, is_home, team_abbr, opp_abbr, game_data, missing_games, s):
+def get_href_html_play_data(scoring_plays, player_data, player_type, time_frame, row_data, game_link, is_home, team_abbr, opp_abbr, game_data, extra_stats, missing_games, s):
     if not game_link:
         return game_data, missing_games
         
@@ -24479,7 +25828,7 @@ def get_href_html_play_data(scoring_plays, player_data, player_type, time_frame,
     if not player_page_xml:
         return game_data, missing_games
 
-    game_data, missing_games = setup_href_game_data(player_data, row_data, player_data["nhl_id"], player_type, time_frame, player_page_xml)
+    game_data, missing_games = setup_href_game_data(player_data, row_data, player_data["nhl_id"], player_type, time_frame, extra_stats, player_page_xml)
     if game_data["missing_data"]:
         return game_data, missing_games
 
@@ -25208,7 +26557,7 @@ def perform_sub_nhl_game_qualifiers(row, qualifiers, player_game_info, player_ty
 
 def perform_metadata_quals(qualifiers, player_type, row, player_game_info, nhl_player_id, skip_career_events, needs_five_stats):
     count_misses = False
-    if not "Shot On" in qualifiers and not "Shot By" in qualifiers and not "Shot On First Name" in qualifiers and not "Shot By First Name" in qualifiers and not "Shot On Last Name" in qualifiers and not "Shot By Last Name" in qualifiers and not "Shot On Birth Country" in qualifiers and not "Shot By Birth Country" in qualifiers and not "Shot On Nationality" in qualifiers and not "Shot By Nationality" in qualifiers and not "Facing Lefty" in qualifiers and not "Facing Righty" in qualifiers:
+    if not "Shot On" in player_game_info["extra_stats"] and not "Shot By" in player_game_info["extra_stats"]:
         if "Penalty Shot" in qualifiers or "Shootout" in qualifiers:
             count_misses = True
 
@@ -25228,7 +26577,7 @@ def perform_metadata_quals(qualifiers, player_type, row, player_game_info, nhl_p
                 if goal_event["firstGoal"]:
                     row["1stG"] += 1
                 if player_game_info["is_old_html_stats"]:
-                    if (not "Shot On" in qualifiers and not "Shot By" in qualifiers and not "Shot On First Name" in qualifiers and not "Shot By First Name" in qualifiers and not "Shot On Last Name" in qualifiers and not "Shot By Last Name" in qualifiers and not "Shot On Birth Country" in qualifiers and not "Shot By Birth Country" in qualifiers and not "Shot On Nationality" in qualifiers and not "Shot By Nationality" in qualifiers and not "Facing Lefty" in qualifiers and not "Facing Righty" in qualifiers) or player_game_info["is_html_stats"]:
+                    if (not "Shot On" in player_game_info["extra_stats"] and not "Shot By" in player_game_info["extra_stats"]) or player_game_info["is_html_stats"]:
                         row["S"] += 1
                         if goal_event["shotType"] == "Wrist Shot":
                             row["WristS"] += 1
@@ -25256,7 +26605,7 @@ def perform_metadata_quals(qualifiers, player_type, row, player_game_info, nhl_p
                 if needs_five_stats and is_five_toi(player_game_info, goal_event, goal_event["period"], goal_event["periodTime"]):
                     row["G_5v5"] += 1
                     if player_game_info["is_old_html_stats"]:
-                        if (not "Shot On" in qualifiers and not "Shot By" in qualifiers and not "Facing Lefty" in qualifiers and not "Facing Righty" in qualifiers) or row["Year"] >= 2007:
+                        if (not "Shot On" in player_game_info["extra_stats"] and not "Shot By" in player_game_info["extra_stats"]) or row["Year"] >= 2007:
                             row["S_5v5"] += 1
                             if player_game_info["is_html_stats"]:
                                 row["TSA_5v5"] += 1
@@ -25633,7 +26982,7 @@ def is_period_qual(qual_object):
     return True
 
 def has_shift_quals(qualifiers):
-    return "On Ice With" in qualifiers or "On Ice Against" in qualifiers or "On Line With" in qualifiers or "On Line Against" in qualifiers or "On Line Together" in qualifiers or "Strength" in qualifiers or "Even Skaters" in qualifiers or "More Skaters" in qualifiers or "Less Skaters" in qualifiers or "Team Goalie Pulled" in qualifiers or "Opponent Goalie Pulled" in qualifiers or "Team Skaters" in qualifiers or "Opponent Skaters" in qualifiers or "Team Players" in qualifiers or "Opponent Players" in qualifiers
+    return "On Ice With" in qualifiers or "On Ice Against" in qualifiers or "On Line With" in qualifiers or "On Line Against" in qualifiers or "On Line Together" in qualifiers or "Strength" in qualifiers or "Even Skaters" in qualifiers or "More Skaters" in qualifiers or "Less Skaters" in qualifiers or "Team Goalie Pulled" in qualifiers or "Opponent Goalie Pulled" in qualifiers or "Team Skaters" in qualifiers or "Opponent Skaters" in qualifiers or "Team Players" in qualifiers or "Opponent Players" in qualifiers or "On Ice With Stat" in qualifiers or "Shot On Stat" in qualifiers or "Shot By Stat" in qualifiers or "On Ice Against Stat" in qualifiers or "On Ice With Stat Rank" in qualifiers or "On Ice Against Stat Rank" in qualifiers or "Shot On Stat Rank" in qualifiers or "Shot By Stat Rank" in qualifiers or "On Ice With Stat Percent" in qualifiers or "On Ice Against Stat Percent" in qualifiers or "Shot On Stat Percent" in qualifiers or "Shot By Stat Percent" in qualifiers
 
 def perform_metadata_qual(event_name, goal_event, qualifiers, player_game_info, row, is_playoffs, year, is_faceoff=False, is_toi=False, is_off_ice=False, skip_career_events=False):
     if not is_toi:
@@ -25653,7 +27002,7 @@ def perform_metadata_qual(event_name, goal_event, qualifiers, player_game_info, 
 
                 has_match = False
                 for player in qual_object["values"]:
-                    if goal_event["goalie"] == player["nhl_id"] or goal_event["goalie"] == player["id"]:
+                    if goal_event["goalie"] == player["nhl_id"]:
                         has_match = True
             
                 if qual_object["negate"]:
@@ -25679,7 +27028,127 @@ def perform_metadata_qual(event_name, goal_event, qualifiers, player_game_info, 
 
                 has_match = False
                 for player in qual_object["values"]:
-                    if goal_event["scorer"] == player["nhl_id"] or goal_event["scorer"] == player["id"]:
+                    if goal_event["scorer"] == player["nhl_id"]:
+                        has_match = True
+            
+                if qual_object["negate"]:
+                    if has_match:
+                        return False
+                else:
+                    if not has_match:
+                        return False
+        
+        if "Shot On Stat" in qualifiers:
+            if event_name != "goal" and event_name != "shot":
+                return False
+
+            for qual_object in qualifiers["Shot On Stat"]:
+                if row["Year"] not in qual_object["year_map_obj"]:
+                    return False
+
+                has_match = False
+                for player in qual_object["year_map_obj"][row["Year"]]:
+                    if goal_event["goalie"] == player:
+                        has_match = True
+            
+                if qual_object["negate"]:
+                    if has_match:
+                        return False
+                else:
+                    if not has_match:
+                        return False
+        
+        if "Shot By Stat" in qualifiers:
+            if event_name != "goal_against" and event_name != "save_against":
+                return False
+
+            for qual_object in qualifiers["Shot By Stat"]:
+                if row["Year"] not in qual_object["year_map_obj"]:
+                    return False
+
+                has_match = False
+                for player in qual_object["year_map_obj"][row["Year"]]:
+                    if goal_event["scorer"] == player:
+                        has_match = True
+            
+                if qual_object["negate"]:
+                    if has_match:
+                        return False
+                else:
+                    if not has_match:
+                        return False
+
+        if "Shot On Stat Rank" in qualifiers:
+            if event_name != "goal" and event_name != "shot":
+                return False
+
+            for qual_object in qualifiers["Shot On Stat Rank"]:
+                if row["Year"] not in qual_object["year_map_obj"]:
+                    return False
+
+                has_match = False
+                for player in qual_object["year_map_obj"][row["Year"]]:
+                    if goal_event["goalie"] == player:
+                        has_match = True
+            
+                if qual_object["negate"]:
+                    if has_match:
+                        return False
+                else:
+                    if not has_match:
+                        return False
+        
+        if "Shot By Stat Rank" in qualifiers:
+            if event_name != "goal_against" and event_name != "save_against":
+                return False
+
+            for qual_object in qualifiers["Shot By Stat Rank"]:
+                if row["Year"] not in qual_object["year_map_obj"]:
+                    return False
+
+                has_match = False
+                for player in qual_object["year_map_obj"][row["Year"]]:
+                    if goal_event["scorer"] == player:
+                        has_match = True
+            
+                if qual_object["negate"]:
+                    if has_match:
+                        return False
+                else:
+                    if not has_match:
+                        return False
+
+        if "Shot On Stat Percent" in qualifiers:
+            if event_name != "goal" and event_name != "shot":
+                return False
+
+            for qual_object in qualifiers["Shot On Stat Percent"]:
+                if row["Year"] not in qual_object["year_map_obj"]:
+                    return False
+
+                has_match = False
+                for player in qual_object["year_map_obj"][row["Year"]]:
+                    if goal_event["goalie"] == player:
+                        has_match = True
+            
+                if qual_object["negate"]:
+                    if has_match:
+                        return False
+                else:
+                    if not has_match:
+                        return False
+        
+        if "Shot By Stat Percent" in qualifiers:
+            if event_name != "goal_against" and event_name != "save_against":
+                return False
+
+            for qual_object in qualifiers["Shot By Stat Percent"]:
+                if row["Year"] not in qual_object["year_map_obj"]:
+                    return False
+
+                has_match = False
+                for player in qual_object["year_map_obj"][row["Year"]]:
+                    if goal_event["scorer"] == player:
                         has_match = True
             
                 if qual_object["negate"]:
@@ -26383,6 +27852,30 @@ def perform_metadata_qual(event_name, goal_event, qualifiers, player_game_info, 
         else:
             if not perform_sub_on_ice_qual(qualifiers["On Line Against"], player_game_info["player_shift_data"], goal_event, row, goal_event["period"], goal_event["periodTime"], False, is_faceoff, False):
                 return False
+    
+    if "On Ice With Stat" in qualifiers:
+        if not perform_stat_sub_on_ice_qual(qualifiers["On Ice With Stat"], player_game_info["player_shift_data"], goal_event, row, goal_event["period"], goal_event["periodTime"], True, is_faceoff, player_game_info["player_id"]):
+            return False
+    
+    if "On Ice Against Stat" in qualifiers:
+        if not perform_stat_sub_on_ice_qual(qualifiers["On Ice Against Stat"], player_game_info["player_shift_data"], goal_event, row, goal_event["period"], goal_event["periodTime"], False, is_faceoff, player_game_info["player_id"]):
+            return False
+
+    if "On Ice With Stat Rank" in qualifiers:
+        if not perform_stat_sub_on_ice_qual(qualifiers["On Ice With Stat Rank"], player_game_info["player_shift_data"], goal_event, row, goal_event["period"], goal_event["periodTime"], True, is_faceoff, player_game_info["player_id"]):
+            return False
+    
+    if "On Ice Against Stat Rank" in qualifiers:
+        if not perform_stat_sub_on_ice_qual(qualifiers["On Ice Against Stat Rank"], player_game_info["player_shift_data"], goal_event, row, goal_event["period"], goal_event["periodTime"], False, is_faceoff, player_game_info["player_id"]):
+            return False
+    
+    if "On Ice With Stat Percent" in qualifiers:
+        if not perform_stat_sub_on_ice_qual(qualifiers["On Ice With Stat Percent"], player_game_info["player_shift_data"], goal_event, row, goal_event["period"], goal_event["periodTime"], True, is_faceoff, player_game_info["player_id"]):
+            return False
+    
+    if "On Ice Against Stat Percent" in qualifiers:
+        if not perform_stat_sub_on_ice_qual(qualifiers["On Ice Against Stat Percent"], player_game_info["player_shift_data"], goal_event, row, goal_event["period"], goal_event["periodTime"], False, is_faceoff, player_game_info["player_id"]):
+            return False
     
     if "Team Score" in qualifiers:
         if not perform_sub_metadata_qual(goal_event, "teamGoals", qualifiers["Team Score"], player_game_info, year):
@@ -27384,6 +28877,34 @@ def perform_sub_on_ice_qual(qualifers, player_shift_data, goal_event, row, perio
 
     return has_row_match
 
+def perform_stat_sub_on_ice_qual(qualifers, player_shift_data, goal_event, row, period, second, is_team, is_faceoff, player_id):
+    has_row_match = True
+    team_on_ice = goal_event["team_on_ice"] if "team_on_ice" in goal_event else None
+    opp_on_ice = goal_event["opp_on_ice"] if "opp_on_ice" in goal_event else None
+    for qual_object in qualifers:
+        if row["Year"] not in qual_object["year_map_obj"]:
+            return False
+
+        matches = 0
+        for player in qual_object["year_map_obj"][row["Year"]]:
+            if player == player_id:
+                continue
+
+            is_on_ice = is_player_on_ice(player_shift_data, team_on_ice, opp_on_ice, period, second, player, is_team, is_faceoff)
+            if is_on_ice:
+                matches += 1
+
+        has_match = matches >= qual_object["num_players"]["start_val"] and matches <= qual_object["num_players"]["end_val"]
+
+        if qual_object["negate"]:
+            if has_match:
+                has_row_match = False
+        else:
+            if not has_match:
+                has_row_match = False
+
+    return has_row_match
+
 def perform_sub_line_on_ice_qual(qualifers, player_shift_data, player_id, goal_event, row, period, second, is_team, is_faceoff):
     team_on_ice = goal_event["team_on_ice"] if "team_on_ice" in goal_event else None
     opp_on_ice = goal_event["opp_on_ice"] if "opp_on_ice" in goal_event else None
@@ -28048,6 +29569,9 @@ def clear_row_attrs(row, player_type):
         row["EVSH"] = 0
         row["PPSH"] = 0
         row["SHSH"] = 0
+        row["EVSV"] = 0
+        row["PPSV"] = 0
+        row["SHSV"] = 0
 
 def calculate_row_attrs(row, player_type):
     if player_type["da_type"]["type"] == "Skater":
@@ -28082,6 +29606,10 @@ def calculate_row_attrs(row, player_type):
         row["SFDiff"] = row["TmSF"] - row["OppSF"]
         row["CFDiff"] = row["TmCF"] - row["OppCF"]
         row["FFDiff"] = row["TmFF"] - row["OppFF"]
+    else:
+        row["EVSV"] = row["EVSH"] - row["EVGA"]
+        row["PPSV"] = row["PPSH"] - row["PPGA"]
+        row["SHSV"] = row["SHSH"] - row["SHGA"]
 
 def handle_awards(player_page, player_data, player_type, time_frame, years_to_skip, years_to_skip_champ, all_rows):
     all_star_div = player_page.find("div", id="leaderboard_honors")
@@ -36722,7 +38250,7 @@ def print_player_data(player_datas, player_type, highest_vals, lowest_vals, has_
                     override_show = True
                     if header == "TOI" or header == "EVTOI" or header == "PPTOI" or header == "SHTOI":
                         override_show = True
-                if "Shot By" in extra_stats and ("EV" in header or "PP" in header or "SH" in header) and not "SH%" in header:
+                if "Shot By" in extra_stats and ("EV" in header or "PP" in header or "SH" in header):
                     override_show = True
                     if header == "TOI" or header == "EVTOI" or header == "PPTOI" or header == "SHTOI":
                         override_show = True
@@ -37209,7 +38737,7 @@ def get_reddit_player_table(player_datas, player_type, debug_mode, original_comm
                     override_show = True
                     if header == "TOI" or header == "EVTOI" or header == "PPTOI" or header == "SHTOI":
                         override_show = True
-                if "Shot By" in extra_stats and ("EV" in header or "PP" in header or "SH" in header) and not "SH%" in header:
+                if "Shot By" in extra_stats and ("EV" in header or "PP" in header or "SH" in header):
                     override_show = True
                     if header == "TOI" or header == "EVTOI" or header == "PPTOI" or header == "SHTOI":
                         override_show = True
@@ -38012,7 +39540,7 @@ def handle_table_data(player_data, player_type, over_header, header, highest_val
         override_show = True
         if header == "TOI" or header == "EVTOI" or header == "PPTOI" or header == "SHTOI":
             override_show = True
-    if "Shot By" in extra_stats and ("EV" in header or "PP" in header or "SH" in header) and not "SH%" in header:
+    if "Shot By" in extra_stats and ("EV" in header or "PP" in header or "SH" in header):
         override_show = True
         if header == "TOI" or header == "EVTOI" or header == "PPTOI" or header == "SHTOI":
             override_show = True
@@ -38441,12 +39969,12 @@ def is_invalid_stat(stat, player_type, data, count_inconsistent, player_data, co
             header_indv_shift_stats = skater_header_indv_shift_stats
         else:
             header_shift_stats = []
-            report_2_stats = ["SH", "SA", "SV", "EVSH", "PPSH", "SHSH", "SVEvenStrength", "SVPowerPlay", "SVShorthanded", "SV%", "GA%-", "SH/60M", "SV/60M", "SA/60M", "SH/GP", "SV/GP", "SA/GP"]
+            report_2_stats = ["SH", "SA", "SV", "EVSH", "PPSH", "SHSH", "EVSV", "PPSV", "SHSV", "SVEvenStrength", "SVPowerPlay", "SVShorthanded", "SV%", "GA%-", "SH/60M", "SV/60M", "SA/60M", "SH/GP", "SV/GP", "SA/GP"]
             report_3_stats = []
             strength_stats = []
             report_stats = []
             shot_on_stats = []
-            shot_on_on_stats = ["SH", "SA", "SV", "EVSH", "PPSH", "SHSH", "SVEvenStrength", "SVPowerPlay", "SVShorthanded", "SV%", "GA%-", "SH/60M", "SV/60M", "SA/60M", "SH/GP", "SV/GP", "SA/GP"]
+            shot_on_on_stats = ["SH", "SA", "SV", "EVSH", "PPSH", "SHSH", "EVSV", "PPSV", "SHSV", "SVEvenStrength", "SVPowerPlay", "SVShorthanded", "SV%", "GA%-", "SH/60M", "SV/60M", "SA/60M", "SH/GP", "SV/GP", "SA/GP"]
             game_report_stats = ["GF", "GFA", "GAA", "AdjGAA", "GA/60M", "GF/60M"]
             on_ice_stats = ["GF", "GFA", "GF/60M"]
             header_indv_shift_stats = goalie_header_indv_shift_stats
