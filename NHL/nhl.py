@@ -19008,6 +19008,12 @@ def handle_facing_stat_rank_qual(qual_obj, stat_mapping, call_type, all_filters,
                     if filter_stats[filter_index] == "positionCode":
                         if start_val.upper() == "F":
                             all_filter_str += "(positionCode=\"L\" or positionCode=\"R\" or positionCode=\"C\")"
+                        elif start_val.upper() == "W":
+                            all_filter_str += "(positionCode=\"L\" or positionCode=\"R\")"
+                        elif start_val.upper() == "LW":
+                            all_filter_str += "positionCode=\"L\""
+                        elif start_val.upper() == "RW":
+                            all_filter_str += "positionCode=\"R\""
                         else:
                             all_filter_str += "("
                             for char in start_val.split("~"):
@@ -19140,6 +19146,12 @@ def handle_facing_stat_percent_qual(qual_obj, stat_mapping, call_type, all_filte
                     if filter_stats[filter_index] == "positionCode":
                         if start_val.upper() == "F":
                             all_filter_str += "(positionCode=\"L\" or positionCode=\"R\" or positionCode=\"C\")"
+                        elif start_val.upper() == "W":
+                            all_filter_str += "(positionCode=\"L\" or positionCode=\"R\")"
+                        elif start_val.upper() == "LW":
+                            all_filter_str += "positionCode=\"L\""
+                        elif start_val.upper() == "RW":
+                            all_filter_str += "positionCode=\"R\""
                         else:
                             all_filter_str += "("
                             for char in start_val.split("~"):
@@ -19275,6 +19287,12 @@ def handle_facing_stat_qual(qual_obj, stat_mapping, call_type, all_filters, all_
                     if filter_stats[filter_index] == "positionCode":
                         if start_val.upper() == "F":
                             all_filter_str += "(positionCode=\"L\" or positionCode=\"R\" or positionCode=\"C\")"
+                        elif start_val.upper() == "W":
+                            all_filter_str += "(positionCode=\"L\" or positionCode=\"R\")"
+                        elif start_val.upper() == "LW":
+                            all_filter_str += "positionCode=\"L\""
+                        elif start_val.upper() == "RW":
+                            all_filter_str += "positionCode=\"R\""
                         else:
                             all_filter_str += "("
                             for char in start_val.split("~"):
