@@ -15731,7 +15731,9 @@ def determine_raw_str(subbb_frame):
                                 qual_str += " [Reverse]"
                             if qual_obj["filters"]:
                                 qual_str += " - Filters : "
-                                for filter_obj in qual_obj["filters"]:
+                                for index, filter_obj in enumerate(qual_obj["filters"]):
+                                    if index != 0:
+                                        qual_str += " + "
                                     qual_str += filter_obj["stat"].upper() + "="
                                     if filter_obj["start_val"] == filter_obj["end_val"]:
                                         qual_str += get_time_str(filter_obj["start_val"], False, period="TOI" in filter_obj["stat"].upper())
@@ -15753,7 +15755,9 @@ def determine_raw_str(subbb_frame):
                                 qual_str += " [Reverse]"
                             if qual_obj["filters"]:
                                 qual_str += " - Filters : "
-                                for filter_obj in qual_obj["filters"]:
+                                for index, filter_obj in enumerate(qual_obj["filters"]):
+                                    if index != 0:
+                                        qual_str += " + "
                                     qual_str += filter_obj["stat"].upper() + "="
                                     if filter_obj["start_val"] == filter_obj["end_val"]:
                                         qual_str += get_time_str(filter_obj["start_val"], False, period="TOI" in filter_obj["stat"].upper())
@@ -15773,7 +15777,9 @@ def determine_raw_str(subbb_frame):
                                 qual_str += (get_time_str(sub_qualifier["start_val"], False, period="TOI" in sub_qualifier["stat"].upper())) + "-" + (get_time_str(sub_qualifier["end_val"], False, period="TOI" in sub_qualifier["stat"].upper()))
                             if qual_obj["filters"]:
                                 qual_str += " - Filters : "
-                                for filter_obj in qual_obj["filters"]:
+                                for index, filter_obj in enumerate(qual_obj["filters"]):
+                                    if index != 0:
+                                        qual_str += " + "
                                     qual_str += filter_obj["stat"].upper() + "="
                                     if filter_obj["start_val"] == filter_obj["end_val"]:
                                         qual_str += get_time_str(filter_obj["start_val"], False, period="TOI" in filter_obj["stat"].upper())
