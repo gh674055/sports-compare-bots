@@ -8339,6 +8339,22 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                             else:
                                 qualifier_obj["negate"] = False
                             
+                            string_vals = [upper_val.upper() for upper_val in [
+                                "Pos",
+                                "Rookie",
+                                "Nationality",
+                                "State",
+                                "Shoots",
+                                "Catches",
+                                "Team",
+                                "City",
+                                "County",
+                                "BirthDate",
+                                "CurrTeam",
+                                "DraftOverall",
+                                "HOF"
+                            ]]
+                            
                             qualifier_str = m.group(2)
                             qual_str_split = qualifier_str.split(":")
                             qual_str = qual_str_split[0]
@@ -8349,9 +8365,9 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                             }
                             filters = []
                             if len(qual_str_split) > 2:
-                                num_players, filters = handle_post_qual_str(qual_str_split[2], num_players, filters)
+                                num_players, filters = handle_post_qual_str(qual_str_split[2], num_players, filters, string_vals)
                                 if len(qual_str_split) > 3:
-                                    num_players, filters = handle_post_qual_str(qual_str_split[3], num_players, filters)
+                                    num_players, filters = handle_post_qual_str(qual_str_split[3], num_players, filters, string_vals)
 
                             qualifier_obj["num_players"] = num_players
                             qualifier_obj["filters"] = filters
@@ -8444,19 +8460,27 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                             "end_val" : float("inf")
                                         })
                                     else:
-                                        split_vals = re.split(r"(?<!\\)(?<!^)\-", split_vals[1], 1)
-
-                                        if "TOI" in stat.upper():
-                                            the_val_split = split_vals[0].split(":")
-                                            if len(the_val_split) > 1:
-                                                the_val = (int(ordinal_to_number(the_val_split[0])) * 60) + int(ordinal_to_number(the_val_split[1]))
-                                            else:
-                                                the_val = (int(ordinal_to_number(the_val_split[0])) * 60)
+                                        if stat.upper() in string_vals:
+                                            the_val = split_vals[1].upper()
                                         else:
-                                            the_val = ordinal_to_number(split_vals[0])
+                                            split_vals = re.split(r"(?<!\\)\-", split_vals[1])
+                                            if "TOI" in stat.upper():
+                                                the_val_split = split_vals[0].split(":")
+                                                if len(the_val_split) > 1:
+                                                    the_val = (int(ordinal_to_number(the_val_split[0])) * 60) + int(ordinal_to_number(the_val_split[1]))
+                                                else:
+                                                    the_val = (int(ordinal_to_number(the_val_split[0])) * 60)
+                                            else:
+                                                the_val = ordinal_to_number(split_vals[0])
 
-                                        if len(split_vals) == 1:
-                                            if the_val > 0:
+                                        if len(split_vals) == 1 or stat.upper() in string_vals:
+                                            if isinstance(the_val, str) or stat in ["draftyear", "draftround"]:
+                                                qualifier_obj["values"].append({
+                                                    "stat" : stat,
+                                                    "start_val" : the_val,
+                                                    "end_val" : the_val
+                                                })
+                                            elif the_val > 0:
                                                 qualifier_obj["values"].append({
                                                     "stat" : stat,
                                                     "start_val" : the_val,
@@ -15212,7 +15236,7 @@ def customGameDateSort(game_link):
     match = re.match(r"\[(.+)\]\(.+\)", game_link)
     return dateutil.parser.parse(match.group(1))
 
-def handle_post_qual_str(pot_qual_str, num_players, filters):
+def handle_post_qual_str(pot_qual_str, num_players, filters, string_vals):
     if "=" in pot_qual_str:
         all_vals = re.split(r"(?<!\\)\;", pot_qual_str)
     
@@ -15220,18 +15244,27 @@ def handle_post_qual_str(pot_qual_str, num_players, filters):
             split_vals = re.split(r"(?<!\\)\=", val)
             stat = unescape_string(split_vals[0])
             
-            split_vals = re.split(r"(?<!\\)\-", split_vals[1])
-            if "TOI" in stat.upper():
-                the_val_split = split_vals[0].split(":")
-                if len(the_val_split) > 1:
-                    the_val = (int(ordinal_to_number(the_val_split[0])) * 60) + int(ordinal_to_number(the_val_split[1]))
-                else:
-                    the_val = (int(ordinal_to_number(the_val_split[0])) * 60)
+            if stat.upper() in string_vals:
+                the_val = split_vals[1].upper()
             else:
-                the_val = ordinal_to_number(split_vals[0])
+                split_vals = re.split(r"(?<!\\)\-", split_vals[1])
+                if "TOI" in stat.upper():
+                    the_val_split = split_vals[0].split(":")
+                    if len(the_val_split) > 1:
+                        the_val = (int(ordinal_to_number(the_val_split[0])) * 60) + int(ordinal_to_number(the_val_split[1]))
+                    else:
+                        the_val = (int(ordinal_to_number(the_val_split[0])) * 60)
+                else:
+                    the_val = ordinal_to_number(split_vals[0])
 
-            if len(split_vals) == 1:
-                if the_val > 0:
+            if len(split_vals) == 1 or stat.upper() in string_vals:
+                if isinstance(the_val, str) or stat in ["draftyear", "draftround"]:
+                    filters.append({
+                        "stat" : stat,
+                        "start_val" : the_val,
+                        "end_val" : the_val
+                    })
+                elif the_val > 0:
                     filters.append({
                         "stat" : stat,
                         "start_val" : the_val,
@@ -18305,7 +18338,7 @@ def handle_stat_rank_stats(all_rows, qualifiers, player_type, s):
                     "plusMinus": "PlusMinus",
                     "points": "P",
                     "pointsPerGame": "PPG",
-                    "positionCode": "POS",
+                    "positionCode": "Pos",
                     "ppGoals": "PPG",
                     "ppPoints": "PPP",
                     "shGoals": "SHG",
@@ -18333,7 +18366,7 @@ def handle_stat_rank_stats(all_rows, qualifiers, player_type, s):
                     "isInHallOfFameYn": "HOF",
                     "nationalityCode": "Nationality",
                     "points": "P",
-                    "positionCode": "POS",
+                    "positionCode": "Pos",
                     "shootsCatches": "Shoots",
                     "weight": "Weight"
                 },
@@ -18348,15 +18381,15 @@ def handle_stat_rank_stats(all_rows, qualifiers, player_type, s):
                     "neutralZoneFaceoffs": "NZFO",
                     "offensiveZoneFaceoffPct": "OZFO%",
                     "offensiveZoneFaceoffs": "OZFO",
-                    "positionCode": "POS",
+                    "positionCode": "Pos",
                     "ppFaceoffPct": "PPFO%",
                     "ppFaceoffs": "PPFO",
                     "shFaceoffPct": "SHFO%",
                     "shFaceoffs": "SHFO",
                     "shootsCatches": "Shoots",
                     "teamAbbrevs": "Team",
-                    "timeOnIcePerGame": 1104,
-                    "totalFaceoffs": 1092
+                    "timeOnIcePerGame": "TOI/GP",
+                    "totalFaceoffs": "FO"
                 },
                 "faceoffwins" : {
                     "defensiveZoneFaceoffLosses": "DZFOL",
@@ -18671,6 +18704,16 @@ def handle_stat_rank_stats(all_rows, qualifiers, player_type, s):
                     "timeOnIcePerShift": "TOI/Shft"
                 }
             }
+
+            all_filters = {
+                "positionCode" : "Pos",
+                "isRookie" : "Rookie",
+                "nationalityCode" : "Nationality",
+                "birthStateProvinceCode" : "State",
+                "draftYear" : "DraftYear",
+                "draftRound" : "DraftRound",
+                "shootsCatches" : "Shoots"
+            }
         else:
             stat_mapping = {
                 "summary" : {
@@ -18728,7 +18771,7 @@ def handle_stat_rank_stats(all_rows, qualifiers, player_type, s):
                     "isInHallOfFameYn": "HOF",
                     "nationalityCode": "Nationality",
                     "points": "P",
-                    "positionCode": "POS",
+                    "positionCode": "Pos",
                     "shootsCatches": "Catches",
                     "weight": "Weight",
                     "otLosses": "OTL",
@@ -18841,10 +18884,24 @@ def handle_stat_rank_stats(all_rows, qualifiers, player_type, s):
                     "wins": "W"
                 }
             }
+
+            all_filters = {
+                "positionCode" : "Pos",
+                "isRookie" : "Rookie",
+                "nationalityCode" : "Nationality",
+                "birthStateProvinceCode" : "State",
+                "draftYear" : "DraftYear",
+                "draftRound" : "DraftRound",
+                "shootsCatches" : "Catches",
+                "isInHallOfFameYn" : "HOF"
+            }
+        
         
         new_stat_mappings = {}
         for stat_key in stat_mapping:
-            new_stat_mappings[stat_key] = {v: k for k, v in stat_mapping[stat_key].items()}
+            new_stat_mappings[stat_key] = {v.upper(): k for k, v in stat_mapping[stat_key].items()}
+
+        all_filters_rev = {v.upper(): k for k, v in all_filters.items()}
 
         stat_mapping = new_stat_mappings
 
@@ -18859,11 +18916,11 @@ def handle_stat_rank_stats(all_rows, qualifiers, player_type, s):
         if func_to_call:
             func = globals().get(func_to_call)
             for qual_obj in qualifiers[qual_str]:
-                year_map_obj = func(qual_obj, stat_mapping, call_type, seasons, s)
+                year_map_obj = func(qual_obj, stat_mapping, call_type, all_filters, all_filters_rev, seasons, s)
                 if year_map_obj != None:
                     qual_obj["year_map_obj"] = year_map_obj
 
-def handle_facing_stat_rank_qual(qual_obj, stat_mapping, call_type, seasons, s):
+def handle_facing_stat_rank_qual(qual_obj, stat_mapping, call_type, all_filters, all_filters_rev, seasons, s):
     year_map_obj = {}
     has_one_stat_match = False
     filters = qual_obj["filters"]
@@ -18882,10 +18939,13 @@ def handle_facing_stat_rank_qual(qual_obj, stat_mapping, call_type, seasons, s):
                     continue
                 has_all_filters = True
                 for filter_obj in filters:
-                    if filter_obj["stat"].upper() not in stat_mapping[query_type]:
+                    if filter_obj["stat"].upper() not in stat_mapping[query_type] and filter_obj["stat"].upper() not in all_filters_rev:
                         has_all_filters = False
                         break
-                    filter_stats.append(stat_mapping[query_type][filter_obj["stat"].upper()])
+                    if filter_obj["stat"].upper() in all_filters_rev:
+                        filter_stats.append(all_filters_rev[filter_obj["stat"].upper()])
+                    else:
+                        filter_stats.append(stat_mapping[query_type][filter_obj["stat"].upper()])
                 if not has_all_filters:
                     continue
 
@@ -18918,6 +18978,7 @@ def handle_facing_stat_rank_qual(qual_obj, stat_mapping, call_type, seasons, s):
                 real_limit = 1000000
 
             filter_str = ""
+            all_filter_str = ""
             for filter_index, filter_obj in enumerate(filters):
                 start_val = filter_obj["start_val"]
                 if start_val == float("inf"):
@@ -18930,8 +18991,39 @@ def handle_facing_stat_rank_qual(qual_obj, stat_mapping, call_type, seasons, s):
                 elif end_val == -float("inf"):
                     end_val = -1000000
 
-                filter_str += filter_stats[filter_index] + ">=" + str(start_val) + " and " + filter_stats[filter_index] + "<=" + str(end_val)
-                filter_str += " and "
+                if filter_stats[filter_index] in all_filters:
+                    all_filter_str += " and "
+                    if filter_stats[filter_index] == "positionCode":
+                        if start_val.upper() == "F":
+                            all_filter_str += "(positionCode=\"L\" or positionCode=\"R\" or positionCode=\"C\")"
+                        else:
+                            all_filter_str += "("
+                            for char in start_val.split("~"):
+                                all_filter_str += "positionCode=\"" + char.upper() + "\" or"
+                            all_filter_str = all_filter_str[:-3] + ")"
+                    elif filter_stats[filter_index] == "isRookie" or filter_stats[filter_index] == "isInHallOfFameYn":
+                        if start_val.upper() == "Y":
+                            all_filter_str += "isRookie=\"1\""
+                        elif start_val.upper() == "N":
+                            all_filter_str += "isRookie=\"0\""
+                        else:
+                            all_filter_str += "isRookie=\"" + filter_stats[filter_index] + "\""
+                    elif filter_stats[filter_index] == "nationalityCode" or filter_stats[filter_index] == "birthStateProvinceCode" or filter_stats[filter_index] == "shootsCatches":
+                        all_filter_str += "("
+                        for char in start_val.split("~"):
+                            all_filter_str += "" + filter_stats[filter_index] + "=\"" + char.upper() + "\" or"
+                        all_filter_str = all_filter_str[:-3] + ")"
+                    elif filter_stats[filter_index] == "draftYear" or filter_stats[filter_index] == "draftRound":
+                        all_filter_str += "("
+                        for num in range(start_val, end_val + 1):
+                            all_filter_str += "" + filter_stats[filter_index] + "=\"" + str(num) + "\" or"
+                        all_filter_str = all_filter_str[:-3] + ")"
+                elif isinstance(start_val, str):
+                    filter_str += filter_stats[filter_index] + "==" + start_val.upper()
+                    filter_str += " and "
+                else:
+                    filter_str += filter_stats[filter_index] + ">=" + str(start_val) + " and " + filter_stats[filter_index] + "<=" + str(end_val)
+                    filter_str += " and "
 
             if report == "penaltyShots" or report == "shootout":
                 filter_str = filter_str[:-5]
@@ -18940,7 +19032,7 @@ def handle_facing_stat_rank_qual(qual_obj, stat_mapping, call_type, seasons, s):
                 
             games_to_use = []
             while True:
-                url_to_use = "https://api.nhle.com/stats/rest/en/" + call_type + "/" + report + "?isAggregate=false&isGame=false&start=" + str(start) +"&sort=" + full_sort_str + "&limit=" + str(limit) + "&cayenneExp=" + urllib.parse.quote_plus("seasonId<=\"" + year_str + "\" and seasonId>=\"" + year_str + "\" and gameTypeId=2")
+                url_to_use = "https://api.nhle.com/stats/rest/en/" + call_type + "/" + report + "?isAggregate=false&isGame=false&start=" + str(start) +"&sort=" + full_sort_str + "&limit=" + str(limit) + "&cayenneExp=" + urllib.parse.quote_plus("seasonId<=\"" + year_str + "\" and seasonId>=\"" + year_str + "\" and gameTypeId=2" + all_filter_str)
                 if filter_str:
                     url_to_use += "&factCayenneExp=" + filter_str
 
@@ -18965,7 +19057,7 @@ def handle_facing_stat_rank_qual(qual_obj, stat_mapping, call_type, seasons, s):
     else:
         return None
 
-def handle_facing_stat_percent_qual(qual_obj, stat_mapping, call_type, seasons, s):
+def handle_facing_stat_percent_qual(qual_obj, stat_mapping, call_type, all_filters, all_filters_rev, seasons, s):
     year_map_obj = {}
     has_one_stat_match = False
     filters = qual_obj["filters"]
@@ -18984,10 +19076,13 @@ def handle_facing_stat_percent_qual(qual_obj, stat_mapping, call_type, seasons, 
                     continue
                 has_all_filters = True
                 for filter_obj in filters:
-                    if filter_obj["stat"].upper() not in stat_mapping[query_type]:
+                    if filter_obj["stat"].upper() not in stat_mapping[query_type] and filter_obj["stat"].upper() not in all_filters_rev:
                         has_all_filters = False
                         break
-                    filter_stats.append(stat_mapping[query_type][filter_obj["stat"].upper()])
+                    if filter_obj["stat"].upper() in all_filters_rev:
+                        filter_stats.append(all_filters_rev[filter_obj["stat"].upper()])
+                    else:
+                        filter_stats.append(stat_mapping[query_type][filter_obj["stat"].upper()])
                 if not has_all_filters:
                     continue
 
@@ -19015,6 +19110,7 @@ def handle_facing_stat_percent_qual(qual_obj, stat_mapping, call_type, seasons, 
             limit = 1000000
                 
             filter_str = ""
+            all_filter_str = ""
             for filter_index, filter_obj in enumerate(filters):
                 start_val = filter_obj["start_val"]
                 if start_val == float("inf"):
@@ -19027,8 +19123,39 @@ def handle_facing_stat_percent_qual(qual_obj, stat_mapping, call_type, seasons, 
                 elif end_val == -float("inf"):
                     end_val = -1000000
 
-                filter_str += filter_stats[filter_index] + ">=" + str(start_val) + " and " + filter_stats[filter_index] + "<=" + str(end_val)
-                filter_str += " and "
+                if filter_stats[filter_index] in all_filters:
+                    all_filter_str += " and "
+                    if filter_stats[filter_index] == "positionCode":
+                        if start_val.upper() == "F":
+                            all_filter_str += "(positionCode=\"L\" or positionCode=\"R\" or positionCode=\"C\")"
+                        else:
+                            all_filter_str += "("
+                            for char in start_val.split("~"):
+                                all_filter_str += "positionCode=\"" + char.upper() + "\" or"
+                            all_filter_str = all_filter_str[:-3] + ")"
+                    elif filter_stats[filter_index] == "isRookie" or filter_stats[filter_index] == "isInHallOfFameYn":
+                        if start_val.upper() == "Y":
+                            all_filter_str += "isRookie=\"1\""
+                        elif start_val.upper() == "N":
+                            all_filter_str += "isRookie=\"0\""
+                        else:
+                            all_filter_str += "isRookie=\"" + filter_stats[filter_index] + "\""
+                    elif filter_stats[filter_index] == "nationalityCode" or filter_stats[filter_index] == "birthStateProvinceCode" or filter_stats[filter_index] == "shootsCatches":
+                        all_filter_str += "("
+                        for char in start_val.split("~"):
+                            all_filter_str += "" + filter_stats[filter_index] + "=\"" + char.upper() + "\" or"
+                        all_filter_str = all_filter_str[:-3] + ")"
+                    elif filter_stats[filter_index] == "draftYear" or filter_stats[filter_index] == "draftRound":
+                        all_filter_str += "("
+                        for num in range(start_val, end_val + 1):
+                            all_filter_str += "" + filter_stats[filter_index] + "=\"" + str(num) + "\" or"
+                        all_filter_str = all_filter_str[:-3] + ")"
+                elif isinstance(start_val, str):
+                    filter_str += filter_stats[filter_index] + "==" + start_val.upper()
+                    filter_str += " and "
+                else:
+                    filter_str += filter_stats[filter_index] + ">=" + str(start_val) + " and " + filter_stats[filter_index] + "<=" + str(end_val)
+                    filter_str += " and "
 
             if report == "penaltyShots" or report == "shootout":
                 filter_str = filter_str[:-5]
@@ -19037,7 +19164,7 @@ def handle_facing_stat_percent_qual(qual_obj, stat_mapping, call_type, seasons, 
                 
             games_to_use = []
             while True:
-                url_to_use = "https://api.nhle.com/stats/rest/en/" + call_type + "/" + report + "?isAggregate=false&isGame=false&start=" + str(start) +"&sort=" + full_sort_str + "&limit=" + str(limit) + "&cayenneExp=" + urllib.parse.quote_plus("seasonId<=\"" + year_str + "\" and seasonId>=\"" + year_str + "\" and gameTypeId=2")
+                url_to_use = "https://api.nhle.com/stats/rest/en/" + call_type + "/" + report + "?isAggregate=false&isGame=false&start=" + str(start) +"&sort=" + full_sort_str + "&limit=" + str(limit) + "&cayenneExp=" + urllib.parse.quote_plus("seasonId<=\"" + year_str + "\" and seasonId>=\"" + year_str + "\" and gameTypeId=2" + all_filter_str)
 
                 if filter_str:
                     url_to_use += "&factCayenneExp=" + filter_str
@@ -19062,7 +19189,7 @@ def handle_facing_stat_percent_qual(qual_obj, stat_mapping, call_type, seasons, 
     else:
         return None
 
-def handle_facing_stat_qual(qual_obj, stat_mapping, call_type, seasons, s):
+def handle_facing_stat_qual(qual_obj, stat_mapping, call_type, all_filters, all_filters_rev, seasons, s):
     year_map_obj = {}
     has_one_stat_match = False
     filters = qual_obj["filters"]
@@ -19076,20 +19203,28 @@ def handle_facing_stat_qual(qual_obj, stat_mapping, call_type, seasons, s):
             stat_name = None
             report = None
             filter_stats = []
+            is_filter = False
             for query_type in stat_mapping:
-                if raw_stat not in stat_mapping[query_type]:
+                if raw_stat not in stat_mapping[query_type] and raw_stat not in all_filters_rev:
                     continue
                 has_all_filters = True
                 for filter_obj in filters:
-                    if filter_obj["stat"].upper() not in stat_mapping[query_type]:
+                    if filter_obj["stat"].upper() not in stat_mapping[query_type] and filter_obj["stat"].upper() not in all_filters_rev:
                         has_all_filters = False
                         break
-                    filter_stats.append(stat_mapping[query_type][filter_obj["stat"].upper()])
+                    if filter_obj["stat"].upper() in all_filters_rev:
+                        filter_stats.append(all_filters_rev[filter_obj["stat"].upper()])
+                    else:
+                        filter_stats.append(stat_mapping[query_type][filter_obj["stat"].upper()])
                 if not has_all_filters:
                     continue
 
                 report = query_type
-                stat_name = stat_mapping[query_type][raw_stat]
+                if raw_stat in all_filters_rev:
+                    stat_name = all_filters_rev[raw_stat]
+                    is_filter = True
+                else:
+                    stat_name = stat_mapping[query_type][raw_stat]
 
             if not stat_name:
                 continue
@@ -19110,6 +19245,7 @@ def handle_facing_stat_qual(qual_obj, stat_mapping, call_type, seasons, s):
             limit = 100
                 
             filter_str = ""
+            all_filter_str = ""
             for filter_index, filter_obj in enumerate(filters):
                 start_val = filter_obj["start_val"]
                 if start_val == float("inf"):
@@ -19122,8 +19258,68 @@ def handle_facing_stat_qual(qual_obj, stat_mapping, call_type, seasons, s):
                 elif end_val == -float("inf"):
                     end_val = -1000000
 
-                filter_str += filter_stats[filter_index] + ">=" + str(start_val) + " and " + filter_stats[filter_index] + "<=" + str(end_val)
-                filter_str += " and "
+                if filter_stats[filter_index] in all_filters:
+                    all_filter_str += " and "
+                    if filter_stats[filter_index] == "positionCode":
+                        if start_val.upper() == "F":
+                            all_filter_str += "(positionCode=\"L\" or positionCode=\"R\" or positionCode=\"C\")"
+                        else:
+                            all_filter_str += "("
+                            for char in start_val.split("~"):
+                                all_filter_str += "positionCode=\"" + char.upper() + "\" or"
+                            all_filter_str = all_filter_str[:-3] + ")"
+                    elif filter_stats[filter_index] == "isRookie" or filter_stats[filter_index] == "isInHallOfFameYn":
+                        if start_val.upper() == "Y":
+                            all_filter_str += "isRookie=\"1\""
+                        elif start_val.upper() == "N":
+                            all_filter_str += "isRookie=\"0\""
+                        else:
+                            all_filter_str += "isRookie=\"" + filter_stats[filter_index] + "\""
+                    elif filter_stats[filter_index] == "nationalityCode" or filter_stats[filter_index] == "birthStateProvinceCode" or filter_stats[filter_index] == "shootsCatches":
+                        all_filter_str += "("
+                        for char in start_val.split("~"):
+                            all_filter_str += "" + filter_stats[filter_index] + "=\"" + char.upper() + "\" or"
+                        all_filter_str = all_filter_str[:-3] + ")"
+                    elif filter_stats[filter_index] == "draftYear" or filter_stats[filter_index] == "draftRound":
+                        all_filter_str += "("
+                        for num in range(start_val, end_val + 1):
+                            all_filter_str += "" + filter_stats[filter_index] + "=\"" + str(num) + "\" or"
+                        all_filter_str = all_filter_str[:-3] + ")"
+                elif isinstance(start_val, str):
+                    filter_str += filter_stats[filter_index] + "==" + start_val.upper()
+                    filter_str += " and "
+                else:
+                    filter_str += filter_stats[filter_index] + ">=" + str(start_val) + " and " + filter_stats[filter_index] + "<=" + str(end_val)
+                    filter_str += " and "
+
+            if is_filter:
+                start_val = sub_qual_object["start_val"]
+                all_filter_str += " and "
+                if filter_stats[filter_index] == "positionCode":
+                    if start_val.upper() == "F":
+                        all_filter_str += "(positionCode=\"L\" or positionCode=\"R\" or positionCode=\"C\")"
+                    else:
+                        all_filter_str += "("
+                        for char in start_val.split("~"):
+                            all_filter_str += "positionCode=\"" + char.upper() + "\" or"
+                        all_filter_str = all_filter_str[:-3] + ")"
+                elif filter_stats[filter_index] == "isRookie" or filter_stats[filter_index] == "isInHallOfFameYn":
+                    if start_val.upper() == "Y":
+                        all_filter_str += "isRookie=\"1\""
+                    elif start_val.upper() == "N":
+                        all_filter_str += "isRookie=\"0\""
+                    else:
+                        all_filter_str += "isRookie=\"" + filter_stats[filter_index] + "\""
+                elif filter_stats[filter_index] == "nationalityCode" or filter_stats[filter_index] == "birthStateProvinceCode" or filter_stats[filter_index] == "shootsCatches":
+                    all_filter_str += "("
+                    for char in start_val.split("~"):
+                        all_filter_str += "" + filter_stats[filter_index] + "=\"" + char.upper() + "\" or"
+                    all_filter_str = all_filter_str[:-3] + ")"
+                elif filter_stats[filter_index] == "draftYear" or filter_stats[filter_index] == "draftRound":
+                    all_filter_str += "("
+                    for num in range(start_val, end_val + 1):
+                        all_filter_str += "" + filter_stats[filter_index] + "=\"" + str(num) + "\" or"
+                    all_filter_str = all_filter_str[:-3] + ")"
 
             if report == "penaltyShots" or report == "shootout":
                 filter_str = filter_str[:-5]
@@ -19132,10 +19328,12 @@ def handle_facing_stat_qual(qual_obj, stat_mapping, call_type, seasons, s):
                 
             games_to_use = []
             while True:
-                url_to_use = "https://api.nhle.com/stats/rest/en/" + call_type + "/" + report + "?isAggregate=false&isGame=false&start=" + str(start) +"&sort=[{\"property\":\"playerId\",\"direction\":\"ASC\"}]&limit=" + str(limit) + "&cayenneExp=" + urllib.parse.quote_plus("seasonId<=\"" + year_str + "\" and seasonId>=\"" + year_str + "\" and gameTypeId=2")
+                url_to_use = "https://api.nhle.com/stats/rest/en/" + call_type + "/" + report + "?isAggregate=false&isGame=false&start=" + str(start) +"&sort=[{\"property\":\"playerId\",\"direction\":\"ASC\"}]&limit=" + str(limit) + "&cayenneExp=" + urllib.parse.quote_plus("seasonId<=\"" + year_str + "\" and seasonId>=\"" + year_str + "\" and gameTypeId=2" + all_filter_str)
 
                 if filter_str:
                     url_to_use += "&factCayenneExp=" + filter_str
+
+                print(url_to_use)
                     
                 data = url_request_json(s, url_to_use)
                     
@@ -19148,11 +19346,21 @@ def handle_facing_stat_qual(qual_obj, stat_mapping, call_type, seasons, s):
                 if season_obj["Year"] not in year_map_obj:
                     year_map_obj[season_obj["Year"]] = set()
 
-                if player[stat_name] == None:
-                    player[stat_name] = 0
-
-                if float(player[stat_name]) >= sub_qual_object["start_val"] and float(player[stat_name]) <= sub_qual_object["end_val"]:
+                if is_filter:
                     year_map_obj[season_obj["Year"]].add(player["playerId"])
+                else:
+                    if player[stat_name] == None:
+                        player[stat_name] = 0
+
+                    if stat_name == "penaltySecondsPerGame":
+                        player[stat_name] = player[stat_name] / 60
+
+                    if isinstance(sub_qual_object["start_val"], str) and isinstance(player[stat_name], str):
+                        if str(player[stat_name]).upper() == sub_qual_object["start_val"].upper():
+                            year_map_obj[season_obj["Year"]].add(player["playerId"])
+                    else:
+                        if float(player[stat_name]) >= sub_qual_object["start_val"] and float(player[stat_name]) <= sub_qual_object["end_val"]:
+                            year_map_obj[season_obj["Year"]].add(player["playerId"])
             
     if has_one_stat_match:
         return year_map_obj

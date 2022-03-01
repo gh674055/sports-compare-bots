@@ -26224,7 +26224,7 @@ def handle_stat_rank_stats(all_rows, qualifiers, player_type, s):
                 "atBatsPerHomeRun": "AB/HR"
             }
 
-        stat_mapping = {v: k for k, v in stat_mapping.items()}
+        stat_mapping = {v.upper(): k for k, v in stat_mapping.items()}
 
         func_to_call = None
         if qual_str in ["Facing Stat Rank", "Facing League Stat Rank", "Facing AL Stat Rank", "Facing NL Stat Rank", "Batting In Front Of Stat Rank", "Batting In Front Of League Stat Rank", "Batting In Front Of AL Stat Rank", "Batting In Front Of NL Stat Rank", "Batting Behind Stat Rank", "Batting Behind League Stat Rank", "Batting Behind AL Stat Rank", "Batting Behind NL Stat Rank", "Batting Next To Stat Rank", "Batting Next To League Stat Rank", "Batting Next To AL Stat Rank", "Batting Next To NL Stat Rank"]:
