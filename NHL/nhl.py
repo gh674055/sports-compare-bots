@@ -15730,7 +15730,7 @@ def determine_raw_str(subbb_frame):
                             if "reverse" in qual_obj and qual_obj["reverse"]:
                                 qual_str += " [Reverse]"
                             if qual_obj["filters"]:
-                                qual_str += " [Filters : "
+                                qual_str += " [Filters: "
                                 for index, filter_obj in enumerate(qual_obj["filters"]):
                                     if index != 0:
                                         qual_str += " + "
@@ -15741,7 +15741,7 @@ def determine_raw_str(subbb_frame):
                                         qual_str += (get_time_str(filter_obj["start_val"], False, period="TOI" in filter_obj["stat"].upper())) + "-" + (get_time_str(filter_obj["end_val"], False, period="TOI" in filter_obj["stat"].upper()))
                                 qual_str += "]"
                             if qual_obj["num_players"]["start_val"] != 1 or qual_obj["num_players"]["end_val"] != float("inf"):
-                                qual_str += " [Player Matches : "
+                                qual_str += " [Player Matches: "
                                 if qual_obj["num_players"]["start_val"] == qual_obj["num_players"]["end_val"]:
                                     qual_str += get_time_str(qual_obj["num_players"]["start_val"], False)
                                 else:
@@ -15756,7 +15756,7 @@ def determine_raw_str(subbb_frame):
                             if "reverse" in qual_obj and qual_obj["reverse"]:
                                 qual_str += " [Reverse]"
                             if qual_obj["filters"]:
-                                qual_str += " [Filters : "
+                                qual_str += " [Filters: "
                                 for index, filter_obj in enumerate(qual_obj["filters"]):
                                     if index != 0:
                                         qual_str += " + "
@@ -15767,7 +15767,7 @@ def determine_raw_str(subbb_frame):
                                         qual_str += (get_time_str(filter_obj["start_val"], False, period="TOI" in filter_obj["stat"].upper())) + "-" + (get_time_str(filter_obj["end_val"], False, period="TOI" in filter_obj["stat"].upper()))
                                 qual_str += "]"
                             if qual_obj["num_players"]["start_val"] != 1 or qual_obj["num_players"]["end_val"] != float("inf"):
-                                qual_str += " [Player Matches : "
+                                qual_str += " [Player Matches: "
                                 if qual_obj["num_players"]["start_val"] == qual_obj["num_players"]["end_val"]:
                                     qual_str += get_time_str(qual_obj["num_players"]["start_val"], False)
                                 else:
@@ -15780,7 +15780,7 @@ def determine_raw_str(subbb_frame):
                             else:
                                 qual_str += (get_time_str(sub_qualifier["start_val"], False, period="TOI" in sub_qualifier["stat"].upper())) + "-" + (get_time_str(sub_qualifier["end_val"], False, period="TOI" in sub_qualifier["stat"].upper()))
                             if qual_obj["filters"]:
-                                qual_str += " [Filters : "
+                                qual_str += " [Filters: "
                                 for index, filter_obj in enumerate(qual_obj["filters"]):
                                     if index != 0:
                                         qual_str += " + "
@@ -15791,7 +15791,7 @@ def determine_raw_str(subbb_frame):
                                         qual_str += (get_time_str(filter_obj["start_val"], False, period="TOI" in filter_obj["stat"].upper())) + "-" + (get_time_str(filter_obj["end_val"], False, period="TOI" in filter_obj["stat"].upper()))
                                 qual_str += "]"
                             if qual_obj["num_players"]["start_val"] != 1 or qual_obj["num_players"]["end_val"] != float("inf"):
-                                qual_str += " [Player Matches : "
+                                qual_str += " [Player Matches: "
                                 if qual_obj["num_players"]["start_val"] == qual_obj["num_players"]["end_val"]:
                                     qual_str += get_time_str(qual_obj["num_players"]["start_val"], False)
                                 else:
