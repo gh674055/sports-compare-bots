@@ -7909,12 +7909,12 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 qualifier_obj["include_all_players"] = False
                                 qualifier_obj["only_rookies"] = False
                                 if len(split_vals) > 2:
-                                    if split_vals[2] == "qualified":
+                                    if split_vals[2] == "all-players":
                                         qualifier_obj["include_all_players"] = True
                                     if split_vals[2] == "rookie": 
                                         qualifier_obj["only_rookies"] = True
                                     if len(split_vals) > 3:
-                                        if split_vals[3] == "qualified":
+                                        if split_vals[3] == "all-players":
                                             qualifier_obj["include_all_players"] = True
                                         if split_vals[3] == "rookie": 
                                             qualifier_obj["only_rookies"] = True
@@ -7965,12 +7965,12 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 qualifier_obj["include_all_players"] = False
                                 qualifier_obj["only_rookies"] = False
                                 if len(split_vals) > 2:
-                                    if split_vals[2] == "qualified":
+                                    if split_vals[2] == "all-players":
                                         qualifier_obj["include_all_players"] = True
                                     if split_vals[2] == "rookie": 
                                         qualifier_obj["only_rookies"] = True
                                     if len(split_vals) > 3:
-                                        if split_vals[3] == "qualified":
+                                        if split_vals[3] == "all-players":
                                             qualifier_obj["include_all_players"] = True
                                         if split_vals[3] == "rookie": 
                                             qualifier_obj["only_rookies"] = True
@@ -15623,6 +15623,8 @@ def determine_raw_str(subbb_frame):
                                 qual_str += " [Only Rookies]"
                             if not qual_obj["include_all_players"]:
                                 qual_str += " [Qualified Players]"
+                            else:
+                                qual_str += " [All Players]"
                         elif qualifier == "Facing Stat Percent" or qualifier == "Facing League Stat Percent" or qualifier == "Facing AL Stat Percent" or qualifier == "Facing NL Stat Percent" or qualifier == "Batting In Front Of Stat Percent" or qualifier == "Batting In Front Of League Stat Percent" or qualifier == "Batting In Front Of AL Stat Percent" or qualifier == "Batting In Front Of NL Stat Percent" or qualifier == "Batting Behind Stat Percent" or qualifier == "Batting Behind League Stat Percent" or qualifier == "Batting Behind AL Stat Percent" or qualifier == "Batting Behind NL Stat Percent" or qualifier == "Batting Next To Stat Percent" or qualifier == "Batting Next To League Stat Percent" or qualifier == "Batting Next To AL Stat Percent" or qualifier == "Batting Next To NL Stat Percent":
                             qual_str += sub_qualifier["stat"].upper() + "="
                             if sub_qualifier["start_val"] == sub_qualifier["end_val"]:
@@ -15635,6 +15637,8 @@ def determine_raw_str(subbb_frame):
                                 qual_str += " [Only Rookies]"
                             if not qual_obj["include_all_players"]:
                                 qual_str += " [Qualified Players]"
+                            else:
+                                qual_str += " [All Players]"
                         elif qualifier == "Facing Stat" or qualifier == "Facing NL Stat" or qualifier == "Facing AL Stat" or qualifier == "Batting In Front Of Stat" or qualifier == "Batting In Front Of NL Stat" or qualifier == "Batting In Front Of AL Stat" or qualifier == "Batting Behind Stat" or qualifier == "Batting Behind NL Stat" or qualifier == "Batting Behind AL Stat" or qualifier == "Batting Next To Stat" or qualifier == "Batting Next To NL Stat" or qualifier == "Batting Next To AL Stat":
                             qual_str += sub_qualifier["stat"].upper() + "="
                             if sub_qualifier["start_val"] == sub_qualifier["end_val"]:
@@ -15645,6 +15649,8 @@ def determine_raw_str(subbb_frame):
                                 qual_str += " [Only Rookies]"
                             if not qual_obj["include_all_players"]:
                                 qual_str += " [Qualified Players]"
+                            else:
+                                qual_str += " [All Players]"
                         elif qualifier == "Min Stat" or qualifier == "Max Stat" or qualifier == "Max Streak" or qualifier == "Max Stretch" or qualifier == "Count Streak" or qualifier == "Max Streak Formula" or qualifier == "Count Streak Formula" or qualifier == "Quickest" or qualifier == "Slowest":
                             if "explain_str" in sub_qualifier and sub_qualifier["explain_str"]:
                                 for explain_str in sub_qualifier["explain_str"]:
