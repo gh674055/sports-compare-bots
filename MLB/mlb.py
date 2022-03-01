@@ -15619,7 +15619,7 @@ def determine_raw_str(subbb_frame):
                                 qual_str += (get_time_str(sub_qualifier["start_val"], True)) + "-" + (get_time_str(sub_qualifier["end_val"], True))
                             if "reverse" in qual_obj and qual_obj["reverse"]:
                                 qual_str += " [Reverse]"
-                            if not qual_obj["only_rookies"]:
+                            if qual_obj["only_rookies"]:
                                 qual_str += " [Only Rookies]"
                             if not qual_obj["include_all_players"]:
                                 qual_str += " [Qualified Players]"
@@ -15631,7 +15631,7 @@ def determine_raw_str(subbb_frame):
                                 qual_str += (get_time_str(sub_qualifier["start_val"], False, True)) + "-" + (get_time_str(sub_qualifier["end_val"], False, True))
                             if "reverse" in qual_obj and qual_obj["reverse"]:
                                 qual_str += " [Reverse]"
-                            if not qual_obj["only_rookies"]:
+                            if qual_obj["only_rookies"]:
                                 qual_str += " [Only Rookies]"
                             if not qual_obj["include_all_players"]:
                                 qual_str += " [Qualified Players]"
@@ -15641,7 +15641,7 @@ def determine_raw_str(subbb_frame):
                                 qual_str += get_time_str(sub_qualifier["start_val"], False)
                             else:
                                 qual_str += (get_time_str(sub_qualifier["start_val"], False)) + "-" + (get_time_str(sub_qualifier["end_val"], False))
-                            if not qual_obj["only_rookies"]:
+                            if qual_obj["only_rookies"]:
                                 qual_str += " [Only Rookies]"
                             if not qual_obj["include_all_players"]:
                                 qual_str += " [Qualified Players]"
