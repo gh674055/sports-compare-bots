@@ -7141,6 +7141,10 @@ missing_event_data = {
     }
 }
 
+manual_href_links = {
+    1965020196 : "196603230BOS"
+}
+
 ssl._create_default_https_context = ssl._create_unverified_context
 
 def main():
@@ -17087,7 +17091,10 @@ def handle_season_stats_game(player_type, player_data, player_link, time_frame, 
                 row_data["Location"] = game["homeRoad"] == "H"
 
                 home_team = row_data["Tm"] if row_data["Location"] else row_data["Opponent"]
-                row_data["GameLink"] = "/boxscores/" + str(row_data["Date"].year) + str(row_data["Month"]).zfill(2) + str(row_data["Day"]).zfill(2) + "0" + home_team.upper() + ".html"
+                if game["gameId"] in manual_href_links:
+                    row_data["GameLink"] = "/boxscores/" + manual_href_links[game["gameId"]] + ".html"
+                else:
+                    row_data["GameLink"] = "/boxscores/" + str(row_data["Date"].year) + str(row_data["Month"]).zfill(2) + str(row_data["Day"]).zfill(2) + "0" + home_team.upper() + ".html"
 
                 row_data["NHLGameLink"] = game["gameId"]
 
