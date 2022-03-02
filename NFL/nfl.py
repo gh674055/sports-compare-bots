@@ -1838,7 +1838,7 @@ def handle_player_string(comment, player_type, is_fantasy, last_updated, hide_ta
                                 is_fantasy = True
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(last_match.group(0), "", 1)).strip()
 
-                        last_match = re.search(r"\b(no(?:t|n)? ?)?-?(?:includes?|including|and|with)(?: |-)?(?:playoffs?|post(?:-| )?seasons?|regular(?:-| )?seasons?)(?!-)\b", time_frame)
+                        last_match = re.search(r"\b(no(?:t|n)?(?: -)?)?(?:(?<!-)includes?|(?<!-)including|(?<!-)and|(?<!-)with)(?: |-)?(?:playoffs?|post(?:-| )?seasons?|regular(?:-| )?seasons?)(?!-)\b", time_frame)
                         if last_match:
                             playoff_match_str = last_match.group(1)
                             if "regular" in last_match.group(0):
@@ -1853,7 +1853,7 @@ def handle_player_string(comment, player_type, is_fantasy, last_updated, hide_ta
                                     playoffs = "Include"
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(last_match.group(0), "", 1)).strip()
                         else:
-                            last_match = re.search(r"\b(no(?:t|n)? ?)?-?(?:playoffs?|post(?:-| )?seasons?|regular(?:-| )?seasons?)(?!-)\b", time_frame)
+                            last_match = re.search(r"\b(no(?:t|n)?(?: -)?)?(?:playoffs?|post(?:-| )?seasons?|regular(?:-| )?seasons?)(?!-)\b", time_frame)
                             if last_match:
                                 playoff_match_str = last_match.group(1)
                                 if "regular" in last_match.group(0):
@@ -6227,7 +6227,7 @@ def determine_player_str(qualifier, player_str, time_frame, qual_str):
         if not re.search(r"(?<!\\)]", player_str):
             player_str += " []"
 
-        if time_frame["playoffs"] and time_frame["playoffs"] != "No" and not re.search(r"\b(no(?:t|n)? ?)?-?(?:includes?|including|and|with)(?: |-)?(?:playoffs?|post(?:-| )?seasons?|regular(?:-| )?seasons?)(?!-)\b", player_str) and not re.search(r"\b(no(?:t|n)? ?)?-?(?:playoffs?|post(?:-| )?seasons?|regular(?:-| )?seasons?)(?!-)\b", player_str):
+        if time_frame["playoffs"] and time_frame["playoffs"] != "No" and not re.search(r"\b(no(?:t|n)?(?: -)?)?(?:(?<!-)includes?|(?<!-)including|(?<!-)and|(?<!-)with)(?: |-)?(?:playoffs?|post(?:-| )?seasons?|regular(?:-| )?seasons?)(?!-)\b", player_str) and not re.search(r"\b(no(?:t|n)?(?: -)?)?(?:playoffs?|post(?:-| )?seasons?|regular(?:-| )?seasons?)(?!-)\b", player_str):
             bracket_index = re.search(r"(?<!\\)]", player_str).start()
             playoffs_str = "playoffs" if time_frame["playoffs"] == "Only" else "including playoffs"
             player_str = player_str[:bracket_index] + " " + playoffs_str + player_str[bracket_index:]
