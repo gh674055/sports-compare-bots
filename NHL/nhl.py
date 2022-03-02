@@ -8163,7 +8163,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                             extra_stats.add(m.group(1))
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
                         
-                        last_match = re.finditer(r"\bshow(?: |-)?(only(?: |-)?)?(goalie-record|record|faceoff|slash|score|goal|year|games?-count|seasons-leading|season|date|per-game|game|adjusted|advanced|relative|missing-games-count|missing-game-count|missing-toi-count|missing-game|missing-toi|best-season|worst-season|ng|team|franchise|number|fight|penalty-taken|penalties-taken|penaltie|penalty|award|shot|shift|star|play|nhl-link|strength|toi|href)s?\b", time_frame)
+                        last_match = re.finditer(r"\bshow(?: |-)?(only(?: |-)?)?(goalie-record|record|faceoff|slash|score|goal|year|games?-count|seasons-leading|season|date|per-game|game|adjusted|advanced|relative|missing-games-count|missing-game-count|missing-toi-count|missing-game|missing-toi|best-season|worst-season|ng|team|franchise|number|fight|penalty-taken|penalties-taken|penaltie|penalty|award|shot|shift|star|play|nhl-link|strength|toi|href|api)s?\b", time_frame)
                         for m in last_match:
                             if "penalt" in m.group(2):
                                 extra_stats.add("penalties")
@@ -22311,7 +22311,7 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
         return game_data, row_data, missing_games
 
     scoring_plays = []
-    if row_data["Year"] < 2000 or has_api_quals(time_frame["qualifiers"]) or "href" in extra_stats:
+    if row_data["Year"] < 2000 or has_api_quals(time_frame["qualifiers"]) or "api" in extra_stats or "href" in extra_stats:
         if all_plays and not "href" in extra_stats:
             scoring_plays = all_plays
             if row_data["Year"] >= 2010:
@@ -22335,7 +22335,7 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                     game_data["is_older_html_stats"] = True
                     game_data["is_href_stats"] = True
     
-        if not scoring_plays and ("href" in extra_stats or "hide-href" not in extra_stats):
+        if not scoring_plays and ("href" in extra_stats or "hide-href" not in extra_stats) and not (has_api_quals(time_frame["qualifiers"]) or "api" in extra_stats):
             game_data, missing_games = get_href_html_play_data(scoring_plays, player_data, player_type, time_frame, row_data, row_data["GameLink"], row_data["Location"], row_data["Tm"], row_data["Opponent"].upper(), game_data, extra_stats, missing_games, s)
             if not scoring_plays:
                 missing_games = True
@@ -22344,7 +22344,7 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
             else:
                 game_data["is_href_stats"] = True
     
-    if row_data["Year"] >= 2000 and not has_api_quals(time_frame["qualifiers"]) and not "hide-play" in extra_stats and (not "href" in extra_stats or not game_data["is_final"]):
+    if row_data["Year"] >= 2000 and not has_api_quals(time_frame["qualifiers"]) and not "api" in extra_stats and not "hide-play" in extra_stats and (not "href" in extra_stats or not game_data["is_final"]):
         if row_data["Year"] >= 2007:
             get_html_play_data(scoring_plays, player_data, row_data["NHLGameLink"], row_data["Location"], game_data, row_data["Year"], s)
             if not scoring_plays or not has_period_event(game_data, scoring_plays):
