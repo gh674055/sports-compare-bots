@@ -31273,10 +31273,13 @@ def perform_sub_mlb_game_qualifiers(row, player_data, qualifiers, player_game_in
                     has_row_match = False
         if not has_row_match:
             return False, row
+        
+    
+    include_all_games = "Event Stat" in qualifiers or "Event Stat Reversed" in qualifiers or "Event Stats" in qualifiers or "Event Stats Reversed" in qualifiers or "Starting Event Stat" in qualifiers or "Starting Event Stat Reversed" in qualifiers or "Starting Event Stats" in qualifiers or "Starting Event Stats Reversed" in qualifiers
 
     raw_row_data = copy.copy(row)
     
-    has_any_match = False
+    has_any_match = include_all_games
     for at_bat_event in player_game_info["batting_events" if player_type["da_type"] == "Batter" else "pitching_events"]:
         event_name = at_bat_event["result"]
         if event_name == "pitch":
