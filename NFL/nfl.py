@@ -17266,26 +17266,29 @@ def fill_row(row, player_data, player_type, lower=True, stats=None):
         if missing_advanced:
             calculate_advanced_stats(row, [row], player_data, player_type)
 
+    row["Shared"]["DateStart"] = [row["Shared"]["Date"]]
+    row["Shared"]["YearStart"] = [row["Shared"]["Year"]]
+
+    prev_is_playofs = row["Shared"]["is_playoffs"]
+    if row["Shared"]["is_playoffs"]:
+        row["Shared"]["is_playoffs"] = "Only"
+    else:
+        row["Shared"]["is_playoffs"] = None
+
     headers_to_remove = {}
     for over_header in row:
-        row["Shared"]["DateStart"] = [row["Shared"]["Date"]]
-        row["Shared"]["YearStart"] = [row["Shared"]["Year"]]
-        prev_is_playofs = row["Shared"]["is_playoffs"]
-        if row["Shared"]["is_playoffs"]:
-            row["Shared"]["is_playoffs"] = "Only"
-        else:
-            row["Shared"]["is_playoffs"] = None
         for header in row[over_header]:
             if header in get_constant_data.stat_groups[over_header]:
                 if get_constant_data.is_invalid_stat(over_header, header, row, False):
                     if over_header not in headers_to_remove:
                         headers_to_remove[over_header] = set()
                     headers_to_remove[over_header].add(header)
-        row["Shared"]["is_playoffs"] = prev_is_playofs
     
     for over_header in headers_to_remove:
         for key in headers_to_remove[over_header]:
             del row[over_header][key]
+
+    row["Shared"]["is_playoffs"] = prev_is_playofs
 
     if lower:
         return {key.lower(): value for key, value in row.items()}

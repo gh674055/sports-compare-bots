@@ -23226,35 +23226,40 @@ def valid_matching_rows(matching_rows, stat_quals, player_type, player_data):
     return True
 
 def comb_rows(matching_rows, player_data, player_type, lower=True, stats=None):
+    parse_formula_stats = stats == None or set(stats).intersection(formulas[player_type["da_type"]].keys())
+    parse_advanced_stats = stats == None or set(stats).intersection(advanced_stats[player_type["da_type"]])
+
     comb_row = {}
     for header in headers[player_type["da_type"]].keys():
-        if not header in formulas[player_type["da_type"]] and not header in advanced_stats["Batter"] and not header in advanced_stats["Pitcher"]:
-            comb_row[header] = 0.0
+        if parse_formula_stats or parse_advanced_stats or stats == None or header in stats:
+            if not header in formulas[player_type["da_type"]] and not header in advanced_stats["Batter"] and not header in advanced_stats["Pitcher"]:
+                comb_row[header] = 0.0
 
     date_start = 0
     date_end = 0
     is_playoffs = None
     for row_data in matching_rows:
         for stat in row_data:
-            if stat in comb_row and isinstance(row_data[stat], numbers.Number) and isinstance(comb_row[stat], numbers.Number) and (not stat in qualifier_map or stat == "Team Score" or stat == "Opponent Score") and not stat in formulas[player_type["da_type"]] and not stat in advanced_stats["Batter"] and not stat in advanced_stats["Pitcher"] and row_data[stat] != 0:
-                if stat in decimal_stats:
-                    comb_row[stat] = round_value(comb_row[stat] + row_data[stat], 1)
-                else:
-                    comb_row[stat] += row_data[stat]
-        
-            if stat == "DateTime":
-                start_date_to_use = row_data[stat]
-                end_date_to_use = row_data[stat]
+            if parse_formula_stats or parse_advanced_stats or stat == "DateTime" or stats == None or stat in stats:
+                if stat in comb_row and isinstance(row_data[stat], numbers.Number) and isinstance(comb_row[stat], numbers.Number) and (not stat in qualifier_map or stat == "Team Score" or stat == "Opponent Score") and not stat in formulas[player_type["da_type"]] and not stat in advanced_stats["Batter"] and not stat in advanced_stats["Pitcher"] and row_data[stat] != 0:
+                    if stat in decimal_stats:
+                        comb_row[stat] = round_value(comb_row[stat] + row_data[stat], 1)
+                    else:
+                        comb_row[stat] += row_data[stat]
+            
+                if stat == "DateTime":
+                    start_date_to_use = row_data[stat]
+                    end_date_to_use = row_data[stat]
 
-                if isinstance(start_date_to_use, int) and not isinstance(date_start, int):
-                    date_start = date_start.year
-                if isinstance(end_date_to_use, int) and not isinstance(date_end, int):
-                    date_end = date_end.year
+                    if isinstance(start_date_to_use, int) and not isinstance(date_start, int):
+                        date_start = date_start.year
+                    if isinstance(end_date_to_use, int) and not isinstance(date_end, int):
+                        date_end = date_end.year
 
-                if date_start == 0 or start_date_to_use < date_start:
-                    date_start = row_data[stat]
-                if date_end == 0 or end_date_to_use > date_end:
-                    date_end = row_data[stat]
+                    if date_start == 0 or start_date_to_use < date_start:
+                        date_start = row_data[stat]
+                    if date_end == 0 or end_date_to_use > date_end:
+                        date_end = row_data[stat]
         
         if row_data["is_playoffs"]:
             if not is_playoffs or is_playoffs == "Only":
@@ -23298,12 +23303,12 @@ def comb_rows(matching_rows, player_data, player_type, lower=True, stats=None):
         elif frac == 1.0:
             comb_row["Inn"] += 1
 
-    if stats == None or set(stats).intersection(formulas[player_type["da_type"]].keys()):
+    if parse_formula_stats:
         for stat in stats:
             if stat in formulas[player_type["da_type"]]:
                 calculate_recursive_formula(stat, player_data, player_type, comb_row, matching_rows)
 
-    if stats == None or set(stats).intersection(advanced_stats[player_type["da_type"]]):
+    if parse_advanced_stats:
         calculate_advanced_stats(comb_row, matching_rows, player_type, None)
 
     headers_to_remove = set()
@@ -23782,7 +23787,7 @@ def fill_row(row, player_data, player_type, lower=True, stats=None):
             if stat in formulas[player_type["da_type"]]:
                 calculate_recursive_formula(stat, player_data, player_type, row, None)
 
-    if stats == None or set(stats).intersection(advanced_stats[player_type["da_type"]]):  
+    if stats == None or set(stats).intersection(advanced_stats[player_type["da_type"]]):
         missing_advanced = False
         for advanced_stat in advanced_stats["Batter"]:
             if not advanced_stat in row:
@@ -23796,18 +23801,21 @@ def fill_row(row, player_data, player_type, lower=True, stats=None):
 
         if missing_advanced:
             calculate_advanced_stats(row, [row], player_type, None)
+    
+    row["DateStart"] = [row["DateTime"]]
+
+    prev_is_playofs = row["is_playoffs"]
+    if row["is_playoffs"]:
+        row["is_playoffs"] = "Only"
+    else:
+        row["is_playoffs"] = None
 
     headers_to_remove = set()
     for header in row:
-        row["DateStart"] = [row["DateTime"]]
-        prev_is_playofs = row["is_playoffs"]
-        if row["is_playoffs"]:
-            row["is_playoffs"] = "Only"
-        else:
-            row["is_playoffs"] = None
         if is_invalid_stat(header, player_type, row, False)["all_invalid"]:
             headers_to_remove.add(header)
-        row["is_playoffs"] = prev_is_playofs
+
+    row["is_playoffs"] = prev_is_playofs
     
     for key in headers_to_remove:
         del row[key]

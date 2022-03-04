@@ -8366,7 +8366,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
 
                         time_frame = re.sub(r"\s+", " ", re.sub(r"(?:regular(?:-| )?season|playoffs?|post(?:-| )?seasons?)(?!-)", "", time_frame)).strip()
 
-                        last_match = re.finditer(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?((?:on-ice-with|on-ice-against|shot-by|shot-on)?-stat(?:-rank|-percent(?:age)?)?(?:-reversed?)?:[\S-]+)", time_frame)
+                        last_match = re.finditer(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?((?:on-ice-with|on-ice-against|shot-by|shot-on)-stat(?:-rank|-percent(?:age)?)?(?:-reversed?)?:[\S-]+)", time_frame)
                         for m in last_match:
                             qualifier_obj = {}
                             
@@ -8555,7 +8555,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                             qualifiers[qual_type].append(qualifier_obj)
 
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
-                        
+                                                
                         last_match = re.finditer(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?((?:(?:playing|starting)-with|(?:playing|starting)-against|(?:playing|starting)-same-game|prv-w|previous-playing-with|prv-a|previous-playing-against|upc-w|upcoming-playing-with|upc-a|upcoming-playing-against|(?:playing|starting)-same-opponents?|(?:playing|starting)-same-dates?|shot-on-birth-country|shot-by-birth-country|shot-on-nationality|shot-by-nationality|shot-on|shot-by|on-ice-with|on-ice-against|on-ice-together|on-line-with|on-line-against|on-line-together|assisted-on|assisted-with|points-with|assisted-by|primary-assisted-on|primary-assisted-with|primary-points-with|primary-assisted-by|hit-on|block-on|penalty-on|faceoff-against|fight-against|fighting-against))\b", time_frame)
                         for m in last_match:
                             qualifier_obj = {}
@@ -34421,10 +34421,14 @@ def valid_matching_rows(matching_rows, stat_quals, player_data, player_type):
     return True
 
 def comb_rows(matching_rows, player_data, player_type, lower=True, stats=None):
+    parse_formula_stats = stats == None or set(stats).intersection(formulas[player_type["da_type"]["type"]].keys())
+    parse_advanced_stats = stats == None or set(stats).intersection(advanced_stats)
+
     comb_row = {}
     for header in headers[player_type["da_type"]["type"]].keys():
-        if not header in formulas[player_type["da_type"]["type"]] and not header in advanced_stats:
-            comb_row[header] = 0.0
+        if parse_formula_stats or parse_advanced_stats or stats == None or header in stats:
+            if not header in formulas[player_type["da_type"]["type"]] and not header in advanced_stats:
+                comb_row[header] = 0.0
 
     date_start = 0
     date_end = 0
@@ -34439,23 +34443,24 @@ def comb_rows(matching_rows, player_data, player_type, lower=True, stats=None):
     is_toi_stats = True
     for row_data in matching_rows:
         for stat in row_data:
-            if stat in comb_row and isinstance(row_data[stat], numbers.Number) and isinstance(comb_row[stat], numbers.Number) and (not stat in qualifier_map or stat == "Team Score" or stat == "Opponent Score") and not stat in formulas[player_type["da_type"]["type"]] and not stat in advanced_stats and row_data[stat] != 0:
-                comb_row[stat] += row_data[stat]
+            if parse_formula_stats or parse_advanced_stats or stat == "Date" or stat == "Year" or stats == None or stat in stats:
+                if stat in comb_row and isinstance(row_data[stat], numbers.Number) and isinstance(comb_row[stat], numbers.Number) and (not stat in qualifier_map or stat == "Team Score" or stat == "Opponent Score") and not stat in formulas[player_type["da_type"]["type"]] and not stat in advanced_stats and row_data[stat] != 0:
+                    comb_row[stat] += row_data[stat]
 
-            if stat == "Date":
-                pontential_date = row_data[stat]
-                if row_data["is_playoffs"] and isinstance(pontential_date, int) and time_frame["playoffs"] == "Only":
-                    pontential_date += 1
+                if stat == "Date":
+                    pontential_date = row_data[stat]
+                    if row_data["is_playoffs"] and isinstance(pontential_date, int) and time_frame["playoffs"] == "Only":
+                        pontential_date += 1
 
-                if date_start == 0 or pontential_date < date_start:
-                    date_start = pontential_date
-                if date_end == 0 or pontential_date > date_end:
-                    date_end = pontential_date
-            elif stat == "Year":
-                if year_start == 0 or row_data[stat] < year_start:
-                    year_start = row_data[stat]
-                if year_end == 0 or row_data[stat] > year_end:
-                    year_end = row_data[stat]
+                    if date_start == 0 or pontential_date < date_start:
+                        date_start = pontential_date
+                    if date_end == 0 or pontential_date > date_end:
+                        date_end = pontential_date
+                elif stat == "Year":
+                    if year_start == 0 or row_data[stat] < year_start:
+                        year_start = row_data[stat]
+                    if year_end == 0 or row_data[stat] > year_end:
+                        year_end = row_data[stat]
         
         if row_data["is_playoffs"]:
             if not is_playoffs or is_playoffs == "Only":
@@ -34507,10 +34512,10 @@ def comb_rows(matching_rows, player_data, player_type, lower=True, stats=None):
         comb_row["is_href_stats"] = is_href_stats
         comb_row["is_toi_stats"] = is_toi_stats
 
-    if stats == None or header in stats or set(stats).intersection(advanced_stats):
+    if parse_advanced_stats:
         calculate_advanced_stats(comb_row, matching_rows, player_type["da_type"]["type"], player_type["da_type"]["position"], player_data)
 
-    if stats == None or set(stats).intersection(formulas[player_type["da_type"]["type"]].keys()):
+    if parse_formula_stats:
         for stat in stats:
             if stat in formulas[player_type["da_type"]["type"]]:
                 calculate_recursive_formula(stat, player_data, player_type, comb_row, matching_rows)
@@ -35001,21 +35006,24 @@ def fill_row(row, player_data, player_type, lower=True, stats=None):
             if stat in formulas[player_type["da_type"]["type"]]:
                 calculate_recursive_formula(stat, player_data, player_type, row, None)
 
+    row["DateStart"] = [row["Date"]]
+    row["YearStart"] = [row["Year"]]
+    row["YearEnd"] = [row["Year"]]
+    row["DateEnd"] = [row["Date"]]
+    
+    prev_is_playofs = row["is_playoffs"]
+    if row["is_playoffs"]:
+        row["is_playoffs"] = "Only"
+    else:
+        row["is_playoffs"] = None
+
     headers_to_remove = set()
     for header in row:
-        row["DateStart"] = [row["Date"]]
-        row["YearStart"] = [row["Year"]]
-        row["YearEnd"] = [row["Year"]]
-        row["DateEnd"] = [row["Date"]]
-        prev_is_playofs = row["is_playoffs"]
-        if row["is_playoffs"]:
-            row["is_playoffs"] = "Only"
-        else:
-            row["is_playoffs"] = None
         if is_invalid_stat(header, player_type, row, False, player_data, True):
             headers_to_remove.add(header)
-        row["is_playoffs"] = prev_is_playofs
     
+    row["is_playoffs"] = prev_is_playofs
+
     for key in headers_to_remove:
         del row[key]
 
