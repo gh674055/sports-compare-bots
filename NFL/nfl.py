@@ -17648,7 +17648,7 @@ def calculate_advanced_stats(data, all_rows, player_data, player_type):
                     data["Era Adjusted Passing"][adj_stat] += total_plus_value
 
 def get_player_type(player_page):
-    player_info = player_page.find("div", {"itemtype" : "https://schema.org/Person"})
+    player_info = player_page.find("div", {"id" : "meta"})
     player_type_el = player_info.find("strong", text="Position").parent
     player_types = re.split('-|,', player_type_el.contents[2].strip()[1:].strip()) 
     player_type = player_types[0].strip().upper()
@@ -17657,18 +17657,18 @@ def get_player_type(player_page):
     return player_type
 
 def get_player_position(player_page):
-    player_info = player_page.find("div", {"itemtype" : "https://schema.org/Person"})
+    player_info = player_page.find("div", {"id" : "meta"})
     player_type_el = player_info.find("strong", text="Position").parent
     player_types =  re.split('-|,', player_type_el.contents[2].strip()[1:].strip()) 
     return player_types[0].strip().upper()
 
 def get_player_name(player_page):
-    player_info = player_page.find("div", {"itemtype" : "https://schema.org/Person"})
-    player_name_el = player_info.find("h1", {"itemprop" : "name"})
+    player_info = player_page.find("div", {"id" : "meta"})
+    player_name_el = player_info.find("h1")
     return str(player_name_el.text).strip()
 
 def get_college_draft_info(player_page):
-    player_info = player_page.find("div", {"itemtype" : "https://schema.org/Person"})
+    player_info = player_page.find("div", {"id" : "meta"})
     college_el = player_info.find("strong", text="Draft:")
     if college_el:
         match = re.search(r"(\d+).+ round, (\d+).+ overall of the (\d{4}) NFL draft", college_el.parent.text)
@@ -17681,7 +17681,7 @@ def get_college_draft_info(player_page):
     return None
 
 def get_pro_draft_info(player_page):
-    player_info = player_page.find("div", {"itemtype" : "https://schema.org/Person"})
+    player_info = player_page.find("div", {"id" : "meta"})
     college_el = player_info.find("strong", text="Draft")
     if college_el:
         match = re.search(r"in the (\d+).+ round \((\d+).+ overall\) of the (\d{4}) NFL Draft\.", college_el.parent.text)
@@ -17715,7 +17715,7 @@ def get_player_deathday(player_page):
         return None
 
 def get_player_image(player_page):
-    image_info = player_page.find("div", {"itemtype" : "https://schema.org/Person"}).find_previous_sibling()
+    image_info = player_page.find("div", {"id" : "meta"}).find("div", {"class" : "media-item"})
     if image_info:
         return image_info.find("img")["src"]
     else:
@@ -17728,7 +17728,7 @@ def get_player_current_team_number(player_page, needs_numbers):
     numbers_map = []
     numbers_team_map = {}
     comments = None
-    team_info = player_page.find("div", {"itemtype" : "https://schema.org/Person"}).find("strong", text="Team")
+    team_info = player_page.find("div", {"id" : "meta"}).find("strong", text="Team")
     number_info = player_page.find("div", {"class" : "uni_holder"})
     if team_info:
         team = str(team_info.find_next_sibling().find(text=True))

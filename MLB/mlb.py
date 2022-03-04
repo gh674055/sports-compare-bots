@@ -24078,9 +24078,9 @@ def url_request_json_urlib(request, timeout=30):
         logger.info("#" + str(threading.get_ident()) + "#   " + "0")
 
 def get_player_type(player_page):
-    player_info = player_page.find("div", {"itemtype" : "https://schema.org/Person"}).find("strong", text="Position:")
+    player_info = player_page.find("div", {"id" : "meta"}).find("strong", text="Position:")
     if not player_info:
-        player_info = player_page.find("div", {"itemtype" : "https://schema.org/Person"}).find("strong", text="Positions:")
+        player_info = player_page.find("div", {"id" : "meta"}).find("strong", text="Positions:")
         if not player_info:
             return "Batter"
         player_type_el = player_info.parent.text.replace("Positions:", "").strip().split(" ")
@@ -24090,9 +24090,9 @@ def get_player_type(player_page):
     return "Batter" if "pitcher" not in player_type_el[0].replace(",", "").strip().lower() else "Pitcher"
 
 def get_player_position(player_page):
-    player_info = player_page.find("div", {"itemtype" : "https://schema.org/Person"}).find("strong", text="Position:")
+    player_info = player_page.find("div", {"id" : "meta"}).find("strong", text="Position:")
     if not player_info:
-        player_info = player_page.find("div", {"itemtype" : "https://schema.org/Person"}).find("strong", text="Positions:")
+        player_info = player_page.find("div", {"id" : "meta"}).find("strong", text="Positions:")
         if not player_info:
             return "UNK"
         main_pos = player_info.parent.text.replace("Positions:", "").strip().lower()
@@ -24126,7 +24126,7 @@ def get_player_position(player_page):
     elif main_pos.startswith("pinch runner"):
         return "PR"
     elif "pitcher" in main_pos:
-        throws_pos = player_page.find("div", {"itemtype" : "https://schema.org/Person"}).find("strong", text="Throws: ")
+        throws_pos = player_page.find("div", {"id" : "meta"}).find("strong", text="Throws: ")
         if throws_pos:
             throw_next_sibling = throws_pos.next_sibling
             if isinstance(throw_next_sibling, element.NavigableString):
@@ -24167,8 +24167,8 @@ def get_player_jaws_position(player_page):
                             return re.split(r"\_|\.", player_pos_link["href"])[1].upper()
 
 def get_player_name(player_page):
-    player_info = player_page.find("div", {"itemtype" : "https://schema.org/Person"})
-    player_name_el = player_info.find("h1", {"itemprop" : "name"})
+    player_info = player_page.find("div", {"id" : "meta"})
+    player_name_el = player_info.find("h1")
     return str(player_name_el.text).strip()
 
 def get_last_updated(player_page):
@@ -24289,7 +24289,7 @@ def add_valid_playoff_years(valid_years, playoff_data, time_frame):
 
 def determine_rookie_years(player_page, player_type, rookie_quals):
     rookie_years = []
-    player_info = player_page.find("div", {"itemtype" : "https://schema.org/Person"})
+    player_info = player_page.find("div", {"id" : "meta"})
     rookie_status_link = player_info.find("a", text="Rookie Status:")
     rookie_status_info = str(rookie_status_link.parent.parent.contents[2]).strip().split()
     if rookie_status_info[0] == "Exceeded":
@@ -24345,17 +24345,17 @@ def get_player_deathday(player_id, player_page):
         return None
 
 def get_player_is_active(player_id, player_page):       
-    return bool(player_page.find("div", {"itemtype" : "https://schema.org/Person"}).find("strong", text="Team:"))
+    return bool(player_page.find("div", {"id" : "meta"}).find("strong", text="Team:"))
 
 def get_player_image(player_page):
-    image_info = player_page.find("div", {"itemtype" : "https://schema.org/Person"}).find_previous_sibling()
+    image_info = player_page.find("div", {"id" : "meta"}).find("div", {"class" : "media-item"})
     if image_info:
         return image_info.find("img")["src"]
     else:
         return None
 
 def get_player_country(player_page):
-    player_country = player_page.find("span", {"itemprop" : "birthPlace"}).find_next_sibling("span")
+    player_country = player_page.find("span", {"id" : "necro-birth"}).find_next_sibling("span")
     if player_country:
         classes = player_country.get("class")
         if classes and len(classes) == 2:
@@ -24416,7 +24416,7 @@ def get_player_current_team_number(player_id, player_page):
                         valid_teams[row_team_str]["years"].add(row_year)
                         numbers_team_map[row_team_str] = str(row_team.find(text=True))
 
-    team_info = player_page.find("div", {"itemtype" : "https://schema.org/Person"}).find("strong", text="Team:")
+    team_info = player_page.find("div", {"id" : "meta"}).find("strong", text="Team:")
     number_info = player_page.find("div", {"class" : "uni_holder"})
 
     if team_info:
@@ -24478,8 +24478,8 @@ def get_player_current_team_number(player_id, player_page):
                     })
 
     if not numbers_team_map or not numbers_year_map:
-        team_info = player_page.find("div", {"itemtype" : "https://schema.org/Person"}).find("strong", text="Team:")
-        draft_info = player_page.find("div", {"itemtype" : "https://schema.org/Person"}).find("strong", text="Draft")
+        team_info = player_page.find("div", {"id" : "meta"}).find("strong", text="Team:")
+        draft_info = player_page.find("div", {"id" : "meta"}).find("strong", text="Draft")
         team_els = []
         if team_info:
             team_els.append(team_info.find_next_sibling())
