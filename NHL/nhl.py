@@ -40458,40 +40458,40 @@ def is_invalid_stat(stat, player_type, data, count_inconsistent, player_data, co
                 if not player_data["stat_values"]["is_indv_shift_data"]:
                     if stat in header_indv_shift_stats:
                         return current_season
-
-                if count_play_stats:
-                    rows_to_use = data["all_rows"] if "all_rows" in data else [data]
-                    for row in rows_to_use:
-                        if stat in header_shift_stats or "TOI" in stat or "/60M" in stat or "GAA" in stat or stat == "GP/GP":
-                            if not row["is_toi_stats"]:
-                                return current_season
-                        if stat in on_ice_stats:
-                            if row["is_api_stats"] and not row["is_toi_stats"]:
-                                return current_season
-                        if player_data["stat_values"]["is_strength_data"] and stat in strength_stats:
-                            if not row["is_html_stats"]:
-                                return current_season
-                        if player_data["stat_values"]["is_shot_on_data"] and stat in shot_on_on_stats:
-                            if not row["is_html_stats"]:
-                                return current_season
-                        if player_data["stat_values"]["is_on_ice_data"] and (stat in report_3_stats or stat in strength_stats or stat in shot_on_stats):
-                            if not row["is_html_stats"]:
-                                return current_season
-                        if stat in report_2_stats:
-                            if not row["is_html_stats"]:
-                                return current_season
-                        if stat in report_3_stats:
-                            if not row["is_old_html_stats"] or row["Year"] < 2005:
-                                return current_season
-                        if stat in report_stats:
-                            if not row["is_old_html_stats"]:
-                                return current_season
-                        if stat in game_report_stats:
-                            if not row["is_older_html_stats"]:
-                                return current_season
-                    return None
                 else:
-                    return None
+                    if count_play_stats:
+                        rows_to_use = data["all_rows"] if "all_rows" in data else [data]
+                        for row in rows_to_use:
+                            if stat in header_shift_stats or "TOI" in stat or "/60M" in stat or "GAA" in stat or stat == "GP/GP":
+                                if not row["is_toi_stats"]:
+                                    return current_season
+                            if stat in on_ice_stats:
+                                if row["is_api_stats"] and not row["is_toi_stats"]:
+                                    return current_season
+                            if player_data["stat_values"]["is_strength_data"] and stat in strength_stats:
+                                if not row["is_html_stats"]:
+                                    return current_season
+                            if player_data["stat_values"]["is_shot_on_data"] and stat in shot_on_on_stats:
+                                if not row["is_html_stats"]:
+                                    return current_season
+                            if player_data["stat_values"]["is_on_ice_data"] and (stat in report_3_stats or stat in strength_stats or stat in shot_on_stats):
+                                if not row["is_html_stats"]:
+                                    return current_season
+                            if stat in report_2_stats:
+                                if not row["is_html_stats"]:
+                                    return current_season
+                            if stat in report_3_stats:
+                                if not row["is_old_html_stats"] or row["Year"] < 2005:
+                                    return current_season
+                            if stat in report_stats:
+                                if not row["is_old_html_stats"]:
+                                    return current_season
+                            if stat in game_report_stats:
+                                if not row["is_older_html_stats"]:
+                                    return current_season
+                        return None
+                    else:
+                        return None
             
             if player_data["stat_values"]["is_leading_data"]:
                 if stat in ("GF", "GA", "PPGF", "PPGA"):
