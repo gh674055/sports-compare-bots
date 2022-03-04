@@ -12398,7 +12398,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 player_str_set.add(player_str)
                 if "Previous Playing Against" in subbbb_date["qualifiers"]:
                    for qual in subbbb_date["qualifiers"]["Previous Playing Against"]:
-                       if "time_frame_str" in qual:
+                        if "time_frame_str" in qual:
                             continue
                         for player_str in (qual["values"] if "values" in qual else subb_names_against):
                             player_str = determine_player_str(qual, player_type, player_str, subbbb_date, "Previous Playing Against")
