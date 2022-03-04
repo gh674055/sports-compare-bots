@@ -7140,11 +7140,11 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
 
                         last_match = re.finditer(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?((?:sub-query|event-sub-query|or-sub-query|or-event-sub-query|day-after-sub-query|day-before-sub-query|day-of-sub-query|game-after-sub-query|game-before-sub-query|season-sub-query|or-season-sub-query|season-after-sub-query|season-before-sub-query):(?<!\\)\{.*?(?<!\\)\})", time_frame)
                         last_match = list(last_match)
-                        if len(last_match) > 10:
-                            raise CustomMessageException("Only can have a max of 10 sub queries!")
+                        # if len(last_match) > 10:
+                        #     raise CustomMessageException("Only can have a max of 10 sub queries!")
                         for m in last_match:
-                            if is_sub_query:
-                                raise CustomMessageException("Cannot have nested sub queries!")
+                            # if is_sub_query:
+                            #     raise CustomMessageException("Cannot have nested sub queries!")
 
                             qualifier_obj = {}
                             negate_str = m.group(1)
@@ -12360,140 +12360,10 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                         else:
                             sub_matching_names.append(subbb_name)
             for subbbb_date in subbb_date:
-                if "Sub Query" in subbbb_date["qualifiers"]:
-                    for qual in subbbb_date["qualifiers"]["Sub Query"]:
-                        for player_str in qual["values"]:
-                            for match_name in sub_matching_names:
-                                player_str = determine_player_str(qual, player_type,  "<" + match_name + "> [" + player_str + "]", subbbb_date, "Sub Query")
-                                if player_str not in player_str_set:
-                                    name_count += 1
-                                    player_str_set.add(player_str)
-                if "Event Sub Query" in subbbb_date["qualifiers"]:
-                    for qual in subbbb_date["qualifiers"]["Event Sub Query"]:
-                        for player_str in qual["values"]:
-                            for match_name in sub_matching_names:
-                                player_str = determine_player_str(qual, player_type,  "<" + match_name + "> [" + player_str + "]", subbbb_date, "Event Sub Query")
-                                if player_str not in player_str_set:
-                                    name_count += 1
-                                    player_str_set.add(player_str)
-                if "Or Sub Query" in subbbb_date["qualifiers"]:
-                    for qual in subbbb_date["qualifiers"]["Or Sub Query"]:
-                        for player_str in qual["values"]:
-                            for match_name in sub_matching_names:
-                                player_str = determine_player_str(qual, player_type,  "<" + match_name + "> [" + player_str + "]", subbbb_date, "Or Sub Query")
-                                if player_str not in player_str_set:
-                                    name_count += 1
-                                    player_str_set.add(player_str)
-                if "Or Event Sub Query" in subbbb_date["qualifiers"]:
-                    for qual in subbbb_date["qualifiers"]["Or Event Sub Query"]:
-                        for player_str in qual["values"]:
-                            for match_name in sub_matching_names:
-                                player_str = determine_player_str(qual, player_type,  "<" + match_name + "> [" + player_str + "]", subbbb_date, "Or Event Sub Query")
-                                if player_str not in player_str_set:
-                                    name_count += 1
-                                    player_str_set.add(player_str)
-                if "Day Of Sub Query" in subbbb_date["qualifiers"]:
-                    for qual in subbbb_date["qualifiers"]["Day Of Sub Query"]:
-                        for player_str in qual["values"]:
-                            for match_name in sub_matching_names:
-                                player_str = determine_player_str(qual, player_type,  "<" + match_name + "> [" + player_str + "]", subbbb_date, "Day Of Sub Query")
-                                if player_str not in player_str_set:
-                                    name_count += 1
-                                    player_str_set.add(player_str)
-                if "Day After Sub Query" in subbbb_date["qualifiers"]:
-                    for qual in subbbb_date["qualifiers"]["Day After Sub Query"]:
-                        for player_str in qual["values"]:
-                            for match_name in sub_matching_names:
-                                player_str = determine_player_str(qual, player_type,  "<" + match_name + "> [" + player_str + "]", subbbb_date, "Day After Sub Query")
-                                if player_str not in player_str_set:
-                                    name_count += 1
-                                    player_str_set.add(player_str)
-                if "Day Before Sub Query" in subbbb_date["qualifiers"]:
-                    for qual in subbbb_date["qualifiers"]["Day Before Sub Query"]:
-                        for player_str in qual["values"]:
-                            for match_name in sub_matching_names:
-                                player_str = determine_player_str(qual, player_type,  "<" + match_name + "> [" + player_str + "]", subbbb_date, "Day Before Sub Query")
-                                if player_str not in player_str_set:
-                                    name_count += 1
-                                    player_str_set.add(player_str)
-                if "Game After Sub Query" in subbbb_date["qualifiers"]:
-                    for qual in subbbb_date["qualifiers"]["Game After Sub Query"]:
-                        for player_str in qual["values"]:
-                            for match_name in sub_matching_names:
-                                player_str = determine_player_str(qual, player_type,  "<" + match_name + "> [" + player_str + "]", subbbb_date, "Game After Sub Query")
-                                if player_str not in player_str_set:
-                                    name_count += 1
-                                    player_str_set.add(player_str)
-                if "Game Before Sub Query" in subbbb_date["qualifiers"]:
-                    for qual in subbbb_date["qualifiers"]["Game Before Sub Query"]:
-                        for player_str in qual["values"]:
-                            for match_name in sub_matching_names:
-                                player_str = determine_player_str(qual, player_type,  "<" + match_name + "> [" + player_str + "]", subbbb_date, "Game Before Sub Query")
-                                if player_str not in player_str_set:
-                                    name_count += 1
-                                    player_str_set.add(player_str)
-                if "Season Sub Query" in subbbb_date["qualifiers"]:
-                    for qual in subbbb_date["qualifiers"]["Season Sub Query"]:
-                        for player_str in qual["values"]:
-                            for match_name in sub_matching_names:
-                                player_str = determine_player_str(qual, player_type,  "<" + match_name + "> [" + player_str + "]", subbbb_date, "Season Sub Query")
-                                if player_str not in player_str_set:
-                                    name_count += 1
-                                    player_str_set.add(player_str)
-                if "Or Season Sub Query" in subbbb_date["qualifiers"]:
-                    for qual in subbbb_date["qualifiers"]["Or Season Sub Query"]:
-                        for player_str in qual["values"]:
-                            for match_name in sub_matching_names:
-                                player_str = determine_player_str(qual, player_type,  "<" + match_name + "> [" + player_str + "]", subbbb_date, "Or Season Sub Query")
-                                if player_str not in player_str_set:
-                                    name_count += 1
-                                    player_str_set.add(player_str)
-                if "Season After Sub Query" in subbbb_date["qualifiers"]:
-                    for qual in subbbb_date["qualifiers"]["Season After Sub Query"]:
-                        for player_str in qual["values"]:
-                            for match_name in sub_matching_names:
-                                player_str = determine_player_str(qual, player_type,  "<" + match_name + "> [" + player_str + "]", subbbb_date, "Season After Sub Query")
-                                if player_str not in player_str_set:
-                                    name_count += 1
-                                    player_str_set.add(player_str)
-                if "Season Before Sub Query" in subbbb_date["qualifiers"]:
-                    for qual in subbbb_date["qualifiers"]["Season Before Sub Query"]:
-                        for player_str in qual["values"]:
-                            for match_name in sub_matching_names:
-                                player_str = determine_player_str(qual, player_type,  "<" + match_name + "> [" + player_str + "]", subbbb_date, "Season Before Sub Query")
-                                if player_str not in player_str_set:
-                                    name_count += 1
-                                    player_str_set.add(player_str)
-                if "Day After Pitching" in subbbb_date["qualifiers"]:
-                    for qual in subbbb_date["qualifiers"]["Day After Pitching"]:
-                        for match_name in sub_matching_names:
-                            player_str = determine_player_str(qual, player_type, match_name, subbbb_date, "Day After Pitching")
-                            if player_str not in player_str_set:
-                                name_count += 1
-                                player_str_set.add(player_str)
-                if "Day After Hitting" in subbbb_date["qualifiers"]:
-                    for qual in subbbb_date["qualifiers"]["Day After Hitting"]:
-                        for match_name in sub_matching_names:
-                            player_str = determine_player_str(qual, player_type, match_name, subbbb_date, "Day After Hitting")
-                            if player_str not in player_str_set:
-                                name_count += 1
-                                player_str_set.add(player_str)
-                if "Day Before Pitching" in subbbb_date["qualifiers"]:
-                    for qual in subbbb_date["qualifiers"]["Day Before Pitching"]:
-                        for match_name in sub_matching_names:
-                            player_str = determine_player_str(qual, player_type, match_name, subbbb_date, "Day Before Pitching")
-                            if player_str not in player_str_set:
-                                name_count += 1
-                                player_str_set.add(player_str)
-                if "Day Before Hitting" in subbbb_date["qualifiers"]:
-                    for qual in subbbb_date["qualifiers"]["Day Before Hitting"]:
-                        for match_name in sub_matching_names:
-                            player_str = determine_player_str(qual, player_type, match_name, subbbb_date, "Day Before Hitting")
-                            if player_str not in player_str_set:
-                                name_count += 1
-                                player_str_set.add(player_str)
                 if "Playing With" in subbbb_date["qualifiers"]:
                     for qual in subbbb_date["qualifiers"]["Playing With"]:
+                        if "time_frame_str" in qual:
+                            continue
                         for player_str in (qual["values"] if "values" in qual else subb_names_with):
                             player_str = determine_player_str(qual, player_type, player_str, subbbb_date, "Playing With")
                             if player_str not in player_str_set:
@@ -12501,6 +12371,8 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 player_str_set.add(player_str)
                 if "Playing Against" in subbbb_date["qualifiers"]:
                     for qual in subbbb_date["qualifiers"]["Playing Against"]:
+                        if "time_frame_str" in qual:
+                            continue
                         for player_str in (qual["values"] if "values" in qual else subb_names_against):
                             player_str = determine_player_str(qual, player_type, player_str, subbbb_date, "Playing Against")
                             if player_str not in player_str_set:
@@ -12508,6 +12380,8 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 player_str_set.add(player_str)
                 if "Playing Same Game" in subbbb_date["qualifiers"]:
                     for qual in subbbb_date["qualifiers"]["Playing Same Game"]:
+                        if "time_frame_str" in qual:
+                            continue
                         for player_str in (qual["values"] if "values" in qual else subb_names_against):
                             player_str = determine_player_str(qual, player_type, player_str, subbbb_date, "Playing Same Game")
                             if player_str not in player_str_set:
@@ -12515,6 +12389,8 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 player_str_set.add(player_str)
                 if "Previous Playing With" in subbbb_date["qualifiers"]:
                     for qual in subbbb_date["qualifiers"]["Previous Playing With"]:
+                        if "time_frame_str" in qual:
+                            continue
                         for player_str in (qual["values"] if "values" in qual else subb_names_with):
                             player_str = determine_player_str(qual, player_type, player_str, subbbb_date, "Previous Playing With")
                             if player_str not in player_str_set:
@@ -12522,6 +12398,8 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 player_str_set.add(player_str)
                 if "Previous Playing Against" in subbbb_date["qualifiers"]:
                    for qual in subbbb_date["qualifiers"]["Previous Playing Against"]:
+                       if "time_frame_str" in qual:
+                            continue
                         for player_str in (qual["values"] if "values" in qual else subb_names_against):
                             player_str = determine_player_str(qual, player_type, player_str, subbbb_date, "Previous Playing Against")
                             if player_str not in player_str_set:
@@ -12529,6 +12407,8 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 player_str_set.add(player_str)
                 if "Upcoming Playing With" in subbbb_date["qualifiers"]:
                     for qual in subbbb_date["qualifiers"]["Upcoming Playing With"]:
+                        if "time_frame_str" in qual:
+                            continue
                         for player_str in (qual["values"] if "values" in qual else subb_names_with):
                             player_str = determine_player_str(qual, player_type, player_str, subbbb_date, "Upcoming Playing With")
                             if player_str not in player_str_set:
@@ -12536,6 +12416,8 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 player_str_set.add(player_str)
                 if "Upcoming Playing Against" in subbbb_date["qualifiers"]:
                     for qual in subbbb_date["qualifiers"]["Upcoming Playing Against"]:
+                        if "time_frame_str" in qual:
+                            continue
                         for player_str in (qual["values"] if "values" in qual else subb_names_against):
                             player_str = determine_player_str(qual, player_type, player_str, subbbb_date, "Upcoming Playing Against")
                             if player_str not in player_str_set:
@@ -12543,6 +12425,8 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 player_str_set.add(player_str)
                 if "Playing Same Opponents" in subbbb_date["qualifiers"]:
                     for qual in subbbb_date["qualifiers"]["Playing Same Opponents"]:
+                        if "time_frame_str" in qual:
+                            continue
                         for player_str in (qual["values"] if "values" in qual else subb_names_against):
                             player_str = determine_player_str(qual, player_type, player_str, subbbb_date, "Playing Same Opponents")
                             if player_str not in player_str_set:
@@ -12550,6 +12434,8 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 player_str_set.add(player_str)
                 if "Playing Same Date" in subbbb_date["qualifiers"]:
                     for qual in subbbb_date["qualifiers"]["Playing Same Date"]:
+                        if "time_frame_str" in qual:
+                            continue
                         for player_str in (qual["values"] if "values" in qual else subb_names_against):
                             player_str = determine_player_str(qual, player_type, player_str, subbbb_date, "Playing Same Date")
                             if player_str not in player_str_set:
@@ -12557,6 +12443,8 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 player_str_set.add(player_str)
                 if "Batting Against" in subbbb_date["qualifiers"]:
                     for qual in subbbb_date["qualifiers"]["Batting Against"]:
+                        if "time_frame_str" in qual:
+                            continue
                         for player_str in (qual["values"] if "values" in qual else subb_names_against):
                             player_str = determine_player_str(qual, player_type, player_str, subbbb_date, "Batting Against")
                             if player_str not in player_str_set:
@@ -12564,6 +12452,8 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 player_str_set.add(player_str)
                 if "Pitching Against" in subbbb_date["qualifiers"]:
                     for qual in subbbb_date["qualifiers"]["Pitching Against"]:
+                        if "time_frame_str" in qual:
+                            continue
                         for player_str in (qual["values"] if "values" in qual else subb_names_against):
                             player_str = determine_player_str(qual, player_type, player_str, subbbb_date, "Pitching Against")
                             if player_str not in player_str_set:
@@ -12571,6 +12461,8 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 player_str_set.add(player_str)
                 if "Driven In" in subbbb_date["qualifiers"]:
                     for qual in subbbb_date["qualifiers"]["Driven In"]:
+                        if "time_frame_str" in qual:
+                            continue
                         for player_str in (qual["values"] if "values" in qual else subb_names_with):
                             player_str = determine_player_str(qual, player_type, player_str, subbbb_date, "Driven In")
                             if player_str not in player_str_set:
@@ -12578,6 +12470,8 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 player_str_set.add(player_str)
                 if "Batted In" in subbbb_date["qualifiers"]:
                     for qual in subbbb_date["qualifiers"]["Batted In"]:
+                        if "time_frame_str" in qual:
+                            continue
                         for player_str in (qual["values"] if "values" in qual else subb_names_with):
                             player_str = determine_player_str(qual, player_type, player_str, subbbb_date, "Batted In")
                             if player_str not in player_str_set:
@@ -12585,6 +12479,8 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 player_str_set.add(player_str)
                 if "Back To Back With" in subbbb_date["qualifiers"]:
                     for qual in subbbb_date["qualifiers"]["Back To Back With"]:
+                        if "time_frame_str" in qual:
+                            continue
                         for player_str in (qual["values"] if "values" in qual else subb_names_with):
                             player_str = determine_player_str(qual, player_type, player_str, subbbb_date, "Back To Back With")
                             if player_str not in player_str_set:
@@ -12592,6 +12488,8 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 player_str_set.add(player_str)
                 if "Batting In Front Of" in subbbb_date["qualifiers"]:
                     for qual in subbbb_date["qualifiers"]["Batting In Front Of"]:
+                        if "time_frame_str" in qual:
+                            continue
                         for player_str in (qual["values"] if "values" in qual else subb_names_with):
                             player_str = determine_player_str(qual, player_type, player_str, subbbb_date, "Batting In Front Of")
                             if player_str not in player_str_set:
@@ -12599,6 +12497,8 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 player_str_set.add(player_str)
                 if "Batting Behind" in subbbb_date["qualifiers"]:
                     for qual in subbbb_date["qualifiers"]["Batting Behind"]:
+                        if "time_frame_str" in qual:
+                            continue
                         for player_str in (qual["values"] if "values" in qual else subb_names_with):
                             player_str = determine_player_str(qual, player_type, player_str, subbbb_date, "Batting Behind")
                             if player_str not in player_str_set:
@@ -12606,6 +12506,8 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 player_str_set.add(player_str)
                 if "Batting Next To" in subbbb_date["qualifiers"]:
                     for qual in subbbb_date["qualifiers"]["Batting Next To"]:
+                        if "time_frame_str" in qual:
+                            continue
                         for player_str in (qual["values"] if "values" in qual else subb_names_with):
                             player_str = determine_player_str(qual, player_type, player_str, subbbb_date, "Batting Next To")
                             if player_str not in player_str_set:
@@ -12613,6 +12515,8 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 player_str_set.add(player_str)
                 if "Caught By" in subbbb_date["qualifiers"]:
                     for qual in subbbb_date["qualifiers"]["Caught By"]:
+                        if "time_frame_str" in qual:
+                            continue
                         for player_str in (qual["values"] if "values" in qual else subb_names_with):
                             player_str = determine_player_str(qual, player_type, player_str, subbbb_date, "Caught By")
                             if player_str not in player_str_set:
@@ -12620,6 +12524,8 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 player_str_set.add(player_str)
                 if "Stealing On" in subbbb_date["qualifiers"]:
                     for qual in subbbb_date["qualifiers"]["Stealing On"]:
+                        if "time_frame_str" in qual:
+                            continue
                         for player_str in (qual["values"] if "values" in qual else subb_names_with):
                             player_str = determine_player_str(qual, player_type, player_str, subbbb_date, "Stealing On")
                             if player_str not in player_str_set:
@@ -12627,6 +12533,8 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 player_str_set.add(player_str)
                 if "On Field With" in subbbb_date["qualifiers"]:
                     for qual in subbbb_date["qualifiers"]["On Field With"]:
+                        if "time_frame_str" in qual:
+                            continue
                         for player_str in (qual["values"] if "values" in qual else subb_names_with):
                             player_str = determine_player_str(qual, player_type, player_str, subbbb_date, "On Field With")
                             if player_str not in player_str_set:
@@ -12634,77 +12542,13 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 player_str_set.add(player_str)
                 if "On Field Against" in subbbb_date["qualifiers"]:
                     for qual in subbbb_date["qualifiers"]["On Field Against"]:
+                        if "time_frame_str" in qual:
+                            continue
                         for player_str in (qual["values"] if "values" in qual else subb_names_against):
                             player_str = determine_player_str(qual, player_type, player_str, subbbb_date, "On Field Against")
                             if player_str not in player_str_set:
                                 name_count += 1
                                 player_str_set.add(player_str)
-                if "First Games" in subbbb_date["qualifiers"]:
-                    if "First Games" not in parsed_game_quals:
-                        name_count += sum(len(re.split(r"(?<!\\)\+", subb_name.strip())) for subb_name in names)
-                        parsed_game_quals.add("First Games")
-                if "First Games" in subbbb_date["qualifiers"]:
-                    if "First Games" not in parsed_game_quals:
-                        name_count += sum(len(re.split(r"(?<!\\)\+", subb_name.strip())) for subb_name in names)
-                        parsed_game_quals.add("First Games")
-                if "First Innings" in subbbb_date["qualifiers"]:
-                    if "First Innings" not in parsed_game_quals:
-                        name_count += sum(len(re.split(r"(?<!\\)\+", subb_name.strip())) for subb_name in names)
-                        parsed_game_quals.add("First Innings")
-                if "First At Bats" in subbbb_date["qualifiers"]:
-                    if "First At Bats" not in parsed_game_quals:
-                        name_count += sum(len(re.split(r"(?<!\\)\+", subb_name.strip())) for subb_name in names)
-                        parsed_game_quals.add("First At Bats")
-                if "First Plate Appearances" in subbbb_date["qualifiers"]:
-                    if "First Plate Appearances" not in parsed_game_quals:
-                        name_count += sum(len(re.split(r"(?<!\\)\+", subb_name.strip())) for subb_name in names)
-                        parsed_game_quals.add("First Plate Appearances")
-                if "First Batters Faced" in subbbb_date["qualifiers"]:
-                    if "First Batters Faced" not in parsed_game_quals:
-                        name_count += sum(len(re.split(r"(?<!\\)\+", subb_name.strip())) for subb_name in names)
-                        parsed_game_quals.add("First Batters Faced")
-                if "First Pitches" in subbbb_date["qualifiers"]:
-                    if "First Pitches" not in parsed_game_quals:
-                        name_count += sum(len(re.split(r"(?<!\\)\+", subb_name.strip())) for subb_name in names)
-                        parsed_game_quals.add("First Pitches")
-                if "Last Games" in subbbb_date["qualifiers"]:
-                    if "Last Games" not in parsed_game_quals:
-                        name_count += sum(len(re.split(r"(?<!\\)\+", subb_name.strip())) for subb_name in names)
-                        parsed_game_quals.add("Last Games")
-                if "Last Innings" in subbbb_date["qualifiers"]:
-                    if "Last Innings" not in parsed_game_quals:
-                        name_count += sum(len(re.split(r"(?<!\\)\+", subb_name.strip())) for subb_name in names)
-                        parsed_game_quals.add("Last Innings")
-                if "Last Plate Appearances" in subbbb_date["qualifiers"]:
-                    if "Last Plate Appearances" not in parsed_game_quals:
-                        name_count += sum(len(re.split(r"(?<!\\)\+", subb_name.strip())) for subb_name in names)
-                        parsed_game_quals.add("Last Plate Appearances")
-                if "Last Batters Faced" in subbbb_date["qualifiers"]:
-                    if "Last Batters Faced" not in parsed_game_quals:
-                        name_count += sum(len(re.split(r"(?<!\\)\+", subb_name.strip())) for subb_name in names)
-                        parsed_game_quals.add("Last Batters Faced")
-                if "Last Pitches" in subbbb_date["qualifiers"]:
-                    if "Last Pitches" not in parsed_game_quals:
-                        name_count += sum(len(re.split(r"(?<!\\)\+", subb_name.strip())) for subb_name in names)
-                        parsed_game_quals.add("Last Pitches")
-                if "Last At Bats" in subbbb_date["qualifiers"]:
-                    if "Last At Bats" not in parsed_game_quals:
-                        name_count += sum(len(re.split(r"(?<!\\)\+", subb_name.strip())) for subb_name in names)
-                        parsed_game_quals.add("Last At Bats")
-                if "Last Seasons" in subbbb_date["qualifiers"]:
-                    if "Last Seasons" not in parsed_game_quals:
-                        name_count += sum(len(re.split(r"(?<!\\)\+", subb_name.strip())) for subb_name in names)
-                        parsed_game_quals.add("Last Seasons")
-                if "Current Age" in subbbb_date["qualifiers"]:
-                    if "Current Age" not in parsed_game_quals:
-                        name_count += sum(len(re.split(r"(?<!\\)\+", subb_name.strip())) for subb_name in names)
-                        parsed_game_quals.add("Current Age")
-                if "Current Season Age" in subbbb_date["qualifiers"]:
-                    if "Current Season Age" not in parsed_game_quals:
-                        name_count += sum(len(re.split(r"(?<!\\)\+", subb_name.strip())) for subb_name in names)
-                        parsed_game_quals.add("Current Season Age")
-                if "Facing Former Team" in subbbb_date["qualifiers"] or "Facing Former Franchise" in subbbb_date["qualifiers"] or "With New Team" in subbbb_date["qualifiers"] or "With New Franchise" in subbbb_date["qualifiers"] or "Game After Sub Query" in subbbb_date["qualifiers"] or "Game Before Sub Query" in subbbb_date["qualifiers"] or "Games Rest" in subbbb_date["qualifiers"] or "Starts Rest" in subbbb_date["qualifiers"] or "Games In A Row" in subbbb_date["qualifiers"] or "Starts In A Row" in subbbb_date["qualifiers"] or "Game Days Rest" in subbbb_date["qualifiers"] or "Start Days Rest" in subbbb_date["qualifiers"] or "Start Days In A Row" in subbbb_date["qualifiers"] or "Game Days In A Row" in subbbb_date["qualifiers"] or "Days Rest" in subbbb_date["qualifiers"] or "Starts Days Rest" in subbbb_date["qualifiers"] or "Upcoming Days Rest" in subbbb_date["qualifiers"] or "Upcoming Starts Days Rest" in subbbb_date["qualifiers"]:
-                    name_count += 1
             name_count += len(subbb_date) - 1
 
     if name_count > 20:
