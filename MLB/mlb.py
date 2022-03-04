@@ -7128,12 +7128,24 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
 
                         time_frame = re.sub(r"\bplayerdiff\b", "", time_frame).strip()
 
+                        is_sub_query = False
+                        last_match = re.search(r"\bis-sub-query\b", time_frame)
+                        if last_match:
+                            is_sub_query = True
+                            time_frame = re.sub(r"\s+", " ", time_frame.replace(last_match.group(0), "", 1)).strip()
+
                         last_match = re.finditer(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?((?:qual-sub-query):(?<!\\)\((.*?)(?<!\\)\))", time_frame)
                         for m in last_match:
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip() + " " + m.group(3)
 
                         last_match = re.finditer(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?((?:sub-query|event-sub-query|or-sub-query|or-event-sub-query|day-after-sub-query|day-before-sub-query|day-of-sub-query|game-after-sub-query|game-before-sub-query|season-sub-query|or-season-sub-query|season-after-sub-query|season-before-sub-query):(?<!\\)\{.*?(?<!\\)\})", time_frame)
+                        last_match = list(last_match)
+                        if len(last_match) > 10:
+                            raise CustomMessageException("Only can have a max of 10 sub queries!")
                         for m in last_match:
+                            if is_sub_query:
+                                raise CustomMessageException("Cannot have nested sub queries!")
+
                             qualifier_obj = {}
                             negate_str = m.group(1)
                             if negate_str:
@@ -7185,7 +7197,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 qual_str = "season-before-sub-query:"
                                 qual_type = "Season Before Sub Query"
 
-                            qualifier_obj["values"] = re.split(r"(?<!\\)\~", re.split(r"(?<!\\)" + qual_str, qualifier_str)[1].strip("{}"))
+                            qualifier_obj["values"] = re.split(r"(?<!\\)\~", re.split(r"(?<!\\)" + qual_str, qualifier_str)[1][1:-1])
                             qualifier_obj["values"] = [value.strip() for value in qualifier_obj["values"]]
 
                             if not qual_type in qualifiers:
@@ -7545,7 +7557,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 qual_str = "playing-same-game:"
                                 qual_type = "Playing Same Game"
                             
-                            qualifier_obj["values"] = re.split(r"(?<!\\)\~", re.split(r"(?<!\\)" + qual_str, qualifier_str)[1].strip("()"))
+                            qualifier_obj["values"] = re.split(r"(?<!\\)\~", re.split(r"(?<!\\)" + qual_str, qualifier_str)[1][1:-1])
                             qualifier_obj["values"] = [value.strip() for value in qualifier_obj["values"]]
                             if qual_type == "Dates":
                                 new_values = []
@@ -7598,7 +7610,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                     qual_str = "start-time:"
                                     qual_type = "Start Time"
 
-                                split_vals = re.split(r"(?<!\\)\-", re.split(r"(?<!\\)" + qual_str, qualifier_str)[1].strip("()"))
+                                split_vals = re.split(r"(?<!\\)\-", re.split(r"(?<!\\)" + qual_str, qualifier_str)[1][1:-1])
 
                                 time_zones = {
                                     "CDT" : "US/Central",
@@ -7688,13 +7700,13 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                         
                         last_match = re.finditer(r"\b(show(?: |-)?only(?: |-)?table:)\(.+?\)", time_frame)
                         for m in last_match:
-                            for stat in re.split(r"(?<!\\)\-", re.split(r"(?<!\\)" + m.group(1), m.group(0))[1].strip("()")):
+                            for stat in re.split(r"(?<!\\)\-", re.split(r"(?<!\\)" + m.group(1), m.group(0))[1][1:-1]):
                                 extra_stats.add("show-only-table-" + unescape_string(stat.strip()))
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
 
                         last_match = re.finditer(r"\b(hide(?: |-)?table:)\(.+?\)", time_frame)
                         for m in last_match:
-                            for stat in re.split(r"(?<!\\)\-", re.split(r"(?<!\\)" + m.group(1), m.group(0))[1].strip("()")):
+                            for stat in re.split(r"(?<!\\)\-", re.split(r"(?<!\\)" + m.group(1), m.group(0))[1][1:-1]):
                                 extra_stats.add("hide-table-" + unescape_string(stat.strip()))
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
 
@@ -7825,20 +7837,20 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                         
                         last_match = re.finditer(r"\b(show(?: |-)?stat:)[\S-]+", time_frame)
                         for m in last_match:
-                            for stat in re.split(r"(?<!\\)\-", re.split(r"(?<!\\)" + m.group(1), m.group(0))[1].strip("()")):
+                            for stat in re.split(r"(?<!\\)\-", re.split(r"(?<!\\)" + m.group(1), m.group(0))[1][1:-1]):
                                 extra_stats.add("show-stat-" + unescape_string(stat.strip()))
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
                         
                         last_match = re.finditer(r"\b(show(?: |-)?only(?: |-)?stat:)[\S-]+", time_frame)
                         for m in last_match:
-                            for stat in re.split(r"(?<!\\)\-", re.split(r"(?<!\\)" + m.group(1), m.group(0))[1].strip("()")):
+                            for stat in re.split(r"(?<!\\)\-", re.split(r"(?<!\\)" + m.group(1), m.group(0))[1][1:-1]):
                                 extra_stats.add("show-only-stat-" + unescape_string(stat.strip()))
                                 extra_stats.add("show-stat-" + unescape_string(stat.strip()))
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
                         
                         last_match = re.finditer(r"\b(hide(?: |-)?stat:)[\S-]+", time_frame)
                         for m in last_match:
-                            for stat in re.split(r"(?<!\\)\-", re.split(r"(?<!\\)" + m.group(1), m.group(0))[1].strip("()")):
+                            for stat in re.split(r"(?<!\\)\-", re.split(r"(?<!\\)" + m.group(1), m.group(0))[1][1:-1]):
                                 extra_stats.add("hide-stat-" + unescape_string(stat.strip()))
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
 
@@ -8068,7 +8080,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 qual_str = "event-formula:"
                                 qual_type = "Event Formula"
 
-                            formula = unescape_string(re.split(r"(?<!\\)" + qual_str, qualifier_str)[1].strip("\{\}"))
+                            formula = unescape_string(re.split(r"(?<!\\)" + qual_str, qualifier_str)[1][1:-1])
                             if "Streak" in qual_type:
                                 qualifier_obj["values"] = [{
                                     "start_level" : 1,
@@ -12257,7 +12269,10 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                 "qualifiers" : []
             }]])
     except BaseException:
-        raise CustomMessageException("Invalid query!")
+        if isinstance(e, CustomMessageException):
+            raise e
+        else: 
+            raise CustomMessageException("Invalid query format!")
 
     best_games_table = 0
     worst_games_table = 0
@@ -13616,6 +13631,10 @@ def determine_player_str(qualifier, player_type, player_str, time_frame, qual_st
     elif qual_str in ["Batting Against", "Day After Pitching", "Day Before Pitching"]:
         bracket_index = re.search(r"(?<!\\)]", player_str).start()
         player_str = player_str[:bracket_index] + " pitching" + player_str[bracket_index:]
+    
+    if "Sub Query" in qual_str:
+        bracket_index = re.search(r"(?<!\\)]", player_str).start()
+        player_str = player_str[:bracket_index] + " is-sub-query" + player_str[bracket_index:]
 
     if "Event Sub Query" in qual_str:
         bracket_index = re.search(r"(?<!\\)]", player_str).start()
