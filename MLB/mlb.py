@@ -8267,6 +8267,9 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
 
                         last_match = re.finditer(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?((\S+)-(inning|out|strike|ball|score-game|run-game)s?)\b", time_frame)
                         for m in last_match:
+                            if m.group(3) == "last":
+                                continue
+
                             qualifier_obj = {}
                             
                             negate_str = m.group(1)
@@ -12268,7 +12271,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                 "add_type" : "plus",
                 "qualifiers" : []
             }]])
-    except BaseException:
+    except BaseException as e:
         if isinstance(e, CustomMessageException):
             raise e
         else: 

@@ -5164,7 +5164,7 @@ def handle_player_string(comment, player_type, is_fantasy, last_updated, hide_ta
                 "add_type" : "plus",
                 "qualifiers" : []
             }]])
-    except BaseException:
+    except BaseException as e:
         if isinstance(e, get_constant_data.CustomMessageException):
             raise e
         else: 
