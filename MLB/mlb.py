@@ -15176,7 +15176,7 @@ def determine_raw_str(subbb_frame):
             for qual_obj in subbb_frame["qualifiers"][qualifier]:
                 sub_sub_sub_first = True
                 if not sub_sub_first:
-                    qual_str += " AND "
+                    qual_str += " OR " if qualifier.startswith("Or") and qualifier.endswith("Sub Query") else " AND "
                 else:
                     sub_sub_first = False
                 if len(subbb_frame["qualifiers"][qualifier]) > 1:
