@@ -7262,10 +7262,10 @@ def combine_player_datas(player_datas, player_type, any_missing_games, time_fram
         player_data["stat_values"]["Shared"]["Raw Range"] = "Dates: ?????"
         player_data["stat_values"]["Shared"]["Raw Time"] = ""
     elif "hide-name" in extra_stats:
-        match = re.search(r"(?:\[([^\]\[]+?)(?<!\\)\])(?:\s*\((?:http[s]?://|www\.)(?:[a-zA-Z]|[0-9]|[$-_@.&+^]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+\))", player_data["stat_values"]["Shared"]["Raw Range"])
+        match = re.search(r"(?:\[([^\]\[]+?)(?<!\\)\])(?:\s*\((?:http[s]?://|www\.)(?:[a-zA-Z]|[0-9]|[$-'\*-_@.&+^]|[!*,]|(?:%[0-9a-fA-F][0-9a-fA-F]))+\))", player_data["stat_values"]["Shared"]["Raw Range"])
         while match:
             player_data["stat_values"]["Shared"]["Raw Range"] = player_data["stat_values"]["Shared"]["Raw Range"].replace(match.group(0), match.group(1), 1)
-            match = re.search(r"(?:\[([^\]\[]+?)(?<!\\)\])(?:\s*\((?:http[s]?://|www\.)(?:[a-zA-Z]|[0-9]|[$-_@.&+^]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+\))", player_data["stat_values"]["Shared"]["Raw Range"])
+            match = re.search(r"(?:\[([^\]\[]+?)(?<!\\)\])(?:\s*\((?:http[s]?://|www\.)(?:[a-zA-Z]|[0-9]|[$-'\*-_@.&+^]|[!*,]|(?:%[0-9a-fA-F][0-9a-fA-F]))+\))", player_data["stat_values"]["Shared"]["Raw Range"])
         player_data["stat_values"]["Raw Time"] = ""
 
     if "hide-query" in extra_stats:
@@ -7349,12 +7349,7 @@ def determine_raw_str(subbb_frame):
         if qualifier != "Start" and qualifier != "Birthday" and qualifier != "Games" and qualifier != "Season Games" and qualifier != "Weeks":
             qual_str += qualifier + ": "
 
-        if qualifier == "Games" or qualifier == "Season Games" or qualifier == "Weeks":
-            if not sub_sub_first:
-                qual_str += " + "
-            else:
-                sub_sub_first = False
-            
+        if qualifier == "Games" or qualifier == "Season Games" or qualifier == "Weeks":            
             if subbb_frame["qualifiers"][qualifier]["negate"]:
                 qual_str += "Not "
             if "explain_str" in subbb_frame["qualifiers"][qualifier] and subbb_frame["qualifiers"][qualifier]["explain_str"]:
@@ -7378,24 +7373,25 @@ def determine_raw_str(subbb_frame):
                             qual_str += " [Reverse]"
         else:
             for qual_obj in subbb_frame["qualifiers"][qualifier]:
+                sub_sub_sub_first = True
+                if not sub_sub_first:
+                    qual_str += " AND "
+                else:
+                    sub_sub_first = False
+                if len(subbb_frame["qualifiers"][qualifier]) > 1:
+                    if "values" in qual_obj and isinstance(qual_obj["values"], list) and len(qual_obj["values"]) > 1:
+                        qual_str += "("
+
                 if qualifier == "Start" or qualifier == "Birthday":
-                    if not sub_sub_first:
-                        qual_str += " + "
-                    else:
-                        sub_sub_first = False
                     qual_str += get_constant_data.qualifier_map[qualifier][not qual_obj["negate"]]
                 elif qualifier == "Rookie" or qualifier == "Facing Former Franchise" or qualifier == "Facing Former Team" or qualifier == "Previous Same Opponent" or qualifier == "Upcoming Same Opponent" or qualifier == "With New Team" or qualifier == "With New Franchise" or qualifier == "Even Calendar Year" or qualifier == "Odd Calendar Year" or qualifier == "Even Year" or qualifier == "Odd Year" or qualifier == "Interleague" or qualifier == "Intraleague" or qualifier == "Interconference" or qualifier == "Intraconference" or qualifier == "Interdivision" or qualifier == "Intradivision" or qualifier == "First Half" or qualifier == "Second Half" or qualifier == "National Game" or qualifier == "Overtime Result" or qualifier == "Winning Opponent" or qualifier == "Losing Opponent" or qualifier == "Tied Opponent" or qualifier == "Winning Or Tied Opponent" or qualifier == "Losing Or Tied Opponent" or qualifier == "Current Winning Opponent" or qualifier == "Current Losing Opponent" or qualifier == "Current Tied Opponent" or qualifier == "Current Winning Or Tied Opponent" or qualifier == "Current Losing Or Tied Opponent" or qualifier == "Playoff Opponent"  or qualifier == "Champ Winner Opponent" or qualifier == "Conference Winner Opponent" or qualifier == "Division Winner Opponent" or qualifier == "Winning Team" or qualifier == "Losing Team" or qualifier == "Tied Team" or qualifier == "Winning Or Tied Team" or qualifier == "Losing Or Tied Team" or qualifier == "Current Winning Team" or qualifier == "Current Losing Team" or qualifier == "Current Tied Team" or qualifier == "Current Winning Or Tied Team" or qualifier == "Current Losing Or Tied Team" or qualifier == "Playoff Team"  or qualifier == "Champ Winner Team" or qualifier == "Conference Winner Team" or qualifier == "Division Winner Team" or qualifier == "Team After Bye" or qualifier == "Team Before Bye" or qualifier == "Team After Playoffs Bye" or qualifier == "Team Before Playoffs Bye" or qualifier == "Team Game After Bye" or qualifier == "Team Game Before Bye" or qualifier == "Team Had Bye" or qualifier == "Opponent After Bye" or qualifier == "Opponent Before Bye" or qualifier == "Opponent After Playoffs Bye" or qualifier == "Opponent Before Playoffs Bye" or qualifier == "Opponent Game After Bye" or qualifier == "Opponent Game Before Bye" or qualifier == "Opponent Had Bye" or qualifier == "Probable" or qualifier == "Doubtful" or qualifier == "Questionable" or qualifier == "Injured" or qualifier == "Underdog" or qualifier == "Favorite" or qualifier == "Overtime" or qualifier == "RedZone":
-                    if not sub_sub_first:
-                        qual_str += " + "
-                    else:
-                        sub_sub_first = False
                     qual_str += str(not qual_obj["negate"])
                 elif qualifier == "Playing With" or qualifier == "Playing Against" or qualifier == "Previous Playing With" or qualifier == "Playing Same Game" or qualifier == "Previous Playing Against" or qualifier == "Upcoming Playing With" or qualifier == "Upcoming Playing Against" or qualifier == "Playing Same Opponents" or qualifier == "Playing Same Date" or qualifier == "Thrown To":
                     for player in qual_obj["values"]:
-                        if not sub_sub_first:
-                            qual_str += " + "
+                        if not sub_sub_sub_first:
+                            qual_str += " OR "
                         else:
-                            sub_sub_first = False
+                            sub_sub_sub_first = False
                         if qual_obj["negate"]:
                             qual_str += "Not "
                         player_url_str = create_player_url_string(player["name"], player["id"], {})
@@ -7406,18 +7402,14 @@ def determine_raw_str(subbb_frame):
                             qual_str += player_url_str + ((" (" + query + ")") if query and player["is_raw_query"] else "")
                 elif qualifier == "Sub Query" or qualifier == "Or Sub Query" or qualifier == "Day Of Sub Query" or qualifier == "Day After Sub Query" or qualifier == "Day Before Sub Query" or qualifier == "Game After Sub Query" or qualifier == "Game Before Sub Query" or qualifier == "Season Sub Query" or qualifier == "Or Season Sub Query" or qualifier == "Season After Sub Query" or qualifier == "Season Before Sub Query":
                     for player in qual_obj["values"]:
-                        if not sub_sub_first:
-                            qual_str += " + "
+                        if not sub_sub_sub_first:
+                            qual_str += " OR "
                         else:
-                            sub_sub_first = False
+                            sub_sub_sub_first = False
                         if qual_obj["negate"]:
                             qual_str += "Not "
                         qual_str += "(" + player["query"].replace("Query: ", "", 1) + ")"
                 elif qualifier == "Days Rest" or qualifier == "Upcoming Days Rest" or qualifier == "Starts Days Rest" or qualifier == "Upcoming Starts Days Rest" or qualifier == "Days In A Row" or qualifier == "Games In A Row" or qualifier == "Starts In A Row" or qualifier == "Games Rest" or qualifier == "Starts Rest" or qualifier == "Team Score" or qualifier == "Opponent Score" or qualifier == "Previous Team Score" or qualifier == "Previous Opponent Score" or qualifier == "Upcoming Team Score" or qualifier == "Upcoming Opponent Score" or qualifier == "Over/Under" or qualifier == "Super Bowl" or qualifier == "Number" or qualifier == "Team Wins" or qualifier == "Team Losses" or qualifier == "Team Ties" or qualifier == "Opponent Wins" or qualifier == "Opponent Losses" or qualifier == "Opponent Ties" or qualifier == "Current Team Wins" or qualifier == "Current Team Losses" or qualifier == "Current Team Ties" or qualifier == "Current Opponent Wins" or qualifier == "Current Opponent Losses" or qualifier == "Current Opponent Ties" or qualifier == "Team Games Over 500" or qualifier == "Opponent Games Over 500" or qualifier == "Current Team Games Over 500" or qualifier == "Current Opponent Games Over 500" or qualifier == "Attendance":
-                    if not sub_sub_first:
-                        qual_str += " + "
-                    else:
-                        sub_sub_first = False
                     if qual_obj["negate"]:
                         qual_str += "Not "
                     if qual_obj["values"]["start_val"] == qual_obj["values"]["end_val"]:
@@ -7425,11 +7417,6 @@ def determine_raw_str(subbb_frame):
                     else:
                         qual_str += (get_time_str(qual_obj["values"]["start_val"], False)) + "-" + (get_time_str(qual_obj["values"]["end_val"], False))
                 elif qualifier == "Year" or qualifier == "Calendar Year":
-                    if not sub_sub_first:
-                        qual_str += " + "
-                    else:
-                        sub_sub_first = False
-
                     if qual_obj["negate"]:
                         qual_str += "Not "
                     if qual_obj["values"]["start_val"] == qual_obj["values"]["end_val"]:
@@ -7437,10 +7424,6 @@ def determine_raw_str(subbb_frame):
                     else:
                         qual_str += (get_time_str(qual_obj["values"]["start_val"], False)) + "-" + (get_time_str(qual_obj["values"]["end_val"], False))
                 elif qualifier == "Temperature" or qualifier == "Wind Chill":
-                    if not sub_sub_first:
-                        qual_str += " + "
-                    else:
-                        sub_sub_first = False
                     if qual_obj["negate"]:
                         qual_str += "Not "
                     if qual_obj["values"]["start_val"] == qual_obj["values"]["end_val"]:
@@ -7449,10 +7432,6 @@ def determine_raw_str(subbb_frame):
                         qual_str += (get_time_str(qual_obj["values"]["start_val"], False)) + "-" + (get_time_str(qual_obj["values"]["end_val"], False))
                     qual_str += " °F"
                 elif qualifier == "Wind":
-                    if not sub_sub_first:
-                        qual_str += " + "
-                    else:
-                        sub_sub_first = False
                     if qual_obj["negate"]:
                         qual_str += "Not "
                     if qual_obj["values"]["start_val"] == qual_obj["values"]["end_val"]:
@@ -7462,10 +7441,6 @@ def determine_raw_str(subbb_frame):
                 
                     qual_str += " MPH"
                 elif qualifier == "Humidity":
-                    if not sub_sub_first:
-                        qual_str += " + "
-                    else:
-                        sub_sub_first = False
                     if qual_obj["negate"]:
                         qual_str += "Not "
                     if qual_obj["values"]["start_val"] == qual_obj["values"]["end_val"]:
@@ -7476,10 +7451,10 @@ def determine_raw_str(subbb_frame):
                     qual_str += "%"
                 elif qualifier == "Dates":
                     for date_obj in qual_obj["values"]:
-                        if not sub_sub_first:
-                            qual_str += " + "
+                        if not sub_sub_sub_first:
+                            qual_str += " OR "
                         else:
-                            sub_sub_first = False
+                            sub_sub_sub_first = False
                         if qual_obj["negate"]:
                             qual_str += "Not "
                         
@@ -7488,10 +7463,6 @@ def determine_raw_str(subbb_frame):
                         else:
                             qual_str += get_time_str(date_obj["start_val"], False) + " to " + get_time_str(date_obj["end_val"], False)
                 elif qualifier == "Score Margin" or qualifier == "Previous Score Margin" or qualifier == "Upcoming Score Margin" or qualifier == "Score Difference" or qualifier == "Previous Score Difference" or qualifier == "Upcoming Score Difference" or qualifier == "Spread" or qualifier == "Spread Margin" or qualifier == "Over/Under Margin" or qualifier == "Quarter" or qualifier == "Down" or qualifier == "Down Distance" or qualifier == "Field Position" or qualifier == "Current Team Score" or qualifier == "Current Opponent Score" or qualifier == "Current Score Margin" or qualifier == "Current Score Difference":
-                    if not sub_sub_first:
-                        qual_str += " + "
-                    else:
-                        sub_sub_first = False
                     if qual_obj["negate"]:
                         qual_str += "Not "
                     if qual_obj["values"]["start_val"] == qual_obj["values"]["end_val"]:
@@ -7499,10 +7470,6 @@ def determine_raw_str(subbb_frame):
                     else:
                         qual_str += (get_time_str(qual_obj["values"]["start_val"], False)) + "-" + (get_time_str(qual_obj["values"]["end_val"], False))
                 elif qualifier == "Quarter Time" or qualifier == "Quarter Time Remaining":
-                    if not sub_sub_first:
-                        qual_str += " + "
-                    else:
-                        sub_sub_first = False
                     if qual_obj["negate"]:
                         qual_str += "Not "
                     if qual_obj["values"]["start_val"] == qual_obj["values"]["end_val"]:
@@ -7510,10 +7477,6 @@ def determine_raw_str(subbb_frame):
                     else:
                         qual_str += (get_time_str(qual_obj["values"]["start_val"], False, quarter=True)) + "-" + (get_time_str(qual_obj["values"]["end_val"], False, quarter=True))
                 elif qualifier == "Season" or qualifier == "Season Reversed" or qualifier == "Season Index" or qualifier == "Season Index Reversed" or qualifier == "Series Game" or qualifier == "Season Game" or qualifier == "Career Game" or qualifier == "Career Game Reversed" or qualifier == "Season Game Reversed" or qualifier == "Team Game Reversed" or qualifier == "Team Game" or qualifier == "Week" or qualifier == "Opponent Points Rank" or qualifier == "Opponent Points Allowed Rank" or qualifier == "Opponent Yards Rank" or qualifier == "Opponent Yards Allowed Rank" or qualifier == "Opponent Pass TD Rank" or qualifier == "Opponent Pass TD Allowed Rank" or qualifier == "Opponent Pass Yards Rank" or qualifier == "Opponent Pass Yards Allowed Rank" or qualifier == "Opponent Rush TD Rank" or qualifier == "Opponent Rush TD Allowed Rank" or qualifier == "Opponent Rush Yards Rank" or qualifier == "Opponent Rush Yards Allowed Rank" or qualifier == "Opponent ANY/A Rank" or qualifier == "Opponent ANY/A Allowed Rank" or qualifier == "Opponent Passer Rating Rank" or qualifier == "Opponent Passer Rating Allowed Rank" or qualifier == "Opponent Fantasy Position Rank" or qualifier == "Team Points Rank" or qualifier == "Team Points Allowed Rank" or qualifier == "Team Yards Rank" or qualifier == "Team Yards Allowed Rank" or qualifier == "Team Pass TD Rank" or qualifier == "Team Pass TD Allowed Rank" or qualifier == "Team Pass Yards Rank" or qualifier == "Team Pass Yards Allowed Rank" or qualifier == "Team Rush TD Rank" or qualifier == "Team Rush TD Allowed Rank" or qualifier == "Team Rush Yards Rank" or qualifier == "Team Rush Yards Allowed Rank" or qualifier == "Team ANY/A Rank" or qualifier == "Team ANY/A Allowed Rank" or qualifier == "Team Passer Rating Rank" or qualifier == "Team Passer Rating Allowed Rank" or qualifier == "Team Fantasy Position Rank":
-                    if not sub_sub_first:
-                        qual_str += " + "
-                    else:
-                        sub_sub_first = False
                     if qual_obj["negate"]:
                         qual_str += "Not "
                     if qual_obj["values"]["start_val"] == qual_obj["values"]["end_val"]:
@@ -7539,10 +7502,6 @@ def determine_raw_str(subbb_frame):
                     if "position" in qual_obj["values"] and qual_obj["values"]["position"]:
                         qual_str += " against " + qual_obj["values"]["position"] + "s"
                 elif qualifier == "Opponent Win Percentage" or qualifier == "Team Win Percentage" or qualifier == "Current Opponent Win Percentage" or qualifier == "Current Team Win Percentage":
-                    if not sub_sub_first:
-                        qual_str += " + "
-                    else:
-                        sub_sub_first = False
                     if qual_obj["negate"]:
                         qual_str += "Not "
                     if qual_obj["values"]["start_val"] == qual_obj["values"]["end_val"]:
@@ -7550,10 +7509,6 @@ def determine_raw_str(subbb_frame):
                     else:
                         qual_str += (get_time_str(qual_obj["values"]["start_val"], True, True)) + " to " + (get_time_str(qual_obj["values"]["end_val"], True, True))
                 elif qualifier == "Offensive Snap Percentage" or qualifier == "Defensive Snap Percentage" or qualifier == "Special Teams Snap Percentage":
-                    if not sub_sub_first:
-                        qual_str += " + "
-                    else:
-                        sub_sub_first = False
                     if qual_obj["negate"]:
                         qual_str += "Not "
                     if qual_obj["values"]["start_val"] == qual_obj["values"]["end_val"]:
@@ -7578,10 +7533,6 @@ def determine_raw_str(subbb_frame):
                         else:
                             qual_str += ("{:.0f}").format(get_constant_data.round_value(100 * qual_obj["values"]["end_val"])) + "%"
                 elif qualifier == "Start Time":
-                    if not sub_sub_first:
-                        qual_str += " + "
-                    else:
-                        sub_sub_first = False
                     if qual_obj["negate"]:
                         qual_str += "Not "
 
@@ -7594,10 +7545,6 @@ def determine_raw_str(subbb_frame):
                         qual_str += start_time.strftime("%I:%M%p") + " to " + end_time.strftime("%I:%M%p")
                     qual_str += " " + qual_obj["values"]["time_zone"]
                 elif qualifier == "Local Start Time" or qualifier == "Team Start Time" or qualifier == "Opponent Start Time":
-                    if not sub_sub_first:
-                        qual_str += " + "
-                    else:
-                        sub_sub_first = False
                     if qual_obj["negate"]:
                         qual_str += "Not "
 
@@ -7609,21 +7556,15 @@ def determine_raw_str(subbb_frame):
                     else:
                         qual_str += start_time.strftime("%I:%M%p") + " to " + end_time.strftime("%I:%M%p")
                 elif qualifier == "Age" or qualifier == "Season Age":
-                    if not sub_sub_first:
-                        qual_str += " + "
-                    else:
-                        sub_sub_first = False
                     if qual_obj["negate"]:
                         qual_str += "Not "
                     qual_str += qual_obj["compare_str"]
                 else:
                     for sub_qualifier in qual_obj["values"]:
-                        if not sub_sub_first:
-                            if qualifier == "Max Streak" or qualifier == "Count Streak" or qualifier == "Count Streak Formula" or qualifier == "Max Streak Formula" or qualifier == "Quickest" or qualifier == "Slowest":
-                                break
-                            qual_str += " + "
+                        if not sub_sub_sub_first:
+                            qual_str += " OR "
                         else:
-                            sub_sub_first = False
+                            sub_sub_sub_first = False
                         if qual_obj["negate"]:
                             qual_str += "Not "
                         
@@ -7686,7 +7627,10 @@ def determine_raw_str(subbb_frame):
                                     sub_qualifier = calendar.day_name[sub_qualifier]
                                 elif qualifier == "Date":
                                     sub_qualifier = num2words(sub_qualifier, lang="en", to="ordinal_num")
-                                qual_str += sub_qualifier
+                                qual_str += sub_qualifier           
+                if len(subbb_frame["qualifiers"][qualifier]) > 1:
+                    if "values" in qual_obj and isinstance(qual_obj["values"], list) and len(qual_obj["values"]) > 1:
+                        qual_str += ")"
     
     return qual_str
 
@@ -22579,10 +22523,10 @@ def create_table_html(html_info, player_datas, original_comment, last_updated, c
             h2.string = player_data["stat_values"]["Shared"]["Raw Player"]
             h2["style"] = "float: left; padding-left:10px; padding-right:10px;"
             raw_range = player_data["stat_values"]["Shared"]["Raw Range"]
-            match = re.search(r"(?:\[([^\]\[]+?)(?<!\\)\])(?:\s*\((?:http[s]?://|www\.)(?:[a-zA-Z]|[0-9]|[$-_@.&+^]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+\))", raw_range)
+            match = re.search(r"(?:\[([^\]\[]+?)(?<!\\)\])(?:\s*\((?:http[s]?://|www\.)(?:[a-zA-Z]|[0-9]|[$-'\*-_@.&+^]|[!*,]|(?:%[0-9a-fA-F][0-9a-fA-F]))+\))", raw_range)
             while match:
                 raw_range = raw_range.replace(match.group(0), match.group(1), 1)
-                match = re.search(r"(?:\[([^\]\[]+?)(?<!\\)\])(?:\s*\((?:http[s]?://|www\.)(?:[a-zA-Z]|[0-9]|[$-_@.&+^]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+\))", raw_range)
+                match = re.search(r"(?:\[([^\]\[]+?)(?<!\\)\])(?:\s*\((?:http[s]?://|www\.)(?:[a-zA-Z]|[0-9]|[$-'\*-_@.&+^]|[!*,]|(?:%[0-9a-fA-F][0-9a-fA-F]))+\))", raw_range)
 
             if has_one_player_missing:
                 h2_div = soup.new_tag("div")
@@ -22605,10 +22549,10 @@ def create_table_html(html_info, player_datas, original_comment, last_updated, c
             if not all_unique_quals and not missing_all_players:
                 raw_quals = player_data["stat_values"]["Shared"]["Raw Quals"]
                 if raw_quals and raw_quals != "Query: ":
-                    match = re.search(r"(?:\[([^\]\[]+?)(?<!\\)\])(?:\s*\((?:http[s]?://|www\.)(?:[a-zA-Z]|[0-9]|[$-_@.&+^]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+\))", raw_quals)
+                    match = re.search(r"(?:\[([^\]\[]+?)(?<!\\)\])(?:\s*\((?:http[s]?://|www\.)(?:[a-zA-Z]|[0-9]|[$-'\*-_@.&+^]|[!*,]|(?:%[0-9a-fA-F][0-9a-fA-F]))+\))", raw_quals)
                     while match:
                         raw_quals = raw_quals.replace(match.group(0), match.group(1), 1)
-                        match = re.search(r"(?:\[([^\]\[]+?)(?<!\\)\])(?:\s*\((?:http[s]?://|www\.)(?:[a-zA-Z]|[0-9]|[$-_@.&+^]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+\))", raw_quals)
+                        match = re.search(r"(?:\[([^\]\[]+?)(?<!\\)\])(?:\s*\((?:http[s]?://|www\.)(?:[a-zA-Z]|[0-9]|[$-'\*-_@.&+^]|[!*,]|(?:%[0-9a-fA-F][0-9a-fA-F]))+\))", raw_quals)
                         
                     h2_div = soup.new_tag("div")
                     h2_div.string = raw_quals
@@ -22620,10 +22564,10 @@ def create_table_html(html_info, player_datas, original_comment, last_updated, c
         if all_unique_quals and player_datas[player_index]["stat_values"]["Shared"]["Raw Quals"] != "Query: ":
             h2 = soup.new_tag("h2")
             raw_quals = player_datas[player_index]["stat_values"]["Shared"]["Raw Quals"]
-            match = re.search(r"(?:\[([^\]\[]+?)(?<!\\)\])(?:\s*\((?:http[s]?://|www\.)(?:[a-zA-Z]|[0-9]|[$-_@.&+^]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+\))", raw_quals)
+            match = re.search(r"(?:\[([^\]\[]+?)(?<!\\)\])(?:\s*\((?:http[s]?://|www\.)(?:[a-zA-Z]|[0-9]|[$-'\*-_@.&+^]|[!*,]|(?:%[0-9a-fA-F][0-9a-fA-F]))+\))", raw_quals)
             while match:
                 raw_quals = raw_quals.replace(match.group(0), match.group(1), 1)
-                match = re.search(r"(?:\[([^\]\[]+?)(?<!\\)\])(?:\s*\((?:http[s]?://|www\.)(?:[a-zA-Z]|[0-9]|[$-_@.&+^]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+\))", raw_quals)
+                match = re.search(r"(?:\[([^\]\[]+?)(?<!\\)\])(?:\s*\((?:http[s]?://|www\.)(?:[a-zA-Z]|[0-9]|[$-'\*-_@.&+^]|[!*,]|(?:%[0-9a-fA-F][0-9a-fA-F]))+\))", raw_quals)
             border_div = soup.new_tag("div")
             border_div["style"] = "border: dashed; border-width: 1px 0px 0px 0px; width: 160px; margin: auto; margin-top: 2px;"
             h2.append(border_div)
