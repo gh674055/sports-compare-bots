@@ -13902,23 +13902,23 @@ def sub_handle_the_quals(players, qualifier, qual_str, player_str, time_frame, k
                 else:
                     players[len(players) - 1]["quals"] = []
 
-    if comment_obj and new_search and comment_obj["is_approved"]:
-        try:
-            string_output = format_alert_message(comment_obj)
-            if comment_obj["reply"]:
-                if isinstance(comment_obj["reply"], Message):
-                    #comment_obj["comment"].reply(string_output.split(alert_message + "\n\n", 1)[1])
-                    pass
-                else:
-                    if display_progress_as_edit:
-                        comment_obj["reply"].edit(string_output)
-                    #else:
-                    #    comment_obj["reply"].delete()
-                    #    comment_obj["reply"] = None
-                    #    comment_obj["reply"] = comment_obj["comment"].reply(string_output)
-                logger.info("#" + str(threading.get_ident()) + "#   User alert edited")
-        except Exception:
-            logger.error("#" + str(threading.get_ident()) + "#   " + traceback.format_exc())
+    # if comment_obj and new_search and comment_obj["is_approved"]:
+    #     try:
+    #         string_output = format_alert_message(comment_obj)
+    #         if comment_obj["reply"]:
+    #             if isinstance(comment_obj["reply"], Message):
+    #                 #comment_obj["comment"].reply(string_output.split(alert_message + "\n\n", 1)[1])
+    #                 pass
+    #             else:
+    #                 if display_progress_as_edit:
+    #                     comment_obj["reply"].edit(string_output)
+    #                 #else:
+    #                 #    comment_obj["reply"].delete()
+    #                 #    comment_obj["reply"] = None
+    #                 #    comment_obj["reply"] = comment_obj["comment"].reply(string_output)
+    #             logger.info("#" + str(threading.get_ident()) + "#   User alert edited")
+    #     except Exception:
+    #         logger.error("#" + str(threading.get_ident()) + "#   " + traceback.format_exc())
 
 def determine_player_str(qualifier, player_str, time_frame, qual_str):
     player_str = unescape_string(player_str)
