@@ -133,7 +133,7 @@ all_days_re = r"(?:" + "|".join([day + "-?" for day in all_days]) + r")+"
 
 string_stats = ["Tm"]
 
-skater_header_indv_shift_stats = ["CF", "CA", "CFPer", "CF/60M", "CA/60M", "FF", "FA", "FFPer", "SF/60M", "SA/60M", "oiOppS", "oiTmS", "SFPer", "FF/60M", "FA/60M", "offIGF", "offIGA", "TmGF", "OppGF", "TtlGF", "GFDiff", "offICF", "offICA", "TmCF", "OppCF", "TtlCF", "CFDiff", "offIFF", "offIFA", "TmFF", "OppFF", "TtlFF", "FFDiff", "offISF", "offISA", "TmSF", "OppSF", "TtlSF", "SFDiff", "offIGF/60M", "offICA/60M", "offIFF/60M" , "offISA/60M", "offIGA/60M", "offICF/60M", "offIFA/60M", "offISF/60M", "offIG/60M", "offIC/60M", "offIF/60M", "offIS/60M", "GFRel/60M", "CFRel/60M", "FFRel/60M", "SFRel/60M", "GARel/60M", "CARel/60M", "FARel/60M", "SARel/60M", "CFRelPer", "FFRelPer", "GFRelPer", "SFRelPer", "oiSPer", "oiSVPer", "PDO", "oiSRelPer", "oiSVRelPer", "PDORel", "OZ%", "TSA", "TSM", "TSB", "TSA/GP", "TSA/60M", "TSB/GP", "TSB/60M", "TSM/GP", "TSM/60M", "TS%", "SThr%", "offITOI", "offITOI/GP", "iTtlTOI", "iTtlTOI/GP", "TmTtlTOI", "TmTtlTOI/GP", "iTOI%", "TmTOI%"]
+skater_header_indv_shift_stats = ["CF", "CA", "CFPer", "CF/60M", "CA/60M", "FF", "FA", "FFPer", "SF/60M", "SA/60M", "oiOppS", "oiTmS", "SFPer", "FF/60M", "FA/60M", "offIGF", "offIGA", "TmGF", "OppGF", "TtlGF", "GFDiff", "offICF", "offICA", "TmCF", "OppCF", "TtlCF", "CFDiff", "offIFF", "offIFA", "TmFF", "OppFF", "TtlFF", "FFDiff", "offISF", "offISA", "TmSF", "OppSF", "TtlSF", "SFDiff", "offIGF/60M", "offICA/60M", "offIFF/60M" , "offISA/60M", "offIGA/60M", "offICF/60M", "offIFA/60M", "offISF/60M", "offIG/60M", "offIC/60M", "offIF/60M", "offIS/60M", "GFRel/60M", "CFRel/60M", "FFRel/60M", "SFRel/60M", "GARel/60M", "CARel/60M", "FARel/60M", "SARel/60M", "CFRelPer", "FFRelPer", "GFRelPer", "SFRelPer", "oiSPer", "oiSVPer", "PDO", "oiSRelPer", "oiSVRelPer", "PDORel", "OZPer", "offIOZ", "offINZ", "offIDZ", "offIOZPer", "OZPerRel", "TSA", "TSM", "TSB", "TSA/GP", "TSA/60M", "TSB/GP", "TSB/60M", "TSM/GP", "TSM/60M", "TS%", "SThr%", "offITOI", "offITOI/GP", "iTtlTOI", "iTtlTOI/GP", "TmTtlTOI", "TmTtlTOI/GP", "iTOI%", "TmTOI%"]
 goalie_header_indv_shift_stats = []
 
 headers = {
@@ -2027,11 +2027,61 @@ headers = {
                 "game" : 2009
             }
         },
-        "OZ%" : {
+        "OZPer" : {
             "positive" : False,
             "display" : False,
             "round" : "percent",
+            "display-value" : "OZ%",
             "type" : "Advanced",
+            "valid_since" : {
+                "season" : 2009,
+                "game" : 2009
+            }
+        },
+        "offIOZ" : {
+            "positive" : True,
+            "display" : False,
+            "type" : "Relative",
+            "valid_since" : {
+                "season" : 2009,
+                "game" : 2009
+            }
+        },
+        "offINZ": {
+            "positive" : True,
+            "display" : False,
+            "type" : "Relative",
+            "valid_since" : {
+                "season" : 2009,
+                "game" : 2009
+            }
+        },
+        "offIDZ": {
+            "positive" : True,
+            "display" : False,
+            "type" : "Relative",
+            "valid_since" : {
+                "season" : 2009,
+                "game" : 2009
+            }
+        },
+        "offIOZPer" : {
+            "positive" : False,
+            "display" : False,
+            "display-value" : "offIOZ%",
+            "round" : "percent",
+            "type" : "Relative",
+            "valid_since" : {
+                "season" : 2009,
+                "game" : 2009
+            }
+        },
+        "OZPerRel" : {
+            "positive" : False,
+            "display" : False,
+            "display-value" : "OZ%Rel",
+            "round" : "percent",
+            "type" : "Relative",
             "valid_since" : {
                 "season" : 2009,
                 "game" : 2009
@@ -6049,7 +6099,9 @@ formulas = {
         "TSM/60M" : "TSM / (TOI / 3600)",
         "TSB/60M" : "TSB / (TOI / 3600)",
         "FO%" : "FOW / FO",
-        "OZ%" : "OZ / (OZ + DZ)",
+        "OZPer" : "OZ / (OZ + DZ)",
+        "offIOZPer" : "offIOZ / (offIOZ + offIDZ)",
+        "OZPerRel" : "OZPer - offIOZPer",
         "OZFO" : "OZFOW + OZFOL",
         "OZFO%" : "OZFOW / OZFO",
         "NZFO" : "NZFOW + NZFOL",
@@ -18522,7 +18574,7 @@ def handle_stat_rank_stats(all_rows, qualifiers, player_type, s):
                     "teamAbbrevs": "Tean",
                     "timeOnIcePerGame5v5": "TOI/GP5v5",
                     "usatPct": "FF%",
-                    "zoneStartPct": "OZ%"
+                    "zoneStartPct": "OZPer"
                 }, "summaryshooting" : {
                     "gamesPlayed": "GP",
                     "positionCode": "Pos",
@@ -18567,7 +18619,7 @@ def handle_stat_rank_stats(all_rows, qualifiers, player_type, s):
                     "usatPercentageTied": "FFTied%",
                     "usatPrecentageClose": "FFClose%",
                     "usatRelative": "FFRel%",
-                    "zoneStartPct5v5": "OZ%"
+                    "zoneStartPct5v5": "OZPer"
                 }, "scoringRates" : {
                     "assists5v5": "A5v5",
                     "assistsPer605v5": "A/60M5v5",
@@ -18575,7 +18627,7 @@ def handle_stat_rank_stats(all_rows, qualifiers, player_type, s):
                     "goals5v5": "G5v5",
                     "goalsPer605v5": "G/60M5v5",
                     "netMinorPenaltiesPer60": "NetMinor/60M5v5",
-                    "offensiveZoneStartPct5v5": "OZ%",
+                    "offensiveZoneStartPct5v5": "OZPer",
                     "onIceShootingPct5v5": "oiS%",
                     "points5v5": "P5v5",
                     "pointsPer605v5": "P/60M5v5",
@@ -20777,6 +20829,7 @@ def perform_sub_nhl_period_qualifiers(row, qualifiers, player_game_info, player_
         "block",
         "penalty",
         "faceoff",
+        "oi_all_faceoffs",
         "all_faceoffs",
         "takeaway",
         "oi_all_team_goals",
@@ -20932,6 +20985,7 @@ def perform_sub_nhl_shift_qualifiers(row, qualifiers, player_game_info, player_t
         "block",
         "penalty",
         "faceoff",
+        "oi_all_faceoffs",
         "all_faceoffs",
         "takeaway",
         "oi_all_team_goals",
@@ -21855,7 +21909,8 @@ def determine_stat_value(player_game_info, all_events, qualifiers, og_row, playe
     hit_taken_stats = ["HITTkn"]
     block_stats = ["BLK"]
     faceoff_stats = ["FO", "FOW", "FOL", "OZFO", "OZFOW", "OZFOL", "NZFO", "NZFOW", "NZFOL", "DZFO", "DZFOW", "DZFOL"]
-    all_faceoff_stats = ["OZ", "NZ", "DZ"]
+    oi_all_faceoff_stats = ["OZ", "NZ", "DZ"]
+    all_faceoff_stats = ["offIOZ", "offINZ", "offIDZ"]
     takeaway_stats = ["TK", "GV"]
     penalty_stats = ["PIM", "PEN", "PenDrawn", "NetPEN", "Minor", "Major", "Misconduct", "GameMisconduct", "Match", "Fight"]
     oi_all_team_goals_stats = ["GF", "GD", "PlusMinus", "EVGF", "PPGF", "SHGF", "EVGD", "PPGD", "SHGD", "TmGF", "TtlGF", "GFDiff"]
@@ -22009,11 +22064,16 @@ def determine_stat_value(player_game_info, all_events, qualifiers, og_row, playe
                                 row[goal_event["zone"] + "FOW"] += 1
                             else:
                                 row[goal_event["zone"] + "FOL"] += 1
+            if stat in oi_all_faceoff_stats:
+                if goal_event["event_name"] == "oi_all_faceoffs":
+                    if goal_event["zone"]:
+                        if determine_event_match(goal_event, qualifiers, player_game_info, og_row, is_faceoff=True):
+                            row[goal_event["zone"]] += 1
             if stat in all_faceoff_stats:
                 if goal_event["event_name"] == "all_faceoffs":
                     if goal_event["zone"]:
-                        if determine_event_match(goal_event, qualifiers, player_game_info, og_row):
-                            row[goal_event["zone"]] += 1
+                        if determine_event_match(goal_event, qualifiers, player_game_info, og_row, is_faceoff=True, is_off_ice=True):
+                            row["offI" + goal_event["zone"]] += 1
             if stat in takeaway_stats:
                 if goal_event["event_name"] == "takeaway":
                     if determine_event_match(goal_event, qualifiers, player_game_info, og_row):
@@ -23190,7 +23250,12 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
             if game_data["player_shift_data"] or team_on_ice:
                 is_on_ice = is_player_on_ice(game_data["player_shift_data"], team_on_ice, opp_on_ice, scoring_play["about"]["period"], period_time, player_id, True, is_faceoff=True)
                 if is_on_ice:
-                    game_data["all_faceoffs"].append({**shared_data , **{
+                    game_data["oi_all_faceoffs"].append({**shared_data , **{
+                        "winner" : True,
+                        "faceoff_against" : faceoff_against
+                    }})
+
+                game_data["all_faceoffs"].append({**shared_data , **{
                         "winner" : True,
                         "faceoff_against" : faceoff_against
                     }})
@@ -23517,6 +23582,7 @@ def setup_game_data(player_data, row_data, player_id, player_type, time_frame, e
         "block" : [],
         "penalty" : [],
         "faceoff" : [],
+        "oi_all_faceoffs" : [],
         "all_faceoffs" : [],
         "periods" : [],
         "takeaway" : [],
@@ -23864,6 +23930,7 @@ def setup_href_game_data(player_data, row_data, player_id, player_type, time_fra
         "block" : [],
         "penalty" : [],
         "faceoff" : [],
+        "oi_all_faceoffs" : [],
         "all_faceoffs" : [],
         "periods" : [],
         "takeaway" : [],
@@ -27097,10 +27164,14 @@ def perform_metadata_quals(qualifiers, player_type, row, player_game_info, nhl_p
                         row[goal_event["zone"] + "FOW"] += 1
                     else:
                         row[goal_event["zone"] + "FOL"] += 1
+        for goal_event in player_game_info["oi_all_faceoffs"]:
+            if goal_event["zone"]:
+                if perform_metadata_qual("oi_all_faceoffs", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], is_faceoff=True, skip_career_events=skip_career_events):
+                    row[goal_event["zone"]] += 1
         for goal_event in player_game_info["all_faceoffs"]:
             if goal_event["zone"]:
-                if perform_metadata_qual("all_faceoffs", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], is_faceoff=True, skip_career_events=skip_career_events):
-                    row[goal_event["zone"]] += 1
+                if perform_metadata_qual("all_faceoffs", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], is_faceoff=True, is_off_ice=True, skip_career_events=skip_career_events):
+                    row["offI" + goal_event["zone"]] += 1
         for goal_event in player_game_info["takeaway"]:
             if perform_metadata_qual("takeaway", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], skip_career_events=skip_career_events):
                 if goal_event["is_takeaway"]:
@@ -29878,6 +29949,9 @@ def clear_row_attrs(row, player_type):
         row["OZ"] = 0
         row["NZ"] = 0
         row["DZ"] = 0
+        row["offIOZ"] = 0
+        row["offINZ"] = 0
+        row["offIDZ"] = 0
 
         row["GWG"] = 0
         row["GWA"] = 0
@@ -38688,7 +38762,7 @@ def print_player_data(player_datas, player_type, highest_vals, lowest_vals, has_
                     if header == "TOI" or header == "EVTOI" or header == "PPTOI" or header == "SHTOI":
                         override_show = True
                 if "current-stats" in extra_stats or "current-stats-zone" in extra_stats:
-                    if header in ("1stG", "PostBar", "Post/60M", "TK", "GV", "TK/GV", "TK/60M", "GV/60M", "GF/60M", "GA/60M", "GF", "GA", "GFPer", "CF/60M", "CA/60M", "CFPer", "FF/60M", "FA/60M", "FFPer", "SF/60M", "SA/60M", "SFPer", "OZ%", "oiSPer", "oiSVPer", "PDO", "oiSRelPer", "oiSVRelPer", "PDORel"):
+                    if header in ("1stG", "PostBar", "Post/60M", "TK", "GV", "TK/GV", "TK/60M", "GV/60M", "GF/60M", "GA/60M", "GF", "GA", "GFPer", "CF/60M", "CA/60M", "CFPer", "FF/60M", "FA/60M", "FFPer", "SF/60M", "SA/60M", "SFPer", "OZPer", "OZPerRel", "oiSPer", "oiSVPer", "PDO", "oiSRelPer", "oiSVRelPer", "PDORel"):
                         override_show = True
                     if header in ("GFRel/60M", "CFRel/60M", "FFRel/60M", "SFRel/60M", "GARel/60M", "CARel/60M", "FARel/60M", "SARel/60M", "GFRelPer", "CFRelPer", "FFRelPer", "SFRelPer"):
                         override_show = True
@@ -39175,7 +39249,7 @@ def get_reddit_player_table(player_datas, player_type, debug_mode, original_comm
                     if header == "TOI" or header == "EVTOI" or header == "PPTOI" or header == "SHTOI":
                         override_show = True
                 if "current-stats" in extra_stats or "current-stats-zone" in extra_stats:
-                    if header in ("1stG", "PostBar", "Post/60M", "TK", "GV", "TK/GV", "TK/60M", "GV/60M", "GF/60M", "GA/60M", "GF", "GA", "GFPer", "CF/60M", "CA/60M", "CFPer", "FF/60M", "FA/60M", "FFPer", "SF/60M", "SA/60M", "SFPer", "OZ%", "oiSPer", "oiSVPer", "PDO", "oiSRelPer", "oiSVRelPer", "PDORel"):
+                    if header in ("1stG", "PostBar", "Post/60M", "TK", "GV", "TK/GV", "TK/60M", "GV/60M", "GF/60M", "GA/60M", "GF", "GA", "GFPer", "CF/60M", "CA/60M", "CFPer", "FF/60M", "FA/60M", "FFPer", "SF/60M", "SA/60M", "SFPer", "OZPer", "OZPerRel", "oiSPer", "oiSVPer", "PDO", "oiSRelPer", "oiSVRelPer", "PDORel"):
                         override_show = True
                     if header in ("GFRel/60M", "CFRel/60M", "FFRel/60M", "SFRel/60M", "GARel/60M", "CARel/60M", "FARel/60M", "SARel/60M", "GFRelPer", "CFRelPer", "FFRelPer", "SFRelPer"):
                         override_show = True
@@ -39978,7 +40052,7 @@ def handle_table_data(player_data, player_type, over_header, header, highest_val
         if header == "TOI" or header == "EVTOI" or header == "PPTOI" or header == "SHTOI":
             override_show = True
     if "current-stats" in extra_stats or "current-stats-zone" in extra_stats:
-        if header in ("1stG", "PostBar", "Post/60M", "TK", "GV", "TK/GV", "TK/60M", "GV/60M", "GF/60M", "GA/60M", "GF", "GA", "GFPer", "CF/60M", "CA/60M", "CFPer", "FF/60M", "FA/60M", "FFPer", "SF/60M", "SA/60M", "SFPer", "OZ%", "oiSPer", "oiSVPer", "PDO", "oiSRelPer", "oiSVRelPer", "PDORel"):
+        if header in ("1stG", "PostBar", "Post/60M", "TK", "GV", "TK/GV", "TK/60M", "GV/60M", "GF/60M", "GA/60M", "GF", "GA", "GFPer", "CF/60M", "CA/60M", "CFPer", "FF/60M", "FA/60M", "FFPer", "SF/60M", "SA/60M", "SFPer", "OZPer", "OZPerRel", "oiSPer", "oiSVPer", "PDO", "oiSRelPer", "oiSVRelPer", "PDORel"):
             override_show = True
         if header in ("GFRel/60M", "CFRel/60M", "FFRel/60M", "SFRel/60M", "GARel/60M", "CARel/60M", "FARel/60M", "SARel/60M", "GFRelPer", "CFRelPer", "FFRelPer", "SFRelPer"):
             override_show = True
@@ -40365,14 +40439,14 @@ def is_invalid_stat(stat, player_type, data, count_inconsistent, player_data, co
     if "YearStart" in data and stat in headers[player_type["da_type"]["type"]] and data["YearStart"]:
         if player_type["da_type"]["type"] == "Skater":
             header_shift_stats = ["Shft", "Shft/GP", "TOI/Shft"]
-            report_2_stats = ["PenDrawn", "NetPEN", "PostBar", "CF", "CA", "CFPer", "CF/60M", "CA/60M", "FF", "FA", "FFPer", "SF/60M", "SA/60M", "oiOppS", "oiTmS", "SFPer", "CFRelPer", "FFRelPer", "SFRelPer", "FF/60M", "FA/60M", "offICF", "offICA", "TmCF", "OppCF", "TmCF", "CFDiff", "offIFF", "offIFA", "TmFF", "OppFF", "TmFF", "FFDiff", "offISF", "offISA", "TmSF", "OppSF", "TmSF", "SFDiff", "offICA/60M", "offIFF/60M" , "offISA/60M", "offICF/60M", "offIFA/60M", "offISF/60M", "offIC/60M", "offIF/60M", "offIS/60M", "CFRel/60M", "FFRel/60M", "SFRel/60M", "CARel/60M", "FARel/60M", "SARel/60M", "OZ%", "oiSPer", "oiSVPer", "PDO", "oiSRelPer", "oiSVRelPer", "PDORel", "TSA", "TSM", "TSB", "TSA/GP", "TSB/GP", "TSM/GP", "TS%", "SThr%"]
+            report_2_stats = ["PenDrawn", "NetPEN", "PostBar", "CF", "CA", "CFPer", "CF/60M", "CA/60M", "FF", "FA", "FFPer", "SF/60M", "SA/60M", "oiOppS", "oiTmS", "SFPer", "CFRelPer", "FFRelPer", "SFRelPer", "FF/60M", "FA/60M", "offICF", "offICA", "TmCF", "OppCF", "TmCF", "CFDiff", "offIFF", "offIFA", "TmFF", "OppFF", "TmFF", "FFDiff", "offISF", "offISA", "TmSF", "OppSF", "TmSF", "SFDiff", "offICA/60M", "offIFF/60M" , "offISA/60M", "offICF/60M", "offIFA/60M", "offISF/60M", "offIC/60M", "offIF/60M", "offIS/60M", "CFRel/60M", "FFRel/60M", "SFRel/60M", "CARel/60M", "FARel/60M", "SARel/60M", "OZPer", "offIOZ", "offINZ", "offIDZ", "offIOZPer", "OZPerRel", "oiSPer", "oiSVPer", "PDO", "oiSRelPer", "oiSVRelPer", "PDORel", "TSA", "TSM", "TSB", "TSA/GP", "TSB/GP", "TSM/GP", "TS%", "SThr%"]
             report_3_stats = ["TK", "GV", "TK/GV", "HIT", "HITTkn", "BLK"]
             strength_stats = ["PEN", "PEN/GP", "PIM", "PIM/GP", "OZFO%", "DZFO%", "OZFO/60M", "DZFO/60M", "OZFOW/60M", "DZFOW/60M", "FOW/GP", "FO/GP", "FOW", "FO", "FO%"]
             shot_on_stats = ["S", "S%", "S/GP"]
             shot_on_on_stats = ["S", "S%", "S/GP"]
             report_stats = ["OZFO%", "DZFO%", "OZFO/60M", "DZFO/60M",  "OZFOW/60M", "DZFOW/60M","FOW/GP", "FO/GP", "FOW", "FO", "FO%", "S", "S%", "S/GP"]
             game_report_stats = ["PlusMinus", "GF", "EVGF", "PPGF", "SHGF", "GA", "EVGA", "PPGA", "SHGA", "GD", "EVGD", "PPGD", "SHGD", "IGP", "EVIGP", "IPP", "EVIPP", "GFPer", "EVGF%", "GF/60M", "GA/60M", "GFRelPer", "offIGF", "offIGA", "TmGF", "OppGF", "TmGF", "GFDiff", "offIGF/60M", "offIGA/60M", "GFRel/60M", "offIG/60M", "GARel/60M"]
-            on_ice_stats = ["CF", "CA", "CFPer", "CF/60M", "CA/60M", "FF", "FA", "FFPer", "SF/60M", "SA/60M", "oiOppS", "oiTmS", "SFPer", "CFRelPer", "FFRelPer", "SFRelPer", "FF/60M", "FA/60M", "offICF", "offICA", "TmCF", "OppCF", "TmCF", "CFDiff", "offIFF", "offIFA", "TmFF", "OppFF", "TmFF", "FFDiff", "offISF", "offISA", "TmSF", "OppSF", "TmSF", "SFDiff", "offICA/60M", "offIFF/60M" , "offISA/60M", "offICF/60M", "offIFA/60M", "offISF/60M", "offIC/60M", "offIF/60M", "offIS/60M", "CFRel/60M", "FFRel/60M", "SFRel/60M", "CARel/60M", "FARel/60M", "SARel/60M", "OZ%", "oiSPer", "oiSVPer", "PDO", "oiSRelPer", "oiSVRelPer", "PDORel"]
+            on_ice_stats = ["CF", "CA", "CFPer", "CF/60M", "CA/60M", "FF", "FA", "FFPer", "SF/60M", "SA/60M", "oiOppS", "oiTmS", "SFPer", "CFRelPer", "FFRelPer", "SFRelPer", "FF/60M", "FA/60M", "offICF", "offICA", "TmCF", "OppCF", "TmCF", "CFDiff", "offIFF", "offIFA", "TmFF", "OppFF", "TmFF", "FFDiff", "offISF", "offISA", "TmSF", "OppSF", "TmSF", "SFDiff", "offICA/60M", "offIFF/60M" , "offISA/60M", "offICF/60M", "offIFA/60M", "offISF/60M", "offIC/60M", "offIF/60M", "offIS/60M", "CFRel/60M", "FFRel/60M", "SFRel/60M", "CARel/60M", "FARel/60M", "SARel/60M", "OZPer", "offIOZ", "offINZ", "offIDZ", "offIOZPer", "OZPerRel", "oiSPer", "oiSVPer", "PDO", "oiSRelPer", "oiSVRelPer", "PDORel"]
             header_indv_shift_stats = skater_header_indv_shift_stats
         else:
             header_shift_stats = []
