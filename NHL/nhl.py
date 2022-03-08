@@ -22575,6 +22575,11 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                                     game_data["num_on_ice_data"][1][second]["opp_goalies"] += 1
                                 else:
                                     game_data["num_on_ice_data"][1][second]["opp_skaters"] += 1
+
+    if game_data["is_api_stats"] and not game_data["is_toi_stats"] and has_shift_quals(time_frame["qualifiers"]):
+        missing_games = True
+        game_data["missing_data"] = True
+        return game_data, row_data, missing_games
                                                 
     next_shot_penalty_shot = False
     first_goal = True
@@ -27385,6 +27390,9 @@ def is_period_qual(qual_object):
 def has_shift_quals(qualifiers):
     return "On Ice With" in qualifiers or "On Ice Against" in qualifiers or "On Line With" in qualifiers or "On Line Against" in qualifiers or "On Line Together" in qualifiers or "Strength" in qualifiers or "Even Skaters" in qualifiers or "More Skaters" in qualifiers or "Less Skaters" in qualifiers or "Team Goalie Pulled" in qualifiers or "Opponent Goalie Pulled" in qualifiers or "Team Skaters" in qualifiers or "Opponent Skaters" in qualifiers or "Team Players" in qualifiers or "Opponent Players" in qualifiers or "On Ice With Stat" in qualifiers or "Shot On Stat" in qualifiers or "Shot By Stat" in qualifiers or "On Ice Against Stat" in qualifiers or "On Ice With Stat Rank" in qualifiers or "On Ice Against Stat Rank" in qualifiers or "Shot On Stat Rank" in qualifiers or "Shot By Stat Rank" in qualifiers or "On Ice With Stat Percent" in qualifiers or "On Ice Against Stat Percent" in qualifiers or "Shot On Stat Percent" in qualifiers or "Shot By Stat Percent" in qualifiers
 
+def has_line_quals(qualifiers):
+    return "On Line With" in qualifiers or "On Line Against" in qualifiers or "On Line Together" in qualifiers
+
 def perform_metadata_qual(event_name, goal_event, qualifiers, player_game_info, row, is_playoffs, year, is_faceoff=False, is_toi=False, is_off_ice=False, skip_career_events=False):
     if not is_toi:
         if "Shot On" in qualifiers:
@@ -28839,7 +28847,7 @@ def perform_metadata_qual(event_name, goal_event, qualifiers, player_game_info, 
         if not has_any_match:
             return False
 
-    if is_off_ice and not ("On Line With" in qualifiers or "On Line Against" in qualifiers or "On Line Together" in qualifiers):
+    if is_off_ice and not has_line_quals(qualifiers):
         team_on_ice = goal_event["team_on_ice"] if "team_on_ice" in goal_event else None
         opp_on_ice = goal_event["opp_on_ice"] if "opp_on_ice" in goal_event else None
         if player_game_info["player_shift_data"] or team_on_ice:
