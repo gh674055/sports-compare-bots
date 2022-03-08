@@ -22397,12 +22397,6 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                 game_data["is_older_html_stats"] = True
                 game_data["is_href_stats"] = True
 
-
-    if not game_data["is_older_html_stats"] and has_shift_quals(time_frame["qualifiers"]):
-        missing_games = True
-        game_data["missing_data"] = True
-        return game_data, row_data, missing_games
-
     fix_goal_errors(player_data, player_type, time_frame, row_data, game_data, scoring_plays, all_plays, s)
 
     if row_data["NHLGameLink"] in missing_event_data:
@@ -22576,7 +22570,7 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                                 else:
                                     game_data["num_on_ice_data"][1][second]["opp_skaters"] += 1
 
-    if game_data["is_api_stats"] and not game_data["is_toi_stats"] and has_shift_quals(time_frame["qualifiers"]):
+    if (not game_data["is_older_html_stats"] or game_data["is_api_stats"]) and not game_data["is_toi_stats"] and has_shift_quals(time_frame["qualifiers"]):
         missing_games = True
         game_data["missing_data"] = True
         return game_data, row_data, missing_games
