@@ -10237,82 +10237,102 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 elif qualifier_str.startswith("event-type:"):
                                     qual_str = "event-type:"
                                     qual_type = "Event Type"
+                                    split_str = ";"
                                     extra_stats.add("current-stats")
                                 elif qualifier_str.startswith("event:"):
                                     qual_str = "event:"
                                     qual_type = "Event Type"
+                                    split_str = ";"
                                     extra_stats.add("current-stats")
                                 elif qualifier_str.startswith("exact-event-type:"):
                                     qual_str = "exact-event-type:"
                                     qual_type = "Exact Event Type"
+                                    split_str = ";"
                                     extra_stats.add("current-stats")
                                 elif qualifier_str.startswith("exact-event:"):
                                     qual_str = "exact-event:"
                                     qual_type = "Exact Event Type"
+                                    split_str = ";"
                                     extra_stats.add("current-stats")
                                 elif qualifier_str.startswith("previous-event-type:"):
                                     qual_str = "previous-event-type:"
                                     qual_type = "Previous Event Type"
+                                    split_str = ";"
                                     extra_stats.add("current-stats")
                                 elif qualifier_str.startswith("previous-event:"):
                                     qual_str = "previous-event:"
                                     qual_type = "Previous Event Type"
+                                    split_str = ";"
                                     extra_stats.add("current-stats")
                                 elif qualifier_str.startswith("previous-player-event-type:"):
                                     qual_str = "previous-player-event-type:"
                                     qual_type = "Previous Player Event Type"
+                                    split_str = ";"
                                     extra_stats.add("current-stats")
                                 elif qualifier_str.startswith("previous-player-event:"):
                                     qual_str = "previous-player-event:"
                                     qual_type = "Previous Player Event Type"
+                                    split_str = ";"
                                     extra_stats.add("current-stats")
                                 elif qualifier_str.startswith("upcoming-player-event-type:"):
                                     qual_str = "upcoming-player-event-type:"
                                     qual_type = "Upcoming Player Event Type"
+                                    split_str = ";"
                                     extra_stats.add("current-stats")
                                 elif qualifier_str.startswith("upcoming-player-event:"):
                                     qual_str = "upcoming-player-event:"
                                     qual_type = "Upcoming Player Event Type"
+                                    split_str = ";"
                                     extra_stats.add("current-stats")
                                 elif qualifier_str.startswith("previous-exact-event-type:"):
                                     qual_str = "previous-exact-event-type:"
                                     qual_type = "Previous Exact Event Type"
+                                    split_str = ";"
                                     extra_stats.add("current-stats")
                                 elif qualifier_str.startswith("previous-exact-event:"):
                                     qual_str = "previous-exact-event:"
                                     qual_type = "Previous Exact Event Type"
+                                    split_str = ";"
                                     extra_stats.add("current-stats")
                                 elif qualifier_str.startswith("previous-exact-player-event-type:"):
                                     qual_str = "previous-exact-player-event-type:"
                                     qual_type = "Previous Exact Player Event Type"
+                                    split_str = ";"
                                     extra_stats.add("current-stats")
                                 elif qualifier_str.startswith("previous-exact-player-event:"):
                                     qual_str = "previous-exact-player-event:"
                                     qual_type = "Previous Exact Player Event Type"
+                                    split_str = ";"
                                     extra_stats.add("current-stats")
                                 elif qualifier_str.startswith("upcoming-exact-player-event-type:"):
                                     qual_str = "upcoming-exact-player-event-type:"
                                     qual_type = "Upcoming Exact Player Event Type"
+                                    split_str = ";"
                                     extra_stats.add("current-stats")
                                 elif qualifier_str.startswith("upcoming-exact-player-event:"):
                                     qual_str = "upcoming-exact-player-event:"
                                     qual_type = "Upcoming Exact Player Event Type"
+                                    split_str = ";"
                                     extra_stats.add("current-stats")
                                 elif qualifier_str.startswith("upcoming-event-type:"):
                                     qual_str = "upcoming-event-type:"
                                     qual_type = "Upcoming Event Type"
+                                    split_str = ";"
                                     extra_stats.add("current-stats")
                                 elif qualifier_str.startswith("upcoming-event:"):
                                     qual_str = "upcoming-event:"
                                     qual_type = "Upcoming Event Type"
+                                    split_str = ";"
                                     extra_stats.add("current-stats")
                                 elif qualifier_str.startswith("upcoming-exact-event-type:"):
                                     qual_str = "upcoming-exact-event-type:"
                                     qual_type = "Upcoming Exact Event Type"
+                                    split_str = ";"
                                     extra_stats.add("current-stats")
                                 elif qualifier_str.startswith("upcoming-exact-event:"):
                                     qual_str = "upcoming-exact-event:"
                                     qual_type = "Upcoming Exact Event Type"
+                                    split_str = ";"
                                     extra_stats.add("current-stats")
                                                                                                 
                                 qualifier_obj["values"] = re.split(r"(?<!\\)" + split_str, re.split(r"(?<!\\)" + qual_str, qualifier_str)[1])
