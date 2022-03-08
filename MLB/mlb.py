@@ -34025,8 +34025,13 @@ def handle_da_mlb_quals(row, event_name, at_bat_event, qualifiers, player_data, 
             return False
 
     if "Pinch Hitting" in qualifiers:
-        if at_bat_event["next_play_pinch"] == None:
-            return False
+        for qual_object in qualifiers["Pinch Hitting"]:
+            if qual_object["negate"]:
+                if at_bat_event["next_play_pinch"] != None:
+                    return Fals
+            else:
+                if at_bat_event["next_play_pinch"] == None:
+                    return False
     
     if "Facing Starter" in qualifiers:
         if not handle_bool_qual(at_bat_event, qualifiers["Facing Starter"], "is_starter_pitcher" if player_type["da_type"] == "Batter" else "is_starter_batter"):
