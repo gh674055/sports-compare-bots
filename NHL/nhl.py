@@ -38656,7 +38656,7 @@ def print_player_data(player_datas, player_type, highest_vals, lowest_vals, has_
                     override_show = True
                 if (header == "AdjGNoSeas" or header == "AdjANoSeas" or header == "AdjPNoSeas" or header == "AdjG/GP" or header == "AdjA/GP" or header == "AdjP/GP" or header == "AdjG/60M" or header == "AdjA/60M" or header == "AdjP/60M") and "adjusted" in extra_stats:
                     override_show = True
-                if header in ("PIM/GP", "PEN/GP", "A1/GP", "EVA1/GP", "GA/GP", "SA/GP", "SV/GP") and not has_toi_stats:
+                if header in ("PIM/GP", "PEN/GP", "GA/GP", "SA/GP", "SV/GP") and not has_toi_stats:
                     override_show = True
                 if "shot" in extra_stats and ("Wrist" in header or "Snap" in header or "Slap" in header or "Back" in header or "Tip" in header or "Deflect" in header or "Wrap" in header):
                     override_show = True
@@ -39143,7 +39143,7 @@ def get_reddit_player_table(player_datas, player_type, debug_mode, original_comm
                     override_show = True
                 if (header == "AdjGNoSeas" or header == "AdjANoSeas" or header == "AdjPNoSeas" or header == "AdjG/GP" or header == "AdjA/GP" or header == "AdjP/GP" or header == "AdjG/60M" or header == "AdjA/60M" or header == "AdjP/60M") and "adjusted" in extra_stats:
                     override_show = True
-                if header in ("PIM/GP", "PEN/GP", "A1/GP", "EVA1/GP", "GA/GP", "SA/GP", "SV/GP") and not has_toi_stats:
+                if header in ("PIM/GP", "PEN/GP", "GA/GP", "SA/GP", "SV/GP") and not has_toi_stats:
                     override_show = True
                 if "shot" in extra_stats and ("Wrist" in header or "Snap" in header or "Slap" in header or "Back" in header or "Tip" in header or "Deflect" in header or "Wrap" in header):
                     override_show = True
@@ -39946,7 +39946,7 @@ def handle_table_data(player_data, player_type, over_header, header, highest_val
         override_show = True
     if (header == "AdjGNoSeas" or header == "AdjANoSeas" or header == "AdjPNoSeas" or header == "AdjG/GP" or header == "AdjA/GP" or header == "AdjP/GP" or header == "AdjG/60M" or header == "AdjA/60M" or header == "AdjP/60M") and "adjusted" in extra_stats:
         override_show = True
-    if header in ("PIM/GP", "PEN/GP", "A1/GP", "EVA1/GP", "GA/GP", "SA/GP", "SV/GP") and not has_toi_stats:
+    if header in ("PIM/GP", "PEN/GP", "GA/GP", "SA/GP", "SV/GP") and not has_toi_stats:
         override_show = True
     if "shot" in extra_stats and ("Wrist" in header or "Snap" in header or "Slap" in header or "Back" in header or "Tip" in header or "Deflect" in header or "Wrap" in header):
         override_show = True
