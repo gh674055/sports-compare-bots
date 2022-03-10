@@ -34028,7 +34028,7 @@ def handle_da_mlb_quals(row, event_name, at_bat_event, qualifiers, player_data, 
         for qual_object in qualifiers["Pinch Hitting"]:
             if qual_object["negate"]:
                 if at_bat_event["next_play_pinch"] != None:
-                    return Fals
+                    return False
             else:
                 if at_bat_event["next_play_pinch"] == None:
                     return False
