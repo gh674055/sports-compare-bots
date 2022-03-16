@@ -259,6 +259,10 @@ headers = {
             "positive" : True,
             "display" : False
         },
+        "CatchSeasons" : {
+            "positive" : True,
+            "display" : False
+        },
         "WARSeasons" : {
             "positive" : True,
             "display" : False
@@ -1556,6 +1560,22 @@ headers = {
             "positive" : True,
             "type" : "Defense/Value (Baseball Reference)"
         },
+        "RerC" : {
+            "positive" : True,
+            "for-pos" : ["C"],
+            "type" : "Defense/Value (Baseball Reference)",
+            "valid_since" : {
+                "season" : 2003
+            }
+        },
+        "RszC" : {
+            "positive" : True,
+            "for-pos" : ["C"],
+            "type" : "Defense/Value (Baseball Reference)",
+            "valid_since" : {
+                "season" : 2011
+            }
+        },
         "WAAPos" : {
             "positive" : True,
             "round" : 1,
@@ -1697,6 +1717,22 @@ headers = {
         "Rfield/Yr" : {
             "positive" : True,
             "type" : "Defense/Value (Baseball Reference)"
+        },
+        "RerC/Yr" : {
+            "positive" : True,
+            "for-pos" : ["C"],
+            "type" : "Defense/Value (Baseball Reference)",
+            "valid_since" : {
+                "season" : 2003
+            }
+        },
+        "RszC/Yr" : {
+            "positive" : True,
+            "for-pos" : ["C"],
+            "type" : "Defense/Value (Baseball Reference)",
+            "valid_since" : {
+                "season" : 2011
+            }
         },
         "WAAPos/Yr" : {
             "positive" : True,
@@ -4579,6 +4615,8 @@ formulas = {
         "Fld%" : "(PutOut + A) / (PutOut + A + E)",
         "Rdrs/yr" : "Special",
         "WAA/Yr" : "WAA / WARSeasons",
+        "RerC/Yr" : "RerC / CatchSeasons",
+        "RszC/Yr" : "RszC / CatchSeasons",
         "Rbat/Yr" : "Rbat / WARSeasons",
         "Rbaser/Yr" : "Rbaser / WARSeasons",
         "Rfield/Yr" : "Rfield / WARSeasons",
@@ -15002,7 +15040,7 @@ def handle_multi_player_data(player_id, time_frames, player_type, player_page, r
     player_data["player_jaws_position"] = get_player_jaws_position(player_page)
     player_data["player_flag"] = get_player_country(player_page)
     player_data["player_hof"] = get_player_hof(player_page)
-    player_data["year_valid_years"], player_data["reg_year_valid_years"], player_data["game_valid_years"], player_data["total_game_valid_years"], player_data["pitch_valid_years"], valid_teams, valid_teams_raw_key, valid_year_teams = get_valid_years(player_page, player_type)
+    player_data["year_valid_years"], player_data["reg_year_valid_years"], player_data["game_valid_years"], player_data["total_game_valid_years"], player_data["pitch_valid_years"], player_data["catch_valid_years"], valid_teams, valid_teams_raw_key, valid_year_teams = get_valid_years(player_page, player_type)
     player_data["has_season_stats"] = True
     player_data["has_award_stats"] = True
     player_data["is_only_ws"] = True
@@ -15923,7 +15961,86 @@ def handle_player_data(player_data, time_frame, player_type, player_page, valid_
             if perform_post_qualifier(player_data, player_type, row_data, time_frame["qualifiers"], all_rows):
                 new_rows.append(row_data)
         all_rows = new_rows
-    
+
+    field_player_page = None
+
+    calling_catching_years = {}
+    framing_catching_years = {}
+    if player_data["catch_valid_years"]:
+        field_page_url = advanced_page_url_format.format(player_data["id"][0], player_data["id"], "field")
+        field_request = urllib.request.Request(field_page_url, headers=request_headers)
+        field_player_page = None
+        try:
+            field_response, field_player_page = url_request(field_request)
+        except urllib.error.HTTPError as err:
+            if err.status != 404:
+                raise
+
+        if field_player_page != None:
+            table = field_player_page.find("table", id="advanced_fielding")
+            if not table:
+                field_comments = field_player_page.find_all(string=lambda text: isinstance(text, Comment))
+                for c in field_comments:
+                    temp_soup = BeautifulSoup(c, "lxml")
+                    temp_table = temp_soup.find("table", id="advanced_fielding")
+                    if temp_table:
+                        table = temp_table
+                        break
+
+            if table:
+                total_rows = table.find("tbody").find_all("tr")
+                for row in total_rows:
+                    match = False
+                    row_id = row.get("id")
+                    if row_id:
+                        match = re.match(r"^\d+\:standard_fielding$", row_id)
+                    elif row.get("class") and "partial_table" in row.get("class") and not "spacer" in row.get("class"):
+                        match = True
+                        
+                    if match:
+                        field_year = int(row.find("th", {"data-stat" : "year_ID"}).find(text=True))
+                        field_team = str(row.find("td", {"data-stat" : "team_ID"}).find(text=True))
+                        if str(row.find("td", {"data-stat" : "pos"}).find(text=True)) == "C":
+                            if field_year >= 2003:
+                                if field_year not in calling_catching_years:
+                                    calling_catching_years[field_year] = set()
+                                calling_catching_years[field_year].add(field_team)
+                                if field_year >= 2011:
+                                    if field_year not in framing_catching_years:
+                                        framing_catching_years[field_year] = set()
+                                    framing_catching_years[field_year].add(field_team)
+                        
+    is_full_career_calling_catch = False
+    if calling_catching_years:
+        is_full_career_calling_catch = True
+        for catch_year in calling_catching_years:
+            for catch_team in calling_catching_years[catch_year]:
+                has_catch_match = False
+                for row_data in all_rows:
+                    if row_data["Year"] == catch_year and row_data["Tm"] == catch_team:
+                        has_catch_match = True
+                        break
+                if not has_catch_match:
+                    is_full_career_calling_catch = False
+                    break
+            if not is_full_career_calling_catch:
+                break
+    is_full_career_framing_catch = False
+    if framing_catching_years:
+        is_full_career_framing_catch = True
+        for catch_year in framing_catching_years:
+            for catch_team in framing_catching_years[catch_year]:
+                has_catch_match = False
+                for row_data in all_rows:
+                    if row_data["Year"] == catch_year and row_data["Tm"] == catch_team:
+                        has_catch_match = True
+                        break
+                if not has_catch_match:
+                    is_full_career_framing_catch = False
+                    break
+            if not is_full_career_framing_catch:
+                break
+
     post_qual_teams = set([row["Tm"] for row in all_rows])
     post_qual_years = set([row["Year"] for row in all_rows])
     post_qual_teams_drs = set([row["Tm"] for row in all_rows if row["Year"] >= 2003])
@@ -15983,9 +16100,12 @@ def handle_player_data(player_data, time_frame, player_type, player_page, valid_
     if "Season Stat" in time_frame["qualifiers"] or "Previous Season Stat" in time_frame["qualifiers"] or "Upcoming Season Stat" in time_frame["qualifiers"] or "Season Formula" in time_frame["qualifiers"] or "Total Games Stat" in time_frame["qualifiers"] or "Max Streak" in time_frame["qualifiers"] or "Count Streak" in time_frame["qualifiers"] or "Max Streak Formula" in time_frame["qualifiers"] or "Count Streak Formula" in time_frame["qualifiers"] or "Max Stretch" in time_frame["qualifiers"] or "Quickest" in time_frame["qualifiers"] or "Slowest" in time_frame["qualifiers"] or "Max Stat" in time_frame["qualifiers"] or "Min Stat" in time_frame["qualifiers"] or "Season" in time_frame["qualifiers"] or "Season Reversed" in time_frame["qualifiers"] or "Season Games" in time_frame["qualifiers"] or "Games" in time_frame["qualifiers"]:
         is_full_career = False
         is_full_career_drs = False
+        is_full_career_calling_catch = False
+        is_full_career_framing_catch = False
         is_full_teams = False
         all_teams_unique = False
         has_post_qual = True
+
     
     has_season_stats = False
     has_award_stats = False
@@ -15999,7 +16119,7 @@ def handle_player_data(player_data, time_frame, player_type, player_page, valid_
         is_only_cs = True
     elif not is_game or is_only_round:
         if not time_frame["playoffs"]:
-            has_season_pitch_stats = handle_season_only_stats(player_page, player_data, player_type, time_frame, all_rows, is_full_career, is_full_career_drs, is_full_teams, all_teams_unique, is_pitching_jaws, False)
+            has_season_pitch_stats = handle_season_only_stats(player_page, field_player_page, player_data, player_type, time_frame, all_rows, is_full_career, is_full_career_drs, is_full_career_calling_catch, is_full_career_framing_catch, is_full_teams, all_teams_unique, is_pitching_jaws, False)
             has_season_stats = True
             regular_seasons = set()
             playoff_seasons = set()
@@ -16018,6 +16138,8 @@ def handle_player_data(player_data, time_frame, player_type, player_page, valid_
                         row["RegularSeasons"] = 1
                         if row["Year"] in player_data["pitch_valid_years"]:
                             row["PitchSeasons"] = 1
+                        if row["Year"] in player_data["catch_valid_years"]:
+                            row["CatchSeasons"] = 1
                         regular_seasons.add(row["Year"])
                 
                 if not (("fake_playoff_row" in row and row["fake_playoff_row"]) or row["is_playoffs"]):
@@ -16070,6 +16192,8 @@ def handle_player_data(player_data, time_frame, player_type, player_page, valid_
                             row["RegularSeasons"] = 1
                             if row["Year"] in player_data["pitch_valid_years"]:
                                 row["PitchSeasons"] = 1
+                            if row["Year"] in player_data["catch_valid_years"]:
+                                row["CatchSeasons"] = 1
                             regular_seasons.add(row["Year"])
                     if row["Year"] not in years_to_skip_champ or years_to_skip_champ[row["Year"]] == row["Tm"]:
                         row["UniqueSeasons"] = 1
@@ -16273,6 +16397,8 @@ def handle_player_data(player_data, time_frame, player_type, player_page, valid_
                     row["RegularSeasons"] = 1
                     if row["Year"] in player_data["pitch_valid_years"]:
                         row["PitchSeasons"] = 1
+                    if row["Year"] in player_data["catch_valid_years"]:
+                        row["CatchSeasons"] = 1
                     regular_seasons.add(row["Year"])
             if row["Year"] not in years_to_skip_champ or years_to_skip_champ[row["Year"]] == row["Tm"]:
                 row["UniqueSeasons"] = 1
@@ -16318,6 +16444,38 @@ def handle_player_data(player_data, time_frame, player_type, player_page, valid_
         post_qual_years_drs = set([row["Year"] for row in all_rows if row["Year"] >= 2003])
         has_all_years = post_qual_years == set(valid_years)
         is_full_career = has_all_years and pre_qual_teams == post_qual_teams
+
+        is_full_career_calling_catch = False
+        if calling_catching_years:
+            is_full_career_calling_catch = True
+            for catch_year in calling_catching_years:
+                for catch_team in calling_catching_years[catch_year]:
+                    has_catch_match = False
+                    for row_data in all_rows:
+                        if row_data["Year"] == catch_year and row_data["Tm"] == catch_team:
+                            has_catch_match = True
+                            break
+                    if not has_catch_match:
+                        is_full_career_calling_catch = False
+                        break
+                if not is_full_career_calling_catch:
+                    break
+        is_full_career_framing_catch = False
+        if framing_catching_years:
+            is_full_career_framing_catch = True
+            for catch_year in framing_catching_years:
+                for catch_team in framing_catching_years[catch_year]:
+                    has_catch_match = False
+                    for row_data in all_rows:
+                        if row_data["Year"] == catch_year and row_data["Tm"] == catch_team:
+                            has_catch_match = True
+                            break
+                    if not has_catch_match:
+                        is_full_career_framing_catch = False
+                        break
+                if not is_full_career_framing_catch:
+                    break
+
         is_full_career_drs = post_qual_years_drs == set([year for year in valid_years if year >= 2003]) and pre_qual_teams_drs == post_qual_teams_drs
         is_full_teams = True
         all_teams_unique = True
@@ -16336,7 +16494,7 @@ def handle_player_data(player_data, time_frame, player_type, player_page, valid_
                 if stat in headers[player_type["da_type"]] and "type" in headers[player_type["da_type"]][stat] and headers[player_type["da_type"]][stat]["type"].startswith("Defense/"):
                     row[stat] = 0
     
-        has_season_pitch_stats = handle_season_only_stats(player_page, player_data, player_type, time_frame, all_rows, is_full_career, is_full_career_drs, is_full_teams, all_teams_unique, is_pitching_jaws, True)
+        has_season_pitch_stats = handle_season_only_stats(player_page, field_player_page, player_data, player_type, time_frame, all_rows, is_full_career, is_full_career_drs, is_full_career_calling_catch, is_full_career_framing_catch, is_full_teams, all_teams_unique, is_pitching_jaws, True)
 
     if all_rows:
         has_war_7 = False
@@ -17203,7 +17361,7 @@ def determine_row_data(game_data, player_type, player_data, player_id, current_t
     return row_data
 
 def fix_seasons(all_rows):
-    stats_to_fix = ["Seasons", "UniqueSeasons", "NonFakeSeasons", "PitchSeasons", "WARPitchSeasons", "SlrSeasons", "RegularSeasons", "WARSeasons", "PlayoffSeasons", "AllStarSeasons"]
+    stats_to_fix = ["Seasons", "UniqueSeasons", "NonFakeSeasons", "PitchSeasons", "WARPitchSeasons", "CatchSeasons", "SlrSeasons", "RegularSeasons", "WARSeasons", "PlayoffSeasons", "AllStarSeasons"]
     for stat_to_fix in stats_to_fix:
         years = set()
         for row in all_rows:
@@ -17365,12 +17523,15 @@ def handle_cycle(player_data, all_rows):
                         row_data["Cycle"] += 1
                         parsed_cycles.add(og_cycle)
 
-def handle_season_only_stats(player_page, player_data, player_type, time_frame, all_rows, is_full_career, is_full_career_drs, is_full_teams, all_teams_unique, is_pitching_jaws, force_seasons):
+def handle_season_only_stats(player_page, field_player_page, player_data, player_type, time_frame, all_rows, is_full_career, is_full_career_drs, is_full_career_calling_catch, is_full_career_framing_catch, is_full_teams, all_teams_unique, is_pitching_jaws, force_seasons):
     if not all_rows:
         return False
         
     table_names = ["batting_value", "pitching_value", "standard_fielding", "appearances"]
     split_table_names = ["batting_value", "pitching_value"]
+
+    if field_player_page:
+        table_names.append("advanced_fielding")
 
     positions_to_skip = ["LF", "RF", "CF"]
 
@@ -17585,15 +17746,15 @@ def handle_season_only_stats(player_page, player_data, player_type, time_frame, 
                     match = True
 
                 if row_id:
-                    if table_name == "standard_fielding":
-                        match = re.match(r"^\d+\:" + table_name + "$", row_id)
+                    if table_name in ["standard_fielding", "advanced_fielding"]:
+                        match = re.match(r"^\d+\:standard_fielding$", row_id)
                     else:
                         match = re.match(r"^" + table_name + r"\.\d+$", row_id)
                 elif row.get("class") and "partial_table" in row.get("class") and not "spacer" in row.get("class"):
                     match = True
 
                 if match:
-                    if table_name == "standard_fielding" and str(row.find("td", {"data-stat" : "pos"}).find(text=True)) in positions_to_skip:
+                    if table_name in ["standard_fielding", "advanced_fielding"] and str(row.find("td", {"data-stat" : "pos"}).find(text=True)) in positions_to_skip:
                         continue
                 
                     if stat_sum_range and not table_has_teeam_quals:
@@ -17696,20 +17857,35 @@ def handle_season_only_stats(player_page, player_data, player_type, time_frame, 
                 pot_row["WAR/Yr"] = pot_row[stat]
 
     comments = None
+    field_comments = None
     previous_headers = set()
     years_have_salary = {}
     drs_year_values = []
     for table_index, table_name in enumerate(table_names):
-        table = player_page.find("table", id=table_name)
+        player_page_to_use = player_page
+        if table_name == "advanced_fielding":
+            player_page_to_use = field_player_page
+
+        table = player_page_to_use.find("table", id=table_name)
         if not table:
-            if not comments:
-                comments = player_page.find_all(string=lambda text: isinstance(text, Comment))
-            for c in comments:
-                temp_soup = BeautifulSoup(c, "lxml")
-                temp_table = temp_soup.find("table", id=table_name)
-                if temp_table:
-                    table = temp_table
-                    break
+            if table_name == "advanced_fielding":
+                if not field_comments:
+                    field_comments = player_page_to_use.find_all(string=lambda text: isinstance(text, Comment))
+                for c in field_comments:
+                    temp_soup = BeautifulSoup(c, "lxml")
+                    temp_table = temp_soup.find("table", id=table_name)
+                    if temp_table:
+                        table = temp_table
+                        break
+            else:
+                if not comments:
+                    comments = player_page_to_use.find_all(string=lambda text: isinstance(text, Comment))
+                for c in comments:
+                    temp_soup = BeautifulSoup(c, "lxml")
+                    temp_table = temp_soup.find("table", id=table_name)
+                    if temp_table:
+                        table = temp_table
+                        break
 
         if table:
             header_columns = table.find("thead").find_all("th")
@@ -17727,8 +17903,8 @@ def handle_season_only_stats(player_page, player_data, player_type, time_frame, 
                 row_id = row.get("id")
                 match = False
                 if row_id:
-                    if table_name == "standard_fielding":
-                        match = re.match(r"^\d+\:" + table_name + "$", row_id)
+                    if table_name in ["standard_fielding", "advanced_fielding"]:
+                        match = re.match(r"^\d+\:standard_fielding$", row_id)
                     else:
                         match = re.match(r"^" + table_name + r"\.\d+$", row_id)
                 elif row.get("class") and "partial_table" in row.get("class") and not "spacer" in row.get("class"):
@@ -17737,7 +17913,7 @@ def handle_season_only_stats(player_page, player_data, player_type, time_frame, 
                     match = True
 
                 if match:
-                    if table_name == "standard_fielding" and str(row.find("td", {"data-stat" : "pos"}).find(text=True)) in positions_to_skip:
+                    if table_name in ["standard_fielding", "advanced_fielding"] and str(row.find("td", {"data-stat" : "pos"}).find(text=True)) in positions_to_skip:
                         continue
 
                     row_data = parse_row(row, time_frame, False, False, player_type, header_values, previous_headers, table_index, table_name)
@@ -17759,7 +17935,7 @@ def handle_season_only_stats(player_page, player_data, player_type, time_frame, 
                                                 years_have_salary[row_data["Tm"]] = set()
                                             years_have_salary[row_data["Tm"]].add(row_data["Year"])
                                         
-                                        if stat == "Salary" or table_name == "standard_fielding":
+                                        if stat == "Salary" or table_name in ["standard_fielding", "advanced_fielding"]:
                                             if stat == "Rdrs/yr":
                                                 drs_year_values.append({
                                                     "pos" : str(row.find("td", {"data-stat" : "pos"}).find(text=True)),
@@ -17909,6 +18085,49 @@ def handle_season_only_stats(player_page, player_data, player_type, time_frame, 
                                     if war_strong and war_7yr_strong and jaws_strong:
                                         all_rows[len(all_rows) - 1]["WAR7yr"] = float(war_7yr_strong)
                                         all_rows[len(all_rows) - 1]["JAWS"] = float(jaws_strong)
+    
+    if player_data["catch_valid_years"] and (is_full_career_calling_catch or is_full_career_framing_catch):
+        table = field_player_page.find("table", id="advanced_fielding")
+        if not table:
+            if not field_comments:
+                field_comments = field_player_page.find_all(string=lambda text: isinstance(text, Comment))
+            for c in field_comments:
+                temp_soup = BeautifulSoup(c, "lxml")
+                temp_table = temp_soup.find("table", id="standard_fielding")
+                if temp_table:
+                    table = temp_table
+                    break
+
+        if table:
+            total_rows = table.find("tfoot").find_all("tr")
+            if total_rows:
+                total_row = total_rows[len(total_rows) - 1]
+                if is_full_career_calling_catch:
+                    drs_col = total_row.find("td", {"data-stat" : "bis_runs_catcher_er"})
+                    if not drs_col:
+                        total_row = total_rows[len(total_rows) - 2]
+                        drs_col = total_row.find("td", {"data-stat" : "bis_runs_catcher_er"})
+                    if drs_col:
+                        drs_value = drs_col.find(text=True)
+                        if drs_value:
+                            for row in all_rows:
+                                if "RerC" in row:
+                                    row["RerC"] = 0
+
+                            all_rows[len(all_rows) - 1]["RerC"] = int(str(drs_value))
+                if is_full_career_framing_catch:
+                    drs_col = total_row.find("td", {"data-stat" : "bis_runs_catcher_sz"})
+                    if not drs_col:
+                        total_row = total_rows[len(total_rows) - 2]
+                        drs_col = total_row.find("td", {"data-stat" : "bis_runs_catcher_sz"})
+                    if drs_col:
+                        drs_value = drs_col.find(text=True)
+                        if drs_value:
+                            for row in all_rows:
+                                if "RszC" in row:
+                                    row["RszC"] = 0
+
+                            all_rows[len(all_rows) - 1]["RszC"] = int(str(drs_value))
     
     set_war = False
     if is_full_career or is_full_current_year:
@@ -24004,6 +24223,7 @@ def get_valid_years(player_page, player_type):
     game_valid_years = set()
     total_game_valid_years = set()
     pitch_valid_years = set()
+    catch_valid_years = set()
     valid_teams_key = {}
     valid_teams_raw_key = {}
     valid_year_teams = {}
@@ -24029,7 +24249,10 @@ def get_valid_years(player_page, player_type):
                 row_id = row.get("id")
                 match = False
                 if row_id:
-                    match = re.match(r"^" + table_name + r"\.\d+$", row_id)
+                    if table_name in ["standard_fielding", "advanced_fielding"]:
+                        match = re.match(r"^\d+\:" + table_name + "$", row_id)
+                    else:
+                        match = re.match(r"^" + table_name + r"\.\d+$", row_id)
                 elif row.get("class") and "partial_table" in row.get("class") and not "spacer" in row.get("class"):
                     match = True
                 if match or (table_name.endswith("postseason") and not row.get("class")) and row.parent.name != "thead" and row.parent.name != "tfoot":
@@ -24039,6 +24262,10 @@ def get_valid_years(player_page, player_type):
                         reg_valid_years.add(row_year)
                     if table_name == "pitching_standard":
                         pitch_valid_years.add(row_year)
+                    elif table_name == "standard_fielding":
+                        if str(row.find("td", {"data-stat" : "pos"}).find(text=True)) == "C":
+                            catch_valid_years.add(row_year)
+
                     row_team = row.find("td", {"data-stat" : "team_ID"}).find("a")
                     if row_team:
                         row_abbr = str(row_team.find(text=True)).upper()
@@ -24088,14 +24315,16 @@ def get_valid_years(player_page, player_type):
     game_valid_years = list(game_valid_years)
     total_game_valid_years = list(total_game_valid_years)
     pitch_valid_years = list(pitch_valid_years)
+    catch_valid_years = list(catch_valid_years)
 
     total_valid_years.sort()
     reg_valid_years.sort()
     game_valid_years.sort()
     total_game_valid_years.sort()
     pitch_valid_years.sort()
+    catch_valid_years.sort()
 
-    return total_valid_years, reg_valid_years, game_valid_years, total_game_valid_years, pitch_valid_years, valid_teams_key, valid_teams_raw_key, valid_year_teams
+    return total_valid_years, reg_valid_years, game_valid_years, total_game_valid_years, pitch_valid_years, catch_valid_years, valid_teams_key, valid_teams_raw_key, valid_year_teams
 
 def add_valid_playoff_years(valid_years, playoff_data, time_frame):
     if time_frame["playoffs"] == "Only":
