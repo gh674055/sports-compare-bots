@@ -38162,12 +38162,6 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
         else:
             raise
 
-    if "message" in sub_data:
-        missing_games = True
-        game_data["missing_data"] = True
-        return game_data, row_data, row_index, missing_games, missing_pitch
-
-
     team_position_map = {
         "PH" : set(),
         "PR" : set()
