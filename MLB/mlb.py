@@ -42627,7 +42627,7 @@ def print_player_data(player_datas, player_type, highest_vals, lowest_vals, has_
                     if header == "BQS" or header == "IS" or header == "IR" or header == "IS%":
                         override_show = True
 
-                if "for-pos" in all_headers[over_header][header]:
+                if "for-pos" in all_headers[over_header][header] and ("display" not in all_headers[over_header][header] or all_headers[over_header][header]["display"]):
                     for player_data in player_datas:
                         if set(all_headers[over_header][header]["for-pos"]) & set(player_data["ind_type"]):
                             display_header = all_headers[over_header][header]["display-value"] if "display-value" in all_headers[over_header][header] and all_headers[over_header][header]["display-value"] else header
@@ -42947,7 +42947,7 @@ def get_reddit_player_table(player_datas, player_type, debug_mode, original_comm
                     if header == "BQS" or header == "IS" or header == "IR" or header == "IS%":
                         override_show = True
                 
-                if "for-pos" in all_headers[over_header][header]:
+                if "for-pos" in all_headers[over_header][header] and ("display" not in all_headers[over_header][header] or all_headers[over_header][header]["display"]):
                     for player_data in player_datas:
                         if set(all_headers[over_header][header]["for-pos"]) & set(player_data["ind_type"]):
                             display_header = all_headers[over_header][header]["display-value"] if "display-value" in all_headers[over_header][header] and all_headers[over_header][header]["display-value"] else header
@@ -43674,7 +43674,7 @@ def handle_table_data(over_header, player_data, player_datas, player_type, heade
         override_show = True
 
     for_pos = None
-    if "for-pos" in headers[player_type["da_type"]][header]:
+    if "for-pos" in headers[player_type["da_type"]][header] and ("display" not in headers[player_type["da_type"]][header] or headers[player_type["da_type"]][header]["display"]):
         if set(headers[player_type["da_type"]][header]["for-pos"]) & set(player_data["ind_type"]):
             for_pos = True
         else:
