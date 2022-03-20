@@ -3432,6 +3432,14 @@ headers = {
             "display-value" : "CurCap",
             "skipzero" : True
         },
+        "AdvCurrentCap$" : {
+            "positive" : False,
+            "display" : False,
+            "round" : "dollar",
+            "type" : "Advanced",
+            "display-value" : "CurCap",
+            "skipzero" : True
+        },
         "Post/GP" : {
             "positive" : True,
             "round" : 2,
@@ -8715,7 +8723,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 extra_stats.add("hide-stat-itoi%")
                                 extra_stats.add("show-stat-advtoi")
                                 extra_stats.add("show-stat-advtoi/gp")
-                                extra_stats.add("show-stat-currentcap$")
+                                extra_stats.add("show-stat-advcurrentcap$")
                                 player_type["da_type"] = {
                                     "type" : "Skater"
                                 }
@@ -8735,7 +8743,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 extra_stats.add("hide-stat-itoi%")
                                 extra_stats.add("show-stat-advtoi")
                                 extra_stats.add("show-stat-advtoi/gp")
-                                extra_stats.add("show-stat-currentcap$")
+                                extra_stats.add("show-stat-advcurrentcap$")
                                 player_type["da_type"] = {
                                     "type" : "Skater"
                                 }
@@ -8755,7 +8763,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 extra_stats.add("hide-stat-itoi%")
                                 extra_stats.add("show-stat-advtoi")
                                 extra_stats.add("show-stat-advtoi/gp")
-                                extra_stats.add("show-stat-currentcap$")
+                                extra_stats.add("show-stat-advcurrentcap$")
                                 player_type["da_type"] = {
                                     "type" : "Skater"
                                 }
@@ -15890,9 +15898,11 @@ def calculate_values(all_rows, player_type, og_player_data, extra_stats={}):
 
     if isinstance(og_player_data["player_cap"], numbers.Number):
         player_data["stat_values"]["CurrentCap$"] += og_player_data["player_cap"]
+        player_data["stat_values"]["AdvCurrentCap$"] += og_player_data["player_cap"]
     else:
         for cap_hit in og_player_data["player_cap"]:
             player_data["stat_values"]["CurrentCap$"] += cap_hit
+            player_data["stat_values"]["AdvCurrentCap$"] += cap_hit
 
     return player_data
 
@@ -40214,7 +40224,7 @@ def handle_table_data(player_data, player_type, over_header, header, highest_val
             elif header == "TOI":
                 if player_data["stat_values"]["any_missing_toi"] or is_invalid_stat(header, player_type, player_data["stat_values"], True, player_data, True):
                     value += "*"
-            elif header == "CurrentCap$":
+            elif header in ["CurrentCap$", "AdvCurrentCap$"]:
                 if not og_value:
                     return "N/A"
 
@@ -40276,7 +40286,7 @@ def is_against_header(header, over_header, extra_stats, player_type, has_toi_sta
             if "TOI" not in header or "current-stats-no-game" in extra_stats:
                 return True
 
-    # if header == "CurrentCap$":
+    # if header in ["CurrentCap$", "AdvCurrentCap$"]:
     #     return True
 
     if header.startswith("GP") and not header.startswith("GP_TOI"):
