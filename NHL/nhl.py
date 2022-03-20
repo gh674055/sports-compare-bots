@@ -8715,6 +8715,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 extra_stats.add("hide-stat-itoi%")
                                 extra_stats.add("show-stat-advtoi")
                                 extra_stats.add("show-stat-advtoi/gp")
+                                extra_stats.add("show-stat-currentcap$")
                                 player_type["da_type"] = {
                                     "type" : "Skater"
                                 }
@@ -8734,6 +8735,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 extra_stats.add("hide-stat-itoi%")
                                 extra_stats.add("show-stat-advtoi")
                                 extra_stats.add("show-stat-advtoi/gp")
+                                extra_stats.add("show-stat-currentcap$")
                                 player_type["da_type"] = {
                                     "type" : "Skater"
                                 }
@@ -8753,6 +8755,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 extra_stats.add("hide-stat-itoi%")
                                 extra_stats.add("show-stat-advtoi")
                                 extra_stats.add("show-stat-advtoi/gp")
+                                extra_stats.add("show-stat-currentcap$")
                                 player_type["da_type"] = {
                                     "type" : "Skater"
                                 }
@@ -40273,8 +40276,8 @@ def is_against_header(header, over_header, extra_stats, player_type, has_toi_sta
             if "TOI" not in header or "current-stats-no-game" in extra_stats:
                 return True
 
-    if header == "CurrentCap$":
-        return True
+    # if header == "CurrentCap$":
+    #     return True
 
     if header.startswith("GP") and not header.startswith("GP_TOI"):
         return False
