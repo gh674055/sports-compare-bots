@@ -9581,6 +9581,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                             elif qualifier_str == "game-winning":
                                 qual_type = "Game Winning"
                                 extra_stats.add("scoring-stats")
+                                extra_stats.add("scoring-stats-oi")
                                 extra_stats.add("current-stats")
                             elif qualifier_str == "offensive-zone":
                                 qual_type = "Offensive Zone"
@@ -22902,26 +22903,38 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                 if is_on_ice != None:
                     if is_on_ice:
                         if scoring_play["team"]["id"] == game_data["team_id"]:
-                            game_data["oi_all_team_goals"].append({**shared_data, **{}})
+                            game_data["oi_all_team_goals"].append({**shared_data, **{
+                                "gameWinningGoal" : "gameWinningGoal" in scoring_play["result"] and scoring_play["result"]["gameWinningGoal"],
+                                "emptyNet" : "emptyNet" in scoring_play["result"] and scoring_play["result"]["emptyNet"],
+                            }})
                             if game_data["is_html_stats"]:
                                 game_data["oi_all_team_shots"].append({**shared_data, **{}})
                                 game_data["oi_all_team_shots_og"].append({**shared_data, **{}})
                                 game_data["oi_all_team_unblocked_shots"].append({**shared_data, **{}})
                         else:
-                            game_data["oi_all_opp_goals"].append({**shared_data, **{}})
+                            game_data["oi_all_opp_goals"].append({**shared_data, **{
+                                "gameWinningGoal" : "gameWinningGoal" in scoring_play["result"] and scoring_play["result"]["gameWinningGoal"],
+                                "emptyNet" : "emptyNet" in scoring_play["result"] and scoring_play["result"]["emptyNet"],
+                            }})
                             if game_data["is_html_stats"]:
                                 game_data["oi_all_opp_shots"].append({**shared_data, **{}})
                                 game_data["oi_all_opp_shots_og"].append({**shared_data, **{}})
                                 game_data["oi_all_opp_unblocked_shots"].append({**shared_data, **{}})
 
                     if scoring_play["team"]["id"] == game_data["team_id"]:
-                        game_data["all_team_goals"].append({**shared_data, **{}})
+                        game_data["all_team_goals"].append({**shared_data, **{
+                                "gameWinningGoal" : "gameWinningGoal" in scoring_play["result"] and scoring_play["result"]["gameWinningGoal"],
+                                "emptyNet" : "emptyNet" in scoring_play["result"] and scoring_play["result"]["emptyNet"],
+                            }})
                         if game_data["is_html_stats"]:
                             game_data["all_team_shots"].append({**shared_data, **{}})
                             game_data["all_team_shots_og"].append({**shared_data, **{}})
                             game_data["all_team_unblocked_shots"].append({**shared_data, **{}})
                     else:
-                        game_data["all_opp_goals"].append({**shared_data, **{}})
+                        game_data["all_opp_goals"].append({**shared_data, **{
+                                "gameWinningGoal" : "gameWinningGoal" in scoring_play["result"] and scoring_play["result"]["gameWinningGoal"],
+                                "emptyNet" : "emptyNet" in scoring_play["result"] and scoring_play["result"]["emptyNet"],
+                            }})
                         if game_data["is_html_stats"]:
                             game_data["all_opp_shots"].append({**shared_data, **{}})
                             game_data["all_opp_shots_og"].append({**shared_data, **{}})
@@ -27372,6 +27385,10 @@ def get_on_ice_info(player_game_info, goal_event, period, second, needs_team, ne
                 if period in player_shift_data and second in player_shift_data[period]:
                     opp_goalies = player_shift_data[period][second]["opp_goalies"]
                     opp_skaters = player_shift_data[period][second]["opp_skaters"]
+
+
+    if "emptyNet" in goal_event and goal_event["emptyNet"]:
+        opp_goalies = 0
 
     return team_skaters, team_goalies, opp_skaters, opp_goalies, has_team_shift_data, has_opp_shift_data
 
@@ -40327,6 +40344,8 @@ def is_against_header(header, over_header, extra_stats, player_type, has_toi_sta
         return header not in ("A", "A/GP", "A/60M", "Shft", "TOI", "Shft/GP", "TOI/Shft", "EVTOI",  "PPTOI",  "SHTOI", "EVTOI/GP",  "PPTOI/GP",  "SHTOI/GP", "GWA", "ENA", "A1", "A1%", "A1/GP", "A1/60M", "AdjA", "EVA", "EVA/GP", "EVA/60M", "EVA1", "EVA1/60M", "EVA1%", "EVA1/GP", "SHA", "SHA/GP", "SHA/60M", "SHA1", "SHA1/60M", "SHA1%", "SHA1/GP", "PPA", "PPA/GP", "PPA/60M", "PPA1", "PPA1/60M", "PPA1%", "PPA1/GP")
     if "Points On" in extra_stats:
         return header not in ("P", "P/GP", "P/60M", "P1", "P1/GP", "P1/60M", "Shft", "Shft/GP", "TOI", "TOI/Shft", "EVTOI",  "PPTOI",  "SHTOI", "EVTOI/GP",  "PPTOI/GP",  "SHTOI/GP", "GWP", "ENP", "AdjP", "EVP", "EVP/GP", "EVP/60M", "SHP", "SHP/GP", "SHP/60M", "PPP", "PPP/GP", "PPP/60M", "EVP1", "EVP1/GP", "EVP1/60M", "SHP1", "SHP1/GP", "SHP1/60M", "PPP1", "PPP1/GP", "PPP1/60M")
+    if "scoring-stats-oi" in extra_stats:
+        return header not in ("G", "OTG", "Shft", "Shft/GP", "TOI", "TOI/Shft", "EVTOI",  "PPTOI",  "SHTOI", "EVTOI/GP",  "PPTOI/GP",  "SHTOI/GP", "GWG", "GWA", "GWP", "1stG", "HAT", "ENG", "ENA", "ENP", "EVG", "AdjG", "PPG", "SHG", "G/GP", "EVG/GP", "EVG/60M", "PPG/GP", "PPG/60M", "G/60M", "A", "A/GP", "A/60M", "A1", "A1%", "A1/GP", "A1/60M", "AdjA", "EVA", "SHA", "PPA", "P", "P/GP", "P/60M", "P1", "P1%", "P1/GP", "P1/60M", "AdjP", "EVP", "EVP/GP", "EVP/60M", "SHP", "PPP", "PPP/GP", "PPP/60M", "EVA1%", "EVP1%", "SHA1%", "SHP1%", "PPA1%", "PPP1%", "EVA1", "EVP1", "SHA1", "SHP1", "PPA1", "PPP1", "SHG/GP", "SHP/GP", "SHP/60M", "SHG/60M", "GF", "GA", "GF/60M", "GA/60M", "GFPer", "GFRel/60M", "GARel/60M", "GFRelPer", "IPP", "TmTOI%")
     if "scoring-stats" in extra_stats:
         return header not in ("G", "OTG", "Shft", "Shft/GP", "TOI", "TOI/Shft", "EVTOI",  "PPTOI",  "SHTOI", "EVTOI/GP",  "PPTOI/GP",  "SHTOI/GP", "GWG", "GWA", "GWP", "1stG", "HAT", "ENG", "ENA", "ENP", "EVG", "AdjG", "PPG", "SHG", "G/GP", "EVG/GP", "EVG/60M", "PPG/GP", "PPG/60M", "G/60M", "A", "A/GP", "A/60M", "A1", "A1%", "A1/GP", "A1/60M", "AdjA", "EVA", "SHA", "PPA", "P", "P/GP", "P/60M", "P1", "P1%", "P1/GP", "P1/60M", "AdjP", "EVP", "EVP/GP", "EVP/60M", "SHP", "PPP", "PPP/GP", "PPP/60M", "EVA1%", "EVP1%", "SHA1%", "SHP1%", "PPA1%", "PPP1%", "EVA1", "EVP1", "SHA1", "SHP1", "PPA1", "PPP1", "SHG/GP", "SHP/GP", "SHP/60M", "SHG/60M")
     if "Hit On" in extra_stats:

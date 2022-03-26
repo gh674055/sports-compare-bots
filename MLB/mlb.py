@@ -38371,24 +38371,34 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
                     scoring_play["playEvents"].pop()
         
         has_count_data = False
-        if not has_count_data and row_data["Year"] >= 129:
-            for index, scoring_play in enumerate(sub_data["liveData"]["plays"]["allPlays"]):
-                if scoring_play["result"]["type"] != "atBat" or "eventType" not in scoring_play["result"]:
-                    continue
-                
-                for play in scoring_play["playEvents"]:
-                    if play["isPitch"]:
-                        code = play["details"]["call"]["code"][-1:].upper()
-                        if code not in ["S", "B", "E", "X", "D", "K", "I", "H"]:
-                            has_count_data = True
-                            break
+        has_pitch_type_data = False
+        all_has_pitch_type_data = True
 
-                if has_count_data:
-                    break
+        for index, scoring_play in enumerate(sub_data["liveData"]["plays"]["allPlays"]):
+            if scoring_play["result"]["type"] != "atBat" or "eventType" not in scoring_play["result"]:
+                continue
+            
+            for play in scoring_play["playEvents"]:
+                if play["isPitch"]:
+                    code = play["details"]["call"]["code"][-1:].upper()
+                    if code not in ["S", "B", "E", "X", "D", "K", "I", "H"]:
+                        has_count_data = True
+
+                    if "type" in play["details"] and play["details"]["type"] and play["details"]["type"]["description"]:
+                        has_pitch_type_data = True
+                    else:
+                        all_has_pitch_type_data = False
         
         if not has_count_data:
             missing_pitch = True
             if has_count_stat or "Hit Location" in qualifiers or "Exact Hit Location" in qualifiers or "Bunting" in qualifiers or "Fastball" in qualifiers or "Out Of Zone" in qualifiers or "In Zone" in qualifiers or "Breaking" in qualifiers or "Offspeed" in qualifiers or "Swung At First Pitch" in qualifiers or "First Pitch" in qualifiers or "Batter Ahead" in qualifiers or "Even Count" in qualifiers or "Pitcher Ahead" in qualifiers or "After Batter Ahead" in qualifiers or "After Even Count" in qualifiers or "After Pitcher Ahead" in qualifiers or "Full Count" in qualifiers or "Swinging On Strikes" in qualifiers or "Swinging On Balls" in qualifiers or "After Swinging On Strikes" in qualifiers or "After Swinging On Balls" in qualifiers or "After Strikes" in qualifiers or "After Balls" in qualifiers or "Strikes" in qualifiers or "Balls" in qualifiers or "Pitch Speed" in qualifiers or "Pitch Zone" in qualifiers or "Pitch Spin" in qualifiers or "Exit Velocity" in qualifiers or "Hit Distance" in qualifiers or "Hit Coordinates" in qualifiers or "Hit Y Coordinate" in qualifiers or "Hit X Coordinate" in qualifiers or "Pitch Coordinates" in qualifiers or "Pitch Y Coordinate" in qualifiers or "Pitch X Coordinate" in qualifiers or "Absolute Pitch Coordinates" in qualifiers or "Absolute Pitch Y Coordinate" in qualifiers or "Absolute Pitch X Coordinate" in qualifiers or "Hit Within Distance" in qualifiers or "Pitch Within Distance" in qualifiers or "Absolute Pitch Within Distance" in qualifiers or "Launch Angle" in qualifiers or "Count" in qualifiers or "After Count" in qualifiers or "After Swinging On Count" in qualifiers or "Swinging On Count" in qualifiers or "Game Pitch Count" in qualifiers or "Team Pitch Count" in qualifiers or "Pitch Count" in qualifiers or "Batters Faced" in qualifiers or "Plate Appearances" in qualifiers or "Starting Pitch Count" in qualifiers or "At Bat Pitch Count" in qualifiers or "Pitch Type" in qualifiers or "Exact Pitch Type" in qualifiers or "Hit Trajectory" in qualifiers or "Hit Hardness" in qualifiers:
+                missing_games = True
+                game_data["missing_data"] = True
+                return game_data, row_data, row_index, missing_games, missing_pitch
+        
+        if not has_pitch_type_data or not all_has_pitch_type_data:
+            missing_pitch = True
+            if not has_pitch_type_data and ("Fastball" in qualifiers or "Breaking" in qualifiers or "Offspeed" in qualifiers or "Pitch Type" in qualifiers or "Exact Pitch Type" in qualifiers):
                 missing_games = True
                 game_data["missing_data"] = True
                 return game_data, row_data, row_index, missing_games, missing_pitch
