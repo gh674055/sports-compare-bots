@@ -27388,7 +27388,10 @@ def get_on_ice_info(player_game_info, goal_event, period, second, needs_team, ne
 
 
     if "emptyNet" in goal_event and goal_event["emptyNet"]:
-        opp_goalies = 0
+        if goal_event["team"] == player_game_info["team_id"]:
+            opp_goalies = 0
+        else:
+            team_goalies = 0
 
     return team_skaters, team_goalies, opp_skaters, opp_goalies, has_team_shift_data, has_opp_shift_data
 
