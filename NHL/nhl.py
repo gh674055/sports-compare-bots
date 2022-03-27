@@ -15901,11 +15901,13 @@ def calculate_values(all_rows, player_type, og_player_data, extra_stats={}):
 
     if isinstance(og_player_data["player_cap"], numbers.Number):
         player_data["stat_values"]["CurrentCap$"] += og_player_data["player_cap"]
-        player_data["stat_values"]["AdvCurrentCap$"] += og_player_data["player_cap"]
+        if player_type["da_type"]["type"] == "Skater":
+            player_data["stat_values"]["AdvCurrentCap$"] += og_player_data["player_cap"]
     else:
         for cap_hit in og_player_data["player_cap"]:
             player_data["stat_values"]["CurrentCap$"] += cap_hit
-            player_data["stat_values"]["AdvCurrentCap$"] += cap_hit
+            if player_type["da_type"]["type"] == "Skater":
+                player_data["stat_values"]["AdvCurrentCap$"] += cap_hit
 
     return player_data
 
