@@ -23619,6 +23619,11 @@ def setup_game_data(player_data, row_data, player_id, player_type, time_frame, e
         else:
             raise
 
+    if "message" in sub_data:
+        missing_games = True
+        game_data["missing_data"] = True
+        return game_data, missing_games, []
+
     team_str = "home" if row_data["Location"] else "away"
     opp_str = "away" if row_data["Location"] else "home"
     game_data["team_str"] = team_str
