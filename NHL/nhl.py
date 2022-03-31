@@ -3428,6 +3428,7 @@ headers = {
         },
         "CurrentCap$" : {
             "positive" : False,
+            "display" : False,
             "round" : "dollar",
             "display-value" : "CurCap",
             "skipzero" : True
@@ -5434,6 +5435,7 @@ headers = {
         },
         "CurrentCap$" : {
             "positive" : False,
+            "display" : False,
             "round" : "dollar",
             "display-value" : "CurCap",
             "skipzero" : True
@@ -8723,7 +8725,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 extra_stats.add("hide-stat-itoi%")
                                 extra_stats.add("show-stat-advtoi")
                                 extra_stats.add("show-stat-advtoi/gp")
-                                extra_stats.add("show-stat-advcurrentcap$")
+                                #extra_stats.add("show-stat-advcurrentcap$")
                                 player_type["da_type"] = {
                                     "type" : "Skater"
                                 }
@@ -8743,7 +8745,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 extra_stats.add("hide-stat-itoi%")
                                 extra_stats.add("show-stat-advtoi")
                                 extra_stats.add("show-stat-advtoi/gp")
-                                extra_stats.add("show-stat-advcurrentcap$")
+                                #extra_stats.add("show-stat-advcurrentcap$")
                                 player_type["da_type"] = {
                                     "type" : "Skater"
                                 }
@@ -8763,7 +8765,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 extra_stats.add("hide-stat-itoi%")
                                 extra_stats.add("show-stat-advtoi")
                                 extra_stats.add("show-stat-advtoi/gp")
-                                extra_stats.add("show-stat-advcurrentcap$")
+                                #extra_stats.add("show-stat-advcurrentcap$")
                                 player_type["da_type"] = {
                                     "type" : "Skater"
                                 }
