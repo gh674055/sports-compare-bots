@@ -38389,10 +38389,11 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
                     if code not in ["S", "B", "E", "X", "D", "K", "I", "H"]:
                         has_count_data = True
 
-                    if "type" in play["details"] and play["details"]["type"] and play["details"]["type"]["description"]:
-                        has_pitch_type_data = True
-                    else:
-                        all_has_pitch_type_data = False
+                    if code not in ["V"]:
+                        if "type" in play["details"] and play["details"]["type"] and play["details"]["type"]["description"]:
+                            has_pitch_type_data = True
+                        else:
+                            all_has_pitch_type_data = False
         
         if not has_count_data:
             missing_pitch = True
