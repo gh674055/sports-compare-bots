@@ -94,7 +94,7 @@ extra_names = {
 manual_arenas = {
     "seattle-ice-arena" : {
         "city": "Seattle",
-        "country": "USA",
+        "country": "US",
         "state": "WA",
         "time_zone": "America/Los_Angeles",
         "venues": [
@@ -103,7 +103,7 @@ manual_arenas = {
     },
     "denman-arena": {
         "city": "Vancouver",
-        "country": "Canada",
+        "country": "CA",
         "state": "BC",
         "time_zone": "America/Vancouver",
         "venues": [
@@ -112,7 +112,7 @@ manual_arenas = {
     },
     "patrick-arena": {
         "city": "Victoria",
-        "country": "Canada",
+        "country": "CA",
         "state": "BC",
         "time_zone": "America/Vancouver",
         "venues": [
@@ -121,7 +121,7 @@ manual_arenas = {
     },
     "ralph-wilson-stadium": {
         "city": "Orchard Park",
-        "country": "USA",
+        "country": "US",
         "state": "NY",
         "time_zone": "America/New_York",
         "venues": [
@@ -130,7 +130,7 @@ manual_arenas = {
     },
     "saitama-super-arena": {
         "city": "Saitama",
-        "country": "Japan",
+        "country": "JP",
         "state": "Kanto",
         "time_zone": "Asia/Tokyo",
         "venues": [
@@ -139,7 +139,7 @@ manual_arenas = {
     },
     "target-field": {
         "city": "Minnesota",
-        "country": "USA",
+        "country": "US",
         "state": "MN",
         "time_zone": "America/Chicago",
         "venues": [
@@ -148,7 +148,7 @@ manual_arenas = {
     },
     "bridgestone-arena": {
         "city": "Nashville",
-        "country": "USA",
+        "country": "US",
         "state": "TN",
         "time_zone": "America/Chicago",
         "venues": [
@@ -160,7 +160,7 @@ manual_arenas = {
     },
     "nissan-stadium": {
         "city": "Nashville",
-        "country": "USA",
+        "country": "US",
         "state": "TN",
         "time_zone": "America/Chicago",
         "venues": [
@@ -169,7 +169,7 @@ manual_arenas = {
     },
     "tim-hortons-field": {
         "city": "Hamilton",
-        "country": "Canada",
+        "country": "CA",
         "state": "ON",
         "time_zone": "America/Toronto",
         "venues": [

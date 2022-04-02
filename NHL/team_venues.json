@@ -164,7 +164,7 @@
     },
     "bridgestone-arena": {
         "city": "Nashville",
-        "country": "USA",
+        "country": "US",
         "state": "TN",
         "time_zone": "America/Chicago",
         "venues": [
@@ -366,7 +366,7 @@
     },
     "denman-arena": {
         "city": "Vancouver",
-        "country": "Canada",
+        "country": "CA",
         "state": "BC",
         "time_zone": "America/Vancouver",
         "venues": [
@@ -842,7 +842,7 @@
     },
     "nissan-stadium": {
         "city": "Nashville",
-        "country": "USA",
+        "country": "US",
         "state": "TN",
         "time_zone": "America/Chicago",
         "venues": [
@@ -923,7 +923,7 @@
     },
     "patrick-arena": {
         "city": "Victoria",
-        "country": "Canada",
+        "country": "CA",
         "state": "BC",
         "time_zone": "America/Vancouver",
         "venues": [
@@ -1026,7 +1026,7 @@
     },
     "ralph-wilson-stadium": {
         "city": "Orchard Park",
-        "country": "USA",
+        "country": "US",
         "state": "NY",
         "time_zone": "America/New_York",
         "venues": [
@@ -1093,7 +1093,7 @@
     },
     "saitama-super-arena": {
         "city": "Saitama",
-        "country": "Japan",
+        "country": "JP",
         "state": "Kanto",
         "time_zone": "Asia/Tokyo",
         "venues": [
@@ -1154,7 +1154,7 @@
     },
     "seattle-ice-arena": {
         "city": "Seattle",
-        "country": "USA",
+        "country": "US",
         "state": "WA",
         "time_zone": "America/Los_Angeles",
         "venues": [
@@ -1237,7 +1237,7 @@
     },
     "target-field": {
         "city": "Minnesota",
-        "country": "USA",
+        "country": "US",
         "state": "MN",
         "time_zone": "America/Chicago",
         "venues": [
@@ -1300,9 +1300,18 @@
             "Thunderdome"
         ]
     },
+    "tim-horton's-field": {
+        "city": "ON",
+        "country": "US",
+        "state": "Ha",
+        "time_zone": "Asia/Shanghai",
+        "venues": [
+            "Tim Horton's Field"
+        ]
+    },
     "tim-hortons-field": {
         "city": "Hamilton",
-        "country": "Canada",
+        "country": "CA",
         "state": "ON",
         "time_zone": "America/Toronto",
         "venues": [
