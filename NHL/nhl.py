@@ -35762,20 +35762,22 @@ def get_player_image(player_page):
         return None
 
 def get_player_country(player_page):
-    player_country = player_page.find("span", {"id" : "necro-birth"}).parent.find_all("span")[-1]
-    if player_country:
-        classes = player_country.get("class")
-        if classes and len(classes) == 2:
-            flag_class = classes[1]
-            if flag_class.startswith("f-"):
-                stylesheet = player_page.find("link", {"rel" : "stylesheet"})
-                if stylesheet:
-                    link = stylesheet.get("href")
-                    if link:
-                        return {
-                            "link" : link,
-                            "flag_class" : flag_class 
-                        }
+    birthday_span = player_page.find("span", {"id" : "necro-birth"})
+    if birthday_span:
+        player_country = birthday_span.parent.find_all("span")[-1]
+        if player_country:
+            classes = player_country.get("class")
+            if classes and len(classes) == 2:
+                flag_class = classes[1]
+                if flag_class.startswith("f-"):
+                    stylesheet = player_page.find("link", {"rel" : "stylesheet"})
+                    if stylesheet:
+                        link = stylesheet.get("href")
+                        if link:
+                            return {
+                                "link" : link,
+                                "flag_class" : flag_class 
+                            }
     return None
 
 def get_player_current_team_number(player_page):
