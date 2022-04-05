@@ -20361,6 +20361,9 @@ def get_nhl_schedule(player_data, all_rows, qualifiers, s):
                     row_data["Opponent Goals"] = row_data["Opponent Score"]
                     row_data["Per"] = len(linescore_game_data["linescore"]["periods"])
 
+                    if game_data["status"]["abstractGameState"] != "Live" and game_data["status"]["abstractGameState"] != "Final":
+                        continue
+
                     is_shootout = False
                     if "hasShootout" in linescore_game_data["linescore"] and linescore_game_data["linescore"]["hasShootout"]:
                         is_shootout = True
