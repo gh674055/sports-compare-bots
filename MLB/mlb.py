@@ -43728,7 +43728,7 @@ def handle_table_data(over_header, player_data, player_datas, player_type, heade
             first = True
             for index, player in enumerate(players):
                 if not first:
-                    value += " + "
+                    value += "/"
                 else:
                     first = False
 

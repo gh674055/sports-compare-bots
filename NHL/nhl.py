@@ -40179,7 +40179,7 @@ def handle_table_data(player_data, player_type, over_header, header, highest_val
             first = True
             for index, player in enumerate(players):
                 if not first:
-                    value += " + "
+                    value += "/"
                 else:
                     first = False
 
