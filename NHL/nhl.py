@@ -38232,6 +38232,7 @@ def calculate_formula(stat, player_type, formula, data, all_rows, player_data, s
             return data["Opponent Goals"]
 
     earliest_invalid_date = None
+    matching_stats = set()
     formula = formula.lower()
 
     formula_matches = list(re.finditer(r"(?:(?:[A-Za-z_:~])\d?|\d?(?:[A-Za-z_:~]))+", formula))
@@ -38239,7 +38240,7 @@ def calculate_formula(stat, player_type, formula, data, all_rows, player_data, s
     if all_rows:
         for sub_stat in data:
             if stat == "custom_formula" or (sub_stat != "Tm" and sub_stat != "Result" and sub_stat != "player_type" and sub_stat != "is_playoffs" and (not sub_stat in qualifier_map or sub_stat == "Team Score" or sub_stat == "Opponent Score")):
-                temp_earliest_invalid_date = calculate_earliest_invalid_date(sub_stat, player_type, data, formula, earliest_invalid_date, stat, player_data, formula_matches)
+                temp_earliest_invalid_date = calculate_earliest_invalid_date(sub_stat, player_type, data, formula, earliest_invalid_date, stat, player_data, formula_matches, matching_stats)
                 if temp_earliest_invalid_date:
                     earliest_invalid_date = temp_earliest_invalid_date
 
@@ -38248,7 +38249,7 @@ def calculate_formula(stat, player_type, formula, data, all_rows, player_data, s
 
     for sub_stat in data:
         if stat == "custom_formula" or (sub_stat != "Tm" and sub_stat != "Result" and sub_stat != "player_type" and sub_stat != "is_playoffs" and (not sub_stat in qualifier_map or sub_stat == "Team Score" or sub_stat == "Opponent Score")):
-            formula, formula_matches = replace_formula(data, sub_stat, formula, all_rows, earliest_invalid_date, player_type, player_data, stat, formula_matches)
+            formula, formula_matches = replace_formula(data, sub_stat, formula, all_rows, earliest_invalid_date, player_type, player_data, stat, formula_matches, matching_stats)
 
     try:
         if safe_eval:
@@ -38302,13 +38303,14 @@ def calculate_team_win_losses(data, all_rows, stat):
 
     return result_count
 
-def calculate_earliest_invalid_date(stat, player_type, data, formula, earliest_invalid_date, real_stat, player_data, formula_matches):
+def calculate_earliest_invalid_date(stat, player_type, data, formula, earliest_invalid_date, real_stat, player_data, formula_matches, matching_stats):
     if real_stat in ["TmPTS", "TmPTS%", "TmW/L%", "PTS", "PTS%", "W/L%"]:
         return
 
     has_match = False
     for formula_match in formula_matches:
         if formula_match.group() == stat.lower():
+            matching_stats.add(stat)
             has_match = True
             break
 
@@ -38327,19 +38329,20 @@ def calculate_earliest_invalid_date(stat, player_type, data, formula, earliest_i
         if new_stat:
             for formula_match in formula_matches:
                 if formula_match.group() == new_stat.lower():
+                    matching_stats.add(stat)
                     invalid_date = is_invalid_stat(stat, player_type, data, False, player_data, False)
                     if invalid_date:
                         if not earliest_invalid_date or invalid_date == True or invalid_date > earliest_invalid_date:
                             return invalid_date
                     break
 
-def replace_formula(data, stat, formula, all_rows, earliest_invalid_date, player_type, player_data, real_stat, formula_matches):
+def replace_formula(data, stat, formula, all_rows, earliest_invalid_date, player_type, player_data, real_stat, formula_matches, matching_stats):
     value = data[stat]
     if not isinstance(value, numbers.Number) and real_stat != "custom_formula":
         return formula, formula_matches
 
     old_formula = formulas
-    formula, formula_matches = perform_replacement(formula_matches, stat, value, formula, earliest_invalid_date, all_rows, player_data, player_type)
+    formula, formula_matches = perform_replacement(formula_matches, stat, value, formula, earliest_invalid_date, all_rows, player_data, player_type, matching_stats)
 
     if old_formula == formula and real_stat == "custom_formula":
         new_stat = None
@@ -38349,27 +38352,44 @@ def replace_formula(data, stat, formula, all_rows, earliest_invalid_date, player
                 break
 
         if new_stat:
-            formula, formula_matches = perform_replacement(formula_matches, new_stat, value, formula, earliest_invalid_date, all_rows, player_data, player_type)
+            formula, formula_matches = perform_replacement(formula_matches, new_stat, value, formula, earliest_invalid_date, all_rows, player_data, player_type, matching_stats)
 
     return formula, formula_matches
 
-def perform_replacement(formula_matches, stat, value, formula, earliest_invalid_date, all_rows, player_data, player_type):
+def perform_replacement(formula_matches, stat, value, formula, earliest_invalid_date, all_rows, player_data, player_type, matching_stats):
     for formula_match in formula_matches:
         if formula_match.group() == stat.lower():
             if isinstance(value, numbers.Number):
-                value = str(calculate_valid_value(stat, value, earliest_invalid_date, all_rows, player_data, player_type))
+                value = str(calculate_valid_value(stat, value, earliest_invalid_date, all_rows, player_data, player_type, matching_stats))
             span = formula_match.span()
             formula = formula[:span[0]] + value + formula[span[1]:]
             formula_matches = list(re.finditer(r"(?:(?:[A-Za-z_:~])\d?|\d?(?:[A-Za-z_:~]))+", formula))
-            return perform_replacement(formula_matches, stat, value, formula, earliest_invalid_date, all_rows, player_data, perform_replacement)
+            return perform_replacement(formula_matches, stat, value, formula, earliest_invalid_date, all_rows, player_data, player_type, matching_stats)
     
     return formula, formula_matches
 
-def calculate_valid_value(stat, value, earliest_invalid_date, all_rows, player_data, player_type):
+def calculate_valid_value(stat, value, earliest_invalid_date, all_rows, player_data, player_type, matching_stats):
     if player_data["stat_values"]["is_shift_data"]:
         for row_data in all_rows:
             if stat in row_data and row_data[stat]:
-                if is_invalid_stat(stat, player_type, row_data, False, player_data, True):
+                is_any_invalid = False
+                for sub_stat in matching_stats:
+                    row_data["DateStart"] = [row_data["Date"]]
+                    row_data["YearStart"] = [row_data["Year"]]
+                    row_data["YearEnd"] = [row_data["Year"]]
+                    row_data["DateEnd"] = [row_data["Date"]]
+                    prev_is_playofs = row_data["is_playoffs"]
+                    if row_data["is_playoffs"]:
+                        row_data["is_playoffs"] = "Only"
+                    else:
+                        row_data["is_playoffs"] = None
+
+                    if is_invalid_stat(sub_stat, player_type, row_data, False, player_data, True):
+                        is_any_invalid = True
+                        row_data["is_playoffs"] = prev_is_playofs
+                        break
+                    row_data["is_playoffs"] = prev_is_playofs
+                if is_any_invalid:
                     value = value - row_data[stat]
     else:
         if not earliest_invalid_date:
