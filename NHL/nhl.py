@@ -9432,30 +9432,20 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 qual_type = "First Games"
                             elif qualifier_str.startswith("first-minute") or qualifier_str.startswith("current-minute"):
                                 qual_type = "First Minutes"
-                                extra_stats.add("current-stats-no-game")
-                                extra_stats.add("current-stats")
                             elif qualifier_str.startswith("first-shot") or qualifier_str.startswith("current-shot"):
                                 qual_type = "First Shots"
-                                extra_stats.add("current-stats-no-game")
-                                extra_stats.add("current-stats")
                             elif qualifier_str.startswith("first-period") or qualifier_str.startswith("current-period"):
                                 qual_type = "First Periods"
-                                extra_stats.add("current-stats")
                             elif qualifier_str.startswith("first-season") or qualifier_str.startswith("current-season"):
                                 qual_type = "First Seasons"
                             elif qualifier_str.startswith("last-game"):
                                 qual_type = "Last Games"
                             elif qualifier_str.startswith("last-minute"):
                                 qual_type = "Last Minutes"
-                                extra_stats.add("current-stats-no-game")
-                                extra_stats.add("current-stats")
                             elif qualifier_str.startswith("last-shot"):
                                 qual_type = "Last Shots"
-                                extra_stats.add("current-stats-no-game")
-                                extra_stats.add("current-stats")
                             elif qualifier_str.startswith("last-period"):
                                 qual_type = "Last Periods"
-                                extra_stats.add("current-stats")
                             elif qualifier_str.startswith("last-season"):
                                 qual_type = "Last Seasons"
                             elif qualifier_str.startswith("first-start"):
@@ -13755,6 +13745,7 @@ def handle_same_games_qual(names, player_type, time_frames, comment_obj, extra_s
                             "stat" : new_qual_type,
                             "negate" : False
                         }]
+                        extra_stats.add("current-stats")
                     elif new_qual_type == "Seasons":
                         time_start = None
                         time_end = None

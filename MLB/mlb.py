@@ -8474,22 +8474,16 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                             elif qualifier_str.startswith("first-innings") or qualifier_str.startswith("current-inning"):
                                 qual_type = "First Innings"
                                 player_type["da_type"] = "Pitcher"
-                                extra_stats.add("current-stats")
                             elif qualifier_str.startswith("first-at-bat") or qualifier_str.startswith("current-at-bat"):
                                 qual_type = "First At Bats"
-                                extra_stats.add("current-stats")
                             elif qualifier_str.startswith("first-plate-appearance") or qualifier_str.startswith("current-plate-appearance"):
                                 qual_type = "First Plate Appearances"
                                 player_type["da_type"] = "Batter"
-                                extra_stats.add("current-stats")
                             elif qualifier_str.startswith("first-batter-faced") or qualifier_str.startswith("current-batter-faced") or qualifier_str.startswith("first-batters-faced") or qualifier_str.startswith("current-batters-faced"):
                                 qual_type = "First Batters Faced"
                                 player_type["da_type"] = "Pitcher"
-                                extra_stats.add("current-stats")
                             elif qualifier_str.startswith("first-pitches") or qualifier_str.startswith("current-pitch"):
                                 qual_type = "First Pitches"
-                                extra_stats.add("show-stat-pit")
-                                extra_stats.add("current-stats")
                             elif qualifier_str.startswith("last-game"):
                                 qual_type = "Last Games"
                             elif qualifier_str.startswith("last-season"):
@@ -8497,22 +8491,16 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                             elif qualifier_str.startswith("last-innings"):
                                 qual_type = "Last Innings"
                                 player_type["da_type"] = "Pitcher"
-                                extra_stats.add("current-stats")
                             elif qualifier_str.startswith("last-plate-appearance"):
                                 qual_type = "Last Plate Appearances"
                                 player_type["da_type"] = "Batter"
-                                extra_stats.add("current-stats")
                             elif qualifier_str.startswith("last-batter-faced") or qualifier_str.startswith("last-batters-faced"):
                                 qual_type = "Last Batters Faced"
                                 player_type["da_type"] = "Pitcher"
-                                extra_stats.add("current-stats")
                             elif qualifier_str.startswith("last-pitch"):
                                 qual_type = "Last Pitches"
-                                extra_stats.add("show-stat-pit")
-                                extra_stats.add("current-stats")
                             elif qualifier_str.startswith("last-at-bat"):
                                 qual_type = "Last At Bats"
-                                extra_stats.add("current-stats")
                             elif qualifier_str.startswith("first-start"):
                                 qual_type = "First Games"
                                 qualifiers["Start"] = []
@@ -13313,6 +13301,9 @@ def handle_same_games_qual(names, player_type, time_frames, comment_obj, extra_s
                             "stat" : new_qual_type,
                             "negate" : False
                         }]
+                        extra_stats.add("show-stat-pit")
+                        if new_qual_type == "Pit":
+                            extra_stats.add("current-stats")
                     elif new_qual_type == "Seasons":
                         time_start = None
                         time_end = None
