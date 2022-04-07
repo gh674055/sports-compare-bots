@@ -57,6 +57,7 @@ teams_to_abbr = {
     "Red Sox" : "BOS",
     "White Sox" : "CHW",
     "White Stockings" : "CHI",
+    "Guardians" : "CLE",
     "Indians" : "CLE",
     "Cleveland" : "CLE",
     "Tigers" : "DET",

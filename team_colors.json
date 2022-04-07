@@ -298,6 +298,16 @@
     }
   },
   {
+    "name": "Cleveland Guardians",
+    "league": "mlb",
+    "colors": {
+      "hex": [
+        "E31937",
+        "002B5C"
+      ]
+    }
+  },
+  {
     "name": "Detroit Tigers",
     "league": "mlb",
     "colors": {
