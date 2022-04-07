@@ -40760,7 +40760,7 @@ def get_opponent_schedule(seasons, is_schedule_diff, is_runs_diff):
     for season_obj in seasons:
         year = str(season_obj["Year"])
         constant_year = year
-        if constant_year not in park_factors or not park_factors[constant_year]:
+        if constant_year not in totals["MLB"]["Batter"] or not totals["MLB"]["Batter"][constant_year]:
             constant_year = str(int(current_season) - 1)
         if is_schedule_diff:
             request = urllib.request.Request(opponent_schedule_url_format.format(season_obj["Year"]), headers=request_headers)
@@ -41180,7 +41180,7 @@ def calculate_advanced_stats(data, all_rows, player_type, time_frames):
                     continue
                 year = str(year)
                 constant_year = year
-                if constant_year not in park_factors or not park_factors[constant_year]:
+                if constant_year not in totals["MLB"]["Batter"] or not totals["MLB"]["Batter"][constant_year]:
                     constant_year = str(int(current_season) - 1)
 
                 if not year in yearly_woba_stats:
@@ -41247,7 +41247,7 @@ def calculate_advanced_stats(data, all_rows, player_type, time_frames):
 
         for year in yearly_woba_stats:
             constant_year = year
-            if constant_year not in park_factors or not park_factors[constant_year]:
+            if constant_year not in totals["MLB"]["Batter"] or not totals["MLB"]["Batter"][constant_year]:
                 constant_year = str(int(current_season) - 1)
             for team in yearly_woba_stats[year]:
                 sleague = yearly_woba_stats[year][team]["TmLg"]
@@ -41271,7 +41271,7 @@ def calculate_advanced_stats(data, all_rows, player_type, time_frames):
                     
         for year in yearly_woba_stats:
             constant_year = year
-            if constant_year not in park_factors or not park_factors[constant_year]:
+            if constant_year not in totals["MLB"]["Batter"] or not totals["MLB"]["Batter"][constant_year]:
                 constant_year = str(int(current_season) - 1)
 
             for team in yearly_woba_stats[year]:
@@ -41608,7 +41608,7 @@ def calculate_advanced_stats(data, all_rows, player_type, time_frames):
             for year in yearly_woba_stats:
                 real_yearly_woba_stats[year] = {}
                 constant_year = year
-                if constant_year not in park_factors or not park_factors[constant_year]:
+                if constant_year not in totals["MLB"]["Batter"] or not totals["MLB"]["Batter"][constant_year]:
                     constant_year = str(int(current_season) - 1)
                 for team in yearly_woba_stats[year]:
                     if team not in park_factors[constant_year]:
@@ -41671,7 +41671,7 @@ def calculate_advanced_stats(data, all_rows, player_type, time_frames):
                 season_index = 0
                 for year in yearly_woba_stats:
                     constant_year = year
-                    if constant_year not in park_factors or not park_factors[constant_year]:
+                    if constant_year not in totals["MLB"]["Batter"] or not totals["MLB"]["Batter"][constant_year]:
                         constant_year = str(int(current_season) - 1)
                     for team in yearly_woba_stats[year]:
                         if team not in park_factors[constant_year]:
@@ -41681,7 +41681,7 @@ def calculate_advanced_stats(data, all_rows, player_type, time_frames):
                             sub_season_index = 0
                             for sub_year in yearly_woba_stats:
                                 constant_year = sub_year
-                                if constant_year not in park_factors or not park_factors[constant_year]:
+                                if constant_year not in totals["MLB"]["Batter"] or not totals["MLB"]["Batter"][constant_year]:
                                     constant_year = str(int(current_season) - 1)
                                 for sub_team in yearly_woba_stats[sub_year]:
                                     if sub_team not in park_factors[constant_year]:
@@ -41730,7 +41730,7 @@ def calculate_advanced_stats(data, all_rows, player_type, time_frames):
 
             for year in yearly_woba_stats:
                 constant_year = year
-                if constant_year not in park_factors or not park_factors[constant_year]:
+                if constant_year not in totals["MLB"]["Batter"] or not totals["MLB"]["Batter"][constant_year]:
                     constant_year = str(int(current_season) - 1)
                 for team in yearly_woba_stats[year]:
                     if team not in park_factors[constant_year]:
@@ -41744,7 +41744,7 @@ def calculate_advanced_stats(data, all_rows, player_type, time_frames):
 
             for year in real_yearly_woba_stats:
                 constant_year = year
-                if constant_year not in park_factors or not park_factors[constant_year]:
+                if constant_year not in totals["MLB"]["Batter"] or not totals["MLB"]["Batter"][constant_year]:
                     constant_year = str(int(current_season) - 1)
 
                 if data["IP"] and real_yearly_woba_stats[year]:
@@ -41769,7 +41769,7 @@ def calculate_advanced_stats(data, all_rows, player_type, time_frames):
 
             for year in yearly_woba_stats:
                 constant_year = year
-                if constant_year not in park_factors or not park_factors[constant_year]:
+                if constant_year not in totals["MLB"]["Batter"] or not totals["MLB"]["Batter"][constant_year]:
                     constant_year = str(int(current_season) - 1)
 
                 for team in yearly_woba_stats[year]:
@@ -43759,7 +43759,7 @@ def handle_table_data(over_header, player_data, player_datas, player_type, heade
                         has_valid_stat = True   
 
                     constant_year = str(row["Year"])
-                    if constant_year not in park_factors or not park_factors[constant_year]:
+                    if constant_year not in totals["MLB"]["Batter"] or not totals["MLB"]["Batter"][constant_year]:
                         constant_year = str(int(current_season) - 1)
 
                     if row["Tm"] in park_factors[constant_year]:
