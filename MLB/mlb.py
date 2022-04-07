@@ -25471,7 +25471,7 @@ def handle_schedule_stats(player_data, live_game, all_rows, qualifiers, is_playo
             for season_obj in team_schedule[team_year]:
                 all_team_rows += season_obj["regular_season"] + season_obj["playoffs"]
         for index, game_data in enumerate(sub_datas):
-            row_data = determine_row_data(game_data, player_type, player_data, None, current_team, all_dates, all_team_rows, {"time_start" : 0, "time_end" : float("inf"), "type" : "date", "qualifiers" : {}})
+            row_data = determine_row_data(game_data, player_type, player_data, None, current_team, all_dates, all_team_rows, {"time_start" : 0, "time_end" : float("inf"), "type" : "date", "qualifiers" : {}}, s)
 
             if row_data:
                 if row_data["Year"] in team_schedule:
