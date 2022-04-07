@@ -17096,7 +17096,7 @@ def determine_row_data(game_data, player_type, player_data, player_id, current_t
         row_data["Pit"] = game["pitchesThrown"]
 
         fake_row_data = copy.deepcopy(row_data)
-        fake_game_data, fake_row_data, fake_index, fake_sub_missing_games = get_live_game_data(-1, False, player_data, fake_row_data, player_type, {}, True, s)
+        fake_game_data, fake_row_data, fake_index, fake_sub_missing_games, fake_sub_missing_pitch = get_live_game_data(-1, False, player_data, fake_row_data, player_type, {}, True, s)
         perform_sub_mlb_game_qualifiers(fake_row_data, player_data, {}, fake_game_data, player_type, True)
         row_data["GDP"] = fake_row_data["GDP"]
 
