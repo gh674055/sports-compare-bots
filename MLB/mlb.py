@@ -24254,7 +24254,7 @@ def get_valid_years(player_page, player_type):
                     if table_name == "pitching_standard":
                         pitch_valid_years.add(row_year)
                     elif table_name == "standard_fielding":
-                        if str(row.find("td", {"data-stat" : "pos"}).find(text=True)) == "C":
+                        if row.find("td", {"data-stat" : "pos"}) and str(row.find("td", {"data-stat" : "pos"}).find(text=True)) == "C":
                             catch_valid_years.add(row_year)
 
                     row_team = row.find("td", {"data-stat" : "team_ID"}).find("a")
