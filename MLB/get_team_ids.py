@@ -81,7 +81,7 @@ request_headers = {
 }
 
 current_year = 2022
-add_current_year = True
+add_current_year = False
 
 manual_team_name_maps = {
     "Cleveland Indians" : "Cleveland Guardians"
