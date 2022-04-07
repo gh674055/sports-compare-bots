@@ -5193,6 +5193,42 @@ headers = {
             "display" : False,
             "type" : "Advanced"
         },
+        "scSA" : {
+            "positive" : True,
+            "type" : "Advanced",
+            "display" : False,
+            "valid_since" : {
+                "season" : 2016,
+                "game" : 2016
+            }
+        },
+        "scGA" : {
+            "positive" : False,
+            "type" : "Advanced",
+            "display" : False,
+            "valid_since" : {
+                "season" : 2016,
+                "game" : 2016
+            }
+        },
+        "HDscGA" : {
+            "positive" : False,
+            "display" : False,
+            "type" : "Advanced",
+            "valid_since" : {
+                "season" : 2016,
+                "game" : 2016
+            }
+        },
+        "HDscSA" : {
+            "positive" : True,
+            "display" : False,
+            "type" : "Advanced",
+            "valid_since" : {
+                "season" : 2016,
+                "game" : 2016
+            }
+        },
         "SVEvenStrength" : {
             "positive" : True,
             "type" : "Advanced",
@@ -5251,6 +5287,26 @@ headers = {
                 "game" : 1997
             }
         },
+        "scSV%" : {
+            "positive" : True,
+            "round" : 3,
+            "type" : "Advanced",
+            "display-value" : "sc SV%",
+            "valid_since" : {
+                "season" : 2016,
+                "game" : 2016
+            }
+        },
+        "HDscSV%" : {
+            "positive" : True,
+            "round" : 3,
+            "type" : "Advanced",
+            "display-value" : "HDsc SV%",
+            "valid_since" : {
+                "season" : 2016,
+                "game" : 2016
+            }
+        },
         "SHEvenStrength" : {
             "positive" : True,
             "round" : "percent",
@@ -5281,6 +5337,26 @@ headers = {
                 "game" : 1997
             }
         },
+        "SHsc" : {
+            "positive" : True,
+            "round" : "percent",
+            "display-value" : "sc SA%",
+            "type" : "Advanced",
+            "valid_since" : {
+                "season" : 2016,
+                "game" : 2016
+            }
+        },
+        "SHHDsc" : {
+            "positive" : True,
+            "round" : "percent",
+            "display-value" : "HDsc SA%",
+            "type" : "Advanced",
+            "valid_since" : {
+                "season" : 2016,
+                "game" : 2016
+            }
+        },
         "EVGA/GP" : {
             "positive" : False,
             "display" : False,
@@ -5298,6 +5374,72 @@ headers = {
             "display" : False,
             "round" : 2,
             "type" : "Advanced"
+        },
+        "scSV/60M" : {
+            "positive" : True,
+            "type" : "Advanced",
+            "display" : False,
+            "display-value" : "sc SV/60",
+            "round" : 2,
+            "valid_since" : {
+                "season" : 2016,
+                "game" : 2016
+            }
+        },
+        "scSA/GP" : {
+            "positive" : True,
+            "type" : "Advanced",
+            "display" : False,
+            "display-value" : "sc/GP",
+            "round" : 2,
+            "valid_since" : {
+                "season" : 2016,
+                "game" : 2016
+            }
+        },
+        "scSA/60M" : {
+            "positive" : True,
+            "type" : "Advanced",
+            "display" : False,
+            "display-value" : "sc SA/60",
+            "round" : 2,
+            "valid_since" : {
+                "season" : 2016,
+                "game" : 2016
+            }
+        },
+        "HDscSV/60M" : {
+            "positive" : True,
+            "round" : 2,
+            "type" : "Advanced",
+            "display" : False,
+            "display-value" : "HDsc SV/60",
+            "valid_since" : {
+                "season" : 2016,
+                "game" : 2016
+            }
+        },
+        "HDscSA/GP" : {
+            "positive" : True,
+            "round" : 2,
+            "display" : False,
+            "type" : "Advanced",
+            "display-value" : "HDsc/GP",
+            "valid_since" : {
+                "season" : 2016,
+                "game" : 2016
+            }
+        },
+        "HDscSA/60M" : {
+            "positive" : True,
+            "display" : False,
+            "round" : 2,
+            "type" : "Advanced",
+            "display-value" : "HDsc SA/60",
+            "valid_since" : {
+                "season" : 2016,
+                "game" : 2016
+            }
         },
         "GAA": {
             "positive" : False,
@@ -5439,128 +5581,6 @@ headers = {
             "round" : "dollar",
             "display-value" : "CurCap",
             "skipzero" : True
-        },
-        "scSA" : {
-            "positive" : True,
-            "type" : "Advanced",
-            "display" : False,
-            "valid_since" : {
-                "season" : 2016,
-                "game" : 2016
-            }
-        },
-        "scGA" : {
-            "positive" : False,
-            "type" : "Advanced",
-            "display" : False,
-            "valid_since" : {
-                "season" : 2016,
-                "game" : 2016
-            }
-        },
-        "scSV/60M" : {
-            "positive" : True,
-            "type" : "Advanced",
-            "display" : False,
-            "display-value" : "sc SV/60",
-            "round" : 2,
-            "valid_since" : {
-                "season" : 2016,
-                "game" : 2016
-            }
-        },
-        "scSA/GP" : {
-            "positive" : True,
-            "type" : "Advanced",
-            "display" : False,
-            "display-value" : "sc/GP",
-            "round" : 2,
-            "valid_since" : {
-                "season" : 2016,
-                "game" : 2016
-            }
-        },
-        "scSA/60M" : {
-            "positive" : True,
-            "type" : "Advanced",
-            "display" : False,
-            "display-value" : "sc SA/60",
-            "round" : 2,
-            "valid_since" : {
-                "season" : 2016,
-                "game" : 2016
-            }
-        },
-        "scSV%" : {
-            "positive" : True,
-            "round" : 3,
-            "type" : "Advanced",
-            "display-value" : "sc SV%",
-            "valid_since" : {
-                "season" : 2016,
-                "game" : 2016
-            }
-        },
-        "HDscSA" : {
-            "positive" : True,
-            "display" : False,
-            "type" : "Advanced",
-            "valid_since" : {
-                "season" : 2016,
-                "game" : 2016
-            }
-        },
-        "HDscGA" : {
-            "positive" : False,
-            "display" : False,
-            "type" : "Advanced",
-            "valid_since" : {
-                "season" : 2016,
-                "game" : 2016
-            }
-        },
-        "HDscSV/60M" : {
-            "positive" : True,
-            "round" : 2,
-            "type" : "Advanced",
-            "display" : False,
-            "display-value" : "HDsc SV/60",
-            "valid_since" : {
-                "season" : 2016,
-                "game" : 2016
-            }
-        },
-        "HDscSA/GP" : {
-            "positive" : True,
-            "round" : 2,
-            "display" : False,
-            "type" : "Advanced",
-            "display-value" : "HDsc/GP",
-            "valid_since" : {
-                "season" : 2016,
-                "game" : 2016
-            }
-        },
-        "HDscSA/60M" : {
-            "positive" : True,
-            "display" : False,
-            "round" : 2,
-            "type" : "Advanced",
-            "display-value" : "HDsc SA/60",
-            "valid_since" : {
-                "season" : 2016,
-                "game" : 2016
-            }
-        },
-        "HDscSV%" : {
-            "positive" : True,
-            "round" : 3,
-            "type" : "Advanced",
-            "display-value" : "HDsc SV%",
-            "valid_since" : {
-                "season" : 2016,
-                "game" : 2016
-            }
         },
         "xEVTOI" : {
             "positive" : True,
@@ -6370,6 +6390,8 @@ formulas = {
         "SHEvenStrength" : "EVSH / (EVSH + PPSH + SHSH)",
         "SHPowerPlay" : "PPSH / (EVSH + PPSH + SHSH)",
         "SHShorthanded" : "SHSH / (EVSH + PPSH + SHSH)",
+        "SHsc" :  "scSA / xEVSH",
+        "SHHDsc" : "HDscSA / xEVSH",
         "xGAPer60" : "xGA / (xEVTOI / 3600)",
         "GAPer60" : "xEVGA / (xEVTOI / 3600)",
         "EVGSAx" : "xGA - xEVGA",
