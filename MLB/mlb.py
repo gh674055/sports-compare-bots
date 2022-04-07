@@ -16734,7 +16734,7 @@ def get_live_game(player_link, player_data, player_type, time_frame, do_live, s)
     if not do_live:
         return
 
-    if "currentTeam" not in sub_data["people"][0] or not sub_data["people"][0]["active"]:
+    if "currentTeam" not in sub_data["people"][0]:
         return
 
     current_team = sub_data["people"][0]["currentTeam"]["id"]
