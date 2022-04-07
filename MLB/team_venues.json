@@ -195,7 +195,7 @@
         ]
     },
     "2397": {
-        "city": "Bunkyo City",
+        "city": "Tokyo",
         "country": "JP",
         "state": "JP",
         "time_zone": "Asia/Tokyo",
@@ -851,15 +851,6 @@
         "time_zone": "America/New_York",
         "values": [
             "Oriole Park"
-        ]
-    },
-    "3165": {
-        "city": "Grand Rapids",
-        "country": "US",
-        "state": "MI",
-        "time_zone": "America/Detroit",
-        "values": [
-            "Ramona Park"
         ]
     },
     "3166": {

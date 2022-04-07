@@ -73,11 +73,6 @@
         },
         {
             "end_year": 1911,
-            "start_year": 1911,
-            "venue": 401
-        },
-        {
-            "end_year": 1910,
             "start_year": 1907,
             "venue": 3128
         },
@@ -184,28 +179,18 @@
         },
         {
             "end_year": 1914,
-            "start_year": 1911,
-            "venue": 401
-        },
-        {
-            "end_year": 1910,
-            "start_year": 1910,
-            "venue": 3131
-        },
-        {
-            "end_year": 1909,
             "start_year": 1903,
-            "venue": 3159
+            "venue": 3131
         },
         {
             "end_year": 1902,
             "start_year": 1902,
-            "venue": 3159
+            "venue": 3131
         },
         {
             "end_year": 1901,
             "start_year": null,
-            "venue": 3159
+            "venue": 3131
         }
     ],
     "115": [
@@ -233,11 +218,6 @@
         },
         {
             "end_year": 1911,
-            "start_year": 1911,
-            "venue": 401
-        },
-        {
-            "end_year": 1910,
             "start_year": null,
             "venue": 3114
         }
@@ -541,13 +521,8 @@
         },
         {
             "end_year": 1957,
-            "start_year": 1911,
-            "venue": 3140
-        },
-        {
-            "end_year": 1910,
             "start_year": 1901,
-            "venue": 3139
+            "venue": 3140
         },
         {
             "end_year": 1900,
@@ -656,11 +631,16 @@
         },
         {
             "end_year": 1960,
-            "start_year": 1903,
+            "start_year": 1911,
             "venue": 3126
         },
         {
-            "end_year": 1902,
+            "end_year": 1910,
+            "start_year": 1904,
+            "venue": 3110
+        },
+        {
+            "end_year": 1903,
             "start_year": null,
             "venue": 3109
         }
@@ -811,11 +791,6 @@
         },
         {
             "end_year": 1912,
-            "start_year": 1911,
-            "venue": 401
-        },
-        {
-            "end_year": 1910,
             "start_year": null,
             "venue": 3127
         }

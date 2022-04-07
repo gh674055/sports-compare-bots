@@ -80,6 +80,13 @@ request_headers = {
     "User-Agent" : "MLBCompareRedditBot"
 }
 
+current_year = 2022
+add_current_year = True
+
+manual_team_name_maps = {
+    "Cleveland Indians" : "Cleveland Guardians"
+}
+
 def main():
     id_val = 1
     team_info = {}
@@ -215,6 +222,25 @@ def main():
                                             teams_to_league[sub_team_row_abbr][sub_team_row_league] = []
                                         if sub_team_row_year not in teams_to_league[sub_team_row_abbr][sub_team_row_league]:
                                             teams_to_league[sub_team_row_abbr][sub_team_row_league].append(sub_team_row_year)
+
+                                        if sub_team_row_year == current_year - 1 and add_current_year:
+                                            sub_team_row_year += 1
+                                            if sub_team_row_name in manual_team_name_maps:
+                                                sub_team_row_name = manual_team_name_maps[sub_team_row_name]
+                                                if sub_team_row_name not in team_name_info:
+                                                    team_name_info[sub_team_row_name] = {}
+                                                if sub_team_row_abbr not in team_name_info[sub_team_row_name]:
+                                                    team_name_info[sub_team_row_name][sub_team_row_abbr] = {}
+                                                if sub_team_row_league not in team_name_info[sub_team_row_name][sub_team_row_abbr]:
+                                                    team_name_info[sub_team_row_name][sub_team_row_abbr][sub_team_row_league] = []
+
+                                            if str(sub_team_row_year) not in team_main_abbr[sub_team_row_league]:
+                                                team_main_abbr[sub_team_row_league][str(sub_team_row_year)] = {}
+                                            team_main_abbr[sub_team_row_league][str(sub_team_row_year)][sub_team_row_abbr] = overall_team_abbr
+                                            if sub_team_row_year not in team_name_info[sub_team_row_name][sub_team_row_abbr][sub_team_row_league]:
+                                                team_name_info[sub_team_row_name][sub_team_row_abbr][sub_team_row_league].append(sub_team_row_year)
+                                            if sub_team_row_year not in teams_to_league[sub_team_row_abbr][sub_team_row_league]:
+                                                teams_to_league[sub_team_row_abbr][sub_team_row_league].append(sub_team_row_year)
     
 
     for id_val in range(1, 806):

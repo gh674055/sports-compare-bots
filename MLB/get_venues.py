@@ -16,6 +16,7 @@ import numbers
 import unidecode
 from nameparser import HumanName
 from urllib.parse import urlparse
+import requests
 
 mlb_teams_url_format = "https://statsapi.mlb.com/api/v1/schedule?&season={}&sportId=1&gameType=R,F,D,L,W"
 
@@ -59,62 +60,63 @@ def main():
     else:
         team_venues = {}
 
-    for sub_year in range(1901, end_year + 1):
-        if year and sub_year != year:
-            continue
+    with requests.Session() as s:
+        for sub_year in range(1901, end_year + 1):
+            if year and sub_year != year:
+                continue
 
-        request = urllib.request.Request(mlb_teams_url_format.format(sub_year), headers=request_headers)
-        response = url_request(request)
+            data = url_request_json(s, mlb_teams_url_format.format(sub_year))
+            for date in data["dates"]:
+                for game in date["games"]:
+                    team_name = unidecode.unidecode(game["venue"]["name"]).strip()
+                    venue_id = str(game["venue"]["id"])
 
-        data = json.load(response)
-        for date in data["dates"]:
-            for game in date["games"]:
-                team_name = unidecode.unidecode(game["venue"]["name"]).strip()
-                venue_id = str(game["venue"]["id"])
+                    if venue_id not in team_venues:
+                        try:
+                            sub_data = url_request_json(s, "https://statsapi.mlb.com" + game["link"])
+                        except urllib.error.HTTPError as err:
+                            if err.status == 404:
+                                missing_games = True
+                                game_data["missing_data"] = True
+                                return game_data, row_data, row_index, missing_games, missing_pitch
+                            else:
+                                raise
 
-                if venue_id not in team_venues:
-                    sub_request = urllib.request.Request("https://statsapi.mlb.com" + game["link"], headers=request_headers)
-                    sub_response = url_request(sub_request)
-                    sub_data = json.load(sub_response)
+                        if "message" in sub_data:
+                            continue
 
-                    team_venues[venue_id] = {
-                        "values" : [],
-                        "city" : sub_data["gameData"]["venue"]["location"]["city"] if "city" in sub_data["gameData"]["venue"]["location"] else None,
-                        "state" : sub_data["gameData"]["venue"]["location"]["stateAbbrev"] if "stateAbbrev" in sub_data["gameData"]["venue"]["location"] else None,
-                        "country" : country_codes[sub_data["gameData"]["venue"]["location"]["country"]] if "country" in sub_data["gameData"]["venue"]["location"] else None,
-                        "time_zone" : sub_data["gameData"]["venue"]["timeZone"]["id"]
-                    }
-                if team_name not in team_venues[venue_id]["values"]:
-                    team_venues[venue_id]["values"].append(team_name)
+                        team_venues[venue_id] = {
+                            "values" : [],
+                            "city" : sub_data["gameData"]["venue"]["location"]["city"] if "city" in sub_data["gameData"]["venue"]["location"] else None,
+                            "state" : sub_data["gameData"]["venue"]["location"]["stateAbbrev"] if "stateAbbrev" in sub_data["gameData"]["venue"]["location"] else None,
+                            "country" : country_codes[sub_data["gameData"]["venue"]["location"]["country"]] if "country" in sub_data["gameData"]["venue"]["location"] else None,
+                            "time_zone" : sub_data["gameData"]["venue"]["timeZone"]["id"]
+                        }
+                    if team_name not in team_venues[venue_id]["values"]:
+                        team_venues[venue_id]["values"].append(team_name)
 
-        print(sub_year)
+            print(sub_year)
 
     with open("team_venues.json", "w") as file:
         file.write(json.dumps(team_venues, indent=4, sort_keys=True))
 
-def url_request(request):
+def url_request_json(session, url, timeout=30):
     failed_counter = 0
     while(True):
         try:
-            return urllib.request.urlopen(request)
-        except urllib.error.HTTPError as err:
-            if err.status == 404:
-                raise
-            failed_counter += 1
-            if failed_counter > max_request_retries:
-                raise
-        except urllib.error.URLError:
+            return session.get(url, timeout=timeout).json()
+        except Exception:
             failed_counter += 1
             if failed_counter > max_request_retries:
                 raise
 
         delay_step = 10
-        print("Retrying in " + str(retry_failure_delay) + " seconds to allow fangraphs to chill")
+        logger.info("#" + str(threading.get_ident()) + "#   " + "Retrying in " + str(retry_failure_delay) + " seconds to allow " + url + " to chill")
         time_to_wait = int(math.ceil(float(retry_failure_delay)/float(delay_step)))
         for i in range(retry_failure_delay, 0, -time_to_wait):
-            print(i)
+            logger.info("#" + str(threading.get_ident()) + "#   " + str(i))
             time.sleep(time_to_wait)
-        print("0")
+        logger.info("#" + str(threading.get_ident()) + "#   " + "0")
 
 if __name__ == "__main__":
     main()
