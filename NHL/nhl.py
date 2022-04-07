@@ -5337,7 +5337,7 @@ headers = {
                 "game" : 1997
             }
         },
-        "SHsc" : {
+        "scSH" : {
             "positive" : True,
             "round" : "percent",
             "display-value" : "sc SA%",
@@ -5347,7 +5347,7 @@ headers = {
                 "game" : 2016
             }
         },
-        "SHHDsc" : {
+        "HDscSH" : {
             "positive" : True,
             "round" : "percent",
             "display-value" : "HDsc SA%",
@@ -6390,8 +6390,8 @@ formulas = {
         "SHEvenStrength" : "EVSH / (EVSH + PPSH + SHSH)",
         "SHPowerPlay" : "PPSH / (EVSH + PPSH + SHSH)",
         "SHShorthanded" : "SHSH / (EVSH + PPSH + SHSH)",
-        "SHsc" :  "scSA / xEVSH",
-        "SHHDsc" : "HDscSA / xEVSH",
+        "scSH" :  "scSA / xEVSH",
+        "HDscSH" : "HDscSA / xEVSH",
         "xGAPer60" : "xGA / (xEVTOI / 3600)",
         "GAPer60" : "xEVGA / (xEVTOI / 3600)",
         "EVGSAx" : "xGA - xEVGA",
