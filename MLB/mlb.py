@@ -8381,6 +8381,9 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 if not playoffs:
                                     playoffs = "Only"
 
+                            if m.group(4) in ["lefty", "righty"]:
+                                continue
+
                             value = ordinal_to_number(m.group(4))
 
                             if isinstance(value, int):
