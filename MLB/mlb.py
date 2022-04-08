@@ -6985,7 +6985,7 @@ def sub_parse_input(curr, comment, debug_mode, comment_obj, force_through):
         except CustomMessageException as e:
             reddit_message = "Oh no, I had a problem with your request: " + e.message
             logger.error("#" + str(threading.get_ident()) + "#   " + traceback.format_exc())
-        except (urllib.error.URLError, socket.timeout) as e:
+        except (urllib.error.URLError, socket.timeout, requests.exceptions.ConnectionError) as e:
             reddit_message = "Oh no, I had a problem with your request: Unable to connect to Baseball Reference or MLB.com! Please try again later"
             logger.error("#" + str(threading.get_ident()) + "#   " + traceback.format_exc())
         except BaseException as e:
