@@ -17326,7 +17326,7 @@ def determine_row_data(game_data, player_type, player_data, player_id, current_t
     if is_final:
         if player_type["da_type"] == "Batter":
             fake_row_data = copy.deepcopy(row_data)
-            fake_game_data = get_live_game_data(-1, False, player_data, fake_row_data, player_type, {}, True)[0]
+            fake_game_data = get_live_game_data(-1, False, player_data, fake_row_data, player_type, {}, True, s)[0]
             row_data["Finished"] = False
             for position in fake_game_data["final_team_position_map"]:
                 if position in ("PH", "PR"):
