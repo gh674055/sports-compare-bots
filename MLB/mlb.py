@@ -39031,7 +39031,6 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
                 pitches = None
                 counts = None
 
-            num_runs = (current_away_score + current_home_score) - (away_score + home_score)
             num_outs = current_outs - outs
             batter = scoring_play["matchup"]["batter"]["id"]
             pitcher = scoring_play["matchup"]["pitcher"]["id"]
@@ -39293,6 +39292,8 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
             is_winning_driven_in = False
             winning_rbi_runner_index = -1
             winning_driven_in_runner_index = -1
+
+            num_runs = (current_away_score + current_home_score) - (away_score + home_score)
 
             if is_home_team:
                 team_score = home_score
