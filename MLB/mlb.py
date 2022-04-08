@@ -16965,6 +16965,8 @@ def determine_row_data(game_data, player_type, player_data, player_id, current_t
     home_team = row_data["Tm"] if row_data["Location"] else row_data["Opponent"]
     row_data["GameLink"] = None
     row_data["MLBGameLink"] = sub_data["gamePk"]
+    row_data["MLBTmID"] = sub_data["gameData"]["teams"]["home"]["id"]
+    row_data["MLBOppID"] = sub_data["gameData"]["teams"]["home"]["id"]
 
     if all_rows:
         last_row = all_rows[len(all_rows) - 1]
@@ -28182,6 +28184,7 @@ def setup_career_stats(row_data, player_game_info, saved_row_data, index, player
                                     if "is_unearned_run" not in at_bat_event or not at_bat_event["is_unearned_run"]:
                                         career_stats_info[stat] += 1
                                 sub_at_bat_event["career_stat_" + stat] = career_stats_info[stat]
+                        at_bat_event["career_stat_" + stat] = career_stats_info[stat]
                     else:
                         career_stats_info[stat] += event_type_stat_mappings[at_bat_event["result"]].get(stat, 0)
                         at_bat_event["career_stat_" + stat] = career_stats_info[stat]
@@ -28259,7 +28262,7 @@ def setup_career_stats(row_data, player_game_info, saved_row_data, index, player
                         else:
                             if "is_unearned_run" not in at_bat_event or not at_bat_event["is_unearned_run"]:
                                 career_stats_info[stat] += 1
-                        at_bat_event["career_stat_" + stat] = career_stats_info[stat]
+                        at_bat_event["career_stat_reversed_" + stat] = career_stats_info[stat]
                     else:
                         at_bat_event["career_stat_reversed_" + stat] = career_stats_info[stat]
 
@@ -28315,6 +28318,7 @@ def setup_career_stats(row_data, player_game_info, saved_row_data, index, player
                                     if "is_unearned_run" not in at_bat_event or not at_bat_event["is_unearned_run"]:
                                         career_stats_info[stat] += 1
                                 sub_at_bat_event["career_stat_reversed_" + stat] = career_stats_info[stat]
+                        at_bat_event["career_stat_reversed_" + stat] = career_stats_info[stat]
                     else:
                         career_stats_info[stat] += event_type_stat_mappings[at_bat_event["result"]].get(stat, 0)
                         at_bat_event["career_stat_reversed_" + stat] = career_stats_info[stat]
@@ -28381,6 +28385,7 @@ def setup_career_stats(row_data, player_game_info, saved_row_data, index, player
                                 if "is_unearned_run" not in at_bat_event or not at_bat_event["is_unearned_run"]:
                                     career_stats_info[stat] += 1
                             sub_at_bat_event["career_stats_" + stat] = career_stats_info[stat]
+                    at_bat_event["career_stats_" + stat] = career_stats_info[stat]
                 else:
                     career_stats_info[stat] += event_type_stat_mappings[at_bat_event["result"]].get(stat, 0)
                     at_bat_event["career_stats_" + stat] = career_stats_info[stat]
@@ -28412,7 +28417,7 @@ def setup_career_stats(row_data, player_game_info, saved_row_data, index, player
                         else:
                             if "is_unearned_run" not in at_bat_event or not at_bat_event["is_unearned_run"]:
                                 career_stats_info[stat] += 1
-                        at_bat_event["career_stat_" + stat] = career_stats_info[stat]
+                        at_bat_event["career_stats_" + stat] = career_stats_info[stat]
                     else:
                         at_bat_event["career_stats_" + stat] = career_stats_info[stat]
 
@@ -28444,7 +28449,7 @@ def setup_career_stats(row_data, player_game_info, saved_row_data, index, player
                         else:
                             if "is_unearned_run" not in at_bat_event or not at_bat_event["is_unearned_run"]:
                                 career_stats_info[stat] += 1
-                        at_bat_event["career_stat_" + stat] = career_stats_info[stat]
+                        at_bat_event["career_stats_reversed_" + stat] = career_stats_info[stat]
                     else:
                         at_bat_event["career_stats_reversed_" + stat] = career_stats_info[stat]
 
@@ -28487,6 +28492,7 @@ def setup_career_stats(row_data, player_game_info, saved_row_data, index, player
                                 if "is_unearned_run" not in at_bat_event or not at_bat_event["is_unearned_run"]:
                                     career_stats_info[stat] += 1
                             sub_at_bat_event["career_stats_reversed_" + stat] = career_stats_info[stat]
+                    at_bat_event["career_stats_reversed_" + stat] = career_stats_info[stat]
                 else:
                     career_stats_info[stat] += event_type_stat_mappings[at_bat_event["result"]].get(stat, 0)
                     at_bat_event["career_stats_reversed_" + stat] = career_stats_info[stat]
@@ -28605,6 +28611,7 @@ def setup_game_stats(row_data, player_game_info, player_type, player_data, quali
                                     if "is_unearned_run" not in at_bat_event or not at_bat_event["is_unearned_run"]:
                                         career_stats_info[stat] += 1
                                 sub_at_bat_event["game_stat_" + stat] = career_stats_info[stat]
+                        at_bat_event["game_stat_" + stat] = career_stats_info[stat]
                     else:
                         career_stats_info[stat] += event_type_stat_mappings[at_bat_event["result"]].get(stat, 0)
                         at_bat_event["game_stat_" + stat] = career_stats_info[stat]
@@ -28647,7 +28654,7 @@ def setup_game_stats(row_data, player_game_info, player_type, player_data, quali
                         else:
                             if "is_unearned_run" not in at_bat_event or not at_bat_event["is_unearned_run"]:
                                 career_stats_info[stat] += 1
-                        at_bat_event["career_stat_" + stat] = career_stats_info[stat]
+                        at_bat_event["game_stat_" + stat] = career_stats_info[stat]
                     else:
                         at_bat_event["game_stat_" + stat] = career_stats_info[stat]
 
@@ -28679,7 +28686,7 @@ def setup_game_stats(row_data, player_game_info, player_type, player_data, quali
                         else:
                             if "is_unearned_run" not in at_bat_event or not at_bat_event["is_unearned_run"]:
                                 career_stats_info[stat] += 1
-                        at_bat_event["career_stat_" + stat] = career_stats_info[stat]
+                        at_bat_event["game_stat_reversed_" + stat] = career_stats_info[stat]
                     else:
                         at_bat_event["game_stat_reversed_" + stat] = career_stats_info[stat]
 
@@ -28735,6 +28742,7 @@ def setup_game_stats(row_data, player_game_info, player_type, player_data, quali
                                     if "is_unearned_run" not in at_bat_event or not at_bat_event["is_unearned_run"]:
                                         career_stats_info[stat] += 1
                                 sub_at_bat_event["game_stat_reversed_" + stat] = career_stats_info[stat]
+                        at_bat_event["game_stat_reversed_" + stat] = career_stats_info[stat]
                     else:
                         career_stats_info[stat] += event_type_stat_mappings[at_bat_event["result"]].get(stat, 0)
                         at_bat_event["game_stat_reversed_" + stat] = career_stats_info[stat]
@@ -28799,6 +28807,7 @@ def setup_game_stats(row_data, player_game_info, player_type, player_data, quali
                                 if "is_unearned_run" not in at_bat_event or not at_bat_event["is_unearned_run"]:
                                     career_stats_info[stat] += 1
                             sub_at_bat_event["game_stats_" + stat] = career_stats_info[stat]
+                    at_bat_event["game_stats_" + stat] = career_stats_info[stat]
                 else:
                     career_stats_info[stat] += event_type_stat_mappings[at_bat_event["result"]].get(stat, 0)
                     at_bat_event["game_stats_" + stat] = career_stats_info[stat]
@@ -28830,7 +28839,7 @@ def setup_game_stats(row_data, player_game_info, player_type, player_data, quali
                         else:
                             if "is_unearned_run" not in at_bat_event or not at_bat_event["is_unearned_run"]:
                                 career_stats_info[stat] += 1
-                        at_bat_event["career_stat_" + stat] = career_stats_info[stat]
+                        at_bat_event["game_stats_" + stat] = career_stats_info[stat]
                     else:
                         at_bat_event["game_stats_" + stat] = career_stats_info[stat]
 
@@ -28859,7 +28868,7 @@ def setup_game_stats(row_data, player_game_info, player_type, player_data, quali
                         else:
                             if "is_unearned_run" not in at_bat_event or not at_bat_event["is_unearned_run"]:
                                 career_stats_info[stat] += 1
-                        at_bat_event["career_stat_" + stat] = career_stats_info[stat]
+                        at_bat_event["game_stats_reversed_" + stat] = career_stats_info[stat]
                     else:
                         at_bat_event["game_stats_reversed_" + stat] = career_stats_info[stat]
 
@@ -28902,6 +28911,7 @@ def setup_game_stats(row_data, player_game_info, player_type, player_data, quali
                                 if "is_unearned_run" not in at_bat_event or not at_bat_event["is_unearned_run"]:
                                     career_stats_info[stat] += 1
                             sub_at_bat_event["game_stats_reversed_" + stat] = career_stats_info[stat]
+                    at_bat_event["game_stats_reversed_" + stat] = career_stats_info[stat]
                 else:
                     career_stats_info[stat] += event_type_stat_mappings[at_bat_event["result"]].get(stat, 0)
                     at_bat_event["game_stats_reversed_" + stat] = career_stats_info[stat]
@@ -29025,6 +29035,7 @@ def setup_starting_career_stats(row_data, player_game_info, saved_row_data, inde
                                     if "is_unearned_run" not in at_bat_event or not at_bat_event["is_unearned_run"]:
                                         career_stats_info[stat] += 1
                                 sub_at_bat_event["starting_career_stat_" + stat] = career_stats_info[stat]
+                        at_bat_event["starting_career_stat_" + stat] = career_stats_info[stat]
                     else:
                         at_bat_event["starting_career_stat_" + stat] = career_stats_info[stat]
                         career_stats_info[stat] += event_type_stat_mappings[at_bat_event["result"]].get(stat, 0)
@@ -29059,7 +29070,7 @@ def setup_starting_career_stats(row_data, player_game_info, saved_row_data, inde
                         else:
                             if "is_unearned_run" not in at_bat_event or not at_bat_event["is_unearned_run"]:
                                 career_stats_info[stat] += 1
-                        at_bat_event["career_stat_" + stat] = career_stats_info[stat]
+                        at_bat_event["starting_career_stat_" + stat] = career_stats_info[stat]
                     else:
                         at_bat_event["starting_career_stat_" + stat] = career_stats_info[stat]
 
@@ -29094,7 +29105,7 @@ def setup_starting_career_stats(row_data, player_game_info, saved_row_data, inde
                         else:
                             if "is_unearned_run" not in at_bat_event or not at_bat_event["is_unearned_run"]:
                                 career_stats_info[stat] += 1
-                        at_bat_event["career_stat_" + stat] = career_stats_info[stat]
+                        at_bat_event["starting_career_stat_reversed_" + stat] = career_stats_info[stat]
                     else:
                         at_bat_event["starting_career_stat_reversed_" + stat] = career_stats_info[stat]
 
@@ -29152,6 +29163,7 @@ def setup_starting_career_stats(row_data, player_game_info, saved_row_data, inde
                                     if "is_unearned_run" not in at_bat_event or not at_bat_event["is_unearned_run"]:
                                         career_stats_info[stat] += 1
                                 sub_at_bat_event["starting_career_stat_reversed_" + stat] = career_stats_info[stat]
+                        at_bat_event["starting_career_stat_reversed_" + stat] = career_stats_info[stat]
                     else:
                         at_bat_event["starting_career_stat_reversed_" + stat] = career_stats_info[stat]
                         career_stats_info[stat] += event_type_stat_mappings[at_bat_event["result"]].get(stat, 0)
@@ -29204,6 +29216,7 @@ def setup_starting_career_stats(row_data, player_game_info, saved_row_data, inde
                                 if "is_unearned_run" not in at_bat_event or not at_bat_event["is_unearned_run"]:
                                     career_stats_info[stat] += 1
                             sub_at_bat_event["starting_career_stats_" + stat] = career_stats_info[stat]
+                    at_bat_event["starting_career_stats_" + stat] = career_stats_info[stat]
                 else:
                     at_bat_event["starting_career_stats_" + stat] = career_stats_info[stat]
                     career_stats_info[stat] += event_type_stat_mappings[at_bat_event["result"]].get(stat, 0)
@@ -29235,7 +29248,7 @@ def setup_starting_career_stats(row_data, player_game_info, saved_row_data, inde
                         else:
                             if "is_unearned_run" not in at_bat_event or not at_bat_event["is_unearned_run"]:
                                 career_stats_info[stat] += 1
-                        at_bat_event["career_stat_" + stat] = career_stats_info[stat]
+                        at_bat_event["starting_career_stats_" + stat] = career_stats_info[stat]
                     else:
                         at_bat_event["starting_career_stats_" + stat] = career_stats_info[stat]
 
@@ -29267,7 +29280,7 @@ def setup_starting_career_stats(row_data, player_game_info, saved_row_data, inde
                         else:
                             if "is_unearned_run" not in at_bat_event or not at_bat_event["is_unearned_run"]:
                                 career_stats_info[stat] += 1
-                        at_bat_event["career_stat_" + stat] = career_stats_info[stat]
+                        at_bat_event["starting_career_stats_reversed_" + stat] = career_stats_info[stat]
                     else:
                         at_bat_event["starting_career_stats_reversed_" + stat] = career_stats_info[stat]
 
@@ -29304,6 +29317,7 @@ def setup_starting_career_stats(row_data, player_game_info, saved_row_data, inde
                                 if "is_unearned_run" not in at_bat_event or not at_bat_event["is_unearned_run"]:
                                     career_stats_info[stat] += 1
                             sub_at_bat_event["starting_career_stats_reversed_" + stat] = career_stats_info[stat]
+                    at_bat_event["starting_career_stats_reversed_" + stat] = career_stats_info[stat]
                 else:
                     at_bat_event["starting_career_stats_reversed_" + stat] = career_stats_info[stat]
                     career_stats_info[stat] += event_type_stat_mappings[at_bat_event["result"]].get(stat, 0)
@@ -29425,6 +29439,7 @@ def setup_starting_game_stats(row_data, player_game_info, player_type, player_da
                                     if "is_unearned_run" not in at_bat_event or not at_bat_event["is_unearned_run"]:
                                         career_stats_info[stat] += 1
                                 sub_at_bat_event["starting_game_stat_" + stat] = career_stats_info[stat]
+                        at_bat_event["starting_game_stat_" + stat] = career_stats_info[stat]
                     else:
                         at_bat_event["starting_game_stat_" + stat] = career_stats_info[stat]
                         career_stats_info[stat] += event_type_stat_mappings[at_bat_event["result"]].get(stat, 0)
@@ -29459,7 +29474,7 @@ def setup_starting_game_stats(row_data, player_game_info, player_type, player_da
                         else:
                             if "is_unearned_run" not in at_bat_event or not at_bat_event["is_unearned_run"]:
                                 career_stats_info[stat] += 1
-                        at_bat_event["career_stat_" + stat] = career_stats_info[stat]
+                        at_bat_event["starting_game_stat_" + stat] = career_stats_info[stat]
                     else:
                         at_bat_event["starting_game_stat_" + stat] = career_stats_info[stat]
 
@@ -29491,7 +29506,7 @@ def setup_starting_game_stats(row_data, player_game_info, player_type, player_da
                         else:
                             if "is_unearned_run" not in at_bat_event or not at_bat_event["is_unearned_run"]:
                                 career_stats_info[stat] += 1
-                        at_bat_event["career_stat_" + stat] = career_stats_info[stat]
+                        at_bat_event["starting_game_stat_reversed_" + stat] = career_stats_info[stat]
                     else:
                         at_bat_event["starting_game_stat_reversed_" + stat] = career_stats_info[stat]
 
@@ -29550,6 +29565,7 @@ def setup_starting_game_stats(row_data, player_game_info, player_type, player_da
                                     if "is_unearned_run" not in at_bat_event or not at_bat_event["is_unearned_run"]:
                                         career_stats_info[stat] += 1
                                 sub_at_bat_event["starting_game_stat_reversed_" + stat] = career_stats_info[stat]
+                        at_bat_event["starting_game_stat_reversed_" + stat] = career_stats_info[stat]
                     else:
                         at_bat_event["starting_game_stat_reversed_" + stat] = career_stats_info[stat]
                         career_stats_info[stat] += event_type_stat_mappings[at_bat_event["result"]].get(stat, 0)
@@ -29599,6 +29615,7 @@ def setup_starting_game_stats(row_data, player_game_info, player_type, player_da
                                 if "is_unearned_run" not in at_bat_event or not at_bat_event["is_unearned_run"]:
                                     career_stats_info[stat] += 1
                             sub_at_bat_event["starting_game_stats_" + stat] = career_stats_info[stat]
+                    at_bat_event["starting_game_stats_" + stat] = career_stats_info[stat]
                 else:
                     at_bat_event["starting_game_stats_" + stat] = career_stats_info[stat]
                     career_stats_info[stat] += event_type_stat_mappings[at_bat_event["result"]].get(stat, 0)
@@ -29630,7 +29647,7 @@ def setup_starting_game_stats(row_data, player_game_info, player_type, player_da
                         else:
                             if "is_unearned_run" not in at_bat_event or not at_bat_event["is_unearned_run"]:
                                 career_stats_info[stat] += 1
-                        at_bat_event["career_stat_" + stat] = career_stats_info[stat]
+                        at_bat_event["starting_game_stats_" + stat] = career_stats_info[stat]
                     else:
                         at_bat_event["starting_game_stats_" + stat] = career_stats_info[stat]
 
@@ -29659,7 +29676,7 @@ def setup_starting_game_stats(row_data, player_game_info, player_type, player_da
                         else:
                             if "is_unearned_run" not in at_bat_event or not at_bat_event["is_unearned_run"]:
                                 career_stats_info[stat] += 1
-                        at_bat_event["career_stat_" + stat] = career_stats_info[stat]
+                        at_bat_event["starting_game_stats_reversed_" + stat] = career_stats_info[stat]
                     else:
                         at_bat_event["starting_game_stats_reversed_" + stat] = career_stats_info[stat]
 
@@ -29696,6 +29713,7 @@ def setup_starting_game_stats(row_data, player_game_info, player_type, player_da
                                 if "is_unearned_run" not in at_bat_event or not at_bat_event["is_unearned_run"]:
                                     career_stats_info[stat] += 1
                             sub_at_bat_event["starting_game_stats_reversed_" + stat] = career_stats_info[stat]
+                    at_bat_event["starting_game_stats_reversed_" + stat] = career_stats_info[stat]
                 else:
                     at_bat_event["starting_game_stats_reversed_" + stat] = career_stats_info[stat]
                     career_stats_info[stat] += event_type_stat_mappings[at_bat_event["result"]].get(stat, 0)
@@ -31413,6 +31431,10 @@ def perform_sub_mlb_game_qualifiers(row, player_data, qualifiers, player_game_in
                     row["ER"] += 1
 
                 has_any_match = True
+            if handle_da_mlb_quals(row, "pitching_run_events", at_bat_event, qualifiers, player_data, player_type, player_game_info, skip_career_events=True):
+                raw_row_data["R"] += 1
+                if "is_unearned_run" not in at_bat_event or not at_bat_event["is_unearned_run"]:
+                    raw_row_data["ER"] += 1
 
     if not has_any_match:
         if "Pitch Speed" in qualifiers or "Pitch Zone" in qualifiers or "Out Of Zone" in qualifiers or "In Zone" in qualifiers or "Fastball" in qualifiers or "Breaking" in qualifiers or "Offspeed" in qualifiers or "Pitch Type" in qualifiers or "Exact Pitch Type" in qualifiers or "Pitch Spin" in qualifiers:
@@ -36686,7 +36708,7 @@ def get_mlb_game_stats_single_thread(all_rows, has_count_stat, qualifiers, games
                             hit_start = True
                         if saved_row_data[stat] >= event_reversed_stats_needed[stat]:
                             hit_end = True
-
+                
                 percent_complete = 100 * (count_info["count"] / count_info["total_count"])
                 if count_info["total_count"] >= 10 and percent_complete >= count_info["current_percent"]:
                     logger.info("#" + str(threading.get_ident()) + "#   " + player_data["id"] + " game data " + str(count_info["current_percent"]) + "% complete")
@@ -37762,8 +37784,8 @@ def set_row_data(player_game_info, row_data, player_type):
             row_data["ExitND"] = 1
 
 def get_mlb_game_links_schedule_links(player_data, player_type, player_link, all_rows, qualifiers, s):
-    seasons = list(set([row["Year"] for row in all_rows]))
-    for season in seasons:
+    seasons_without_id = list(set([row["Year"] for row in all_rows if not "MLBGameLink" in row]))
+    for season in seasons_without_id:
         sub_year = season
         for team in player_data["numbers_year_map"][sub_year]:
             if team not in player_data["player_team_map"]:
@@ -37820,293 +37842,308 @@ def get_mlb_game_links_schedule_links(player_data, player_type, player_link, all
                 continue
 
             team_id = team_ids[sleague][team_name]
+            parse_mlb_team_year_link(team_id, sub_year, qualifiers, all_rows, team, s)
 
-            da_dates = []
+    seasons_with_id = list(set([row["Year"] for row in all_rows if "MLBGameLink" in row and "FoundScheduleGame" not in row]))
+    for season in seasons_without_id:
+        sesaon_team_ids = list(set([row["Year"] for row in all_rows if "MLBGameLink" in row and "FoundScheduleGame" not in row and row["Year"] == season]))
+        for team_id in sesaon_team_ids:
+            parse_mlb_team_year_link(team_id, season, qualifiers, all_rows, team, s)
             
-            scheudle_url = mlb_team_schedule_url_format.format(team_id, sub_year) + "&hydrate="
-            if "National Game" in qualifiers or "Any National Game" in qualifiers or "TV Network" in qualifiers or "Radio Network" in qualifiers or "Raw TV Network" in qualifiers or "Raw Radio Network" in qualifiers or "National TV Network" in qualifiers or "National Raw TV Network" in qualifiers or "Any National TV Network" in qualifiers or "Any National Raw TV Network" in qualifiers:
-                scheudle_url += "broadcasts(all),"
-            if "Surface" in qualifiers:
-                scheudle_url += "venue(fieldInfo),"
-            if "Condition" in qualifiers or "Temperature" in qualifiers or "Wind" in qualifiers:
-                scheudle_url += "weather,"
-            if "Exact Umpire" in qualifiers or "Exact Home Plate Umpire" in qualifiers or "Umpire" in qualifiers or "Home Plate Umpire" in qualifiers:
-                scheudle_url += "officials,"
-            if "Attendance" in qualifiers:
-                scheudle_url += "gameInfo,"
-                
-            if scheudle_url.endswith(","):
-                scheudle_url = scheudle_url[:-1]
-            else:
-                scheudle_url = scheudle_url[:-9]
+def parse_mlb_team_year_link(team_id, sub_year, qualifiers, all_rows, team, s):
+    da_dates = []
+    scheudle_url = mlb_team_schedule_url_format.format(team_id, sub_year) + "&hydrate="
+    if "National Game" in qualifiers or "Any National Game" in qualifiers or "TV Network" in qualifiers or "Radio Network" in qualifiers or "Raw TV Network" in qualifiers or "Raw Radio Network" in qualifiers or "National TV Network" in qualifiers or "National Raw TV Network" in qualifiers or "Any National TV Network" in qualifiers or "Any National Raw TV Network" in qualifiers:
+        scheudle_url += "broadcasts(all),"
+    if "Surface" in qualifiers:
+        scheudle_url += "venue(fieldInfo),"
+    if "Condition" in qualifiers or "Temperature" in qualifiers or "Wind" in qualifiers:
+        scheudle_url += "weather,"
+    if "Exact Umpire" in qualifiers or "Exact Home Plate Umpire" in qualifiers or "Umpire" in qualifiers or "Home Plate Umpire" in qualifiers:
+        scheudle_url += "officials,"
+    if "Attendance" in qualifiers:
+        scheudle_url += "gameInfo,"
+        
+    if scheudle_url.endswith(","):
+        scheudle_url = scheudle_url[:-1]
+    else:
+        scheudle_url = scheudle_url[:-9]
 
-            data = url_request_json(s, scheudle_url)
+    data = url_request_json(s, scheudle_url)
 
-            for game in data["dates"]:
-                da_dates.append(game)
+    for game in data["dates"]:
+        da_dates.append(game)
 
-            # for month_int in range(1, 13):
-            #     min_date = datetime.date(sub_year, month_int, 1)
-            #     max_date = datetime.date(sub_year, month_int, calendar.monthrange(sub_year, month_int)[1])
+    # for month_int in range(1, 13):
+    #     min_date = datetime.date(sub_year, month_int, 1)
+    #     max_date = datetime.date(sub_year, month_int, calendar.monthrange(sub_year, month_int)[1])
 
-            #     scheudle_url = mlb_team_schedule_url_format.format(team_id, urllib.parse.quote_plus(str(min_date)), urllib.parse.quote_plus(str(max_date))) + "&hydrate="
-            #     if "National Game" in qualifiers or "Any National Game" in qualifiers or "TV Network" in qualifiers or "Radio Network" in qualifiers or "Raw TV Network" in qualifiers or "Raw Radio Network" in qualifiers or "National TV Network" in qualifiers or "National Raw TV Network" in qualifiers or "Any National TV Network" in qualifiers or "Any National Raw TV Network" in qualifiers:
-            #         scheudle_url += "broadcasts(all),"
+    #     scheudle_url = mlb_team_schedule_url_format.format(team_id, urllib.parse.quote_plus(str(min_date)), urllib.parse.quote_plus(str(max_date))) + "&hydrate="
+    #     if "National Game" in qualifiers or "Any National Game" in qualifiers or "TV Network" in qualifiers or "Radio Network" in qualifiers or "Raw TV Network" in qualifiers or "Raw Radio Network" in qualifiers or "National TV Network" in qualifiers or "National Raw TV Network" in qualifiers or "Any National TV Network" in qualifiers or "Any National Raw TV Network" in qualifiers:
+    #         scheudle_url += "broadcasts(all),"
 
-            #     if "National Game" in qualifiers or "Any National Game" in qualifiers or "TV Network" in qualifiers or "Radio Network" in qualifiers or "Raw TV Network" in qualifiers or "Raw Radio Network" in qualifiers or "National TV Network" in qualifiers or "National Raw TV Network" in qualifiers or "Any National TV Network" in qualifiers or "Any National Raw TV Network" in qualifiers:
-            #         scheudle_url += "broadcasts(all),"
-            #     if "Surface" in qualifiers:
-            #         scheudle_url += "venue(fieldInfo),"
-            #     if "Condition" in qualifiers or "Temperature" in qualifiers or "Wind" in qualifiers:
-            #         scheudle_url += "weather,"
-            #     if "Exact Umpire" in qualifiers or "Exact Home Plate Umpire" in qualifiers or "Umpire" in qualifiers or "Home Plate Umpire" in qualifiers:
-            #         scheudle_url += "officials,"
-            #     if "Attendance" in qualifiers:
-            #         scheudle_url += "gameInfo,"
+    #     if "National Game" in qualifiers or "Any National Game" in qualifiers or "TV Network" in qualifiers or "Radio Network" in qualifiers or "Raw TV Network" in qualifiers or "Raw Radio Network" in qualifiers or "National TV Network" in qualifiers or "National Raw TV Network" in qualifiers or "Any National TV Network" in qualifiers or "Any National Raw TV Network" in qualifiers:
+    #         scheudle_url += "broadcasts(all),"
+    #     if "Surface" in qualifiers:
+    #         scheudle_url += "venue(fieldInfo),"
+    #     if "Condition" in qualifiers or "Temperature" in qualifiers or "Wind" in qualifiers:
+    #         scheudle_url += "weather,"
+    #     if "Exact Umpire" in qualifiers or "Exact Home Plate Umpire" in qualifiers or "Umpire" in qualifiers or "Home Plate Umpire" in qualifiers:
+    #         scheudle_url += "officials,"
+    #     if "Attendance" in qualifiers:
+    #         scheudle_url += "gameInfo,"
+            
+    #     if scheudle_url.endswith(","):
+    #         scheudle_url = scheudle_url[:-1]
+    #     else:
+    #         scheudle_url = scheudle_url[:-9]
+    #     data = url_request_json(s, scheudle_url)
+
+    #     for game in data["dates"]:
+    #         da_dates.append(game)
+
+    national_networks_to_skip = ["MLBN", "MLBN-INT", "Twitter", "YouTube", "FB-WATCH", "ESPN+"]
+
+    all_games = []
+    for sub_game in da_dates:
+        ids_to_header = {}
+        for game in sub_game["games"]:
+            if game["officialDate"] != sub_game["date"]:
+                continue
+            game_type = game["gameType"]
+            if game_type != "R" and game_type != "F" and game_type != "D" and game_type != "L" and game_type != "W":
+                continue
+            if game["status"]["detailedState"]:
+                if game["status"]["detailedState"] == "Cancelled" or game["status"]["detailedState"] == "Warmup" or game["status"]["detailedState"] == "Postponed" or game["status"]["detailedState"].startswith("Suspended"):
+                    continue
+            if not "score" in game["teams"]["home"]:
+                continue
+            ids_to_header[game["gamePk"]] = len(ids_to_header)
+        
+        if len(ids_to_header) > 1:
+            for game_pk in ids_to_header:
+                ids_to_header[game_pk] += 1
+
+        for game in sub_game["games"]:
+            if game["gamePk"] not in ids_to_header:
+                continue
+
+            if game["season"] == str(sub_year):
+                game_type = game["gameType"]
+                if game_type != "R" and game_type != "F" and game_type != "D" and game_type != "L" and game_type != "W":
+                    continue
+                if game["status"]["detailedState"]:
+                    if game["status"]["detailedState"] == "Cancelled" or game["status"]["detailedState"] == "Warmup" or game["status"]["detailedState"] == "Postponed" or game["status"]["detailedState"].startswith("Suspended"):
+                        continue
+                if not "score" in game["teams"]["home"]:
+                    continue
+
+                game["time_int"] = ids_to_header[game["gamePk"]]
+            
+                all_games.append(game)
+
+    for game_index, game in enumerate(all_games):
+        game_datetime = dateutil.parser.parse(game["officialDate"])
+        game_date = game_datetime.date()
+        time_int = game["time_int"]
+        game_datetime = game_datetime.replace(hour=time_int)
+
+        is_national = False
+        is_any_national = False
+        tv_networks = []
+        radio_networks = []
+        national_tv_networks = []
+        any_national_tv_networks = []
+
+        if "broadcasts" in game and game["broadcasts"]:
+            for broadcast in game["broadcasts"]:
+                if "callSign" in broadcast and broadcast["callSign"]:
+                    call_sign = broadcast["callSign"]
+                else:
+                    call_sign = broadcast["name"].split(" ")[0]
                     
-            #     if scheudle_url.endswith(","):
-            #         scheudle_url = scheudle_url[:-1]
-            #     else:
-            #         scheudle_url = scheudle_url[:-9]
-            #     data = url_request_json(s, scheudle_url)
+                if broadcast["type"] == "TV":
+                    if "isNational" in broadcast and broadcast["isNational"]:
+                        is_any_national = True
+                        if call_sign not in national_networks_to_skip:
+                            is_national = True
+                            national_tv_networks.append(call_sign.lower())
+                        any_national_tv_networks.append(call_sign.lower())
+                    tv_networks.append(call_sign.lower())
+                elif broadcast["type"] in ["AM", "FM"]:
+                    radio_networks.append(call_sign.lower())
+        for index, row_data in enumerate(all_rows):
+            if row_data["Date"] == game_date:
+                if row_data["DateTime"] == game_datetime or (str(game_date) in special_doubleheaders and team in special_doubleheaders[str(game_date)]["single_teams"]):
+                    team_match = False
+                    if "MLBTmID" in row_data:
+                        team_match = row_data["MLBTmID"] == team_id
+                    else:
+                        team_match = row_data["Tm"] == team
+                    if row_data["Tm"] == team:
+                        row_data["MLBGameLink"] = game["gamePk"]
+                        row_data["MLBTmID"] = game["teams"]["home"]["team"]["id"]
+                        row_data["MLBOppID"] = game["teams"]["home"]["team"]["id"]
+                        row_data["FoundScheduleGame"] = True
+                        if "broadcasts" in game and game["broadcasts"]:
+                            row_data["IsNational"] = is_national
+                            row_data["AnyIsNational"] = is_any_national
+                            row_data["TVNetworks"] = tv_networks
+                            row_data["RadioNetworks"] = radio_networks
+                            row_data["NationalTVNetworks"] = national_tv_networks
+                            row_data["AnyNationalTVNetworks"] = any_national_tv_networks
+                        
+                        is_home = game["teams"]["home"]["team"]["id"] == team_id
+                        is_final = game["status"]["abstractGameState"] == "Final"
 
-            #     for game in data["dates"]:
-            #         da_dates.append(game)
+                        if is_home:
+                            row_data["CurrTmWins"] = game["teams"]["home"]["leagueRecord"]["wins"]
+                            row_data["CurrTmLosses"] = game["teams"]["home"]["leagueRecord"]["losses"]
 
-            national_networks_to_skip = ["MLBN", "MLBN-INT", "Twitter", "YouTube", "FB-WATCH", "ESPN+"]
+                            row_data["CurrOppWins"] = game["teams"]["away"]["leagueRecord"]["wins"]
+                            row_data["CurrOppLosses"] = game["teams"]["away"]["leagueRecord"]["losses"]
 
-            all_games = []
-            for sub_game in da_dates:
-                ids_to_header = {}
-                for game in sub_game["games"]:
-                    if game["officialDate"] != sub_game["date"]:
-                        continue
-                    game_type = game["gameType"]
-                    if game_type != "R" and game_type != "F" and game_type != "D" and game_type != "L" and game_type != "W":
-                        continue
-                    if game["status"]["detailedState"]:
-                        if game["status"]["detailedState"] == "Cancelled" or game["status"]["detailedState"] == "Warmup" or game["status"]["detailedState"] == "Postponed" or game["status"]["detailedState"].startswith("Suspended"):
-                            continue
-                    if not "score" in game["teams"]["home"]:
-                        continue
-                    ids_to_header[game["gamePk"]] = len(ids_to_header)
-                
-                if len(ids_to_header) > 1:
-                    for game_pk in ids_to_header:
-                        ids_to_header[game_pk] += 1
-
-                for game in sub_game["games"]:
-                    if game["gamePk"] not in ids_to_header:
-                        continue
-
-                    if game["season"] == str(season):
-                        game_type = game["gameType"]
-                        if game_type != "R" and game_type != "F" and game_type != "D" and game_type != "L" and game_type != "W":
-                            continue
-                        if game["status"]["detailedState"]:
-                            if game["status"]["detailedState"] == "Cancelled" or game["status"]["detailedState"] == "Warmup" or game["status"]["detailedState"] == "Postponed" or game["status"]["detailedState"].startswith("Suspended"):
-                                continue
-                        if not "score" in game["teams"]["home"]:
-                            continue
-
-                        game["time_int"] = ids_to_header[game["gamePk"]]
-                    
-                        all_games.append(game)
-
-            for game_index, game in enumerate(all_games):
-                game_datetime = dateutil.parser.parse(game["officialDate"])
-                game_date = game_datetime.date()
-                time_int = game["time_int"]
-                game_datetime = game_datetime.replace(hour=time_int)
-
-                is_national = False
-                is_any_national = False
-                tv_networks = []
-                radio_networks = []
-                national_tv_networks = []
-                any_national_tv_networks = []
-
-                if "broadcasts" in game and game["broadcasts"]:
-                    for broadcast in game["broadcasts"]:
-                        if "callSign" in broadcast and broadcast["callSign"]:
-                            call_sign = broadcast["callSign"]
+                            if is_final:
+                                if game["teams"]["home"]["score"] > game["teams"]["away"]["score"]:
+                                    row_data["CurrTmWins"] -= 1
+                                    row_data["CurrOppLosses"] -= 1
+                                elif game["teams"]["home"]["score"] < game["teams"]["away"]["score"]:
+                                    row_data["CurrTmLosses"] -= 1
+                                    row_data["CurrOppWins"] -= 1
                         else:
-                            call_sign = broadcast["name"].split(" ")[0]
-                            
-                        if broadcast["type"] == "TV":
-                            if "isNational" in broadcast and broadcast["isNational"]:
-                                is_any_national = True
-                                if call_sign not in national_networks_to_skip:
-                                    is_national = True
-                                    national_tv_networks.append(call_sign.lower())
-                                any_national_tv_networks.append(call_sign.lower())
-                            tv_networks.append(call_sign.lower())
-                        elif broadcast["type"] in ["AM", "FM"]:
-                            radio_networks.append(call_sign.lower())
-                for index, row_data in enumerate(all_rows):
-                    if row_data["Date"] == game_date:
-                        if row_data["DateTime"] == game_datetime or (str(game_date) in special_doubleheaders and team in special_doubleheaders[str(game_date)]["single_teams"]):
-                            if row_data["Tm"] == team:
-                                row_data["MLBGameLink"] = game["gamePk"]
-                                if "broadcasts" in game and game["broadcasts"]:
-                                    row_data["IsNational"] = is_national
-                                    row_data["AnyIsNational"] = is_any_national
-                                    row_data["TVNetworks"] = tv_networks
-                                    row_data["RadioNetworks"] = radio_networks
-                                    row_data["NationalTVNetworks"] = national_tv_networks
-                                    row_data["AnyNationalTVNetworks"] = any_national_tv_networks
-                                
-                                is_home = game["teams"]["home"]["team"]["id"] == team_id
-                                is_final = game["status"]["abstractGameState"] == "Final"
+                            row_data["CurrTmWins"] = game["teams"]["away"]["leagueRecord"]["wins"]
+                            row_data["CurrTmLosses"] = game["teams"]["away"]["leagueRecord"]["losses"]
 
-                                if is_home:
-                                    row_data["CurrTmWins"] = game["teams"]["home"]["leagueRecord"]["wins"]
-                                    row_data["CurrTmLosses"] = game["teams"]["home"]["leagueRecord"]["losses"]
+                            row_data["CurrOppWins"] = game["teams"]["home"]["leagueRecord"]["wins"]
+                            row_data["CurrOppLosses"] = game["teams"]["home"]["leagueRecord"]["losses"]
 
-                                    row_data["CurrOppWins"] = game["teams"]["away"]["leagueRecord"]["wins"]
-                                    row_data["CurrOppLosses"] = game["teams"]["away"]["leagueRecord"]["losses"]
+                            if is_final:
+                                if game["teams"]["away"]["score"] > game["teams"]["home"]["score"]:
+                                    row_data["CurrTmWins"] -= 1
+                                    row_data["CurrOppLosses"] -= 1
+                                elif game["teams"]["away"]["score"] < game["teams"]["home"]["score"]:
+                                    row_data["CurrTmLosses"] -= 1
+                                    row_data["CurrOppWins"] -= 1
+                        
+                        if game["dayNight"] == "day":
+                            row_data["Time"] = "D"
+                        elif game["dayNight"] == "night":
+                            row_data["Time"] = "N"
 
-                                    if is_final:
-                                        if game["teams"]["home"]["score"] > game["teams"]["away"]["score"]:
-                                            row_data["CurrTmWins"] -= 1
-                                            row_data["CurrOppLosses"] -= 1
-                                        elif game["teams"]["home"]["score"] < game["teams"]["away"]["score"]:
-                                            row_data["CurrTmLosses"] -= 1
-                                            row_data["CurrOppWins"] -= 1
+                        if "gameDate" in game and game["gameDate"]:
+                            row_data["StartTime"] = dateutil.parser.parse(game["gameDate"])
+
+                        if "gameInfo" in game and "attendance" in game["gameInfo"]:
+                            row_data["Attendance"] = game["gameInfo"]["attendance"]
+
+                        if "officials" in game:
+                            for index, umpire_obj in enumerate(game["officials"]):
+                                if umpire_obj["officialType"] == "Home Plate":
+                                    row_data["HPUmpire"] = umpire_obj["official"]["fullName"]
+                                    row_data["HPUmpireID"] = umpire_obj["official"]["id"]
+                                elif umpire_obj["officialType"] == "First Base":
+                                    row_data["1BUmpire"] = umpire_obj["official"]["fullName"]
+                                    row_data["1BUmpireID"] = umpire_obj["official"]["id"]
+                                elif umpire_obj["officialType"] == "Second Base":
+                                    row_data["2BUmpire"] = umpire_obj["official"]["fullName"]
+                                    row_data["2BUmpireID"] = umpire_obj["official"]["id"]
+                                elif umpire_obj["officialType"] == "Third Base":
+                                    row_data["3BUmpire"] = umpire_obj["official"]["fullName"]
+                                    row_data["3BUmpireID"] = umpire_obj["official"]["id"]
+                                elif umpire_obj["officialType"] == "Left Field":
+                                    row_data["LFUmpire"] = umpire_obj["official"]["fullName"]
+                                    row_data["LFUmpireID"] = umpire_obj["official"]["id"]
+                                elif umpire_obj["officialType"] == "Right Field":
+                                    row_data["RFUmpire"] = umpire_obj["official"]["fullName"]
+                                    row_data["RFUmpireID"] = umpire_obj["official"]["id"]
                                 else:
-                                    row_data["CurrTmWins"] = game["teams"]["away"]["leagueRecord"]["wins"]
-                                    row_data["CurrTmLosses"] = game["teams"]["away"]["leagueRecord"]["losses"]
+                                    row_data["OtherUmpire"] = umpire_obj["official"]["fullName"]
+                                    row_data["OtherUmpireID"] = umpire_obj["official"]["id"]
 
-                                    row_data["CurrOppWins"] = game["teams"]["home"]["leagueRecord"]["wins"]
-                                    row_data["CurrOppLosses"] = game["teams"]["home"]["leagueRecord"]["losses"]
+                        if "weather" in game:
+                            if "temp" in game["weather"]:
+                                row_data["Temperature"] = int(game["weather"]["temp"])
+                            if "wind" in game["weather"]:
+                                row_data["Wind"] = int(game["weather"]["wind"].split()[0])
+                            if "condition" in game["weather"]:
+                                row_data["Condition"] = game["weather"]["condition"]
 
-                                    if is_final:
-                                        if game["teams"]["away"]["score"] > game["teams"]["home"]["score"]:
-                                            row_data["CurrTmWins"] -= 1
-                                            row_data["CurrOppLosses"] -= 1
-                                        elif game["teams"]["away"]["score"] < game["teams"]["home"]["score"]:
-                                            row_data["CurrTmLosses"] -= 1
-                                            row_data["CurrOppWins"] -= 1
-                                
-                                if game["dayNight"] == "day":
-                                    row_data["Time"] = "D"
-                                elif game["dayNight"] == "night":
-                                    row_data["Time"] = "N"
+                        if "fieldInfo" in game["venue"]:
+                            row_data["Surface"] = game["venue"]["fieldInfo"]["turfType"]
+                        
+                        row_data["Stadium"] = unidecode.unidecode(game["venue"]["name"]).strip()
+                        row_data["StadiumID"] = game["venue"]["id"]
 
-                                if "gameDate" in game and game["gameDate"]:
-                                    row_data["StartTime"] = dateutil.parser.parse(game["gameDate"])
+                        if row_data["is_playoffs"]:
+                            continue
 
-                                if "gameInfo" in game and "attendance" in game["gameInfo"]:
-                                    row_data["Attendance"] = game["gameInfo"]["attendance"]
+                        if "seriesNumber" in game["teams"]["home"]:
+                            if is_home:
+                                row_data["SeriesID"] = game["teams"]["home"]["seriesNumber"]
+                            else:
+                                row_data["SeriesID"] = game["teams"]["away"]["seriesNumber"]
 
-                                if "officials" in game:
-                                    for index, umpire_obj in enumerate(game["officials"]):
-                                        if umpire_obj["officialType"] == "Home Plate":
-                                            row_data["HPUmpire"] = umpire_obj["official"]["fullName"]
-                                            row_data["HPUmpireID"] = umpire_obj["official"]["id"]
-                                        elif umpire_obj["officialType"] == "First Base":
-                                            row_data["1BUmpire"] = umpire_obj["official"]["fullName"]
-                                            row_data["1BUmpireID"] = umpire_obj["official"]["id"]
-                                        elif umpire_obj["officialType"] == "Second Base":
-                                            row_data["2BUmpire"] = umpire_obj["official"]["fullName"]
-                                            row_data["2BUmpireID"] = umpire_obj["official"]["id"]
-                                        elif umpire_obj["officialType"] == "Third Base":
-                                            row_data["3BUmpire"] = umpire_obj["official"]["fullName"]
-                                            row_data["3BUmpireID"] = umpire_obj["official"]["id"]
-                                        elif umpire_obj["officialType"] == "Left Field":
-                                            row_data["LFUmpire"] = umpire_obj["official"]["fullName"]
-                                            row_data["LFUmpireID"] = umpire_obj["official"]["id"]
-                                        elif umpire_obj["officialType"] == "Right Field":
-                                            row_data["RFUmpire"] = umpire_obj["official"]["fullName"]
-                                            row_data["RFUmpireID"] = umpire_obj["official"]["id"]
-                                        else:
-                                            row_data["OtherUmpire"] = umpire_obj["official"]["fullName"]
-                                            row_data["OtherUmpireID"] = umpire_obj["official"]["id"]
+                            row_data["RoundGame"] = game["seriesGameNumber"]
+                            row_data["SeriesLength"] = game["gamesInSeries"]
 
-                                if "weather" in game:
-                                    if "temp" in game["weather"]:
-                                        row_data["Temperature"] = int(game["weather"]["temp"])
-                                    if "wind" in game["weather"]:
-                                        row_data["Wind"] = int(game["weather"]["wind"].split()[0])
-                                    if "condition" in game["weather"]:
-                                        row_data["Condition"] = game["weather"]["condition"]
-
-                                if "fieldInfo" in game["venue"]:
-                                    row_data["Surface"] = game["venue"]["fieldInfo"]["turfType"]
-                                
-                                row_data["Stadium"] = unidecode.unidecode(game["venue"]["name"]).strip()
-                                row_data["StadiumID"] = game["venue"]["id"]
-
-                                if row_data["is_playoffs"]:
+                            round_length = round(row_data["SeriesLength"] / 2)
+                            if row_data["SeriesLength"] % 2 == 0:
+                                round_length += 1
+                            team_wins = 0
+                            opponent_wins = 0
+                            
+                            has_missing_game = False
+                            for previous_game in reversed(all_games[0:game_index]):
+                                if previous_game["gameType"] in ("F", "D", "L", "W"):
                                     continue
 
-                                if "seriesNumber" in game["teams"]["home"]:
-                                    if is_home:
-                                        row_data["SeriesID"] = game["teams"]["home"]["seriesNumber"]
-                                    else:
-                                        row_data["SeriesID"] = game["teams"]["away"]["seriesNumber"]
-
-                                    row_data["RoundGame"] = game["seriesGameNumber"]
-                                    row_data["SeriesLength"] = game["gamesInSeries"]
-
-                                    round_length = round(row_data["SeriesLength"] / 2)
-                                    if row_data["SeriesLength"] % 2 == 0:
-                                        round_length += 1
-                                    team_wins = 0
-                                    opponent_wins = 0
-                                    
-                                    has_missing_game = False
-                                    for previous_game in reversed(all_games[0:game_index]):
-                                        if previous_game["gameType"] in ("F", "D", "L", "W"):
-                                            continue
-
-                                        prev_is_home = previous_game["teams"]["home"]["team"]["id"] == team_id
-                                        prev_is_final = previous_game["status"]["abstractGameState"] == "Final"
-                                        
-                                        prev_result = None
-                                        if "seriesNumber" in previous_game["teams"]["home"]:
-                                            if is_home:
-                                                prev_series_id = previous_game["teams"]["home"]["seriesNumber"]
-
-                                                if prev_is_final:
-                                                    if previous_game["teams"]["home"]["score"] > previous_game["teams"]["away"]["score"]:
-                                                        prev_result = "W"
-                                                    elif previous_game["teams"]["home"]["score"] < previous_game["teams"]["away"]["score"]:
-                                                        prev_result = "L"
-                                            else:
-                                                prev_series_id = previous_game["teams"]["away"]["seriesNumber"]
-
-                                                if prev_is_final:
-                                                    if previous_game["teams"]["away"]["score"] > previous_game["teams"]["home"]["score"]:
-                                                        prev_result = "W"
-                                                    elif previous_game["teams"]["away"]["score"] < previous_game["teams"]["home"]["score"]:
-                                                        prev_result = "L"
-
-                                            if prev_series_id == row_data["SeriesID"]:
-                                                if prev_result == "W":
-                                                    team_wins += 1
-                                                elif prev_result == "L":
-                                                    opponent_wins += 1
-                                        else:
-                                            has_missing_game = True
+                                prev_is_home = previous_game["teams"]["home"]["team"]["id"] == team_id
+                                prev_is_final = previous_game["status"]["abstractGameState"] == "Final"
                                 
-                                    if not has_missing_game:
-                                        if opponent_wins > round_length or team_wins > round_length:
-                                            row_data["Clinching"] = False
-                                            row_data["Elimination"] = False
-                                        else:
-                                            if opponent_wins == round_length - 1:  
-                                                row_data["Elimination"] = True
-                                            else:
-                                                row_data["Elimination"] = False
-                                            if team_wins == round_length - 1:
-                                                row_data["Clinching"] = True
-                                            else:
-                                                row_data["Clinching"] = False
-                                        
-                                        row_data["SeriesTeamWins"] = team_wins
-                                        row_data["SeriesOpponentWins"] = opponent_wins
-                                        row_data["SeriesScore"] = team_wins - opponent_wins
+                                prev_result = None
+                                if "seriesNumber" in previous_game["teams"]["home"]:
+                                    if is_home:
+                                        prev_series_id = previous_game["teams"]["home"]["seriesNumber"]
+
+                                        if prev_is_final:
+                                            if previous_game["teams"]["home"]["score"] > previous_game["teams"]["away"]["score"]:
+                                                prev_result = "W"
+                                            elif previous_game["teams"]["home"]["score"] < previous_game["teams"]["away"]["score"]:
+                                                prev_result = "L"
+                                    else:
+                                        prev_series_id = previous_game["teams"]["away"]["seriesNumber"]
+
+                                        if prev_is_final:
+                                            if previous_game["teams"]["away"]["score"] > previous_game["teams"]["home"]["score"]:
+                                                prev_result = "W"
+                                            elif previous_game["teams"]["away"]["score"] < previous_game["teams"]["home"]["score"]:
+                                                prev_result = "L"
+
+                                    if prev_series_id == row_data["SeriesID"]:
+                                        if prev_result == "W":
+                                            team_wins += 1
+                                        elif prev_result == "L":
+                                            opponent_wins += 1
+                                else:
+                                    has_missing_game = True
+                        
+                            if not has_missing_game:
+                                if opponent_wins > round_length or team_wins > round_length:
+                                    row_data["Clinching"] = False
+                                    row_data["Elimination"] = False
+                                else:
+                                    if opponent_wins == round_length - 1:  
+                                        row_data["Elimination"] = True
+                                    else:
+                                        row_data["Elimination"] = False
+                                    if team_wins == round_length - 1:
+                                        row_data["Clinching"] = True
+                                    else:
+                                        row_data["Clinching"] = False
+                                
+                                row_data["SeriesTeamWins"] = team_wins
+                                row_data["SeriesOpponentWins"] = opponent_wins
+                                row_data["SeriesScore"] = team_wins - opponent_wins
     
 def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_type, qualifiers, needs_plays, s):
     missing_games = False
