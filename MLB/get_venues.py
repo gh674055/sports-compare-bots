@@ -17,6 +17,7 @@ import unidecode
 from nameparser import HumanName
 from urllib.parse import urlparse
 import requests
+import threading
 
 mlb_teams_url_format = "https://statsapi.mlb.com/api/v1/schedule?&season={}&sportId=1&gameType=R,F,D,L,W"
 
@@ -45,7 +46,7 @@ def main():
     try:
         options = getopt.getopt(sys.argv[1:], year_short + ":", [year_long + "="])[0]
     except getopt.GetoptError as err:
-        logger.error("Encountered error \"" + str(err) + "\" parsing arguments")
+        print("Encountered error \"" + str(err) + "\" parsing arguments")
         return
     
     year = None
@@ -111,12 +112,12 @@ def url_request_json(session, url, timeout=30):
                 raise
 
         delay_step = 10
-        logger.info("#" + str(threading.get_ident()) + "#   " + "Retrying in " + str(retry_failure_delay) + " seconds to allow " + url + " to chill")
+        print("#" + str(threading.get_ident()) + "#   " + "Retrying in " + str(retry_failure_delay) + " seconds to allow " + url + " to chill")
         time_to_wait = int(math.ceil(float(retry_failure_delay)/float(delay_step)))
         for i in range(retry_failure_delay, 0, -time_to_wait):
-            logger.info("#" + str(threading.get_ident()) + "#   " + str(i))
+            print("#" + str(threading.get_ident()) + "#   " + str(i))
             time.sleep(time_to_wait)
-        logger.info("#" + str(threading.get_ident()) + "#   " + "0")
+        print("#" + str(threading.get_ident()) + "#   " + "0")
 
 if __name__ == "__main__":
     main()

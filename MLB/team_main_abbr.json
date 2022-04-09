@@ -1723,7 +1723,9 @@
         "1928": {
             "AC": "BAG",
             "BBS": "BBS",
+            "BRG": "BR2",
             "CSE": "CSE",
+            "HG": "HG",
             "NLG": "NLG",
             "PTG": "PTG"
         }
@@ -3931,11 +3933,14 @@
         },
         "1923": {
             "ABC": "ABC",
+            "BBB": "BBB",
             "CAG": "CAG",
             "CSW": "CSW",
+            "CTS": "CTS",
             "DS": "DS",
             "KCM": "KCM",
             "MB": "MB",
+            "MRS": "MRS",
             "SLS": "SLS",
             "TT": "TT"
         },
@@ -4015,6 +4020,7 @@
             "CAG": "CAG",
             "CCU": "CCU",
             "DS": "DS",
+            "KCM": "KCM",
             "LOW": "LVB",
             "SLS": "SLS"
         }
