@@ -7594,51 +7594,6 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                             elif qualifier_str.startswith("playing-same-game:"):
                                 qual_str = "playing-same-game:"
                                 qual_type = "Playing Same Game"
-                            
-                            qualifier_obj["values"] = re.split(r"(?<!\\)\~", re.split(r"(?<!\\)" + qual_str, qualifier_str)[1][1:-1])
-                            qualifier_obj["values"] = [value.strip() for value in qualifier_obj["values"]]
-                            if qual_type == "Dates":
-                                new_values = []
-                                for value in qualifier_obj["values"]:
-                                    replace_first_year = {
-                                        "replace" : False
-                                    }
-
-                                    if "to" in value:
-                                        dates = re.split(r"(?<!\\)to", value)
-                                        date1 = handle_string_year(dates[0], True, replace_first_year)
-                                        date2 = handle_string_year(dates[1], False, replace_first_year)
-                                        new_values.append({
-                                            "start_val" : date1,
-                                            "end_val" : date2,
-                                        })
-                                    else:
-                                        date1 = handle_string_year(value, True, replace_first_year)
-                                        new_values.append({
-                                            "start_val" : date1,
-                                            "end_val" : date1,
-                                        })
-                                qualifier_obj["values"] = new_values
-                            elif "On Field" in qual_type:
-                                new_values = []
-                                for value in qualifier_obj["values"]:
-                                    values = re.split(r"(?<!\\)=", value)
-                                    if len(values) == 1:
-                                        new_values.append({
-                                            "pos" : ["ANY"],
-                                            "value" : values[0].strip()
-                                        })
-                                    else:
-                                        positions = []
-                                        for sub_pos in re.split(r"(?<!\\)-", values[0]):
-                                            positions.append(sub_pos.upper().strip())
-                                        if positions == 2 and positions[0].isdigit() and positions[1].isdigit() and int(positions[0]) < int(positions[1]):
-                                            positions = range(int(qualifier_obj["values"][0]), int(qualifier_obj["values"][1]) + 1)
-                                        new_values.append({
-                                            "pos" : positions,
-                                            "value" : values[1].strip()
-                                        })
-                                qualifier_obj["values"] = new_values
                             elif qualifier_str.startswith("event-time:") or qualifier_str.startswith("start-time:"):
                                 if qualifier_str.startswith("event-time:"):
                                     qual_str = "event-time:"
@@ -7717,6 +7672,53 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 
                                 qualifier_obj["values"]["start_val"] = qualifier_obj["values"]["start_val"].replace(microsecond=0)
                                 qualifier_obj["values"]["end_val"] = qualifier_obj["values"]["end_val"].replace(microsecond=0)
+                            
+                            if not qual_type in ["Event Time", "Start Time"]:
+                                qualifier_obj["values"] = re.split(r"(?<!\\)\~", re.split(r"(?<!\\)" + qual_str, qualifier_str)[1][1:-1])
+                                qualifier_obj["values"] = [value.strip() for value in qualifier_obj["values"]]
+
+                            if qual_type == "Dates":
+                                new_values = []
+                                for value in qualifier_obj["values"]:
+                                    replace_first_year = {
+                                        "replace" : False
+                                    }
+
+                                    if "to" in value:
+                                        dates = re.split(r"(?<!\\)to", value)
+                                        date1 = handle_string_year(dates[0], True, replace_first_year)
+                                        date2 = handle_string_year(dates[1], False, replace_first_year)
+                                        new_values.append({
+                                            "start_val" : date1,
+                                            "end_val" : date2,
+                                        })
+                                    else:
+                                        date1 = handle_string_year(value, True, replace_first_year)
+                                        new_values.append({
+                                            "start_val" : date1,
+                                            "end_val" : date1,
+                                        })
+                                qualifier_obj["values"] = new_values
+                            elif "On Field" in qual_type:
+                                new_values = []
+                                for value in qualifier_obj["values"]:
+                                    values = re.split(r"(?<!\\)=", value)
+                                    if len(values) == 1:
+                                        new_values.append({
+                                            "pos" : ["ANY"],
+                                            "value" : values[0].strip()
+                                        })
+                                    else:
+                                        positions = []
+                                        for sub_pos in re.split(r"(?<!\\)-", values[0]):
+                                            positions.append(sub_pos.upper().strip())
+                                        if positions == 2 and positions[0].isdigit() and positions[1].isdigit() and int(positions[0]) < int(positions[1]):
+                                            positions = range(int(qualifier_obj["values"][0]), int(qualifier_obj["values"][1]) + 1)
+                                        new_values.append({
+                                            "pos" : positions,
+                                            "value" : values[1].strip()
+                                        })
+                                qualifier_obj["values"] = new_values
 
                             if not qual_type in qualifiers:
                                 qualifiers[qual_type] = []
@@ -37848,10 +37850,10 @@ def get_mlb_game_links_schedule_links(player_data, player_type, player_link, all
             parse_mlb_team_year_link(team_id, sub_year, qualifiers, all_rows, team, s)
 
     seasons_with_id = list(set([row["Year"] for row in all_rows if "MLBGameLink" in row and "FoundScheduleGame" not in row]))
-    for season in seasons_without_id:
-        sesaon_team_ids = list(set([row["Year"] for row in all_rows if "MLBGameLink" in row and "FoundScheduleGame" not in row and row["Year"] == season]))
+    for season in seasons_with_id:
+        sesaon_team_ids = list(set([row["MLBTmID"] for row in all_rows if "MLBGameLink" in row and "FoundScheduleGame" not in row and row["Year"] == season]))
         for team_id in sesaon_team_ids:
-            parse_mlb_team_year_link(team_id, season, qualifiers, all_rows, team, s)
+            parse_mlb_team_year_link(team_id, season, qualifiers, all_rows, None, s)
             
 def parse_mlb_team_year_link(team_id, sub_year, qualifiers, all_rows, team, s):
     da_dates = []
@@ -37864,7 +37866,7 @@ def parse_mlb_team_year_link(team_id, sub_year, qualifiers, all_rows, team, s):
         scheudle_url += "weather,"
     if "Exact Umpire" in qualifiers or "Exact Home Plate Umpire" in qualifiers or "Umpire" in qualifiers or "Home Plate Umpire" in qualifiers:
         scheudle_url += "officials,"
-    if "Attendance" in qualifiers:
+    if "Attendance" in qualifiers or "Start Time" in qualifiers or "Local Start Time" in qualifiers or "Team Start Time" in qualifiers or "Opponent Start Time" in qualifiers:
         scheudle_url += "gameInfo,"
         
     if scheudle_url.endswith(","):
@@ -37983,7 +37985,7 @@ def parse_mlb_team_year_link(team_id, sub_year, qualifiers, all_rows, team, s):
                         team_match = row_data["MLBTmID"] == team_id
                     else:
                         team_match = row_data["Tm"] == team
-                    if row_data["Tm"] == team:
+                    if team_match:
                         row_data["MLBGameLink"] = game["gamePk"]
                         row_data["MLBTmID"] = game["teams"]["home"]["team"]["id"]
                         row_data["MLBOppID"] = game["teams"]["home"]["team"]["id"]
@@ -38033,8 +38035,9 @@ def parse_mlb_team_year_link(team_id, sub_year, qualifiers, all_rows, team, s):
                         elif game["dayNight"] == "night":
                             row_data["Time"] = "N"
 
-                        if "gameDate" in game and game["gameDate"]:
-                            row_data["StartTime"] = dateutil.parser.parse(game["gameDate"])
+
+                        if "gameInfo" in game and "firstPitch" in game["gameInfo"]:
+                            row_data["StartTime"] = dateutil.parser.parse(game["gameInfo"]["firstPitch"])
 
                         if "gameInfo" in game and "attendance" in game["gameInfo"]:
                             row_data["Attendance"] = game["gameInfo"]["attendance"]

@@ -1612,35 +1612,6 @@ def handle_player_string(comment, player_type, is_fantasy, last_updated, hide_ta
                             elif qualifier_str.startswith("exact-opponent-head-coach:"):
                                 qual_str = "exact-opponent-head-coach:"
                                 qual_type = "Exact Opponent Head Coach"
-
-                            qualifier_obj["values"] = re.split(r"(?<!\\)\~", re.split(r"(?<!\\)" + qual_str, qualifier_str)[1][1:-1])
-                            qualifier_obj["values"] = [value.strip() for value in qualifier_obj["values"]]
-                            if qual_type == "Dates":
-                                new_values = []
-                                for value in qualifier_obj["values"]:
-                                    replace_first_year = {
-                                        "replace" : False
-                                    }
-
-                                    if "to" in value:
-                                        dates = re.split(r"(?<!\\)to", value)
-                                        date1 = dateutil.parser.parse(dates[0].strip()).date()
-                                        date2 = dateutil.parser.parse(dates[1].strip()).date()
-                                        new_values = [date1 + datetime.timedelta(days=x) for x in range((date2-date1).days + 1)]
-                                        date1 = handle_string_year(dates[0], True, replace_first_year)
-                                        date2 = handle_string_year(dates[1], False, replace_first_year)
-                                        new_values.append({
-                                            "start_val" : date1,
-                                            "end_val" : date2,
-                                        })
-                                    else:
-                                        new_values.append(dateutil.parser.parse(value).date())
-                                        date1 = handle_string_year(value, True, replace_first_year)
-                                        new_values.append({
-                                            "start_val" : date1,
-                                            "end_val" : date1,
-                                        })
-                                qualifier_obj["values"] = new_values
                             elif qualifier_str.startswith("start-time:"):
                                 if qualifier_str.startswith("start-time:"):
                                     qual_str = "start-time:"
@@ -1715,6 +1686,37 @@ def handle_player_string(comment, player_type, is_fantasy, last_updated, hide_ta
                                 
                                 qualifier_obj["values"]["start_val"] = qualifier_obj["values"]["start_val"].replace(microsecond=0).replace(second=0)
                                 qualifier_obj["values"]["end_val"] = qualifier_obj["values"]["end_val"].replace(microsecond=0).replace(second=0)
+                            
+                            if not qual_type in ["Start Time"]:
+                                qualifier_obj["values"] = re.split(r"(?<!\\)\~", re.split(r"(?<!\\)" + qual_str, qualifier_str)[1][1:-1])
+                                qualifier_obj["values"] = [value.strip() for value in qualifier_obj["values"]]
+
+                            if qual_type == "Dates":
+                                new_values = []
+                                for value in qualifier_obj["values"]:
+                                    replace_first_year = {
+                                        "replace" : False
+                                    }
+
+                                    if "to" in value:
+                                        dates = re.split(r"(?<!\\)to", value)
+                                        date1 = dateutil.parser.parse(dates[0].strip()).date()
+                                        date2 = dateutil.parser.parse(dates[1].strip()).date()
+                                        new_values = [date1 + datetime.timedelta(days=x) for x in range((date2-date1).days + 1)]
+                                        date1 = handle_string_year(dates[0], True, replace_first_year)
+                                        date2 = handle_string_year(dates[1], False, replace_first_year)
+                                        new_values.append({
+                                            "start_val" : date1,
+                                            "end_val" : date2,
+                                        })
+                                    else:
+                                        new_values.append(dateutil.parser.parse(value).date())
+                                        date1 = handle_string_year(value, True, replace_first_year)
+                                        new_values.append({
+                                            "start_val" : date1,
+                                            "end_val" : date1,
+                                        })
+                                qualifier_obj["values"] = new_values
 
                             if not qual_type in qualifiers:
                                 qualifiers[qual_type] = []
@@ -7540,7 +7542,7 @@ def determine_raw_str(subbb_frame):
                     end_time = datetime.datetime.now().replace(hour=qual_obj["values"]["end_val"].hour).replace(minute=qual_obj["values"]["end_val"].minute).replace(second=qual_obj["values"]["end_val"].second)
 
                     if start_time == end_time:
-                        qual_str += start_time.strftime("%I:%M:%S%p")
+                        qual_str += start_time.strftime("%I:%M%p")
                     else:
                         qual_str += start_time.strftime("%I:%M%p") + " to " + end_time.strftime("%I:%M%p")
                     qual_str += " " + qual_obj["values"]["time_zone"]
