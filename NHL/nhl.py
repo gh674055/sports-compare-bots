@@ -13963,8 +13963,12 @@ def determine_player_str(qualifier, player_str, time_frame, qual_str):
             bracket_index = re.search(r"(?<!\\)]", player_str).start()
             playoffs_str = "playoffs" if time_frame["playoffs"] == "Only" else "including playoffs"
             player_str = player_str[:bracket_index] + " " + playoffs_str + player_str[bracket_index:]
-    else:
+    elif "time_frame_str" in qualifier:
         player_str += " [" + qualifier["time_frame_str"] + "]"
+        bracket_index = re.search(r"(?<!\\)]", player_str).start()
+        player_str = player_str[:bracket_index] + " hide-advanced" + player_str[bracket_index:]
+    else:
+        player_str += " []"
         bracket_index = re.search(r"(?<!\\)]", player_str).start()
         player_str = player_str[:bracket_index] + " hide-advanced" + player_str[bracket_index:]
 
