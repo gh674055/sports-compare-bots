@@ -36852,6 +36852,8 @@ def perform_mlb_schedule_qualifiers(row, qualifiers):
             else:
                 if not set(tv_networks).intersection(set(qual_object["values"])):
                     return False
+
+        print(tv_networks)
     
     if "National Raw TV Network" in qualifiers:
         if "NationalTVNetworks" not in row or not row["NationalTVNetworks"]:
@@ -37911,7 +37913,7 @@ def parse_mlb_team_year_link(team_id, sub_year, qualifiers, all_rows, team, s):
     #     for game in data["dates"]:
     #         da_dates.append(game)
 
-    national_networks_to_skip = ["MLBN", "MLBN-INT", "Twitter", "YouTube", "FB-WATCH", "ESPN+"]
+    national_networks_to_skip = ["MLBN", "MLBN-INT", "Twitter", "YouTube", "FB-WATCH", "ESPN+", "Apple TV+", "Peacock"]
 
     all_games = []
     for sub_game in da_dates:
