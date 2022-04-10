@@ -36852,8 +36852,6 @@ def perform_mlb_schedule_qualifiers(row, qualifiers):
             else:
                 if not set(tv_networks).intersection(set(qual_object["values"])):
                     return False
-
-        print(tv_networks)
     
     if "National Raw TV Network" in qualifiers:
         if "NationalTVNetworks" not in row or not row["NationalTVNetworks"]:
