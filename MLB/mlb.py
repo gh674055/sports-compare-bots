@@ -18146,7 +18146,7 @@ def handle_season_only_stats(player_page, field_player_page, player_data, player
                             war_value = war_ps[len(war_ps) - 1].find(text=True)
                         elif len(war_ps) == 2:
                             war_value = war_ps[0].find(text=True)
-                        if war_value:
+                        if war_value and war_value != "-":
                             set_war = True
                             all_rows[len(all_rows) - 1]["WAR"] = float(str(war_value))
                             all_rows[len(all_rows) - 1]["SlrWAR"] = float(str(war_value))
