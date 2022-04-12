@@ -11549,15 +11549,6 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                     qual_str = "playing-same-game:"
                                     qual_type = "Playing Same Game"
 
-                            if "On Field" in qual_type:
-                                new_values = []
-                                for value in qualifier_obj["values"]:
-                                    new_values.append({
-                                        "pos" : ["ANY"],
-                                        "value" : value
-                                    })
-                                qualifier_obj["values"] = new_values
-                            
                             qualifier_obj["time_frame_str"] = re.sub(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?((?:(?:playing|starting)-with|(?:playing|starting)-against|(?:playing|starting)-same-game|prv-w|previous-playing-with|prv-a|previous-playing-against|upc-w|upcoming-playing-with|upc-a|upcoming-playing-against|(?:playing|starting)-same-opponents?|(?:playing|starting)-same-dates?|batting-against|pitching-against|facing|driven-in|batted-in|back-to-back-with|back-to-back|batting-in-front-of|batting-in-front|batting-ahead|batting-ahead-of|batting-behind|batting-behind-of|batting-next-to|caught-by|stealing-on|on-field-with|on-field-against|-?starts?|-?started|-?starting|-?ignore-starts?|-?ignore-started?|-?ignore-starting))(?!:)\b", "", og_time_str)
                             qualifier_obj["time_frame_str"] = re.sub(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?((?:qual-sub-query):(?<!\\)\(.*?(?<!\\)\))", "", qualifier_obj["time_frame_str"])
 
@@ -13473,7 +13464,10 @@ def sub_handle_the_quals(players, qualifier, real_player_type, qual_str, player_
                 "is_raw_query" : is_raw_query
             })
             if "On Field" in qual_str:
-                players[len(players) - 1]["pos"] = og_player_str["pos"]
+                if isinstance(og_player_str, dict):
+                    players[len(players) - 1]["pos"] = og_player_str["pos"]
+                else:
+                    players[len(players) - 1]["pos"] = ["ANY"]
             if "Event Sub Query" in qual_str:
                 if player_name != "No Player Match!":
                     players[len(players) - 1]["quals"] = player_data["quals"][qual_index]
@@ -13500,7 +13494,7 @@ def sub_handle_the_quals(players, qualifier, real_player_type, qual_str, player_
     #         logger.error("#" + str(threading.get_ident()) + "#   " + traceback.format_exc())
 
 def determine_player_str(qualifier, player_type, player_str, time_frame, qual_str):
-    if "On Field" in qual_str:
+    if "On Field" in qual_str and isinstance(player_str, dict):
         player_str = player_str["value"]
     player_str = unescape_string(player_str)
     
