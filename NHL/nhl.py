@@ -23314,18 +23314,21 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                                 for faceoff_index, faceoff_time in enumerate(faceoff_times):
                                     if faceoff_time == second:
                                         shift_event["event_time"] = faceoff_time_information[period][faceoff_time]
+                                        break
                                     elif faceoff_time > second:
                                         if faceoff_index != 0:
                                             faceoff_time = faceoff_times[faceoff_index - 1]
                                             faceoff_event_time = faceoff_time_information[period][faceoff_time]
 
                                             shift_event["event_time"] = faceoff_event_time + datetime.timedelta(seconds=(second - faceoff_time))
+                                            break
                                 if faceoff_times and not "event_time" in shift_event:
                                     faceoff_time = faceoff_times[len(faceoff_times) - 1]
                                     if faceoff_time < second:
                                         faceoff_event_time = faceoff_time_information[period][faceoff_time]
                                         
                                         shift_event["event_time"] = faceoff_event_time + datetime.timedelta(seconds=(second - faceoff_time))
+                                        break
 
                         if not "event_time" in shift_event:
                             game_data["missing_toi"] = True
@@ -23384,18 +23387,21 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                             for faceoff_index, faceoff_time in enumerate(faceoff_times):
                                 if faceoff_time == second:
                                     shift_event["event_time"] = faceoff_time_information[period][faceoff_time]
+                                    break
                                 elif faceoff_time > second:
                                     if faceoff_index != 0:
                                         faceoff_time = faceoff_times[faceoff_index - 1]
                                         faceoff_event_time = faceoff_time_information[period][faceoff_time]
 
                                         shift_event["event_time"] = faceoff_event_time + datetime.timedelta(seconds=(second - faceoff_time))
+                                        break
                             if faceoff_times and not "event_time" in shift_event:
                                 faceoff_time = faceoff_times[len(faceoff_times) - 1]
                                 if faceoff_time < second:
                                     faceoff_event_time = faceoff_time_information[period][faceoff_time]
                                     
                                     shift_event["event_time"] = faceoff_event_time + datetime.timedelta(seconds=(second - faceoff_time))
+                                    break
 
                     if not "event_time" in shift_event:
                         game_data["missing_toi"] = True
