@@ -38620,13 +38620,13 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
                                         if old_player == player_data["mlb_id"] and ("Pitching Lefty" in qualifiers or "Pitching Righty" in qualifiers):
                                             missing_games = True
                                         
-                                        if scoring_play["matchup"]["batter"]["id"] == player_data["mlb_id"] and player_type["da_type"] == "Batter" and ("Batting Lefty" in qualifiers or "Batting Righty" in qualifiers):
+                                        if scoring_play["matchup"]["batter"]["id"] == player_data["mlb_id"] and player_type["da_type"] == "Batter" and ("Facing Lefty" in qualifiers or "Facing Righty" in qualifiers or "Platoon Advantage" in qualifiers):
                                             missing_games = True
                                 
                                 if old_player == player_data["mlb_id"] and ("Pitching Lefty" in qualifiers or "Pitching Righty" in qualifiers):
                                     missing_pitch = True
                                 
-                                if scoring_play["matchup"]["batter"]["id"] == player_data["mlb_id"] and player_type["da_type"] == "Batter" and ("Batting Lefty" in qualifiers or "Batting Righty" in qualifiers):
+                                if scoring_play["matchup"]["batter"]["id"] == player_data["mlb_id"] and player_type["da_type"] == "Batter" and ("Facing Lefty" in qualifiers or "Facing Righty" in qualifiers or "Platoon Advantage" in qualifiers):
                                     missing_pitch = True
                             elif play["details"]["eventType"] == "offensive_substitution":
                                 if play["position"]["abbreviation"] == "PH":
