@@ -6726,6 +6726,23 @@ manual_players = {
     "wade jr" : "wadela01"
 }
 
+missing_mlb_schedule_games = {
+    1981 : {
+        113 : {
+            180497 : {
+                "date" : "1981-04-08",
+                "index" : 0
+            }
+        },
+        143 : {
+            180497 : {
+                "date" : "1981-04-08",
+                "index" : 0
+            }
+        }
+    }
+}
+
 logname = "mlb.log"
 logger = logging.getLogger("mlb")
 logger.setLevel(logging.INFO)
@@ -6751,7 +6768,7 @@ sum_stats_format = "https://www.baseball-reference.com/tools/span_stats.cgi?html
 total_schedule_url = "https://www.baseball-reference.com/leagues/MLB/{}-schedule.shtml"
 team_roster_url_format = "https://statsapi.mlb.com/api/v1/teams/{}/roster?season={}&hydrate=person"
 mlb_team_schedule_url_format = "https://statsapi.mlb.com/api/v1/schedule?teamId={}&season={}&sportId=1&gameType=R,F,D,L,W"
-#mlb_team_schedule_url_format = "https://statsapi.mlb.com/api/v1/schedule?teamId={}&startDate={}&endDate={}&sportId=1&gameType=R,F,D,L,W"
+mlb_team_schedule_url_date_format = "https://statsapi.mlb.com/api/v1/schedule?teamId={}&startDate={}&endDate={}&sportId=1&gameType=R,F,D,L,W"
 mlb_player_schedule_url_format = "https://statsapi.mlb.com/api/v1/people/{}/stats?stats=gameLog&season={}&gameType=R,F,D,L,W"
 mlb_leaderboard_query = "https://bdfed.stitch.mlbinfra.com/bdfed/stats/player?stitch_env=prod&&season={}&playerPool={}&sportId=1&stats=season&group={}&gameType=R&limit={}&offset={}&sortStat={}&order={}"
 mlb_leaderboard_query_no_sort = "https://bdfed.stitch.mlbinfra.com/bdfed/stats/player?stitch_env=prod&&season={}&playerPool={}&sportId=1&stats=season&group={}&gameType=R&limit={}&offset={}"
@@ -16759,6 +16776,8 @@ def get_live_game(player_link, player_data, player_type, time_frame, do_live, s)
     for game in data["dates"]:
         da_dates.append(game)
 
+    add_missing_schedule_games(current_team, current_season, da_dates, s)
+
     lastest_games = []
     team_game_number = 1
     for sub_game in da_dates:
@@ -24650,6 +24669,8 @@ def get_mlb_player_link(player_data, s):
                     #     for game in data["dates"]:
                     #         da_dates.append(game)
 
+                    add_missing_schedule_games(team_id, sub_year, da_dates, s)
+
                     matching_players = []
                     parsed_people = set()
                     for sub_game in da_dates:
@@ -24775,6 +24796,8 @@ def get_mlb_player_link(player_data, s):
 
                     #     for game in data["dates"]:
                     #         da_dates.append(game)
+
+                    add_missing_schedule_games(team_id, sub_year, da_dates, s)
 
                     matching_players = []
                     parsed_people = set()
@@ -37995,6 +38018,8 @@ def parse_mlb_team_year_link(team_id, sub_year, qualifiers, all_rows, team, s):
     #     for game in data["dates"]:
     #         da_dates.append(game)
 
+    add_missing_schedule_games(team_id, sub_year, da_dates, s)
+
     national_networks_to_skip = ["MLBN", "MLBN-INT", "Twitter", "YouTube", "FB-WATCH", "ESPN+", "Apple TV+", "Peacock"]
 
     all_games = []
@@ -38238,6 +38263,21 @@ def parse_mlb_team_year_link(team_id, sub_year, qualifiers, all_rows, team, s):
                                 row_data["SeriesTeamWins"] = team_wins
                                 row_data["SeriesOpponentWins"] = opponent_wins
                                 row_data["SeriesScore"] = team_wins - opponent_wins
+
+def add_missing_schedule_games(team_id, sub_year, da_dates, s):
+    if sub_year in missing_mlb_schedule_games and team_id in missing_mlb_schedule_games[sub_year]:
+        for missing_game_id in missing_mlb_schedule_games[sub_year][team_id]:
+            schedule_url = mlb_team_schedule_url_date_format.format(team_id, missing_mlb_schedule_games[sub_year][team_id][missing_game_id]["date"], missing_mlb_schedule_games[sub_year][team_id][missing_game_id]["date"])
+            data = url_request_json(s, schedule_url)
+            for game in data["dates"]:
+                existing_match = False
+                for index, existing_game in enumerate(da_dates):
+                    if existing_game["date"] == game["date"]:
+                        da_dates[index] = existing_game
+                        existing_match = True
+                        break
+                if not existing_match:
+                    da_dates.insert(missing_mlb_schedule_games[sub_year][team_id][missing_game_id]["index"], game)
     
 def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_type, qualifiers, needs_plays, s):
     missing_games = False
