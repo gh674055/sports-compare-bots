@@ -35625,6 +35625,19 @@ def handle_da_pitch_quals(row, event_name, at_bat_event, qualifiers, player_data
     sub_num_pitches = 0
     sub_index_to_use = 0
 
+    current_batter = None
+    current_pitcher = None
+    pitching_lefty = -1
+    pitching_righty = -1
+    batting_lefty = -1
+    batting_righty = -1
+
+    is_starter_pitcher = at_bat_event["is_starter_pitcher"]
+    is_starter_batter = at_bat_event["is_starter_batter"],
+    is_reliever_pitcher = at_bat_event["is_reliever_pitcher"]
+    is_reliever_batter = at_bat_event["is_reliever_batter"]
+    time_facing_opponent = at_bat_event["time_facing_opponent"]
+
     for sub_sub_play_index, play in enumerate(at_bat_event["playEvents"][:sub_play_index]):
         if play["isPitch"]:
             sub_num_pitches += 1
@@ -35642,8 +35655,55 @@ def handle_da_pitch_quals(row, event_name, at_bat_event, qualifiers, player_data
     sub_swung_at_first_pitch = False
     first_pitch_num_pitches = 0
     first_pitch = True
+
     for sub_sub_play_index, play in enumerate(at_bat_event["playEvents"][:(sub_play_index + 1)]):
-        if play["isPitch"]:
+        if "isSubstitution" in play and play["isSubstitution"]:
+            if play["count"]["balls"] != 0 or play["count"]["strikes"] != 0:
+                if "replacedPlayer" in play:
+                    if play["details"]["eventType"] == "pitching_substitution":
+                        current_pitcher = play["player"]["id"]
+                        pitch_pos = player_game_info["pitch_sides"][current_pitcher]
+                        if pitch_pos == "S":
+                            bat_pos = player_game_info["bat_sides"][current_batter if current_batter else at_bat_event["batter"]]
+                            if bat_pos == "S":
+                                pitching_lefty = None
+                                pitching_righty = None
+                            else:
+                                if bat_pos == "R":
+                                    pitching_lefty = True
+                                else:
+                                    pitching_righty = True
+                        else:
+                            if pitch_pos == "L":
+                                pitching_lefty = True
+                            else:
+                                pitching_righty = True
+                        is_starter_pitcher = False
+                        is_reliever_pitcher = True
+                        time_facing_opponent = 1
+                    elif play["details"]["eventType"] == "offensive_substitution":
+                        if play["position"]["abbreviation"] == "PH":
+                            current_batter = play["player"]["id"]
+                            bat_pos = player_game_info["bat_sides"][current_batter]
+                            if bat_pos == "S":
+                                pitch_pos = player_game_info["pitch_sides"][current_pitcher if current_pitcher else at_bat_event["pitcher"]]
+                                if pitch_pos == "S":
+                                    batting_lefty = None
+                                    batting_righty = None
+                                else:
+                                    if pitch_pos == "R":
+                                        batting_lefty = True
+                                    else:
+                                        batting_righty = True
+                            else:
+                                if bat_pos == "L":
+                                    batting_lefty = True
+                                else:
+                                    batting_righty = True
+                            is_starter_batter = False
+                            is_reliever_batter = True
+                            time_facing_opponent = 1
+        elif play["isPitch"]:
             first_pitch_num_pitches += 1
             code = play["details"]["call"]["code"][-1:].upper()
             sub_pitches.append(code)
@@ -35729,6 +35789,27 @@ def handle_da_pitch_quals(row, event_name, at_bat_event, qualifiers, player_data
                 sub_hit_y.append(play["hitData"]["coordinates"]["coordY"])
             else:
                 sub_hit_y.append(None)
+    
+    if current_batter == None:
+        current_batter = at_bat_event["batter"]
+    if current_pitcher == None:
+        current_pitcher = at_bat_event["pitcher"]
+        
+    if player_type["da_type"] == "Batter":
+        if current_batter != at_bat_event["batter"]:
+            return None
+    else:
+        if current_pitcher != at_bat_event["pitcher"]:
+            return None
+
+    if pitching_lefty == -1:
+        pitching_lefty = at_bat_event["pitching_lefty"]
+    if pitching_righty == -1:
+        pitching_righty = at_bat_event["pitching_righty"]
+    if batting_lefty == -1:
+        batting_lefty = at_bat_event["batting_lefty"]
+    if batting_righty == -1:
+        batting_righty = at_bat_event["batting_righty"]
 
     sub_first_pitch = first_pitch_num_pitches == 1
     
@@ -35992,6 +36073,15 @@ def handle_da_pitch_quals(row, event_name, at_bat_event, qualifiers, player_data
     if "endTime" in sub_play and sub_play["endTime"]:
         sub_end_time = dateutil.parser.parse(sub_play["endTime"])
 
+    batter_first = player_game_info["first_names"][current_batter]
+    batter_birth_first = player_game_info["birth_first_names"][current_batter]
+    batter_last = player_game_info["last_names"][current_batter]
+    pitcher_first = player_game_info["first_names"][current_pitcher]
+    pitcher_birth_first = player_game_info["birth_first_names"][current_pitcher]
+    pitcher_last = player_game_info["last_names"][current_pitcher]
+    batter_country = player_game_info["countries"][current_batter]
+    pitcher_country = player_game_info["countries"][current_pitcher]
+
     sub_event_obj = {
         "result" : "pitch",
         "event_time" : sub_end_time,
@@ -36000,16 +36090,16 @@ def handle_da_pitch_quals(row, event_name, at_bat_event, qualifiers, player_data
         "upcoming_event_type" : at_bat_event["upcoming_result"],
         "previous_player_event_type" : at_bat_event["previous_player_result"],
         "upcoming_player_event_type" : at_bat_event["upcoming_player_result"],
-        "batter" : at_bat_event["batter"],
-        "pitcher" : at_bat_event["pitcher"],
-        "batter_first" : at_bat_event["batter_first"],
-        "pitcher_first" : at_bat_event["pitcher_first"],
-        "batter_birth_first" : at_bat_event["batter_birth_first"],
-        "pitcher_birth_first" : at_bat_event["pitcher_birth_first"],
-        "batter_last" : at_bat_event["batter_last"],
-        "pitcher_last" : at_bat_event["pitcher_last"],
-        "batter_country" : at_bat_event["batter_country"],
-        "pitcher_country" : at_bat_event["pitcher_country"],
+        "batter" : current_batter,
+        "pitcher" : current_pitcher,
+        "batter_first" : batter_first,
+        "pitcher_first" : pitcher_first,
+        "batter_birth_first" : batter_birth_first,
+        "pitcher_birth_first" : pitcher_birth_first,
+        "batter_last" : batter_last,
+        "pitcher_last" : pitcher_last,
+        "batter_country" : batter_country,
+        "pitcher_country" : pitcher_country,
         "runners_driven_in" : at_bat_event["runners_driven_in"],
         "runners_batted_in" : at_bat_event["runners_batted_in"],
         "description" : sub_play["details"]["description"] if "description" in sub_play["details"] and sub_play["details"]["description"] else None,
@@ -36037,10 +36127,10 @@ def handle_da_pitch_quals(row, event_name, at_bat_event, qualifiers, player_data
         "balls"  : sub_balls,
         "strikes"  : sub_strikes,
         "counts" : sub_counts,
-        "pitching_lefty" : at_bat_event["pitching_lefty"],
-        "pitching_righty" : at_bat_event["pitching_righty"],
-        "batting_lefty" : at_bat_event["batting_lefty"],
-        "batting_righty" : at_bat_event["batting_righty"],
+        "pitching_lefty" : pitching_lefty,
+        "pitching_righty" : pitching_righty,
+        "batting_lefty" : batting_lefty,
+        "batting_righty" : batting_righty,
         "team_position_map" : sub_tm_position_map,
         "opp_position_map" : sub_opp_position_map,
         "team_main_position_map" : at_bat_event["team_main_position_map"],
@@ -36056,13 +36146,13 @@ def handle_da_pitch_quals(row, event_name, at_bat_event, qualifiers, player_data
         "swung_at_first_pitch" : sub_swung_at_first_pitch,
         "first_pitch" : sub_first_pitch,
         "next_play_pinch" : sub_next_play_pinch,
-        "is_starter_pitcher" : at_bat_event["is_starter_pitcher"],
-        "is_starter_batter" : at_bat_event["is_starter_batter"],
-        "is_reliever_pitcher" : at_bat_event["is_reliever_pitcher"],
-        "is_reliever_batter" : at_bat_event["is_reliever_batter"],
+        "is_starter_pitcher" : is_starter_pitcher,
+        "is_starter_batter" : is_starter_batter,
+        "is_reliever_pitcher" : is_reliever_pitcher,
+        "is_reliever_batter" : is_reliever_batter,
         "starting_inning" : at_bat_event["starting_inning"],
         "time_through_lineup" : at_bat_event["time_through_lineup"],
-        "time_facing_opponent" : at_bat_event["time_facing_opponent"],
+        "time_facing_opponent" : time_facing_opponent,
         "starting_pitch_count" : sub_starting_pitch_count,
         "pitch_count" : sub_pitch_count,
         "batter_matchup_map" : at_bat_event["batter_matchup_map"],
@@ -38263,28 +38353,32 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
             game_data["missing_data"] = True
             return game_data, row_data, row_index, missing_games, missing_pitch
 
-        strike_zone_map = {}
-        first_names = {}
-        birth_first_names = {}
-        last_names = {}
-        countries = {}
+        game_data["strike_zone_map"] = {}
+        game_data["first_names"] = {}
+        game_data["birth_first_names"] = {}
+        game_data["last_names"] = {}
+        game_data["countries"] = {}
+        game_data["pitch_sides"] = {}
+        game_data["bat_sides"] = {}
         for player in sub_data["gameData"]["players"]:
             player = sub_data["gameData"]["players"][player]
 
             if "strikeZoneTop" in player and "strikeZoneBottom" in player:
-                strike_zone_map[player["id"]] = {
+                game_data["strike_zone_map"][player["id"]] = {
                     "strikeZoneTop" : player["strikeZoneTop"],
                     "strikeZoneBottom" : player["strikeZoneBottom"]
                 }
 
             if "useName" in player and player["useName"]:
-                first_names[player["id"]] = player["useName"]
+                game_data["first_names"][player["id"]] = player["useName"]
             else:
-                first_names[player["id"]] = player["firstName"]
-            birth_first_names[player["id"]] = player["firstName"]
+                game_data["first_names"][player["id"]] = player["firstName"]
+            game_data["birth_first_names"][player["id"]] = player["firstName"]
             
-            last_names[player["id"]] = player["lastName"]
-            countries[player["id"]] = player["birthCountry"]
+            game_data["last_names"][player["id"]] = player["lastName"]
+            game_data["countries"][player["id"]] = player["birthCountry"]
+            game_data["pitch_sides"][player["id"]] = player["pitchHand"]["code"]
+            game_data["bat_sides"][player["id"]] = player["batSide"]["code"]
             
         for player in sub_data["liveData"]["boxscore"]["teams"]["away"]["players"]:
             player = sub_data["liveData"]["boxscore"]["teams"]["away"]["players"][player]
@@ -38454,11 +38548,15 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
             else:
                 is_team_batting = True if is_top_inning else False
 
+            current_batter = None
+            current_pitcher = None
+
             for play in scoring_play["playEvents"]:
                 if "isSubstitution" in play and play["isSubstitution"]:
                     if play["count"]["balls"] != 0 or play["count"]["strikes"] != 0:
                         if "replacedPlayer" in play:
                             if play["details"]["eventType"] == "pitching_substitution":
+                                current_pitcher = play["player"]["id"]
                                 old_player = play["replacedPlayer"]["id"]
                                 if (play["count"]["balls"] == 2 and play["count"]["strikes"] == 0) or (play["count"]["balls"] == 2 and play["count"]["strikes"] == 1) or (play["count"]["balls"] == 3 and play["count"]["strikes"] == 0) or (play["count"]["balls"] == 3 and play["count"]["strikes"] == 0) or (play["count"]["balls"] == 3 and play["count"]["strikes"] == 1) or (play["count"]["balls"] == 3 and play["count"]["strikes"] == 2):
                                     if scoring_play["result"]["eventType"].endswith("walk"):
@@ -38466,9 +38564,9 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
                                         play["player"]["id"] = old_player
                                         scoring_play["matchup"]["pitcher"]["id"] = old_player
 
-                                        pitch_pos = sub_data["gameData"]["players"]["ID" + str(old_player)]["pitchHand"]["code"]
+                                        pitch_pos = game_data["pitch_sides"][current_pitcher]
                                         if pitch_pos == "S":
-                                            bat_pos = sub_data["gameData"]["players"]["ID" + str(scoring_play["matchup"]["batter"]["id"])]["batSide"]["code"]
+                                            bat_pos = game_data["bat_sides"][current_batter if current_batter else scoring_play["matchup"]["batter"]["id"]]
                                             if bat_pos == "S":
                                                 scoring_play["matchup"]["splits"]["batter"] = None
                                             else:
@@ -38484,8 +38582,15 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
                                         
                                         if scoring_play["matchup"]["batter"]["id"] == player_data["mlb_id"] and player_type["da_type"] == "Batter" and ("Batting Lefty" in qualifiers or "Batting Righty" in qualifiers):
                                             missing_games = True
+                                
+                                if old_player == player_data["mlb_id"] and ("Pitching Lefty" in qualifiers or "Pitching Righty" in qualifiers):
+                                    missing_pitch = True
+                                
+                                if scoring_play["matchup"]["batter"]["id"] == player_data["mlb_id"] and player_type["da_type"] == "Batter" and ("Batting Lefty" in qualifiers or "Batting Righty" in qualifiers):
+                                    missing_pitch = True
                             elif play["details"]["eventType"] == "offensive_substitution":
                                 if play["position"]["abbreviation"] == "PH":
+                                    current_batter = play["player"]["id"]
                                     old_player = play["replacedPlayer"]["id"]
                                     if play["count"]["strikes"] == 2:
                                         event_type = scoring_play["result"]["eventType"]
@@ -38511,9 +38616,9 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
                                             play["player"]["id"] = old_player
                                             scoring_play["matchup"]["batter"]["id"] = old_player
                                             
-                                            bat_pos = sub_data["gameData"]["players"]["ID" + str(old_player)]["batSide"]["code"]
+                                            bat_pos = game_data["bat_sides"][current_batter]
                                             if bat_pos == "S":
-                                                pitch_pos = sub_data["gameData"]["players"]["ID" + str(scoring_play["matchup"]["pitcher"]["id"])]["pitchHand"]["code"]
+                                                pitch_pos = game_data["pitch_sides"][current_pitcher if current_pitcher else scoring_play["matchup"]["pitcher"]["id"]]
                                                 if pitch_pos == "S":
                                                     scoring_play["matchup"]["splits"]["pitcher"] = None
                                                 else:
@@ -38530,6 +38635,12 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
                                             
                                             if scoring_play["matchup"]["pitcher"]["id"] == player_data["mlb_id"] and player_type["da_type"] != "Batter" and ("Facing Lefty" in qualifiers or "Facing Righty" in qualifiers or "Platoon Advantage" in qualifiers):
                                                 missing_games = True
+                                    
+                                    if old_player == player_data["mlb_id"] and ("Batting Lefty" in qualifiers or "Batting Righty" in qualifiers):
+                                        missing_pitch = True
+                                    
+                                    if scoring_play["matchup"]["pitcher"]["id"] == player_data["mlb_id"] and player_type["da_type"] != "Batter" and ("Facing Lefty" in qualifiers or "Facing Righty" in qualifiers or "Platoon Advantage" in qualifiers):
+                                        missing_pitch = True
 
         if is_final:
             for index, scoring_play in enumerate(sub_data["liveData"]["plays"]["allPlays"]):
@@ -39039,14 +39150,14 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
             man_on_second = False
             man_on_third = False
 
-            batter_first = first_names[batter]
-            batter_birth_first = birth_first_names[batter]
-            batter_last = last_names[batter]
-            pitcher_first = first_names[pitcher]
-            pitcher_birth_first = birth_first_names[pitcher]
-            pitcher_last = last_names[pitcher]
-            batter_country = countries[batter]
-            pitcher_country = countries[pitcher]
+            batter_first = game_data["first_names"][batter]
+            batter_birth_first = game_data["birth_first_names"][batter]
+            batter_last = game_data["last_names"][batter]
+            pitcher_first = game_data["first_names"][pitcher]
+            pitcher_birth_first = game_data["birth_first_names"][pitcher]
+            pitcher_last = game_data["last_names"][pitcher]
+            batter_country = game_data["countries"][batter]
+            pitcher_country = game_data["countries"][pitcher]
 
             if is_home_team:
                 is_team_batting = False if is_top_inning else True
@@ -43892,7 +44003,7 @@ def handle_table_data(over_header, player_data, player_datas, player_type, heade
                         value += "*"
                     else:
                         return "N/A"
-                elif over_header == "Defense/Value (Baseball Reference)" and header not in ("Fld%", "CS%") and "Seasons" not in header:
+                elif over_header == "Defense/Value (Baseball Reference)" and header not in ("Fld%", "FldCaughtStealing%") and "Seasons" not in header:
                     if has_non_live_stats:
                         value += "*"
                     else:
