@@ -38412,11 +38412,17 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
             if "useName" in player and player["useName"]:
                 game_data["first_names"][player["id"]] = player["useName"]
             else:
-                game_data["first_names"][player["id"]] = player["firstName"]
-            game_data["birth_first_names"][player["id"]] = player["firstName"]
+                if "firstName" in player:
+                    game_data["first_names"][player["id"]] = player["firstName"]
             
-            game_data["last_names"][player["id"]] = player["lastName"]
-            game_data["countries"][player["id"]] = player["birthCountry"]
+            if "firstName" in player:
+                game_data["birth_first_names"][player["id"]] = player["firstName"]
+            
+            if "lastName" in player:
+                game_data["last_names"][player["id"]] = player["lastName"]
+            if "birthCountry" in player:
+                game_data["countries"][player["id"]] = player["birthCountry"]
+
             game_data["pitch_sides"][player["id"]] = player["pitchHand"]["code"]
             game_data["bat_sides"][player["id"]] = player["batSide"]["code"]
             
