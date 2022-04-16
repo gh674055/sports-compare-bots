@@ -32179,6 +32179,8 @@ def handle_da_mlb_quals(row, event_name, at_bat_event, qualifiers, player_data, 
                     return False
     
     if "Batting Against Birth Country" in qualifiers:
+        if not at_bat_event["pitcher_country"]:
+            return False
         for qual_object in qualifiers["Batting Against Birth Country"]:
             has_match = False
             for player in qual_object["values"]:
@@ -32195,6 +32197,8 @@ def handle_da_mlb_quals(row, event_name, at_bat_event, qualifiers, player_data, 
                     return False
     
     if "Pitching Against Birth Country" in qualifiers:
+        if not at_bat_event["batter_country"]:
+            return False
         for qual_object in qualifiers["Pitching Against Birth Country"]:
             has_match = False
             for player in qual_object["values"]:
@@ -36102,8 +36106,8 @@ def handle_da_pitch_quals(row, event_name, at_bat_event, qualifiers, player_data
     pitcher_first = player_game_info["first_names"][current_pitcher]
     pitcher_birth_first = player_game_info["birth_first_names"][current_pitcher]
     pitcher_last = player_game_info["last_names"][current_pitcher]
-    batter_country = player_game_info["countries"][current_batter]
-    pitcher_country = player_game_info["countries"][current_pitcher]
+    batter_country = player_game_info["countries"][current_batter] if current_batter in player_game_info["countries"] else None
+    pitcher_country = player_game_info["countries"][current_pitcher] if current_pitcher in player_game_info["countries"] else None
 
     sub_event_obj = {
         "result" : "pitch",
@@ -38412,17 +38416,12 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
             if "useName" in player and player["useName"]:
                 game_data["first_names"][player["id"]] = player["useName"]
             else:
-                if "firstName" in player:
-                    game_data["first_names"][player["id"]] = player["firstName"]
+                game_data["first_names"][player["id"]] = player["firstName"]
+            game_data["birth_first_names"][player["id"]] = player["firstName"]
             
-            if "firstName" in player:
-                game_data["birth_first_names"][player["id"]] = player["firstName"]
-            
-            if "lastName" in player:
-                game_data["last_names"][player["id"]] = player["lastName"]
+            game_data["last_names"][player["id"]] = player["lastName"]
             if "birthCountry" in player:
                 game_data["countries"][player["id"]] = player["birthCountry"]
-
             game_data["pitch_sides"][player["id"]] = player["pitchHand"]["code"]
             game_data["bat_sides"][player["id"]] = player["batSide"]["code"]
             
@@ -39202,8 +39201,8 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
             pitcher_first = game_data["first_names"][pitcher]
             pitcher_birth_first = game_data["birth_first_names"][pitcher]
             pitcher_last = game_data["last_names"][pitcher]
-            batter_country = game_data["countries"][batter]
-            pitcher_country = game_data["countries"][pitcher]
+            batter_country = game_data["countries"][batter] if batter in game_data["countries"] else None
+            pitcher_country = game_data["countries"][pitcher] if pitcher in game_data["countries"] else None
 
             if is_home_team:
                 is_team_batting = False if is_top_inning else True
