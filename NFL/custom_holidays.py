@@ -1,6 +1,7 @@
 from convertdate import holidays, hebrew
 from pytz import timezone
 import datetime
+import dateutil.relativedelta
 
 def thanksgiving(date, church, country, obseverd, eve):
     if country == "usa" and date.year > 1939:
@@ -68,3 +69,13 @@ def hanukkah(date, church, country, obseverd, eve):
     start_date = datetime.date(year, month, day)
     end_date = start_date + datetime.timedelta(days=7)
     return date in [start_date + datetime.timedelta(days=x) for x in range((end_date - start_date).days + 1)]
+
+def good_friday(date, church, country, obseverd, eve):
+    easter_date = holidays.easter(date.year, church)
+    easter_date = datetime.datetime(easter_date[0], easter_date[1], easter_date[2]).date()
+    holiday_date = easter_date + dateutil.relativedelta.relativedelta(weekday=dateutil.relativedelta.FR(-1))
+
+    if eve:
+        holiday_date -= datetime.timedelta(days=1)
+    
+    return date == holiday_date
