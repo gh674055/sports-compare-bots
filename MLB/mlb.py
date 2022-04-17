@@ -13312,9 +13312,9 @@ def handle_same_games_qual(names, player_type, time_frames, comment_obj, extra_s
                             "stat" : new_qual_type,
                             "negate" : False
                         }]
-                        extra_stats.add("show-stat-pit")
+                        extra_stats.add("current-stats")
                         if new_qual_type == "Pit":
-                            extra_stats.add("current-stats")
+                            extra_stats.add("show-stat-pit")
                     elif new_qual_type == "Seasons":
                         time_start = None
                         time_end = None
