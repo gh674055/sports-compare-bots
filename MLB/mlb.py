@@ -6722,8 +6722,6 @@ div_id_to_stat = {
 
 manual_awards_map = {}
 manual_players = {
-    "lamonte wade jr" : "wadela01",
-    "wade jr" : "wadela01"
 }
 
 missing_mlb_schedule_games = {
