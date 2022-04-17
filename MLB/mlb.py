@@ -38573,12 +38573,13 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
                 game_data["missing_data"] = True
                 return game_data, row_data, row_index, missing_games, missing_pitch
         
-        if not has_pitch_type_data or not all_has_pitch_type_data:
-            missing_pitch = True
-            if not has_pitch_type_data and ("Fastball" in qualifiers or "Breaking" in qualifiers or "Offspeed" in qualifiers or "Pitch Type" in qualifiers or "Exact Pitch Type" in qualifiers):
+        if ("Fastball" in qualifiers or "Breaking" in qualifiers or "Offspeed" in qualifiers or "Pitch Type" in qualifiers or "Exact Pitch Type" in qualifiers):
+            if not has_pitch_type_data:
                 missing_games = True
                 game_data["missing_data"] = True
                 return game_data, row_data, row_index, missing_games, missing_pitch
+            elif not all_has_pitch_type_data:
+                missing_pitch = True
 
         for index, scoring_play in enumerate(sub_data["liveData"]["plays"]["allPlays"]):
             if scoring_play["result"]["type"] != "atBat" or "eventType" not in scoring_play["result"]:
