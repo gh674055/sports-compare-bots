@@ -31566,12 +31566,12 @@ def add_row_numbers(row, at_bat_event, event_name, qualifiers, player_type):
         row[stat] += row_event_info[stat]
     
     if "WalkOff" in at_bat_event and at_bat_event["WalkOff"]:
-        if event_name not in ("run_scored", "stolen_base", "caught_stealing", "pick_off", "no_stats", "strikeout"):
+        if event_name not in ("run_scored", "stolen_base", "caught_stealing", "pick_off", "no_stats", "no_stats_sb", "strikeout"):
             row["WalkOff"] += 1
         else:
             if player_type["da_type"] != "Batter":
                 row["WalkOff"] += 1
-            elif event_name == "run_scored" and "event_type" in at_bat_event and at_bat_event["event_type"] in ("run_scored", "stolen_base", "caught_stealing", "pick_off", "no_stats", "strikeout"):
+            elif event_name == "run_scored" and "event_type" in at_bat_event and at_bat_event["event_type"] in ("stolen_base", "no_stats_sb"):
                 row["WalkOff"] += 1
 
     if event_name not in ("run_scored", "stolen_base", "caught_stealing", "pick_off"):
@@ -38718,8 +38718,11 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
                                         elif event_type in ["sac_bunt_double_play"]:
                                             event_type = "sac_bunt"
 
-                                        if event_type not in event_type_stat_mappings or event_type in ["stolen_base", "caught_stealing", "run_scored", "pick_off"]:
-                                            event_type = "no_stats"
+                                        if event_type.startswith("stolen_base"):
+                                            event_type = "no_stats_sb"
+                                        else:
+                                            if event_type not in event_type_stat_mappings or event_type in ["caught_stealing", "run_scored", "pick_off"]:
+                                                event_type = "no_stats"
 
                                         if event_type == "home_run" and "description" in scoring_play["result"] and scoring_play["result"]["description"] and "inside-the-park" in scoring_play["result"]["description"]:
                                             event_type = "inside_the_park_home_run"
@@ -38836,14 +38839,17 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
             elif event_type in ["sac_bunt_double_play"]:
                 event_type = "sac_bunt"
 
-            if event_type not in event_type_stat_mappings or event_type in ["stolen_base", "caught_stealing", "run_scored", "pick_off"]:
-                event_type = "no_stats"
+            if event_type.startswith("stolen_base"):
+                event_type = "no_stats_sb"
+            else:
+                if event_type not in event_type_stat_mappings or event_type in ["caught_stealing", "run_scored", "pick_off"]:
+                    event_type = "no_stats"
 
             if event_type == "home_run" and "description" in scoring_play["result"] and scoring_play["result"]["description"] and "inside-the-park" in scoring_play["result"]["description"]:
                 event_type = "inside_the_park_home_run"
 
             if first_play == -1:
-                if event_type != "no_stats":
+                if event_type not in ["no_stats", "no_stats_sb"]:
                     first_play = index
 
             is_top_inning = scoring_play["about"]["isTopInning"]
@@ -38854,7 +38860,7 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
                 else:
                     is_team_batting = True if is_top_inning else False
 
-                if event_type != "no_stats":
+                if event_type not in ["no_stats", "no_stats_sb"]:
                     if player_type["da_type"] == "Batter":
                         if is_team_batting:
                             first_play_team = index
@@ -39084,8 +39090,11 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
                     elif event_type in ["sac_bunt_double_play"]:
                         event_type = "sac_bunt"
 
-                    if event_type not in event_type_stat_mappings or event_type in ["stolen_base", "caught_stealing", "run_scored", "pick_off"]:
-                        event_type = "no_stats"
+                    if event_type.startswith("stolen_base"):
+                        event_type = "no_stats_sb"
+                    else:
+                        if event_type not in event_type_stat_mappings or event_type in ["caught_stealing", "run_scored", "pick_off"]:
+                            event_type = "no_stats"
 
                     if event_type == "home_run" and "description" in sub_scoring_play["result"] and sub_scoring_play["result"]["description"] and "inside-the-park" in sub_scoring_play["result"]["description"]:
                         event_type = "inside_the_park_home_run"
@@ -39438,8 +39447,11 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
             elif event_type in ["sac_bunt_double_play"]:
                 event_type = "sac_bunt"
 
-            if event_type not in event_type_stat_mappings or event_type in ["stolen_base", "caught_stealing", "run_scored", "pick_off"]:
-                event_type = "no_stats"
+            if event_type.startswith("stolen_base"):
+                event_type = "no_stats_sb"
+            else:
+                if event_type not in event_type_stat_mappings or event_type in ["caught_stealing", "run_scored", "pick_off"]:
+                    event_type = "no_stats"
 
             if event_type == "home_run" and "description" in scoring_play["result"] and scoring_play["result"]["description"] and "inside-the-park" in scoring_play["result"]["description"]:
                 event_type = "inside_the_park_home_run"
@@ -39485,7 +39497,7 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
             first_batter_inning = False
             leading_off_game = False
             leading_off_team = False
-            if event_type != "no_stats":
+            if event_type not in ["no_stats", "no_stats_sb"]:
                 if last_top_event != is_top_inning:
                     first_batter_inning = True
                 leading_off_game = index == first_play
@@ -39496,7 +39508,7 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
                 starting_inning = True
 
             last_top = is_top_inning
-            if event_type != "no_stats":
+            if event_type not in ["no_stats", "no_stats_sb"]:
                 last_top_event = is_top_inning
             
             if num_pitches != None:
@@ -39801,7 +39813,7 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
                 "swung_at_first_pitch" : swung_at_first_pitch,
                 "batting_order_pos" : batting_order_pos,
                 "first_pitch" : first_pitch,
-                "next_play_pinch" : next_play_pinch if event_type != "no_stats" else None,
+                "next_play_pinch" : next_play_pinch if event_type not in ["no_stats", "no_stats_sb"] else None,
                 "is_starter_pitcher" : is_starter_pitcher,
                 "is_starter_batter" : is_starter_batter,
                 "is_reliever_pitcher" : not is_starter_pitcher,
@@ -40756,7 +40768,7 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
                 else:
                     is_pitching = False
                             
-            if event_type not in ("no_stats"):
+            if event_type not in ["no_stats", "no_stats_sb"]:
                 next_play_pinch = None
                 batter_matchup_map[batter]["current_ab"] += 1
                 pitcher_matchup_map[pitcher]["current_ab"] += 1
@@ -40883,11 +40895,11 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
         for index, all_event in enumerate(all_events):
             event_index = all_events.index(all_event)
             for sub_event in reversed(all_events[:event_index]):
-                if sub_event["result"] != "no_stats" and sub_event["inning"] == all_event["inning"] and sub_event["is_top_inning"] == all_event["is_top_inning"]:
+                if sub_event["result"] not in ["no_stats", "no_stats_sb"] and sub_event["inning"] == all_event["inning"] and sub_event["is_top_inning"] == all_event["is_top_inning"]:
                     all_event["previous_event"] = sub_event
                     break
             for sub_event in all_events[(event_index + 1):]:
-                if sub_event["result"] != "no_stats" and sub_event["inning"] == all_event["inning"] and sub_event["is_top_inning"] == all_event["is_top_inning"]:
+                if sub_event["result"] not in ["no_stats", "no_stats_sb"] and sub_event["inning"] == all_event["inning"] and sub_event["is_top_inning"] == all_event["is_top_inning"]:
                     all_event["next_event"] = sub_event
                     break
             
