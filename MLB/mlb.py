@@ -17040,10 +17040,12 @@ def determine_row_data(game_data, player_type, player_data, player_id, current_t
         return None
 
     if player_type["da_type"] == "Batter":
-        positions = []
+        row_data["Pos"] = ""
         for position in player["allPositions"]:
-            positions.append(position["abbreviation"])
-        row_data["Pos"] = " ".join(positions)
+            if position["abbreviation"] in ["PH", "PR"]:
+                row_data["Pos"] += "H"
+            else:
+                row_data["Pos"] += position_map_reversed[position["abbreviation"]]
         if "battingOrder" in player:
             row_data["BOP"] = int(player["battingOrder"][0])
 
