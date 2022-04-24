@@ -7909,6 +7909,9 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 extra_stats.add("hide-stat-" + unescape_string(stat.strip()))
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
 
+                        if is_sub_query:
+                            extra_stats = set()
+
                         last_match = re.search(r"\b(no(?:t|n)?(?: -)?)?(?:(?<!-)includes?|(?<!-)including|(?<!-)and|(?<!-)with)(?: |-)?(?:playoffs?|post(?:-| )?seasons?|regular(?:-| )?seasons?)(?!-)\b", time_frame)
                         if last_match:
                             playoff_match_str = last_match.group(1)
@@ -13550,9 +13553,8 @@ def determine_player_str(qualifier, player_type, player_str, time_frame, qual_st
         bracket_index = re.search(r"(?<!\\)]", player_str).start()
         player_str = player_str[:bracket_index] + " pitching" + player_str[bracket_index:]
     
-    if "Sub Query" in qual_str:
-        bracket_index = re.search(r"(?<!\\)]", player_str).start()
-        player_str = player_str[:bracket_index] + " is-sub-query" + player_str[bracket_index:]
+    bracket_index = re.search(r"(?<!\\)]", player_str).start()
+    player_str = player_str[:bracket_index] + " is-sub-query" + player_str[bracket_index:]
 
     if "Event Sub Query" in qual_str:
         bracket_index = re.search(r"(?<!\\)]", player_str).start()

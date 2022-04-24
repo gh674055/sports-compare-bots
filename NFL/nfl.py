@@ -1842,6 +1842,9 @@ def handle_player_string(comment, player_type, is_fantasy, last_updated, hide_ta
                             for stat in re.split(r"(?<!\\)\-", re.split(r"(?<!\\)" + m.group(1), m.group(0))[1][1:-1]):
                                 extra_stats.add("hide-stat-" + unescape_string(stat.strip()))
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
+
+                        if is_sub_query:
+                            extra_stats = set()
                         
                         last_match = re.search(r"\b(no(?:t|n)? ?)?-?fantasy(?!-)\b", time_frame)
                         if last_match:
@@ -6175,9 +6178,8 @@ def determine_player_str(qualifier, player_str, time_frame, qual_str):
         bracket_index = re.search(r"(?<!\\)]", player_str).start()
         player_str = player_str[:bracket_index] + " force-dates" + player_str[bracket_index:]
 
-    if "Sub Query" in qual_str:
-        bracket_index = re.search(r"(?<!\\)]", player_str).start()
-        player_str = player_str[:bracket_index] + " is-sub-query" + player_str[bracket_index:]
+    bracket_index = re.search(r"(?<!\\)]", player_str).start()
+    player_str = player_str[:bracket_index] + " is-sub-query" + player_str[bracket_index:]
     
     if "Ignore Start" not in time_frame["qualifiers"]:
         if "Start If QB" in time_frame["qualifiers"]:
