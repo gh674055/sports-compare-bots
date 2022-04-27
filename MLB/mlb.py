@@ -8352,6 +8352,9 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                             elif qualifier_str == "score-game" or qualifier_str == "run-game":
                                 qual_type = "Score Margin"
                                 extra_stats.add("current-stats")
+                            
+                            if m.group(3) in ["bottom", "top"]:
+                                continue
 
                             value = ordinal_to_number(m.group(3))
 
