@@ -12,5 +12,12 @@
         "birthday" : "1987-01-16",
         "position" : "LW",
         "handiness" : "R"
+    },
+    "delveal01" : {
+        "id" : 8445865,
+        "name" : "Alex Delvecchio",
+        "birthday" : "1931-12-04",
+        "position" : "C",
+        "handiness" : "L"
     }
 }
