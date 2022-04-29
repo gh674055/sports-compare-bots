@@ -5336,9 +5336,9 @@ def handle_player_string(comment, player_type, is_fantasy, last_updated, hide_ta
             name_count += len(subbb_date) - 1
 
     if name_count > 20:
-        raise get_constant_data.CustomMessageException("You can only compare a max of twenty players!")
+        raise get_constant_data.CustomMessageException("You can only compare a max of 20 players!")
 
-    if sub_name_count > 20:
+    if sub_name_count > 30:
         raise CustomMessageException("You can only have a max of 30 sub-players!")
 
     years_table = "year" in extra_stats
