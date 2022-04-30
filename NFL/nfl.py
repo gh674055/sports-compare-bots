@@ -7309,7 +7309,7 @@ def determine_raw_str(subbb_frame):
                 else:
                     qual_str += "Last " + str(subbb_frame["time_end"]) + " Seasons"
     else:
-        if subbb_frame["time_start"] == 0 and subbb_frame["time_end"] == current_season:
+        if subbb_frame["time_start"] == datetime.date.min.year and subbb_frame["time_end"] == current_season:
             qual_str += "Career"
         else:
             if isinstance(subbb_frame["time_end"], dateutil.relativedelta.relativedelta):
