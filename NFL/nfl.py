@@ -6469,7 +6469,7 @@ def get_player(name, player_type, time_frames):
                     
                     player_pos_div = player_search_div.find("div", {"class" : "search-item-name"})
 
-                    player_name = str(player_pos_div.find("a").find(text=True)).strip().lower()
+                    player_name = unidecode.unidecode(str(player_pos_div.find("a").find(text=True)).strip().lower())
                     
                     parsed_name = create_human_name(player_name)
                     
