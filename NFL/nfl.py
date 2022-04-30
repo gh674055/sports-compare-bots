@@ -4886,7 +4886,7 @@ def handle_player_string(comment, player_type, is_fantasy, last_updated, hide_ta
 
                         time_frame_type = "date"
                         if not time_frame:
-                            time_start = 0
+                            time_start = datetime.date.min.year
                             time_end = current_season
                         else:
                             unit = None
@@ -5060,7 +5060,7 @@ def handle_player_string(comment, player_type, is_fantasy, last_updated, hide_ta
                                         qualifiers[qual_str] = []
                                     qualifiers[qual_str].append(qualifier_obj)
 
-                                    time_start = 0
+                                    time_start = datetime.date.min.year
                                     time_end = current_season
                                     time_frame_type = "date"
 
@@ -5121,7 +5121,7 @@ def handle_player_string(comment, player_type, is_fantasy, last_updated, hide_ta
 
                                     time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
                                 
-                                time_start = 0
+                                time_start = datetime.date.min.year
                                 time_end = current_season
 
                                 if time_frame:
