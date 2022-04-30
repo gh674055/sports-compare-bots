@@ -12327,7 +12327,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                 parse_time_frames.append(sub_parsed_time_frames)
         else:
             parse_time_frames.append([[{
-                "time_start" : 0,
+                "time_start" : datetime.date.min.year,
                 "time_end" : current_season,
                 "type" : "date",
                 "playoffs" : None,
@@ -13541,7 +13541,7 @@ def determine_player_str(qualifier, player_type, player_str, time_frame, qual_st
         bracket_index = re.search(r"(?<!\\)]", player_str).start()
         player_str = player_str[:bracket_index] + " hide-advanced" + player_str[bracket_index:]
 
-    if is_pre_query and time_frame["type"] == "date" and not (time_frame["time_start"] == 0 and time_frame["time_end"] == current_season):
+    if is_pre_query and time_frame["type"] == "date" and not (time_frame["time_start"] == datetime.date.min.year and time_frame["time_end"] == current_season):
         bracket_index = re.search(r"(?<!\\)]", player_str).start()
         player_str = player_str[:bracket_index] + " " + get_time_str(time_frame["time_start"], False) + " to " + get_time_str(time_frame["time_end"], False) + player_str[bracket_index:]
 
@@ -15179,7 +15179,7 @@ def determine_raw_str(subbb_frame):
                 else:
                     qual_str += "Last " + str(subbb_frame["time_end"]) + " Seasons"
     else:
-        if subbb_frame["time_start"] == 0 and subbb_frame["time_end"] == current_season:
+        if subbb_frame["time_start"] == datetime.date.min.year and subbb_frame["time_end"] == current_season:
             qual_str += "Career"
         else:
             if isinstance(subbb_frame["time_end"], dateutil.relativedelta.relativedelta):
@@ -15201,7 +15201,7 @@ def determine_raw_str(subbb_frame):
                     qual_str += "s"
             else:
                 time_start = subbb_frame["time_start"]
-                if time_start == datetime.date.min or time_start == 0:
+                if time_start == datetime.date.min or time_start == datetime.date.min.year:
                     time_start = "MIN"
                 if time_start == subbb_frame["time_end"]:
                     qual_str += str(time_start)
@@ -16557,7 +16557,7 @@ def handle_player_data(player_data, time_frame, player_type, player_page, valid_
 
 def get_team_map_info(player_data, player_type, valid_teams, comment_obj):
     subbb_frames = [{
-        "time_start" : 0,
+        "time_start" : datetime.date.min.year,
         "time_end" : current_season,
         "type" : "date",
         "add_type" : "add", 
@@ -16670,7 +16670,7 @@ def get_team_map_info(player_data, player_type, valid_teams, comment_obj):
 
 def get_all_games(player_data, time_frame, player_type, comment_obj):
     subbb_frames = [{
-        "time_start" : 0,
+        "time_start" : datetime.date.min.year,
         "time_end" : current_season,
         "type" : "date",
         "add_type" : "add", 
@@ -17557,7 +17557,7 @@ def handle_season_only_stats(player_page, field_player_page, player_data, player
 
     handle_season_only_stats = False
 
-    is_career = (time_frame["type"] == "date" and time_frame["time_start"] == 0 and time_frame["time_end"] == current_season) or is_full_career
+    is_career = (time_frame["type"] == "date" and time_frame["time_start"] == datetime.date.min.year and time_frame["time_end"] == current_season) or is_full_career
     has_quals = bool(time_frame["qualifiers"])
     has_non_war_quals = False
     has_team_quals = False
@@ -18279,7 +18279,7 @@ def handle_awards(player_page, player_data, player_type, time_frame, is_full_car
         "leaderboard_SHO" : "P Ink 1"
     }
 
-    is_career = (time_frame["type"] == "date" and time_frame["time_start"] == 0 and time_frame["time_end"] == current_season) or is_full_career
+    is_career = (time_frame["type"] == "date" and time_frame["time_start"] == datetime.date.min.year and time_frame["time_end"] == current_season) or is_full_career
     has_quals = bool(time_frame["qualifiers"])
     is_full_career = is_full_career if is_full_career else is_career and not has_quals
 
@@ -25504,7 +25504,7 @@ def handle_schedule_stats(player_data, live_game, all_rows, qualifiers, is_playo
             for season_obj in team_schedule[team_year]:
                 all_team_rows += season_obj["regular_season"] + season_obj["playoffs"]
         for index, game_data in enumerate(sub_datas):
-            row_data = determine_row_data(game_data, player_type, player_data, None, current_team, all_dates, all_team_rows, {"time_start" : 0, "time_end" : float("inf"), "type" : "date", "qualifiers" : {}}, s)
+            row_data = determine_row_data(game_data, player_type, player_data, None, current_team, all_dates, all_team_rows, {"time_start" : datetime.date.min.year, "time_end" : float("inf"), "type" : "date", "qualifiers" : {}}, s)
 
             if row_data:
                 if row_data["Year"] in team_schedule:
@@ -44372,7 +44372,7 @@ def handle_string_year(string_year, is_first, replace_first_year):
         return int(string_year)
     else:
         if string_year == "min":
-            return 0
+            return datetime.date.min.year
         elif string_year == "max" or string_year == "now" or string_year == "present":
             return current_season
         elif string_year == "today":

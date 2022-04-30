@@ -5162,7 +5162,7 @@ def handle_player_string(comment, player_type, is_fantasy, last_updated, hide_ta
                 parse_time_frames.append(sub_parsed_time_frames)
         else:
             parse_time_frames.append([[{
-                "time_start" : 0,
+                "time_start" : datetime.date.min.year,
                 "time_end" : current_season,
                 "type" : "date",
                 "playoffs" : None,
@@ -6170,7 +6170,7 @@ def determine_player_str(qualifier, player_str, time_frame, qual_str):
         bracket_index = re.search(r"(?<!\\)]", player_str).start()
         player_str = player_str[:bracket_index] + " hide-advanced" + player_str[bracket_index:]
 
-    if is_pre_query and time_frame["type"] == "date" and not (time_frame["time_start"] == 0 and time_frame["time_end"] == current_season):
+    if is_pre_query and time_frame["type"] == "date" and not (time_frame["time_start"] == datetime.date.min.year and time_frame["time_end"] == current_season):
         bracket_index = re.search(r"(?<!\\)]", player_str).start()
         player_str = player_str[:bracket_index] + " " + get_time_str(time_frame["time_start"], False) + " to " + get_time_str(time_frame["time_end"], False) + player_str[bracket_index:]
 
@@ -7331,7 +7331,7 @@ def determine_raw_str(subbb_frame):
                     qual_str += "s"
             else:
                 time_start = subbb_frame["time_start"]
-                if time_start == datetime.date.min or time_start == 0:
+                if time_start == datetime.date.min or time_start == datetime.date.min.year:
                     time_start = "MIN"
                 if time_start == subbb_frame["time_end"]:
                     qual_str += str(time_start)
@@ -8550,7 +8550,7 @@ def handle_player_data(player_data, time_frame, player_type, player_page, is_fan
 
 def get_team_map_info(player_data, player_type, valid_teams, comment_obj):
     subbb_frames = [{
-        "time_start" : 0,
+        "time_start" : datetime.date.min.year,
         "time_end" : current_season,
         "type" : "date",
         "add_type" : "add", 
@@ -8659,7 +8659,7 @@ def get_team_map_info(player_data, player_type, valid_teams, comment_obj):
 
 def get_all_games(player_data, time_frame, player_type, comment_obj):
     subbb_frames = [{
-        "time_start" : 0,
+        "time_start" : datetime.date.min.year,
         "time_end" : current_season,
         "type" : "date",
         "add_type" : "add", 
@@ -11346,7 +11346,7 @@ def handle_awards(player_page, player_data, player_type, ind_player_type, time_f
         "leaderboard_pro_bowls" : "ProBowl"
     }
 
-    is_career = (time_frame["type"] == "date" and time_frame["time_start"] == 0 and time_frame["time_end"] == current_season) or is_full_career
+    is_career = (time_frame["type"] == "date" and time_frame["time_start"] == datetime.date.min.year and time_frame["time_end"] == current_season) or is_full_career
     has_quals = bool(time_frame["qualifiers"])
     is_full_career = is_full_career if is_full_career else is_career and not has_quals
 
@@ -18488,7 +18488,7 @@ def handle_penalties(player_data, player_type, ind_player_type, is_game_page):
             else:
                 raise
 
-        reg_season_vals = parse_table(player_page, player_data, {"time_start" : 0, "time_end" : float("inf"), "type" : "date", "qualifiers" : {}}, True, player_type, ind_player_type, None, None, None)
+        reg_season_vals = parse_table(player_page, player_data, {"time_start" : datetime.date.min.year, "time_end" : float("inf"), "type" : "date", "qualifiers" : {}}, True, player_type, ind_player_type, None, None, None)
         for val in reg_season_vals:
             reg_season_dates.append(val["Shared"]["Date"])
 
@@ -23046,7 +23046,7 @@ def handle_string_year(string_year, is_first, replace_first_year):
         return int(string_year)
     else:
         if string_year == "min":
-            return 0
+            return datetime.date.min.year
         elif string_year == "max" or string_year == "now" or string_year == "present":
             return current_season
         elif string_year == "today":

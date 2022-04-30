@@ -12752,7 +12752,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                 parse_time_frames.append(sub_parsed_time_frames)
         else:
             parse_time_frames.append([[{
-                "time_start" : 0,
+                "time_start" : datetime.date.min.year,
                 "time_end" : current_season,
                 "type" : "date",
                 "playoffs" : None,
@@ -13975,7 +13975,7 @@ def determine_player_str(qualifier, player_str, time_frame, qual_str):
         bracket_index = re.search(r"(?<!\\)]", player_str).start()
         player_str = player_str[:bracket_index] + " hide-advanced" + player_str[bracket_index:]
 
-    if is_pre_query and time_frame["type"] == "date" and not (time_frame["time_start"] == 0 and time_frame["time_end"] == current_season):
+    if is_pre_query and time_frame["type"] == "date" and not (time_frame["time_start"] == datetime.date.min.year and time_frame["time_end"] == current_season):
         bracket_index = re.search(r"(?<!\\)]", player_str).start()
         player_str = player_str[:bracket_index] + " " + get_time_str(time_frame["time_start"], False) + " to " + get_time_str(time_frame["time_end"], False) + player_str[bracket_index:]
     
@@ -15404,7 +15404,7 @@ def determine_raw_str(subbb_frame):
                     qual_str += "s"
             else:
                 time_start = subbb_frame["time_start"]
-                if time_start == datetime.date.min or time_start == 0:
+                if time_start == datetime.date.min or time_start == datetime.date.min.year:
                     time_start = "MIN"
                 time_end = subbb_frame["time_end"]
 
@@ -16682,7 +16682,7 @@ def handle_player_data(player_data, time_frame, player_type, player_page, valid_
 
 def get_team_map_info(player_data, player_type, valid_teams, comment_obj):
     subbb_frames = [{
-        "time_start" : 0,
+        "time_start" : datetime.date.min.year,
         "time_end" : current_season,
         "type" : "date",
         "add_type" : "add", 
@@ -16792,7 +16792,7 @@ def get_team_map_info(player_data, player_type, valid_teams, comment_obj):
 
 def get_all_games(player_data, time_frame, player_type, comment_obj):
     subbb_frames = [{
-        "time_start" : 0,
+        "time_start" : datetime.date.min.year,
         "time_end" : current_season,
         "type" : "date",
         "add_type" : "add", 
@@ -40716,7 +40716,7 @@ def handle_string_year(string_year, playoffs, is_first, replace_first_year):
         return int(string_year)
     else:
         if string_year == "min":
-            return 0
+            return datetime.date.min.year
         elif string_year == "max" or string_year == "now" or string_year == "present":
             return current_season
         elif string_year == "today":
