@@ -31480,7 +31480,8 @@ def perform_sub_mlb_game_qualifiers(row, player_data, qualifiers, player_game_in
             return False, row
         
     
-    include_all_games = "Event Stat" in qualifiers or "Event Stat Reversed" in qualifiers or "Event Stats" in qualifiers or "Event Stats Reversed" in qualifiers or "Starting Event Stat" in qualifiers or "Starting Event Stat Reversed" in qualifiers or "Starting Event Stats" in qualifiers or "Starting Event Stats Reversed" in qualifiers
+    #include_all_games = "Event Stat" in qualifiers or "Event Stat Reversed" in qualifiers or "Event Stats" in qualifiers or "Event Stats Reversed" in qualifiers or "Starting Event Stat" in qualifiers or "Starting Event Stat Reversed" in qualifiers or "Starting Event Stats" in qualifiers or "Starting Event Stats Reversed" in qualifiers
+    include_all_games = True
 
     raw_row_data = copy.copy(row)
     
