@@ -12354,14 +12354,6 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
             else:
                 worst_games_table = 1
 
-    if remove_duplicates or remove_duplicate_games or "score" in extra_stats or "record" in extra_stats or "game" in extra_stats or "current-stats" in extra_stats or "run-support" in extra_stats or "advanced-runner" in extra_stats or "run-support-record" in extra_stats or "exit-record" in extra_stats or best_games_table or worst_games_table:
-        for subb_frame in parse_time_frames:
-            for subbb_frame in subb_frame:
-                for time_frame in subbb_frame:
-                    time_frame["qualifiers"]["Force Dates"] = [{
-                        "negate" : False
-                    }]
-
     while len(names) < len(parse_time_frames):
         names.append(names[len(names) - 1])
 
@@ -12379,6 +12371,59 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
     
     if player_type["da_type"] == None:
         player_type["da_type"] = get_init_type(names, parse_time_frames)
+
+    for subb_frames in parse_time_frames:
+        for subbb_frames in subb_frames:
+            for time_frame in subbb_frames:
+                for qualifier in time_frame["qualifiers"]:
+                    if "Season" not in qualifier and "State" not in qualifier and "Facing" not in qualifier and ("Event Stat" not in qualifier or qualifier == "Individual Event Stat") and ("Stat" in qualifier or "Streak" in qualifier or "Stretch" in qualifier or ("Formula" in qualifier and qualifier != "Event Formula") or "Quickest" in qualifier or "Slowest" in qualifier):
+                        for qual_object in time_frame["qualifiers"][qualifier]:
+                            for sub_qual_object in qual_object["values"]:
+                                if "Formula" in qualifier:
+                                    stats = qual_object["values"]
+                                else:
+                                    if "stats" in sub_qual_object:
+                                        stats = []
+                                        for stat in sub_qual_object["stats"]:
+                                            stats.append(stat["stat"])
+                                    else:
+                                        stats = [sub_qual_object["stat"]]
+                            for stat in stats:
+                                if "gwrbi" in stat or "slam" in stat or "walkoff" in stat or "drivenin" in stat or "gwdrivenin" in stat:
+                                    extra_stats.add("current-stats")
+                                for header_stat in headers[player_type["da_type"]]:
+                                    if "display-value" in headers[player_type["da_type"]][header_stat] and headers[player_type["da_type"]][header_stat]["display-value"].lower() == stat:
+                                        stat = header_stat.lower()
+                                        if "gwrbi" in stat or "slam" in stat or "walkoff" in stat or "drivenin" in stat or "gwdrivenin" in stat:
+                                            extra_stats.add("current-stats")
+                                        break
+        
+    add_play = False
+    for extra_stat in extra_stats:
+        if extra_stat.startswith("show-stat-"):
+            stat = extra_stat.split("show-stat-", 1)[1]
+            if "gwrbi" in stat or "slam" in stat or "walkoff" in stat or "drivenin" in stat or "gwdrivenin" in stat:
+                add_play = True
+            for header_stat in headers[player_type["da_type"]]:
+                if "display-value" in headers[player_type["da_type"]][header_stat] and headers[player_type["da_type"]][header_stat]["display-value"].lower() == stat:
+                    stat = header_stat.lower()
+                    if "gwrbi" in stat or "slam" in stat or "walkoff" in stat or "drivenin" in stat or "gwdrivenin" in stat:
+                        add_play = True
+                    break
+
+    if add_play:
+        extra_stats.add("current-stats")
+
+    if "hide-advanced" in extra_stats and "current-stats" in extra_stats:
+        extra_stats.remove("current-stats")    
+            
+    if remove_duplicates or remove_duplicate_games or "score" in extra_stats or "record" in extra_stats or "game" in extra_stats or "current-stats" in extra_stats or "run-support" in extra_stats or "advanced-runner" in extra_stats or "run-support-record" in extra_stats or "exit-record" in extra_stats or best_games_table or worst_games_table:
+        for subb_frame in parse_time_frames:
+            for subbb_frame in subb_frame:
+                for time_frame in subbb_frame:
+                    time_frame["qualifiers"]["Force Dates"] = [{
+                        "negate" : False
+                    }]
 
     for subb_frames in parse_time_frames:
         for subbb_frames in subb_frames:
@@ -15803,7 +15848,7 @@ def handle_player_data(player_data, time_frame, player_type, player_page, valid_
         
         if not is_game_page:
             handle_missing_playoff_rows(player_page, player_data, valid_years, all_rows, player_type, time_frame)
-        
+
         has_result_stat_qual = False
         has_count_stat = False
         for qualifier in time_frame["qualifiers"]:
@@ -15822,8 +15867,6 @@ def handle_player_data(player_data, time_frame, player_type, player_page, valid_
                     for stat in stats:
                         if "tmh" in stat or "tmr" in stat or "tmrbi" in stat or "tmhr" in stat or "opph" in stat or "oppr" in stat or "opprbi" in stat or "opphr" in stat or "ttlh" in stat or "hdiff" in stat or "ttlr" in stat or "rdiff" in stat or "ttlrbi" in stat or "rbidiff" in stat or "ttlhr" in stat or "hrdiff" in stat or "gwrbi" in stat or "slam" in stat or "walkoff" in stat or "drivenin" in stat or "gwdrivenin" in stat:
                             has_result_stat_qual = True
-                        if "gwrbi" in stat or "slam" in stat or "walkoff" in stat or "drivenin" in stat or "gwdrivenin" in stat:
-                            extra_stats.add("current-stats")
                         for count_stat in count_stats:
                             if count_stat.lower() in stat:
                                 has_count_stat = True
@@ -15833,22 +15876,17 @@ def handle_player_data(player_data, time_frame, player_type, player_page, valid_
                                 stat = header_stat.lower()
                                 if "tmh" in stat or "tmr" in stat or "tmrbi" in stat or "tmhr" in stat or "opph" in stat or "oppr" in stat or "opprbi" in stat or "opphr" in stat or "ttlh" in stat or "hdiff" in stat or "ttlr" in stat or "rdiff" in stat or "ttlrbi" in stat or "rbidiff" in stat or "ttlhr" in stat or "hrdiff" in stat or "gwrbi" in stat or "slam" in stat or "walkoff" in stat or "drivenin" in stat or "gwdrivenin" in stat:
                                     has_result_stat_qual = True
-                                if "gwrbi" in stat or "slam" in stat or "walkoff" in stat or "drivenin" in stat or "gwdrivenin" in stat:
-                                    extra_stats.add("current-stats")
                                 for count_stat in count_stats:
                                     if count_stat.lower() in stat:
                                         has_count_stat = True
                                         break
                                 break
             
-        add_play = False
         for extra_stat in extra_stats:
             if extra_stat.startswith("show-stat-"):
                 stat = extra_stat.split("show-stat-", 1)[1]
                 if "tmh" in stat or "tmr" in stat or "tmrbi" in stat or "tmhr" in stat or "opph" in stat or "oppr" in stat or "opprbi" in stat or "opphr" in stat or "ttlh" in stat or "hdiff" in stat or "ttlr" in stat or "rdiff" in stat or "ttlrbi" in stat or "rbidiff" in stat or "ttlhr" in stat or "hrdiff" in stat or "gwrbi" in stat or "slam" in stat or "walkoff" in stat or "drivenin" in stat or "gwdrivenin" in stat:
                     has_result_stat_qual = True
-                if "gwrbi" in stat or "slam" in stat or "walkoff" in stat or "drivenin" in stat or "gwdrivenin" in stat:
-                    add_play = True
                 for count_stat in count_stats:
                     if count_stat.lower() in stat:
                         has_count_stat = True
@@ -15858,19 +15896,11 @@ def handle_player_data(player_data, time_frame, player_type, player_page, valid_
                         stat = header_stat.lower()
                         if "tmh" in stat or "tmr" in stat or "tmrbi" in stat or "tmhr" in stat or "opph" in stat or "oppr" in stat or "opprbi" in stat or "opphr" in stat or "ttlh" in stat or "hdiff" in stat or "ttlr" in stat or "rdiff" in stat or "ttlrbi" in stat or "rbidiff" in stat or "ttlhr" in stat or "hrdiff" in stat or "gwrbi" in stat or "slam" in stat or "walkoff" in stat or "drivenin" in stat or "gwdrivenin" in stat:
                             has_result_stat_qual = True
-                        if "gwrbi" in stat or "slam" in stat or "walkoff" in stat or "drivenin" in stat or "gwdrivenin" in stat:
-                            add_play = True
                         for count_stat in count_stats:
                             if count_stat.lower() in stat:
                                 has_count_stat = True
                                 break
                         break
-
-        if add_play:
-            extra_stats.add("current-stats")
-    
-        if "hide-advanced" in extra_stats and "current-stats" in extra_stats:
-            extra_stats.remove("current-stats")
         
         all_dates = set()
         if live_game:

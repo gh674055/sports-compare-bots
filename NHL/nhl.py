@@ -12779,14 +12779,6 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
             else:
                 worst_games_table = 1
 
-    if remove_duplicates or remove_duplicate_games or "score" in extra_stats or "record" in extra_stats or "star" in extra_stats or "game" in extra_stats or "penalties" in extra_stats or "fight" in extra_stats or "current-stats" in extra_stats or best_games_table or worst_games_table:
-        for subb_frame in parse_time_frames:
-            for subbb_frame in subb_frame:
-                for time_frame in subbb_frame:
-                    time_frame["qualifiers"]["Force Dates"] = [{
-                        "negate" : False
-                    }]
-
     while len(names) < len(parse_time_frames):
         names.append(names[len(names) - 1])
 
@@ -13126,6 +13118,87 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
     
     if not player_type["da_type"]:
         player_type["da_type"] = get_init_type(names, parse_time_frames)
+
+    for subb_frames in parse_time_frames:
+        for subbb_frames in subb_frames:
+            for time_frame in subbb_frames:
+                for qualifier in time_frame["qualifiers"]:
+                    if "Season" not in qualifier and "State" not in qualifier and ("Event Stat" not in qualifier or qualifier == "Individual Event Stat") and ("Stat" in qualifier or "Streak" in qualifier or "Stretch" in qualifier or ("Formula" in qualifier and qualifier != "Event Formula") or "Quickest" in qualifier or "Slowest" in qualifier):
+                        for qual_object in time_frame["qualifiers"][qualifier]:
+                            for sub_qual_object in qual_object["values"]:
+                                if "Formula" in qualifier:
+                                    stats = qual_object["values"]
+                                else:
+                                    if "stats" in sub_qual_object:
+                                        stats = []
+                                        for stat in sub_qual_object["stats"]:
+                                            stats.append(stat["stat"])
+                                    else:
+                                        stats = [sub_qual_object["stat"]]
+                            for stat in stats:
+                                if "fight" in stat:
+                                    extra_stats.add("penalties")
+                                    extra_stats.add("fight")
+                                if "star" in stat:
+                                    extra_stats.add("star")
+                                if "hittkn" in stat:
+                                    extra_stats.add("current-stats")
+                                if stat in [indv_shift_stat.lower() for indv_shift_stat in skater_header_indv_shift_stats]:
+                                    extra_stats.add("current-stats")
+                                for header_stat in headers[player_type["da_type"]["type"]]:
+                                    if "display-value" in headers[player_type["da_type"]["type"]][header_stat] and headers[player_type["da_type"]["type"]][header_stat]["display-value"].lower() == stat:
+                                        stat = header_stat.lower()
+                                        if "fight" in stat:
+                                            extra_stats.add("penalties")
+                                            extra_stats.add("fight")
+                                        if "star" in stat:
+                                            extra_stats.add("star")
+                                        if "hittkn" in stat:
+                                            extra_stats.add("current-stats")
+                                        if stat in [indv_shift_stat.lower() for indv_shift_stat in skater_header_indv_shift_stats]:
+                                            extra_stats.add("current-stats")
+                                        break
+        
+        add_pen = False
+        add_fight = False
+        add_star = False
+        add_current_stats = False
+        for extra_stat in extra_stats:
+            if extra_stat.startswith("show-stat-"):
+                stat = extra_stat.split("show-stat-", 1)[1]
+                if "fight" in stat:
+                    add_pen = True
+                    add_fight = True
+                if "star" in stat:
+                    add_star = True
+                if "hittkn" in stat:
+                    add_current_stats = True
+                if stat in [indv_shift_stat.lower() for indv_shift_stat in skater_header_indv_shift_stats]:
+                    add_current_stats = True
+                for header_stat in headers[player_type["da_type"]["type"]]:
+                    if "display-value" in headers[player_type["da_type"]["type"]][header_stat] and headers[player_type["da_type"]["type"]][header_stat]["display-value"].lower() == stat:
+                        stat = header_stat.lower()
+                        if "fight" in stat:
+                            add_pen = True
+                            add_fight = True
+                        if "star" in stat:
+                            add_star = True
+                        if "hittkn" in stat:
+                            add_current_stats = True
+                        if stat in [indv_shift_stat.lower() for indv_shift_stat in skater_header_indv_shift_stats]:
+                            add_current_stats = True
+                        break
+
+    if "hide-advanced" in extra_stats and "current-stats" in extra_stats:
+        extra_stats.remove("current-stats")
+
+    if remove_duplicates or remove_duplicate_games or "score" in extra_stats or "record" in extra_stats or "star" in extra_stats or "game" in extra_stats or "penalties" in extra_stats or "fight" in extra_stats or "current-stats" in extra_stats or best_games_table or worst_games_table:
+        for subb_frame in parse_time_frames:
+            for subbb_frame in subb_frame:
+                for time_frame in subbb_frame:
+                    time_frame["qualifiers"]["Force Dates"] = [{
+                        "negate" : False
+                    }]
 
     handle_against_qual(names, parse_time_frames, comment_obj, extra_stats)
     handle_same_games_qual(names, player_type, parse_time_frames, comment_obj, extra_stats)
@@ -16289,76 +16362,24 @@ def handle_player_data(player_data, time_frame, player_type, player_page, valid_
                     for stat in stats:
                         if "time" in stat or "arena" in stat or "score" in stat or "goal" in stat or "result" in stat or "round" in stat or "series" in stat or "tmgm" in stat or "gamesrest" in stat or "gamesinarow" in stat or "daysinarow" in stat or "elimination" in stat or "clinching" in stat or "tmg" in stat or "oppg" in stat or "ttlg" in stat or "gdiff" in stat:
                             has_schedule_stat_qual = True
-                        if "fight" in stat:
-                            extra_stats.add("penalties")
-                            extra_stats.add("fight")
-                        if "star" in stat:
-                            extra_stats.add("star")
-                        if "hittkn" in stat:
-                            extra_stats.add("current-stats")
-                        if stat in [indv_shift_stat.lower() for indv_shift_stat in skater_header_indv_shift_stats]:
-                            extra_stats.add("current-stats")
                         for header_stat in headers[player_type["da_type"]["type"]]:
                             if "display-value" in headers[player_type["da_type"]["type"]][header_stat] and headers[player_type["da_type"]["type"]][header_stat]["display-value"].lower() == stat:
                                 stat = header_stat.lower()
                                 if "time" in stat or "arena" in stat or "score" in stat or "goal" in stat or "result" in stat or "round" in stat or "series" in stat or "tmgm" in stat or "gamesrest" in stat or "gamesinarow" in stat or "daysinarow" in stat or "elimination" in stat or "clinching" in stat or "tmg" in stat or "oppg" in stat or "ttlg" in stat or "gdiff" in stat:
                                     has_schedule_stat_qual = True
-                                if "fight" in stat:
-                                    extra_stats.add("penalties")
-                                    extra_stats.add("fight")
-                                if "star" in stat:
-                                    extra_stats.add("star")
-                                if "hittkn" in stat:
-                                    extra_stats.add("current-stats")
-                                if stat in [indv_shift_stat.lower() for indv_shift_stat in skater_header_indv_shift_stats]:
-                                    extra_stats.add("current-stats")
                                 break
         
-        add_pen = False
-        add_fight = False
-        add_star = False
-        add_current_stats = False
         for extra_stat in extra_stats:
             if extra_stat.startswith("show-stat-"):
                 stat = extra_stat.split("show-stat-", 1)[1]
                 if "time" in stat or "arena" in stat or "score" in stat or "goal" in stat or "result" in stat or "round" in stat or "series" in stat or "tmgm" in stat or "gamesrest" in stat or "gamesinarow" in stat or "daysinarow" in stat or "elimination" in stat or "clinching" in stat or "tmg" in stat or "oppg" in stat or "ttlg" in stat or "gdiff" in stat:
                     has_schedule_stat_qual = True
-                if "fight" in stat:
-                    add_pen = True
-                    add_fight = True
-                if "star" in stat:
-                    add_star = True
-                if "hittkn" in stat:
-                    add_current_stats = True
-                if stat in [indv_shift_stat.lower() for indv_shift_stat in skater_header_indv_shift_stats]:
-                    add_current_stats = True
                 for header_stat in headers[player_type["da_type"]["type"]]:
                     if "display-value" in headers[player_type["da_type"]["type"]][header_stat] and headers[player_type["da_type"]["type"]][header_stat]["display-value"].lower() == stat:
                         stat = header_stat.lower()
                         if "time" in stat or "arena" in stat or "score" in stat or "goal" in stat or "result" in stat or "round" in stat or "series" in stat or "tmgm" in stat or "gamesrest" in stat or "gamesinarow" in stat or "daysinarow" in stat or "elimination" in stat or "clinching" in stat or "tmg" in stat or "oppg" in stat or "ttlg" in stat or "gdiff" in stat:
                             has_schedule_stat_qual = True
-                        if "fight" in stat:
-                            add_pen = True
-                            add_fight = True
-                        if "star" in stat:
-                            add_star = True
-                        if "hittkn" in stat:
-                            add_current_stats = True
-                        if stat in [indv_shift_stat.lower() for indv_shift_stat in skater_header_indv_shift_stats]:
-                            add_current_stats = True
                         break
-        
-        if add_pen:
-            extra_stats.add("penalties")
-        if add_fight:
-            extra_stats.add("fight")
-        if add_star:
-            extra_stats.add("star")
-        if add_current_stats:
-            extra_stats.add("current-stats")
-
-        if "hide-advanced" in extra_stats and "current-stats" in extra_stats:
-            extra_stats.remove("current-stats")
 
         needs_half = False
         if "First Half" in time_frame["qualifiers"] or "Second Half" in time_frame["qualifiers"]:
