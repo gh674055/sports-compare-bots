@@ -15848,6 +15848,59 @@ def handle_player_data(player_data, time_frame, player_type, player_page, valid_
         
         if not is_game_page:
             handle_missing_playoff_rows(player_page, player_data, valid_years, all_rows, player_type, time_frame)
+
+        has_result_stat_qual = False
+        has_count_stat = False
+        for qualifier in time_frame["qualifiers"]:
+            if "Season" not in qualifier and "State" not in qualifier and "Facing" not in qualifier and ("Event Stat" not in qualifier or qualifier == "Individual Event Stat") and ("Stat" in qualifier or "Streak" in qualifier or "Stretch" in qualifier or ("Formula" in qualifier and qualifier != "Event Formula") or "Quickest" in qualifier or "Slowest" in qualifier):
+                for qual_object in time_frame["qualifiers"][qualifier]:
+                    for sub_qual_object in qual_object["values"]:
+                        if "Formula" in qualifier:
+                            stats = qual_object["values"]
+                        else:
+                            if "stats" in sub_qual_object:
+                                stats = []
+                                for stat in sub_qual_object["stats"]:
+                                    stats.append(stat["stat"])
+                            else:
+                                stats = [sub_qual_object["stat"]]
+                    for stat in stats:
+                        if "tmh" in stat or "tmr" in stat or "tmrbi" in stat or "tmhr" in stat or "opph" in stat or "oppr" in stat or "opprbi" in stat or "opphr" in stat or "ttlh" in stat or "hdiff" in stat or "ttlr" in stat or "rdiff" in stat or "ttlrbi" in stat or "rbidiff" in stat or "ttlhr" in stat or "hrdiff" in stat or "gwrbi" in stat or "slam" in stat or "walkoff" in stat or "drivenin" in stat or "gwdrivenin" in stat:
+                            has_result_stat_qual = True
+                        for count_stat in count_stats:
+                            if count_stat.lower() in stat:
+                                has_count_stat = True
+                                break
+                        for header_stat in headers[player_type["da_type"]]:
+                            if "display-value" in headers[player_type["da_type"]][header_stat] and headers[player_type["da_type"]][header_stat]["display-value"].lower() == stat:
+                                stat = header_stat.lower()
+                                if "tmh" in stat or "tmr" in stat or "tmrbi" in stat or "tmhr" in stat or "opph" in stat or "oppr" in stat or "opprbi" in stat or "opphr" in stat or "ttlh" in stat or "hdiff" in stat or "ttlr" in stat or "rdiff" in stat or "ttlrbi" in stat or "rbidiff" in stat or "ttlhr" in stat or "hrdiff" in stat or "gwrbi" in stat or "slam" in stat or "walkoff" in stat or "drivenin" in stat or "gwdrivenin" in stat:
+                                    has_result_stat_qual = True
+                                for count_stat in count_stats:
+                                    if count_stat.lower() in stat:
+                                        has_count_stat = True
+                                        break
+                                break
+            
+        for extra_stat in extra_stats:
+            if extra_stat.startswith("show-stat-"):
+                stat = extra_stat.split("show-stat-", 1)[1]
+                if "tmh" in stat or "tmr" in stat or "tmrbi" in stat or "tmhr" in stat or "opph" in stat or "oppr" in stat or "opprbi" in stat or "opphr" in stat or "ttlh" in stat or "hdiff" in stat or "ttlr" in stat or "rdiff" in stat or "ttlrbi" in stat or "rbidiff" in stat or "ttlhr" in stat or "hrdiff" in stat or "gwrbi" in stat or "slam" in stat or "walkoff" in stat or "drivenin" in stat or "gwdrivenin" in stat:
+                    has_result_stat_qual = True
+                for count_stat in count_stats:
+                    if count_stat.lower() in stat:
+                        has_count_stat = True
+                        break
+                for header_stat in headers[player_type["da_type"]]:
+                    if "display-value" in headers[player_type["da_type"]][header_stat] and headers[player_type["da_type"]][header_stat]["display-value"].lower() == stat:
+                        stat = header_stat.lower()
+                        if "tmh" in stat or "tmr" in stat or "tmrbi" in stat or "tmhr" in stat or "opph" in stat or "oppr" in stat or "opprbi" in stat or "opphr" in stat or "ttlh" in stat or "hdiff" in stat or "ttlr" in stat or "rdiff" in stat or "ttlrbi" in stat or "rbidiff" in stat or "ttlhr" in stat or "hrdiff" in stat or "gwrbi" in stat or "slam" in stat or "walkoff" in stat or "drivenin" in stat or "gwdrivenin" in stat:
+                            has_result_stat_qual = True
+                        for count_stat in count_stats:
+                            if count_stat.lower() in stat:
+                                has_count_stat = True
+                                break
+                        break
         
         all_dates = set()
         if live_game:
@@ -31427,7 +31480,7 @@ def perform_sub_mlb_game_qualifiers(row, player_data, qualifiers, player_game_in
             return False, row
         
     
-    include_all_games = True
+    include_all_games = "Event Stat" in qualifiers or "Event Stat Reversed" in qualifiers or "Event Stats" in qualifiers or "Event Stats Reversed" in qualifiers or "Starting Event Stat" in qualifiers or "Starting Event Stat Reversed" in qualifiers or "Starting Event Stats" in qualifiers or "Starting Event Stats Reversed" in qualifiers
 
     raw_row_data = copy.copy(row)
     
