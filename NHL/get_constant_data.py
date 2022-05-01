@@ -40,7 +40,7 @@ logger.addHandler(streamhandler)
 
 start_year = 1917
 end_year = 2021
-current_year_playoffs_started = False
+current_year_playoffs_started = True
 
 year_games_played = [
     {
@@ -374,14 +374,15 @@ def get_totals(specific_year, totals):
 
                         for team in totals[over_key][key][str(year)]:
                             if team != "NHL":
-                                for header_value in team_map_by_year[over_key][str(year)][team]:
-                                    totals[over_key][key][str(year)][team][header_value] = team_map_by_year[over_key][str(year)][team][header_value]
+                                if team in team_map_by_year[over_key][str(year)]:
+                                    for header_value in team_map_by_year[over_key][str(year)][team]:
+                                        totals[over_key][key][str(year)][team][header_value] = team_map_by_year[over_key][str(year)][team][header_value]
 
-                                for header_value in totals[over_key][key][str(year)][team]:
-                                    if header_value not in totals[over_key][key][str(year)]["NHL"]:
-                                        totals[over_key][key][str(year)]["NHL"][header_value] = 0.0
+                                    for header_value in totals[over_key][key][str(year)][team]:
+                                        if header_value not in totals[over_key][key][str(year)]["NHL"]:
+                                            totals[over_key][key][str(year)]["NHL"][header_value] = 0.0
 
-                                    totals[over_key][key][str(year)]["NHL"][header_value] += totals[over_key][key][str(year)][team][header_value]
+                                        totals[over_key][key][str(year)]["NHL"][header_value] += totals[over_key][key][str(year)][team][header_value]
 
                         for year_game_played in year_games_played:
                             year_start_year = year_game_played["start_year"]
@@ -398,15 +399,18 @@ def get_totals(specific_year, totals):
 
                             for team in totals[over_key][key][pos][str(year)]:
                                 if team != "NHL":
-                                    if key == "Skater":
-                                        for header_value in team_map_by_year[over_key][str(year)][team]:
-                                            totals[over_key][key][pos][str(year)][team][header_value] = team_map_by_year[over_key][str(year)][team][header_value]
+                                    if team in team_map_by_year[over_key][str(year)]:
+                                        if key == "Skater":
+                                            for header_value in team_map_by_year[over_key][str(year)][team]:
+                                                totals[over_key][key][pos][str(year)][team][header_value] = team_map_by_year[over_key][str(year)][team][header_value]
 
-                                    for header_value in totals[over_key][key][pos][str(year)][team]:
-                                        if header_value not in totals[over_key][key][pos][str(year)]["NHL"]:
-                                            totals[over_key][key][pos][str(year)]["NHL"][header_value] = 0.0
+                                        for header_value in totals[over_key][key][pos][str(year)][team]:
+                                            if header_value not in totals[over_key][key][pos][str(year)]["NHL"]:
+                                                totals[over_key][key][pos][str(year)]["NHL"][header_value] = 0.0
 
-                                        totals[over_key][key][pos][str(year)]["NHL"][header_value] += totals[over_key][key][pos][str(year)][team][header_value]
+                                            totals[over_key][key][pos][str(year)]["NHL"][header_value] += totals[over_key][key][pos][str(year)][team][header_value]
+                                    else:
+                                        print(str(over_key) + " " + str(team))
 
     return totals
 
