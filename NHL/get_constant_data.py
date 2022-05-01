@@ -409,8 +409,6 @@ def get_totals(specific_year, totals):
                                                 totals[over_key][key][pos][str(year)]["NHL"][header_value] = 0.0
 
                                             totals[over_key][key][pos][str(year)]["NHL"][header_value] += totals[over_key][key][pos][str(year)][team][header_value]
-                                    else:
-                                        print(str(over_key) + " " + str(team))
 
     return totals
 
