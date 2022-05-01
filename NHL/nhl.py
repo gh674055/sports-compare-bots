@@ -13189,6 +13189,15 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                             add_current_stats = True
                         break
 
+    if add_pen:
+        extra_stats.add("penalties")
+    if add_fight:
+        extra_stats.add("fight")
+    if add_star:
+        extra_stats.add("star")
+    if add_current_stats:
+        extra_stats.add("current-stats")
+
     if "hide-advanced" in extra_stats and "current-stats" in extra_stats:
         extra_stats.remove("current-stats")
 
