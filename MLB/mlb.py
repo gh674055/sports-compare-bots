@@ -38645,6 +38645,17 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
         for index, scoring_play in enumerate(sub_data["liveData"]["plays"]["allPlays"]):
             if scoring_play["result"]["type"] != "atBat" or "eventType" not in scoring_play["result"]:
                 continue
+
+            runners_in_order = []
+            own_runners = []
+            actual_batter = scoring_play["matchup"]["actual_batter"] if "actual_batter" in scoring_play["matchup"] else scoring_play["matchup"]["batter"]["id"]
+            for runner in scoring_play["runners"]:
+                if runner["details"]["runner"]["id"] == actual_batter:
+                    own_runners.append(runner)
+                else:
+                    runners_in_order.append(runner)
+            runners_in_order += own_runners
+            scoring_play["runners"] = runners_in_order
         
             if scoring_play["result"]["eventType"] == "ejection":
                 if scoring_play["count"]["strikes"] == 3:
