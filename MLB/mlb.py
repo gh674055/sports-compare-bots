@@ -17074,16 +17074,6 @@ def determine_row_data(game_data, player_type, player_data, player_id, current_t
     if not player:
         return None
 
-    if player_type["da_type"] == "Batter":
-        row_data["Pos"] = ""
-        for position in player["allPositions"]:
-            if position["abbreviation"] in ["PH", "PR"]:
-                row_data["Pos"] += "H"
-            else:
-                row_data["Pos"] += position_map_reversed[position["abbreviation"]]
-        if "battingOrder" in player:
-            row_data["BOP"] = int(player["battingOrder"][0])
-
     if "fielding" in player["stats"] and player["stats"]["fielding"]:
         game = player["stats"]["fielding"]
         row_data["PutOut"] = game["putOuts"]
@@ -17402,11 +17392,27 @@ def determine_row_data(game_data, player_type, player_data, player_id, current_t
                     if not stat_obj["time_frame"] or not (stat_obj["time_frame"]["qual_type"] == "Seasons" or stat_obj["time_frame"]["qual_type"] == "Teams"):
                         is_qual_match = True
 
+    is_season_qual = False
     if time_frame["type"] == "date" and (isinstance(time_frame["time_start"], int) or isinstance(time_frame["time_end"], int)):
         year = row_data["Year"]
         if not is_qual_match:
             row_data["Date"] = year
             row_data["DateTime"] = year
+            is_season_qual = True
+
+    if player_type["da_type"] == "Batter":
+        row_data["Pos"] = ""
+        for position in player["allPositions"]:
+            if is_season_qual:
+                if position["abbreviation"] in ["PH", "PR"]:
+                    row_data["Pos"] += "H"
+                else:
+                    row_data["Pos"] += position_map_reversed[position["abbreviation"]]
+            else:
+                row_data["Pos"] += position["abbreviation"] + " "
+        row_data["Pos"].strip()
+        if "battingOrder" in player:
+            row_data["BOP"] = int(player["battingOrder"][0])
 
     return row_data
 
