@@ -38805,7 +38805,7 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
                 else:
                     is_team_batting = True if is_top_inning else False
                 
-                for runner in reversed(scoring_play["runners"]):
+                for runner in scoring_play["runners"]:
                     if runner["details"]["isScoringEvent"]:
                         sub_play_index = runner["details"]["playIndex"]
                         sub_play = scoring_play["playEvents"][sub_play_index]
@@ -40362,7 +40362,7 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
                 sub_current_home_score = sub_home_score
                 sub_current_away_score = sub_away_score
                 sub_play_outs = sub_outs
-                for sub_runner_index, sub_runner in enumerate(reversed(scoring_play["runners"])):
+                for sub_runner_index, sub_runner in enumerate(scoring_play["runners"]):
                     sub_runner_index = len(scoring_play["runners"]) - sub_runner_index - 1
                     if sub_runner["details"]["playIndex"] == sub_play_index:
                         if sub_runner["movement"]["isOut"]:
