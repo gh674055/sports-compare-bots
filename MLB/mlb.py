@@ -31960,7 +31960,7 @@ def add_row_numbers(row, at_bat_event, event_name, qualifiers, player_type):
                         if at_bat_event["is_winning_rbi"] and is_winning_rbi:
                             row["GWRBI"] += 1
                     if is_driven_in:
-                        row["GWDrivenIn"] += 1
+                        row["DrivenIn"] += 1
                         if at_bat_event["is_winning_driven_in"] and is_winning_driven_in:
                             row["GWDrivenIn"] += 1
                 else:
