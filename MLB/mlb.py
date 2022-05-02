@@ -38648,9 +38648,8 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
 
             runners_in_order = []
             own_runners = []
-            actual_batter = scoring_play["matchup"]["actual_batter"] if "actual_batter" in scoring_play["matchup"] else scoring_play["matchup"]["batter"]["id"]
             for runner in scoring_play["runners"]:
-                if runner["details"]["runner"]["id"] == actual_batter:
+                if runner["details"]["runner"]["id"] == scoring_play["matchup"]["batter"]["id"]:
                     own_runners.append(runner)
                 else:
                     runners_in_order.append(runner)
