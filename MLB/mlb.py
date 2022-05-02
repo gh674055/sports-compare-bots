@@ -27784,6 +27784,8 @@ def handle_mlb_game_stats(all_rows, has_count_stat, qualifiers, player_data, pla
                                 if pos in qual_str or other_pos in qual_str:
                                     has_match = True
                                     break
+                        else:
+                            has_match = True
             if not has_match:
                 games_to_skip.add(row_data["GameLink"])
     for qual in ["Event Stat", "Event Stat Reversed", "Event Stats", "Event Stats Reversed", "Starting Event Stat", "Starting Event Stat Reversed", "Starting Event Stats", "Starting Event Stats Reversed", "Game Event Stat", "Game Event Stat Reversed", "Game Event Stats", "Game Event Stats Reversed", "Starting Game Event Stat", "Starting Game Event Stat Reversed", "Starting Game Event Stats", "Starting Game Event Stats Reversed"]:
@@ -28166,6 +28168,8 @@ def handle_mlb_game_stats_single_thread(all_rows, has_count_stat, qualifiers, pl
                                 if pos in qual_str or other_pos in qual_str:
                                     has_match = True
                                     break
+                        else:
+                            has_match = True
             if not has_match:
                 games_to_skip.add(row_data["GameLink"])
     for qual in ["Event Stat", "Event Stat Reversed", "Event Stats", "Event Stats Reversed", "Starting Event Stat", "Starting Event Stat Reversed", "Starting Event Stats", "Starting Event Stats Reversed", "Game Event Stat", "Game Event Stat Reversed", "Game Event Stats", "Game Event Stats Reversed", "Starting Game Event Stat", "Starting Game Event Stat Reversed", "Starting Game Event Stats", "Starting Game Event Stats Reversed"]:
