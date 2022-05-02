@@ -27767,6 +27767,25 @@ def handle_mlb_game_stats(all_rows, has_count_stat, qualifiers, player_data, pla
                 
             if not has_match:
                 games_to_skip.add(row_data["GameLink"])
+    if "Position" in qualifiers:
+        for row_data in all_rows:
+            has_match = False
+            if "Pos" in row_data:
+                qual_str = re.split(r"\s+", row_data["Pos"].replace("*", "").replace("/", ""))
+                if qual_str:
+                    for qual_object in qualifiers["Position"]:
+                        if not qual_object["negate"]:
+                            has_match = False
+                            for pos in qual_object["values"]:
+                                pos = pos.upper()
+                                other_pos = pos
+                                if pos in position_map:
+                                    other_pos = position_map[pos]
+                                if pos in qual_str or other_pos in qual_str:
+                                    has_match = True
+                                    break
+            if not has_match:
+                games_to_skip.add(row_data["GameLink"])
     for qual in ["Event Stat", "Event Stat Reversed", "Event Stats", "Event Stats Reversed", "Starting Event Stat", "Starting Event Stat Reversed", "Starting Event Stats", "Starting Event Stats Reversed", "Game Event Stat", "Game Event Stat Reversed", "Game Event Stats", "Game Event Stats Reversed", "Starting Game Event Stat", "Starting Game Event Stat Reversed", "Starting Game Event Stats", "Starting Game Event Stats Reversed"]:
         handle_event_stats(qual, all_rows, games_to_skip, qualifiers, player_type, player_data)
 
@@ -28128,6 +28147,25 @@ def handle_mlb_game_stats_single_thread(all_rows, has_count_stat, qualifiers, pl
                 else:
                     has_match = True
                 
+            if not has_match:
+                games_to_skip.add(row_data["GameLink"])
+    if "Position" in qualifiers:
+        for row_data in all_rows:
+            has_match = False
+            if "Pos" in row_data:
+                qual_str = re.split(r"\s+", row_data["Pos"].replace("*", "").replace("/", ""))
+                if qual_str:
+                    for qual_object in qualifiers["Position"]:
+                        if not qual_object["negate"]:
+                            has_match = False
+                            for pos in qual_object["values"]:
+                                pos = pos.upper()
+                                other_pos = pos
+                                if pos in position_map:
+                                    other_pos = position_map[pos]
+                                if pos in qual_str or other_pos in qual_str:
+                                    has_match = True
+                                    break
             if not has_match:
                 games_to_skip.add(row_data["GameLink"])
     for qual in ["Event Stat", "Event Stat Reversed", "Event Stats", "Event Stats Reversed", "Starting Event Stat", "Starting Event Stat Reversed", "Starting Event Stats", "Starting Event Stats Reversed", "Game Event Stat", "Game Event Stat Reversed", "Game Event Stats", "Game Event Stats Reversed", "Starting Game Event Stat", "Starting Game Event Stat Reversed", "Starting Game Event Stats", "Starting Game Event Stats Reversed"]:
