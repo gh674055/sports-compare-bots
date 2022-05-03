@@ -6547,6 +6547,7 @@ advanced_stats = {
 team_renames = {
     "los angeles angels of anaheim" : "los angeles angels",
     "california angels" : "los angeles angels",
+    "anaheim angels" : "los angeles angels",
     "brooklyn dodgers" : "los angeles dodgers",
     "tampa bay devil rays" : "tampa bay rays",
     "florida marlins" : "miami marlins"
