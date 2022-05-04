@@ -13436,7 +13436,7 @@ def sub_handle_the_quals(players, qualifier, real_player_type, qual_str, player_
         if "On Field" in qual_str:
             is_raw_query = bool("Sub Query" in qual_str or re.search(r"(?<!\\)]", unescape_string(player_str["value"])) or re.search(r"(?<!\\)}", unescape_string(player_str["value"])))
         else:
-            is_raw_query = bool("Sub Query" in qual_str or re.search(r"(?<!\\)]", unescape_string(player_str)) or re.search(r"(?<!\\)}", unescape_string(player_str["value"])))
+            is_raw_query = bool("Sub Query" in qual_str or re.search(r"(?<!\\)]", unescape_string(player_str)) or re.search(r"(?<!\\)}", unescape_string(player_str)))
 
     og_player_str = player_str
 
