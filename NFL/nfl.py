@@ -6154,7 +6154,9 @@ def determine_player_str(qualifier, player_str, time_frame, qual_str):
     player_str = "!nflcompare " + player_str
 
     if "values" in qualifier:
-        if not re.search(r"(?<!\\)]", player_str):
+        if re.search(r"(?<!\\)}", player_str):
+            player_str = re.sub(r"(?<!\\)}", "]", re.sub(r"(?<!\\){", "[", player_str))
+        elif not re.search(r"(?<!\\)]", player_str):
             player_str += " []"
 
         if time_frame["playoffs"] and time_frame["playoffs"] != "No" and not re.search(r"\b(no(?:t|n)?(?: -)?)?(?:(?<!-)includes?|(?<!-)including|(?<!-)and|(?<!-)with)(?: |-)?(?:playoffs?|post(?:-| )?seasons?|regular(?:-| )?seasons?)(?!-)\b", player_str) and not re.search(r"\b(no(?:t|n)?(?: -)?)?(?:playoffs?|post(?:-| )?seasons?|regular(?:-| )?seasons?)(?!-)\b", player_str):
