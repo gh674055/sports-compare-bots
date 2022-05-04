@@ -16087,7 +16087,7 @@ def handle_multi_player_data(player_id, time_frames, player_type, player_page, r
         logger.info("#" + str(threading.get_ident()) + "#   " + "Starting player " + player_id)
         if ("Facing Former Team" in time_frame["qualifiers"] or "Facing Former Franchise" in time_frame["qualifiers"] or "With New Team" in time_frame["qualifiers"] or "With New Franchise" in time_frame["qualifiers"]) and not "valid_teams_order" in player_data:
             get_team_map_info(player_data, player_type, valid_teams_raw_key, comment_obj)
-        if ("Game After Sub Query" in time_frame["qualifiers"] or "Game Before Sub Query" in time_frame["qualifiers"] or "Games Rest" in time_frame["qualifiers"] or "Starts Rest" in time_frame["qualifiers"] or "Games In A Row" in time_frame["qualifiers"] or "Starts In A Row" in time_frame["qualifiers"] or "Game Days Rest" in time_frame["qualifiers"] or "Start Days Rest" in time_frame["qualifiers"] or "Start Days In A Row" in time_frame["qualifiers"] or "Game Days In A Row" in time_frame["qualifiers"] or "Days Rest" in time_frame["qualifiers"] or "Starts Days Rest" in time_frame["qualifiers"] or "Upcoming Days Rest" in time_frame["qualifiers"] or "Upcoming Starts Days Rest" in time_frame["qualifiers"]) and not "all_games" in player_data:
+        if ("Game After Sub Query" in time_frame["qualifiers"] or "Game Before Sub Query" in time_frame["qualifiers"] or "Games Rest" in time_frame["qualifiers"] or "Starts Rest" in time_frame["qualifiers"] or "Days In A Row" in time_frame["qualifiers"] or "Games In A Row" in time_frame["qualifiers"] or "Starts In A Row" in time_frame["qualifiers"] or "Game Days Rest" in time_frame["qualifiers"] or "Start Days Rest" in time_frame["qualifiers"] or "Start Days In A Row" in time_frame["qualifiers"] or "Game Days In A Row" in time_frame["qualifiers"] or "Days Rest" in time_frame["qualifiers"] or "Starts Days Rest" in time_frame["qualifiers"] or "Upcoming Days Rest" in time_frame["qualifiers"] or "Upcoming Starts Days Rest" in time_frame["qualifiers"]) and not "all_games" in player_data:
             get_all_games(player_data, time_frame, player_type, comment_obj)
         row, missing_games, missing_toi = handle_player_data(player_data, time_frame, player_type, player_page, valid_teams, valid_year_teams, skip_games, extra_stats)
 
@@ -31688,7 +31688,7 @@ def perform_qualifier(player_data, player_type, row, time_frame, all_rows):
                 days_in_a_row += 1
                 date_to_check -= datetime.timedelta(days=1)
 
-        for qual_object in qualifiers["Days Rest"]:
+        for qual_object in qualifiers["Days In A Row"]:
             if qual_object["negate"]:
                 if days_in_a_row >= qual_object["values"]["start_val"] and days_in_a_row <= qual_object["values"]["end_val"]:
                     return False
