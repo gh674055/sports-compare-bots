@@ -13918,7 +13918,7 @@ def sub_handle_the_quals(players, qualifier, qual_str, player_str, time_frame, k
 
     is_raw_query = False
     if "time_frame_str" not in qualifier:
-        is_raw_query = bool("Sub Query" in qual_str or re.search(r"(?<!\\)]", unescape_string(player_str)))
+        is_raw_query = bool("Sub Query" in qual_str or re.search(r"(?<!\\)]" or re.search(r"(?<!\\)}", unescape_string(player_str)))
 
     player_str = determine_player_str(qualifier, player_str, time_frame, qual_str)
 
