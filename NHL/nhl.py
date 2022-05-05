@@ -23063,11 +23063,11 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
                 game_data["missed_shot_against"].append({**shared_data , **{
                     "scorer" : scorer,
                     "penaltyShot" : next_shot_penalty_shot,
-                    "oppSide" : None if scorer not in game_data["player_side_map"] else game_data["player_side_map"][scorer],
-                    "oppFirstName" : game_data["player_first_name_map"][scorer],
-                    "oppLastName" : game_data["player_last_name_map"][scorer],
-                    "oppBirthCountry" : game_data["player_birth_country_map"][scorer] if scorer in game_data["player_birth_country_map"] else None,
-                    "oppNationality" : game_data["player_nationality_map"][scorer] if scorer in game_data["player_nationality_map"] else None
+                    "oppSide" : None if not scorer or scorer not in game_data["player_side_map"] else game_data["player_side_map"][scorer],
+                    "oppFirstName" : game_data["player_first_name_map"][scorer] if scorer else None,
+                    "oppLastName" : game_data["player_last_name_map"][scorer] if scorer else None,
+                    "oppBirthCountry" : game_data["player_birth_country_map"][scorer] if scorer and scorer in game_data["player_birth_country_map"] else None,
+                    "oppNationality" : game_data["player_nationality_map"][scorer] if scorer and scorer in game_data["player_nationality_map"] else None
                 }})
 
             if game_data["player_shift_data"] or team_on_ice:
