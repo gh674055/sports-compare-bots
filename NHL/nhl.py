@@ -12625,34 +12625,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                     time_frame_type = "season-range"
                                 
                                 if time_frame_type == "special-qual":
-                                    qualifier_obj = {}
-                                    qualifier_obj["negate"] = False
-                                    qual_str = "Season Index" if (unit.startswith("season") or time_frame_type == "special-qual") else "Dates"
-                                    if qual_str == "Season Index":
-                                        qual_str = "Season Index Reversed" if time_start == None and compare_type != "special" else "Season Index"
-                                        if not time_start or not time_end:
-                                            time_end = time_start if time_start else time_end
-                                            if compare_type != "special":
-                                                time_start = 1
-                                            else:
-                                                time_start = time_end
-                                        qualifier_obj["values"] = {
-                                            "start_val" : time_start,
-                                            "end_val" : time_end
-                                        }
-                                    else:
-                                        qualifier_obj["values"] = [{
-                                            "start_val" : time_start,
-                                            "end_val" : time_end
-                                        }]
-
-                                    if not qual_str in qualifiers:
-                                        qualifiers[qual_str] = []
-                                    qualifiers[qual_str].append(qualifier_obj)
-
-                                    time_start = datetime.date.min.year
-                                    time_end = current_season
-                                    time_frame_type = "date"
+                                    time_frame_type = "season"
 
                                 time_frame = re.sub(r"\s+", " ", time_frame.replace(last_match.group(0), "", 1)).strip()
 
@@ -12739,7 +12712,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                         time_start = datetime.date(year=time_start, month=1, day=1)
                                     elif isinstance(time_end, int) and not isinstance(time_start, int):
                                         time_end = datetime.date(year=time_end, month=12, day=31)
-                                            
+                        
                         da_time_frames.append({
                             "time_start" : time_start,
                             "time_end" : time_end,
@@ -13863,7 +13836,7 @@ def handle_same_games_qual(names, player_type, time_frames, comment_obj, extra_s
 
                         time_frame["time_start"] = time_start
                         time_frame["time_end"] = time_end
-                        time_frame["type"] = "seasons"
+                        time_frame["type"] = "season"
                     else:
                         if new_qual_type == "Age":
                             compare_str = ""
@@ -36526,8 +36499,10 @@ def handle_schedule_stats(player_data, all_rows, qualifiers, is_playoffs, missin
         all_rows_order = []
         for season_obj in team_schedule[da_year]:
             da_games = []
-            da_games += season_obj["regular_season"]
-            da_games += season_obj["playoffs"]
+            if is_playoffs != "Only":
+                da_games += season_obj["regular_season"]
+            if is_playoffs:
+                da_games += season_obj["playoffs"]
             for data in da_games:
                 all_rows_order.append(data)
     
