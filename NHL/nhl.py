@@ -13058,8 +13058,8 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 player_str_set.add(player_str)
             name_count += len(subbb_date) - 1
 
-    if name_count > 20:
-        raise CustomMessageException("You can only compare a max of 20 players!")
+    if name_count > 30:
+        raise CustomMessageException("You can only compare a max of 30 players!")
 
     if sub_name_count > 30:
         raise CustomMessageException("You can only have a max of 30 sub-players!")
