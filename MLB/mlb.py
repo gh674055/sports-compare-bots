@@ -6370,6 +6370,14 @@ qualifier_map = {
     "Man On First" : {},
     "Man On Second" : {},
     "Man On Third" : {},
+    "Teammate On First" : {},
+    "Teammate On Second" : {},
+    "Teammate On Third" : {},
+    "Teammate On Base" : {},
+    "Opponent On First" : {},
+    "Opponent On Second" : {},
+    "Opponent On Third" : {},
+    "Opponent On Base" : {},
     "Inherited" : {},
     "Outs" : {},
     "Outs Remaining" : {},
@@ -7261,7 +7269,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
 
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
 
-                        last_match = re.finditer(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?((?:w|(?:playing|starting)-with|a|(?:playing|starting)-against|(?:playing|starting)-same-game|prv-w|previous-playing-with|prv-a|previous-playing-against|upc-w|upcoming-playing-with|upc-a|upcoming-playing-against|(?:playing|starting)-same-opponents?|(?:playing|starting)-same-dates?|holidays?|dts|dates|stadium|exact-stadium|arena|exact-arena|pitch-type|exact-pitch-type|hit-trajectory|hit-hardness|opponent-city|opponent-exact-city|team-city|team-exact-city|city|exact-city|event-description|exact-event-description|surface|condition|exact-home-plate-umpire|exact-umpire|home-plate-umpire|umpire|exact-home-plate-official|exact-official|home-plate-official|official|batting-against|pitching-against|batting-against-first-or-birth-name|pitching-against-first-or-birth-name|batting-against-birth-or-first-name|pitching-against-birth-or-first-name|batting-against-birth-name|pitching-against-birth-name|batting-against-first-name|pitching-against-first-name|batting-against-last-name|pitching-against-last-name|batting-against-birth-country|pitching-against-birth-country|facing|facing-first-or-birth-name|facing-birth-or-first-name|facing-birth-name|facing-first-name|facing-last-name|facing-birth-country|driven-in|batted-in|back-to-back-with|back-to-back|batting-in-front-of|batting-in-front|batting-ahead|batting-ahead-of|batting-behind|batting-behind-of|batting-next-to|caught-by|stealing-on|on-field-with|on-field-against|event-time|start-time):(?<!\\)\(.*?(?<!\\)\))", time_frame)
+                        last_match = re.finditer(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?((?:w|(?:playing|starting)-with|a|(?:playing|starting)-against|(?:playing|starting)-same-game|prv-w|previous-playing-with|prv-a|previous-playing-against|upc-w|upcoming-playing-with|upc-a|upcoming-playing-against|(?:playing|starting)-same-opponents?|(?:playing|starting)-same-dates?|holidays?|dts|dates|stadium|exact-stadium|arena|exact-arena|pitch-type|exact-pitch-type|hit-trajectory|hit-hardness|opponent-city|opponent-exact-city|team-city|team-exact-city|city|exact-city|event-description|exact-event-description|surface|condition|exact-home-plate-umpire|exact-umpire|home-plate-umpire|umpire|exact-home-plate-official|exact-official|home-plate-official|official|teammate-on-first|teammate-on-second|teammate-on-third|teammate-on-base|opponent-on-first|opponent-on-second|opponent-on-third|opponent-on-base|batting-against|pitching-against|batting-against-first-or-birth-name|pitching-against-first-or-birth-name|batting-against-birth-or-first-name|pitching-against-birth-or-first-name|batting-against-birth-name|pitching-against-birth-name|batting-against-first-name|pitching-against-first-name|batting-against-last-name|pitching-against-last-name|batting-against-birth-country|pitching-against-birth-country|facing|facing-first-or-birth-name|facing-birth-or-first-name|facing-birth-name|facing-first-name|facing-last-name|facing-birth-country|driven-in|batted-in|back-to-back-with|back-to-back|batting-in-front-of|batting-in-front|batting-ahead|batting-ahead-of|batting-behind|batting-behind-of|batting-next-to|caught-by|stealing-on|on-field-with|on-field-against|event-time|start-time):(?<!\\)\(.*?(?<!\\)\))", time_frame)
                         for m in last_match:
                             qualifier_obj = {}
                             negate_str = m.group(1)
@@ -7484,6 +7492,46 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 qual_str = "batting-next-to:"
                                 qual_type = "Batting Next To"
                                 player_type["da_type"] = "Batter"
+                                extra_stats.add("current-stats")
+                            elif qualifier_str.startswith("teammate-on-first:"):
+                                qual_str = "teammate-on-first:"
+                                qual_type = "Teammate On First"
+                                player_type["da_type"] = "Batter"
+                                extra_stats.add("current-stats")
+                            elif qualifier_str.startswith("teammate-on-second:"):
+                                qual_str = "teammate-on-second:"
+                                qual_type = "Teammate On Second"
+                                player_type["da_type"] = "Batter"
+                                extra_stats.add("current-stats")
+                            elif qualifier_str.startswith("teammate-on-third:"):
+                                qual_str = "teammate-on-third:"
+                                qual_type = "Teammate On Third"
+                                player_type["da_type"] = "Batter"
+                                extra_stats.add("current-stats")
+                            elif qualifier_str.startswith("teammate-on-base:"):
+                                qual_str = "teammate-on-base:"
+                                qual_type = "Teammate On Base"
+                                player_type["da_type"] = "Batter"
+                                extra_stats.add("current-stats")
+                            elif qualifier_str.startswith("opponent-on-first:"):
+                                qual_str = "opponent-on-first:"
+                                qual_type = "Opponent On First"
+                                player_type["da_type"] = "Pitcher"
+                                extra_stats.add("current-stats")
+                            elif qualifier_str.startswith("opponent-on-second:"):
+                                qual_str = "opponent-on-second:"
+                                qual_type = "Opponent On Second"
+                                player_type["da_type"] = "Pitcher"
+                                extra_stats.add("current-stats")
+                            elif qualifier_str.startswith("opponent-on-third:"):
+                                qual_str = "opponent-on-third:"
+                                qual_type = "Opponent On Third"
+                                player_type["da_type"] = "Pitcher"
+                                extra_stats.add("current-stats")
+                            elif qualifier_str.startswith("opponent-on-base:"):
+                                qual_str = "opponent-on-base:"
+                                qual_type = "Opponent On Base"
+                                player_type["da_type"] = "Pitcher"
                                 extra_stats.add("current-stats")
                             elif qualifier_str.startswith("caught-by:"):
                                 qual_str = "caught-by:"
@@ -11414,7 +11462,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
 
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
                         
-                        last_match = re.finditer(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?((?:(?:playing|starting)-with|(?:playing|starting)-against|(?:playing|starting)-same-game|prv-w|previous-playing-with|prv-a|previous-playing-against|upc-w|upcoming-playing-with|upc-a|upcoming-playing-against|(?:playing|starting)-same-opponents?|(?:playing|starting)-same-dates?|batting-against|pitching-against|facing|driven-in|batted-in|back-to-back-with|back-to-back|batting-in-front-of|batting-in-front|batting-ahead|batting-ahead-of|batting-behind|batting-behind-of|batting-next-to|caught-by|stealing-on|on-field-with|on-field-against))\b", time_frame)
+                        last_match = re.finditer(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?((?:(?:playing|starting)-with|(?:playing|starting)-against|(?:playing|starting)-same-game|prv-w|previous-playing-with|prv-a|previous-playing-against|upc-w|upcoming-playing-with|upc-a|upcoming-playing-against|(?:playing|starting)-same-opponents?|(?:playing|starting)-same-dates?|teammate-on-first|teammate-on-second|teammate-on-third|teammate-on-base|opponent-on-first|opponent-on-second|opponent-on-third|opponent-on-base|batting-against|pitching-against|facing|driven-in|batted-in|back-to-back-with|back-to-back|batting-in-front-of|batting-in-front|batting-ahead|batting-ahead-of|batting-behind|batting-behind-of|batting-next-to|caught-by|stealing-on|on-field-with|on-field-against))\b", time_frame)
                         for m in last_match:
                             qualifier_obj = {}
                             negate_str = m.group(1)
@@ -11567,6 +11615,46 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 elif qualifier_str.startswith("on-field-against"):
                                     qual_str = "on-field-against"
                                     qual_type = "On Field Against"
+                                    extra_stats.add("current-stats")
+                                elif qualifier_str.startswith("teammate-on-first"):
+                                    qual_str = "teammate-on-first"
+                                    qual_type = "Teammate On First"
+                                    player_type["da_type"] = "Batter"
+                                    extra_stats.add("current-stats")
+                                elif qualifier_str.startswith("teammate-on-second"):
+                                    qual_str = "teammate-on-second"
+                                    qual_type = "Teammate On Second"
+                                    player_type["da_type"] = "Batter"
+                                    extra_stats.add("current-stats")
+                                elif qualifier_str.startswith("teammate-on-third"):
+                                    qual_str = "teammate-on-third"
+                                    qual_type = "Teammate On Third"
+                                    player_type["da_type"] = "Batter"
+                                    extra_stats.add("current-stats")
+                                elif qualifier_str.startswith("teammate-on-base"):
+                                    qual_str = "teammate-on-base"
+                                    qual_type = "Teammate On Base"
+                                    player_type["da_type"] = "Batter"
+                                    extra_stats.add("current-stats")
+                                elif qualifier_str.startswith("opponent-on-first"):
+                                    qual_str = "opponent-on-first"
+                                    qual_type = "Opponent On First"
+                                    player_type["da_type"] = "Pitcher"
+                                    extra_stats.add("current-stats")
+                                elif qualifier_str.startswith("opponent-on-second"):
+                                    qual_str = "opponent-on-second"
+                                    qual_type = "Opponent On Second"
+                                    player_type["da_type"] = "Pitcher"
+                                    extra_stats.add("current-stats")
+                                elif qualifier_str.startswith("opponent-on-third"):
+                                    qual_str = "opponent-on-third"
+                                    qual_type = "Opponent On Third"
+                                    player_type["da_type"] = "Pitcher"
+                                    extra_stats.add("current-stats")
+                                elif qualifier_str.startswith("opponent-on-base"):
+                                    qual_str = "opponent-on-base"
+                                    qual_type = "Opponent On Base"
+                                    player_type["da_type"] = "Pitcher"
                                     extra_stats.add("current-stats")
                                 elif qualifier_str.startswith("playing-same-game"):
                                     qual_str = "playing-same-game:"
@@ -12618,6 +12706,87 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                             if player_str not in player_str_set:
                                 sub_name_count += 1
                                 player_str_set.add(player_str)
+                if "Teammate On First" in subbbb_date["qualifiers"]:
+                    for qual in subbbb_date["qualifiers"]["Teammate On First"]:
+                        if "time_frame_str" in qual:
+                            continue
+                        for player_str in (qual["values"] if "values" in qual else subb_names_against):
+                            player_str = determine_player_str(qual, player_type, player_str, subbbb_date, "Teammate On First")
+                            if player_str not in player_str_set:
+                                sub_name_count += 1
+                                player_str_set.add(player_str)
+                if "Teammate On First" in subbbb_date["qualifiers"]:
+                    for qual in subbbb_date["qualifiers"]["Teammate On First"]:
+                        if "time_frame_str" in qual:
+                            continue
+                        for player_str in (qual["values"] if "values" in qual else subb_names_against):
+                            player_str = determine_player_str(qual, player_type, player_str, subbbb_date, "Teammate On First")
+                            if player_str not in player_str_set:
+                                sub_name_count += 1
+                                player_str_set.add(player_str)
+                if "Teammate On Second" in subbbb_date["qualifiers"]:
+                    for qual in subbbb_date["qualifiers"]["Teammate On Second"]:
+                        if "time_frame_str" in qual:
+                            continue
+                        for player_str in (qual["values"] if "values" in qual else subb_names_against):
+                            player_str = determine_player_str(qual, player_type, player_str, subbbb_date, "Teammate On Second")
+                            if player_str not in player_str_set:
+                                sub_name_count += 1
+                                player_str_set.add(player_str)
+                if "Teammate On Third" in subbbb_date["qualifiers"]:
+                    for qual in subbbb_date["qualifiers"]["Teammate On Third"]:
+                        if "time_frame_str" in qual:
+                            continue
+                        for player_str in (qual["values"] if "values" in qual else subb_names_against):
+                            player_str = determine_player_str(qual, player_type, player_str, subbbb_date, "Teammate On Third")
+                            if player_str not in player_str_set:
+                                sub_name_count += 1
+                                player_str_set.add(player_str)
+                if "Teammate On Base" in subbbb_date["qualifiers"]:
+                    for qual in subbbb_date["qualifiers"]["Teammate On Base"]:
+                        if "time_frame_str" in qual:
+                            continue
+                        for player_str in (qual["values"] if "values" in qual else subb_names_against):
+                            player_str = determine_player_str(qual, player_type, player_str, subbbb_date, "Teammate On Base")
+                            if player_str not in player_str_set:
+                                sub_name_count += 1
+                                player_str_set.add(player_str)
+                if "Opponent On First" in subbbb_date["qualifiers"]:
+                    for qual in subbbb_date["qualifiers"]["Opponent On First"]:
+                        if "time_frame_str" in qual:
+                            continue
+                        for player_str in (qual["values"] if "values" in qual else subb_names_against):
+                            player_str = determine_player_str(qual, player_type, player_str, subbbb_date, "Opponent On First")
+                            if player_str not in player_str_set:
+                                sub_name_count += 1
+                                player_str_set.add(player_str)
+                if "Opponent On Second" in subbbb_date["qualifiers"]:
+                    for qual in subbbb_date["qualifiers"]["Opponent On Second"]:
+                        if "time_frame_str" in qual:
+                            continue
+                        for player_str in (qual["values"] if "values" in qual else subb_names_against):
+                            player_str = determine_player_str(qual, player_type, player_str, subbbb_date, "Opponent On Second")
+                            if player_str not in player_str_set:
+                                sub_name_count += 1
+                                player_str_set.add(player_str)
+                if "Opponent On Third" in subbbb_date["qualifiers"]:
+                    for qual in subbbb_date["qualifiers"]["Opponent On Third"]:
+                        if "time_frame_str" in qual:
+                            continue
+                        for player_str in (qual["values"] if "values" in qual else subb_names_against):
+                            player_str = determine_player_str(qual, player_type, player_str, subbbb_date, "Opponent On Third")
+                            if player_str not in player_str_set:
+                                sub_name_count += 1
+                                player_str_set.add(player_str)
+                if "Opponent On Base" in subbbb_date["qualifiers"]:
+                    for qual in subbbb_date["qualifiers"]["Opponent On Base"]:
+                        if "time_frame_str" in qual:
+                            continue
+                        for player_str in (qual["values"] if "values" in qual else subb_names_against):
+                            player_str = determine_player_str(qual, player_type, player_str, subbbb_date, "Opponent On Base")
+                            if player_str not in player_str_set:
+                                sub_name_count += 1
+                                player_str_set.add(player_str)
                 if "On Field With" in subbbb_date["qualifiers"]:
                     for qual in subbbb_date["qualifiers"]["On Field With"]:
                         if "time_frame_str" in qual:
@@ -13268,6 +13437,22 @@ def handle_against_qual(names, time_frames, player_type, comment_obj, extra_stat
                     handle_the_quals(time_frame["qualifiers"], player_type, "Caught By", subb_names_with, time_frame, "Tm", comment_obj, players_map, extra_stats)
                 if "Stealing On" in time_frame["qualifiers"]:
                     handle_the_quals(time_frame["qualifiers"], player_type, "Stealing On", subb_names_with, time_frame, "Opponent", comment_obj, players_map, extra_stats)
+                if "Teammate On First" in time_frame["qualifiers"]:
+                    handle_the_quals(time_frame["qualifiers"], player_type, "Teammate On First", subb_names_against, time_frame, "Tm", comment_obj, players_map, extra_stats)
+                if "Teammate On Second" in time_frame["qualifiers"]:
+                    handle_the_quals(time_frame["qualifiers"], player_type, "Teammate On Second", subb_names_against, time_frame, "Tm", comment_obj, players_map, extra_stats)
+                if "Teammate On Third" in time_frame["qualifiers"]:
+                    handle_the_quals(time_frame["qualifiers"], player_type, "Teammate On Third", subb_names_against, time_frame, "Tm", comment_obj, players_map, extra_stats)
+                if "Teammate On Base" in time_frame["qualifiers"]:
+                    handle_the_quals(time_frame["qualifiers"], player_type, "Teammate On Base", subb_names_against, time_frame, "Tm", comment_obj, players_map, extra_stats)
+                if "Opponent On First" in time_frame["qualifiers"]:
+                    handle_the_quals(time_frame["qualifiers"], player_type, "Opponent On First", subb_names_against, time_frame, "Opponent", comment_obj, players_map, extra_stats)
+                if "Opponent On Second" in time_frame["qualifiers"]:
+                    handle_the_quals(time_frame["qualifiers"], player_type, "Opponent On Second", subb_names_against, time_frame, "Opponent", comment_obj, players_map, extra_stats)
+                if "Opponent On Third" in time_frame["qualifiers"]:
+                    handle_the_quals(time_frame["qualifiers"], player_type, "Opponent On Third", subb_names_against, time_frame, "Opponent", comment_obj, players_map, extra_stats)
+                if "Opponent On Base" in time_frame["qualifiers"]:
+                    handle_the_quals(time_frame["qualifiers"], player_type, "Opponent On Base", subb_names_against, time_frame, "Opponent", comment_obj, players_map, extra_stats)
                 if "On Field With" in time_frame["qualifiers"]:
                     handle_the_quals(time_frame["qualifiers"], player_type, "On Field With", subb_names_with, time_frame, "Tm", comment_obj, players_map, extra_stats)
                 if "On Field Against" in time_frame["qualifiers"]:
@@ -13571,7 +13756,7 @@ def determine_player_str(qualifier, player_type, player_str, time_frame, qual_st
         bracket_index = re.search(r"(?<!\\)]", player_str).start()
         player_str = player_str[:bracket_index] + " force-dates" + player_str[bracket_index:]
 
-    if qual_str in ["Driven In", "Batted In", "Back To Back With", "Batting In Front Of", "Batting Behind", "Batting Next To", "Caught By", "Stealing On", "Pitching Against", "Day After Hitting", "Day Before Hitting"]:
+    if qual_str in ["Driven In", "Batted In", "Back To Back With", "Batting In Front Of", "Batting Behind", "Batting Next To", "Caught By", "Stealing On", "Pitching Against", "Day After Hitting", "Day Before Hitting", "Teammate On First", "Teammate On Second", "Teammate On Third", "Teammate On Base", "Opponent On First", "Opponent On Second", "Opponent On Third", "Opponent On Base"]:
         bracket_index = re.search(r"(?<!\\)]", player_str).start()
         player_str = player_str[:bracket_index] + " batting" + player_str[bracket_index:]
     elif qual_str in ["Batting Against", "Day After Pitching", "Day Before Pitching"]:
@@ -14275,6 +14460,78 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
                             any_missing_inf = True
             if "Stealing On" in time_frame["qualifiers"]:
                 for qualifier in time_frame["qualifiers"]["Stealing On"]:
+                    for player in qualifier["values"]:
+                        any_missing_games += player["missing_games"]
+                        any_missing_pitch += player["missing_pitch"]
+                        if player["missing_salary"]:
+                            any_missing_salary = True
+                        if player["missing_inf"]:
+                            any_missing_inf = True
+            if "Teammate On First" in time_frame["qualifiers"]:
+                for qualifier in time_frame["qualifiers"]["Teammate On First"]:
+                    for player in qualifier["values"]:
+                        any_missing_games += player["missing_games"]
+                        any_missing_pitch += player["missing_pitch"]
+                        if player["missing_salary"]:
+                            any_missing_salary = True
+                        if player["missing_inf"]:
+                            any_missing_inf = True
+            if "Teammate On Second" in time_frame["qualifiers"]:
+                for qualifier in time_frame["qualifiers"]["Teammate On Second"]:
+                    for player in qualifier["values"]:
+                        any_missing_games += player["missing_games"]
+                        any_missing_pitch += player["missing_pitch"]
+                        if player["missing_salary"]:
+                            any_missing_salary = True
+                        if player["missing_inf"]:
+                            any_missing_inf = True
+            if "Teammate On Third" in time_frame["qualifiers"]:
+                for qualifier in time_frame["qualifiers"]["Teammate On Third"]:
+                    for player in qualifier["values"]:
+                        any_missing_games += player["missing_games"]
+                        any_missing_pitch += player["missing_pitch"]
+                        if player["missing_salary"]:
+                            any_missing_salary = True
+                        if player["missing_inf"]:
+                            any_missing_inf = True
+            if "Teammate On Base" in time_frame["qualifiers"]:
+                for qualifier in time_frame["qualifiers"]["Teammate On Base"]:
+                    for player in qualifier["values"]:
+                        any_missing_games += player["missing_games"]
+                        any_missing_pitch += player["missing_pitch"]
+                        if player["missing_salary"]:
+                            any_missing_salary = True
+                        if player["missing_inf"]:
+                            any_missing_inf = True
+            if "Opponent On First" in time_frame["qualifiers"]:
+                for qualifier in time_frame["qualifiers"]["Opponent On First"]:
+                    for player in qualifier["values"]:
+                        any_missing_games += player["missing_games"]
+                        any_missing_pitch += player["missing_pitch"]
+                        if player["missing_salary"]:
+                            any_missing_salary = True
+                        if player["missing_inf"]:
+                            any_missing_inf = True
+            if "Opponent On Second" in time_frame["qualifiers"]:
+                for qualifier in time_frame["qualifiers"]["Opponent On Second"]:
+                    for player in qualifier["values"]:
+                        any_missing_games += player["missing_games"]
+                        any_missing_pitch += player["missing_pitch"]
+                        if player["missing_salary"]:
+                            any_missing_salary = True
+                        if player["missing_inf"]:
+                            any_missing_inf = True
+            if "Opponent On Third" in time_frame["qualifiers"]:
+                for qualifier in time_frame["qualifiers"]["Opponent On Third"]:
+                    for player in qualifier["values"]:
+                        any_missing_games += player["missing_games"]
+                        any_missing_pitch += player["missing_pitch"]
+                        if player["missing_salary"]:
+                            any_missing_salary = True
+                        if player["missing_inf"]:
+                            any_missing_inf = True
+            if "Opponent On Base" in time_frame["qualifiers"]:
+                for qualifier in time_frame["qualifiers"]["Opponent On Base"]:
                     for player in qualifier["values"]:
                         any_missing_games += player["missing_games"]
                         any_missing_pitch += player["missing_pitch"]
@@ -15281,7 +15538,7 @@ def determine_raw_str(subbb_frame):
                     qual_str += qualifier_map[qualifier][not qual_obj["negate"]]
                 elif qualifier == "Rookie" or qualifier == "Facing Former Franchise" or qualifier == "Facing Former Team" or qualifier == "Previous Same Opponent" or qualifier == "Upcoming Same Opponent" or qualifier == "Decision" or qualifier == "Interleague" or qualifier == "Intraleague" or qualifier == "Interdivision" or qualifier == "Intradivision" or qualifier == "First Half" or qualifier == "Second Half" or qualifier == "Post All-Star" or qualifier == "Pre All-Star" or qualifier == "Elimination" or qualifier == "Clinching" or qualifier == "Elimination Or Clinching" or qualifier == "Winner Take All" or qualifier == "Ahead In Series" or qualifier == "Behind In Series" or qualifier == "Even In Series" or qualifier == "Winning Opponent" or qualifier == "Losing Opponent" or qualifier == "Tied Opponent" or qualifier == "Winning Or Tied Opponent" or qualifier == "Losing Or Tied Opponent" or qualifier == "Current Winning Opponent" or qualifier == "Current Losing Opponent" or qualifier == "Current Tied Opponent" or qualifier == "Current Winning Or Tied Opponent" or qualifier == "Current Losing Or Tied Opponent" or qualifier == "Playoff Opponent" or qualifier == "WS Winner Opponent" or qualifier == "Pennant Winner Opponent" or qualifier == "Division Winner Opponent" or qualifier == "Winning Team" or qualifier == "Losing Team" or qualifier == "Tied Team" or qualifier == "Winning Or Tied Team" or qualifier == "Losing Or Tied Team" or qualifier == "Current Winning Team" or qualifier == "Current Losing Team" or qualifier == "Current Tied Team" or qualifier == "Current Winning Or Tied Team" or qualifier == "Current Losing Or Tied Team" or qualifier == "Playoff Team" or qualifier == "WS Winner Team" or qualifier == "Pennant Winner Team" or qualifier == "Division Winner Team" or qualifier == "Save Situation" or qualifier == "Finished" or qualifier == "Bases Empty" or qualifier == "Men On Base" or qualifier == "Bunting" or qualifier == "Fastball" or qualifier == "Out Of Zone" or qualifier == "In Zone" or qualifier == "Offspeed" or qualifier == "Breaking" or qualifier == "With New Team" or qualifier == "With New Franchise" or qualifier == "Even Calendar Year" or qualifier == "Odd Calendar Year" or qualifier == "Even Year" or qualifier == "Odd Year" or qualifier == "RISP" or qualifier == "Inherited" or qualifier == "Batter Reached Base" or qualifier == "National Game" or qualifier == "Any National Game" or qualifier == "Batter First Plate Appearance" or qualifier == "Pitcher First Batter Faced" or qualifier == "Batter Last Plate Appearance" or qualifier == "Pitcher Last Batter Faced" or qualifier == "Activated" or qualifier == "Activated From IL" or qualifier == "Facing Pitcher" or qualifier == "Facing Position Player" or qualifier == "Stealing Second" or qualifier == "Stealing Third" or qualifier == "Stealing Home" or qualifier == "Facing Lefty" or qualifier == "Facing Righty" or qualifier == "Facing Rookie" or qualifier == "Facing Qualified Rookie" or qualifier == "Platoon Advantage" or qualifier == "Batting Lefty"  or qualifier == "Batting Righty"  or qualifier == "Pitching Lefty"  or qualifier == "Pitching Righty" or qualifier == "Pinch Hitting" or qualifier == "Facing Starter" or qualifier == "Facing Reliever" or qualifier == "Leading Off Inning" or qualifier == "Inning Started" or qualifier == "Leading Off Game" or qualifier == "Leading Off Whole Game" or qualifier == "Swung At First Pitch" or qualifier == "Batter Ahead" or qualifier == "Even Count" or qualifier == "Pitcher Ahead" or qualifier == "After Batter Ahead" or qualifier == "After Even Count" or qualifier == "After Pitcher Ahead" or qualifier == "First Pitch" or qualifier == "Top Inning" or qualifier == "Bottom Inning" or qualifier == "Top Inning Entered" or qualifier == "Bottom Inning Entered" or qualifier == "Walk Off" or qualifier == "Inside The Park HR" or qualifier == "Walk Off Opportunity" or qualifier == "Game Tying" or qualifier == "Late" or qualifier == "Close" or qualifier == "Game Tying Opportunity" or qualifier == "Go Ahead" or qualifier == "Go Ahead Opportunity" or qualifier == "Go Ahead Or Game Tying" or qualifier == "Go Ahead Or Game Tying Opportunity" or qualifier == "Game Winning" or qualifier == "Tying On Deck" or qualifier == "Winning On Deck" or qualifier == "Tying On First" or qualifier == "Winning On First" or qualifier == "Tying On Second" or qualifier == "Winning On Second" or qualifier == "Tying On Third" or qualifier == "Winning On Third" or qualifier == "Tying At Bat" or qualifier == "Winning At Bat" or qualifier == "Tying In Scoring" or qualifier == "Winning In Scoring" or qualifier == "Tying On Base" or qualifier == "Winning On Base" or qualifier == "Last Inning" or qualifier == "Last Inning Entered" or qualifier == "Last Out" or qualifier == "Last Batter" or qualifier == "Extra Innings" or qualifier == "Bases Loaded" or qualifier == "Full Count" or qualifier == "Man On First" or qualifier == "Man On Second" or qualifier == "Man On Third" or qualifier == "Day After Pitching" or qualifier == "Day After Hitting" or qualifier == "Day Before Pitching" or qualifier == "Day Before Hitting":
                     qual_str += str(not qual_obj["negate"])
-                elif qualifier == "Playing With" or qualifier == "Playing Against" or qualifier == "Playing Same Game" or qualifier == "Previous Playing With" or qualifier == "Previous Playing Against" or qualifier == "Upcoming Playing With" or qualifier == "Upcoming Playing Against" or qualifier == "Playing Same Opponents" or qualifier == "Playing Same Date" or qualifier == "Batting Against" or qualifier == "Pitching Against" or qualifier == "Driven In" or qualifier == "Batted In" or qualifier == "Back To Back With" or qualifier == "Batting Behind" or qualifier == "Batting In Front Of" or qualifier == "Batting Next To" or qualifier == "Caught By" or qualifier == "Stealing On":
+                elif qualifier == "Playing With" or qualifier == "Playing Against" or qualifier == "Playing Same Game" or qualifier == "Previous Playing With" or qualifier == "Previous Playing Against" or qualifier == "Upcoming Playing With" or qualifier == "Upcoming Playing Against" or qualifier == "Playing Same Opponents" or qualifier == "Playing Same Date" or qualifier == "Batting Against" or qualifier == "Pitching Against" or qualifier == "Driven In" or qualifier == "Batted In" or qualifier == "Back To Back With" or qualifier == "Batting Behind" or qualifier == "Batting In Front Of" or qualifier == "Batting Next To" or qualifier == "Caught By" or qualifier == "Stealing On" or qualifier == "Teammate On First" or qualifier == "Teammate On Second" or qualifier == "Teammate On Third" or qualifier == "Teammate On Base" or qualifier == "Opponent On First" or qualifier == "Opponent On Second" or qualifier == "Opponent On Third" or qualifier == "Opponent On Base":
                     for player in qual_obj["values"]:
                         if not sub_sub_sub_first:
                             qual_str += " OR "
@@ -27370,6 +27627,94 @@ def handle_mlb_game_stats(all_rows, has_count_stat, qualifiers, player_data, pla
                 
                     if not has_match:
                         games_to_skip.add(row_data["GameLink"])
+    if "Teammate On First" in qualifiers:
+        for row_data in all_rows:
+            for qual_object in qualifiers["Teammate On First"]:
+                if not qual_object["negate"]:
+                    has_match = False
+                    for player in qual_object["values"]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["DateTime"] in player["games"][row_data["Tm"].lower()]:
+                            has_match = True
+                
+                    if not has_match:
+                        games_to_skip.add(row_data["GameLink"])
+    if "Teammate On Second" in qualifiers:
+        for row_data in all_rows:
+            for qual_object in qualifiers["Teammate On Second"]:
+                if not qual_object["negate"]:
+                    has_match = False
+                    for player in qual_object["values"]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["DateTime"] in player["games"][row_data["Tm"].lower()]:
+                            has_match = True
+                
+                    if not has_match:
+                        games_to_skip.add(row_data["GameLink"])
+    if "Teammate On Third" in qualifiers:
+        for row_data in all_rows:
+            for qual_object in qualifiers["Teammate On Third"]:
+                if not qual_object["negate"]:
+                    has_match = False
+                    for player in qual_object["values"]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["DateTime"] in player["games"][row_data["Tm"].lower()]:
+                            has_match = True
+                
+                    if not has_match:
+                        games_to_skip.add(row_data["GameLink"])
+    if "Teammate On Base" in qualifiers:
+        for row_data in all_rows:
+            for qual_object in qualifiers["Teammate On Base"]:
+                if not qual_object["negate"]:
+                    has_match = False
+                    for player in qual_object["values"]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["DateTime"] in player["games"][row_data["Tm"].lower()]:
+                            has_match = True
+                
+                    if not has_match:
+                        games_to_skip.add(row_data["GameLink"])
+    if "Opponent On First" in qualifiers:
+        for row_data in all_rows:
+            for qual_object in qualifiers["Opponent On First"]:
+                if not qual_object["negate"]:
+                    has_match = False
+                    for player in qual_object["values"]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["DateTime"] in player["games"][row_data["Tm"].lower()]:
+                            has_match = True
+                
+                    if not has_match:
+                        games_to_skip.add(row_data["GameLink"])
+    if "Opponent On Second" in qualifiers:
+        for row_data in all_rows:
+            for qual_object in qualifiers["Opponent On Second"]:
+                if not qual_object["negate"]:
+                    has_match = False
+                    for player in qual_object["values"]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["DateTime"] in player["games"][row_data["Tm"].lower()]:
+                            has_match = True
+                
+                    if not has_match:
+                        games_to_skip.add(row_data["GameLink"])
+    if "Opponent On Third" in qualifiers:
+        for row_data in all_rows:
+            for qual_object in qualifiers["Opponent On Third"]:
+                if not qual_object["negate"]:
+                    has_match = False
+                    for player in qual_object["values"]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["DateTime"] in player["games"][row_data["Tm"].lower()]:
+                            has_match = True
+                
+                    if not has_match:
+                        games_to_skip.add(row_data["GameLink"])
+    if "Opponent On Base" in qualifiers:
+        for row_data in all_rows:
+            for qual_object in qualifiers["Opponent On Base"]:
+                if not qual_object["negate"]:
+                    has_match = False
+                    for player in qual_object["values"]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["DateTime"] in player["games"][row_data["Tm"].lower()]:
+                            has_match = True
+                
+                    if not has_match:
+                        games_to_skip.add(row_data["GameLink"])
     if "Facing Rookie" in qualifiers:
         for row_data in all_rows:
             for qual_object in qualifiers["Facing Rookie"]:
@@ -27811,6 +28156,94 @@ def handle_mlb_game_stats_single_thread(all_rows, has_count_stat, qualifiers, pl
     if "Pitching Against" in qualifiers:
         for row_data in all_rows:
             for qual_object in qualifiers["Pitching Against"]:
+                if not qual_object["negate"]:
+                    has_match = False
+                    for player in qual_object["values"]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["DateTime"] in player["games"][row_data["Tm"].lower()]:
+                            has_match = True
+                
+                    if not has_match:
+                        games_to_skip.add(row_data["GameLink"])
+    if "Teammate On First" in qualifiers:
+        for row_data in all_rows:
+            for qual_object in qualifiers["Teammate On First"]:
+                if not qual_object["negate"]:
+                    has_match = False
+                    for player in qual_object["values"]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["DateTime"] in player["games"][row_data["Tm"].lower()]:
+                            has_match = True
+                
+                    if not has_match:
+                        games_to_skip.add(row_data["GameLink"])
+    if "Teammate On Second" in qualifiers:
+        for row_data in all_rows:
+            for qual_object in qualifiers["Teammate On Second"]:
+                if not qual_object["negate"]:
+                    has_match = False
+                    for player in qual_object["values"]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["DateTime"] in player["games"][row_data["Tm"].lower()]:
+                            has_match = True
+                
+                    if not has_match:
+                        games_to_skip.add(row_data["GameLink"])
+    if "Teammate On Third" in qualifiers:
+        for row_data in all_rows:
+            for qual_object in qualifiers["Teammate On Third"]:
+                if not qual_object["negate"]:
+                    has_match = False
+                    for player in qual_object["values"]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["DateTime"] in player["games"][row_data["Tm"].lower()]:
+                            has_match = True
+                
+                    if not has_match:
+                        games_to_skip.add(row_data["GameLink"])
+    if "Teammate On Base" in qualifiers:
+        for row_data in all_rows:
+            for qual_object in qualifiers["Teammate On Base"]:
+                if not qual_object["negate"]:
+                    has_match = False
+                    for player in qual_object["values"]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["DateTime"] in player["games"][row_data["Tm"].lower()]:
+                            has_match = True
+                
+                    if not has_match:
+                        games_to_skip.add(row_data["GameLink"])
+    if "Opponent On First" in qualifiers:
+        for row_data in all_rows:
+            for qual_object in qualifiers["Opponent On First"]:
+                if not qual_object["negate"]:
+                    has_match = False
+                    for player in qual_object["values"]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["DateTime"] in player["games"][row_data["Tm"].lower()]:
+                            has_match = True
+                
+                    if not has_match:
+                        games_to_skip.add(row_data["GameLink"])
+    if "Opponent On Second" in qualifiers:
+        for row_data in all_rows:
+            for qual_object in qualifiers["Opponent On Second"]:
+                if not qual_object["negate"]:
+                    has_match = False
+                    for player in qual_object["values"]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["DateTime"] in player["games"][row_data["Tm"].lower()]:
+                            has_match = True
+                
+                    if not has_match:
+                        games_to_skip.add(row_data["GameLink"])
+    if "Opponent On Third" in qualifiers:
+        for row_data in all_rows:
+            for qual_object in qualifiers["Opponent On Third"]:
+                if not qual_object["negate"]:
+                    has_match = False
+                    for player in qual_object["values"]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["DateTime"] in player["games"][row_data["Tm"].lower()]:
+                            has_match = True
+                
+                    if not has_match:
+                        games_to_skip.add(row_data["GameLink"])
+    if "Opponent On Base" in qualifiers:
+        for row_data in all_rows:
+            for qual_object in qualifiers["Opponent On Base"]:
                 if not qual_object["negate"]:
                     has_match = False
                     for player in qual_object["values"]:
@@ -29976,1534 +30409,6 @@ def perform_sub_mlb_game_qualifiers(row, player_data, qualifiers, player_game_in
     if "Batting Lefty" in qualifiers or "Batting Righty" in qualifiers or "Back To Back With" in qualifiers or "Batting In Front Of" in qualifiers or "Batting Behind" in qualifiers or "Batting Next To" in qualifiers or "Pinch Hitting" in qualifiers or "Leading Off Game" in qualifiers or "Leading Off Whole Game" in qualifiers  or "Leading Off Inning" in qualifiers or "Swung At First Pitch" in qualifiers or "Time Facing Opponent" in qualifiers:
         if player_type["da_type"] == "Batter":
             skip_run_events = True
-
-    if "Batting Against" in qualifiers:
-        has_row_match = True
-        for qual_object in qualifiers["Batting Against"]:
-            if not qual_object["negate"]:
-                has_match = False
-                for at_bat_event in player_game_info["batting_events"]:
-                    for player in qual_object["values"]:
-                        if at_bat_event["pitcher"] == player["mlb_id"]:
-                            has_match = True
-    
-                if not has_match:
-                    has_row_match = False
-        if not has_row_match:
-            return False, row
-    
-    if "Pitching Against" in qualifiers:
-        has_row_match = True
-        for qual_object in qualifiers["Pitching Against"]:
-            if not qual_object["negate"]:
-                has_match = False
-                for at_bat_event in player_game_info["pitching_events"] + player_game_info["pitching_run_events"]:
-                    for player in qual_object["values"]:
-                        if at_bat_event ["batter"] == player["mlb_id"]:
-                            has_match = True
-    
-                if not has_match:
-                    has_row_match = False
-        if not has_row_match:
-            return False, row
-    
-    if "Facing Rookie" in qualifiers:
-        has_row_match = True
-        for qual_object in qualifiers["Facing Rookie"]:
-            if row["Year"] not in qual_object["year_map_obj"]:
-                return False, row
-            if not qual_object["negate"]:
-                has_match = False
-                for at_bat_event in (player_game_info["batting_events"] if player_type["da_type"] == "Batter" else player_game_info["pitching_events"] + player_game_info["pitching_run_events"]):
-                    if at_bat_event["pitcher" if player_type["da_type"] == "Batter" else "batter"] in qual_object["year_map_obj"][row["Year"]]:
-                        has_match = True
-    
-                if not has_match:
-                    has_row_match = False
-        if not has_row_match:
-            return False, row
-    
-    if "Facing Qualified Rookie" in qualifiers:
-        has_row_match = True
-        for qual_object in qualifiers["Facing Qualified Rookie"]:
-            if row["Year"] not in qual_object["year_map_obj"]:
-                return False, row
-            if not qual_object["negate"]:
-                has_match = False
-                for at_bat_event in (player_game_info["batting_events"] if player_type["da_type"] == "Batter" else player_game_info["pitching_events"] + player_game_info["pitching_run_events"]):
-                    if at_bat_event["pitcher" if player_type["da_type"] == "Batter" else "batter"] in qual_object["year_map_obj"][row["Year"]]:
-                        has_match = True
-    
-                if not has_match:
-                    has_row_match = False
-        if not has_row_match:
-            return False, row
-
-    if "Facing Stat Rank" in qualifiers:
-        has_row_match = True
-        for qual_object in qualifiers["Facing Stat Rank"]:
-            if row["Year"] not in qual_object["year_map_obj"]:
-                return False, row
-            if not qual_object["negate"]:
-                has_match = False
-                for at_bat_event in (player_game_info["batting_events"] if player_type["da_type"] == "Batter" else player_game_info["pitching_events"] + player_game_info["pitching_run_events"]):
-                    if at_bat_event["pitcher" if player_type["da_type"] == "Batter" else "batter"] in qual_object["year_map_obj"][row["Year"]]:
-                        has_match = True
-    
-                if not has_match:
-                    has_row_match = False
-        if not has_row_match:
-            return False, row
-    
-    if "Facing League Stat Rank" in qualifiers:
-        has_row_match = True
-        for qual_object in qualifiers["Facing League Stat Rank"]:
-            if row["Year"] not in qual_object["year_map_obj"]:
-                return False, row
-            if not qual_object["negate"]:
-                has_match = False
-                for at_bat_event in (player_game_info["batting_events"] if player_type["da_type"] == "Batter" else player_game_info["pitching_events"] + player_game_info["pitching_run_events"]):
-                    if at_bat_event["pitcher" if player_type["da_type"] == "Batter" else "batter"] in qual_object["year_map_obj"][row["Year"]]:
-                        has_match = True
-    
-                if not has_match:
-                    has_row_match = False
-        if not has_row_match:
-            return False, row
-    
-    if "Facing AL Stat Rank" in qualifiers:
-        has_row_match = True
-        for qual_object in qualifiers["Facing AL Stat Rank"]:
-            if row["Year"] not in qual_object["year_map_obj"]:
-                return False, row
-            if not qual_object["negate"]:
-                has_match = False
-                for at_bat_event in (player_game_info["batting_events"] if player_type["da_type"] == "Batter" else player_game_info["pitching_events"] + player_game_info["pitching_run_events"]):
-                    if at_bat_event["pitcher" if player_type["da_type"] == "Batter" else "batter"] in qual_object["year_map_obj"][row["Year"]]:
-                        has_match = True
-    
-                if not has_match:
-                    has_row_match = False
-        if not has_row_match:
-            return False, row
-    
-    if "Facing NL Stat Rank" in qualifiers:
-        has_row_match = True
-        for qual_object in qualifiers["Facing NL Stat Rank"]:
-            if row["Year"] not in qual_object["year_map_obj"]:
-                return False, row
-            if not qual_object["negate"]:
-                has_match = False
-                for at_bat_event in (player_game_info["batting_events"] if player_type["da_type"] == "Batter" else player_game_info["pitching_events"] + player_game_info["pitching_run_events"]):
-                    if at_bat_event["pitcher" if player_type["da_type"] == "Batter" else "batter"] in qual_object["year_map_obj"][row["Year"]]:
-                        has_match = True
-    
-                if not has_match:
-                    has_row_match = False
-        if not has_row_match:
-            return False, row
-    
-    if "Facing Stat Percent" in qualifiers:
-        has_row_match = True
-        for qual_object in qualifiers["Facing Stat Percent"]:
-            if row["Year"] not in qual_object["year_map_obj"]:
-                return False, row
-            if not qual_object["negate"]:
-                has_match = False
-                for at_bat_event in (player_game_info["batting_events"] if player_type["da_type"] == "Batter" else player_game_info["pitching_events"] + player_game_info["pitching_run_events"]):
-                    if at_bat_event["pitcher" if player_type["da_type"] == "Batter" else "batter"] in qual_object["year_map_obj"][row["Year"]]:
-                        has_match = True
-    
-                if not has_match:
-                    has_row_match = False
-        if not has_row_match:
-            return False, row
-    
-    if "Facing League Stat Percent" in qualifiers:
-        has_row_match = True
-        for qual_object in qualifiers["Facing League Stat Percent"]:
-            if row["Year"] not in qual_object["year_map_obj"]:
-                return False, row
-            if not qual_object["negate"]:
-                has_match = False
-                for at_bat_event in (player_game_info["batting_events"] if player_type["da_type"] == "Batter" else player_game_info["pitching_events"] + player_game_info["pitching_run_events"]):
-                    if at_bat_event["pitcher" if player_type["da_type"] == "Batter" else "batter"] in qual_object["year_map_obj"][row["Year"]]:
-                        has_match = True
-    
-                if not has_match:
-                    has_row_match = False
-        if not has_row_match:
-            return False, row
-    
-    if "Facing AL Stat Percent" in qualifiers:
-        has_row_match = True
-        for qual_object in qualifiers["Facing AL Stat Percent"]:
-            if row["Year"] not in qual_object["year_map_obj"]:
-                return False, row
-            if not qual_object["negate"]:
-                has_match = False
-                for at_bat_event in (player_game_info["batting_events"] if player_type["da_type"] == "Batter" else player_game_info["pitching_events"] + player_game_info["pitching_run_events"]):
-                    if at_bat_event["pitcher" if player_type["da_type"] == "Batter" else "batter"] in qual_object["year_map_obj"][row["Year"]]:
-                        has_match = True
-    
-                if not has_match:
-                    has_row_match = False
-        if not has_row_match:
-            return False, row
-    
-    if "Facing NL Stat Percent" in qualifiers:
-        has_row_match = True
-        for qual_object in qualifiers["Facing NL Stat Percent"]:
-            if row["Year"] not in qual_object["year_map_obj"]:
-                return False, row
-            if not qual_object["negate"]:
-                has_match = False
-                for at_bat_event in (player_game_info["batting_events"] if player_type["da_type"] == "Batter" else player_game_info["pitching_events"] + player_game_info["pitching_run_events"]):
-                    if at_bat_event["pitcher" if player_type["da_type"] == "Batter" else "batter"] in qual_object["year_map_obj"][row["Year"]]:
-                        has_match = True
-    
-                if not has_match:
-                    has_row_match = False
-        if not has_row_match:
-            return False, row
-    
-    if "Facing Stat" in qualifiers:            
-        has_row_match = True
-        for qual_object in qualifiers["Facing Stat"]:
-            if row["Year"] not in qual_object["year_map_obj"]:
-                return False, row
-            if not qual_object["negate"]:
-                has_match = False
-                for at_bat_event in (player_game_info["batting_events"] if player_type["da_type"] == "Batter" else player_game_info["pitching_events"] + player_game_info["pitching_run_events"]):
-                    if at_bat_event["pitcher" if player_type["da_type"] == "Batter" else "batter"] in qual_object["year_map_obj"][row["Year"]]:
-                        has_match = True
-    
-                if not has_match:
-                    has_row_match = False
-        if not has_row_match:
-            return False, row
-    
-    if "Facing AL Stat" in qualifiers:            
-        has_row_match = True
-        for qual_object in qualifiers["Facing AL Stat"]:
-            if row["Year"] not in qual_object["year_map_obj"]:
-                return False, row
-            if not qual_object["negate"]:
-                has_match = False
-                for at_bat_event in (player_game_info["batting_events"] if player_type["da_type"] == "Batter" else player_game_info["pitching_events"] + player_game_info["pitching_run_events"]):
-                    if at_bat_event["pitcher" if player_type["da_type"] == "Batter" else "batter"] in qual_object["year_map_obj"][row["Year"]]:
-                        has_match = True
-    
-                if not has_match:
-                    has_row_match = False
-        if not has_row_match:
-            return False, row
-    
-    if "Facing NL Stat" in qualifiers:            
-        has_row_match = True
-        for qual_object in qualifiers["Facing NL Stat"]:
-            if row["Year"] not in qual_object["year_map_obj"]:
-                return False, row
-            if not qual_object["negate"]:
-                has_match = False
-                for at_bat_event in (player_game_info["batting_events"] if player_type["da_type"] == "Batter" else player_game_info["pitching_events"] + player_game_info["pitching_run_events"]):
-                    if at_bat_event["pitcher" if player_type["da_type"] == "Batter" else "batter"] in qual_object["year_map_obj"][row["Year"]]:
-                        has_match = True
-    
-                if not has_match:
-                    has_row_match = False
-        if not has_row_match:
-            return False, row
-
-    if "Batting In Front Of Stat Rank" in qualifiers:
-        has_row_match = True                        
-        for qual_object in qualifiers["Batting In Front Of Stat Rank"]:
-            if row["Year"] not in qual_object["year_map_obj"]:
-                return False, row
-            if not qual_object["negate"]:
-                has_match = False
-                for at_bat_event in player_game_info["batting_events"]:
-                    match_batter_posses = set()
-                    if (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 9:
-                        match_batter_posses.add(1)
-                    else:
-                        match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) + 1)
-
-                    match_batters = set()
-                    for match_batter in at_bat_event["team_batting_order_map"]:
-                        if at_bat_event["team_batting_order_map"][match_batter] in match_batter_posses:
-                            match_batters.add(match_batter)
-
-                    if match_batters.intersection(qual_object["year_map_obj"][row["Year"]]):
-                        has_match = True
-    
-                if not has_match:
-                    has_row_match = False
-        if not has_row_match:
-            return False, row
-
-    if "Batting In Front Of League Stat Rank" in qualifiers:
-        has_row_match = True                        
-        for qual_object in qualifiers["Batting In Front Of League Stat Rank"]:
-            if row["Year"] not in qual_object["year_map_obj"]:
-                return False, row
-            if not qual_object["negate"]:
-                has_match = False
-                for at_bat_event in player_game_info["batting_events"]:
-                    match_batter_posses = set()
-                    if (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 9:
-                        match_batter_posses.add(1)
-                    else:
-                        match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) + 1)
-
-                    match_batters = set()
-                    for match_batter in at_bat_event["team_batting_order_map"]:
-                        if at_bat_event["team_batting_order_map"][match_batter] in match_batter_posses:
-                            match_batters.add(match_batter)
-
-                    if match_batters.intersection(qual_object["year_map_obj"][row["Year"]]):
-                        has_match = True
-    
-                if not has_match:
-                    has_row_match = False
-        if not has_row_match:
-            return False, row
-    
-    if "Batting In Front Of AL Stat Rank" in qualifiers:
-        has_row_match = True                        
-        for qual_object in qualifiers["Batting In Front Of AL Stat Rank"]:
-            if row["Year"] not in qual_object["year_map_obj"]:
-                return False, row
-            if not qual_object["negate"]:
-                has_match = False
-                for at_bat_event in player_game_info["batting_events"]:
-                    match_batter_posses = set()
-                    if (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 9:
-                        match_batter_posses.add(1)
-                    else:
-                        match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) + 1)
-
-                    match_batters = set()
-                    for match_batter in at_bat_event["team_batting_order_map"]:
-                        if at_bat_event["team_batting_order_map"][match_batter] in match_batter_posses:
-                            match_batters.add(match_batter)
-
-                    if match_batters.intersection(qual_object["year_map_obj"][row["Year"]]):
-                        has_match = True
-    
-                if not has_match:
-                    has_row_match = False
-        if not has_row_match:
-            return False, row
-    
-    if "Batting In Front Of NL Stat Rank" in qualifiers:
-        has_row_match = True                        
-        for qual_object in qualifiers["Batting In Front Of NL Stat Rank"]:
-            if row["Year"] not in qual_object["year_map_obj"]:
-                return False, row
-            if not qual_object["negate"]:
-                has_match = False
-                for at_bat_event in player_game_info["batting_events"]:
-                    match_batter_posses = set()
-                    if (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 9:
-                        match_batter_posses.add(1)
-                    else:
-                        match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) + 1)
-
-                    match_batters = set()
-                    for match_batter in at_bat_event["team_batting_order_map"]:
-                        if at_bat_event["team_batting_order_map"][match_batter] in match_batter_posses:
-                            match_batters.add(match_batter)
-
-                    if match_batters.intersection(qual_object["year_map_obj"][row["Year"]]):
-                        has_match = True
-    
-                if not has_match:
-                    has_row_match = False
-        if not has_row_match:
-            return False, row
-
-    if "Batting Behind Stat Rank" in qualifiers:
-        has_row_match = True                        
-        for qual_object in qualifiers["Batting Behind Stat Rank"]:
-            if row["Year"] not in qual_object["year_map_obj"]:
-                return False, row
-            if not qual_object["negate"]:
-                has_match = False
-                for at_bat_event in player_game_info["batting_events"]:
-                    match_batter_posses = set()
-                    if (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 1:
-                        match_batter_posses.add(9)
-                    else:
-                        match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) - 1)
-
-                    match_batters = set()
-                    for match_batter in at_bat_event["team_batting_order_map"]:
-                        if at_bat_event["team_batting_order_map"][match_batter] in match_batter_posses:
-                            match_batters.add(match_batter)
-
-                    if match_batters.intersection(qual_object["year_map_obj"][row["Year"]]):
-                        has_match = True
-    
-                if not has_match:
-                    has_row_match = False
-        if not has_row_match:
-            return False, row
-
-    if "Batting Behind League Stat Rank" in qualifiers:
-        has_row_match = True                        
-        for qual_object in qualifiers["Batting Behind League Stat Rank"]:
-            if row["Year"] not in qual_object["year_map_obj"]:
-                return False, row
-            if not qual_object["negate"]:
-                has_match = False
-                for at_bat_event in player_game_info["batting_events"]:
-                    match_batter_posses = set()
-                    if (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 1:
-                        match_batter_posses.add(9)
-                    else:
-                        match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) - 1)
-
-                    match_batters = set()
-                    for match_batter in at_bat_event["team_batting_order_map"]:
-                        if at_bat_event["team_batting_order_map"][match_batter] in match_batter_posses:
-                            match_batters.add(match_batter)
-
-                    if match_batters.intersection(qual_object["year_map_obj"][row["Year"]]):
-                        has_match = True
-    
-                if not has_match:
-                    has_row_match = False
-        if not has_row_match:
-            return False, row
-    
-    if "Batting Behind AL Stat Rank" in qualifiers:
-        has_row_match = True                        
-        for qual_object in qualifiers["Batting Behind AL Stat Rank"]:
-            if row["Year"] not in qual_object["year_map_obj"]:
-                return False, row
-            if not qual_object["negate"]:
-                has_match = False
-                for at_bat_event in player_game_info["batting_events"]:
-                    match_batter_posses = set()
-                    if (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 1:
-                        match_batter_posses.add(9)
-                    else:
-                        match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) - 1)
-
-                    match_batters = set()
-                    for match_batter in at_bat_event["team_batting_order_map"]:
-                        if at_bat_event["team_batting_order_map"][match_batter] in match_batter_posses:
-                            match_batters.add(match_batter)
-
-                    if match_batters.intersection(qual_object["year_map_obj"][row["Year"]]):
-                        has_match = True
-    
-                if not has_match:
-                    has_row_match = False
-        if not has_row_match:
-            return False, row
-    
-    if "Batting Behind NL Stat Rank" in qualifiers:
-        has_row_match = True                        
-        for qual_object in qualifiers["Batting Behind NL Stat Rank"]:
-            if row["Year"] not in qual_object["year_map_obj"]:
-                return False, row
-            if not qual_object["negate"]:
-                has_match = False
-                for at_bat_event in player_game_info["batting_events"]:
-                    match_batter_posses = set()
-                    if (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 1:
-                        match_batter_posses.add(9)
-                    else:
-                        match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) - 1)
-
-                    match_batters = set()
-                    for match_batter in at_bat_event["team_batting_order_map"]:
-                        if at_bat_event["team_batting_order_map"][match_batter] in match_batter_posses:
-                            match_batters.add(match_batter)
-
-                    if match_batters.intersection(qual_object["year_map_obj"][row["Year"]]):
-                        has_match = True
-    
-                if not has_match:
-                    has_row_match = False
-        if not has_row_match:
-            return False, row
-        
-    if "Batting Next To Stat Rank" in qualifiers:
-        has_row_match = True                        
-        for qual_object in qualifiers["Batting Next To Stat Rank"]:
-            if row["Year"] not in qual_object["year_map_obj"]:
-                return False, row
-            if not qual_object["negate"]:
-                has_match = False
-                for at_bat_event in player_game_info["batting_events"]:
-                    match_batter_posses = set()
-                    if (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 1:
-                        match_batter_posses.add(9)
-                        match_batter_posses.add(2)
-                    elif (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 9:
-                        match_batter_posses.add(1)
-                        match_batter_posses.add(8)
-                    else:
-                        match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) + 1)
-                        match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) - 1)
-
-                    match_batters = set()
-                    for match_batter in at_bat_event["team_batting_order_map"]:
-                        if at_bat_event["team_batting_order_map"][match_batter] in match_batter_posses:
-                            match_batters.add(match_batter)
-
-                    if match_batters.intersection(qual_object["year_map_obj"][row["Year"]]):
-                        has_match = True
-    
-                if not has_match:
-                    has_row_match = False
-        if not has_row_match:
-            return False, row
-
-    if "Batting Next To League Stat Rank" in qualifiers:
-        has_row_match = True                        
-        for qual_object in qualifiers["Batting Next To League Stat Rank"]:
-            if row["Year"] not in qual_object["year_map_obj"]:
-                return False, row
-            if not qual_object["negate"]:
-                has_match = False
-                for at_bat_event in player_game_info["batting_events"]:
-                    match_batter_posses = set()
-                    if (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 1:
-                        match_batter_posses.add(9)
-                        match_batter_posses.add(2)
-                    elif (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 9:
-                        match_batter_posses.add(1)
-                        match_batter_posses.add(8)
-                    else:
-                        match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) + 1)
-                        match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) - 1)
-
-                    match_batters = set()
-                    for match_batter in at_bat_event["team_batting_order_map"]:
-                        if at_bat_event["team_batting_order_map"][match_batter] in match_batter_posses:
-                            match_batters.add(match_batter)
-
-                    if match_batters.intersection(qual_object["year_map_obj"][row["Year"]]):
-                        has_match = True
-    
-                if not has_match:
-                    has_row_match = False
-        if not has_row_match:
-            return False, row
-    
-    if "Batting Next To AL Stat Rank" in qualifiers:
-        has_row_match = True                        
-        for qual_object in qualifiers["Batting Next To AL Stat Rank"]:
-            if row["Year"] not in qual_object["year_map_obj"]:
-                return False, row
-            if not qual_object["negate"]:
-                has_match = False
-                for at_bat_event in player_game_info["batting_events"]:
-                    match_batter_posses = set()
-                    if (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 1:
-                        match_batter_posses.add(9)
-                        match_batter_posses.add(2)
-                    elif (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 9:
-                        match_batter_posses.add(1)
-                        match_batter_posses.add(8)
-                    else:
-                        match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) + 1)
-                        match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) - 1)
-
-                    match_batters = set()
-                    for match_batter in at_bat_event["team_batting_order_map"]:
-                        if at_bat_event["team_batting_order_map"][match_batter] in match_batter_posses:
-                            match_batters.add(match_batter)
-
-                    if match_batters.intersection(qual_object["year_map_obj"][row["Year"]]):
-                        has_match = True
-    
-                if not has_match:
-                    has_row_match = False
-        if not has_row_match:
-            return False, row
-    
-    if "Batting Next To NL Stat Rank" in qualifiers:
-        has_row_match = True                        
-        for qual_object in qualifiers["Batting Next To NL Stat Rank"]:
-            if row["Year"] not in qual_object["year_map_obj"]:
-                return False, row
-            if not qual_object["negate"]:
-                has_match = False
-                for at_bat_event in player_game_info["batting_events"]:
-                    match_batter_posses = set()
-                    if (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 1:
-                        match_batter_posses.add(9)
-                        match_batter_posses.add(2)
-                    elif (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 9:
-                        match_batter_posses.add(1)
-                        match_batter_posses.add(8)
-                    else:
-                        match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) + 1)
-                        match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) - 1)
-
-                    match_batters = set()
-                    for match_batter in at_bat_event["team_batting_order_map"]:
-                        if at_bat_event["team_batting_order_map"][match_batter] in match_batter_posses:
-                            match_batters.add(match_batter)
-
-                    if match_batters.intersection(qual_object["year_map_obj"][row["Year"]]):
-                        has_match = True
-    
-                if not has_match:
-                    has_row_match = False
-        if not has_row_match:
-            return False, row
-    
-    if "Batting In Front Of Stat Percent" in qualifiers:
-        has_row_match = True                        
-        for qual_object in qualifiers["Batting In Front Of Stat Percent"]:
-            if row["Year"] not in qual_object["year_map_obj"]:
-                return False, row
-            if not qual_object["negate"]:
-                has_match = False
-                for at_bat_event in player_game_info["batting_events"]:
-                    match_batter_posses = set()
-                    if (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 9:
-                        match_batter_posses.add(1)
-                    else:
-                        match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) + 1)
-
-                    match_batters = set()
-                    for match_batter in at_bat_event["team_batting_order_map"]:
-                        if at_bat_event["team_batting_order_map"][match_batter] in match_batter_posses:
-                            match_batters.add(match_batter)
-
-                    if match_batters.intersection(qual_object["year_map_obj"][row["Year"]]):
-                        has_match = True
-    
-                if not has_match:
-                    has_row_match = False
-        if not has_row_match:
-            return False, row
-
-    if "Batting In Front Of League Stat Percent" in qualifiers:
-        has_row_match = True                        
-        for qual_object in qualifiers["Batting In Front Of League Stat Percent"]:
-            if row["Year"] not in qual_object["year_map_obj"]:
-                return False, row
-            if not qual_object["negate"]:
-                has_match = False
-                for at_bat_event in player_game_info["batting_events"]:
-                    match_batter_posses = set()
-                    if (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 9:
-                        match_batter_posses.add(1)
-                    else:
-                        match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) + 1)
-
-                    match_batters = set()
-                    for match_batter in at_bat_event["team_batting_order_map"]:
-                        if at_bat_event["team_batting_order_map"][match_batter] in match_batter_posses:
-                            match_batters.add(match_batter)
-
-                    if match_batters.intersection(qual_object["year_map_obj"][row["Year"]]):
-                        has_match = True
-    
-                if not has_match:
-                    has_row_match = False
-        if not has_row_match:
-            return False, row
-    
-    if "Batting In Front Of AL Stat Percent" in qualifiers:
-        has_row_match = True                        
-        for qual_object in qualifiers["Batting In Front Of AL Stat Percent"]:
-            if row["Year"] not in qual_object["year_map_obj"]:
-                return False, row
-            if not qual_object["negate"]:
-                has_match = False
-                for at_bat_event in player_game_info["batting_events"]:
-                    match_batter_posses = set()
-                    if (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 9:
-                        match_batter_posses.add(1)
-                    else:
-                        match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) + 1)
-
-                    match_batters = set()
-                    for match_batter in at_bat_event["team_batting_order_map"]:
-                        if at_bat_event["team_batting_order_map"][match_batter] in match_batter_posses:
-                            match_batters.add(match_batter)
-
-                    if match_batters.intersection(qual_object["year_map_obj"][row["Year"]]):
-                        has_match = True
-    
-                if not has_match:
-                    has_row_match = False
-        if not has_row_match:
-            return False, row
-    
-    if "Batting In Front Of NL Stat Percent" in qualifiers:
-        has_row_match = True                        
-        for qual_object in qualifiers["Batting In Front Of NL Stat Percent"]:
-            if row["Year"] not in qual_object["year_map_obj"]:
-                return False, row
-            if not qual_object["negate"]:
-                has_match = False
-                for at_bat_event in player_game_info["batting_events"]:
-                    match_batter_posses = set()
-                    if (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 9:
-                        match_batter_posses.add(1)
-                    else:
-                        match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) + 1)
-
-                    match_batters = set()
-                    for match_batter in at_bat_event["team_batting_order_map"]:
-                        if at_bat_event["team_batting_order_map"][match_batter] in match_batter_posses:
-                            match_batters.add(match_batter)
-
-                    if match_batters.intersection(qual_object["year_map_obj"][row["Year"]]):
-                        has_match = True
-    
-                if not has_match:
-                    has_row_match = False
-        if not has_row_match:
-            return False, row
-
-    if "Batting Behind Stat Percent" in qualifiers:
-        has_row_match = True                        
-        for qual_object in qualifiers["Batting Behind Stat Percent"]:
-            if row["Year"] not in qual_object["year_map_obj"]:
-                return False, row
-            if not qual_object["negate"]:
-                has_match = False
-                for at_bat_event in player_game_info["batting_events"]:
-                    match_batter_posses = set()
-                    if (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 1:
-                        match_batter_posses.add(9)
-                    else:
-                        match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) - 1)
-
-                    match_batters = set()
-                    for match_batter in at_bat_event["team_batting_order_map"]:
-                        if at_bat_event["team_batting_order_map"][match_batter] in match_batter_posses:
-                            match_batters.add(match_batter)
-
-                    if match_batters.intersection(qual_object["year_map_obj"][row["Year"]]):
-                        has_match = True
-    
-                if not has_match:
-                    has_row_match = False
-        if not has_row_match:
-            return False, row
-
-    if "Batting Behind League Stat Percent" in qualifiers:
-        has_row_match = True                        
-        for qual_object in qualifiers["Batting Behind League Stat Percent"]:
-            if row["Year"] not in qual_object["year_map_obj"]:
-                return False, row
-            if not qual_object["negate"]:
-                has_match = False
-                for at_bat_event in player_game_info["batting_events"]:
-                    match_batter_posses = set()
-                    if (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 1:
-                        match_batter_posses.add(9)
-                    else:
-                        match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) - 1)
-
-                    match_batters = set()
-                    for match_batter in at_bat_event["team_batting_order_map"]:
-                        if at_bat_event["team_batting_order_map"][match_batter] in match_batter_posses:
-                            match_batters.add(match_batter)
-
-                    if match_batters.intersection(qual_object["year_map_obj"][row["Year"]]):
-                        has_match = True
-    
-                if not has_match:
-                    has_row_match = False
-        if not has_row_match:
-            return False, row
-    
-    if "Batting Behind AL Stat Percent" in qualifiers:
-        has_row_match = True                        
-        for qual_object in qualifiers["Batting Behind AL Stat Percent"]:
-            if row["Year"] not in qual_object["year_map_obj"]:
-                return False, row
-            if not qual_object["negate"]:
-                has_match = False
-                for at_bat_event in player_game_info["batting_events"]:
-                    match_batter_posses = set()
-                    if (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 1:
-                        match_batter_posses.add(9)
-                    else:
-                        match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) - 1)
-
-                    match_batters = set()
-                    for match_batter in at_bat_event["team_batting_order_map"]:
-                        if at_bat_event["team_batting_order_map"][match_batter] in match_batter_posses:
-                            match_batters.add(match_batter)
-
-                    if match_batters.intersection(qual_object["year_map_obj"][row["Year"]]):
-                        has_match = True
-    
-                if not has_match:
-                    has_row_match = False
-        if not has_row_match:
-            return False, row
-    
-    if "Batting Behind NL Stat Percent" in qualifiers:
-        has_row_match = True                        
-        for qual_object in qualifiers["Batting Behind NL Stat Percent"]:
-            if row["Year"] not in qual_object["year_map_obj"]:
-                return False, row
-            if not qual_object["negate"]:
-                has_match = False
-                for at_bat_event in player_game_info["batting_events"]:
-                    match_batter_posses = set()
-                    if (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 1:
-                        match_batter_posses.add(9)
-                    else:
-                        match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) - 1)
-
-                    match_batters = set()
-                    for match_batter in at_bat_event["team_batting_order_map"]:
-                        if at_bat_event["team_batting_order_map"][match_batter] in match_batter_posses:
-                            match_batters.add(match_batter)
-
-                    if match_batters.intersection(qual_object["year_map_obj"][row["Year"]]):
-                        has_match = True
-    
-                if not has_match:
-                    has_row_match = False
-        if not has_row_match:
-            return False, row
-        
-    if "Batting Next To Stat Percent" in qualifiers:
-        has_row_match = True                        
-        for qual_object in qualifiers["Batting Next To Stat Percent"]:
-            if row["Year"] not in qual_object["year_map_obj"]:
-                return False, row
-            if not qual_object["negate"]:
-                has_match = False
-                for at_bat_event in player_game_info["batting_events"]:
-                    match_batter_posses = set()
-                    if (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 1:
-                        match_batter_posses.add(9)
-                        match_batter_posses.add(2)
-                    elif (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 9:
-                        match_batter_posses.add(1)
-                        match_batter_posses.add(8)
-                    else:
-                        match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) + 1)
-                        match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) - 1)
-
-                    match_batters = set()
-                    for match_batter in at_bat_event["team_batting_order_map"]:
-                        if at_bat_event["team_batting_order_map"][match_batter] in match_batter_posses:
-                            match_batters.add(match_batter)
-
-                    if match_batters.intersection(qual_object["year_map_obj"][row["Year"]]):
-                        has_match = True
-    
-                if not has_match:
-                    has_row_match = False
-        if not has_row_match:
-            return False, row
-
-    if "Batting Next To League Stat Percent" in qualifiers:
-        has_row_match = True                        
-        for qual_object in qualifiers["Batting Next To League Stat Percent"]:
-            if row["Year"] not in qual_object["year_map_obj"]:
-                return False, row
-            if not qual_object["negate"]:
-                has_match = False
-                for at_bat_event in player_game_info["batting_events"]:
-                    match_batter_posses = set()
-                    if (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 1:
-                        match_batter_posses.add(9)
-                        match_batter_posses.add(2)
-                    elif (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 9:
-                        match_batter_posses.add(1)
-                        match_batter_posses.add(8)
-                    else:
-                        match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) + 1)
-                        match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) - 1)
-
-                    match_batters = set()
-                    for match_batter in at_bat_event["team_batting_order_map"]:
-                        if at_bat_event["team_batting_order_map"][match_batter] in match_batter_posses:
-                            match_batters.add(match_batter)
-
-                    if match_batters.intersection(qual_object["year_map_obj"][row["Year"]]):
-                        has_match = True
-    
-                if not has_match:
-                    has_row_match = False
-        if not has_row_match:
-            return False, row
-    
-    if "Batting Next To AL Stat Percent" in qualifiers:
-        has_row_match = True                        
-        for qual_object in qualifiers["Batting Next To AL Stat Percent"]:
-            if row["Year"] not in qual_object["year_map_obj"]:
-                return False, row
-            if not qual_object["negate"]:
-                has_match = False
-                for at_bat_event in player_game_info["batting_events"]:
-                    match_batter_posses = set()
-                    if (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 1:
-                        match_batter_posses.add(9)
-                        match_batter_posses.add(2)
-                    elif (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 9:
-                        match_batter_posses.add(1)
-                        match_batter_posses.add(8)
-                    else:
-                        match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) + 1)
-                        match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) - 1)
-
-                    match_batters = set()
-                    for match_batter in at_bat_event["team_batting_order_map"]:
-                        if at_bat_event["team_batting_order_map"][match_batter] in match_batter_posses:
-                            match_batters.add(match_batter)
-
-                    if match_batters.intersection(qual_object["year_map_obj"][row["Year"]]):
-                        has_match = True
-    
-                if not has_match:
-                    has_row_match = False
-        if not has_row_match:
-            return False, row
-    
-    if "Batting Next To NL Stat Percent" in qualifiers:
-        has_row_match = True                        
-        for qual_object in qualifiers["Batting Next To NL Stat Percent"]:
-            if row["Year"] not in qual_object["year_map_obj"]:
-                return False, row
-            if not qual_object["negate"]:
-                has_match = False
-                for at_bat_event in player_game_info["batting_events"]:
-                    match_batter_posses = set()
-                    if (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 1:
-                        match_batter_posses.add(9)
-                        match_batter_posses.add(2)
-                    elif (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 9:
-                        match_batter_posses.add(1)
-                        match_batter_posses.add(8)
-                    else:
-                        match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) + 1)
-                        match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) - 1)
-
-                    match_batters = set()
-                    for match_batter in at_bat_event["team_batting_order_map"]:
-                        if at_bat_event["team_batting_order_map"][match_batter] in match_batter_posses:
-                            match_batters.add(match_batter)
-
-                    if match_batters.intersection(qual_object["year_map_obj"][row["Year"]]):
-                        has_match = True
-    
-                if not has_match:
-                    has_row_match = False
-        if not has_row_match:
-            return False, row
-    
-    if "Batting In Front Of Stat" in qualifiers:
-        has_row_match = True                        
-        for qual_object in qualifiers["Batting In Front Of Stat"]:
-            if row["Year"] not in qual_object["year_map_obj"]:
-                return False, row
-            if not qual_object["negate"]:
-                has_match = False
-                for at_bat_event in player_game_info["batting_events"]:
-                    match_batter_posses = set()
-                    if (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 9:
-                        match_batter_posses.add(1)
-                    else:
-                        match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) + 1)
-
-                    match_batters = set()
-                    for match_batter in at_bat_event["team_batting_order_map"]:
-                        if at_bat_event["team_batting_order_map"][match_batter] in match_batter_posses:
-                            match_batters.add(match_batter)
-
-                    if match_batters.intersection(qual_object["year_map_obj"][row["Year"]]):
-                        has_match = True
-    
-                if not has_match:
-                    has_row_match = False
-        if not has_row_match:
-            return False, row
-
-    if "Batting In Front Of AL Stat" in qualifiers:
-        has_row_match = True                        
-        for qual_object in qualifiers["Batting In Front Of AL Stat"]:
-            if row["Year"] not in qual_object["year_map_obj"]:
-                return False, row
-            if not qual_object["negate"]:
-                has_match = False
-                for at_bat_event in player_game_info["batting_events"]:
-                    match_batter_posses = set()
-                    if (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 9:
-                        match_batter_posses.add(1)
-                    else:
-                        match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) + 1)
-
-                    match_batters = set()
-                    for match_batter in at_bat_event["team_batting_order_map"]:
-                        if at_bat_event["team_batting_order_map"][match_batter] in match_batter_posses:
-                            match_batters.add(match_batter)
-
-                    if match_batters.intersection(qual_object["year_map_obj"][row["Year"]]):
-                        has_match = True
-    
-                if not has_match:
-                    has_row_match = False
-        if not has_row_match:
-            return False, row
-    
-    if "Batting In Front Of NL Stat" in qualifiers:
-        has_row_match = True                        
-        for qual_object in qualifiers["Batting In Front Of NL Stat"]:
-            if row["Year"] not in qual_object["year_map_obj"]:
-                return False, row
-            if not qual_object["negate"]:
-                has_match = False
-                for at_bat_event in player_game_info["batting_events"]:
-                    match_batter_posses = set()
-                    if (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 9:
-                        match_batter_posses.add(1)
-                    else:
-                        match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) + 1)
-
-                    match_batters = set()
-                    for match_batter in at_bat_event["team_batting_order_map"]:
-                        if at_bat_event["team_batting_order_map"][match_batter] in match_batter_posses:
-                            match_batters.add(match_batter)
-
-                    if match_batters.intersection(qual_object["year_map_obj"][row["Year"]]):
-                        has_match = True
-    
-                if not has_match:
-                    has_row_match = False
-        if not has_row_match:
-            return False, row
-
-    if "Batting Behind Stat" in qualifiers:
-        has_row_match = True                        
-        for qual_object in qualifiers["Batting Behind Stat"]:
-            if row["Year"] not in qual_object["year_map_obj"]:
-                return False, row
-            if not qual_object["negate"]:
-                has_match = False
-                for at_bat_event in player_game_info["batting_events"]:
-                    match_batter_posses = set()
-                    if (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 1:
-                        match_batter_posses.add(9)
-                    else:
-                        match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) - 1)
-
-                    match_batters = set()
-                    for match_batter in at_bat_event["team_batting_order_map"]:
-                        if at_bat_event["team_batting_order_map"][match_batter] in match_batter_posses:
-                            match_batters.add(match_batter)
-
-                    if match_batters.intersection(qual_object["year_map_obj"][row["Year"]]):
-                        has_match = True
-    
-                if not has_match:
-                    has_row_match = False
-        if not has_row_match:
-            return False, row
-    
-    if "Batting Behind AL Stat" in qualifiers:
-        has_row_match = True                        
-        for qual_object in qualifiers["Batting Behind AL Stat"]:
-            if row["Year"] not in qual_object["year_map_obj"]:
-                return False, row
-            if not qual_object["negate"]:
-                has_match = False
-                for at_bat_event in player_game_info["batting_events"]:
-                    match_batter_posses = set()
-                    if (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 1:
-                        match_batter_posses.add(9)
-                    else:
-                        match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) - 1)
-
-                    match_batters = set()
-                    for match_batter in at_bat_event["team_batting_order_map"]:
-                        if at_bat_event["team_batting_order_map"][match_batter] in match_batter_posses:
-                            match_batters.add(match_batter)
-
-                    if match_batters.intersection(qual_object["year_map_obj"][row["Year"]]):
-                        has_match = True
-    
-                if not has_match:
-                    has_row_match = False
-        if not has_row_match:
-            return False, row
-    
-    if "Batting Behind NL Stat" in qualifiers:
-        has_row_match = True                        
-        for qual_object in qualifiers["Batting Behind NL Stat"]:
-            if row["Year"] not in qual_object["year_map_obj"]:
-                return False, row
-            if not qual_object["negate"]:
-                has_match = False
-                for at_bat_event in player_game_info["batting_events"]:
-                    match_batter_posses = set()
-                    if (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 1:
-                        match_batter_posses.add(9)
-                    else:
-                        match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) - 1)
-
-                    match_batters = set()
-                    for match_batter in at_bat_event["team_batting_order_map"]:
-                        if at_bat_event["team_batting_order_map"][match_batter] in match_batter_posses:
-                            match_batters.add(match_batter)
-
-                    if match_batters.intersection(qual_object["year_map_obj"][row["Year"]]):
-                        has_match = True
-    
-                if not has_match:
-                    has_row_match = False
-        if not has_row_match:
-            return False, row
-        
-    if "Batting Next To Stat" in qualifiers:
-        has_row_match = True                        
-        for qual_object in qualifiers["Batting Next To Stat"]:
-            if row["Year"] not in qual_object["year_map_obj"]:
-                return False, row
-            if not qual_object["negate"]:
-                has_match = False
-                for at_bat_event in player_game_info["batting_events"]:
-                    match_batter_posses = set()
-                    if (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 1:
-                        match_batter_posses.add(9)
-                        match_batter_posses.add(2)
-                    elif (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 9:
-                        match_batter_posses.add(1)
-                        match_batter_posses.add(8)
-                    else:
-                        match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) + 1)
-                        match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) - 1)
-
-                    match_batters = set()
-                    for match_batter in at_bat_event["team_batting_order_map"]:
-                        if at_bat_event["team_batting_order_map"][match_batter] in match_batter_posses:
-                            match_batters.add(match_batter)
-
-                    if match_batters.intersection(qual_object["year_map_obj"][row["Year"]]):
-                        has_match = True
-    
-                if not has_match:
-                    has_row_match = False
-        if not has_row_match:
-            return False, row
-    
-    if "Batting Next To AL Stat" in qualifiers:
-        has_row_match = True                        
-        for qual_object in qualifiers["Batting Next To AL Stat"]:
-            if row["Year"] not in qual_object["year_map_obj"]:
-                return False, row
-            if not qual_object["negate"]:
-                has_match = False
-                for at_bat_event in player_game_info["batting_events"]:
-                    match_batter_posses = set()
-                    if (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 1:
-                        match_batter_posses.add(9)
-                        match_batter_posses.add(2)
-                    elif (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 9:
-                        match_batter_posses.add(1)
-                        match_batter_posses.add(8)
-                    else:
-                        match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) + 1)
-                        match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) - 1)
-
-                    match_batters = set()
-                    for match_batter in at_bat_event["team_batting_order_map"]:
-                        if at_bat_event["team_batting_order_map"][match_batter] in match_batter_posses:
-                            match_batters.add(match_batter)
-
-                    if match_batters.intersection(qual_object["year_map_obj"][row["Year"]]):
-                        has_match = True
-    
-                if not has_match:
-                    has_row_match = False
-        if not has_row_match:
-            return False, row
-    
-    if "Batting Next To NL Stat" in qualifiers:
-        has_row_match = True                        
-        for qual_object in qualifiers["Batting Next To NL Stat"]:
-            if row["Year"] not in qual_object["year_map_obj"]:
-                return False, row
-            if not qual_object["negate"]:
-                has_match = False
-                for at_bat_event in player_game_info["batting_events"]:
-                    match_batter_posses = set()
-                    if (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 1:
-                        match_batter_posses.add(9)
-                        match_batter_posses.add(2)
-                    elif (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 9:
-                        match_batter_posses.add(1)
-                        match_batter_posses.add(8)
-                    else:
-                        match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) + 1)
-                        match_batter_posses.add((at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) - 1)
-
-                    match_batters = set()
-                    for match_batter in at_bat_event["team_batting_order_map"]:
-                        if at_bat_event["team_batting_order_map"][match_batter] in match_batter_posses:
-                            match_batters.add(match_batter)
-
-                    if match_batters.intersection(qual_object["year_map_obj"][row["Year"]]):
-                        has_match = True
-    
-                if not has_match:
-                    has_row_match = False
-        if not has_row_match:
-            return False, row
-    
-    if "Driven In" in qualifiers:
-        has_row_match = True
-        for qual_object in qualifiers["Driven In"]:
-            if not qual_object["negate"]:
-                has_match = False
-                for at_bat_event in player_game_info["batting_events"]:
-                    if at_bat_event["batter"] == player_data["mlb_id"]:
-                        for player in qual_object["values"]:
-                            if player["mlb_id"] in at_bat_event["runners_driven_in"]:
-                                has_match = True
-    
-                if not has_match:
-                    has_row_match = False
-        if not has_row_match:
-            return False, row
-    
-    if "Batted In" in qualifiers:
-        has_row_match = True
-        for qual_object in qualifiers["Batted In"]:
-            if not qual_object["negate"]:
-                has_match = False
-                for at_bat_event in player_game_info["batting_events"]:
-                    if at_bat_event["batter"] == player_data["mlb_id"]:
-                        for player in qual_object["values"]:
-                            if player["mlb_id"] in at_bat_event["runners_batted_in"]:
-                                has_match = True
-    
-                if not has_match:
-                    has_row_match = False
-        if not has_row_match:
-            return False, row
-    
-    if "Back To Back With" in qualifiers:
-        has_row_match = True
-        for index, qual_object in enumerate(qualifiers["Back To Back With"]):
-            if not qual_object["negate"]:
-                has_match = False
-                for at_bat_event in player_game_info["batting_events"]:
-                    for player in qual_object["values"]:
-                        next_event = at_bat_event
-                        for event_index in range(0, index + 1):
-                            if "next_event" in next_event and next_event["next_event"]:
-                                next_event = next_event["next_event"]
-                            else:
-                                next_event = None
-                                break
-                        if next_event and next_event["batter"] == player["mlb_id"]:
-                            has_match = True
-    
-                if not has_match:
-                    has_row_match = False
-        if not has_row_match:
-            return False, row
-    
-    if "Batting Behind" in qualifiers:
-        has_row_match = True
-        for index, qual_object in enumerate(qualifiers["Batting Behind"]):
-            if not qual_object["negate"]:
-                has_match = False
-                for at_bat_event in player_game_info["batting_events"]:
-                    for player in qual_object["values"]:
-                        if (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 1:
-                            if player["mlb_id"] in at_bat_event["team_batting_order_map"] and at_bat_event["team_batting_order_map"][player["mlb_id"]] == 9:
-                                has_match = True
-                        else:
-                            if player["mlb_id"] in at_bat_event["team_batting_order_map"] and at_bat_event["team_batting_order_map"][player["mlb_id"]] == (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) - 1:
-                                has_match = True
-
-                if not has_match:
-                    has_row_match = False
-        if not has_row_match:
-            return False, row
-    
-    if "Batting In Front Of" in qualifiers:
-        has_row_match = True
-        for index, qual_object in enumerate(qualifiers["Batting In Front Of"]):
-            if not qual_object["negate"]:
-                has_match = False
-                for at_bat_event in player_game_info["batting_events"]:
-                    for player in qual_object["values"]:
-                        if (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 9:
-                            if player["mlb_id"] in at_bat_event["team_batting_order_map"] and at_bat_event["team_batting_order_map"][player["mlb_id"]] == 1:
-                                has_match = True
-                        else:
-                            if player["mlb_id"] in at_bat_event["team_batting_order_map"] and at_bat_event["team_batting_order_map"][player["mlb_id"]] == (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) + 1:
-                                has_match = True
-
-                if not has_match:
-                    has_row_match = False
-        if not has_row_match:
-            return False, row
-
-    if "Batting Next To" in qualifiers:
-        has_row_match = True
-        for index, qual_object in enumerate(qualifiers["Batting Next To"]):
-            if not qual_object["negate"]:
-                has_match = False
-                for at_bat_event in player_game_info["batting_events"]:
-                    for player in qual_object["values"]:
-                        if (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 1:
-                            if player["mlb_id"] in at_bat_event["team_batting_order_map"] and at_bat_event["team_batting_order_map"][player["mlb_id"]] == 9:
-                                has_match = True
-                            elif player["mlb_id"] in at_bat_event["team_batting_order_map"] and at_bat_event["team_batting_order_map"][player["mlb_id"]] == (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) + 1:
-                                has_match = True
-                        elif (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) == 9:
-                            if player["mlb_id"] in at_bat_event["team_batting_order_map"] and at_bat_event["team_batting_order_map"][player["mlb_id"]] == 1:
-                                has_match = True
-                            elif player["mlb_id"] in at_bat_event["team_batting_order_map"] and at_bat_event["team_batting_order_map"][player["mlb_id"]] == (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) - 1:
-                                has_match = True
-                        else:
-                            if player["mlb_id"] in at_bat_event["team_batting_order_map"] and at_bat_event["team_batting_order_map"][player["mlb_id"]] == (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) - 1:
-                                has_match = True
-                            elif player["mlb_id"] in at_bat_event["team_batting_order_map"] and at_bat_event["team_batting_order_map"][player["mlb_id"]] == (at_bat_event["team_batting_order_map"][player_data["mlb_id"]] if player_data["mlb_id"] in at_bat_event["team_batting_order_map"] else at_bat_event["batting_order_pos"]) + 1:
-                                has_match = True
-
-                if not has_match:
-                    has_row_match = False
-        if not has_row_match:
-            return False, row
-    
-    if "Caught By" in qualifiers:
-        has_row_match = True
-        for qual_object in qualifiers["Caught By"]:
-            if not qual_object["negate"]:
-                has_match = False
-                for at_bat_event in player_game_info["pitching_events"] + player_game_info["pitching_run_events"]:
-                    if "C" not in at_bat_event["team_position_map"]:
-                        continue
-                    for player in qual_object["values"]:
-                        if at_bat_event["team_position_map"]["C"] == player["mlb_id"]:
-                            has_match = True
-    
-                if not has_match:
-                    has_row_match = False
-        if not has_row_match:
-            return False, row
-        
-    if "Stealing On" in qualifiers:
-        has_row_match = True
-        for qual_object in qualifiers["Stealing On"]:
-            if not qual_object["negate"]:
-                has_match = False
-                for at_bat_event in player_game_info["batting_events"]:
-                    if at_bat_event["result"] not in ["stolen_base", "caught_stealing"]:
-                        continue
-                    if "C" not in at_bat_event["opp_position_map"]:
-                        continue
-                    if "is_catcher_po" in at_bat_event and not at_bat_event["is_catcher_po"]:
-                        continue
-
-                    for player in qual_object["values"]:
-                        if at_bat_event["opp_position_map"]["C"] == player["mlb_id"]:
-                            has_match = True
-    
-                if not has_match:
-                    has_row_match = False
-        if not has_row_match:
-            return False, row
-    
-    if "On Field With" in qualifiers:
-        has_row_match = True
-        for qual_object in qualifiers["On Field With"]:
-            if not qual_object["negate"]:
-                has_match = False
-                for at_bat_event in player_game_info["batting_events" if player_type["da_type"] == "Batter" else "pitching_events"]:
-                    for player in qual_object["values"]:
-                        for position in player["pos"]:
-                            position = position.upper()
-                            if position == "ANY":
-                                for position in at_bat_event["team_position_map"]:
-                                    if position in ("PH", "PR"):
-                                        if player["mlb_id"] in at_bat_event["team_position_map"][position]:
-                                            has_match = True
-                                    else:
-                                        if at_bat_event["team_position_map"][position] == player["mlb_id"]:
-                                            has_match = True
-                            else:
-                                if position in position_map:
-                                    position = position_map[position]
-                                if position not in at_bat_event["team_position_map"]:
-                                    continue
-                                if position in ("PH", "PR"):
-                                    if player["mlb_id"] in at_bat_event["team_position_map"][position]:
-                                        has_match = True
-                                else:
-                                    if at_bat_event["team_position_map"][position] == player["mlb_id"]:
-                                        has_match = True
-    
-                if not has_match:
-                    has_row_match = False
-        if not has_row_match:
-            return False, row
-    
-    if "On Field Against" in qualifiers:
-        has_row_match = True
-        for qual_object in qualifiers["On Field Against"]:
-            if not qual_object["negate"]:
-                has_match = False
-                for at_bat_event in player_game_info["batting_events" if player_type["da_type"] == "Batter" else "pitching_events"]:
-                    for player in qual_object["values"]:
-                        for position in player["pos"]:
-                            position = position.upper()
-                            if position == "ANY":
-                                for position in at_bat_event["opp_position_map"]:
-                                    if position in ("PH", "PR"):
-                                        if player["mlb_id"] in at_bat_event["opp_position_map"][position]:
-                                            has_match = True
-                                    else:
-                                        if at_bat_event["opp_position_map"][position] == player["mlb_id"]:
-                                            has_match = True
-                            else:
-                                if position in position_map:
-                                    position = position_map[position]
-                                if position not in at_bat_event["opp_position_map"]:
-                                    continue
-                                if position in ("PH", "PR"):
-                                    if player["mlb_id"] in at_bat_event["opp_position_map"][position]:
-                                        has_match = True
-                                else:
-                                    if at_bat_event["opp_position_map"][position] == player["mlb_id"]:
-                                        has_match = True
-    
-                if not has_match:
-                    has_row_match = False
-        if not has_row_match:
-            return False, row
-    
-    if "Position" in qualifiers:
-        has_row_match = True
-        for qual_object in qualifiers["Position"]:
-            if not qual_object["negate"]:
-                has_match = False
-                for pos in qual_object["values"]:
-                    pos = pos.upper()
-                    if pos in position_map:
-                        pos = position_map[pos]
-                    for at_bat_event in player_game_info["batting_events" if player_type["da_type"] == "Batter" else "pitching_events"]:
-                        if pos in ("PH", "PR"):
-                            if pos in at_bat_event["team_position_map"] and at_bat_event["team_position_map"][pos] and (player_data["id"] in at_bat_event["team_position_map"][pos] or player_data["mlb_id"] in at_bat_event["team_position_map"][pos]):
-                                has_match = True
-                        else:
-                            if pos in at_bat_event["team_position_map"] and at_bat_event["team_position_map"][pos] and (at_bat_event["team_position_map"][pos] == player_data["id"] or at_bat_event["team_position_map"][pos] == player_data["mlb_id"]):
-                                has_match = True
-
-                if not has_match:
-                    has_row_match = False
-        if not has_row_match:
-            return False, row
-    
-    if "PH For Position" in qualifiers:
-        has_row_match = True
-        for qual_object in qualifiers["PH For Position"]:
-            if not qual_object["negate"]:
-                has_match = False
-                for pos in qual_object["values"]:
-                    pos = pos.upper()
-                    if pos in position_map:
-                        pos = position_map[pos]
-                    for at_bat_event in player_game_info["batting_events" if player_type["da_type"] == "Batter" else "pitching_events"]:
-                        if at_bat_event["next_play_pinch"] == pos:
-                            has_match = True
-
-                if not has_match:
-                    has_row_match = False
-        if not has_row_match:
-            return False, row
-    
-    if "Facing Position" in qualifiers:
-        has_row_match = True
-        for qual_object in qualifiers["Facing Position"]:
-            if not qual_object["negate"]:
-                has_match = False
-                for pos in qual_object["values"]:
-                    pos = pos.upper()
-                    if pos in position_map:
-                        pos = position_map[pos]
-                    for at_bat_event in player_game_info["batting_events" if player_type["da_type"] == "Batter" else "pitching_events"]:
-                        if pos in ("PH", "PR"):
-                            if pos in at_bat_event["opp_position_map"] and at_bat_event["opp_position_map"][pos] and (at_bat_event["pitcher" if player_type["da_type"] == "Batter" else "batter"] in at_bat_event["opp_position_map"][pos]):
-                                has_match = True
-                        else:
-                            if pos in at_bat_event["opp_position_map"] and at_bat_event["opp_position_map"][pos] and (at_bat_event["opp_position_map"][pos] == at_bat_event["pitcher" if player_type["da_type"] == "Batter" else "batter"]):
-                                has_match = True
-
-                if not has_match:
-                    has_row_match = False
-        if not has_row_match:
-            return False, row
-    
-    if "Facing PH For Position" in qualifiers:
-        has_row_match = True
-        for qual_object in qualifiers["Facing PH For Position"]:
-            if not qual_object["negate"]:
-                has_match = False
-                for pos in qual_object["values"]:
-                    pos = pos.upper()
-                    if pos in position_map:
-                        pos = position_map[pos]
-                    for at_bat_event in player_game_info["batting_events" if player_type["da_type"] == "Batter" else "pitching_events"]:
-                        if at_bat_event["next_play_pinch"] == pos:
-                            has_match = True
-
-                if not has_match:
-                    has_row_match = False
-        if not has_row_match:
-            return False, row
-
-    if "Facing Primary Position" in qualifiers:
-        has_row_match = True
-        for qual_object in qualifiers["Facing Primary Position"]:
-            if not qual_object["negate"]:
-                has_match = False
-                for pos in qual_object["values"]:
-                    pos = pos.upper()
-                    if pos in position_map:
-                        pos = position_map[pos]
-                    for at_bat_event in player_game_info["batting_events" if player_type["da_type"] == "Batter" else "pitching_events"]:
-                        if at_bat_event["pitcher" if player_type["da_type"] == "Batter" else "batter"] in at_bat_event["opp_primary_position_map"] and at_bat_event["opp_primary_position_map"][at_bat_event["pitcher" if player_type["da_type"] == "Batter" else "batter"]] and (at_bat_event["opp_primary_position_map"][at_bat_event["pitcher" if player_type["da_type"] == "Batter" else "batter"]] == pos):
-                            has_match = True
-
-                if not has_match:
-                    has_row_match = False
-        if not has_row_match:
-            return False, row
-    
-    if "Facing Main Position" in qualifiers:
-        has_row_match = True
-        for qual_object in qualifiers["Facing Main Position"]:
-            if not qual_object["negate"]:
-                has_match = False
-                for pos in qual_object["values"]:
-                    pos = pos.upper()
-                    if pos in position_map:
-                        pos = position_map[pos]
-                    for at_bat_event in player_game_info["batting_events" if player_type["da_type"] == "Batter" else "pitching_events"]:
-                        if at_bat_event["pitcher" if player_type["da_type"] == "Batter" else "batter"] in at_bat_event["opp_main_position_map"] and at_bat_event["opp_main_position_map"][at_bat_event["pitcher" if player_type["da_type"] == "Batter" else "batter"]] and (at_bat_event["opp_main_position_map"][at_bat_event["pitcher" if player_type["da_type"] == "Batter" else "batter"]] == pos):
-                            has_match = True
-
-                if not has_match:
-                    has_row_match = False
-        if not has_row_match:
-            return False, row
-        
     
     #include_all_games = "Event Stat" in qualifiers or "Event Stat Reversed" in qualifiers or "Event Stats" in qualifiers or "Event Stats Reversed" in qualifiers or "Starting Event Stat" in qualifiers or "Starting Event Stat Reversed" in qualifiers or "Starting Event Stats" in qualifiers or "Starting Event Stats Reversed" in qualifiers
     include_all_games = True
@@ -32165,6 +31070,190 @@ def handle_da_mlb_quals(row, event_name, at_bat_event, qualifiers, player_data, 
             has_match = False
             for player in qual_object["values"]:
                 if at_bat_event["batter"] == player["mlb_id"]:
+                    has_match = True
+    
+            if qual_object["negate"]:
+                if has_match:
+                    return False
+            else:
+                if not has_match:
+                    return False
+
+    if "Teammate On First" in qualifiers:
+        for qual_object in qualifiers["Teammate On First"]:
+            has_match = False
+            for player in qual_object["values"]:
+                if row["Tm"].lower() in player["games"] and row["DateTime"] in player["games"][row["Tm"].lower()]:
+                    has_match = True
+
+            if not qual_object["negate"]:
+                if not has_match:
+                    return False
+            
+            has_match = False
+            for player in qual_object["values"]:
+                if at_bat_event["men_on_base_map"]["1B"] == player["mlb_id"]:
+                    has_match = True
+    
+            if qual_object["negate"]:
+                if has_match:
+                    return False
+            else:
+                if not has_match:
+                    return False
+    
+    if "Teammate On Second" in qualifiers:
+        for qual_object in qualifiers["Teammate On Second"]:
+            has_match = False
+            for player in qual_object["values"]:
+                if row["Tm"].lower() in player["games"] and row["DateTime"] in player["games"][row["Tm"].lower()]:
+                    has_match = True
+
+            if not qual_object["negate"]:
+                if not has_match:
+                    return False
+            
+            has_match = False
+            for player in qual_object["values"]:
+                if at_bat_event["men_on_base_map"]["2B"] == player["mlb_id"]:
+                    has_match = True
+    
+            if qual_object["negate"]:
+                if has_match:
+                    return False
+            else:
+                if not has_match:
+                    return False
+    
+    if "Teammate On Third" in qualifiers:
+        for qual_object in qualifiers["Teammate On Third"]:
+            has_match = False
+            for player in qual_object["values"]:
+                if row["Tm"].lower() in player["games"] and row["DateTime"] in player["games"][row["Tm"].lower()]:
+                    has_match = True
+
+            if not qual_object["negate"]:
+                if not has_match:
+                    return False
+            
+            has_match = False
+            for player in qual_object["values"]:
+                if at_bat_event["men_on_base_map"]["3B"] == player["mlb_id"]:
+                    has_match = True
+    
+            if qual_object["negate"]:
+                if has_match:
+                    return False
+            else:
+                if not has_match:
+                    return False
+    
+    if "Teammate On Base" in qualifiers:
+        for qual_object in qualifiers["Teammate On Base"]:
+            has_match = False
+            for player in qual_object["values"]:
+                if row["Tm"].lower() in player["games"] and row["DateTime"] in player["games"][row["Tm"].lower()]:
+                    has_match = True
+
+            if not qual_object["negate"]:
+                if not has_match:
+                    return False
+            
+            has_match = False
+            for player in qual_object["values"]:
+                if at_bat_event["men_on_base_map"]["1B"] == player["mlb_id"] or at_bat_event["men_on_base_map"]["2B"] == player["mlb_id"] or at_bat_event["men_on_base_map"]["3B"] == player["mlb_id"]:
+                    has_match = True
+    
+            if qual_object["negate"]:
+                if has_match:
+                    return False
+            else:
+                if not has_match:
+                    return False
+
+    if "Opponent On First" in qualifiers:
+        for qual_object in qualifiers["Opponent On First"]:
+            has_match = False
+            for player in qual_object["values"]:
+                if row["Tm"].lower() in player["games"] and row["DateTime"] in player["games"][row["Tm"].lower()]:
+                    has_match = True
+
+            if not qual_object["negate"]:
+                if not has_match:
+                    return False
+            
+            has_match = False
+            for player in qual_object["values"]:
+                if at_bat_event["men_on_base_map"]["1B"] == player["mlb_id"]:
+                    has_match = True
+    
+            if qual_object["negate"]:
+                if has_match:
+                    return False
+            else:
+                if not has_match:
+                    return False
+    
+    if "Opponent On Second" in qualifiers:
+        for qual_object in qualifiers["Opponent On Second"]:
+            has_match = False
+            for player in qual_object["values"]:
+                if row["Tm"].lower() in player["games"] and row["DateTime"] in player["games"][row["Tm"].lower()]:
+                    has_match = True
+
+            if not qual_object["negate"]:
+                if not has_match:
+                    return False
+            
+            has_match = False
+            for player in qual_object["values"]:
+                if at_bat_event["men_on_base_map"]["2B"] == player["mlb_id"]:
+                    has_match = True
+    
+            if qual_object["negate"]:
+                if has_match:
+                    return False
+            else:
+                if not has_match:
+                    return False
+    
+    if "Opponent On Third" in qualifiers:
+        for qual_object in qualifiers["Opponent On Third"]:
+            has_match = False
+            for player in qual_object["values"]:
+                if row["Tm"].lower() in player["games"] and row["DateTime"] in player["games"][row["Tm"].lower()]:
+                    has_match = True
+
+            if not qual_object["negate"]:
+                if not has_match:
+                    return False
+            
+            has_match = False
+            for player in qual_object["values"]:
+                if at_bat_event["men_on_base_map"]["3B"] == player["mlb_id"]:
+                    has_match = True
+    
+            if qual_object["negate"]:
+                if has_match:
+                    return False
+            else:
+                if not has_match:
+                    return False
+    
+    if "Opponent On Base" in qualifiers:
+        for qual_object in qualifiers["Opponent On Base"]:
+            has_match = False
+            for player in qual_object["values"]:
+                if row["Tm"].lower() in player["games"] and row["DateTime"] in player["games"][row["Tm"].lower()]:
+                    has_match = True
+
+            if not qual_object["negate"]:
+                if not has_match:
+                    return False
+            
+            has_match = False
+            for player in qual_object["values"]:
+                if at_bat_event["men_on_base_map"]["1B"] == player["mlb_id"] or at_bat_event["men_on_base_map"]["2B"] == player["mlb_id"] or at_bat_event["men_on_base_map"]["3B"] == player["mlb_id"]:
                     has_match = True
     
             if qual_object["negate"]:
@@ -36004,12 +35093,21 @@ def handle_da_pitch_quals(row, event_name, at_bat_event, qualifiers, player_data
     sub_man_on_second = False
     sub_man_on_third = False
 
+    sub_men_on_base_map = {
+        "1B" : None,
+        "2B" : None,
+        "3B" : None
+    }
+
     if at_bat_event["postOnFirst"]:
         sub_man_on_first = True
+        sub_men_on_base_map["1B"] = at_bat_event["postOnFirst"] 
     if at_bat_event["postOnSecond"]:
         sub_man_on_second = True
+        sub_men_on_base_map["2B"] = at_bat_event["postOnSecond"] 
     if at_bat_event["postOnThird"]:
         sub_man_on_third = True
+        sub_men_on_base_map["3B"] = at_bat_event["postOnThird"] 
     
     for inherited_play in at_bat_event["playEvents"]:
         if "eventType" in inherited_play["details"] and inherited_play["details"]["eventType"] and inherited_play["details"]["eventType"] == "runner_placed":
@@ -36042,17 +35140,22 @@ def handle_da_pitch_quals(row, event_name, at_bat_event, qualifiers, player_data
                 if sub_runner["movement"]["end"] == "2B":
                     sub_man_on_second = True
                     new_man_on_second = True
+                    sub_men_on_base_map["2B"] = sub_runner["details"]["runner"]["id"]
                 if sub_runner["movement"]["end"] == "3B":
                     sub_man_on_third = True
                     new_man_on_third = True
+                    sub_men_on_base_map["3B"] = sub_runner["details"]["runner"]["id"]
         
         for sub_runner in runners_by_play[play_index]:
             if sub_runner["movement"]["start"] == "1B" and sub_runner["movement"]["end"] != "1B":
                 sub_man_on_first = False
+                sub_men_on_base_map["1B"] = None
             if sub_runner["movement"]["start"] == "2B" and sub_runner["movement"]["end"] != "2B" and not new_man_on_second:
                 sub_man_on_second = False
+                sub_men_on_base_map["2B"] = None
             if sub_runner["movement"]["start"] == "3B" and sub_runner["movement"]["end"] != "3B" and not new_man_on_third:
                 sub_man_on_third = False
+                sub_men_on_base_map["3B"] = None
 
     sub_men_on_base = int(sub_man_on_first) + int(sub_man_on_second) + int(sub_man_on_third)
     sub_men_in_scoring = int(sub_man_on_second) + int(sub_man_on_third)
@@ -36243,6 +35346,7 @@ def handle_da_pitch_quals(row, event_name, at_bat_event, qualifiers, player_data
         "upcoming_event_type" : at_bat_event["upcoming_result"],
         "previous_player_event_type" : at_bat_event["previous_player_result"],
         "upcoming_player_event_type" : at_bat_event["upcoming_player_result"],
+        "men_on_base_map" : sub_men_on_base_map,
         "batter" : current_batter,
         "pitcher" : current_pitcher,
         "batter_first" : batter_first,
@@ -38945,6 +38049,8 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
             starting_opp_position_map = opp_position_map.copy()
             starting_team_batting_order_map = team_batting_order_map.copy()
             starting_opp_batting_order_map = opp_batting_order_map.copy()
+            pinch_run_for_map = {}
+            before_first_pitch = True
             for play in scoring_play["playEvents"]:
                 if "isSubstitution" in play and play["isSubstitution"]:
                     if "postPlay" in play and play["postPlay"]:
@@ -39107,6 +38213,11 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
                                 del opp_batting_order_map[old_player]
                             if "battingOrder" in play:
                                 opp_batting_order_map[pinch_hitter] = int(play["battingOrder"][0])
+
+                        if play["position"]["abbreviation"] == "PR" and before_first_pitch:
+                            pinch_run_for_map[play["base"]] = pinch_hitter
+                elif play["isPitch"]:
+                    before_first_pitch = False 
 
             if scoring_play["result"]["type"] != "atBat" or "eventType" not in scoring_play["result"]:
                 continue
@@ -39343,6 +38454,12 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
             man_on_second = False
             man_on_third = False
 
+            men_on_base_map = {
+                "1B" : None,
+                "2B" : None,
+                "3B" : None
+            }
+
             batter_first = game_data["first_names"][batter]
             batter_birth_first = game_data["birth_first_names"][batter]
             batter_last = game_data["last_names"][batter]
@@ -39360,19 +38477,32 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
             man_on_first = False
             man_on_second = False
             man_on_third = False
-            post_man_on_first = False
-            post_man_on_second = False
-            post_man_on_third = False
+            post_man_on_first = None
+            post_man_on_second = None
+            post_man_on_third = None
             if index != 0 and sub_data["liveData"]["plays"]["allPlays"][index - 1]["about"]["isTopInning"] == is_top_inning:
                 if "postOnFirst" in sub_data["liveData"]["plays"]["allPlays"][index - 1]["matchup"]:
                     man_on_first = True
-                    post_man_on_first = True
+                    post_man_on_first = sub_data["liveData"]["plays"]["allPlays"][index - 1]["matchup"]["postOnFirst"]["id"]
+                    if 1 in pinch_run_for_map:
+                        post_man_on_first = pinch_run_for_map[1]
+                    else:
+                        post_man_on_first = sub_data["liveData"]["plays"]["allPlays"][index - 1]["matchup"]["postOnFirst"]["id"]
+                    men_on_base_map["1B"] = post_man_on_first
                 if "postOnSecond" in sub_data["liveData"]["plays"]["allPlays"][index - 1]["matchup"]:
                     man_on_second = True
-                    post_man_on_second = True
+                    if 2 in pinch_run_for_map:
+                        post_man_on_second = pinch_run_for_map[2]
+                    else:
+                        post_man_on_second = sub_data["liveData"]["plays"]["allPlays"][index - 1]["matchup"]["postOnSecond"]["id"]
+                    men_on_base_map["2B"] = post_man_on_second
                 if "postOnThird" in sub_data["liveData"]["plays"]["allPlays"][index - 1]["matchup"]:
                     man_on_third = True
-                    post_man_on_third = True
+                    if 3 in pinch_run_for_map:
+                        post_man_on_third = pinch_run_for_map[3]
+                    else:
+                        post_man_on_third = sub_data["liveData"]["plays"]["allPlays"][index - 1]["matchup"]["postOnThird"]["id"]
+                    men_on_base_map["3B"] = post_man_on_third
 
             for inherited_play in scoring_play["playEvents"]:
                 if "eventType" in inherited_play["details"] and inherited_play["details"]["eventType"] and inherited_play["details"]["eventType"] == "runner_placed":
@@ -39411,17 +38541,22 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
                         if sub_runner["movement"]["end"] == "2B":
                             man_on_second = True
                             new_man_on_second = True
+                            men_on_base_map["2B"] = sub_runner["details"]["runner"]["id"]
                         if sub_runner["movement"]["end"] == "3B":
                             man_on_third = True
                             new_man_on_third = True
+                            men_on_base_map["3B"] = sub_runner["details"]["runner"]["id"]
                 
                 for sub_runner in runners_by_play[play_index]:
                     if sub_runner["movement"]["start"] == "1B" and sub_runner["movement"]["end"] != "1B":
                         man_on_first = False
+                        men_on_base_map["1B"] = None
                     if sub_runner["movement"]["start"] == "2B" and sub_runner["movement"]["end"] != "2B" and not new_man_on_second:
                         man_on_second = False
+                        men_on_base_map["2B"] = None
                     if sub_runner["movement"]["start"] == "3B" and sub_runner["movement"]["end"] != "3B" and not new_man_on_third:
                         man_on_third = False
+                        men_on_base_map["3B"] = None
 
             men_on_base = int(man_on_first) + int(man_on_second) + int(man_on_third)
             men_in_scoring = int(man_on_second) + int(man_on_third)
@@ -39818,6 +38953,7 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
             event_obj = {
                 "batter" : batter,
                 "pitcher" : pitcher,
+                "men_on_base_map" : men_on_base_map,
                 "batter_first" : batter_first,
                 "pitcher_first" : pitcher_first,
                 "batter_birth_first" : batter_birth_first,
@@ -40338,13 +39474,22 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
                 sub_man_on_second = False
                 sub_man_on_third = False
 
+                sub_men_on_base_map = {
+                    "1B" : None,
+                    "2B" : None,
+                    "3B" : None
+                }
+
                 if index != 0 and sub_data["liveData"]["plays"]["allPlays"][index - 1]["about"]["isTopInning"] == is_top_inning:
-                    if "postOnFirst" in sub_data["liveData"]["plays"]["allPlays"][index - 1]["matchup"]:
+                    if post_man_on_first:
                         sub_man_on_first = True
-                    if "postOnSecond" in sub_data["liveData"]["plays"]["allPlays"][index - 1]["matchup"]:
+                        sub_men_on_base_map["1B"] = post_man_on_first
+                    if post_man_on_second:
                         sub_man_on_second = True
-                    if "postOnThird" in sub_data["liveData"]["plays"]["allPlays"][index - 1]["matchup"]:
+                        sub_men_on_base_map["2B"] = post_man_on_second
+                    if post_man_on_third:
                         sub_man_on_third = True
+                        sub_men_on_base_map["3B"] = post_man_on_third
                 
                 for inherited_play in scoring_play["playEvents"]:
                     if "eventType" in inherited_play["details"] and inherited_play["details"]["eventType"] and inherited_play["details"]["eventType"] == "runner_placed":
@@ -40377,17 +39522,22 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
                             if sub_runner["movement"]["end"] == "2B":
                                 sub_man_on_second = True
                                 new_man_on_second = True
+                                sub_men_on_base_map["2B"] = sub_runner["details"]["runner"]["id"]
                             if sub_runner["movement"]["end"] == "3B":
                                 sub_man_on_third = True
                                 new_man_on_third = True
+                                sub_men_on_base_map["3B"] = sub_runner["details"]["runner"]["id"]
                     
                     for sub_runner in runners_by_play[play_index]:
                         if sub_runner["movement"]["start"] == "1B" and sub_runner["movement"]["end"] != "1B":
                             sub_man_on_first = False
+                            sub_men_on_base_map["1B"] = None
                         if sub_runner["movement"]["start"] == "2B" and sub_runner["movement"]["end"] != "2B" and not new_man_on_second:
                             sub_man_on_second = False
+                            sub_men_on_base_map["2B"] = None
                         if sub_runner["movement"]["start"] == "3B" and sub_runner["movement"]["end"] != "3B" and not new_man_on_third:
                             sub_man_on_third = False
+                            sub_men_on_base_map["3B"] = None
 
                 sub_men_on_base = int(sub_man_on_first) + int(sub_man_on_second) + int(sub_man_on_third)
                 sub_men_in_scoring = int(sub_man_on_second) + int(sub_man_on_third)
@@ -40597,6 +39747,7 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
                 sub_event_obj = {
                     "batter" : batter,
                     "pitcher" : pitcher,
+                    "men_on_base_map" : sub_men_on_base_map,
                     "batter_first" : batter_first,
                     "pitcher_first" : pitcher_first,
                     "batter_birth_first" : batter_birth_first,
