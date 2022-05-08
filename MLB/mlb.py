@@ -25801,7 +25801,7 @@ def handle_schedule_stats(player_data, live_game, all_rows, qualifiers, is_playo
             for data in da_games:
                 all_rows_order.append(data)
     
-        all_rows_order = sorted(all_rows_order, key=lambda row: row["NHLGameLink"])
+        all_rows_order = sorted(all_rows_order, key=lambda row: row["DateTime"])
         for index, row_data in enumerate(all_rows_order):
             if index == 0:
                 row_data["Previous Team Result"] = None
