@@ -11263,8 +11263,8 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                         }
                                     elif "Attendance" in qual_type:
                                         qualifier_obj["values"] = {
-                                            "start_val" : ordinal_to_number(split_vals[0]),
-                                            "end_val" : float("inf"),
+                                            "start_val" : 0,
+                                            "end_val" : ordinal_to_number(split_vals[0]),
                                             "reverse" : reverse
                                         }
                                     else:
