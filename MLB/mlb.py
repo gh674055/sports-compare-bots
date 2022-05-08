@@ -28089,10 +28089,10 @@ def handle_mlb_game_stats(all_rows, has_count_stat, qualifiers, player_data, pla
             for qual_object in qualifiers["Walk Off"]:
                 if not qual_object["negate"]:
                     if player_type["da_type"] == "Batter":
-                        if row_data["Location"] and row_data["Result"] == "W" and (row_data["Team Score"] - row_data["Opponent Score"]) <= 4:
+                        if row_data["Location"] and row_data["Result"] in ["W", None] and (row_data["Team Score"] - row_data["Opponent Score"]) <= 4:
                             has_match = True
                     else:
-                        if not row_data["Location"] and row_data["Result"] == "L" and (row_data["Opponent Score"] - row_data["Team Score"]) <= -4:
+                        if not row_data["Location"] and row_data["Result"] in ["L", None] and (row_data["Opponent Score"] - row_data["Team Score"]) <= -4:
                             has_match = True
                 else:
                     has_match = True
@@ -28561,10 +28561,10 @@ def handle_mlb_game_stats_single_thread(all_rows, has_count_stat, qualifiers, pl
             for qual_object in qualifiers["Walk Off"]:
                 if not qual_object["negate"]:
                     if player_type["da_type"] == "Batter":
-                        if row_data["Location"] and row_data["Result"] == "W" and (row_data["Team Score"] - row_data["Opponent Score"]) <= 4:
+                        if row_data["Location"] and row_data["Result"] in ["W", None] and (row_data["Team Score"] - row_data["Opponent Score"]) <= 4:
                             has_match = True
                     else:
-                        if not row_data["Location"] and row_data["Result"] == "L" and (row_data["Opponent Score"] - row_data["Team Score"]) <= -4:
+                        if not row_data["Location"] and row_data["Result"] in ["L", None] and (row_data["Opponent Score"] - row_data["Team Score"]) <= -4:
                             has_match = True
                 else:
                     has_match = True
