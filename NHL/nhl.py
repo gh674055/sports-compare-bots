@@ -13923,7 +13923,7 @@ def sub_handle_the_quals(players, qualifier, qual_str, player_str, time_frame, k
                         player_games[opponent] = set()
                     player_games[opponent].add(date)
                 elif key == "Game":
-                    player_games[row["GameLink"]] = True
+                    player_games[row["NHLGameLink"]] = True
                 elif key == "Season":
                     player_games[row["Year"]] = True
                 elif key == "Date":
@@ -19774,7 +19774,7 @@ def handle_nhl_game_stats(player_data, all_rows, time_frame, player_link, player
                 if not qual_object["negate"]:
                     has_match = False
                     for player in qual_object["values"]:
-                        if row_data["GameLink"] in player["games"]:
+                        if row_data["NHLGameLink"] in player["games"]:
                             has_match = True
                 
                     if not has_match:
@@ -19785,7 +19785,7 @@ def handle_nhl_game_stats(player_data, all_rows, time_frame, player_link, player
             for qual_object in time_frame["qualifiers"]["Or Event Sub Query"]:
                 if not qual_object["negate"]:
                     for player in qual_object["values"]:
-                        if row_data["GameLink"] in player["games"]:
+                        if row_data["NHLGameLink"] in player["games"]:
                             has_match = True
                 else:
                     has_match = True
@@ -19796,62 +19796,62 @@ def handle_nhl_game_stats(player_data, all_rows, time_frame, player_link, player
         for row_data in all_rows:
             for qual_object in time_frame["qualifiers"]["On Ice With Stat"]:
                 if "year_map_obj" not in qual_object:
-                    games_to_skip.add(row_data["GameLink"])
+                    games_to_skip.add(row_data["NHLGameLink"])
     if "On Ice Against Stat" in time_frame["qualifiers"]:
         for row_data in all_rows:
             for qual_object in time_frame["qualifiers"]["On Ice Against Stat"]:
                 if "year_map_obj" not in qual_object:
-                    games_to_skip.add(row_data["GameLink"])
+                    games_to_skip.add(row_data["NHLGameLink"])
     if "Shot On Stat" in time_frame["qualifiers"]:
         for row_data in all_rows:
             for qual_object in time_frame["qualifiers"]["Shot On Stat"]:
                 if "year_map_obj" not in qual_object:
-                    games_to_skip.add(row_data["GameLink"])
+                    games_to_skip.add(row_data["NHLGameLink"])
     if "Shot By Stat" in time_frame["qualifiers"]:
         for row_data in all_rows:
             for qual_object in time_frame["qualifiers"]["Shot By Stat"]:
                 if "year_map_obj" not in qual_object:
-                    games_to_skip.add(row_data["GameLink"])
+                    games_to_skip.add(row_data["NHLGameLink"])
     if "On Ice With Stat Rank" in time_frame["qualifiers"]:
         for row_data in all_rows:
             for qual_object in time_frame["qualifiers"]["On Ice With Stat Rank"]:
                 if "year_map_obj" not in qual_object:
-                    games_to_skip.add(row_data["GameLink"])
+                    games_to_skip.add(row_data["NHLGameLink"])
     if "On Ice Against Stat Rank" in time_frame["qualifiers"]:
         for row_data in all_rows:
             for qual_object in time_frame["qualifiers"]["On Ice Against Stat Rank"]:
                 if "year_map_obj" not in qual_object:
-                    games_to_skip.add(row_data["GameLink"])
+                    games_to_skip.add(row_data["NHLGameLink"])
     if "Shot On Stat Rank" in time_frame["qualifiers"]:
         for row_data in all_rows:
             for qual_object in time_frame["qualifiers"]["Shot On Stat Rank"]:
                 if "year_map_obj" not in qual_object:
-                    games_to_skip.add(row_data["GameLink"])
+                    games_to_skip.add(row_data["NHLGameLink"])
     if "Shot By Stat Rank" in time_frame["qualifiers"]:
         for row_data in all_rows:
             for qual_object in time_frame["qualifiers"]["Shot By Stat Rank"]:
                 if "year_map_obj" not in qual_object:
-                    games_to_skip.add(row_data["GameLink"])
+                    games_to_skip.add(row_data["NHLGameLink"])
     if "On Ice With Stat Percent" in time_frame["qualifiers"]:
         for row_data in all_rows:
             for qual_object in time_frame["qualifiers"]["On Ice With Stat Percent"]:
                 if "year_map_obj" not in qual_object:
-                    games_to_skip.add(row_data["GameLink"])
+                    games_to_skip.add(row_data["NHLGameLink"])
     if "On Ice Against Stat Percent" in time_frame["qualifiers"]:
         for row_data in all_rows:
             for qual_object in time_frame["qualifiers"]["On Ice Against Stat Percent"]:
                 if "year_map_obj" not in qual_object:
-                    games_to_skip.add(row_data["GameLink"])
+                    games_to_skip.add(row_data["NHLGameLink"])
     if "Shot On Stat Percent" in time_frame["qualifiers"]:
         for row_data in all_rows:
             for qual_object in time_frame["qualifiers"]["Shot On Stat Percent"]:
                 if "year_map_obj" not in qual_object:
-                    games_to_skip.add(row_data["GameLink"])
+                    games_to_skip.add(row_data["NHLGameLink"])
     if "Shot By Stat Percent" in time_frame["qualifiers"]:
         for row_data in all_rows:
             for qual_object in time_frame["qualifiers"]["Shot By Stat Percent"]:
                 if "year_map_obj" not in qual_object:
-                    games_to_skip.add(row_data["GameLink"])
+                    games_to_skip.add(row_data["NHLGameLink"])
     if "Overtime" in time_frame["qualifiers"]:
         for row_data in all_rows:
             has_match = False
@@ -20127,7 +20127,7 @@ def handle_nhl_game_stats_single_thread(player_data, all_rows, time_frame, playe
                 if not qual_object["negate"]:
                     has_match = False
                     for player in qual_object["values"]:
-                        if row_data["GameLink"] in player["games"]:
+                        if row_data["NHLGameLink"] in player["games"]:
                             has_match = True
                 
                     if not has_match:
@@ -20138,7 +20138,7 @@ def handle_nhl_game_stats_single_thread(player_data, all_rows, time_frame, playe
             for qual_object in time_frame["qualifiers"]["Or Event Sub Query"]:
                 if not qual_object["negate"]:
                     for player in qual_object["values"]:
-                        if row_data["GameLink"] in player["games"]:
+                        if row_data["NHLGameLink"] in player["games"]:
                             has_match = True
                 else:
                     has_match = True
@@ -20149,62 +20149,62 @@ def handle_nhl_game_stats_single_thread(player_data, all_rows, time_frame, playe
         for row_data in all_rows:
             for qual_object in time_frame["qualifiers"]["On Ice With Stat"]:
                 if "year_map_obj" not in qual_object:
-                    games_to_skip.add(row_data["GameLink"])
+                    games_to_skip.add(row_data["NHLGameLink"])
     if "On Ice Against Stat" in time_frame["qualifiers"]:
         for row_data in all_rows:
             for qual_object in time_frame["qualifiers"]["On Ice Against Stat"]:
                 if "year_map_obj" not in qual_object:
-                    games_to_skip.add(row_data["GameLink"])
+                    games_to_skip.add(row_data["NHLGameLink"])
     if "Shot On Stat" in time_frame["qualifiers"]:
         for row_data in all_rows:
             for qual_object in time_frame["qualifiers"]["Shot On Stat"]:
                 if "year_map_obj" not in qual_object:
-                    games_to_skip.add(row_data["GameLink"])
+                    games_to_skip.add(row_data["NHLGameLink"])
     if "Shot By Stat" in time_frame["qualifiers"]:
         for row_data in all_rows:
             for qual_object in time_frame["qualifiers"]["Shot By Stat"]:
                 if "year_map_obj" not in qual_object:
-                    games_to_skip.add(row_data["GameLink"])
+                    games_to_skip.add(row_data["NHLGameLink"])
     if "On Ice With Stat Rank" in time_frame["qualifiers"]:
         for row_data in all_rows:
             for qual_object in time_frame["qualifiers"]["On Ice With Stat Rank"]:
                 if "year_map_obj" not in qual_object:
-                    games_to_skip.add(row_data["GameLink"])
+                    games_to_skip.add(row_data["NHLGameLink"])
     if "On Ice Against Stat Rank" in time_frame["qualifiers"]:
         for row_data in all_rows:
             for qual_object in time_frame["qualifiers"]["On Ice Against Stat Rank"]:
                 if "year_map_obj" not in qual_object:
-                    games_to_skip.add(row_data["GameLink"])
+                    games_to_skip.add(row_data["NHLGameLink"])
     if "Shot On Stat Rank" in time_frame["qualifiers"]:
         for row_data in all_rows:
             for qual_object in time_frame["qualifiers"]["Shot On Stat Rank"]:
                 if "year_map_obj" not in qual_object:
-                    games_to_skip.add(row_data["GameLink"])
+                    games_to_skip.add(row_data["NHLGameLink"])
     if "Shot By Stat Rank" in time_frame["qualifiers"]:
         for row_data in all_rows:
             for qual_object in time_frame["qualifiers"]["Shot By Stat Rank"]:
                 if "year_map_obj" not in qual_object:
-                    games_to_skip.add(row_data["GameLink"])
+                    games_to_skip.add(row_data["NHLGameLink"])
     if "On Ice With Stat Percent" in time_frame["qualifiers"]:
         for row_data in all_rows:
             for qual_object in time_frame["qualifiers"]["On Ice With Stat Percent"]:
                 if "year_map_obj" not in qual_object:
-                    games_to_skip.add(row_data["GameLink"])
+                    games_to_skip.add(row_data["NHLGameLink"])
     if "On Ice Against Stat Percent" in time_frame["qualifiers"]:
         for row_data in all_rows:
             for qual_object in time_frame["qualifiers"]["On Ice Against Stat Percent"]:
                 if "year_map_obj" not in qual_object:
-                    games_to_skip.add(row_data["GameLink"])
+                    games_to_skip.add(row_data["NHLGameLink"])
     if "Shot On Stat Percent" in time_frame["qualifiers"]:
         for row_data in all_rows:
             for qual_object in time_frame["qualifiers"]["Shot On Stat Percent"]:
                 if "year_map_obj" not in qual_object:
-                    games_to_skip.add(row_data["GameLink"])
+                    games_to_skip.add(row_data["NHLGameLink"])
     if "Shot By Stat Percent" in time_frame["qualifiers"]:
         for row_data in all_rows:
             for qual_object in time_frame["qualifiers"]["Shot By Stat Percent"]:
                 if "year_map_obj" not in qual_object:
-                    games_to_skip.add(row_data["GameLink"])
+                    games_to_skip.add(row_data["NHLGameLink"])
     if "Overtime" in time_frame["qualifiers"]:
         for row_data in all_rows:
             has_match = False
@@ -28893,7 +28893,7 @@ def perform_metadata_qual(event_name, goal_event, qualifiers, player_game_info, 
         for qual_object in qualifiers["Event Sub Query"]:
             has_match = False
             for player in qual_object["values"]:
-                if row["GameLink"] in player["games"]:
+                if row["NHLGameLink"] in player["games"]:
                     has_match = perform_metadata_qual(event_name, goal_event, player["quals"], player_game_info, row, is_playoffs, year, is_faceoff, is_toi, is_off_ice, skip_career_events)
             if qual_object["negate"]:
                 if has_match:
@@ -28907,7 +28907,7 @@ def perform_metadata_qual(event_name, goal_event, qualifiers, player_game_info, 
         for qual_object in qualifiers["Or Event Sub Query"]:
             has_match = False
             for player in qual_object["values"]:
-                if row["GameLink"] in player["games"]:
+                if row["NHLGameLink"] in player["games"]:
                     has_match = perform_metadata_qual(event_name, goal_event, player["quals"], player_game_info, row, is_playoffs, year, is_faceoff, is_toi, is_off_ice, skip_career_events)
             if qual_object["negate"]:
                 if not has_match:
@@ -31136,7 +31136,7 @@ def perform_qualifier(player_data, player_type, row, time_frame, all_rows):
         for qual_object in qualifiers["Sub Query"]:
             has_match = False
             for player in qual_object["values"]:
-                if row["GameLink"] in player["games"]:
+                if row["NHLGameLink"] in player["games"]:
                     has_match = True
             if qual_object["negate"]:
                 if has_match:
@@ -31150,7 +31150,7 @@ def perform_qualifier(player_data, player_type, row, time_frame, all_rows):
         for qual_object in qualifiers["Or Sub Query"]:
             has_match = False
             for player in qual_object["values"]:
-                if row["GameLink"] in player["games"]:
+                if row["NHLGameLink"] in player["games"]:
                     has_match = True
             if qual_object["negate"]:
                 if not has_match:
@@ -31209,10 +31209,10 @@ def perform_qualifier(player_data, player_type, row, time_frame, all_rows):
     if "Game After Sub Query" in qualifiers:
         all_games = player_data["all_games"][row["Year"]]
 
-        game_index = [sub_row["GameLink"] for sub_row in player_data["all_games"][row["Year"]]].index(row["GameLink"])
+        game_index = [sub_row["NHLGameLink"] for sub_row in player_data["all_games"][row["Year"]]].index(row["NHLGameLink"])
         if game_index == 0:
             return False
-        previous_game = all_games[game_index - 1]["GameLink"]
+        previous_game = all_games[game_index - 1]["NHLGameLink"]
 
         for qual_object in qualifiers["Game After Sub Query"]:
             has_match = False
@@ -31229,10 +31229,10 @@ def perform_qualifier(player_data, player_type, row, time_frame, all_rows):
     if "Game Before Sub Query" in qualifiers:
         all_games = player_data["all_games"][row["Year"]]
 
-        game_index = [sub_row["GameLink"] for sub_row in player_data["all_games"][row["Year"]]].index(row["GameLink"])
+        game_index = [sub_row["NHLGameLink"] for sub_row in player_data["all_games"][row["Year"]]].index(row["NHLGameLink"])
         if game_index == len(all_games) - 1:
             return False
-        next_game = all_games[game_index + 1]["GameLink"]
+        next_game = all_games[game_index + 1]["NHLGameLink"]
 
         for qual_object in qualifiers["Game Before Sub Query"]:
             has_match = False
