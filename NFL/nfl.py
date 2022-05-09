@@ -6409,7 +6409,7 @@ def get_player(name, player_type, time_frames):
         pot_id = last_name + first_name
 
         for i in range(0, 10):
-            the_id = pot_id + str(i).zfill(2)            
+            the_id = pot_id + str(i).zfill(2)
             url = main_page_url_format.format(the_id[0].upper(), the_id)
             request = urllib.request.Request(url, headers=request_headers)
             try:
@@ -6421,7 +6421,7 @@ def get_player(name, player_type, time_frames):
                     raise
 
             potential_draft_into = get_pro_draft_info(player_page)
-            if potential_draft_into == player_draft_info:
+            if potential_draft_into and potential_draft_into == player_draft_info:
                 return the_id, player_page
     elif path[0] == "search":
         player_div = player_page.find("div", {"id" : "players"})
@@ -17521,8 +17521,7 @@ def get_college_draft_info(player_page):
     return None
 
 def get_pro_draft_info(player_page):
-    player_info = player_page.find("div", {"id" : "meta"})
-    college_el = player_info.find("strong", text="Draft")
+    college_el = player_page.find("strong", text="Draft")
     if college_el:
         match = re.search(r"in the (\d+).+ round \((\d+).+ overall\) of the (\d{4}) NFL Draft\.", college_el.parent.text)
         return {
