@@ -20295,6 +20295,12 @@ def get_nhl_schedule(player_data, all_rows, qualifiers, s):
 
                     row_data["Year"] = season
 
+                    if game_data["gamePk"] in manual_info:
+                        row_date = manual_info[game_data["gamePk"]]["Date"]
+                    else:
+                        row_date = row_data["StartTime"].date()
+                    row_data["Date"] = row_date
+
                     is_home = game_data["teams"]["home"]["team"]["id"] == team_id
                     if is_home:
                         player_team_id = game_data["teams"]["home"]["team"]["id"]
@@ -36487,6 +36493,7 @@ def handle_schedule_stats(player_data, all_rows, qualifiers, is_playoffs, missin
                             
                             manual_row["Per"] = manual_info_row["Per"]
                             manual_row["StartTime"] = manual_info_row["StartTime"]
+                            manual_row["Date"] = manual_info_row["Date"]
 
                             if row_data["is_playoffs"]:
                                 season_obj["playoffs"].append(manual_row)
