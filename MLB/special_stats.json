@@ -2253,6 +2253,13 @@
         ]
     },
     "no_hit": {
+        "detmere01" : [
+            {
+                "date": "2022-05-10 00:00:00",
+                "is_playoffs": false,
+                "team": "LAA"
+            }
+        ],
         "gilbety01" : [
             {
                 "date": "2021-08-14 00:00:00",
