@@ -1855,12 +1855,14 @@ def handle_player_string(comment, player_type, is_fantasy, last_updated, hide_ta
                                 is_fantasy = True
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(last_match.group(0), "", 1)).strip()
 
+                        playoffs_set = False
                         last_match = re.search(r"\b(no(?:t|n)?(?: -)?)?(?:(?<!-)includes?|(?<!-)including|(?<!-)and|(?<!-)with)(?: |-)?(?:playoffs?|post(?:-| )?seasons?|regular(?:-| )?seasons?)(?!-)\b", time_frame)
                         if last_match:
                             playoff_match_str = last_match.group(1)
                             if "regular" in last_match.group(0):
                                 if playoff_match_str:
                                     playoffs = "Only"
+                                    playoffs_set = True
                                 else:
                                     playoffs = "Include"
                             else:
@@ -1876,6 +1878,7 @@ def handle_player_string(comment, player_type, is_fantasy, last_updated, hide_ta
                                 if "regular" in last_match.group(0):
                                     if playoff_match_str:
                                         playoffs = "Only"
+                                        playoffs_set = True
                                     else:
                                         playoffs = "No"
                                 else:
@@ -1883,6 +1886,7 @@ def handle_player_string(comment, player_type, is_fantasy, last_updated, hide_ta
                                         playoffs = "No"
                                     else:
                                         playoffs = "Only"
+                                        playoffs_set = True
                                 time_frame = re.sub(r"\s+", " ", time_frame.replace(last_match.group(0), "", 1)).strip()
                         
                         time_frame = re.sub(r"\s+", " ", re.sub(r"(?:regular(?:-| )?season|playoffs?|post(?:-| )?seasons?)(?!-)", "", time_frame)).strip()
@@ -4475,7 +4479,7 @@ def handle_player_string(comment, player_type, is_fantasy, last_updated, hide_ta
                         last_matches = list(re.finditer(r"(no(?:t|n)?(?: |-))?(first|1st|last|this|past)? ?(\S*)? ?(?:season(?:[- ]))?(games?|weeks?)", time_frame))
                         start_match = False
                         sub_last_match = re.search(r"(no(?:t|n)?(?: |-))?(first|1st|last|this|past)? ?(\S*)? ?((?:(?:calendar|date)(?: |-))?days?|(?:(?:calendar|date)(?: |-))?weeks?|(?:(?:calendar|date)(?: |-))?months?|(?:(?:calendar|date)(?: |-))?years?|seasons?)( ([\w-]+)( reversed?)?)?", time_frame)
-                        if ("Start" in qualifiers or playoffs != "Only") and (not sub_last_match or sub_last_match.group(3).endswith("to") or sub_last_match.group(3).endswith("yester")):
+                        if ("Start" in qualifiers or not playoffs_set) and (not sub_last_match or sub_last_match.group(3).endswith("to") or sub_last_match.group(3).endswith("yester")):
                             last_matches += list(re.finditer(r"(no(?:t|n)?(?: |-))?(first|1st|last|this|past) ?(\S*)", time_frame))
                             start_match = True
                         for last_match in last_matches:
@@ -4732,7 +4736,7 @@ def handle_player_string(comment, player_type, is_fantasy, last_updated, hide_ta
                         last_matches = re.finditer(r"(no(?:t|n)?(?: |-))(first|1st|last|this|past) ?(\S*)", time_frame)
                         for last_match in last_matches:
                             unit = "season"
-                            if last_match and not last_match.group(3).endswith("to") and not last_match.group(3).endswith("yester") and playoffs == "Only":
+                            if last_match and not last_match.group(3).endswith("to") and not last_match.group(3).endswith("yester") and playoffs_set:
                                 time_frame_type = "special-qual"
                             if last_match and not last_match.group(3).endswith("to") and not last_match.group(3).endswith("yester"):
                                 compare_type = last_match.group(2)
@@ -4894,7 +4898,7 @@ def handle_player_string(comment, player_type, is_fantasy, last_updated, hide_ta
                             if not last_match:
                                 last_match = re.search(r"(first|1st|last|this|past) ?(\S*)", time_frame)
                                 unit = "season"
-                                if last_match and not last_match.group(2).endswith("to") and not last_match.group(2).endswith("yester") and playoffs == "Only":
+                                if last_match and not last_match.group(2).endswith("to") and not last_match.group(2).endswith("yester") and playoffs_set:
                                     time_frame_type = "special-qual"
                             if last_match and not last_match.group(2).endswith("to") and not last_match.group(2).endswith("yester"):
                                 compare_type = last_match.group(1)
