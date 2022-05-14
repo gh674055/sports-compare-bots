@@ -18905,7 +18905,8 @@ def perform_schedule_qualifiers(row, qualifiers):
         if not "StartTime" in row["Shared"]:
             return False
 
-        is_national = row["Shared"]["is_playoffs"] or row["Shared"]["Date"].weekday() != 6 or row["Shared"]["StartTime"].time().replace(microsecond=0).replace(second=0) < datetime.time(12, 0, 0) or not row["Shared"]["StartTime"].time().replace(microsecond=0).replace(second=0) >= datetime.time(19, 0, 0)
+        start_time = row["Shared"]["StartTime"].time().replace(microsecond=0).replace(second=0)
+        is_national = row["Shared"]["is_playoffs"] or row["Shared"]["Date"].weekday() != 6 or start_time < datetime.time(12, 0, 0) or start_time >= datetime.time(19, 0, 0)
         for qual_object in qualifiers["National Game"]:
             if qual_object["negate"]:
                 if is_national:
