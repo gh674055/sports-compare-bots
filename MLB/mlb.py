@@ -7967,7 +7967,10 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
 
                         if is_sub_query:
+                            has_hide_advanced = "hide-advanced" in extra_stats
                             extra_stats = set()
+                            if has_hide_advanced:
+                                extra_stats.add("hide-advanced")
 
                         playoffs_set = False
                         last_match = re.search(r"\b(no(?:t|n)?(?: -)?)?(?:(?<!-)includes?|(?<!-)including|(?<!-)and|(?<!-)with)(?: |-)?(?:playoffs?|post(?:-| )?seasons?|regular(?:-| )?seasons?)(?!-)\b", time_frame)
@@ -13773,12 +13776,8 @@ def determine_player_str(qualifier, player_type, player_str, time_frame, qual_st
             player_str = player_str[:bracket_index] + " " + playoffs_str + player_str[bracket_index:]
     elif "time_frame_str" in qualifier:
         player_str += " [" + qualifier["time_frame_str"] + "]"
-        bracket_index = re.search(r"(?<!\\)]", player_str).start()
-        player_str = player_str[:bracket_index] + " hide-advanced" + player_str[bracket_index:]
     else:
         player_str += " []"
-        bracket_index = re.search(r"(?<!\\)]", player_str).start()
-        player_str = player_str[:bracket_index] + " hide-advanced" + player_str[bracket_index:]
 
     if is_pre_query and time_frame["type"] == "date" and not (time_frame["time_start"] == datetime.date.min.year and time_frame["time_end"] == current_season):
         bracket_index = re.search(r"(?<!\\)]", player_str).start()
@@ -13798,9 +13797,11 @@ def determine_player_str(qualifier, player_type, player_str, time_frame, qual_st
     bracket_index = re.search(r"(?<!\\)]", player_str).start()
     player_str = player_str[:bracket_index] + " is-sub-query" + player_str[bracket_index:]
 
+    bracket_index = re.search(r"(?<!\\)]", player_str).start()
     if "Event Sub Query" in qual_str:
-        bracket_index = re.search(r"(?<!\\)]", player_str).start()
         player_str = player_str[:bracket_index] + " show-advanced" + player_str[bracket_index:]
+    else:
+        player_str = player_str[:bracket_index] + " hide-advanced" + player_str[bracket_index:]
     
     if "Ignore Start" not in time_frame["qualifiers"]:
         if "Start" in time_frame["qualifiers"]:

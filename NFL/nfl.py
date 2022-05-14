@@ -1844,7 +1844,10 @@ def handle_player_string(comment, player_type, is_fantasy, last_updated, hide_ta
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
 
                         if is_sub_query:
+                            has_hide_advanced = "hide-advanced" in extra_stats
                             extra_stats = set()
+                            if has_hide_advanced:
+                                extra_stats.add("hide-advanced")
                         
                         last_match = re.search(r"\b(no(?:t|n)? ?)?-?fantasy(?!-)\b", time_frame)
                         if last_match:
@@ -6142,12 +6145,8 @@ def determine_player_str(qualifier, player_str, time_frame, qual_str):
             player_str = player_str[:bracket_index] + " " + playoffs_str + player_str[bracket_index:]
     elif "time_frame_str" in qualifier:
         player_str += " [" + qualifier["time_frame_str"] + "]"
-        bracket_index = re.search(r"(?<!\\)]", player_str).start()
-        player_str = player_str[:bracket_index] + " hide-advanced" + player_str[bracket_index:]
     else:
         player_str += " []"
-        bracket_index = re.search(r"(?<!\\)]", player_str).start()
-        player_str = player_str[:bracket_index] + " hide-advanced" + player_str[bracket_index:]
 
     if is_pre_query and time_frame["type"] == "date" and not (time_frame["time_start"] == datetime.date.min.year and time_frame["time_end"] == current_season):
         bracket_index = re.search(r"(?<!\\)]", player_str).start()
@@ -6159,6 +6158,9 @@ def determine_player_str(qualifier, player_str, time_frame, qual_str):
 
     bracket_index = re.search(r"(?<!\\)]", player_str).start()
     player_str = player_str[:bracket_index] + " is-sub-query" + player_str[bracket_index:]
+
+    bracket_index = re.search(r"(?<!\\)]", player_str).start()
+    player_str = player_str[:bracket_index] + " hide-advanced" + player_str[bracket_index:]
     
     if "Ignore Start" not in time_frame["qualifiers"]:
         if "Start If QB" in time_frame["qualifiers"]:
