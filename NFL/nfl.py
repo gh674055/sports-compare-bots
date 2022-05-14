@@ -8709,7 +8709,7 @@ def handle_nfl_game_stats(player_data, all_rows, qualifiers, extra_stats, missin
                 if not qual_object["negate"]:
                     has_match = False
                     for player in qual_object["values"]:
-                        if row_data["Shared"]["Tm"].lower() in player["games"] and row_data["Shared"]["Date"] in player["games"][row_data["Shared"]["Tm"].lower()]:
+                        if row_data["Shared"]["Tm"].lower() in player["games"] and row_data["Shared"]["GameLink"] in player["games"][row_data["Shared"]["Tm"].lower()]:
                             has_match = True
                 
                     if not has_match:

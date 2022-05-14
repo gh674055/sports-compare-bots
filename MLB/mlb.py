@@ -27625,7 +27625,7 @@ def handle_mlb_game_stats(all_rows, has_count_stat, qualifiers, player_data, pla
                 if not qual_object["negate"]:
                     has_match = False
                     for player in qual_object["values"]:
-                        if row_data["Tm"].lower() in player["games"] and row_data["DateTime"] in player["games"][row_data["Tm"].lower()]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["GameID"] in player["games"][row_data["Tm"].lower()]:
                             has_match = True
                 
                     if not has_match:
@@ -27636,7 +27636,7 @@ def handle_mlb_game_stats(all_rows, has_count_stat, qualifiers, player_data, pla
                 if not qual_object["negate"]:
                     has_match = False
                     for player in qual_object["values"]:
-                        if row_data["Tm"].lower() in player["games"] and row_data["DateTime"] in player["games"][row_data["Tm"].lower()]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["GameID"] in player["games"][row_data["Tm"].lower()]:
                             has_match = True
                 
                     if not has_match:
@@ -27647,7 +27647,7 @@ def handle_mlb_game_stats(all_rows, has_count_stat, qualifiers, player_data, pla
                 if not qual_object["negate"]:
                     has_match = False
                     for player in qual_object["values"]:
-                        if row_data["Tm"].lower() in player["games"] and row_data["DateTime"] in player["games"][row_data["Tm"].lower()]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["GameID"] in player["games"][row_data["Tm"].lower()]:
                             has_match = True
                 
                     if not has_match:
@@ -27658,7 +27658,7 @@ def handle_mlb_game_stats(all_rows, has_count_stat, qualifiers, player_data, pla
                 if not qual_object["negate"]:
                     has_match = False
                     for player in qual_object["values"]:
-                        if row_data["Tm"].lower() in player["games"] and row_data["DateTime"] in player["games"][row_data["Tm"].lower()]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["GameID"] in player["games"][row_data["Tm"].lower()]:
                             has_match = True
                 
                     if not has_match:
@@ -27669,7 +27669,7 @@ def handle_mlb_game_stats(all_rows, has_count_stat, qualifiers, player_data, pla
                 if not qual_object["negate"]:
                     has_match = False
                     for player in qual_object["values"]:
-                        if row_data["Tm"].lower() in player["games"] and row_data["DateTime"] in player["games"][row_data["Tm"].lower()]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["GameID"] in player["games"][row_data["Tm"].lower()]:
                             has_match = True
                 
                     if not has_match:
@@ -27680,7 +27680,7 @@ def handle_mlb_game_stats(all_rows, has_count_stat, qualifiers, player_data, pla
                 if not qual_object["negate"]:
                     has_match = False
                     for player in qual_object["values"]:
-                        if row_data["Tm"].lower() in player["games"] and row_data["DateTime"] in player["games"][row_data["Tm"].lower()]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["GameID"] in player["games"][row_data["Tm"].lower()]:
                             has_match = True
                 
                     if not has_match:
@@ -27691,7 +27691,7 @@ def handle_mlb_game_stats(all_rows, has_count_stat, qualifiers, player_data, pla
                 if not qual_object["negate"]:
                     has_match = False
                     for player in qual_object["values"]:
-                        if row_data["Tm"].lower() in player["games"] and row_data["DateTime"] in player["games"][row_data["Tm"].lower()]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["GameID"] in player["games"][row_data["Tm"].lower()]:
                             has_match = True
                 
                     if not has_match:
@@ -27702,7 +27702,7 @@ def handle_mlb_game_stats(all_rows, has_count_stat, qualifiers, player_data, pla
                 if not qual_object["negate"]:
                     has_match = False
                     for player in qual_object["values"]:
-                        if row_data["Tm"].lower() in player["games"] and row_data["DateTime"] in player["games"][row_data["Tm"].lower()]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["GameID"] in player["games"][row_data["Tm"].lower()]:
                             has_match = True
                 
                     if not has_match:
@@ -27713,7 +27713,7 @@ def handle_mlb_game_stats(all_rows, has_count_stat, qualifiers, player_data, pla
                 if not qual_object["negate"]:
                     has_match = False
                     for player in qual_object["values"]:
-                        if row_data["Tm"].lower() in player["games"] and row_data["DateTime"] in player["games"][row_data["Tm"].lower()]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["GameID"] in player["games"][row_data["Tm"].lower()]:
                             has_match = True
                 
                     if not has_match:
@@ -27724,7 +27724,7 @@ def handle_mlb_game_stats(all_rows, has_count_stat, qualifiers, player_data, pla
                 if not qual_object["negate"]:
                     has_match = False
                     for player in qual_object["values"]:
-                        if row_data["Tm"].lower() in player["games"] and row_data["DateTime"] in player["games"][row_data["Tm"].lower()]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["GameID"] in player["games"][row_data["Tm"].lower()]:
                             has_match = True
                 
                     if not has_match:
@@ -27965,7 +27965,7 @@ def handle_mlb_game_stats(all_rows, has_count_stat, qualifiers, player_data, pla
                 if not qual_object["negate"]:
                     has_match = False
                     for player in qual_object["values"]:
-                        if row_data["Tm"].lower() in player["games"] and row_data["DateTime"] in player["games"][row_data["Tm"].lower()]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["GameID"] in player["games"][row_data["Tm"].lower()]:
                             has_match = True
                 
                     if not has_match:
@@ -27976,7 +27976,7 @@ def handle_mlb_game_stats(all_rows, has_count_stat, qualifiers, player_data, pla
                 if not qual_object["negate"]:
                     has_match = False
                     for player in qual_object["values"]:
-                        if row_data["Tm"].lower() in player["games"] and row_data["DateTime"] in player["games"][row_data["Tm"].lower()]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["GameID"] in player["games"][row_data["Tm"].lower()]:
                             has_match = True
                 
                     if not has_match:
@@ -27987,7 +27987,7 @@ def handle_mlb_game_stats(all_rows, has_count_stat, qualifiers, player_data, pla
                 if not qual_object["negate"]:
                     has_match = False
                     for player in qual_object["values"]:
-                        if row_data["Tm"].lower() in player["games"] and row_data["DateTime"] in player["games"][row_data["Tm"].lower()]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["GameID"] in player["games"][row_data["Tm"].lower()]:
                             has_match = True
                 
                     if not has_match:
@@ -27998,7 +27998,7 @@ def handle_mlb_game_stats(all_rows, has_count_stat, qualifiers, player_data, pla
                 if not qual_object["negate"]:
                     has_match = False
                     for player in qual_object["values"]:
-                        if row_data["Tm"].lower() in player["games"] and row_data["DateTime"] in player["games"][row_data["Tm"].lower()]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["GameID"] in player["games"][row_data["Tm"].lower()]:
                             has_match = True
                 
                     if not has_match:
@@ -28009,7 +28009,7 @@ def handle_mlb_game_stats(all_rows, has_count_stat, qualifiers, player_data, pla
                 if not qual_object["negate"]:
                     has_match = False
                     for player in qual_object["values"]:
-                        if row_data["Tm"].lower() in player["games"] and row_data["DateTime"] in player["games"][row_data["Tm"].lower()]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["GameID"] in player["games"][row_data["Tm"].lower()]:
                             has_match = True
                 
                     if not has_match:
@@ -28020,7 +28020,7 @@ def handle_mlb_game_stats(all_rows, has_count_stat, qualifiers, player_data, pla
                 if not qual_object["negate"]:
                     has_match = False
                     for player in qual_object["values"]:
-                        if row_data["Tm"].lower() in player["games"] and row_data["DateTime"] in player["games"][row_data["Tm"].lower()]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["GameID"] in player["games"][row_data["Tm"].lower()]:
                             has_match = True
                 
                     if not has_match:
@@ -28031,7 +28031,7 @@ def handle_mlb_game_stats(all_rows, has_count_stat, qualifiers, player_data, pla
                 if not qual_object["negate"]:
                     has_match = False
                     for player in qual_object["values"]:
-                        if row_data["Tm"].lower() in player["games"] and row_data["DateTime"] in player["games"][row_data["Tm"].lower()]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["GameID"] in player["games"][row_data["Tm"].lower()]:
                             has_match = True
                 
                     if not has_match:
@@ -28042,7 +28042,7 @@ def handle_mlb_game_stats(all_rows, has_count_stat, qualifiers, player_data, pla
                 if not qual_object["negate"]:
                     has_match = False
                     for player in qual_object["values"]:
-                        if row_data["Tm"].lower() in player["games"] and row_data["DateTime"] in player["games"][row_data["Tm"].lower()]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["GameID"] in player["games"][row_data["Tm"].lower()]:
                             has_match = True
                 
                     if not has_match:
@@ -28053,7 +28053,7 @@ def handle_mlb_game_stats(all_rows, has_count_stat, qualifiers, player_data, pla
                 if not qual_object["negate"]:
                     has_match = False
                     for player in qual_object["values"]:
-                        if row_data["Tm"].lower() in player["games"] and row_data["DateTime"] in player["games"][row_data["Tm"].lower()]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["GameID"] in player["games"][row_data["Tm"].lower()]:
                             has_match = True
                 
                     if not has_match:
@@ -28064,7 +28064,7 @@ def handle_mlb_game_stats(all_rows, has_count_stat, qualifiers, player_data, pla
                 if not qual_object["negate"]:
                     has_match = False
                     for player in qual_object["values"]:
-                        if row_data["Tm"].lower() in player["games"] and row_data["DateTime"] in player["games"][row_data["Tm"].lower()]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["GameID"] in player["games"][row_data["Tm"].lower()]:
                             has_match = True
                 
                     if not has_match:
@@ -28162,7 +28162,7 @@ def handle_mlb_game_stats_single_thread(all_rows, has_count_stat, qualifiers, pl
                 if not qual_object["negate"]:
                     has_match = False
                     for player in qual_object["values"]:
-                        if row_data["Tm"].lower() in player["games"] and row_data["DateTime"] in player["games"][row_data["Tm"].lower()]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["GameID"] in player["games"][row_data["Tm"].lower()]:
                             has_match = True
                 
                     if not has_match:
@@ -28173,7 +28173,7 @@ def handle_mlb_game_stats_single_thread(all_rows, has_count_stat, qualifiers, pl
                 if not qual_object["negate"]:
                     has_match = False
                     for player in qual_object["values"]:
-                        if row_data["Tm"].lower() in player["games"] and row_data["DateTime"] in player["games"][row_data["Tm"].lower()]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["GameID"] in player["games"][row_data["Tm"].lower()]:
                             has_match = True
                 
                     if not has_match:
@@ -28184,7 +28184,7 @@ def handle_mlb_game_stats_single_thread(all_rows, has_count_stat, qualifiers, pl
                 if not qual_object["negate"]:
                     has_match = False
                     for player in qual_object["values"]:
-                        if row_data["Tm"].lower() in player["games"] and row_data["DateTime"] in player["games"][row_data["Tm"].lower()]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["GameID"] in player["games"][row_data["Tm"].lower()]:
                             has_match = True
                 
                     if not has_match:
@@ -28195,7 +28195,7 @@ def handle_mlb_game_stats_single_thread(all_rows, has_count_stat, qualifiers, pl
                 if not qual_object["negate"]:
                     has_match = False
                     for player in qual_object["values"]:
-                        if row_data["Tm"].lower() in player["games"] and row_data["DateTime"] in player["games"][row_data["Tm"].lower()]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["GameID"] in player["games"][row_data["Tm"].lower()]:
                             has_match = True
                 
                     if not has_match:
@@ -28206,7 +28206,7 @@ def handle_mlb_game_stats_single_thread(all_rows, has_count_stat, qualifiers, pl
                 if not qual_object["negate"]:
                     has_match = False
                     for player in qual_object["values"]:
-                        if row_data["Tm"].lower() in player["games"] and row_data["DateTime"] in player["games"][row_data["Tm"].lower()]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["GameID"] in player["games"][row_data["Tm"].lower()]:
                             has_match = True
                 
                     if not has_match:
@@ -28217,7 +28217,7 @@ def handle_mlb_game_stats_single_thread(all_rows, has_count_stat, qualifiers, pl
                 if not qual_object["negate"]:
                     has_match = False
                     for player in qual_object["values"]:
-                        if row_data["Tm"].lower() in player["games"] and row_data["DateTime"] in player["games"][row_data["Tm"].lower()]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["GameID"] in player["games"][row_data["Tm"].lower()]:
                             has_match = True
                 
                     if not has_match:
@@ -28228,7 +28228,7 @@ def handle_mlb_game_stats_single_thread(all_rows, has_count_stat, qualifiers, pl
                 if not qual_object["negate"]:
                     has_match = False
                     for player in qual_object["values"]:
-                        if row_data["Tm"].lower() in player["games"] and row_data["DateTime"] in player["games"][row_data["Tm"].lower()]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["GameID"] in player["games"][row_data["Tm"].lower()]:
                             has_match = True
                 
                     if not has_match:
@@ -28239,7 +28239,7 @@ def handle_mlb_game_stats_single_thread(all_rows, has_count_stat, qualifiers, pl
                 if not qual_object["negate"]:
                     has_match = False
                     for player in qual_object["values"]:
-                        if row_data["Tm"].lower() in player["games"] and row_data["DateTime"] in player["games"][row_data["Tm"].lower()]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["GameID"] in player["games"][row_data["Tm"].lower()]:
                             has_match = True
                 
                     if not has_match:
@@ -28250,7 +28250,7 @@ def handle_mlb_game_stats_single_thread(all_rows, has_count_stat, qualifiers, pl
                 if not qual_object["negate"]:
                     has_match = False
                     for player in qual_object["values"]:
-                        if row_data["Tm"].lower() in player["games"] and row_data["DateTime"] in player["games"][row_data["Tm"].lower()]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["GameID"] in player["games"][row_data["Tm"].lower()]:
                             has_match = True
                 
                     if not has_match:
@@ -28261,7 +28261,7 @@ def handle_mlb_game_stats_single_thread(all_rows, has_count_stat, qualifiers, pl
                 if not qual_object["negate"]:
                     has_match = False
                     for player in qual_object["values"]:
-                        if row_data["Tm"].lower() in player["games"] and row_data["DateTime"] in player["games"][row_data["Tm"].lower()]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["GameID"] in player["games"][row_data["Tm"].lower()]:
                             has_match = True
                 
                     if not has_match:
@@ -28437,7 +28437,7 @@ def handle_mlb_game_stats_single_thread(all_rows, has_count_stat, qualifiers, pl
                 if not qual_object["negate"]:
                     has_match = False
                     for player in qual_object["values"]:
-                        if row_data["Tm"].lower() in player["games"] and row_data["DateTime"] in player["games"][row_data["Tm"].lower()]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["GameID"] in player["games"][row_data["Tm"].lower()]:
                             has_match = True
                 
                     if not has_match:
@@ -28448,7 +28448,7 @@ def handle_mlb_game_stats_single_thread(all_rows, has_count_stat, qualifiers, pl
                 if not qual_object["negate"]:
                     has_match = False
                     for player in qual_object["values"]:
-                        if row_data["Tm"].lower() in player["games"] and row_data["DateTime"] in player["games"][row_data["Tm"].lower()]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["GameID"] in player["games"][row_data["Tm"].lower()]:
                             has_match = True
                 
                     if not has_match:
@@ -28459,7 +28459,7 @@ def handle_mlb_game_stats_single_thread(all_rows, has_count_stat, qualifiers, pl
                 if not qual_object["negate"]:
                     has_match = False
                     for player in qual_object["values"]:
-                        if row_data["Tm"].lower() in player["games"] and row_data["DateTime"] in player["games"][row_data["Tm"].lower()]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["GameID"] in player["games"][row_data["Tm"].lower()]:
                             has_match = True
                 
                     if not has_match:
@@ -28470,7 +28470,7 @@ def handle_mlb_game_stats_single_thread(all_rows, has_count_stat, qualifiers, pl
                 if not qual_object["negate"]:
                     has_match = False
                     for player in qual_object["values"]:
-                        if row_data["Tm"].lower() in player["games"] and row_data["DateTime"] in player["games"][row_data["Tm"].lower()]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["GameID"] in player["games"][row_data["Tm"].lower()]:
                             has_match = True
                 
                     if not has_match:
@@ -28481,7 +28481,7 @@ def handle_mlb_game_stats_single_thread(all_rows, has_count_stat, qualifiers, pl
                 if not qual_object["negate"]:
                     has_match = False
                     for player in qual_object["values"]:
-                        if row_data["Tm"].lower() in player["games"] and row_data["DateTime"] in player["games"][row_data["Tm"].lower()]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["GameID"] in player["games"][row_data["Tm"].lower()]:
                             has_match = True
                 
                     if not has_match:
@@ -28492,7 +28492,7 @@ def handle_mlb_game_stats_single_thread(all_rows, has_count_stat, qualifiers, pl
                 if not qual_object["negate"]:
                     has_match = False
                     for player in qual_object["values"]:
-                        if row_data["Tm"].lower() in player["games"] and row_data["DateTime"] in player["games"][row_data["Tm"].lower()]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["GameID"] in player["games"][row_data["Tm"].lower()]:
                             has_match = True
                 
                     if not has_match:
@@ -28503,7 +28503,7 @@ def handle_mlb_game_stats_single_thread(all_rows, has_count_stat, qualifiers, pl
                 if not qual_object["negate"]:
                     has_match = False
                     for player in qual_object["values"]:
-                        if row_data["Tm"].lower() in player["games"] and row_data["DateTime"] in player["games"][row_data["Tm"].lower()]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["GameID"] in player["games"][row_data["Tm"].lower()]:
                             has_match = True
                 
                     if not has_match:
@@ -28514,7 +28514,7 @@ def handle_mlb_game_stats_single_thread(all_rows, has_count_stat, qualifiers, pl
                 if not qual_object["negate"]:
                     has_match = False
                     for player in qual_object["values"]:
-                        if row_data["Tm"].lower() in player["games"] and row_data["DateTime"] in player["games"][row_data["Tm"].lower()]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["GameID"] in player["games"][row_data["Tm"].lower()]:
                             has_match = True
                 
                     if not has_match:
@@ -28525,7 +28525,7 @@ def handle_mlb_game_stats_single_thread(all_rows, has_count_stat, qualifiers, pl
                 if not qual_object["negate"]:
                     has_match = False
                     for player in qual_object["values"]:
-                        if row_data["Tm"].lower() in player["games"] and row_data["DateTime"] in player["games"][row_data["Tm"].lower()]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["GameID"] in player["games"][row_data["Tm"].lower()]:
                             has_match = True
                 
                     if not has_match:
@@ -28536,7 +28536,7 @@ def handle_mlb_game_stats_single_thread(all_rows, has_count_stat, qualifiers, pl
                 if not qual_object["negate"]:
                     has_match = False
                     for player in qual_object["values"]:
-                        if row_data["Tm"].lower() in player["games"] and row_data["DateTime"] in player["games"][row_data["Tm"].lower()]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["GameID"] in player["games"][row_data["Tm"].lower()]:
                             has_match = True
                 
                     if not has_match:
