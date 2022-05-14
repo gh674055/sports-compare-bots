@@ -35923,7 +35923,7 @@ def get_player_current_team_number(player_page):
                                     else:
                                         raise
                                 team_info = team_page.find("div", {"id" : "info"})
-                                team_name_str = str(team_info.find("h1", {"itemprop" : "name"}).find_all("span")[1].find(text=True))
+                                team_name_str = str(team_info.find("h1").find_all("span")[1].find(text=True))
                                 numbers_team_map[team_name_str] = row_team_str
                                 parsed_teams.add(row_team_str)
 
@@ -35977,7 +35977,7 @@ def get_player_current_team_number(player_page):
                 else:
                     raise
             team_info = team_page.find("div", {"id" : "info"})
-            team_name_str = str(team_info.find("h1", {"itemprop" : "name"}).find_all("span")[1].find(text=True))
+            team_name_str = str(team_info.find("h1").find_all("span")[1].find(text=True))
             numbers_team_map[team_name_str] = row_team_str
             if not numbers_map and not team:
                 team = team_name_str
@@ -35997,7 +35997,7 @@ def get_player_current_team_number(player_page):
                             else:
                                 raise
                         team_info = team_page.find("div", {"id" : "info"})
-                        team = str(team_info.find("h1", {"itemprop" : "name"}).find_all("span")[1].find(text=True))
+                        team = str(team_info.find("h1").find_all("span")[1].find(text=True))
         
     return team, number, numbers_map, {v: k for k, v in numbers_team_map.items()}, numbers_year_map
 
