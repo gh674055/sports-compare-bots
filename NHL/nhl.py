@@ -13935,30 +13935,15 @@ def sub_handle_the_quals(players, qualifier, qual_str, player_str, time_frame, k
                     player_games[row["Year"]] = True
                 elif key == "Date":
                     date = row["Date"]
-                    opponent = row[key]
-                    if key == "Tm":
-                        opponent = opponent.lower()
-                    if not opponent in player_games:
-                        player_games[opponent] = []
-                    player_games[opponent].append(date)
+                    player_games[date] = True
                 elif key == "DateAfter":
                     date = row["Date"] + datetime.timedelta(days=1)
-                    opponent = row["Tm"]
-                    if key == "Tm":
-                        opponent = opponent.lower()
-                    if not opponent in player_games:
-                        player_games[opponent] = []
-                    player_games[opponent].append(date)
+                    player_games[date] = True
                 elif key == "DateBefore":
                     date = row["Date"] - datetime.timedelta(days=1)
-                    opponent = row["Tm"]
-                    if key == "Tm":
-                        opponent = opponent.lower()
-                    if not opponent in player_games:
-                        player_games[opponent] = []
-                    player_games[opponent].append(date)
+                    player_games[date] = True
                 elif key == "Either":
-                    date = row["Date"]
+                    date = row["NHLGameLink"]
                     if not row["Tm"].lower() in player_games:
                         player_games[row["Tm"].lower()] = []
                     player_games[row["Tm"].lower()].append(date)
@@ -13966,7 +13951,7 @@ def sub_handle_the_quals(players, qualifier, qual_str, player_str, time_frame, k
                         player_games[row["Opponent"].lower()] = []
                     player_games[row["Opponent"].lower()].append(date)
                 else:
-                    date = row["Date"]
+                    date = row["NHLGameLink"]
                     opponent = row[key]
                     if key == "Tm":
                         opponent = opponent.lower()
@@ -14037,7 +14022,10 @@ def determine_player_str(qualifier, player_str, time_frame, qual_str):
 
     if is_pre_query and time_frame["type"] == "date" and not (time_frame["time_start"] == datetime.date.min.year and time_frame["time_end"] == current_season):
         bracket_index = re.search(r"(?<!\\)]", player_str).start()
-        player_str = player_str[:bracket_index] + " " + get_time_str(time_frame["time_start"], False) + " to " + get_time_str(time_frame["time_end"], False) + player_str[bracket_index:]
+        if time_frame["playoffs"] == "Only":
+            player_str = player_str[:bracket_index] + " " + get_time_str(time_frame["time_start"] + 1, False) + " to " + get_time_str(time_frame["time_end"] + 1, False) + player_str[bracket_index:]
+        else:
+            player_str = player_str[:bracket_index] + " " + get_time_str(time_frame["time_start"], False) + " to " + get_time_str(time_frame["time_end"], False) + player_str[bracket_index:]
     
     if not qual_str in ["Season Sub Query", "Or Season Sub Query", "Season After Sub Query", "Season Before Sub Query"]:
         bracket_index = re.search(r"(?<!\\)]", player_str).start()
@@ -19559,7 +19547,7 @@ def handle_nhl_game_stats(player_data, all_rows, time_frame, player_link, player
                 if not qual_object["negate"]:
                     has_match = False
                     for player in qual_object["values"]:
-                        if row_data["Tm"].lower() in player["games"] and row_data["Date"] in player["games"][row_data["Tm"].lower()]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["NHLGameLink"] in player["games"][row_data["Tm"].lower()]:
                             has_match = True
                 
                     if not has_match:
@@ -19570,7 +19558,7 @@ def handle_nhl_game_stats(player_data, all_rows, time_frame, player_link, player
                 if not qual_object["negate"]:
                     has_match = False
                     for player in qual_object["values"]:
-                        if row_data["Tm"].lower() in player["games"] and row_data["Date"] in player["games"][row_data["Tm"].lower()]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["NHLGameLink"] in player["games"][row_data["Tm"].lower()]:
                             has_match = True
                 
                     if not has_match:
@@ -19581,7 +19569,7 @@ def handle_nhl_game_stats(player_data, all_rows, time_frame, player_link, player
                 if not qual_object["negate"]:
                     has_match = False
                     for player in qual_object["values"]:
-                        if row_data["Tm"].lower() in player["games"] and row_data["Date"] in player["games"][row_data["Tm"].lower()]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["NHLGameLink"] in player["games"][row_data["Tm"].lower()]:
                             has_match = True
                 
                     if not has_match:
@@ -19592,7 +19580,7 @@ def handle_nhl_game_stats(player_data, all_rows, time_frame, player_link, player
                 if not qual_object["negate"]:
                     has_match = False
                     for player in qual_object["values"]:
-                        if row_data["Tm"].lower() in player["games"] and row_data["Date"] in player["games"][row_data["Tm"].lower()]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["NHLGameLink"] in player["games"][row_data["Tm"].lower()]:
                             has_match = True
                 
                     if not has_match:
@@ -19603,7 +19591,7 @@ def handle_nhl_game_stats(player_data, all_rows, time_frame, player_link, player
                 if not qual_object["negate"]:
                     has_match = False
                     for player in qual_object["values"]:
-                        if row_data["Tm"].lower() in player["games"] and row_data["Date"] in player["games"][row_data["Tm"].lower()]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["NHLGameLink"] in player["games"][row_data["Tm"].lower()]:
                             has_match = True
                 
                     if not has_match:
@@ -19614,7 +19602,7 @@ def handle_nhl_game_stats(player_data, all_rows, time_frame, player_link, player
                 if not qual_object["negate"]:
                     has_match = False
                     for player in qual_object["values"]:
-                        if row_data["Tm"].lower() in player["games"] and row_data["Date"] in player["games"][row_data["Tm"].lower()]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["NHLGameLink"] in player["games"][row_data["Tm"].lower()]:
                             has_match = True
                 
                     if not has_match:
@@ -19625,7 +19613,7 @@ def handle_nhl_game_stats(player_data, all_rows, time_frame, player_link, player
                 if not qual_object["negate"]:
                     has_match = False
                     for player in qual_object["values"]:
-                        if row_data["Tm"].lower() in player["games"] and row_data["Date"] in player["games"][row_data["Tm"].lower()]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["NHLGameLink"] in player["games"][row_data["Tm"].lower()]:
                             has_match = True
                 
                     if not has_match:
@@ -19636,7 +19624,7 @@ def handle_nhl_game_stats(player_data, all_rows, time_frame, player_link, player
                 if not qual_object["negate"]:
                     has_match = False
                     for player in qual_object["values"]:
-                        if row_data["Tm"].lower() in player["games"] and row_data["Date"] in player["games"][row_data["Tm"].lower()]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["NHLGameLink"] in player["games"][row_data["Tm"].lower()]:
                             has_match = True
                 
                     if not has_match:
@@ -19647,7 +19635,7 @@ def handle_nhl_game_stats(player_data, all_rows, time_frame, player_link, player
                 if not qual_object["negate"]:
                     has_match = False
                     for player in qual_object["values"]:
-                        if row_data["Tm"].lower() in player["games"] and row_data["Date"] in player["games"][row_data["Tm"].lower()]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["NHLGameLink"] in player["games"][row_data["Tm"].lower()]:
                             has_match = True
                 
                     if not has_match:
@@ -19658,7 +19646,7 @@ def handle_nhl_game_stats(player_data, all_rows, time_frame, player_link, player
                 if not qual_object["negate"]:
                     has_match = False
                     for player in qual_object["values"]:
-                        if row_data["Tm"].lower() in player["games"] and row_data["Date"] in player["games"][row_data["Tm"].lower()]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["NHLGameLink"] in player["games"][row_data["Tm"].lower()]:
                             has_match = True
                 
                     if not has_match:
@@ -19669,7 +19657,7 @@ def handle_nhl_game_stats(player_data, all_rows, time_frame, player_link, player
                 if not qual_object["negate"]:
                     has_match = False
                     for player in qual_object["values"]:
-                        if row_data["Tm"].lower() in player["games"] and row_data["Date"] in player["games"][row_data["Tm"].lower()]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["NHLGameLink"] in player["games"][row_data["Tm"].lower()]:
                             has_match = True
                 
                     if not has_match:
@@ -19680,7 +19668,7 @@ def handle_nhl_game_stats(player_data, all_rows, time_frame, player_link, player
                 if not qual_object["negate"]:
                     has_match = False
                     for player in qual_object["values"]:
-                        if row_data["Tm"].lower() in player["games"] and row_data["Date"] in player["games"][row_data["Tm"].lower()]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["NHLGameLink"] in player["games"][row_data["Tm"].lower()]:
                             has_match = True
                 
                     if not has_match:
@@ -19691,7 +19679,7 @@ def handle_nhl_game_stats(player_data, all_rows, time_frame, player_link, player
                 if not qual_object["negate"]:
                     has_match = False
                     for player in qual_object["values"]:
-                        if row_data["Tm"].lower() in player["games"] and row_data["Date"] in player["games"][row_data["Tm"].lower()]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["NHLGameLink"] in player["games"][row_data["Tm"].lower()]:
                             has_match = True
                 
                     if not has_match:
@@ -19702,7 +19690,7 @@ def handle_nhl_game_stats(player_data, all_rows, time_frame, player_link, player
                 if not qual_object["negate"]:
                     has_match = False
                     for player in qual_object["values"]:
-                        if row_data["Tm"].lower() in player["games"] and row_data["Date"] in player["games"][row_data["Tm"].lower()]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["NHLGameLink"] in player["games"][row_data["Tm"].lower()]:
                             has_match = True
                 
                     if not has_match:
@@ -19713,7 +19701,7 @@ def handle_nhl_game_stats(player_data, all_rows, time_frame, player_link, player
                 if not qual_object["negate"]:
                     has_match = False
                     for player in qual_object["values"]:
-                        if row_data["Tm"].lower() in player["games"] and row_data["Date"] in player["games"][row_data["Tm"].lower()]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["NHLGameLink"] in player["games"][row_data["Tm"].lower()]:
                             has_match = True
                 
                     if not has_match:
@@ -19724,7 +19712,7 @@ def handle_nhl_game_stats(player_data, all_rows, time_frame, player_link, player
                 if not qual_object["negate"]:
                     has_match = False
                     for player in qual_object["values"]:
-                        if row_data["Tm"].lower() in player["games"] and row_data["Date"] in player["games"][row_data["Tm"].lower()]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["NHLGameLink"] in player["games"][row_data["Tm"].lower()]:
                             has_match = True
                 
                     if not has_match:
@@ -19735,7 +19723,7 @@ def handle_nhl_game_stats(player_data, all_rows, time_frame, player_link, player
                 if not qual_object["negate"]:
                     has_match = False
                     for player in qual_object["values"]:
-                        if row_data["Tm"].lower() in player["games"] and row_data["Date"] in player["games"][row_data["Tm"].lower()]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["NHLGameLink"] in player["games"][row_data["Tm"].lower()]:
                             has_match = True
                 
                     if not has_match:
@@ -19746,7 +19734,7 @@ def handle_nhl_game_stats(player_data, all_rows, time_frame, player_link, player
                 if not qual_object["negate"]:
                     has_match = False
                     for player in qual_object["values"]:
-                        if row_data["Tm"].lower() in player["games"] and row_data["Date"] in player["games"][row_data["Tm"].lower()]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["NHLGameLink"] in player["games"][row_data["Tm"].lower()]:
                             has_match = True
                 
                     if not has_match:
@@ -19757,7 +19745,7 @@ def handle_nhl_game_stats(player_data, all_rows, time_frame, player_link, player
                 if not qual_object["negate"]:
                     has_match = False
                     for player in qual_object["values"]:
-                        if row_data["Tm"].lower() in player["games"] and row_data["Date"] in player["games"][row_data["Tm"].lower()]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["NHLGameLink"] in player["games"][row_data["Tm"].lower()]:
                             has_match = True
                 
                     if not has_match:
@@ -19768,7 +19756,7 @@ def handle_nhl_game_stats(player_data, all_rows, time_frame, player_link, player
                 if not qual_object["negate"]:
                     has_match = False
                     for player in qual_object["values"]:
-                        if row_data["Tm"].lower() in player["games"] and row_data["Date"] in player["games"][row_data["Tm"].lower()]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["NHLGameLink"] in player["games"][row_data["Tm"].lower()]:
                             has_match = True
                 
                     if not has_match:
@@ -19912,7 +19900,7 @@ def handle_nhl_game_stats_single_thread(player_data, all_rows, time_frame, playe
                 if not qual_object["negate"]:
                     has_match = False
                     for player in qual_object["values"]:
-                        if row_data["Tm"].lower() in player["games"] and row_data["Date"] in player["games"][row_data["Tm"].lower()]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["NHLGameLink"] in player["games"][row_data["Tm"].lower()]:
                             has_match = True
                 
                     if not has_match:
@@ -19923,7 +19911,7 @@ def handle_nhl_game_stats_single_thread(player_data, all_rows, time_frame, playe
                 if not qual_object["negate"]:
                     has_match = False
                     for player in qual_object["values"]:
-                        if row_data["Tm"].lower() in player["games"] and row_data["Date"] in player["games"][row_data["Tm"].lower()]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["NHLGameLink"] in player["games"][row_data["Tm"].lower()]:
                             has_match = True
                 
                     if not has_match:
@@ -19934,7 +19922,7 @@ def handle_nhl_game_stats_single_thread(player_data, all_rows, time_frame, playe
                 if not qual_object["negate"]:
                     has_match = False
                     for player in qual_object["values"]:
-                        if row_data["Tm"].lower() in player["games"] and row_data["Date"] in player["games"][row_data["Tm"].lower()]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["NHLGameLink"] in player["games"][row_data["Tm"].lower()]:
                             has_match = True
                 
                     if not has_match:
@@ -19945,7 +19933,7 @@ def handle_nhl_game_stats_single_thread(player_data, all_rows, time_frame, playe
                 if not qual_object["negate"]:
                     has_match = False
                     for player in qual_object["values"]:
-                        if row_data["Tm"].lower() in player["games"] and row_data["Date"] in player["games"][row_data["Tm"].lower()]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["NHLGameLink"] in player["games"][row_data["Tm"].lower()]:
                             has_match = True
                 
                     if not has_match:
@@ -19956,7 +19944,7 @@ def handle_nhl_game_stats_single_thread(player_data, all_rows, time_frame, playe
                 if not qual_object["negate"]:
                     has_match = False
                     for player in qual_object["values"]:
-                        if row_data["Tm"].lower() in player["games"] and row_data["Date"] in player["games"][row_data["Tm"].lower()]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["NHLGameLink"] in player["games"][row_data["Tm"].lower()]:
                             has_match = True
                 
                     if not has_match:
@@ -19967,7 +19955,7 @@ def handle_nhl_game_stats_single_thread(player_data, all_rows, time_frame, playe
                 if not qual_object["negate"]:
                     has_match = False
                     for player in qual_object["values"]:
-                        if row_data["Tm"].lower() in player["games"] and row_data["Date"] in player["games"][row_data["Tm"].lower()]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["NHLGameLink"] in player["games"][row_data["Tm"].lower()]:
                             has_match = True
                 
                     if not has_match:
@@ -19978,7 +19966,7 @@ def handle_nhl_game_stats_single_thread(player_data, all_rows, time_frame, playe
                 if not qual_object["negate"]:
                     has_match = False
                     for player in qual_object["values"]:
-                        if row_data["Tm"].lower() in player["games"] and row_data["Date"] in player["games"][row_data["Tm"].lower()]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["NHLGameLink"] in player["games"][row_data["Tm"].lower()]:
                             has_match = True
                 
                     if not has_match:
@@ -19989,7 +19977,7 @@ def handle_nhl_game_stats_single_thread(player_data, all_rows, time_frame, playe
                 if not qual_object["negate"]:
                     has_match = False
                     for player in qual_object["values"]:
-                        if row_data["Tm"].lower() in player["games"] and row_data["Date"] in player["games"][row_data["Tm"].lower()]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["NHLGameLink"] in player["games"][row_data["Tm"].lower()]:
                             has_match = True
                 
                     if not has_match:
@@ -20000,7 +19988,7 @@ def handle_nhl_game_stats_single_thread(player_data, all_rows, time_frame, playe
                 if not qual_object["negate"]:
                     has_match = False
                     for player in qual_object["values"]:
-                        if row_data["Tm"].lower() in player["games"] and row_data["Date"] in player["games"][row_data["Tm"].lower()]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["NHLGameLink"] in player["games"][row_data["Tm"].lower()]:
                             has_match = True
                 
                     if not has_match:
@@ -20011,7 +19999,7 @@ def handle_nhl_game_stats_single_thread(player_data, all_rows, time_frame, playe
                 if not qual_object["negate"]:
                     has_match = False
                     for player in qual_object["values"]:
-                        if row_data["Tm"].lower() in player["games"] and row_data["Date"] in player["games"][row_data["Tm"].lower()]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["NHLGameLink"] in player["games"][row_data["Tm"].lower()]:
                             has_match = True
                 
                     if not has_match:
@@ -20022,7 +20010,7 @@ def handle_nhl_game_stats_single_thread(player_data, all_rows, time_frame, playe
                 if not qual_object["negate"]:
                     has_match = False
                     for player in qual_object["values"]:
-                        if row_data["Tm"].lower() in player["games"] and row_data["Date"] in player["games"][row_data["Tm"].lower()]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["NHLGameLink"] in player["games"][row_data["Tm"].lower()]:
                             has_match = True
                 
                     if not has_match:
@@ -20033,7 +20021,7 @@ def handle_nhl_game_stats_single_thread(player_data, all_rows, time_frame, playe
                 if not qual_object["negate"]:
                     has_match = False
                     for player in qual_object["values"]:
-                        if row_data["Tm"].lower() in player["games"] and row_data["Date"] in player["games"][row_data["Tm"].lower()]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["NHLGameLink"] in player["games"][row_data["Tm"].lower()]:
                             has_match = True
                 
                     if not has_match:
@@ -20044,7 +20032,7 @@ def handle_nhl_game_stats_single_thread(player_data, all_rows, time_frame, playe
                 if not qual_object["negate"]:
                     has_match = False
                     for player in qual_object["values"]:
-                        if row_data["Tm"].lower() in player["games"] and row_data["Date"] in player["games"][row_data["Tm"].lower()]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["NHLGameLink"] in player["games"][row_data["Tm"].lower()]:
                             has_match = True
                 
                     if not has_match:
@@ -20055,7 +20043,7 @@ def handle_nhl_game_stats_single_thread(player_data, all_rows, time_frame, playe
                 if not qual_object["negate"]:
                     has_match = False
                     for player in qual_object["values"]:
-                        if row_data["Tm"].lower() in player["games"] and row_data["Date"] in player["games"][row_data["Tm"].lower()]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["NHLGameLink"] in player["games"][row_data["Tm"].lower()]:
                             has_match = True
                 
                     if not has_match:
@@ -20066,7 +20054,7 @@ def handle_nhl_game_stats_single_thread(player_data, all_rows, time_frame, playe
                 if not qual_object["negate"]:
                     has_match = False
                     for player in qual_object["values"]:
-                        if row_data["Tm"].lower() in player["games"] and row_data["Date"] in player["games"][row_data["Tm"].lower()]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["NHLGameLink"] in player["games"][row_data["Tm"].lower()]:
                             has_match = True
                 
                     if not has_match:
@@ -20077,7 +20065,7 @@ def handle_nhl_game_stats_single_thread(player_data, all_rows, time_frame, playe
                 if not qual_object["negate"]:
                     has_match = False
                     for player in qual_object["values"]:
-                        if row_data["Tm"].lower() in player["games"] and row_data["Date"] in player["games"][row_data["Tm"].lower()]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["NHLGameLink"] in player["games"][row_data["Tm"].lower()]:
                             has_match = True
                 
                     if not has_match:
@@ -20088,7 +20076,7 @@ def handle_nhl_game_stats_single_thread(player_data, all_rows, time_frame, playe
                 if not qual_object["negate"]:
                     has_match = False
                     for player in qual_object["values"]:
-                        if row_data["Tm"].lower() in player["games"] and row_data["Date"] in player["games"][row_data["Tm"].lower()]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["NHLGameLink"] in player["games"][row_data["Tm"].lower()]:
                             has_match = True
                 
                     if not has_match:
@@ -20099,7 +20087,7 @@ def handle_nhl_game_stats_single_thread(player_data, all_rows, time_frame, playe
                 if not qual_object["negate"]:
                     has_match = False
                     for player in qual_object["values"]:
-                        if row_data["Tm"].lower() in player["games"] and row_data["Date"] in player["games"][row_data["Tm"].lower()]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["NHLGameLink"] in player["games"][row_data["Tm"].lower()]:
                             has_match = True
                 
                     if not has_match:
@@ -20110,7 +20098,7 @@ def handle_nhl_game_stats_single_thread(player_data, all_rows, time_frame, playe
                 if not qual_object["negate"]:
                     has_match = False
                     for player in qual_object["values"]:
-                        if row_data["Tm"].lower() in player["games"] and row_data["Date"] in player["games"][row_data["Tm"].lower()]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["NHLGameLink"] in player["games"][row_data["Tm"].lower()]:
                             has_match = True
                 
                     if not has_match:
@@ -20121,7 +20109,7 @@ def handle_nhl_game_stats_single_thread(player_data, all_rows, time_frame, playe
                 if not qual_object["negate"]:
                     has_match = False
                     for player in qual_object["values"]:
-                        if row_data["Tm"].lower() in player["games"] and row_data["Date"] in player["games"][row_data["Tm"].lower()]:
+                        if row_data["Tm"].lower() in player["games"] and row_data["NHLGameLink"] in player["games"][row_data["Tm"].lower()]:
                             has_match = True
                 
                     if not has_match:
@@ -27484,7 +27472,7 @@ def perform_metadata_qual(event_name, goal_event, qualifiers, player_game_info, 
             for qual_object in qualifiers["Shot On"]:
                 has_match = False
                 for player in qual_object["values"]:
-                    if row["Tm"].lower() in player["games"] and row["Date"] in player["games"][row["Tm"].lower()]:
+                    if row["Tm"].lower() in player["games"] and row["NHLGameLink"] in player["games"][row["Tm"].lower()]:
                         has_match = True
 
                 if not qual_object["negate"]:
@@ -27510,7 +27498,7 @@ def perform_metadata_qual(event_name, goal_event, qualifiers, player_game_info, 
             for qual_object in qualifiers["Shot By"]:
                 has_match = False
                 for player in qual_object["values"]:
-                    if row["Tm"].lower() in player["games"] and row["Date"] in player["games"][row["Tm"].lower()]:
+                    if row["Tm"].lower() in player["games"] and row["NHLGameLink"] in player["games"][row["Tm"].lower()]:
                         has_match = True
 
                 if not qual_object["negate"]:
@@ -27656,7 +27644,7 @@ def perform_metadata_qual(event_name, goal_event, qualifiers, player_game_info, 
             for qual_object in qualifiers["Assisted By"]:
                 has_match = False
                 for player in qual_object["values"]:
-                    if row["Tm"].lower() in player["games"] and row["Date"] in player["games"][row["Tm"].lower()]:
+                    if row["Tm"].lower() in player["games"] and row["NHLGameLink"] in player["games"][row["Tm"].lower()]:
                         has_match = True
 
                 if not qual_object["negate"]:
@@ -27682,7 +27670,7 @@ def perform_metadata_qual(event_name, goal_event, qualifiers, player_game_info, 
             for qual_object in qualifiers["Assisted On"]:
                 has_match = False
                 for player in qual_object["values"]:
-                    if row["Tm"].lower() in player["games"] and row["Date"] in player["games"][row["Tm"].lower()]:
+                    if row["Tm"].lower() in player["games"] and row["NHLGameLink"] in player["games"][row["Tm"].lower()]:
                         has_match = True
 
                 if not qual_object["negate"]:
@@ -27708,7 +27696,7 @@ def perform_metadata_qual(event_name, goal_event, qualifiers, player_game_info, 
             for qual_object in qualifiers["Assisted With"]:
                 has_match = False
                 for player in qual_object["values"]:
-                    if row["Tm"].lower() in player["games"] and row["Date"] in player["games"][row["Tm"].lower()]:
+                    if row["Tm"].lower() in player["games"] and row["NHLGameLink"] in player["games"][row["Tm"].lower()]:
                         has_match = True
 
                 if not qual_object["negate"]:
@@ -27734,7 +27722,7 @@ def perform_metadata_qual(event_name, goal_event, qualifiers, player_game_info, 
             for qual_object in qualifiers["Points With"]:
                 has_match = False
                 for player in qual_object["values"]:
-                    if row["Tm"].lower() in player["games"] and row["Date"] in player["games"][row["Tm"].lower()]:
+                    if row["Tm"].lower() in player["games"] and row["NHLGameLink"] in player["games"][row["Tm"].lower()]:
                         has_match = True
 
                 if not qual_object["negate"]:
@@ -27764,7 +27752,7 @@ def perform_metadata_qual(event_name, goal_event, qualifiers, player_game_info, 
             for qual_object in qualifiers["Primary Assisted By"]:
                 has_match = False
                 for player in qual_object["values"]:
-                    if row["Tm"].lower() in player["games"] and row["Date"] in player["games"][row["Tm"].lower()]:
+                    if row["Tm"].lower() in player["games"] and row["NHLGameLink"] in player["games"][row["Tm"].lower()]:
                         has_match = True
 
                 if not qual_object["negate"]:
@@ -27790,7 +27778,7 @@ def perform_metadata_qual(event_name, goal_event, qualifiers, player_game_info, 
             for qual_object in qualifiers["Primary Assisted On"]:
                 has_match = False
                 for player in qual_object["values"]:
-                    if row["Tm"].lower() in player["games"] and row["Date"] in player["games"][row["Tm"].lower()]:
+                    if row["Tm"].lower() in player["games"] and row["NHLGameLink"] in player["games"][row["Tm"].lower()]:
                         has_match = True
 
                 if not qual_object["negate"]:
@@ -27816,7 +27804,7 @@ def perform_metadata_qual(event_name, goal_event, qualifiers, player_game_info, 
             for qual_object in qualifiers["Primary Assisted With"]:
                 has_match = False
                 for player in qual_object["values"]:
-                    if row["Tm"].lower() in player["games"] and row["Date"] in player["games"][row["Tm"].lower()]:
+                    if row["Tm"].lower() in player["games"] and row["NHLGameLink"] in player["games"][row["Tm"].lower()]:
                         has_match = True
 
                 if not qual_object["negate"]:
@@ -27842,7 +27830,7 @@ def perform_metadata_qual(event_name, goal_event, qualifiers, player_game_info, 
             for qual_object in qualifiers["Primary Points With"]:
                 has_match = False
                 for player in qual_object["values"]:
-                    if row["Tm"].lower() in player["games"] and row["Date"] in player["games"][row["Tm"].lower()]:
+                    if row["Tm"].lower() in player["games"] and row["NHLGameLink"] in player["games"][row["Tm"].lower()]:
                         has_match = True
 
                 if not qual_object["negate"]:
@@ -27872,7 +27860,7 @@ def perform_metadata_qual(event_name, goal_event, qualifiers, player_game_info, 
             for qual_object in qualifiers["Hit On"]:
                 has_match = False
                 for player in qual_object["values"]:
-                    if row["Tm"].lower() in player["games"] and row["Date"] in player["games"][row["Tm"].lower()]:
+                    if row["Tm"].lower() in player["games"] and row["NHLGameLink"] in player["games"][row["Tm"].lower()]:
                         has_match = True
 
                 if not qual_object["negate"]:
@@ -27898,7 +27886,7 @@ def perform_metadata_qual(event_name, goal_event, qualifiers, player_game_info, 
             for qual_object in qualifiers["Block On"]:
                 has_match = False
                 for player in qual_object["values"]:
-                    if row["Tm"].lower() in player["games"] and row["Date"] in player["games"][row["Tm"].lower()]:
+                    if row["Tm"].lower() in player["games"] and row["NHLGameLink"] in player["games"][row["Tm"].lower()]:
                         has_match = True
 
                 if not qual_object["negate"]:
@@ -27924,7 +27912,7 @@ def perform_metadata_qual(event_name, goal_event, qualifiers, player_game_info, 
             for qual_object in qualifiers["Penalty On"]:
                 has_match = False
                 for player in qual_object["values"]:
-                    if row["Tm"].lower() in player["games"] and row["Date"] in player["games"][row["Tm"].lower()]:
+                    if row["Tm"].lower() in player["games"] and row["NHLGameLink"] in player["games"][row["Tm"].lower()]:
                         has_match = True
 
                 if not qual_object["negate"]:
@@ -27950,7 +27938,7 @@ def perform_metadata_qual(event_name, goal_event, qualifiers, player_game_info, 
             for qual_object in qualifiers["Faceoff Against"]:
                 has_match = False
                 for player in qual_object["values"]:
-                    if row["Tm"].lower() in player["games"] and row["Date"] in player["games"][row["Tm"].lower()]:
+                    if row["Tm"].lower() in player["games"] and row["NHLGameLink"] in player["games"][row["Tm"].lower()]:
                         has_match = True
 
                 if not qual_object["negate"]:
@@ -27975,7 +27963,7 @@ def perform_metadata_qual(event_name, goal_event, qualifiers, player_game_info, 
             for qual_object in qualifiers["Fight Against"]:
                 has_match = False
                 for player in qual_object["values"]:
-                    if row["Tm"].lower() in player["games"] and row["Date"] in player["games"][row["Tm"].lower()]:
+                    if row["Tm"].lower() in player["games"] and row["NHLGameLink"] in player["games"][row["Tm"].lower()]:
                         has_match = True
 
                 if not qual_object["negate"]:
@@ -29347,7 +29335,7 @@ def perform_sub_on_ice_qual(qualifers, player_shift_data, goal_event, row, perio
 
         has_match = False
         for player in qual_object["values"]:
-            if row["Tm"].lower() in player["games"] and row["Date"] in player["games"][row["Tm"].lower()]:
+            if row["Tm"].lower() in player["games"] and row["NHLGameLink"] in player["games"][row["Tm"].lower()]:
                 has_match = True
 
         if not negate:
@@ -31176,10 +31164,9 @@ def perform_qualifier(player_data, player_type, row, time_frame, all_rows):
         for qual_object in qualifiers["Day Of Sub Query"]:
             has_match = False
             for player in qual_object["values"]:
-                for team in player["games"]:
-                    if row["Date"] in player["games"][team]:
-                        has_match = True
-                        break
+                if row["Date"] in player["games"]:
+                    has_match = True
+                    break
             if qual_object["negate"]:
                 if has_match:
                     return False
@@ -31191,10 +31178,9 @@ def perform_qualifier(player_data, player_type, row, time_frame, all_rows):
         for qual_object in qualifiers["Day After Sub Query"]:
             has_match = False
             for player in qual_object["values"]:
-                for team in player["games"]:
-                    if row["Date"] in player["games"][team]:
-                        has_match = True
-                        break
+                if row["Date"] in player["games"]:
+                    has_match = True
+                    break
             if qual_object["negate"]:
                 if has_match:
                     return False
@@ -31206,10 +31192,9 @@ def perform_qualifier(player_data, player_type, row, time_frame, all_rows):
         for qual_object in qualifiers["Day Before Sub Query"]:
             has_match = False
             for player in qual_object["values"]:
-                for team in player["games"]:
-                    if row["Date"] in player["games"][team]:
-                        has_match = True
-                        break
+                if row["Date"] in player["games"]:
+                    has_match = True
+                    break
             if qual_object["negate"]:
                 if has_match:
                     return False
@@ -31339,7 +31324,7 @@ def perform_qualifier(player_data, player_type, row, time_frame, all_rows):
         for qual_object in qualifiers["Playing With"]:
             has_match = False
             for player in qual_object["values"]:
-                if row["Tm"].lower() in player["games"] and row["Date"] in player["games"][row["Tm"].lower()]:
+                if row["Tm"].lower() in player["games"] and row["NHLGameLink"] in player["games"][row["Tm"].lower()]:
                     has_match = True
             if qual_object["negate"]:
                 if has_match:
@@ -31352,7 +31337,7 @@ def perform_qualifier(player_data, player_type, row, time_frame, all_rows):
         for qual_object in qualifiers["Playing Against"]:
             has_match = False
             for player in qual_object["values"]:
-                if row["Tm"].lower() in player["games"] and row["Date"] in player["games"][row["Tm"].lower()]:
+                if row["Tm"].lower() in player["games"] and row["NHLGameLink"] in player["games"][row["Tm"].lower()]:
                     has_match = True
             if qual_object["negate"]:
                 if has_match:
@@ -31367,7 +31352,7 @@ def perform_qualifier(player_data, player_type, row, time_frame, all_rows):
         for qual_object in qualifiers["Previous Playing With"]:
             has_match = False
             for player in qual_object["values"]:
-                if row["Tm"].lower() in player["games"] and row["Previous Row"]["Date"] in player["games"][row["Tm"].lower()]:
+                if row["Tm"].lower() in player["games"] and row["Previous Row"]["NHLGameLink"] in player["games"][row["Tm"].lower()]:
                     has_match = True
             if qual_object["negate"]:
                 if has_match:
@@ -31382,7 +31367,7 @@ def perform_qualifier(player_data, player_type, row, time_frame, all_rows):
         for qual_object in qualifiers["Upcoming Playing With"]:
             has_match = False
             for player in qual_object["values"]:
-                if row["Tm"].lower() in player["games"] and row["Upcoming Row"]["Date"] in player["games"][row["Tm"].lower()]:
+                if row["Tm"].lower() in player["games"] and row["Upcoming Row"]["NHLGameLink"] in player["games"][row["Tm"].lower()]:
                     has_match = True
             if qual_object["negate"]:
                 if has_match:
@@ -31397,7 +31382,7 @@ def perform_qualifier(player_data, player_type, row, time_frame, all_rows):
         for qual_object in qualifiers["Previous Playing Against"]:
             has_match = False
             for player in qual_object["values"]:
-                if row["Tm"].lower() in player["games"] and row["Previous Row"]["Date"] in player["games"][row["Tm"].lower()]:
+                if row["Tm"].lower() in player["games"] and row["Previous Row"]["NHLGameLink"] in player["games"][row["Tm"].lower()]:
                     has_match = True
             if qual_object["negate"]:
                 if has_match:
@@ -31412,7 +31397,7 @@ def perform_qualifier(player_data, player_type, row, time_frame, all_rows):
         for qual_object in qualifiers["Upcoming Playing Against"]:
             has_match = False
             for player in qual_object["values"]:
-                if row["Tm"].lower() in player["games"] and row["Upcoming Row"]["Date"] in player["games"][row["Tm"].lower()]:
+                if row["Tm"].lower() in player["games"] and row["Upcoming Row"]["NHLGameLink"] in player["games"][row["Tm"].lower()]:
                     has_match = True
             if qual_object["negate"]:
                 if has_match:
@@ -31438,7 +31423,7 @@ def perform_qualifier(player_data, player_type, row, time_frame, all_rows):
         for qual_object in qualifiers["Playing Same Game"]:
             has_match = False
             for player in qual_object["values"]:
-                if row["Tm"].lower() in player["games"] and row["Date"] in player["games"][row["Tm"].lower()]:
+                if row["Tm"].lower() in player["games"] and row["NHLGameLink"] in player["games"][row["Tm"].lower()]:
                     has_match = True
             if qual_object["negate"]:
                 if has_match:
@@ -31451,10 +31436,9 @@ def perform_qualifier(player_data, player_type, row, time_frame, all_rows):
         for qual_object in qualifiers["Playing Same Date"]:
             has_match = False
             for player in qual_object["values"]:
-                for team in player["games"]:
-                    if row["Date"] in player["games"][team]:
-                        has_match = True
-                        break
+                if row["Date"] in player["games"]:
+                    has_match = True
+                    break
             if qual_object["negate"]:
                 if has_match:
                     return False

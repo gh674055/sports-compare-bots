@@ -6057,30 +6057,15 @@ def sub_handle_the_quals(players, qualifier, qual_str, player_str, time_frame, k
                     player_games[row["Shared"]["Year"]] = True
                 elif key == "Date":
                     date = row["Shared"]["Date"]
-                    opponent = row["Shared"][key]
-                    if key == "Tm":
-                        opponent = opponent.lower()
-                    if not opponent in player_games:
-                        player_games[opponent] = []
-                    player_games[opponent].append(date)
+                    player_games[date] = True
                 elif key == "DateAfter":
                     date = row["Shared"]["Date"] + datetime.timedelta(days=1)
-                    opponent = row["Shared"]["Tm"]
-                    if key == "Tm":
-                        opponent = opponent.lower()
-                    if not opponent in player_games:
-                        player_games[opponent] = []
-                    player_games[opponent].append(date)
+                    player_games[date] = True
                 elif key == "DateBefore":
                     date = row["Shared"]["Date"] - datetime.timedelta(days=1)
-                    opponent = row["Shared"]["Tm"]
-                    if key == "Tm":
-                        opponent = opponent.lower()
-                    if not opponent in player_games:
-                        player_games[opponent] = []
-                    player_games[opponent].append(date)
+                    player_games[date] = True
                 elif key == "Either":
-                    date = row["Shared"]["Date"]
+                    date = row["Shared"]["GameLink"]
                     if not row["Shared"]["Tm"].lower() in player_games:
                         player_games[row["Shared"]["Tm"].lower()] = []
                     player_games[row["Shared"]["Tm"].lower()].append(date)
@@ -6088,7 +6073,7 @@ def sub_handle_the_quals(players, qualifier, qual_str, player_str, time_frame, k
                         player_games[row["Shared"]["Opponent"].lower()] = []
                     player_games[row["Shared"]["Opponent"].lower()].append(date)
                 else:
-                    date = row["Shared"]["Date"]
+                    date = row["Shared"]["GameLink"]
                     opponent = row["Shared"][key]
                     if key == "Tm":
                         opponent = opponent.lower()
@@ -10417,7 +10402,7 @@ def handle_da_nfl_quals(row, event_name, at_bat_event, qualifiers, player_data, 
         for qual_object in qualifiers["Thrown To"]:
             has_match = False
             for player in qual_object["values"]:
-                if row["Shared"]["Tm"].lower() in player["games"] and row["Shared"]["Date"] in player["games"][row["Shared"]["Tm"].lower()]:
+                if row["Shared"]["Tm"].lower() in player["games"] and row["Shared"]["GameLink"] in player["games"][row["Shared"]["Tm"].lower()]:
                     has_match = True
 
             if not qual_object["negate"]:
@@ -12279,10 +12264,9 @@ def perform_qualifier(player_data, player_type, ind_player_type, row, time_frame
         for qual_object in qualifiers["Day Of Sub Query"]:
             has_match = False
             for player in qual_object["values"]:
-                for team in player["games"]:
-                    if row["Shared"]["Date"] in player["games"][team]:
-                        has_match = True
-                        break
+                if row["Shared"]["Date"] in player["games"]:
+                    has_match = True
+                    break
             if qual_object["negate"]:
                 if has_match:
                     return False
@@ -12294,10 +12278,9 @@ def perform_qualifier(player_data, player_type, ind_player_type, row, time_frame
         for qual_object in qualifiers["Day After Sub Query"]:
             has_match = False
             for player in qual_object["values"]:
-                for team in player["games"]:
-                    if row["Shared"]["Date"] in player["games"][team]:
-                        has_match = True
-                        break
+                if row["Shared"]["Date"] in player["games"]:
+                    has_match = True
+                    break
             if qual_object["negate"]:
                 if has_match:
                     return False
@@ -12309,10 +12292,9 @@ def perform_qualifier(player_data, player_type, ind_player_type, row, time_frame
         for qual_object in qualifiers["Day Before Sub Query"]:
             has_match = False
             for player in qual_object["values"]:
-                for team in player["games"]:
-                    if row["Shared"]["Date"] in player["games"][team]:
-                        has_match = True
-                        break
+                if row["Shared"]["Date"] in player["games"]:
+                    has_match = True
+                    break
             if qual_object["negate"]:
                 if has_match:
                     return False
@@ -12446,7 +12428,7 @@ def perform_qualifier(player_data, player_type, ind_player_type, row, time_frame
         for qual_object in qualifiers["Playing With"]:
             has_match = False
             for player in qual_object["values"]:
-                if row["Shared"]["Tm"].lower() in player["games"] and row["Shared"]["Date"] in player["games"][row["Shared"]["Tm"].lower()]:
+                if row["Shared"]["Tm"].lower() in player["games"] and row["Shared"]["GameLink"] in player["games"][row["Shared"]["Tm"].lower()]:
                     has_match = True
             if qual_object["negate"]:
                 if has_match:
@@ -12459,7 +12441,7 @@ def perform_qualifier(player_data, player_type, ind_player_type, row, time_frame
         for qual_object in qualifiers["Playing Against"]:
             has_match = False
             for player in qual_object["values"]:
-                if row["Shared"]["Tm"].lower() in player["games"] and row["Shared"]["Date"] in player["games"][row["Shared"]["Tm"].lower()]:
+                if row["Shared"]["Tm"].lower() in player["games"] and row["Shared"]["GameLink"] in player["games"][row["Shared"]["Tm"].lower()]:
                     has_match = True
             if qual_object["negate"]:
                 if has_match:
@@ -12474,7 +12456,7 @@ def perform_qualifier(player_data, player_type, ind_player_type, row, time_frame
         for qual_object in qualifiers["Previous Playing With"]:
             has_match = False
             for player in qual_object["values"]:
-                if row["Shared"]["Tm"].lower() in player["games"] and row["Shared"]["Previous Row"]["Shared"]["Date"] in player["games"][row["Shared"]["Tm"].lower()]:
+                if row["Shared"]["Tm"].lower() in player["games"] and row["Shared"]["Previous Row"]["Shared"]["GameLink"] in player["games"][row["Shared"]["Tm"].lower()]:
                     has_match = True
             if qual_object["negate"]:
                 if has_match:
@@ -12489,7 +12471,7 @@ def perform_qualifier(player_data, player_type, ind_player_type, row, time_frame
         for qual_object in qualifiers["Upcoming Playing With"]:
             has_match = False
             for player in qual_object["values"]:
-                if row["Shared"]["Tm"].lower() in player["games"] and row["Shared"]["Upcoming Row"]["Shared"]["Date"] in player["games"][row["Shared"]["Tm"].lower()]:
+                if row["Shared"]["Tm"].lower() in player["games"] and row["Shared"]["Upcoming Row"]["Shared"]["GameLink"] in player["games"][row["Shared"]["Tm"].lower()]:
                     has_match = True
             if qual_object["negate"]:
                 if has_match:
@@ -12504,7 +12486,7 @@ def perform_qualifier(player_data, player_type, ind_player_type, row, time_frame
         for qual_object in qualifiers["Previous Playing Against"]:
             has_match = False
             for player in qual_object["values"]:
-                if row["Shared"]["Tm"].lower() in player["games"] and row["Shared"]["Previous Row"]["Shared"]["Date"] in player["games"][row["Shared"]["Tm"].lower()]:
+                if row["Shared"]["Tm"].lower() in player["games"] and row["Shared"]["Previous Row"]["Shared"]["GameLink"] in player["games"][row["Shared"]["Tm"].lower()]:
                     has_match = True
             if qual_object["negate"]:
                 if has_match:
@@ -12519,7 +12501,7 @@ def perform_qualifier(player_data, player_type, ind_player_type, row, time_frame
         for qual_object in qualifiers["Upcoming Playing Against"]:
             has_match = False
             for player in qual_object["values"]:
-                if row["Shared"]["Tm"].lower() in player["games"] and row["Shared"]["Upcoming Row"]["Shared"]["Date"] in player["games"][row["Shared"]["Tm"].lower()]:
+                if row["Shared"]["Tm"].lower() in player["games"] and row["Shared"]["Upcoming Row"]["Shared"]["GameLink"] in player["games"][row["Shared"]["Tm"].lower()]:
                     has_match = True
             if qual_object["negate"]:
                 if has_match:
@@ -12545,7 +12527,7 @@ def perform_qualifier(player_data, player_type, ind_player_type, row, time_frame
         for qual_object in qualifiers["Playing Same Game"]:
             has_match = False
             for player in qual_object["values"]:
-                if row["Shared"]["Tm"].lower() in player["games"] and row["Shared"]["Date"] in player["games"][row["Shared"]["Tm"].lower()]:
+                if row["Shared"]["Tm"].lower() in player["games"] and row["Shared"]["GameLink"] in player["games"][row["Shared"]["Tm"].lower()]:
                     has_match = True
             if qual_object["negate"]:
                 if has_match:
@@ -12558,10 +12540,9 @@ def perform_qualifier(player_data, player_type, ind_player_type, row, time_frame
         for qual_object in qualifiers["Playing Same Date"]:
             has_match = False
             for player in qual_object["values"]:
-                for team in player["games"]:
-                    if row["Shared"]["Date"] in player["games"][team]:
-                        has_match = True
-                        break
+                if row["Shared"]["Date"] in player["games"]:
+                    has_match = True
+                    break
             if qual_object["negate"]:
                 if has_match:
                     return False

@@ -13670,30 +13670,15 @@ def sub_handle_the_quals(players, qualifier, real_player_type, qual_str, player_
                     player_games[row["Year"]] = True
                 elif key == "Date":
                     date = row["Date"]
-                    opponent = row["Tm"]
-                    if key == "Tm":
-                        opponent = opponent.lower()
-                    if not opponent in player_games:
-                        player_games[opponent] = []
-                    player_games[opponent].append(date)
+                    player_games[date] = True
                 elif key == "DateAfter":
                     date = row["Date"] + datetime.timedelta(days=1)
-                    opponent = row["Tm"]
-                    if key == "Tm":
-                        opponent = opponent.lower()
-                    if not opponent in player_games:
-                        player_games[opponent] = []
-                    player_games[opponent].append(date)
+                    player_games[date] = True
                 elif key == "DateBefore":
                     date = row["Date"] - datetime.timedelta(days=1)
-                    opponent = row["Tm"]
-                    if key == "Tm":
-                        opponent = opponent.lower()
-                    if not opponent in player_games:
-                        player_games[opponent] = []
-                    player_games[opponent].append(date)
+                    player_games[date] = True
                 elif key == "Either":
-                    date = row["DateTime"]
+                    date = row["GameID"]
                     if not row["Tm"].lower() in player_games:
                         player_games[row["Tm"].lower()] = []
                     player_games[row["Tm"].lower()].append(date)
@@ -13701,7 +13686,7 @@ def sub_handle_the_quals(players, qualifier, real_player_type, qual_str, player_
                         player_games[row["Opponent"].lower()] = []
                     player_games[row["Opponent"].lower()].append(date)
                 else:
-                    date = row["DateTime"]
+                    date = row["GameID"]
                     opponent = row[key]
                     if key == "Tm":
                         opponent = opponent.lower()
@@ -19776,10 +19761,9 @@ def perform_qualifier(player_data, player_type, row, time_frame, all_rows):
         for qual_object in qualifiers["Day Of Sub Query"]:
             has_match = False
             for player in qual_object["values"]:
-                for team in player["games"]:
-                    if row["Date"] in player["games"][team]:
-                        has_match = True
-                        break
+                if row["Date"] in player["games"]:
+                    has_match = True
+                    break
             if qual_object["negate"]:
                 if has_match:
                     return False
@@ -19791,10 +19775,9 @@ def perform_qualifier(player_data, player_type, row, time_frame, all_rows):
         for qual_object in qualifiers["Day After Sub Query"]:
             has_match = False
             for player in qual_object["values"]:
-                for team in player["games"]:
-                    if row["Date"] in player["games"][team]:
-                        has_match = True
-                        break
+                if row["Date"] in player["games"]:
+                    has_match = True
+                    break
             if qual_object["negate"]:
                 if has_match:
                     return False
@@ -19806,10 +19789,9 @@ def perform_qualifier(player_data, player_type, row, time_frame, all_rows):
         for qual_object in qualifiers["Day Before Sub Query"]:
             has_match = False
             for player in qual_object["values"]:
-                for team in player["games"]:
-                    if row["Date"] in player["games"][team]:
-                        has_match = True
-                        break
+                if row["Date"] in player["games"]:
+                    has_match = True
+                    break
             if qual_object["negate"]:
                 if has_match:
                     return False
@@ -19938,7 +19920,7 @@ def perform_qualifier(player_data, player_type, row, time_frame, all_rows):
         for qual_object in qualifiers["Playing With"]:
             has_match = False
             for player in qual_object["values"]:
-                if row["Tm"].lower() in player["games"] and row["DateTime"] in player["games"][row["Tm"].lower()]:
+                if row["Tm"].lower() in player["games"] and row["GameID"] in player["games"][row["Tm"].lower()]:
                     has_match = True
             if qual_object["negate"]:
                 if has_match:
@@ -19951,7 +19933,7 @@ def perform_qualifier(player_data, player_type, row, time_frame, all_rows):
         for qual_object in qualifiers["Playing Against"]:
             has_match = False
             for player in qual_object["values"]:
-                if row["Tm"].lower() in player["games"] and row["DateTime"] in player["games"][row["Tm"].lower()]:
+                if row["Tm"].lower() in player["games"] and row["GameID"] in player["games"][row["Tm"].lower()]:
                     has_match = True
             if qual_object["negate"]:
                 if has_match:
@@ -19964,7 +19946,7 @@ def perform_qualifier(player_data, player_type, row, time_frame, all_rows):
         for qual_object in qualifiers["Playing Same Game"]:
             has_match = False
             for player in qual_object["values"]:
-                if row["Tm"].lower() in player["games"] and row["DateTime"] in player["games"][row["Tm"].lower()]:
+                if row["Tm"].lower() in player["games"] and row["GameID"] in player["games"][row["Tm"].lower()]:
                     has_match = True
             if qual_object["negate"]:
                 if has_match:
@@ -19979,7 +19961,7 @@ def perform_qualifier(player_data, player_type, row, time_frame, all_rows):
         for qual_object in qualifiers["Previous Playing With"]:
             has_match = False
             for player in qual_object["values"]:
-                if row["Tm"].lower() in player["games"] and row["Previous Row"]["DateTime"] in player["games"][row["Tm"].lower()]:
+                if row["Tm"].lower() in player["games"] and row["Previous Row"]["GameID"] in player["games"][row["Tm"].lower()]:
                     has_match = True
             if qual_object["negate"]:
                 if has_match:
@@ -19994,7 +19976,7 @@ def perform_qualifier(player_data, player_type, row, time_frame, all_rows):
         for qual_object in qualifiers["Upcoming Playing With"]:
             has_match = False
             for player in qual_object["values"]:
-                if row["Tm"].lower() in player["games"] and row["Upcoming Row"]["DateTime"] in player["games"][row["Tm"].lower()]:
+                if row["Tm"].lower() in player["games"] and row["Upcoming Row"]["GameID"] in player["games"][row["Tm"].lower()]:
                     has_match = True
             if qual_object["negate"]:
                 if has_match:
@@ -20009,7 +19991,7 @@ def perform_qualifier(player_data, player_type, row, time_frame, all_rows):
         for qual_object in qualifiers["Previous Playing Against"]:
             has_match = False
             for player in qual_object["values"]:
-                if row["Tm"].lower() in player["games"] and row["Previous Row"]["DateTime"] in player["games"][row["Tm"].lower()]:
+                if row["Tm"].lower() in player["games"] and row["Previous Row"]["GameID"] in player["games"][row["Tm"].lower()]:
                     has_match = True
             if qual_object["negate"]:
                 if has_match:
@@ -20024,7 +20006,7 @@ def perform_qualifier(player_data, player_type, row, time_frame, all_rows):
         for qual_object in qualifiers["Upcoming Playing Against"]:
             has_match = False
             for player in qual_object["values"]:
-                if row["Tm"].lower() in player["games"] and row["Upcoming Row"]["DateTime"] in player["games"][row["Tm"].lower()]:
+                if row["Tm"].lower() in player["games"] and row["Upcoming Row"]["GameID"] in player["games"][row["Tm"].lower()]:
                     has_match = True
             if qual_object["negate"]:
                 if has_match:
@@ -20050,10 +20032,9 @@ def perform_qualifier(player_data, player_type, row, time_frame, all_rows):
         for qual_object in qualifiers["Playing Same Date"]:
             has_match = False
             for player in qual_object["values"]:
-                for team in player["games"]:
-                    if row["Date"] in player["games"][team]:
-                        has_match = True
-                        break
+                if row["Date"] in player["games"]:
+                    has_match = True
+                    break
             if qual_object["negate"]:
                 if has_match:
                     return False
@@ -20065,10 +20046,9 @@ def perform_qualifier(player_data, player_type, row, time_frame, all_rows):
         for qual_object in qualifiers["Day After Pitching"]:
             has_match = False
             for player in qual_object["values"]:
-                for team in player["games"]:
-                    if row["Date"] in player["games"][team]:
-                        has_match = True
-                        break
+                if row["Date"] in player["games"]:
+                    has_match = True
+                    break
             if qual_object["negate"]:
                 if has_match:
                     return False
@@ -20080,10 +20060,9 @@ def perform_qualifier(player_data, player_type, row, time_frame, all_rows):
         for qual_object in qualifiers["Day After Hitting"]:
             has_match = False
             for player in qual_object["values"]:
-                for team in player["games"]:
-                    if row["Date"] in player["games"][team]:
-                        has_match = True
-                        break
+                if row["Date"] in player["games"]:
+                    has_match = True
+                    break
             if qual_object["negate"]:
                 if has_match:
                     return False
@@ -20095,10 +20074,9 @@ def perform_qualifier(player_data, player_type, row, time_frame, all_rows):
         for qual_object in qualifiers["Day Before Pitching"]:
             has_match = False
             for player in qual_object["values"]:
-                for team in player["games"]:
-                    if row["Date"] in player["games"][team]:
-                        has_match = True
-                        break
+                if row["Date"] in player["games"]:
+                    has_match = True
+                    break
             if qual_object["negate"]:
                 if has_match:
                     return False
@@ -20110,10 +20088,9 @@ def perform_qualifier(player_data, player_type, row, time_frame, all_rows):
         for qual_object in qualifiers["Day Before Hitting"]:
             has_match = False
             for player in qual_object["values"]:
-                for team in player["games"]:
-                    if row["Date"] in player["games"][team]:
-                        has_match = True
-                        break
+                if row["Date"] in player["games"]:
+                    has_match = True
+                    break
             if qual_object["negate"]:
                 if has_match:
                     return False
@@ -31074,7 +31051,7 @@ def handle_da_mlb_quals(row, event_name, at_bat_event, qualifiers, player_data, 
         for qual_object in qualifiers["Batting Against"]:
             has_match = False
             for player in qual_object["values"]:
-                if row["Tm"].lower() in player["games"] and row["DateTime"] in player["games"][row["Tm"].lower()]:
+                if row["Tm"].lower() in player["games"] and row["GameID"] in player["games"][row["Tm"].lower()]:
                     has_match = True
 
             if not qual_object["negate"]:
@@ -31097,7 +31074,7 @@ def handle_da_mlb_quals(row, event_name, at_bat_event, qualifiers, player_data, 
         for qual_object in qualifiers["Pitching Against"]:
             has_match = False
             for player in qual_object["values"]:
-                if row["Tm"].lower() in player["games"] and row["DateTime"] in player["games"][row["Tm"].lower()]:
+                if row["Tm"].lower() in player["games"] and row["GameID"] in player["games"][row["Tm"].lower()]:
                     has_match = True
 
             if not qual_object["negate"]:
@@ -31120,7 +31097,7 @@ def handle_da_mlb_quals(row, event_name, at_bat_event, qualifiers, player_data, 
         for qual_object in qualifiers["Teammate On First"]:
             has_match = False
             for player in qual_object["values"]:
-                if row["Tm"].lower() in player["games"] and row["DateTime"] in player["games"][row["Tm"].lower()]:
+                if row["Tm"].lower() in player["games"] and row["GameID"] in player["games"][row["Tm"].lower()]:
                     has_match = True
 
             if not qual_object["negate"]:
@@ -31143,7 +31120,7 @@ def handle_da_mlb_quals(row, event_name, at_bat_event, qualifiers, player_data, 
         for qual_object in qualifiers["Teammate On Second"]:
             has_match = False
             for player in qual_object["values"]:
-                if row["Tm"].lower() in player["games"] and row["DateTime"] in player["games"][row["Tm"].lower()]:
+                if row["Tm"].lower() in player["games"] and row["GameID"] in player["games"][row["Tm"].lower()]:
                     has_match = True
 
             if not qual_object["negate"]:
@@ -31166,7 +31143,7 @@ def handle_da_mlb_quals(row, event_name, at_bat_event, qualifiers, player_data, 
         for qual_object in qualifiers["Teammate On Third"]:
             has_match = False
             for player in qual_object["values"]:
-                if row["Tm"].lower() in player["games"] and row["DateTime"] in player["games"][row["Tm"].lower()]:
+                if row["Tm"].lower() in player["games"] and row["GameID"] in player["games"][row["Tm"].lower()]:
                     has_match = True
 
             if not qual_object["negate"]:
@@ -31189,7 +31166,7 @@ def handle_da_mlb_quals(row, event_name, at_bat_event, qualifiers, player_data, 
         for qual_object in qualifiers["Teammate On Base"]:
             has_match = False
             for player in qual_object["values"]:
-                if row["Tm"].lower() in player["games"] and row["DateTime"] in player["games"][row["Tm"].lower()]:
+                if row["Tm"].lower() in player["games"] and row["GameID"] in player["games"][row["Tm"].lower()]:
                     has_match = True
 
             if not qual_object["negate"]:
@@ -31212,7 +31189,7 @@ def handle_da_mlb_quals(row, event_name, at_bat_event, qualifiers, player_data, 
         for qual_object in qualifiers["Opponent On First"]:
             has_match = False
             for player in qual_object["values"]:
-                if row["Tm"].lower() in player["games"] and row["DateTime"] in player["games"][row["Tm"].lower()]:
+                if row["Tm"].lower() in player["games"] and row["GameID"] in player["games"][row["Tm"].lower()]:
                     has_match = True
 
             if not qual_object["negate"]:
@@ -31235,7 +31212,7 @@ def handle_da_mlb_quals(row, event_name, at_bat_event, qualifiers, player_data, 
         for qual_object in qualifiers["Opponent On Second"]:
             has_match = False
             for player in qual_object["values"]:
-                if row["Tm"].lower() in player["games"] and row["DateTime"] in player["games"][row["Tm"].lower()]:
+                if row["Tm"].lower() in player["games"] and row["GameID"] in player["games"][row["Tm"].lower()]:
                     has_match = True
 
             if not qual_object["negate"]:
@@ -31258,7 +31235,7 @@ def handle_da_mlb_quals(row, event_name, at_bat_event, qualifiers, player_data, 
         for qual_object in qualifiers["Opponent On Third"]:
             has_match = False
             for player in qual_object["values"]:
-                if row["Tm"].lower() in player["games"] and row["DateTime"] in player["games"][row["Tm"].lower()]:
+                if row["Tm"].lower() in player["games"] and row["GameID"] in player["games"][row["Tm"].lower()]:
                     has_match = True
 
             if not qual_object["negate"]:
@@ -31281,7 +31258,7 @@ def handle_da_mlb_quals(row, event_name, at_bat_event, qualifiers, player_data, 
         for qual_object in qualifiers["Opponent On Base"]:
             has_match = False
             for player in qual_object["values"]:
-                if row["Tm"].lower() in player["games"] and row["DateTime"] in player["games"][row["Tm"].lower()]:
+                if row["Tm"].lower() in player["games"] and row["GameID"] in player["games"][row["Tm"].lower()]:
                     has_match = True
 
             if not qual_object["negate"]:
@@ -32541,7 +32518,7 @@ def handle_da_mlb_quals(row, event_name, at_bat_event, qualifiers, player_data, 
         for qual_object in qualifiers["Driven In"]:
             has_match = False
             for player in qual_object["values"]:
-                if row["Tm"].lower() in player["games"] and row["DateTime"] in player["games"][row["Tm"].lower()]:
+                if row["Tm"].lower() in player["games"] and row["GameID"] in player["games"][row["Tm"].lower()]:
                     has_match = True
 
             if not qual_object["negate"]:
@@ -32567,7 +32544,7 @@ def handle_da_mlb_quals(row, event_name, at_bat_event, qualifiers, player_data, 
         for qual_object in qualifiers["Batted In"]:
             has_match = False
             for player in qual_object["values"]:
-                if row["Tm"].lower() in player["games"] and row["DateTime"] in player["games"][row["Tm"].lower()]:
+                if row["Tm"].lower() in player["games"] and row["GameID"] in player["games"][row["Tm"].lower()]:
                     has_match = True
 
             if not qual_object["negate"]:
@@ -32607,7 +32584,7 @@ def handle_da_mlb_quals(row, event_name, at_bat_event, qualifiers, player_data, 
 
             has_match = False
             for player in qual_object["values"]:
-                if row["Tm"].lower() in player["games"] and row["DateTime"] in player["games"][row["Tm"].lower()]:
+                if row["Tm"].lower() in player["games"] and row["GameID"] in player["games"][row["Tm"].lower()]:
                     has_match = True
 
             if not qual_object["negate"]:
@@ -32701,7 +32678,7 @@ def handle_da_mlb_quals(row, event_name, at_bat_event, qualifiers, player_data, 
         for qual_object in qualifiers["Caught By"]:
             has_match = False
             for player in qual_object["values"]:
-                if row["Tm"].lower() in player["games"] and row["DateTime"] in player["games"][row["Tm"].lower()]:
+                if row["Tm"].lower() in player["games"] and row["GameID"] in player["games"][row["Tm"].lower()]:
                     has_match = True
 
             if not qual_object["negate"]:
@@ -32731,7 +32708,7 @@ def handle_da_mlb_quals(row, event_name, at_bat_event, qualifiers, player_data, 
         for qual_object in qualifiers["Stealing On"]:
             has_match = False
             for player in qual_object["values"]:
-                if row["Tm"].lower() in player["games"] and row["DateTime"] in player["games"][row["Tm"].lower()]:
+                if row["Tm"].lower() in player["games"] and row["GameID"] in player["games"][row["Tm"].lower()]:
                     has_match = True
 
             if not qual_object["negate"]:
@@ -32754,7 +32731,7 @@ def handle_da_mlb_quals(row, event_name, at_bat_event, qualifiers, player_data, 
         for qual_object in qualifiers["On Field With"]:
             has_match = False
             for player in qual_object["values"]:
-                if row["Tm"].lower() in player["games"] and row["DateTime"] in player["games"][row["Tm"].lower()]:
+                if row["Tm"].lower() in player["games"] and row["GameID"] in player["games"][row["Tm"].lower()]:
                     has_match = True
 
             if not qual_object["negate"]:
@@ -32796,7 +32773,7 @@ def handle_da_mlb_quals(row, event_name, at_bat_event, qualifiers, player_data, 
         for qual_object in qualifiers["On Field Against"]:
             has_match = False
             for player in qual_object["values"]:
-                if row["Tm"].lower() in player["games"] and row["DateTime"] in player["games"][row["Tm"].lower()]:
+                if row["Tm"].lower() in player["games"] and row["GameID"] in player["games"][row["Tm"].lower()]:
                     has_match = True
 
             if not qual_object["negate"]:
