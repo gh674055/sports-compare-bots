@@ -17585,8 +17585,8 @@ def determine_row_data(game_data, player_type, player_data, player_id, current_t
                             outs_remaining_entered = outs_remaining
                             men_on_base_entered = num_occupied
                             men_in_scoring_entered = int(sub_man_on_second) + int(sub_man_on_third)
-                    elif not is_team_batting:
-                        pitcher_changed = True
+                        elif not is_team_batting:
+                            pitcher_changed = True
 
         if inning_entered == None:
             for index, scoring_play in enumerate(sub_data["liveData"]["plays"]["allPlays"]):
