@@ -17439,8 +17439,6 @@ def determine_row_data(game_data, player_type, player_data, player_id, current_t
             points_after_fourth = (2 * (math.floor(row_data["IP"]) - 4))
             if points_after_fourth > 0:
                 row_data["GSc"] += points_after_fourth
-            if row_data["IP"] >= 6 and row_data["ER"] <= 3:
-                row_data["QS"] = 1
             if is_final:
                 has_no_hit = False
                 if player_data["id"] in special_stats["no_hit"]:
@@ -17497,8 +17495,15 @@ def determine_row_data(game_data, player_type, player_data, player_id, current_t
         men_on_base_entered = None
         men_in_scoring_entered = None
         run_diff = None
+        pitcher_changed = False
 
         for index, scoring_play in enumerate(sub_data["liveData"]["plays"]["allPlays"]):
+            is_top_inning = scoring_play["about"]["isTopInning"]
+            if is_home_team:
+                is_team_batting = False if is_top_inning else True
+            else:
+                is_team_batting = True if is_top_inning else False
+
             for sub_play in scoring_play["playEvents"]:
                 if "isSubstitution" in sub_play and sub_play["isSubstitution"]:
                     if sub_play["details"]["eventType"] == "pitching_substitution":
@@ -17580,7 +17585,8 @@ def determine_row_data(game_data, player_type, player_data, player_id, current_t
                             outs_remaining_entered = outs_remaining
                             men_on_base_entered = num_occupied
                             men_in_scoring_entered = int(sub_man_on_second) + int(sub_man_on_third)
-                            break
+                    elif not is_team_batting:
+                        pitcher_changed = True
 
         if inning_entered == None:
             for index, scoring_play in enumerate(sub_data["liveData"]["plays"]["allPlays"]):
@@ -17620,6 +17626,19 @@ def determine_row_data(game_data, player_type, player_data, player_id, current_t
         row_data["MenInScoringEntered"] = men_in_scoring_entered
         row_data["ScoreMarginEntered"] = run_diff
 
+        if row_data["GS"]:
+            if row_data["IP"] >= 6 and row_data["ER"] <= 3:
+                if is_final:
+                    row_data["QS"] = 1
+                elif pitcher_changed:
+                    has_responsible_runner = False
+                    if "currentPlay" in sub_data["liveData"]["plays"]:
+                        for runner in sub_data["liveData"]["plays"]["currentPlay"]["runners"]:
+                            if runner["details"]["responsiblePitcher"] and runner["details"]["responsiblePitcher"]["id"] == player_data["mlb_id"]:
+                                has_responsible_runner = True
+                                break
+                    if not has_responsible_runner:
+                        row_data["QS"] = 1
     if is_final:
         if player_type["da_type"] == "Batter":
             fake_row_data = copy.deepcopy(row_data)
