@@ -5317,6 +5317,8 @@ qualifier_map = {
     "Days In A Row" : {},
     "Games In A Row" : {},
     "Starts In A Row" : {},
+    "Games In Days" : {},
+    "Starts In Days" : {},
     "Number" : {},
     "Year" : {},
     "Even Year" : {},
