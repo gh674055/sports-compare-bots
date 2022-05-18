@@ -10705,8 +10705,6 @@ def fix_seasons(all_rows, player_type):
                         years.add(row["Shared"]["Year"])
 
 def handle_playoff_weeks(player_data, all_rows):
-    handle_schedule_stats(player_data, all_rows, [], "Only")
-
     for row in all_rows:
         weeks_per_season = None
         for weeks_obj in year_weeks_played:
