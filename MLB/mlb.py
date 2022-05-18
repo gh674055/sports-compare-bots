@@ -25332,6 +25332,9 @@ def fix_prob_data(all_rows, player_data, player_type, all_teams_unique):
     }
 
     for row_data in all_rows:
+        if "MLBLiveGame" in row_data and row_data["MLBLiveGame"]:
+            continue
+
         if row_data["is_playoffs"] or "RawCrGm" in row_data or all_teams_unique:
             row_data["WPA"] = 0
             row_data["cWPA"] = 0
@@ -25340,6 +25343,9 @@ def fix_prob_data(all_rows, player_data, player_type, all_teams_unique):
     max_reg_year = 0
     max_playoff_year = 0
     for row_data in all_rows:
+        if "MLBLiveGame" in row_data and row_data["MLBLiveGame"]:
+            continue
+
         if row_data["is_playoffs"] or "RawCrGm" in row_data:
             season_ranges[row_data["is_playoffs"]].append(row_data["RawCrGm"])
             if row_data["is_playoffs"]:
@@ -25355,6 +25361,9 @@ def fix_prob_data(all_rows, player_data, player_type, all_teams_unique):
     full_season_ranges = []
     if not season_ranges[False] and all_teams_unique:
         for row_data in all_rows:
+            if "MLBLiveGame" in row_data and row_data["MLBLiveGame"]:
+                continue
+
             if not row_data["is_playoffs"] and "RawCrGm" not in row_data:
                 if row_data["Year"] not in full_season_ranges:
                     full_season_ranges.append(row_data["Year"])
@@ -25410,6 +25419,9 @@ def handle_prob_data(player_type, all_season_ranges, player_data, all_rows, is_p
             for i in range(len(standard_table_rows)):
                 row = standard_table_rows[i]
                 for pot_row in all_rows:
+                    if "MLBLiveGame" in pot_row and pot_row["MLBLiveGame"]:
+                        continue
+                    
                     if pot_row["Year"] >= (1901 if is_post else 1916) and pot_row["is_playoffs"] == is_post:
                         wpa_str = row.find("td", {"data-stat" : "wpa_" + ("bat" if player_type["da_type"] == "Batter" else "def")}).find(text=True)
                         if wpa_str:
