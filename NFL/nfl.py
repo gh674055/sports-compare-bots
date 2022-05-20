@@ -1085,14 +1085,14 @@ def main():
         if opt in ("-" + manual_comment_short, "--" + manual_comment_long):
             comment = reddit.comment(id=arg.strip())
             if not comment.archived and comment.author and not comment.author.name.lower() in blocked_users:
-                if re.search(r"!\bnflcompare\b", comment.body, re.IGNORECASE):
+                if re.search(r"!\bnflcompare(?:bot)?\b", comment.body, re.IGNORECASE):
                     logger.info("FOUND COMMENT " + str(comment.id))
                     parse_input(comment, False, comment.subreddit.display_name in approved_subreddits)
             return
         elif opt in ("-" + debug_mode_short, "--" + debug_mode_long):
             comment_str = arg.strip()
             comment = FakeComment(comment_str, "-1", "", "nfl")
-            if re.search(r"!\bnflcompare\b", comment.body, re.IGNORECASE):
+            if re.search(r"!\bnflcompare(?:bot)?\b", comment.body, re.IGNORECASE):
                 logger.info("FOUND COMMENT " + str(comment.id))
                 parse_input(comment, True, False)
             return
@@ -1100,7 +1100,7 @@ def main():
     with ThreadPoolExecutor(max_workers=10) as executor:
         for comment in subreddit.stream.comments():
             if not comment.archived and comment.author and not comment.author.name.lower() in blocked_users:
-                if re.search(r"!\bnflcompare\b", comment.body, re.IGNORECASE):
+                if re.search(r"!\bnflcompare(?:bot)?\b", comment.body, re.IGNORECASE):
                     logger.info("FOUND COMMENT " + str(comment.id))
                     executor.submit(parse_input, comment, False, comment.subreddit.display_name in approved_subreddits)
 
@@ -1331,12 +1331,12 @@ def parse_comment_str(comment_str):
     input_str = unescape(input_str)
     input_str = input_str.replace("\\<", "<").replace("\\>", ">").replace("\\]", "]").replace("\\[", "[")
     input_str = re.sub(r"(?<!\\)(?:[*_^`]|[~]{2})", "", input_str)
-    match = re.search(r"!\bnflcompare\b\s*(?<!\\)<(.+?)(?<!\\)>(?:\s*(?<!\\)\[(.+?)(?<!\\)\](?!\s*\((http[s]?://|www\.)(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+\)))?", input_str, re.IGNORECASE)
+    match = re.search(r"!\bnflcompare(?:bot)?\b\s*(?<!\\)<(.+?)(?<!\\)>(?:\s*(?<!\\)\[(.+?)(?<!\\)\](?!\s*\((http[s]?://|www\.)(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+\)))?", input_str, re.IGNORECASE)
 
     if not match:
-        input_split = re.split(r"!\bnflcompare\b", input_str, 1, re.IGNORECASE)
+        input_split = re.split(r"!\bnflcompare(?:bot)?\b", input_str, 1, re.IGNORECASE)
         input_str = "!nflcompare <" + input_split[1].strip() + ">"
-        match = re.search(r"!\bnflcompare\b\s*(?<!\\)<(.+?)(?<!\\)>(?:\s*(?<!\\)\[(.+?)(?<!\\)\](?!\s*\((http[s]?://|www\.)(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+\)))?", input_str, re.IGNORECASE)
+        match = re.search(r"!\bnflcompare(?:bot)?\b\s*(?<!\\)<(.+?)(?<!\\)>(?:\s*(?<!\\)\[(.+?)(?<!\\)\](?!\s*\((http[s]?://|www\.)(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+\)))?", input_str, re.IGNORECASE)
     if not match:
         raise get_constant_data.CustomMessageException("No players in search!")
 
