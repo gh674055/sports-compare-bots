@@ -109,7 +109,7 @@ def main():
             elif message.subject.strip().lower() == "re-run" or message.subject.strip().lower() == "rerun":
                 logger.info("FOUND RE-RUN MESSAGE " + str(message.id))
                 re_run_message(message, reddit, True)
-            elif re.search(r"!\bnflcompare\b", message.body, re.IGNORECASE):
+            elif re.search(r"!\bnflcompare(?:bot)?\b", message.body, re.IGNORECASE):
                 logger.info("FOUND COMPARE MESSAGE " + str(message.id))
                 nfl.parse_input(message, True, False)
         return
@@ -121,7 +121,7 @@ def main():
         elif message.subject.strip().lower() == "re-run" or message.subject.strip().lower() == "rerun":
             logger.info("FOUND RE-RUN MESSAGE " + str(message.id))
             re_run_message(message, reddit, True)
-        elif re.search(r"!\bnflcompare\b", message.body, re.IGNORECASE):
+        elif re.search(r"!\bnflcompare(?:bot)?\b", message.body, re.IGNORECASE):
             logger.info("FOUND COMPARE MESSAGE " + str(message.id))
             nfl.parse_input(message, True, False)
         return
@@ -136,7 +136,7 @@ def main():
                     elif message.subject.strip().lower() == "re-run" or message.subject.strip().lower() == "rerun":
                         logger.info("FOUND RE-RUN MESSAGE " + str(message.id))
                         executor.submit(re_run_message, message, reddit, False)
-                    elif re.search(r"!\bnflcompare\b", message.body, re.IGNORECASE):
+                    elif re.search(r"!\bnflcompare(?:bot)?\b", message.body, re.IGNORECASE):
                         logger.info("FOUND COMPARE MESSAGE " + str(message.id))
                         executor.submit(nfl.parse_input, message, False, False)
 
@@ -330,7 +330,7 @@ def parse_comment(reddit, comment_id, reply_comment_id, original_comment, is_exi
 
     if is_message:
         message = reddit.inbox.message(comment_id)
-        if re.search(r"!\bnflcompare\b", message.body, re.IGNORECASE):
+        if re.search(r"!\bnflcompare(?:bot)?\b", message.body, re.IGNORECASE):
             logger.info("#" + str(threading.get_ident()) + "#   " + "Starting re-run")
             try:
                 message.reply("Starting re-run!")
@@ -344,7 +344,7 @@ def parse_comment(reddit, comment_id, reply_comment_id, original_comment, is_exi
     else:
         comment = reddit.comment(id=comment_id)
         if not comment.archived:
-            if re.search(r"!\bnflcompare\b", comment.body, re.IGNORECASE):
+            if re.search(r"!\bnflcompare(?:bot)?\b", comment.body, re.IGNORECASE):
                 comment_obj = None
                 if reply_comment_id:
                     delete_comment = reddit.comment(id=reply_comment_id)
