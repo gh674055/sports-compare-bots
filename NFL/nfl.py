@@ -17578,14 +17578,28 @@ def get_player_birthday(player_page):
     if birthday_span:
         return dateutil.parser.parse(birthday_span["data-birth"]).date()
     else:
-        return None
+        born_span = player_page.find("strong", text="Born:")
+        if not born_span:
+            born_span = player_page.find("strong", text="Born")
+        if born_span:
+            born_sibling = born_span.find_next_sibling()
+            if born_sibling and born_sibling["id"] == "necro-birth":
+                return dateutil.parser.parse(born_sibling["data-birth"]).date()
+    return None
 
 def get_player_deathday(player_page):
     birthday_span = player_page.find("span", {"id" : "necro-death"})
     if birthday_span:
         return dateutil.parser.parse(birthday_span["data-death"]).date()
     else:
-        return None
+        born_span = player_page.find("strong", text="Died:")
+        if not born_span:
+            born_span = player_page.find("strong", text="Died")
+        if born_span:
+            born_sibling = born_span.find_next_sibling()
+            if born_sibling and born_sibling["id"] == "necro-death":
+                return dateutil.parser.parse(born_sibling["data-death"]).date()
+    return None
 
 def get_player_image(player_page):
     image_info = player_page.find("div", {"id" : "meta"}).find("div", {"class" : "media-item"})

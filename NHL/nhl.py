@@ -16074,8 +16074,8 @@ def handle_multi_player_data(player_id, time_frames, player_type, player_page, r
     #except Exception:
     #    player_data["LastUpdated"] = None
     player_data["LastUpdated"] = None
-    player_data["Birthday"] = get_player_birthday(player_id, player_page)
-    player_data["Deathday"] = get_player_deathday(player_id, player_page)
+    player_data["Birthday"] = get_player_birthday(player_page)
+    player_data["Deathday"] = get_player_deathday(player_page)
     #player_data["Player_Active"] = get_player_is_active(player_id, player_page)
     player_data["player_image_url"] = get_player_image(player_page)
     player_data["year_valid_years"], player_data["reg_year_valid_years"], player_data["game_valid_years"], valid_teams, valid_teams_raw_key, valid_year_teams = get_valid_years(player_page, player_type)
@@ -35635,19 +35635,33 @@ def get_current_cap(player_page):
         return float(cap_hit[1:].replace(",", ""))
     return 0
 
-def get_player_birthday(player_id, player_page):
+def get_player_birthday(player_page):
     birthday_span = player_page.find("span", {"id" : "necro-birth"})
     if birthday_span:
         return dateutil.parser.parse(birthday_span["data-birth"]).date()
     else:
-        return None
+        born_span = player_page.find("strong", text="Born:")
+        if not born_span:
+            born_span = player_page.find("strong", text="Born")
+        if born_span:
+            born_sibling = born_span.find_next_sibling()
+            if born_sibling and born_sibling["id"] == "necro-birth":
+                return dateutil.parser.parse(born_sibling["data-birth"]).date()
+    return None
 
-def get_player_deathday(player_id, player_page):
+def get_player_deathday(player_page):
     birthday_span = player_page.find("span", {"id" : "necro-death"})
     if birthday_span:
         return dateutil.parser.parse(birthday_span["data-death"]).date()
     else:
-        return None
+        born_span = player_page.find("strong", text="Died:")
+        if not born_span:
+            born_span = player_page.find("strong", text="Died")
+        if born_span:
+            born_sibling = born_span.find_next_sibling()
+            if born_sibling and born_sibling["id"] == "necro-death":
+                return dateutil.parser.parse(born_sibling["data-death"]).date()
+    return None
 
 def get_player_name(player_page):
     player_info = player_page.find("div", {"id" : "meta"})
