@@ -9227,7 +9227,10 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 qual_type = "Score Margin"
                                 extra_stats.add("current-stats")
 
-                            value = ordinal_to_number(m.group(3))
+                            try:
+                                value = ordinal_to_number(m.group(3))
+                            except Exception:
+                                continue
 
                             if isinstance(value, int):
                                 if qual_type == "Score Margin":
@@ -9269,7 +9272,10 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 if not playoffs:
                                     playoffs = "Only"
 
-                            value = ordinal_to_number(m.group(4))
+                            try:
+                                value = ordinal_to_number(m.group(4))
+                            except Exception:
+                                continue
 
                             if isinstance(value, int):
                                 if qual_type == "Score Margin":

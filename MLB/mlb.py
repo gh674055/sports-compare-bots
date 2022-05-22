@@ -8434,10 +8434,10 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 qual_type = "Score Margin"
                                 extra_stats.add("current-stats")
                             
-                            if m.group(3) in ["bottom", "top"]:
+                            try:
+                                value = ordinal_to_number(m.group(3))
+                            except Exception:
                                 continue
-
-                            value = ordinal_to_number(m.group(3))
 
                             if isinstance(value, int):
                                 if qual_type == "Score Margin":
@@ -8472,7 +8472,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 qual_type = "Batting Order Position"
                                 player_type["da_type"] = "Batter"
                             elif qualifier_str == "facing-batting":
-                                qual_type = "Batting Order Position"
+                                qual_type = "Pitching Against Batting Order"
                                 player_type["da_type"] = "Pitcher"
                             elif qualifier_str == "leading-by":
                                 qual_type = "Score Margin"
@@ -8485,10 +8485,10 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 if not playoffs:
                                     playoffs = "Only"
 
-                            if m.group(4) in ["lefty", "righty"]:
+                            try:
+                                value = ordinal_to_number(m.group(4))
+                            except Exception:
                                 continue
-
-                            value = ordinal_to_number(m.group(4))
 
                             if isinstance(value, int):
                                 if qual_type == "Score Margin":

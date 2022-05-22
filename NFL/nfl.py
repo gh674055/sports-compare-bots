@@ -2208,7 +2208,10 @@ def handle_player_string(comment, player_type, is_fantasy, last_updated, hide_ta
                                 qual_type = "Current Score Margin"
                                 extra_stats.add("current-stats")
 
-                            value = ordinal_to_number(m.group(3))
+                            try:
+                                value = ordinal_to_number(m.group(3))
+                            except Exception:
+                                continue
 
                             if isinstance(value, int):
                                 if qual_type == "Current Score Margin":
@@ -2254,7 +2257,10 @@ def handle_player_string(comment, player_type, is_fantasy, last_updated, hide_ta
                                 qual_type = "Current Score Margin"
                                 extra_stats.add("current-stats")
 
-                            value = ordinal_to_number(m.group(4))
+                            try:
+                                value = ordinal_to_number(m.group(4))
+                            except Exception:
+                                continue
 
                             if isinstance(value, int):
                                 if qual_type == "Current Score Margin":
