@@ -8405,20 +8405,36 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                         last_match = re.finditer(r"\b(show(?: |-)?stat:)[\S-]+", time_frame)
                         for m in last_match:
                             for stat in re.split(r"(?<!\\)\-", re.split(r"(?<!\\)" + m.group(1), m.group(0))[1][1:-1]):
-                                extra_stats.add("show-stat-" + unescape_string(stat.strip()))
+                                stat_value = unescape_string(stat.strip())
+                                if stat_value.endswith("/60"):
+                                    stat_value += "m"
+                                if stat_value.startswith("5v5>"):
+                                    stat_value += "_5v5"
+                                extra_stats.add("show-stat-" + stat_value)
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
                         
                         last_match = re.finditer(r"\b(show(?: |-)?only(?: |-)?stat:)[\S-]+", time_frame)
                         for m in last_match:
                             for stat in re.split(r"(?<!\\)\-", re.split(r"(?<!\\)" + m.group(1), m.group(0))[1][1:-1]):
-                                extra_stats.add("show-only-stat-" + unescape_string(stat.strip()))
-                                extra_stats.add("show-stat-" + unescape_string(stat.strip()))
+                                stat_value = unescape_string(stat.strip())
+                                if stat_value.endswith("/60"):
+                                    stat_value += "m"
+                                if stat_value.startswith("5v5>"):
+                                    stat_value += "_5v5"
+
+                                extra_stats.add("show-only-stat-" + stat_value)
+                                extra_stats.add("show-stat-" + stat_value)
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
 
                         last_match = re.finditer(r"\b(hide(?: |-)?stat:)[\S-]+", time_frame)
                         for m in last_match:
                             for stat in re.split(r"(?<!\\)\-", re.split(r"(?<!\\)" + m.group(1), m.group(0))[1][1:-1]):
-                                extra_stats.add("hide-stat-" + unescape_string(stat.strip()))
+                                stat_value = unescape_string(stat.strip())
+                                if stat_value.endswith("/60"):
+                                    stat_value += "m"
+                                if stat_value.startswith("5v5>"):
+                                    stat_value += "_5v5"
+                                extra_stats.add("hide-stat-" + stat_value)
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
 
                         last_match = re.finditer(r"\b(sort(?: |-)?by(?:(?: |-)?stat)?:)[\S-]+", time_frame)
@@ -8428,8 +8444,15 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 sort_split = re.split(r"(?<!\\)\;", stat)
                                 if len(sort_split) == 2:
                                     is_desc = False
+
+                                stat_value = unescape_string(sort_split[0].strip())
+                                if stat_value.endswith("/60"):
+                                    stat_value += "m"
+                                if stat_value.startswith("5v5>"):
+                                    stat_value += "_5v5"
+
                                 sort_vals.append({
-                                    "stat" : unescape_string(sort_split[0].strip()),
+                                    "stat" : stat_value,
                                     "is_desc" : is_desc
                                 })
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
