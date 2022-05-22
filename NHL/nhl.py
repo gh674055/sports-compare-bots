@@ -38712,7 +38712,7 @@ def print_player_data(player_datas, player_type, highest_vals, lowest_vals, has_
         all_headers["Relative"] = rel_headers
     if advance_headers:
         if player_type["da_type"]["type"] == "Skater":
-            all_headers["5v5 (Avail since 2009-2010)"] = advance_headers
+            all_headers["5v5"] = advance_headers
         else:
             all_headers["Advanced"] = advance_headers
     if penalty_headers and "penalties" in extra_stats:
@@ -38878,7 +38878,7 @@ def print_player_data(player_datas, player_type, highest_vals, lowest_vals, has_
             continue
         if over_header.startswith("5v5") and "hide-table-5v5" in extra_stats:
             continue
-        if over_header == "5v5 (Avail since 2009-2010)":
+        if over_header == "5v5":
             if error_getting_adv:
                 continue
 
@@ -39007,7 +39007,7 @@ def print_player_data(player_datas, player_type, highest_vals, lowest_vals, has_
                                 if display_header.endswith("_Rel"):
                                     display_header = display_header[:-4]
                                 display_header = display_header.replace("Rel", "")
-                            elif over_header == "5v5 (Avail since 2009-2010)":
+                            elif over_header == "5v5":
                                 if display_header.endswith("_5v5"):
                                     display_header = display_header[:-4]
                                 if display_header.endswith("M"):
@@ -39048,9 +39048,9 @@ def print_player_data(player_datas, player_type, highest_vals, lowest_vals, has_
                         display_over_header = "Situational/Advanced (Even Strength/Hockey Reference, avail since 2016-2017)"
                     else:
                         display_over_header = "Situational"
-            elif display_over_header == "5v5 (Avail since 2009-2010)":
-                if has_against_quals_no_so(extra_stats):
-                    display_over_header = "5v5"
+            elif display_over_header == "5v5":
+                if not has_against_quals_no_so(extra_stats):
+                    display_over_header = "5v5 (Avail since 2009-2010)"
             elif display_over_header == "Per Game/60 Minutes":
                 if has_against_quals_no_so(extra_stats) and not "per-game" in extra_stats:
                     display_over_header = "Per 60 Minutes (Avail since 2007-2008)"
@@ -39121,7 +39121,7 @@ def get_reddit_player_table(player_datas, player_type, debug_mode, original_comm
         all_headers["Relative"] = rel_headers
     if advance_headers:
         if player_type["da_type"]["type"] == "Skater":
-            all_headers["5v5 (Avail since 2009-2010)"] = advance_headers
+            all_headers["5v5"] = advance_headers
         else:
             all_headers["Advanced"] = advance_headers
     if penalty_headers and "penalties" in extra_stats:
@@ -39342,7 +39342,7 @@ def get_reddit_player_table(player_datas, player_type, debug_mode, original_comm
             continue
         if over_header.startswith("5v5") and "hide-table-5v5" in extra_stats:
             continue
-        if over_header == "5v5 (Avail since 2009-2010)":
+        if over_header == "5v5":
             if error_getting_adv:
                 continue
 
@@ -39360,7 +39360,7 @@ def get_reddit_player_table(player_datas, player_type, debug_mode, original_comm
                         display_over_header = "Situational/Advanced (Even Strength/Hockey Reference, avail since 2016-2017)"
                     else:
                         display_over_header = "Situational"
-            elif display_over_header == "5v5 (Avail since 2009-2010)":
+            elif display_over_header == "5v5":
                 if has_against_quals_no_so(extra_stats):
                     display_over_header = "5v5"
             elif display_over_header == "Per Game/60 Minutes":
@@ -39496,7 +39496,7 @@ def get_reddit_player_table(player_datas, player_type, debug_mode, original_comm
                                 if display_header.endswith("_Rel"):
                                     display_header = display_header[:-4]
                                 display_header = display_header.replace("Rel", "")
-                            elif over_header == "5v5 (Avail since 2009-2010)":
+                            elif over_header == "5v5":
                                 if display_header.endswith("_5v5"):
                                     display_header = display_header[:-4]
                                 if display_header.endswith("M"):
