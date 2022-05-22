@@ -39361,8 +39361,8 @@ def get_reddit_player_table(player_datas, player_type, debug_mode, original_comm
                     else:
                         display_over_header = "Situational"
             elif display_over_header == "5v5":
-                if has_against_quals_no_so(extra_stats):
-                    display_over_header = "5v5"
+                if not has_against_quals_no_so(extra_stats):
+                    display_over_header = "5v5 (Avail since 2009-2010)"
             elif display_over_header == "Per Game/60 Minutes":
                 if has_against_quals_no_so(extra_stats) and not "per-game" in extra_stats:
                     display_over_header = "Per 60 Minutes (Avail since 2007-2008)"
