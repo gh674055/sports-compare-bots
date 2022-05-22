@@ -10375,18 +10375,22 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 elif qualifier_str.startswith("facing-position:"):
                                     qual_str = "facing-position:"
                                     qual_type = "Facing Position"
+                                    player_type["da_type"] = "Pitcher"
                                     extra_stats.add("current-stats")
                                 elif qualifier_str.startswith("facing-ph-for-position:"):
                                     qual_str = "facing-ph-for-position:"
                                     qual_type = "Facing PH For Position"
+                                    player_type["da_type"] = "Pitcher"
                                     extra_stats.add("current-stats")
                                 elif qualifier_str.startswith("facing-primary-position:"):
                                     qual_str = "facing-primary-position:"
                                     qual_type = "Facing Primary Position"
+                                    player_type["da_type"] = "Pitcher"
                                     extra_stats.add("current-stats")
                                 elif qualifier_str.startswith("facing-main-position:"):
                                     qual_str = "facing-main-position:"
                                     qual_type = "Facing Main Position"
+                                    player_type["da_type"] = "Pitcher"
                                     extra_stats.add("current-stats")
                                 elif qualifier_str.startswith("primary-game-position:"):
                                     qual_str = "primary-game-position:"
@@ -33086,9 +33090,12 @@ def handle_da_mlb_quals(row, event_name, at_bat_event, qualifiers, player_data, 
                     return False
         
     if "Facing Pitcher" in qualifiers:
-        is_pitcher = at_bat_event["pitcher"] in at_bat_event["opp_main_position_map"] and at_bat_event["opp_main_position_map"][at_bat_event["pitcher"]] and (at_bat_event["opp_main_position_map"][at_bat_event["pitcher"]] == "P")
-        if not is_pitcher and at_bat_event["pitcher"] in pitcher_overrides:
-            is_pitcher = True
+        if player_type["da_type"] == "Batter":
+            is_pitcher = at_bat_event["pitcher"] in at_bat_event["opp_main_position_map"] and at_bat_event["opp_main_position_map"][at_bat_event["pitcher"]] and (at_bat_event["opp_main_position_map"][at_bat_event["pitcher"]] == "P")
+            if not is_pitcher and at_bat_event["pitcher"] in pitcher_overrides:
+                is_pitcher = True
+        else:
+            is_pitcher = "P" in at_bat_event["opp_position_map"] and at_bat_event["opp_position_map"]["P"] and at_bat_event["opp_position_map"]["P"] == at_bat_event["batter"]
             
         for qual_object in qualifiers["Facing Pitcher"]:
             if qual_object["negate"]:
@@ -33099,9 +33106,12 @@ def handle_da_mlb_quals(row, event_name, at_bat_event, qualifiers, player_data, 
                     return False
 
     if "Facing Position Player" in qualifiers:
-        is_pitcher = at_bat_event["pitcher"] in at_bat_event["opp_main_position_map"] and at_bat_event["opp_main_position_map"][at_bat_event["pitcher"]] and (at_bat_event["opp_main_position_map"][at_bat_event["pitcher"]] == "P")
-        if not is_pitcher and at_bat_event["pitcher"] in pitcher_overrides:
-            is_pitcher = True
+        if player_type["da_type"] == "Batter":
+            is_pitcher = at_bat_event["pitcher"] in at_bat_event["opp_main_position_map"] and at_bat_event["opp_main_position_map"][at_bat_event["pitcher"]] and (at_bat_event["opp_main_position_map"][at_bat_event["pitcher"]] == "P")
+            if not is_pitcher and at_bat_event["pitcher"] in pitcher_overrides:
+                is_pitcher = True
+        else:
+            is_pitcher = "P" in at_bat_event["opp_position_map"] and at_bat_event["opp_position_map"]["P"] and at_bat_event["opp_position_map"]["P"] == at_bat_event["batter"]
         
         for qual_object in qualifiers["Facing Position Player"]:
             if qual_object["negate"]:
