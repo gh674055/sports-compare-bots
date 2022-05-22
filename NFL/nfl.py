@@ -1352,6 +1352,7 @@ def handle_player_string(comment, player_type, is_fantasy, last_updated, hide_ta
     remove_duplicates = False
     remove_duplicate_games = False
     extra_stats = set()
+    sort_vals = []
     is_fantasy_manually_set = False
     current_week = None
 
@@ -1843,9 +1844,23 @@ def handle_player_string(comment, player_type, is_fantasy, last_updated, hide_ta
                                 extra_stats.add("hide-stat-" + unescape_string(stat.strip()))
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
 
+                        last_match = re.finditer(r"\b(sort(?: |-)?by(?:(?: |-)?stat)?:)[\S-]+", time_frame)
+                        for m in last_match:
+                            for stat in re.split(r"(?<!\\)\-", re.split(r"(?<!\\)" + m.group(1), m.group(0))[1][1:-1]):
+                                is_desc = True
+                                sort_split = re.split(r"(?<!\\)\;", stat)
+                                if len(sort_split) == 2:
+                                    is_desc = False
+                                sort_vals.append({
+                                    "stat" : unescape_string(sort_split[0].strip()),
+                                    "is_desc" : is_desc
+                                })
+                            time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
+
                         if is_sub_query:
                             has_hide_advanced = "hide-advanced" in extra_stats
                             extra_stats = set()
+                            sort_vals = []
                             if has_hide_advanced:
                                 extra_stats.add("hide-advanced")
                         
@@ -5422,6 +5437,9 @@ def handle_player_string(comment, player_type, is_fantasy, last_updated, hide_ta
             for sub_index in datas_by_index:
                 if len(datas_by_index[sub_index]) > index:
                     player_datas.append(datas_by_index[sub_index][index])
+    
+    if sort_vals:
+        player_datas = sort_player_datats(player_datas, sort_vals, player_type, is_fantasy, extra_stats)
     
     return player_datas, last_updated, original_comment, hide_table, is_fantasy, extra_stats
 
@@ -21658,7 +21676,7 @@ def print_player_data(player_datas, player_type, highest_vals, lowest_vals, has_
                                 has_table_match = True
                                 break
                         else:
-                            if ("show-only-stat-" + header.lower() in extra_stats or "show-only-stat-" + over_header + ">" + header.lower() in extra_stats or "show-stat-" + header.lower() in extra_stats or "show-stat-" + over_header + ">" + header.lower() in extra_stats):
+                            if ("show-only-stat-" + header.lower() in extra_stats or "show-only-stat-" + over_header.lower() + ">" + header.lower() in extra_stats or "show-stat-" + header.lower() in extra_stats or "show-stat-" + over_header.lower() + ">" + header.lower() in extra_stats):
                                 if (not over_header.startswith("Awards/Honors") or seasons_leading) or (ordinal_to_number(value) or "award" in extra_stats):
                                     has_table_match = True
                                     break
@@ -21732,21 +21750,21 @@ def print_player_data(player_datas, player_type, highest_vals, lowest_vals, has_
              
             if player_data["add_type"] == "minus":
                 if (over_header == "Era Adjusted Passing" and header.startswith("Rec")) or header == "TmRec" or header == "ATS TmRec" or header == "O/U TmRec":
-                    if not ("show-only-stat-" + header.lower() in extra_stats or "show-only-stat-" + over_header + ">" + header.lower() in extra_stats or "show-stat-" + header.lower() in extra_stats or "show-stat-" + over_header + ">" + header.lower() in extra_stats):
+                    if not ("show-only-stat-" + header.lower() in extra_stats or "show-only-stat-" + over_header.lower() + ">" + header.lower() in extra_stats or "show-stat-" + header.lower() in extra_stats or "show-stat-" + over_header.lower() + ">" + header.lower() in extra_stats):
                         continue
             
-            if "hide-stat-" + header.lower() in extra_stats or "hide-stat-" + over_header + ">" + header.lower() in extra_stats:
+            if "hide-stat-" + header.lower() in extra_stats or "hide-stat-" + over_header.lower() + ">" + header.lower() in extra_stats:
                 continue
             for extra_stat in extra_stats:
                 if extra_stat.startswith("show-only-stat-"):
-                    if not ("show-only-stat-" + header.lower() in extra_stats or "show-only-stat-" + over_header + ">" + header.lower() in extra_stats or "show-stat-" + header.lower() in extra_stats or "show-stat-" + over_header + ">" + header.lower() in extra_stats):
+                    if not ("show-only-stat-" + header.lower() in extra_stats or "show-only-stat-" + over_header.lower() + ">" + header.lower() in extra_stats or "show-stat-" + header.lower() in extra_stats or "show-stat-" + over_header.lower() + ">" + header.lower() in extra_stats):
                         if header != "Player" and header != "G" and header != "GS" and header != "G/Yr" and header != "GS/Yr" and header != "Seasons":
                             continue
             if over_header == "Era Adjusted Passing" and header.endswith("+") and not seasons_leading and error_getting_adj:
                 continue
             override_show = False
             if header_index == 0:
-                if "show-stat-" + header.lower() in extra_stats or "show-stat-" + over_header + ">" + header.lower() in extra_stats:
+                if "show-stat-" + header.lower() in extra_stats or "show-stat-" + over_header.lower() + ">" + header.lower() in extra_stats:
                     override_show = True
                 if seasons_leading and over_header in div_id_to_stat and header in div_id_to_stat[over_header].values():
                     override_show = True
@@ -21786,20 +21804,20 @@ def print_player_data(player_datas, player_type, highest_vals, lowest_vals, has_
 
             if player_data["add_type"] == "minus":
                 if (over_header == "Era Adjusted Passing" and header.startswith("Rec")) or header == "TmRec" or header == "ATS TmRec" or header == "O/U TmRec":
-                    if not ("show-only-stat-" + header.lower() in extra_stats or "show-only-stat-" + over_header + ">" + header.lower() in extra_stats or "show-stat-" + header.lower() in extra_stats or "show-stat-" + over_header + ">" + header.lower() in extra_stats):
+                    if not ("show-only-stat-" + header.lower() in extra_stats or "show-only-stat-" + over_header.lower() + ">" + header.lower() in extra_stats or "show-stat-" + header.lower() in extra_stats or "show-stat-" + over_header.lower() + ">" + header.lower() in extra_stats):
                         continue
 
-            if "hide-stat-" + header.lower() in extra_stats or "hide-stat-" + over_header + ">" + header.lower() in extra_stats:
+            if "hide-stat-" + header.lower() in extra_stats or "hide-stat-" + over_header.lower() + ">" + header.lower() in extra_stats:
                 continue
             for extra_stat in extra_stats:
                 if extra_stat.startswith("show-only-stat-"):
-                    if not ("show-only-stat-" + header.lower() in extra_stats or "show-only-stat-" + over_header + ">" + header.lower() in extra_stats or "show-stat-" + header.lower() in extra_stats or "show-stat-" + over_header + ">" + header.lower() in extra_stats):
+                    if not ("show-only-stat-" + header.lower() in extra_stats or "show-only-stat-" + over_header.lower() + ">" + header.lower() in extra_stats or "show-stat-" + header.lower() in extra_stats or "show-stat-" + over_header.lower() + ">" + header.lower() in extra_stats):
                         if header != "Player" and header != "G" and header != "GS" and header != "G/Yr" and header != "GS/Yr" and header != "Seasons":
                             continue
             if over_header == "Era Adjusted Passing" and header.endswith("+") and not seasons_leading and error_getting_adj:
                 continue
             override_show = False
-            if "show-stat-" + header.lower() in extra_stats or "show-stat-" + over_header + ">" + header.lower() in extra_stats:
+            if "show-stat-" + header.lower() in extra_stats or "show-stat-" + over_header.lower() + ">" + header.lower() in extra_stats:
                 override_show = True
             if seasons_leading and over_header in div_id_to_stat and header in div_id_to_stat[over_header].values():
                 override_show = True
@@ -22013,7 +22031,7 @@ def get_reddit_player_table(player_datas, player_type, is_fantasy, debug_mode, o
                                 has_table_match = True
                                 break
                         else:
-                            if ("show-only-stat-" + header.lower() in extra_stats or "show-only-stat-" + over_header + ">" + header.lower() in extra_stats or "show-stat-" + header.lower() in extra_stats or "show-stat-" + over_header + ">" + header.lower() in extra_stats):
+                            if ("show-only-stat-" + header.lower() in extra_stats or "show-only-stat-" + over_header.lower() + ">" + header.lower() in extra_stats or "show-stat-" + header.lower() in extra_stats or "show-stat-" + over_header.lower() + ">" + header.lower() in extra_stats):
                                 if (not over_header.startswith("Awards/Honors") or seasons_leading) or (ordinal_to_number(value) or "award" in extra_stats):
                                     has_table_match = True
                                     break
@@ -22086,21 +22104,21 @@ def get_reddit_player_table(player_datas, player_type, is_fantasy, debug_mode, o
 
             if player_data["add_type"] == "minus":
                 if (over_header == "Era Adjusted Passing" and header.startswith("Rec")) or header == "TmRec" or header == "ATS TmRec" or header == "O/U TmRec":
-                    if not ("show-only-stat-" + header.lower() in extra_stats or "show-only-stat-" + over_header + ">" + header.lower() in extra_stats or "show-stat-" + header.lower() in extra_stats or "show-stat-" + over_header + ">" + header.lower() in extra_stats):
+                    if not ("show-only-stat-" + header.lower() in extra_stats or "show-only-stat-" + over_header.lower() + ">" + header.lower() in extra_stats or "show-stat-" + header.lower() in extra_stats or "show-stat-" + over_header.lower() + ">" + header.lower() in extra_stats):
                         continue
 
-            if "hide-stat-" + header.lower() in extra_stats or "hide-stat-" + over_header + ">" + header.lower() in extra_stats:
+            if "hide-stat-" + header.lower() in extra_stats or "hide-stat-" + over_header.lower() + ">" + header.lower() in extra_stats:
                 continue
             for extra_stat in extra_stats:
                 if extra_stat.startswith("show-only-stat-"):
-                    if not ("show-only-stat-" + header.lower() in extra_stats or "show-only-stat-" + over_header + ">" + header.lower() in extra_stats or "show-stat-" + header.lower() in extra_stats or "show-stat-" + over_header + ">" + header.lower() in extra_stats):
+                    if not ("show-only-stat-" + header.lower() in extra_stats or "show-only-stat-" + over_header.lower() + ">" + header.lower() in extra_stats or "show-stat-" + header.lower() in extra_stats or "show-stat-" + over_header.lower() + ">" + header.lower() in extra_stats):
                         if header != "Player" and header != "G" and header != "GS" and header != "G/Yr" and header != "GS/Yr" and header != "Seasons":
                             continue
             if over_header == "Era Adjusted Passing" and header.endswith("+") and not seasons_leading and error_getting_adj:
                 continue
             override_show = False
             if header_index == 0:
-                if "show-stat-" + header.lower() in extra_stats or "show-stat-" + over_header + ">" + header.lower() in extra_stats:
+                if "show-stat-" + header.lower() in extra_stats or "show-stat-" + over_header.lower() + ">" + header.lower() in extra_stats:
                     override_show = True
                 if seasons_leading and over_header in div_id_to_stat and header in div_id_to_stat[over_header].values():
                     override_show = True
@@ -22140,20 +22158,20 @@ def get_reddit_player_table(player_datas, player_type, is_fantasy, debug_mode, o
 
             if player_data["add_type"] == "minus":
                 if (over_header == "Era Adjusted Passing" and header.startswith("Rec")) or header == "TmRec" or header == "ATS TmRec" or header == "O/U TmRec":
-                    if not ("show-only-stat-" + header.lower() in extra_stats or "show-only-stat-" + over_header + ">" + header.lower() in extra_stats or "show-stat-" + header.lower() in extra_stats or "show-stat-" + over_header + ">" + header.lower() in extra_stats):
+                    if not ("show-only-stat-" + header.lower() in extra_stats or "show-only-stat-" + over_header.lower() + ">" + header.lower() in extra_stats or "show-stat-" + header.lower() in extra_stats or "show-stat-" + over_header.lower() + ">" + header.lower() in extra_stats):
                         continue
 
-            if "hide-stat-" + header.lower() in extra_stats or "hide-stat-" + over_header + ">" + header.lower() in extra_stats:
+            if "hide-stat-" + header.lower() in extra_stats or "hide-stat-" + over_header.lower() + ">" + header.lower() in extra_stats:
                 continue
             for extra_stat in extra_stats:
                 if extra_stat.startswith("show-only-stat-"):
-                    if not ("show-only-stat-" + header.lower() in extra_stats or "show-only-stat-" + over_header + ">" + header.lower() in extra_stats or "show-stat-" + header.lower() in extra_stats or "show-stat-" + over_header + ">" + header.lower() in extra_stats):
+                    if not ("show-only-stat-" + header.lower() in extra_stats or "show-only-stat-" + over_header.lower() + ">" + header.lower() in extra_stats or "show-stat-" + header.lower() in extra_stats or "show-stat-" + over_header.lower() + ">" + header.lower() in extra_stats):
                         if header != "Player" and header != "G" and header != "GS" and header != "G/Yr" and header != "GS/Yr" and header != "Seasons":
                             continue
             if over_header == "Era Adjusted Passing" and header.endswith("+") and not seasons_leading and error_getting_adj:
                 continue
             override_show = False
-            if "show-stat-" + header.lower() in extra_stats or "show-stat-" + over_header + ">" + header.lower() in extra_stats:
+            if "show-stat-" + header.lower() in extra_stats or "show-stat-" + over_header.lower() + ">" + header.lower() in extra_stats:
                 override_show = True
             if seasons_leading and over_header in div_id_to_stat and header in div_id_to_stat[over_header].values():
                 override_show = True
@@ -22393,6 +22411,85 @@ def calculate_highest_lowest_vals(player_datas, player_type, has_non_playoffs, i
                                 lowest_vals[over_header][header]["players"].append(index)
     
     return highest_vals, lowest_vals
+
+def sort_player_datats(player_datas, sort_vals, player_type, is_fantasy, extra_stats):
+    has_non_playoffs = False
+    for sub_player_data in player_datas:
+        if sub_player_data["stat_values"]["Shared"]["is_playoffs"] != "Only":
+            has_non_playoffs = True
+
+    error_getting_adj = False
+    for player_data in player_datas:
+        if player_data["error_getting_adj"]:
+            error_getting_adj = True
+            break
+
+    seasons_leading = 0
+    for extra_stat in extra_stats:
+        if extra_stat.startswith("seasons-leading"):
+            if len(extra_stat.split("-")) >= 3:
+                seasons_leading = int(extra_stat.split("-")[2])
+            else:
+                seasons_leading = 1
+    
+    def sort_player_datas(player_data_1, player_data_2):
+        if ("all_rows" in player_data_1["stat_values"]["Shared"] and player_data_1["stat_values"]["Shared"]["all_rows"]) and ("all_rows" in player_data_2["stat_values"]["Shared"] and player_data_2["stat_values"]["Shared"]["all_rows"]):
+            for sort_val in sort_vals:
+                for header_index, over_header in enumerate((list(headers[player_type["da_type"]]) + ["Shared"])):
+                    for header in get_constant_data.stat_groups[over_header]:
+                        found_stat_match = False
+                        if header.lower() == sort_val["stat"] or over_header.lower() + ">" + header.lower() == sort_val["stat"]:
+                            found_stat_match = True
+                        if found_stat_match:
+                            value_1 = calculate_sort_value(over_header, header, player_data_1, player_datas, player_type, has_non_playoffs, error_getting_adj, is_fantasy, header_index, seasons_leading, extra_stats)
+                            value_2 = calculate_sort_value(over_header, header, player_data_2, player_datas, player_type, has_non_playoffs, error_getting_adj, is_fantasy, header_index, seasons_leading, extra_stats)
+                            if value_1 != None and value_2 != None:
+                                if "skipzero" in get_constant_data.stat_groups[over_header][header]:
+                                    if value_1 and not value_2:
+                                        return -1
+                                    elif value_2 and not value_1:
+                                        return 1
+
+                                positive_to_use = get_constant_data.stat_groups[over_header][header]["positive"]
+                                if seasons_leading and header in ["Int%", "Sk%"]:
+                                    positive_to_use = True
+
+                                if (value_1 > value_2 and positive_to_use) or (value_1 < value_2 and not positive_to_use):
+                                    if sort_val["is_desc"]:
+                                        return -1
+                                    else:
+                                        return 1
+                                elif (value_1 < value_2 and positive_to_use) or (value_1 > value_2 and not positive_to_use):
+                                    if sort_val["is_desc"]:
+                                        return 1
+                                    else:
+                                        return -1
+                            elif value_1 != None:
+                                return -1
+                            elif value_2 != None:
+                                return 1
+                            break
+        elif "all_rows" in player_data_1["stat_values"]["Shared"] and player_data_1["stat_values"]["Shared"]["all_rows"]:
+            return -1
+        elif ("all_rows" in player_data_2["stat_values"]["Shared"] and player_data_2["stat_values"]["Shared"]["all_rows"]):
+            return 1
+        
+        return 0
+        
+    return sorted(player_datas, key=functools.cmp_to_key(sort_player_datas))
+
+def calculate_sort_value(over_header, header, player_data, player_datas, player_type, has_non_playoffs, error_getting_adj, is_fantasy, header_index, seasons_leading, extra_stats):
+    if over_header in player_data["stat_values"] and header in player_data["stat_values"][over_header] and handle_table_data(player_data, player_type, header, over_header, {}, {}, -1, has_non_playoffs, True, is_fantasy, header_index, error_getting_adj, extra_stats) != "N/A":
+        value = player_data["stat_values"][over_header][header]
+        if ((over_header == "Era Adjusted Passing" and header.startswith("Rec")) or header == "TmRec" or header == "ATS TmRec" or header == "O/U TmRec") and not seasons_leading:
+            rec_split = value.split(":")
+            try:
+                value = float(rec_split[0]) / (float(rec_split[0]) + float(rec_split[1]))
+            except ZeroDivisionError:
+                value = 0
+        return value
+    else:
+        return None
 
 def create_table_html(html_info, player_datas, original_comment, last_updated, comment_id, extra_stats):
     dirpath = tempfile.mkdtemp()
@@ -22832,13 +22929,13 @@ def handle_table_data(player_data, player_type, header, over_header, highest_val
         return None
     if player_data["add_type"] == "minus":
         if (over_header == "Era Adjusted Passing" and header.startswith("Rec")) or header == "TmRec" or header == "ATS TmRec" or header == "O/U TmRec":
-            if not ("show-only-stat-" + header.lower() in extra_stats or "show-only-stat-" + over_header + ">" + header.lower() in extra_stats or "show-stat-" + header.lower() in extra_stats or "show-stat-" + over_header + ">" + header.lower() in extra_stats):
+            if not ("show-only-stat-" + header.lower() in extra_stats or "show-only-stat-" + over_header.lower() + ">" + header.lower() in extra_stats or "show-stat-" + header.lower() in extra_stats or "show-stat-" + over_header.lower() + ">" + header.lower() in extra_stats):
                 return None
-    if "hide-stat-" + header.lower() in extra_stats or "hide-stat-" + over_header + ">" + header.lower() in extra_stats:
+    if "hide-stat-" + header.lower() in extra_stats or "hide-stat-" + over_header.lower() + ">" + header.lower() in extra_stats:
         return None
     for extra_stat in extra_stats:
         if extra_stat.startswith("show-only-stat-"):
-            if not ("show-only-stat-" + header.lower() in extra_stats or "show-only-stat-" + over_header + ">" + header.lower() in extra_stats or "show-stat-" + header.lower() in extra_stats or "show-stat-" + over_header + ">" + header.lower() in extra_stats):
+            if not ("show-only-stat-" + header.lower() in extra_stats or "show-only-stat-" + over_header.lower() + ">" + header.lower() in extra_stats or "show-stat-" + header.lower() in extra_stats or "show-stat-" + over_header.lower() + ">" + header.lower() in extra_stats):
                 if header != "Player" and header != "G" and header != "GS" and header != "G/Yr" and header != "GS/Yr" and header != "Seasons":
                     return None
     
@@ -22855,7 +22952,7 @@ def handle_table_data(player_data, player_type, header, over_header, highest_val
     
     override_show = False
     if header_index == 0 or over_header != "Shared":
-        if "show-stat-" + header.lower() in extra_stats or "show-stat-" + over_header + ">" + header.lower() in extra_stats:
+        if "show-stat-" + header.lower() in extra_stats or "show-stat-" + over_header.lower() + ">" + header.lower() in extra_stats:
             override_show = True
         if seasons_leading and over_header in div_id_to_stat and header in div_id_to_stat[over_header].values():
             override_show = True
@@ -23061,7 +23158,7 @@ def is_against_header(header, over_header, extra_stats):
     if header.startswith("Player") or header == "G":
         return False
 
-    if "show-stat-" + header.lower() in extra_stats or "show-stat-" + over_header + ">" + header.lower() in extra_stats:
+    if "show-stat-" + header.lower() in extra_stats or "show-stat-" + over_header.lower() + ">" + header.lower() in extra_stats:
         return False
 
     if over_header == "Passing" or over_header == "Rushing" or over_header == "Receiving":
