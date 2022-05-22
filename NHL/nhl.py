@@ -2548,7 +2548,6 @@ headers = {
         },
         "SHA2" : {
             "positive" : True,
-            "type" : "Advanced",
             "display" : False,
             "valid_since" : {
                 "season" : 1933,
