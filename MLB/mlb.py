@@ -34930,15 +34930,15 @@ def handle_da_pitch_quals(row, event_name, at_bat_event, qualifiers, player_data
             is_top_inning = at_bat_event["is_top_inning"]
             if play["details"]["eventType"] == "pitching_substitution":
                 if is_team_batting:
+                    if sub_opp_position_map["P"] and sub_opp_position_map["P"] in sub_opp_batting_order_map:
+                        del sub_opp_batting_order_map[sub_opp_position_map["P"]]
                     sub_opp_position_map["P"] = play["player"]["id"]
-                    if "replacedPlayer" in play and play["replacedPlayer"]["id"] in sub_opp_batting_order_map:
-                        del sub_opp_batting_order_map[play["replacedPlayer"]["id"]]
                     if "battingOrder" in play:
                         sub_opp_batting_order_map[play["player"]["id"]] = int(play["battingOrder"][0])
                 else:
+                    if sub_tm_position_map["P"] and sub_tm_position_map["P"] in sub_team_batting_order_map:
+                        del sub_team_batting_order_map[sub_tm_position_map["P"]]
                     sub_tm_position_map["P"] = play["player"]["id"]
-                    if "replacedPlayer" in play and play["replacedPlayer"]["id"] in sub_team_batting_order_map:
-                        del sub_team_batting_order_map[play["replacedPlayer"]["id"]]
                     if "battingOrder" in play:
                         sub_team_batting_order_map[play["player"]["id"]] = int(play["battingOrder"][0])
             elif play["details"]["eventType"] == "defensive_switch" or play["details"]["eventType"] == "defensive_substitution":
@@ -35117,29 +35117,29 @@ def handle_da_pitch_quals(row, event_name, at_bat_event, qualifiers, player_data
     for sub_sub_play_index, play in enumerate(at_bat_event["playEvents"][:(sub_play_index + 1)]):
         if "isSubstitution" in play and play["isSubstitution"]:
             if play["count"]["balls"] != 0 or play["count"]["strikes"] != 0:
-                if "replacedPlayer" in play:
-                    if play["details"]["eventType"] == "pitching_substitution":
-                        current_pitcher = play["player"]["id"]
-                        pitch_pos = player_game_info["pitch_sides"][current_pitcher]
-                        if pitch_pos == "S":
-                            bat_pos = player_game_info["bat_sides"][current_batter if current_batter else at_bat_event["batter"]]
-                            if bat_pos == "S":
-                                pitching_lefty = None
-                                pitching_righty = None
-                            else:
-                                if bat_pos == "R":
-                                    pitching_lefty = True
-                                else:
-                                    pitching_righty = True
+                if play["details"]["eventType"] == "pitching_substitution":
+                    current_pitcher = play["player"]["id"]
+                    pitch_pos = player_game_info["pitch_sides"][current_pitcher]
+                    if pitch_pos == "S":
+                        bat_pos = player_game_info["bat_sides"][current_batter if current_batter else at_bat_event["batter"]]
+                        if bat_pos == "S":
+                            pitching_lefty = None
+                            pitching_righty = None
                         else:
-                            if pitch_pos == "L":
+                            if bat_pos == "R":
                                 pitching_lefty = True
                             else:
                                 pitching_righty = True
-                        is_starter_pitcher = False
-                        is_reliever_pitcher = True
-                        time_facing_opponent = 1
-                    elif play["details"]["eventType"] == "offensive_substitution":
+                    else:
+                        if pitch_pos == "L":
+                            pitching_lefty = True
+                        else:
+                            pitching_righty = True
+                    is_starter_pitcher = False
+                    is_reliever_pitcher = True
+                    time_facing_opponent = 1
+                elif play["details"]["eventType"] == "offensive_substitution":
+                    if "replacedPlayer" in play:
                         if play["position"]["abbreviation"] == "PH":
                             current_batter = play["player"]["id"]
                             bat_pos = player_game_info["bat_sides"][current_batter]
@@ -38041,6 +38041,9 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
             elif not all_has_pitch_type_data:
                 missing_pitch = True
 
+        prev_team_pitcher = starter_team_position_map["P"]
+        prev_opp_pitcher = starter_opp_position_map["P"]
+
         for index, scoring_play in enumerate(sub_data["liveData"]["plays"]["allPlays"]):
             if scoring_play["result"]["type"] != "atBat" or "eventType" not in scoring_play["result"]:
                 continue
@@ -38057,42 +38060,48 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
 
             for play in scoring_play["playEvents"]:
                 if "isSubstitution" in play and play["isSubstitution"]:
-                    if play["count"]["balls"] != 0 or play["count"]["strikes"] != 0:
-                        if "replacedPlayer" in play:
-                            if play["details"]["eventType"] == "pitching_substitution":
-                                current_pitcher = play["player"]["id"]
-                                old_player = play["replacedPlayer"]["id"]
-                                if (play["count"]["balls"] == 2 and play["count"]["strikes"] == 0) or (play["count"]["balls"] == 2 and play["count"]["strikes"] == 1) or (play["count"]["balls"] == 3 and play["count"]["strikes"] == 0) or (play["count"]["balls"] == 3 and play["count"]["strikes"] == 0) or (play["count"]["balls"] == 3 and play["count"]["strikes"] == 1) or (play["count"]["balls"] == 3 and play["count"]["strikes"] == 2):
-                                    if scoring_play["result"]["eventType"].endswith("walk"):
-                                        play["postPlay"] = play["player"]["id"]
-                                        play["player"]["id"] = old_player
-                                        scoring_play["matchup"]["pitcher"]["id"] = old_player
+                    if play["details"]["eventType"] == "pitching_substitution":
+                        current_pitcher = play["player"]["id"]
+                        if is_team_batting:
+                            old_player = prev_opp_pitcher
+                            prev_opp_pitcher = current_pitcher
+                        else:
+                            old_player = prev_team_pitcher
+                            prev_team_pitcher = current_pitcher
+                        if play["count"]["balls"] != 0 or play["count"]["strikes"] != 0:
+                            if (play["count"]["balls"] == 2 and play["count"]["strikes"] == 0) or (play["count"]["balls"] == 2 and play["count"]["strikes"] == 1) or (play["count"]["balls"] == 3 and play["count"]["strikes"] == 0) or (play["count"]["balls"] == 3 and play["count"]["strikes"] == 0) or (play["count"]["balls"] == 3 and play["count"]["strikes"] == 1) or (play["count"]["balls"] == 3 and play["count"]["strikes"] == 2):
+                                if scoring_play["result"]["eventType"].endswith("walk"):
+                                    play["postPlay"] = play["player"]["id"]
+                                    play["player"]["id"] = old_player
+                                    scoring_play["matchup"]["pitcher"]["id"] = old_player
 
-                                        pitch_pos = game_data["pitch_sides"][current_pitcher]
-                                        if pitch_pos == "S":
-                                            bat_pos = game_data["bat_sides"][current_batter if current_batter else scoring_play["matchup"]["batter"]["id"]]
-                                            if bat_pos == "S":
-                                                scoring_play["matchup"]["splits"]["batter"] = None
-                                            else:
-                                                if bat_pos == "R":
-                                                    scoring_play["matchup"]["splits"]["batter"] = "vs_LHP"
-                                                else:
-                                                    scoring_play["matchup"]["splits"]["batter"] = "vs_RHP"
+                                    pitch_pos = game_data["pitch_sides"][current_pitcher]
+                                    if pitch_pos == "S":
+                                        bat_pos = game_data["bat_sides"][current_batter if current_batter else scoring_play["matchup"]["batter"]["id"]]
+                                        if bat_pos == "S":
+                                            scoring_play["matchup"]["splits"]["batter"] = None
                                         else:
-                                            scoring_play["matchup"]["splits"]["batter"] = "vs_" + pitch_pos + "HP"
+                                            if bat_pos == "R":
+                                                scoring_play["matchup"]["splits"]["batter"] = "vs_LHP"
+                                            else:
+                                                scoring_play["matchup"]["splits"]["batter"] = "vs_RHP"
+                                    else:
+                                        scoring_play["matchup"]["splits"]["batter"] = "vs_" + pitch_pos + "HP"
 
-                                        if old_player == player_data["mlb_id"] and ("Pitching Lefty" in qualifiers or "Pitching Righty" in qualifiers):
-                                            missing_games = True
-                                        
-                                        if scoring_play["matchup"]["batter"]["id"] == player_data["mlb_id"] and player_type["da_type"] == "Batter" and ("Facing Lefty" in qualifiers or "Facing Righty" in qualifiers or "Platoon Advantage" in qualifiers):
-                                            missing_games = True
-                                
-                                if old_player == player_data["mlb_id"] and ("Pitching Lefty" in qualifiers or "Pitching Righty" in qualifiers):
-                                    missing_pitch = True
-                                
-                                if scoring_play["matchup"]["batter"]["id"] == player_data["mlb_id"] and player_type["da_type"] == "Batter" and ("Facing Lefty" in qualifiers or "Facing Righty" in qualifiers or "Platoon Advantage" in qualifiers):
-                                    missing_pitch = True
-                            elif play["details"]["eventType"] == "offensive_substitution":
+                                    if old_player == player_data["mlb_id"] and ("Pitching Lefty" in qualifiers or "Pitching Righty" in qualifiers):
+                                        missing_games = True
+                                    
+                                    if scoring_play["matchup"]["batter"]["id"] == player_data["mlb_id"] and player_type["da_type"] == "Batter" and ("Facing Lefty" in qualifiers or "Facing Righty" in qualifiers or "Platoon Advantage" in qualifiers):
+                                        missing_games = True
+                            
+                            if old_player == player_data["mlb_id"] and ("Pitching Lefty" in qualifiers or "Pitching Righty" in qualifiers):
+                                missing_pitch = True
+                            
+                            if scoring_play["matchup"]["batter"]["id"] == player_data["mlb_id"] and player_type["da_type"] == "Batter" and ("Facing Lefty" in qualifiers or "Facing Righty" in qualifiers or "Platoon Advantage" in qualifiers):
+                                missing_pitch = True
+                    elif play["details"]["eventType"] == "offensive_substitution":
+                        if play["count"]["balls"] != 0 or play["count"]["strikes"] != 0:
+                            if "replacedPlayer" in play:
                                 if play["position"]["abbreviation"] == "PH":
                                     current_batter = play["player"]["id"]
                                     old_player = play["replacedPlayer"]["id"]
@@ -38279,15 +38288,15 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
 
                     if play["details"]["eventType"] == "pitching_substitution":
                         if is_team_batting:
+                            if opp_position_map["P"] and opp_position_map["P"] in opp_batting_order_map:
+                                del opp_batting_order_map[opp_position_map["P"]]
                             opp_position_map["P"] = play["player"]["id"]
-                            if "replacedPlayer" in play and play["replacedPlayer"]["id"] in opp_batting_order_map:
-                                del opp_batting_order_map[play["replacedPlayer"]["id"]]
                             if "battingOrder" in play:
                                 opp_batting_order_map[play["player"]["id"]] = int(play["battingOrder"][0])
                         else:
+                            if team_position_map["P"] and team_position_map["P"] in team_batting_order_map:
+                                del team_batting_order_map[team_position_map["P"]]
                             team_position_map["P"] = play["player"]["id"]
-                            if "replacedPlayer" in play and play["replacedPlayer"]["id"] in team_batting_order_map:
-                                del team_batting_order_map[play["replacedPlayer"]["id"]]
                             if "battingOrder" in play:
                                 team_batting_order_map[play["player"]["id"]] = int(play["battingOrder"][0])
 
@@ -39351,15 +39360,15 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
 
                         if play["details"]["eventType"] == "pitching_substitution":
                             if is_team_batting:
+                                if sub_opp_position_map["P"] and sub_opp_position_map["P"] in sub_opp_batting_order_map:
+                                    del sub_opp_batting_order_map[sub_opp_position_map["P"]]
                                 sub_opp_position_map["P"] = play["player"]["id"]
-                                if "replacedPlayer" in play and play["replacedPlayer"]["id"] in sub_opp_batting_order_map:
-                                    del sub_opp_batting_order_map[play["replacedPlayer"]["id"]]
                                 if "battingOrder" in play:
                                     sub_opp_batting_order_map[play["player"]["id"]] = int(play["battingOrder"][0])
                             else:
+                                if sub_tm_position_map["P"] and sub_tm_position_map["P"] in sub_team_batting_order_map:
+                                    del sub_team_batting_order_map[sub_tm_position_map["P"]]
                                 sub_tm_position_map["P"] = play["player"]["id"]
-                                if "replacedPlayer" in play and play["replacedPlayer"]["id"] in sub_team_batting_order_map:
-                                    del sub_team_batting_order_map[play["replacedPlayer"]["id"]]
                                 if "battingOrder" in play:
                                     sub_team_batting_order_map[play["player"]["id"]] = int(play["battingOrder"][0])
                         elif play["details"]["eventType"] == "defensive_switch" or play["details"]["eventType"] == "defensive_substitution":
@@ -40235,15 +40244,15 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
                 if "isSubstitution" in play and play["isSubstitution"]:
                     if play["details"]["eventType"] == "pitching_substitution":
                         if is_team_batting:
+                            if opp_position_map["P"] and opp_position_map["P"] in opp_batting_order_map:
+                                del opp_batting_order_map[opp_position_map["P"]]
                             opp_position_map["P"] = play["postPlay"]
-                            if "replacedPlayer" in play and play["replacedPlayer"]["id"] in opp_batting_order_map:
-                                del opp_batting_order_map[play["replacedPlayer"]["id"]]
                             if "battingOrder" in play:
                                 opp_batting_order_map[play["postPlay"]] = int(play["battingOrder"][0])
                         else:
+                            if team_position_map["P"] and team_position_map["P"] in team_batting_order_map:
+                                del team_batting_order_map[team_position_map["P"]]
                             team_position_map["P"] = play["postPlay"]
-                            if "replacedPlayer" in play and play["replacedPlayer"]["id"] in team_batting_order_map:
-                                del team_batting_order_map[play["replacedPlayer"]["id"]]
                             if "battingOrder" in play:
                                 team_batting_order_map[play["postPlay"]] = int(play["battingOrder"][0])
 
