@@ -18021,7 +18021,7 @@ def handle_season_only_stats(player_page, field_player_page, player_data, player
 
             single_team_match = False
             is_all_match = False
-            if is_multi_team:
+            if is_multi_team and table_name != "span_stats":
                 standard_table_rows = table.find("tfoot").find_all("tr")[3:]
                 if standard_table_rows:
                     is_all_match = True
