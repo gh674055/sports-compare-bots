@@ -38268,7 +38268,6 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
                         if not is_team_batting:
                             first_play_team = index
 
-        post_play_events = []
         for index, scoring_play in enumerate(sub_data["liveData"]["plays"]["allPlays"]):
             starting_tm_position_map = team_position_map.copy()
             starting_opp_position_map = opp_position_map.copy()
@@ -38276,6 +38275,7 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
             starting_opp_batting_order_map = opp_batting_order_map.copy()
             pinch_run_for_map = {}
             before_first_pitch = True
+            post_play_events = []
             for play in scoring_play["playEvents"]:
                 if "isSubstitution" in play and play["isSubstitution"]:
                     if "postPlay" in play and play["postPlay"]:
@@ -38344,7 +38344,6 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
 
                                 if play["player"]["id"] == player_data["mlb_id"]:
                                     inherited_runners += sub_men_on_base
-                                
                     elif play["details"]["eventType"] == "defensive_switch" or play["details"]["eventType"] == "defensive_substitution":
                         new_player = play["player"]["id"]
                         new_position = play["position"]["abbreviation"]
@@ -40299,7 +40298,6 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
                                 sub_men_on_base = int(sub_man_on_first) + int(sub_man_on_second) + int(sub_man_on_third)
 
                                 if play["postPlay"] == player_data["mlb_id"]:
-                                    inherited_runners += sub_men_on_base            
                     elif play["details"]["eventType"] == "offensive_substitution":
                         pinch_hitter = play["postPlay"]
                         old_player = play["replacedPlayer"]["id"] if "replacedPlayer" in play else None
