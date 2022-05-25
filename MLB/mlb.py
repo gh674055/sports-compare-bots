@@ -34930,16 +34930,16 @@ def handle_da_pitch_quals(row, event_name, at_bat_event, qualifiers, player_data
             is_top_inning = at_bat_event["is_top_inning"]
             if play["details"]["eventType"] == "pitching_substitution":
                 if is_team_batting:
-                    if sub_opp_position_map["P"] and sub_opp_position_map["P"] in sub_opp_batting_order_map:
-                        del sub_opp_batting_order_map[sub_opp_position_map["P"]]
                     sub_opp_position_map["P"] = play["player"]["id"]
                     if "battingOrder" in play:
+                        if sub_opp_position_map["P"] and sub_opp_position_map["P"] in sub_opp_batting_order_map:
+                            del sub_opp_batting_order_map[sub_opp_position_map["P"]]
                         sub_opp_batting_order_map[play["player"]["id"]] = int(play["battingOrder"][0])
                 else:
-                    if sub_tm_position_map["P"] and sub_tm_position_map["P"] in sub_team_batting_order_map:
-                        del sub_team_batting_order_map[sub_tm_position_map["P"]]
                     sub_tm_position_map["P"] = play["player"]["id"]
                     if "battingOrder" in play:
+                        if sub_tm_position_map["P"] and sub_tm_position_map["P"] in sub_team_batting_order_map:
+                            del sub_team_batting_order_map[sub_tm_position_map["P"]]
                         sub_team_batting_order_map[play["player"]["id"]] = int(play["battingOrder"][0])
             elif play["details"]["eventType"] == "defensive_switch" or play["details"]["eventType"] == "defensive_substitution":
                 new_player = play["player"]["id"]
@@ -38288,16 +38288,16 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
 
                     if play["details"]["eventType"] == "pitching_substitution":
                         if is_team_batting:
-                            if opp_position_map["P"] and opp_position_map["P"] in opp_batting_order_map:
-                                del opp_batting_order_map[opp_position_map["P"]]
                             opp_position_map["P"] = play["player"]["id"]
                             if "battingOrder" in play:
+                                if opp_position_map["P"] and opp_position_map["P"] in opp_batting_order_map:
+                                    del opp_batting_order_map[opp_position_map["P"]]
                                 opp_batting_order_map[play["player"]["id"]] = int(play["battingOrder"][0])
                         else:
-                            if team_position_map["P"] and team_position_map["P"] in team_batting_order_map:
-                                del team_batting_order_map[team_position_map["P"]]
                             team_position_map["P"] = play["player"]["id"]
                             if "battingOrder" in play:
+                                if team_position_map["P"] and team_position_map["P"] in team_batting_order_map:
+                                    del team_batting_order_map[team_position_map["P"]]
                                 team_batting_order_map[play["player"]["id"]] = int(play["battingOrder"][0])
 
                             if play["player"]["id"] == player_data["mlb_id"]:
@@ -39359,16 +39359,16 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
 
                         if play["details"]["eventType"] == "pitching_substitution":
                             if is_team_batting:
-                                if sub_opp_position_map["P"] and sub_opp_position_map["P"] in sub_opp_batting_order_map:
-                                    del sub_opp_batting_order_map[sub_opp_position_map["P"]]
                                 sub_opp_position_map["P"] = play["player"]["id"]
                                 if "battingOrder" in play:
+                                    if sub_opp_position_map["P"] and sub_opp_position_map["P"] in sub_opp_batting_order_map:
+                                        del sub_opp_batting_order_map[sub_opp_position_map["P"]]
                                     sub_opp_batting_order_map[play["player"]["id"]] = int(play["battingOrder"][0])
                             else:
-                                if sub_tm_position_map["P"] and sub_tm_position_map["P"] in sub_team_batting_order_map:
-                                    del sub_team_batting_order_map[sub_tm_position_map["P"]]
                                 sub_tm_position_map["P"] = play["player"]["id"]
                                 if "battingOrder" in play:
+                                    if sub_tm_position_map["P"] and sub_tm_position_map["P"] in sub_team_batting_order_map:
+                                        del sub_team_batting_order_map[sub_tm_position_map["P"]]
                                     sub_team_batting_order_map[play["player"]["id"]] = int(play["battingOrder"][0])
                         elif play["details"]["eventType"] == "defensive_switch" or play["details"]["eventType"] == "defensive_substitution":
                             new_player = play["player"]["id"]
@@ -40243,16 +40243,16 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
                 if "isSubstitution" in play and play["isSubstitution"]:
                     if play["details"]["eventType"] == "pitching_substitution":
                         if is_team_batting:
-                            if opp_position_map["P"] and opp_position_map["P"] in opp_batting_order_map:
-                                del opp_batting_order_map[opp_position_map["P"]]
                             opp_position_map["P"] = play["postPlay"]
                             if "battingOrder" in play:
+                                if opp_position_map["P"] and opp_position_map["P"] in opp_batting_order_map:
+                                    del opp_batting_order_map[opp_position_map["P"]]
                                 opp_batting_order_map[play["postPlay"]] = int(play["battingOrder"][0])
                         else:
-                            if team_position_map["P"] and team_position_map["P"] in team_batting_order_map:
-                                del team_batting_order_map[team_position_map["P"]]
                             team_position_map["P"] = play["postPlay"]
                             if "battingOrder" in play:
+                                if team_position_map["P"] and team_position_map["P"] in team_batting_order_map:
+                                    del team_batting_order_map[team_position_map["P"]]
                                 team_batting_order_map[play["postPlay"]] = int(play["battingOrder"][0])
 
                             if play["postPlay"] == player_data["mlb_id"]:
