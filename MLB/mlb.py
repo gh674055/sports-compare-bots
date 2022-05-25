@@ -12,6 +12,7 @@ from urllib.parse import urlparse, parse_qs
 import dateutil.parser
 import dateutil.relativedelta
 import dateutil.rrule
+from tzlocal import get_localzone
 import datetime
 from prettytable import PrettyTable
 from concurrent.futures import ThreadPoolExecutor
@@ -5924,6 +5925,10 @@ qualifier_map = {
     "Local Event Time" : {},
     "Team Event Time" : {},
     "Opponent Event Time" : {},
+    "Event DateTime" : {},
+    "Local Event DateTime" : {},
+    "Team Event DateTime" : {},
+    "Opponent Event DateTime" : {},
     "Exact Event Type" : {},
     "Previous Event Type" : {},
     "Previous Exact Event Type" : {},
@@ -7279,7 +7284,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
 
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
 
-                        last_match = re.finditer(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?((?:w|(?:playing|starting)-with|a|(?:playing|starting)-against|(?:playing|starting)-same-game|prv-w|previous-playing-with|prv-a|previous-playing-against|upc-w|upcoming-playing-with|upc-a|upcoming-playing-against|(?:playing|starting)-same-opponents?|(?:playing|starting)-same-dates?|holidays?|dts|dates|stadium|exact-stadium|arena|exact-arena|pitch-type|exact-pitch-type|hit-trajectory|hit-hardness|opponent-city|opponent-exact-city|team-city|team-exact-city|city|exact-city|event-description|exact-event-description|surface|condition|exact-home-plate-umpire|exact-umpire|home-plate-umpire|umpire|exact-home-plate-official|exact-official|home-plate-official|official|teammate-on-first|teammate-on-second|teammate-on-third|teammate-on-base|opponent-on-first|opponent-on-second|opponent-on-third|opponent-on-base|batting-against|pitching-against|batting-against-first-or-birth-name|pitching-against-first-or-birth-name|batting-against-birth-or-first-name|pitching-against-birth-or-first-name|batting-against-birth-name|pitching-against-birth-name|batting-against-first-name|pitching-against-first-name|batting-against-last-name|pitching-against-last-name|batting-against-birth-country|pitching-against-birth-country|facing|facing-first-or-birth-name|facing-birth-or-first-name|facing-birth-name|facing-first-name|facing-last-name|facing-birth-country|driven-in|batted-in|back-to-back-with|back-to-back|batting-in-front-of|batting-in-front|batting-ahead|batting-ahead-of|batting-behind|batting-behind-of|batting-next-to|caught-by|stealing-on|on-field-with|on-field-against|event-time|start-time):(?<!\\)\(.*?(?<!\\)\))", time_frame)
+                        last_match = re.finditer(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?((?:w|(?:playing|starting)-with|a|(?:playing|starting)-against|(?:playing|starting)-same-game|prv-w|previous-playing-with|prv-a|previous-playing-against|upc-w|upcoming-playing-with|upc-a|upcoming-playing-against|(?:playing|starting)-same-opponents?|(?:playing|starting)-same-dates?|holidays?|dts|dates|stadium|exact-stadium|arena|exact-arena|pitch-type|exact-pitch-type|hit-trajectory|hit-hardness|opponent-city|opponent-exact-city|team-city|team-exact-city|city|exact-city|event-description|exact-event-description|surface|condition|exact-home-plate-umpire|exact-umpire|home-plate-umpire|umpire|exact-home-plate-official|exact-official|home-plate-official|official|teammate-on-first|teammate-on-second|teammate-on-third|teammate-on-base|opponent-on-first|opponent-on-second|opponent-on-third|opponent-on-base|batting-against|pitching-against|batting-against-first-or-birth-name|pitching-against-first-or-birth-name|batting-against-birth-or-first-name|pitching-against-birth-or-first-name|batting-against-birth-name|pitching-against-birth-name|batting-against-first-name|pitching-against-first-name|batting-against-last-name|pitching-against-last-name|batting-against-birth-country|pitching-against-birth-country|facing|facing-first-or-birth-name|facing-birth-or-first-name|facing-birth-name|facing-first-name|facing-last-name|facing-birth-country|driven-in|batted-in|back-to-back-with|back-to-back|batting-in-front-of|batting-in-front|batting-ahead|batting-ahead-of|batting-behind|batting-behind-of|batting-next-to|caught-by|stealing-on|on-field-with|on-field-against|event-time|event-datetime|event-date-time|start-time):(?<!\\)\(.*?(?<!\\)\))", time_frame)
                         for m in last_match:
                             qualifier_obj = {}
                             negate_str = m.group(1)
@@ -7747,8 +7752,87 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 
                                 qualifier_obj["values"]["start_val"] = qualifier_obj["values"]["start_val"].replace(microsecond=0)
                                 qualifier_obj["values"]["end_val"] = qualifier_obj["values"]["end_val"].replace(microsecond=0)
+                            elif qualifier_str.startswith("event-datetime:") or qualifier_str.startswith("event-datetime:"):
+                                if qualifier_str.startswith("event-datetime:"):
+                                    qual_str = "event-datetime:"
+                                    qual_type = "Event DateTime"
+                                    extra_stats.add("current-stats")
+                                elif qualifier_str.startswith("event-date-time:"):
+                                    qual_str = "event-date-time:"
+                                    qual_type = "Event DateTime"
+                                    extra_stats.add("current-stats")
+
+                                split_vals = re.split(r"(?<!\\)\~", re.split(r"(?<!\\)" + qual_str, qualifier_str)[1][1:-1])
+
+                                time_zones = {
+                                    "CDT" : "US/Central",
+                                    "CST" : "US/Central",
+                                    "EST" : "US/Eastern",
+                                    "EDT" : "US/Eastern",
+                                    "MDT" : "US/Mountain",
+                                    "MST" : "US/Mountain",
+                                    "PDT" : "US/Pacific",
+                                    "PST" : "US/Pacific",
+                                    "ET" : "US/Eastern",
+                                    "CT" : "US/Central",
+                                    "MT" : "US/Mountain",
+                                    "PT" : "US/Pacific"
+                                }
+                                time_zone = None
+                                last_val = split_vals[len(split_vals) - 1]
+                                for index, split_val in enumerate(split_vals):
+                                    for key in time_zones:
+                                        if split_val.upper().endswith(key):
+                                            time_zone = time_zones[key]
+                                            split_vals[index] = split_vals[index][:-(len(key))].strip()
+                                            break
+                                    if not time_zone:
+                                        for key in pytz.all_timezones:
+                                            if split_val.upper().endswith(key.upper()):
+                                                time_zone = key
+                                                split_vals[index] = split_vals[index][:-(len(key))].strip()
+                                                break
+                                if not time_zone:
+                                    time_zone = "US/Eastern"
+                                
+                                if len(split_vals) == 1:
+                                    the_date = dateutil.parser.parse(split_vals[0])
+                                    the_date_2 = dateutil.parser.parse(split_vals[0])
+                                    if split_vals[0].count(":") == 0:
+                                        the_date_2 = the_date_2.replace(minute=59).replace(second=59)
+                                    elif split_vals[0].count(":") == 1:
+                                        the_date_2 = the_date_2.replace(second=59)
+                                    qualifier_obj["values"] = {
+                                        "start_val" : the_date,
+                                        "end_val" : the_date_2,
+                                        "time_zone" : time_zone
+                                    }
+                                else:
+                                    start_date = None
+                                    end_date = None
+                                    if split_vals[0] == "min" and split_vals[1] == "max":
+                                        start_date = datetime.datetime.min
+                                        end_date = datetime.datetime.now()
+                                    elif split_vals[0] == "min":
+                                        start_date = datetime.datetime.min
+                                        end_date = dateutil.parser.parse(split_vals[1])
+                                    elif split_vals[1] == "max":
+                                        start_date = dateutil.parser.parse(split_vals[0])
+                                        end_date = datetime.datetime.now()
+                                    else:
+                                        start_date = dateutil.parser.parse(split_vals[0])
+                                        end_date = dateutil.parser.parse(split_vals[1])
+
+                                    qualifier_obj["values"] = {
+                                        "start_val" : start_date,
+                                        "end_val" : end_date,
+                                        "time_zone" : time_zone
+                                    }
+                                
+                                qualifier_obj["values"]["start_val"] = qualifier_obj["values"]["start_val"].replace(microsecond=0).replace(tzinfo=None)
+                                qualifier_obj["values"]["end_val"] = qualifier_obj["values"]["end_val"].replace(microsecond=0).replace(tzinfo=None)
                             
-                            if not qual_type in ["Event Time", "Start Time"]:
+                            if not qual_type in ["Event Time", "Start Time", "Event DateTime"]:
                                 qualifier_obj["values"] = re.split(r"(?<!\\)\~", re.split(r"(?<!\\)" + qual_str, qualifier_str)[1][1:-1])
                                 qualifier_obj["values"] = [value.strip() for value in qualifier_obj["values"]]
 
@@ -8514,7 +8598,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
 
                                 time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
 
-                        last_match = re.finditer(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?(current-season-age|first-games?|current-games?|first-seasons?|current-seasons?|last-games?|last-seasons?|first-starts?|last-starts?|first-innings|last-innings|current-innings?|first-plate-appearances?|last-plate-appearances?|current-plate-appearances?|first-batters?-faced|last-batters?-faced|current-batters?-faced|first-pitches|last-pitch(?:es)|current-pitch(?:es)?|first-at-bats?|last-at-bats?|current-at-bats?|current-age|rook|rookie|facing-former-franchise|facing-former-team|decision|interleague|intraleague|interdivision|intradivision|current-winning-opponents?|current-losing-opponents?|current-tied-opponents?|current-winning-or-tied-opponents?|current-losing-or-tied-opponents?|winning-opponents?|losing-opponents?|tied-opponents?|winning-or-tied-opponents?|losing-or-tied-opponents?|playoff-opponents?|ws-winner-opponent|pennant-winner-opponent|division-winner-opponent|current-winning-teams?|current-losing-teams?|current-tied-teams?|current-winning-or-tied-teams?|current-losing-or-tied-teams?|winning-teams?|losing-teams?|tied-teams?|winning-or-tied-teams?|losing-or-tied-teams?|playoff-teams?|ws-winner-team|pennant-winner-team|division-winner-team|elimination-or-clinching|clinching-or-elimination|elimination(?:-games?)?|eliminating(?:-games?)?|clinching(?:-games?)?|clinch(?:-games?)?|winner-take-all|behind-in-series|ahead-in-series|even-in-series|leading-off-inning|leading-off-whole-game|leading-off-game|leading-off|leading(:?-in-game)?|trailing(:?-in-game)?|tied?(:?(?:-in)?-game)?|force-dates|first-half|second-half|pre-all-star|post-all-star|series-games?:[\w-]+|t:[\w-]+|o:[\w-]+|m:[\w-]+|d:[\w-]+|dt:[\w-]+|team-franchise:[\w-]+|opponent-franchise:[\w-]+|franchise:[\w-]+|tf:[\w-]+|of:[\w-]+|f:[\w-]+|tv-network:[\w-]+|radio-network:[\w-]+|raw-tv-network:[\w-]+|raw-radio-network:[\w-]+|national-tv-network:[\w-]+|national-raw-tv-network:[\w-]+|any-national-tv-network:[\w-]+|any-national-raw-tv-network:[\w-]+|local-event-time:[\S-]+|local-start-time:[\S-]+|team-start-time:[\S-]+|opponent-start-time:[\S-]+|team-event-time:[\S-]+|opponent-event-time:[\S-]+|previous-event(?:-type)?:[\w-]+|previous-exact-event(?:-type)?:[\w-]+|upcoming-player-event(?:-type)?:[\w-]+|upcoming-exact-player-event(?:-type)?:[\w-]+|previous-player-event(?:-type)?:[\w-]+|previous-exact-player-event(?:-type)?:[\w-]+|upcoming-event(?:-type)?:[\w-]+|upcoming-exact-event(?:-type)?:[\w-]+|event(?:-type)?:[\w-]+|exact-event(?:-type)?:[\w-]+|hit-x-coordinate:[\S-]+|hit-y-coordinate:[\S-]+|hit-coordinates:[\S-]+|absolute-pitch-x-coordinate:[\w-]+|absolute-pitch-y-coordinate:[\w-]+|absolute-pitch-coordinates:[\w-]+|pitch-x-coordinate:[\S-]+|pitch-y-coordinate:[\S-]+|pitch-coordinates:[\S-]+|hit-within-distance:[\S-]+|pitch-within-distance:[\S-]+|absolute-pitch-within-distance:[\S-]+|team-stadium:[\w-]+|team-arena:[\w-]+|franchise-stadium:[\w-]+|franchise-arena:[\w-]+|team:[\w-]+|opponent:[\w-]+|team-central-european-time-zone|team-eastern-european-time-zone|team-japan-time-zone|team-hawaii-time-zone|team-greenwich-time-zone|team-australian-time-zone|team-atlantic-time-zone|team-eastern-time-zone|team-central-time-zone|team-mountain-time-zone|team-pacific-time-zone|opponent-central-european-time-zone|opponent-eastern-european-time-zone|opponent-japan-time-zone|opponent-hawaii-time-zone|opponent-greenwich-time-zone|opponent-australian-time-zone|opponent-atlantic-time-zone|opponent-eastern-time-zone|opponent-central-time-zone|opponent-mountain-time-zone|opponent-pacific-time-zone|central-european-time-zone|eastern-european-time-zone|japan-time-zone|hawaii-time-zone|greenwich-time-zone|australian-time-zone|atlantic-time-zone|eastern-time-zone|central-time-zone|mountain-time-zone|pacific-time-zone|time-zone:[\S-]+|exact-time-zone:[\S-]+|state:[\w-]+|exact-state:[\w-]+|province:[\w-]+|exact-province:[\w-]+|team-time-zone:[\S-]+|team-exact-time-zone:[\S-]+|team-state:[\w-]+|team-exact-state:[\w-]+|team-province:[\w-]+|team-exact-province:[\w-]+|opponent-time-zone:[\S-]+|opponent-exact-time-zone:[\S-]+|opponent-state:[\w-]+|opponent-exact-state:[\w-]+|opponent-province:[\w-]+|opponent-exact-province:[\w-]+|opponent-country:[\w-]+|opponent-exact-country:[\w-]+|team-country:[\w-]+|team-exact-country:[\w-]+|country:[\w-]+|exact-country:[\w-]+|month:[\w-]+|day:[\w-]+|date:[\w-]+|gm:[\w-]+|game:[\w-]+|season-gm:[\w-]+|season-game:[\w-]+|season:[\w-]+|season-reversed:[\w-]+|seasons:[\w-]+|seasons-reversed:[\w-]+|tmgm:[\w-]+|team-games?:[\w-]+|crgm:[\w-]+|career-games?-reversed:[\w-]+|team-games?-reversed:[\w-]+|season-games?-reversed:[\w-]+|gamev-reversed:[\w-]+|career-games?:[\w-]+|dr:[\w-]+|starts-days-rest:[\w-]+|days-rest:[\w-]+|prv-dr:[\w-]+|previous-days-rest:[\w-]+|batter-plate-appearance:[\w-]+|pitcher-batters-faced:[\w-]+|batter-plate-appearance-reversed:[\w-]+|pitcher-batters-faced-reversed:[\w-]+|pitch-count:[\w-]+|starting-pitch-count:[\w-]+|innings-pitched:[\S-]+|ending-innings-pitched:[\S-]+|team-pitch-count:[\w-]+|game-pitch-count:[\w-]+|at-bat-pitch-count:[\w-]+|upc-dr:[\w-]+|games-in-days:[\S-]+|starts-in-days:[\S-]+|upcoming-starts-days-rest:[\w-]+|upcoming-days-rest:[\w-]+|gr:[\w-]+|game-days-rest:[\w-]+|start-days-rest:[\w-]+|games-rest:[\w-]+|starts-rest:[\w-]+|prv-gr:[\w-]+|previous-games-rest:[\w-]+|start-days-in-a-row:[\w-]+|game-days-in-a-row:[\w-]+|days-in-a-row:[\w-]+|games-in-a-row:[\w-]+|starts-in-a-row:[\w-]+|game-number:[\w-]+|season-number:[\w-]+|number:[\w-]+|upc-gr:[\w-]+|upcoming-games-rest:[\w-]+|prv-t:[\w-]+|prv-o:[\w-]+|upc-t:[\w-]+|upc-o:[\w-]+|upcoming-same-opponent|previous-same-opponent|previous-franchise:[\w-]+|previous-team-franchise:[\w-]+|previous-opponent-franchise:[\w-]+|upcoming-franchise:[\w-]+|upcoming-team-franchise:[\w-]+|upcoming-opponent-franchise:[\w-]+|previous-team:[\w-]+|previous-opponent:[\w-]+|upcoming-team:[\w-]+|upcoming-opponent:[\w-]+|lg:[\w-]+|team-league:[\w-]+|opp-lg:[\w-]+|opponent-league:[\w-]+|previous-team-league:[\w-]+|previous-opponent-league:[\w-]+|upcoming-team-league:[\w-]+|upcoming-team-league:[\w-]+|team-division:[\S-]+|opponent-division:[\S-]+|primary-season-position:[\S-]+|season-position:[\S-]+|ph-for-position:[\S-]+|position:[\S-]+|hit-location:[\S-]+|exact-hit-location:[\S-]+|facing-primary-position:[\S-]+|facing-main-position:[\S-]+|facing-ph-for-position:[\S-]+|facing-position:[\S-]+|primary-game-position:[\S-]+|game-position:[\S-]+|prv-season-st:[\S-]+|previous-season-stat:[\S-]+|upc-season-st:[\S-]+|upcoming-season-stat:[\S-]+|season-st:[\S-]+|season-stat:[\S-]+|individual-event-stat:[\S-]+|indv-event-stat:[\S-]+|ind-event-stat:[\S-]+|game-event-stat:[\S-]+|game-event-stat-reversed:[\S-]+|game-event-stats:[\S-]+|game-event-stats-reversed:[\S-]+|event-stat:[\S-]+|event-stat-reversed:[\S-]+|event-stats:[\S-]+|event-stats-reversed:[\S-]+|starting-game-event-stat:[\S-]+|starting-game-event-stat-reversed:[\S-]+|starting-game-event-stats:[\S-]+|starting-game-event-stats-reversed:[\S-]+|starting-event-stat:[\S-]+|starting-event-stat-reversed:[\S-]+|starting-event-stats:[\S-]+|starting-event-stats-reversed:[\S-]+|inning-stat:[\S-]+||st:[\S-]+|stat:[\S-]+|prv-st:[\S-]+|previous-stat:[\S-]+|upc-st:[\S-]+|upcoming-stat:[\S-]+|min-st:[\S-]+|min-stat:[\S-]+|max-st:[\S-]+|max-stat:[\S-]+|totalgames-st:[\S-]+|totalgames-stat:[\S-]+|max-str:[\S-]+|max-streak:[\S-]+|ctn-str:[\S-]+|count-streak:[\S-]+|q:[\S-]+|quickest:[\S-]+|s:[\S-]+|slowest:[\S-]+|dh(?::[((?:f|s|b|e)-]+)?|double-header(?::[((?:first|second|both|either)-]+)?|world(?:(?: |-)series|(?: |-)finals?|(?: |-)championship|(?: |-)?round)?|ws|(?:(?:(?:american|al|national|nl)(?:(?: |-)league)?)(?: |-)?)?(?:championship|league)(?:(?: |-)series|(?: |-)finals?|(?: |-)championship|(?: |-)?round)?|(?:(?:(?:american|al|national|nl)(?:(?: |-)league)?)(?: |-)?)?cs|(?:(?:(?:american|al|national|nl)(?:(?: |-)league)?)(?: |-)?)?division(?:(?: |-)series|(?: |-)finals?|(?: |-)championship|(?: |-)?round)?|(?:(?:(?:american|al|national|nl)(?:(?: |-)league)?)(?: |-)?)?ds|(?:(?:(?:american|al|national|nl)(?:(?: |-)league)?)(?: |-)?)?wild(?: |-)?card(?:(?: |-)series|(?: |-)finals?|(?: |-)championship|(?: |-)?round)?|(?:(?:(?:american|al|national|nl)(?:(?: |-)league)?)(?: |-)?)?wc|summer|spring|winter|fall|autumn|away|home|road|bunt(?:ing)?|previous-away|previous-home|previous-road|upcoming-away|upcoming-home|upcoming-road|-?starts?|-?started|-?starting|-?ignore-starts?|-?ignore-started?|-?ignore-starting|finished|win(?:s)?|loss(?:es)?|tie(?:s)?|w|l|tprv-w|prv-l|prv-t|upc-w|upc-l|upc-t|previous-win(?:s)?|previous-loss(?:es)?|previous-tie(?:s)?|upcoming-win(?:s)?|upcoming-loss(?:es)?|upcoming-tie(?:s)?|prv-t-w|prv-t-l|prv-t-t|upc-t-w|upc-t-l|upc-t-t|previous-team-win(?:s)?|previous-team-loss(?:es)?|previous-team-tie(?:s)?|upcoming-team-win(?:s)?|upcoming-team-loss(?:es)?|upcoming-team-tie(?:s)?|save(?: |-)situations?|run-support:[\w-]+|final-team-score:[\w-]+|men-on-base:[\w-]+|time-through-lineup:[\w-]+|time-facing-opponent:[\w-]+|men-in-scoring-number:[\w-]+|men-on-base-number:[\w-]+|final-opponent-score:[\w-]+|final-score-margin:[\S-]+|final-score-difference:[\S-]+|ending-team-score:[\w-]+|ending-opponent-score:[\w-]+|ending-score-margin:[\S-]+|ending-score-difference:[\S-]+|team-score:[\w-]+|entered-score:[\w-]+|opponent-score:[\w-]+|score-margin-entered:[\S-]+|score-margin:[\S-]+|score-difference-entered:[\S-]+|score-difference:[\S-]+|wind:[\w-]+|inning-entered:[\w-]+|men-on-base-entered:[\w-]+|men-in-scoring-entered:[\w-]+|outs-entered:[\w-]+|bases-empty|men-on-base|risp|inherited|batter-reached-base|any-national-game|national-game|pitcher-first-batter-faced|batter-first-plate-appearance|pitcher-last-batter-faced|batter-last-plate-appearance|day-after-pitching|day-after-hitting|day-before-pitching|day-before-hitting|with-new-team|with-new-franchise|changing-team|changing-franchise|even-calendar-year|odd-calendar-year|even-year|odd-year|activated-from-(?:il|dl)|activated|two-seam-fastball|4-seam-fastball|2-seam-fastball|four-seam-fastball|4-seam|2-seam|four-seam|two-seam|cutter|intentional-ball|sinker|slider|curveball|splitter|knuckle-curve|pitchout|knuckle-ball|changeup|screwball|eephus|automatic-ball|slow-curve|forkball|facing-position-player|facing-pitcher|stealing-second|stealing-third|stealing-home|fastball|out-of-zone|in-zone|breaking|offspeed|facing-qualified-rookie|facing-rookie|facing-lefty|facing-righty|platoon-advantage|batting-lefty|batting-righty|pitching-lefty|pitching-righty|pinch-hitting|facing-starter|facing-reliever|inning-started|swung-at-first-pitch|first-pitch|batter-ahead|pitcher-ahead|even-count|after-batter-ahead|after-pitcher-ahead|after-even-count|go-ahead-or-game-tying-opp|go-ahead-or-game-tying|game-tying-or-go-ahead-opp|game-tying-or-go-ahead|game-tying-opp|close|late|game-tying|go-ahead-opp|go-ahead|game-winning|last-inning-entered|last-inning|last-out|last-batter|extra-innings|inside-the-park-hr|walk-off-opp|walk-off|tying-on-deck|tying-on-first|tying-on-second|tying-on-third|tying-at-bat|tying-in-scoring|tying-on-base|go-ahead-on-deck|go-ahead-on-first|go-ahead-on-second|go-ahead-on-third|go-ahead-at-bat|go-ahead-in-scoring|go-ahead-on-base|go-ahead-or-tying-on-deck|go-ahead-or-tying-on-first|go-ahead-or-tying-on-second|go-ahead-or-tying-on-third|go-ahead-or-tying-at-bat|go-ahead-or-tying-in-scoring|go-ahead-or-tying-on-base|bottom-inning-entered|top-inning-entered|bottom-inning|top-inning|full-count|man-on-first|man-on-second|man-on-third|bases-loaded|after-swinging-on-strikes:[\w-]+|after-swinging-on-balls:[\w-]+|swinging-on-strikes:[\w-]+|swinging-on-balls:[\w-]+|after-strikes:[\w-]+|after-balls:[\w-]+|strikes:[\w-]+|balls:[\w-]+|ending-outs:[\w-]+|play-outs:[\w-]+|outs-remaining-entered:[\w-]+|outs-remaining:[\w-]+|outs:[\w-]+|runs:[\w-]+|rbis:[\w-]+|number-drove-in:[\w-]+|pitch-speed:[\S-]+|pitch-zone:[\w-]+|pitch-spin:[\S-]+|exit-velocity:[\S-]+|hit-distance:[\S-]+|launch-angle:[\S-]+|inning:[\S-]+|inning-reversed:[\S-]+|scheduled-inning-reversed:[\S-]+|pitching-against-batting-order:[\w-]+|count:[\S-]+|final-score:[\S-]+|previous-score:[\S-]+|upcoming-score:[\S-]+|ending-score:[\S-]+|score:[\S-]+|after-count:[\S-]+|after-swinging-on-count:[\S-]+|swinging-on-count:[\S-]+|temperature:[\w-]+|new-moon|waning-crescent|third-quarter|waning-gibbous|full-moon|waxing-gibbous|first-quarter|waxing-crescent|grass|artificial|rain|cloudy|partly-cloudy|overcast|drizzle|sunny|dome|roof-closed|clear|previous-team-score:[\w-]+|previous-opponent-score:[\w-]+|previous-score-margin:[\S-]+|previous-score-difference:[\S-]+|upcoming-team-score:[\w-]+|upcoming-opponent-score:[\w-]+|upcoming-score-margin:[\S-]+|upcoming-score-difference:[\S-]+|series-team-wins:[\w-]+|series-opponent-wins:[\w-]+|series-score-margin:[\w-]+|series-score-difference:[\w-]+|series-score:[\w-]+|calendar-years?:[\w-]+|years?:[\w-]+|batting-order(?:-pos(?:ition)?|-spot)?:[\w-]+|opponent-runs?-rank:[\S-]+|current-team-wins:[\w-]+|current-team-losses:[\w-]+|current-team-games-over-500:[\S-]+|current-opponent-wins:[\w-]+|current-opponent-losses:[\w-]+|current-opponent-games-over-500:[\S-]+|attendance:[\w-]+|team-wins:[\w-]+|team-losses:[\w-]+|team-games-over-500:[\S-]+|opponent-wins:[\w-]+|opponent-losses:[\w-]+|opponent-games-over-500:[\S-]+|opponent-standings-rank:[\S-]+|opponent-runs?-allowed-rank:[\S-]+|opponent-wrc\\\+-rank:[\S-]+|opponent-avg-rank:[\S-]+|opponent-slg-rank:[\S-]+|opponent-obp-rank:[\S-]+|opponent-ops-rank:[\S-]+|opponent-era--rank:[\S-]+|opponent-era-rank:[\S-]+|current-opponent-win(?:ning)?-percent:[\S-]+|opponent-win(?:ning)?-percent:[\S-]+|team-runs?-rank:[\S-]+|team-standings-rank:[\S-]+|team-runs?-allowed-rank:[\S-]+|team-wrc\\\+-rank:[\S-]+|team-avg-rank:[\S-]+|team-slg-rank:[\S-]+|team-obp-rank:[\S-]+|team-ops-rank:[\S-]+|team-era--rank:[\S-]+|team-era-rank:[\S-]+|current-team-win(?:ning)?-percent:[\S-]+|team-win(?:ning)?-percent:[\S-]+|birthda(?:y|te)|day|night(?:time)?|evening|late|pitching|batting|hitting|" + all_months_re + r"|" + all_days_re + r'|' + all_event_types_re + r")(?!\S+)", time_frame)
+                        last_match = re.finditer(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?(current-season-age|first-games?|current-games?|first-seasons?|current-seasons?|last-games?|last-seasons?|first-starts?|last-starts?|first-innings|last-innings|current-innings?|first-plate-appearances?|last-plate-appearances?|current-plate-appearances?|first-batters?-faced|last-batters?-faced|current-batters?-faced|first-pitches|last-pitch(?:es)|current-pitch(?:es)?|first-at-bats?|last-at-bats?|current-at-bats?|current-age|rook|rookie|facing-former-franchise|facing-former-team|decision|interleague|intraleague|interdivision|intradivision|current-winning-opponents?|current-losing-opponents?|current-tied-opponents?|current-winning-or-tied-opponents?|current-losing-or-tied-opponents?|winning-opponents?|losing-opponents?|tied-opponents?|winning-or-tied-opponents?|losing-or-tied-opponents?|playoff-opponents?|ws-winner-opponent|pennant-winner-opponent|division-winner-opponent|current-winning-teams?|current-losing-teams?|current-tied-teams?|current-winning-or-tied-teams?|current-losing-or-tied-teams?|winning-teams?|losing-teams?|tied-teams?|winning-or-tied-teams?|losing-or-tied-teams?|playoff-teams?|ws-winner-team|pennant-winner-team|division-winner-team|elimination-or-clinching|clinching-or-elimination|elimination(?:-games?)?|eliminating(?:-games?)?|clinching(?:-games?)?|clinch(?:-games?)?|winner-take-all|behind-in-series|ahead-in-series|even-in-series|leading-off-inning|leading-off-whole-game|leading-off-game|leading-off|leading(:?-in-game)?|trailing(:?-in-game)?|tied?(:?(?:-in)?-game)?|force-dates|first-half|second-half|pre-all-star|post-all-star|series-games?:[\w-]+|t:[\w-]+|o:[\w-]+|m:[\w-]+|d:[\w-]+|dt:[\w-]+|team-franchise:[\w-]+|opponent-franchise:[\w-]+|franchise:[\w-]+|tf:[\w-]+|of:[\w-]+|f:[\w-]+|tv-network:[\w-]+|radio-network:[\w-]+|raw-tv-network:[\w-]+|raw-radio-network:[\w-]+|national-tv-network:[\w-]+|national-raw-tv-network:[\w-]+|any-national-tv-network:[\w-]+|any-national-raw-tv-network:[\w-]+|local-event-time:[\S-]+|local-event-datetime:[\S-]+|local-event-date-time:[\S-]+|local-start-time:[\S-]+|team-start-time:[\S-]+|opponent-start-time:[\S-]+|team-event-time:[\S-]+|opponent-event-time:[\S-]+|team-event-datetime:[\S-]+|opponent-event-datetime:[\S-]+|team-event-date-time:[\S-]+|opponent-event-date-time:[\S-]+|previous-event(?:-type)?:[\w-]+|previous-exact-event(?:-type)?:[\w-]+|upcoming-player-event(?:-type)?:[\w-]+|upcoming-exact-player-event(?:-type)?:[\w-]+|previous-player-event(?:-type)?:[\w-]+|previous-exact-player-event(?:-type)?:[\w-]+|upcoming-event(?:-type)?:[\w-]+|upcoming-exact-event(?:-type)?:[\w-]+|event(?:-type)?:[\w-]+|exact-event(?:-type)?:[\w-]+|hit-x-coordinate:[\S-]+|hit-y-coordinate:[\S-]+|hit-coordinates:[\S-]+|absolute-pitch-x-coordinate:[\w-]+|absolute-pitch-y-coordinate:[\w-]+|absolute-pitch-coordinates:[\w-]+|pitch-x-coordinate:[\S-]+|pitch-y-coordinate:[\S-]+|pitch-coordinates:[\S-]+|hit-within-distance:[\S-]+|pitch-within-distance:[\S-]+|absolute-pitch-within-distance:[\S-]+|team-stadium:[\w-]+|team-arena:[\w-]+|franchise-stadium:[\w-]+|franchise-arena:[\w-]+|team:[\w-]+|opponent:[\w-]+|team-central-european-time-zone|team-eastern-european-time-zone|team-japan-time-zone|team-hawaii-time-zone|team-greenwich-time-zone|team-australian-time-zone|team-atlantic-time-zone|team-eastern-time-zone|team-central-time-zone|team-mountain-time-zone|team-pacific-time-zone|opponent-central-european-time-zone|opponent-eastern-european-time-zone|opponent-japan-time-zone|opponent-hawaii-time-zone|opponent-greenwich-time-zone|opponent-australian-time-zone|opponent-atlantic-time-zone|opponent-eastern-time-zone|opponent-central-time-zone|opponent-mountain-time-zone|opponent-pacific-time-zone|central-european-time-zone|eastern-european-time-zone|japan-time-zone|hawaii-time-zone|greenwich-time-zone|australian-time-zone|atlantic-time-zone|eastern-time-zone|central-time-zone|mountain-time-zone|pacific-time-zone|time-zone:[\S-]+|exact-time-zone:[\S-]+|state:[\w-]+|exact-state:[\w-]+|province:[\w-]+|exact-province:[\w-]+|team-time-zone:[\S-]+|team-exact-time-zone:[\S-]+|team-state:[\w-]+|team-exact-state:[\w-]+|team-province:[\w-]+|team-exact-province:[\w-]+|opponent-time-zone:[\S-]+|opponent-exact-time-zone:[\S-]+|opponent-state:[\w-]+|opponent-exact-state:[\w-]+|opponent-province:[\w-]+|opponent-exact-province:[\w-]+|opponent-country:[\w-]+|opponent-exact-country:[\w-]+|team-country:[\w-]+|team-exact-country:[\w-]+|country:[\w-]+|exact-country:[\w-]+|month:[\w-]+|day:[\w-]+|date:[\w-]+|gm:[\w-]+|game:[\w-]+|season-gm:[\w-]+|season-game:[\w-]+|season:[\w-]+|season-reversed:[\w-]+|seasons:[\w-]+|seasons-reversed:[\w-]+|tmgm:[\w-]+|team-games?:[\w-]+|crgm:[\w-]+|career-games?-reversed:[\w-]+|team-games?-reversed:[\w-]+|season-games?-reversed:[\w-]+|gamev-reversed:[\w-]+|career-games?:[\w-]+|dr:[\w-]+|starts-days-rest:[\w-]+|days-rest:[\w-]+|prv-dr:[\w-]+|previous-days-rest:[\w-]+|batter-plate-appearance:[\w-]+|pitcher-batters-faced:[\w-]+|batter-plate-appearance-reversed:[\w-]+|pitcher-batters-faced-reversed:[\w-]+|pitch-count:[\w-]+|starting-pitch-count:[\w-]+|innings-pitched:[\S-]+|ending-innings-pitched:[\S-]+|team-pitch-count:[\w-]+|game-pitch-count:[\w-]+|at-bat-pitch-count:[\w-]+|upc-dr:[\w-]+|games-in-days:[\S-]+|starts-in-days:[\S-]+|upcoming-starts-days-rest:[\w-]+|upcoming-days-rest:[\w-]+|gr:[\w-]+|game-days-rest:[\w-]+|start-days-rest:[\w-]+|games-rest:[\w-]+|starts-rest:[\w-]+|prv-gr:[\w-]+|previous-games-rest:[\w-]+|start-days-in-a-row:[\w-]+|game-days-in-a-row:[\w-]+|days-in-a-row:[\w-]+|games-in-a-row:[\w-]+|starts-in-a-row:[\w-]+|game-number:[\w-]+|season-number:[\w-]+|number:[\w-]+|upc-gr:[\w-]+|upcoming-games-rest:[\w-]+|prv-t:[\w-]+|prv-o:[\w-]+|upc-t:[\w-]+|upc-o:[\w-]+|upcoming-same-opponent|previous-same-opponent|previous-franchise:[\w-]+|previous-team-franchise:[\w-]+|previous-opponent-franchise:[\w-]+|upcoming-franchise:[\w-]+|upcoming-team-franchise:[\w-]+|upcoming-opponent-franchise:[\w-]+|previous-team:[\w-]+|previous-opponent:[\w-]+|upcoming-team:[\w-]+|upcoming-opponent:[\w-]+|lg:[\w-]+|team-league:[\w-]+|opp-lg:[\w-]+|opponent-league:[\w-]+|previous-team-league:[\w-]+|previous-opponent-league:[\w-]+|upcoming-team-league:[\w-]+|upcoming-team-league:[\w-]+|team-division:[\S-]+|opponent-division:[\S-]+|primary-season-position:[\S-]+|season-position:[\S-]+|ph-for-position:[\S-]+|position:[\S-]+|hit-location:[\S-]+|exact-hit-location:[\S-]+|facing-primary-position:[\S-]+|facing-main-position:[\S-]+|facing-ph-for-position:[\S-]+|facing-position:[\S-]+|primary-game-position:[\S-]+|game-position:[\S-]+|prv-season-st:[\S-]+|previous-season-stat:[\S-]+|upc-season-st:[\S-]+|upcoming-season-stat:[\S-]+|season-st:[\S-]+|season-stat:[\S-]+|individual-event-stat:[\S-]+|indv-event-stat:[\S-]+|ind-event-stat:[\S-]+|game-event-stat:[\S-]+|game-event-stat-reversed:[\S-]+|game-event-stats:[\S-]+|game-event-stats-reversed:[\S-]+|event-stat:[\S-]+|event-stat-reversed:[\S-]+|event-stats:[\S-]+|event-stats-reversed:[\S-]+|starting-game-event-stat:[\S-]+|starting-game-event-stat-reversed:[\S-]+|starting-game-event-stats:[\S-]+|starting-game-event-stats-reversed:[\S-]+|starting-event-stat:[\S-]+|starting-event-stat-reversed:[\S-]+|starting-event-stats:[\S-]+|starting-event-stats-reversed:[\S-]+|inning-stat:[\S-]+||st:[\S-]+|stat:[\S-]+|prv-st:[\S-]+|previous-stat:[\S-]+|upc-st:[\S-]+|upcoming-stat:[\S-]+|min-st:[\S-]+|min-stat:[\S-]+|max-st:[\S-]+|max-stat:[\S-]+|totalgames-st:[\S-]+|totalgames-stat:[\S-]+|max-str:[\S-]+|max-streak:[\S-]+|ctn-str:[\S-]+|count-streak:[\S-]+|q:[\S-]+|quickest:[\S-]+|s:[\S-]+|slowest:[\S-]+|dh(?::[((?:f|s|b|e)-]+)?|double-header(?::[((?:first|second|both|either)-]+)?|world(?:(?: |-)series|(?: |-)finals?|(?: |-)championship|(?: |-)?round)?|ws|(?:(?:(?:american|al|national|nl)(?:(?: |-)league)?)(?: |-)?)?(?:championship|league)(?:(?: |-)series|(?: |-)finals?|(?: |-)championship|(?: |-)?round)?|(?:(?:(?:american|al|national|nl)(?:(?: |-)league)?)(?: |-)?)?cs|(?:(?:(?:american|al|national|nl)(?:(?: |-)league)?)(?: |-)?)?division(?:(?: |-)series|(?: |-)finals?|(?: |-)championship|(?: |-)?round)?|(?:(?:(?:american|al|national|nl)(?:(?: |-)league)?)(?: |-)?)?ds|(?:(?:(?:american|al|national|nl)(?:(?: |-)league)?)(?: |-)?)?wild(?: |-)?card(?:(?: |-)series|(?: |-)finals?|(?: |-)championship|(?: |-)?round)?|(?:(?:(?:american|al|national|nl)(?:(?: |-)league)?)(?: |-)?)?wc|summer|spring|winter|fall|autumn|away|home|road|bunt(?:ing)?|previous-away|previous-home|previous-road|upcoming-away|upcoming-home|upcoming-road|-?starts?|-?started|-?starting|-?ignore-starts?|-?ignore-started?|-?ignore-starting|finished|win(?:s)?|loss(?:es)?|tie(?:s)?|w|l|tprv-w|prv-l|prv-t|upc-w|upc-l|upc-t|previous-win(?:s)?|previous-loss(?:es)?|previous-tie(?:s)?|upcoming-win(?:s)?|upcoming-loss(?:es)?|upcoming-tie(?:s)?|prv-t-w|prv-t-l|prv-t-t|upc-t-w|upc-t-l|upc-t-t|previous-team-win(?:s)?|previous-team-loss(?:es)?|previous-team-tie(?:s)?|upcoming-team-win(?:s)?|upcoming-team-loss(?:es)?|upcoming-team-tie(?:s)?|save(?: |-)situations?|run-support:[\w-]+|final-team-score:[\w-]+|men-on-base:[\w-]+|time-through-lineup:[\w-]+|time-facing-opponent:[\w-]+|men-in-scoring-number:[\w-]+|men-on-base-number:[\w-]+|final-opponent-score:[\w-]+|final-score-margin:[\S-]+|final-score-difference:[\S-]+|ending-team-score:[\w-]+|ending-opponent-score:[\w-]+|ending-score-margin:[\S-]+|ending-score-difference:[\S-]+|team-score:[\w-]+|entered-score:[\w-]+|opponent-score:[\w-]+|score-margin-entered:[\S-]+|score-margin:[\S-]+|score-difference-entered:[\S-]+|score-difference:[\S-]+|wind:[\w-]+|inning-entered:[\w-]+|men-on-base-entered:[\w-]+|men-in-scoring-entered:[\w-]+|outs-entered:[\w-]+|bases-empty|men-on-base|risp|inherited|batter-reached-base|any-national-game|national-game|pitcher-first-batter-faced|batter-first-plate-appearance|pitcher-last-batter-faced|batter-last-plate-appearance|day-after-pitching|day-after-hitting|day-before-pitching|day-before-hitting|with-new-team|with-new-franchise|changing-team|changing-franchise|even-calendar-year|odd-calendar-year|even-year|odd-year|activated-from-(?:il|dl)|activated|two-seam-fastball|4-seam-fastball|2-seam-fastball|four-seam-fastball|4-seam|2-seam|four-seam|two-seam|cutter|intentional-ball|sinker|slider|curveball|splitter|knuckle-curve|pitchout|knuckle-ball|changeup|screwball|eephus|automatic-ball|slow-curve|forkball|facing-position-player|facing-pitcher|stealing-second|stealing-third|stealing-home|fastball|out-of-zone|in-zone|breaking|offspeed|facing-qualified-rookie|facing-rookie|facing-lefty|facing-righty|platoon-advantage|batting-lefty|batting-righty|pitching-lefty|pitching-righty|pinch-hitting|facing-starter|facing-reliever|inning-started|swung-at-first-pitch|first-pitch|batter-ahead|pitcher-ahead|even-count|after-batter-ahead|after-pitcher-ahead|after-even-count|go-ahead-or-game-tying-opp|go-ahead-or-game-tying|game-tying-or-go-ahead-opp|game-tying-or-go-ahead|game-tying-opp|close|late|game-tying|go-ahead-opp|go-ahead|game-winning|last-inning-entered|last-inning|last-out|last-batter|extra-innings|inside-the-park-hr|walk-off-opp|walk-off|tying-on-deck|tying-on-first|tying-on-second|tying-on-third|tying-at-bat|tying-in-scoring|tying-on-base|go-ahead-on-deck|go-ahead-on-first|go-ahead-on-second|go-ahead-on-third|go-ahead-at-bat|go-ahead-in-scoring|go-ahead-on-base|go-ahead-or-tying-on-deck|go-ahead-or-tying-on-first|go-ahead-or-tying-on-second|go-ahead-or-tying-on-third|go-ahead-or-tying-at-bat|go-ahead-or-tying-in-scoring|go-ahead-or-tying-on-base|bottom-inning-entered|top-inning-entered|bottom-inning|top-inning|full-count|man-on-first|man-on-second|man-on-third|bases-loaded|after-swinging-on-strikes:[\w-]+|after-swinging-on-balls:[\w-]+|swinging-on-strikes:[\w-]+|swinging-on-balls:[\w-]+|after-strikes:[\w-]+|after-balls:[\w-]+|strikes:[\w-]+|balls:[\w-]+|ending-outs:[\w-]+|play-outs:[\w-]+|outs-remaining-entered:[\w-]+|outs-remaining:[\w-]+|outs:[\w-]+|runs:[\w-]+|rbis:[\w-]+|number-drove-in:[\w-]+|pitch-speed:[\S-]+|pitch-zone:[\w-]+|pitch-spin:[\S-]+|exit-velocity:[\S-]+|hit-distance:[\S-]+|launch-angle:[\S-]+|inning:[\S-]+|inning-reversed:[\S-]+|scheduled-inning-reversed:[\S-]+|pitching-against-batting-order:[\w-]+|count:[\S-]+|final-score:[\S-]+|previous-score:[\S-]+|upcoming-score:[\S-]+|ending-score:[\S-]+|score:[\S-]+|after-count:[\S-]+|after-swinging-on-count:[\S-]+|swinging-on-count:[\S-]+|temperature:[\w-]+|new-moon|waning-crescent|third-quarter|waning-gibbous|full-moon|waxing-gibbous|first-quarter|waxing-crescent|grass|artificial|rain|cloudy|partly-cloudy|overcast|drizzle|sunny|dome|roof-closed|clear|previous-team-score:[\w-]+|previous-opponent-score:[\w-]+|previous-score-margin:[\S-]+|previous-score-difference:[\S-]+|upcoming-team-score:[\w-]+|upcoming-opponent-score:[\w-]+|upcoming-score-margin:[\S-]+|upcoming-score-difference:[\S-]+|series-team-wins:[\w-]+|series-opponent-wins:[\w-]+|series-score-margin:[\w-]+|series-score-difference:[\w-]+|series-score:[\w-]+|calendar-years?:[\w-]+|years?:[\w-]+|batting-order(?:-pos(?:ition)?|-spot)?:[\w-]+|opponent-runs?-rank:[\S-]+|current-team-wins:[\w-]+|current-team-losses:[\w-]+|current-team-games-over-500:[\S-]+|current-opponent-wins:[\w-]+|current-opponent-losses:[\w-]+|current-opponent-games-over-500:[\S-]+|attendance:[\w-]+|team-wins:[\w-]+|team-losses:[\w-]+|team-games-over-500:[\S-]+|opponent-wins:[\w-]+|opponent-losses:[\w-]+|opponent-games-over-500:[\S-]+|opponent-standings-rank:[\S-]+|opponent-runs?-allowed-rank:[\S-]+|opponent-wrc\\\+-rank:[\S-]+|opponent-avg-rank:[\S-]+|opponent-slg-rank:[\S-]+|opponent-obp-rank:[\S-]+|opponent-ops-rank:[\S-]+|opponent-era--rank:[\S-]+|opponent-era-rank:[\S-]+|current-opponent-win(?:ning)?-percent:[\S-]+|opponent-win(?:ning)?-percent:[\S-]+|team-runs?-rank:[\S-]+|team-standings-rank:[\S-]+|team-runs?-allowed-rank:[\S-]+|team-wrc\\\+-rank:[\S-]+|team-avg-rank:[\S-]+|team-slg-rank:[\S-]+|team-obp-rank:[\S-]+|team-ops-rank:[\S-]+|team-era--rank:[\S-]+|team-era-rank:[\S-]+|current-team-win(?:ning)?-percent:[\S-]+|team-win(?:ning)?-percent:[\S-]+|birthda(?:y|te)|day|night(?:time)?|evening|late|pitching|batting|hitting|" + all_months_re + r"|" + all_days_re + r'|' + all_event_types_re + r")(?!\S+)", time_frame)
                         for m in last_match:
                             qualifier_obj = {}
                             
@@ -10597,6 +10681,67 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 
                                 qualifier_obj["values"]["start_val"] = qualifier_obj["values"]["start_val"].replace(microsecond=0)
                                 qualifier_obj["values"]["end_val"] = qualifier_obj["values"]["end_val"].replace(microsecond=0)
+                            elif qualifier.startswith("local-event-datetime:") or qualifier.startswith("local-event-date-time:") or qualifier.startswith("team-event-datetime:") or qualifier.startswith("team-event-date-time:") or qualifier.startswith("opponent-event-datetime:") or qualifier.startswith("opponent-event-date-time:"):
+                                if qualifier_str.startswith("local-event-datetime:"):
+                                    qual_str = "local-event-datetime:"
+                                    qual_type = "Local Event DateTime"
+                                    extra_stats.add("current-stats")
+                                elif qualifier_str.startswith("local-event-date-time:"):
+                                    qual_str = "local-event-date-time:"
+                                    qual_type = "Local Event DateTime"
+                                    extra_stats.add("current-stats")
+                                elif qualifier_str.startswith("team-event-datetime:"):
+                                    qual_str = "team-event-datetime:"
+                                    qual_type = "Team Event DateTime"
+                                    extra_stats.add("current-stats")
+                                elif qualifier_str.startswith("team-event-date-time:"):
+                                    qual_str = "team-event-date-time:"
+                                    qual_type = "Team Event DateTime"
+                                    extra_stats.add("current-stats")
+                                elif qualifier_str.startswith("opponent-event-datetime:"):
+                                    qual_str = "opponent-event-datetime:"
+                                    qual_type = "Opponent Event DateTime"
+                                    extra_stats.add("current-stats")
+                                elif qualifier_str.startswith("opponent-event-date-time:"):
+                                    qual_str = "opponent-event-date-time:"
+                                    qual_type = "Opponent Event DateTime"
+                                    extra_stats.add("current-stats")
+
+                                split_vals = re.split(r"(?<!\\)-", re.split(r"(?<!\\)" + qual_str, qualifier_str)[1])
+                                if len(split_vals) == 1:
+                                    the_date = dateutil.parser.parse(split_vals[0]).time()
+                                    the_date_2 = dateutil.parser.parse(split_vals[0]).time()
+                                    if split_vals[0].count(":") == 0:
+                                        the_date_2 = the_date_2.replace(minute=59).replace(second=59)
+                                    elif split_vals[0].count(":") == 1:
+                                        the_date_2 = the_date_2.replace(second=59)
+                                    qualifier_obj["values"] = {
+                                        "start_val" : the_date,
+                                        "end_val" : the_date_2
+                                    }
+                                else:
+                                    start_date = None
+                                    end_date = None
+                                    if split_vals[0] == "min" and split_vals[1] == "max":
+                                        start_date = datetime.datetime.min
+                                        end_date = datetime.datetime.now()
+                                    elif split_vals[0] == "min":
+                                        start_date = datetime.datetime.min
+                                        end_date = dateutil.parser.parse(split_vals[1].upper())
+                                    elif split_vals[1] == "max":
+                                        start_date = dateutil.parser.parse(split_vals[0].upper())
+                                        end_date = datetime.datetime.now()
+                                    else:
+                                        start_date = dateutil.parser.parse(split_vals[0].upper())
+                                        end_date = dateutil.parser.parse(split_vals[1].upper())
+
+                                    qualifier_obj["values"] = {
+                                        "start_val" : start_date,
+                                        "end_val" : end_date
+                                    }
+                                
+                                qualifier_obj["values"]["start_val"] = qualifier_obj["values"]["start_val"].replace(microsecond=0).replace(tzinfo=None)
+                                qualifier_obj["values"]["end_val"] = qualifier_obj["values"]["end_val"].replace(microsecond=0).replace(tzinfo=None)
                             elif re.match(all_event_types_re, qualifier):
                                 qualifier_obj["values"] = re.split(r"(?<!\\)\;", qualifier_str)
                                 qual_type = "Exact Event Type"
@@ -11833,7 +11978,71 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                             qualifiers[qual_type_to_use].append(qualifier_obj)
 
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(last_match.group(0), "", 1)).strip()
+
+                        last_matches = re.finditer(r"(no(?:t|n)?(?: |-))?(first|1st|last|this|past)? ?(\S*)? ?((?:exact(?: |-)days?|exact(?: |-)weeks?|exact(?: |-)months?|exact(?: |-)years?|(?:exact(?: |-))?hours?)|(?:exact(?: |-))?minutes?|(?:exact(?: |-))?seconds?)", time_frame)
+                        for last_match in last_matches:
+                            compare_type = last_match.group(2)
+                            if not compare_type:
+                                compare_type = "last"
+
+                            if compare_type == "1st":
+                                compare_type = "first"
+
+                            qual_type = "Event DateTime"
+
+                            unit = last_match.group(4)
+                            time_unit = last_match.group(3)
+                            if not time_unit:
+                                time_unit = 1
+                            else:
+                                time_unit = ordinal_to_number(time_unit)
+
+                            extra_stats.add("current-stats")
+
+                            days = 0
+                            weeks = 0
+                            months = 0
+                            years = 0
+                            hours = 0
+                            minutes = 0
+                            seconds = 0
+
+                            if "week" in unit:
+                                weeks = time_unit
+                            elif "month" in unit:
+                                months = time_unit
+                            elif "year" in unit:
+                                years = time_unit
+                            elif "day" in unit:
+                                days = time_unit
+                            elif "hour" in unit:
+                                hours = time_unit
+                            elif "minute" in unit:
+                                minutes = time_unit
+                            else:
+                                seconds = time_unit
+
+                            if compare_type == "first":
+                                time_start = datetime.datetime.min.replace(microsecond=0)
+                                time_end = dateutil.relativedelta.relativedelta(years=years, months=months, weeks=weeks, days=days, hours=hours, minutes=minutes, seconds=seconds)
+                            else:
+                                time_end = datetime.datetime.today().replace(microsecond=0)
+                                time_start = (time_end - dateutil.relativedelta.relativedelta(years=years, months=months, weeks=weeks, days=days, hours=hours, minutes=minutes, seconds=seconds)).replace(microsecond=0)
+
+                            qualifier_obj = {}
+                            qualifier_obj["negate"] = bool(last_match.group(1))
+                            qualifier_obj["values"] = {
+                                "start_val" : time_start,
+                                "end_val" : time_end,
+                                "time_zone" : str(get_localzone())
+                            }
+
+                            if not qual_type in qualifiers:
+                                qualifiers[qual_type] = []
+                            qualifiers[qual_type].append(qualifier_obj)
                             
+                            time_frame = re.sub(r"\s+", " ", time_frame.replace(last_match.group(0), "", 1)).strip()
+                    
                         last_matches = list(re.finditer(r"(no(?:t|n)?(?: |-))?(first|1st|last|this|past)? ?(\S*)? ?(?:season(?:[- ]))?(games?)", time_frame))
                         sub_last_match = re.search(r"(no(?:t|n)?(?: |-))?(first|1st|last|this|past)? ?(\S*)? ?((?:(?:calendar|date)(?: |-))?days?|(?:(?:calendar|date)(?: |-))?weeks?|(?:(?:calendar|date)(?: |-))?months?|(?:(?:calendar|date)(?: |-))?years?|seasons?)( ([\w-]+)( reversed?)?)?", time_frame)
                         if ("Start" in qualifiers or not playoffs_set) and (not sub_last_match or sub_last_match.group(3).endswith("to") or sub_last_match.group(3).endswith("yester")):
@@ -15860,6 +16069,29 @@ def determine_raw_str(subbb_frame):
                         qual_str += start_time.strftime("%I:%M:%S%p")
                     else:
                         qual_str += start_time.strftime("%I:%M:%S%p") + " to " + end_time.strftime("%I:%M:%S%p")
+                elif qualifier == "Event DateTime":
+                    if qual_obj["negate"]:
+                        qual_str += "Not "
+
+                    start_time = datetime.datetime.now().replace(year=qual_obj["values"]["start_val"].year).replace(month=qual_obj["values"]["start_val"].month).replace(day=qual_obj["values"]["start_val"].day).replace(hour=qual_obj["values"]["start_val"].hour).replace(minute=qual_obj["values"]["start_val"].minute).replace(second=qual_obj["values"]["start_val"].second)
+                    end_time = datetime.datetime.now().replace(year=qual_obj["values"]["end_val"].year).replace(month=qual_obj["values"]["end_val"].month).replace(day=qual_obj["values"]["end_val"].day).replace(hour=qual_obj["values"]["end_val"].hour).replace(minute=qual_obj["values"]["end_val"].minute).replace(second=qual_obj["values"]["end_val"].second)
+
+                    if start_time == end_time:
+                        qual_str += start_time.strftime("%Y-%m-%d %I:%M:%S%p")
+                    else:
+                        qual_str += start_time.strftime("%Y-%m-%d %I:%M:%S%p") + " to " + end_time.strftime("%Y-%m-%d %I:%M:%S%p")
+                    qual_str += " " + qual_obj["values"]["time_zone"]
+                elif qualifier == "Local Event Time" or qualifier == "Team Event Time" or qualifier == "Opponent Event Time":
+                    if qual_obj["negate"]:
+                        qual_str += "Not "
+
+                    start_time = qual_obj["values"]["start_val"]
+                    end_time = qual_obj["values"]["end_val"]
+
+                    if start_time == end_time:
+                        qual_str += start_time.strftime("%Y-%m-%d %I:%M:%S%p")
+                    else:
+                        qual_str += start_time.strftime("%Y-%m-%d %I:%M:%S%p") + " to " + end_time.strftime("%Y-%m-%d %I:%M:%S%p")
                 elif qualifier == "Age" or qualifier == "Season Age":
                     if qual_obj["negate"]:
                         qual_str += "Not "
@@ -30580,11 +30812,102 @@ def perform_sub_mlb_inning_qualifiers(row, player_data, qualifiers, player_game_
     
     return overall_has_match, raw_row_data
 
+def perform_sub_game_quals(qualifiers, player_game_info, row):
+    if "Event DateTime" in qualifiers:
+        start_event_time = player_game_info["start_event_time"]
+        end_event_time = player_game_info["end_event_time"]
+        if not start_event_time or not end_event_time:
+            return
+
+        for qual_object in qualifiers["Event DateTime"]:
+            if not qual_object["negate"]:
+                stat_val = qual_object["values"]["start_val"].astimezone(pytz.timezone(qual_object["values"]["time_zone"])).replace(microsecond=0)
+                end_val = qual_object["values"]["end_val"].astimezone(pytz.timezone(qual_object["values"]["time_zone"])).replace(microsecond=0)
+                start_event_time = start_event_time.astimezone(pytz.timezone(qual_object["values"]["time_zone"])).replace(microsecond=0)
+                end_event_time = end_event_time.astimezone(pytz.timezone(qual_object["values"]["time_zone"])).replace(microsecond=0)
+                is_match = (stat_val <= end_event_time) and (start_event_time <= end_val)
+
+                if not is_match:
+                    return False
+
+    if "Team Event DateTime" in qualifiers:
+        start_event_time = player_game_info["start_event_time"]
+        end_event_time = player_game_info["end_event_time"]
+        if not start_event_time or not end_event_time:
+            return
+
+        venue_obj = determine_venue_obj(row, True)
+        if not venue_obj:
+            return False
+
+        val_to_check = venue_obj["time_zone"]
+
+        start_event_time = start_event_time.astimezone(pytz.timezone(val_to_check)).replace(microsecond=0)
+        end_event_time = end_event_time.astimezone(pytz.timezone(val_to_check)).replace(microsecond=0)
+        for qual_object in qualifiers["Team Event DateTime"]:
+            if not qual_object["negate"]:
+                stat_val = qual_object["values"]["start_val"].astimezone(pytz.timezone(val_to_check)).replace(microsecond=0)
+                end_val = qual_object["values"]["end_val"].astimezone(pytz.timezone(val_to_check)).replace(microsecond=0)
+                is_match = (stat_val <= end_event_time) and (start_event_time <= end_val)
+
+                if not is_match:
+                    return False
+    
+    if "Opponent Event DateTime" in qualifiers:
+        start_event_time = player_game_info["start_event_time"]
+        end_event_time = player_game_info["end_event_time"]
+        if not start_event_time or not end_event_time:
+            return
+
+        venue_obj = determine_venue_obj(row, False)
+        if not venue_obj:
+            return False
+
+        val_to_check = venue_obj["time_zone"]
+
+        start_event_time = start_event_time.astimezone(pytz.timezone(val_to_check)).replace(microsecond=0)
+        end_event_time = end_event_time.astimezone(pytz.timezone(val_to_check)).replace(microsecond=0)
+        for qual_object in qualifiers["Opponent Event DateTime"]:
+            if not qual_object["negate"]:
+                stat_val = qual_object["values"]["start_val"].astimezone(pytz.timezone(val_to_check)).replace(microsecond=0)
+                end_val = qual_object["values"]["end_val"].astimezone(pytz.timezone(val_to_check)).replace(microsecond=0)
+                is_match = (stat_val <= end_event_time) and (start_event_time <= end_val)
+
+                if not is_match:
+                    return False
+    
+    if "Local Event DateTime" in qualifiers:
+        start_event_time = player_game_info["start_event_time"]
+        end_event_time = player_game_info["end_event_time"]
+        if not start_event_time or not end_event_time:
+            return
+        if "StadiumID" not in row or row["StadiumID"] == None:
+            return False
+
+        venue_obj = team_venues[str(row["StadiumID"])]
+        val_to_check = venue_obj["time_zone"]
+
+        start_event_time = start_event_time.astimezone(pytz.timezone(val_to_check)).replace(microsecond=0)
+        end_event_time = end_event_time.astimezone(pytz.timezone(val_to_check)).replace(microsecond=0)
+        for qual_object in qualifiers["Local Event DateTime"]:
+            if not qual_object["negate"]:
+                stat_val = qual_object["values"]["start_val"].astimezone(pytz.timezone(val_to_check)).replace(microsecond=0)
+                end_val = qual_object["values"]["end_val"].astimezone(pytz.timezone(val_to_check)).replace(microsecond=0)
+                is_match = (stat_val <= end_event_time) and (start_event_time <= end_val)
+                    
+                if not is_match:
+                    return False
+    
+    return True
+
 def perform_sub_mlb_game_qualifiers(row, player_data, qualifiers, player_game_info, player_type, do_clear):
     if do_clear:
         clear_data(row)
 
     if not player_game_info or player_game_info["missing_data"]:
+        return False, row
+
+    if not perform_sub_game_quals(qualifiers, player_game_info, row):
         return False, row
 
     skip_run_events = False
@@ -33862,7 +34185,6 @@ def handle_da_mlb_quals(row, event_name, at_bat_event, qualifiers, player_data, 
                 if not is_match:
                     return False
     
-
     if "Team Event Time" in qualifiers:
         event_time = at_bat_event["event_time"]
         if not event_time:
@@ -33942,7 +34264,96 @@ def handle_da_mlb_quals(row, event_name, at_bat_event, qualifiers, player_data, 
             else:
                 if not is_match:
                     return False
+
+    if "Event DateTime" in qualifiers:
+        event_time = at_bat_event["event_time"]
+        if not event_time:
+            return
+
+        for qual_object in qualifiers["Event DateTime"]:
+            stat_val = qual_object["values"]["start_val"].astimezone(pytz.timezone(qual_object["values"]["time_zone"])).replace(microsecond=0)
+            end_val = qual_object["values"]["end_val"].astimezone(pytz.timezone(qual_object["values"]["time_zone"])).replace(microsecond=0)
+            event_time = event_time.astimezone(pytz.timezone(qual_object["values"]["time_zone"])).replace(microsecond=0)
+            is_match = event_time >= stat_val and event_time <= end_val
+
+            if qual_object["negate"]:
+                if is_match:
+                    return False
+            else:
+                if not is_match:
+                    return False
+
+    if "Team Event DateTime" in qualifiers:
+        event_time = at_bat_event["event_time"]
+        if not event_time:
+            return
+
+        venue_obj = determine_venue_obj(row, True)
+        if not venue_obj:
+            return False
+
+        val_to_check = venue_obj["time_zone"]
+
+        event_time = event_time.astimezone(pytz.timezone(val_to_check)).replace(microsecond=0)
+        for qual_object in qualifiers["Team Event DateTime"]:
+            stat_val = qual_object["values"]["start_val"].astimezone(pytz.timezone(val_to_check)).replace(microsecond=0)
+            end_val = qual_object["values"]["end_val"].astimezone(pytz.timezone(val_to_check)).replace(microsecond=0)
+            is_match = event_time >= stat_val and event_time <= end_val
+
+            if qual_object["negate"]:
+                if is_match:
+                    return False
+            else:
+                if not is_match:
+                    return False
     
+    if "Opponent Event DateTime" in qualifiers:
+        event_time = at_bat_event["event_time"]
+        if not event_time:
+            return
+
+        venue_obj = determine_venue_obj(row, False)
+        if not venue_obj:
+            return False
+
+        val_to_check = venue_obj["time_zone"]
+
+        event_time = event_time.astimezone(pytz.timezone(val_to_check)).replace(microsecond=0)
+        for qual_object in qualifiers["Opponent Event DateTime"]:
+            stat_val = qual_object["values"]["start_val"].astimezone(pytz.timezone(val_to_check)).replace(microsecond=0)
+            end_val = qual_object["values"]["end_val"].astimezone(pytz.timezone(val_to_check)).replace(microsecond=0)
+            is_match = event_time >= stat_val and event_time <= end_val
+
+            if qual_object["negate"]:
+                if is_match:
+                    return False
+            else:
+                if not is_match:
+                    return False
+    
+    if "Local Event DateTime" in qualifiers:
+        event_time = at_bat_event["event_time"]
+        if not event_time:
+            return
+        if "StadiumID" not in row or row["StadiumID"] == None:
+            return False
+
+        venue_obj = team_venues[str(row["StadiumID"])]
+        val_to_check = venue_obj["time_zone"]
+
+        event_time = event_time.astimezone(pytz.timezone(val_to_check)).replace(microsecond=0)
+        for qual_object in qualifiers["Local Event DateTime"]:
+            stat_val = qual_object["values"]["start_val"].astimezone(pytz.timezone(val_to_check)).replace(microsecond=0)
+            end_val = qual_object["values"]["end_val"].astimezone(pytz.timezone(val_to_check)).replace(microsecond=0)
+            is_match = event_time >= stat_val and event_time <= end_val
+                
+            if qual_object["negate"]:
+                if is_match:
+                    return False
+            else:
+                if not is_match:
+                    return False
+
     if "Event Type" in qualifiers:
         event_type = at_bat_event["event_type"] if "event_type" in at_bat_event else at_bat_event["result"]
         if not event_type:
@@ -37787,6 +38198,8 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
         "pitching_events" : [],
         "pitching_run_events" : [],
         "pitch_event_to_run_event" : {},
+        "start_event_time" : None,
+        "end_event_time" : None,
         "RS" : None,
         "BQS" : None,
         "IR" : None,
@@ -38315,6 +38728,7 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
                         if not is_team_batting:
                             first_play_team = index
 
+        all_times = set()
         for index, scoring_play in enumerate(sub_data["liveData"]["plays"]["allPlays"]):
             starting_tm_position_map = team_position_map.copy()
             starting_opp_position_map = opp_position_map.copy()
@@ -38324,6 +38738,10 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
             before_first_pitch = True
             post_play_events = []
             for play in scoring_play["playEvents"]:
+                if not ("eventType" in play["details"] and play["details"]["eventType"] == "game_advisory") and "endTime" in play and play["endTime"]:
+                    end_time = dateutil.parser.parse(play["endTime"])
+                    all_times.add(end_time)
+
                 if "isSubstitution" in play and play["isSubstitution"]:
                     if "postPlay" in play and play["postPlay"]:
                         post_play_events.append(play)
@@ -39221,6 +39639,8 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
             if "endTime" in scoring_play["about"] and scoring_play["about"]["endTime"]:
                 end_time = dateutil.parser.parse(scoring_play["about"]["endTime"])
 
+            all_times.add(end_time)
+
             event_obj = {
                 "batter" : batter,
                 "pitcher" : pitcher,
@@ -40015,6 +40435,8 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
                 if "endTime" in sub_play and sub_play["endTime"]:
                     sub_end_time = dateutil.parser.parse(sub_play["endTime"])
 
+                all_times.add(end_time)
+
                 sub_event_obj = {
                     "batter" : batter,
                     "pitcher" : pitcher,
@@ -40398,6 +40820,11 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
             
             if index == len(all_events) - 1:
                 game_data["final_team_position_map"] = all_event["team_position_map"]
+
+        
+        if all_times:
+            game_data["start_event_time"] = min(all_times)
+            game_data["end_event_time"] = max(all_times)
         
     return game_data, row_data, row_index, missing_games, missing_pitch
 
