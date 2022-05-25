@@ -15201,7 +15201,7 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
                 player_data["stat_values"]["Raw Quals"] +=  " [Missing Games: " + " + ".join(player_data["stat_values"]["any_missing_games"]) + "]"
             else:
                 player_data["stat_values"]["Raw Quals"] +=  " [No Missing Games!]"
-        elif "missing-game-count" in extra_stats:
+        elif "missing-game-count" in extra_stats or player_data["stat_values"]["any_missing_games"]:
             if player_data["stat_values"]["any_missing_games"]:
                 player_data["stat_values"]["Raw Quals"] +=  " [" + str(len(player_data["stat_values"]["any_missing_games"])) + " Missing Game(s)]"
             else:
@@ -15216,7 +15216,7 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
                 player_data["stat_values"]["Raw Quals"] +=  " [Missing Pitch Games: " + " + ".join(player_data["stat_values"]["any_missing_pitch"]) + "]"
             else:
                 player_data["stat_values"]["Raw Quals"] +=  " [No Missing Pitch Games!]"
-        elif "missing-pitch-count" in extra_stats:
+        elif "missing-pitch-count" in extra_stats or (player_data["stat_values"]["any_missing_pitch"] and "show-stat-pit" in extra_stats):
             if player_data["stat_values"]["any_missing_pitch"]:
                 player_data["stat_values"]["Raw Quals"] +=  " [" + str(len(player_data["stat_values"]["any_missing_pitch"])) + " Missing Pitch Game(s)]"
             else:

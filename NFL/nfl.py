@@ -7276,6 +7276,9 @@ def combine_player_datas(player_datas, player_type, any_missing_games, time_fram
                 player_data["stat_values"]["Shared"]["Raw Quals"] += " [Seasons In Top " + str(seasons_leading_end) + "]"
             else:
                 player_data["stat_values"]["Shared"]["Raw Quals"] +=  " [Seasons In Top " + str(seasons_leading_start) + "-" + str(seasons_leading_end) + "]"
+        
+        if player_data["stat_values"]["Shared"]["any_missing_games"]:
+            player_data["stat_values"]["Shared"]["Raw Quals"] +=  " [Missing Game(s)]"
     
     player_data["stat_values"]["Shared"]["Raw Quals"] = player_data["stat_values"]["Shared"]["Raw Quals"].strip()
 

@@ -15351,7 +15351,7 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
                 player_data["stat_values"]["Raw Quals"] +=  " [Missing Games: " + " + ".join(player_data["stat_values"]["any_missing_games"]) + "]"
             else:
                 player_data["stat_values"]["Raw Quals"] +=  " [No Missing Games!]"
-        elif "missing-game-count" in extra_stats:
+        elif "missing-game-count" in extra_stats or player_data["stat_values"]["any_missing_games"]:
             if player_data["stat_values"]["any_missing_games"]:
                 player_data["stat_values"]["Raw Quals"] +=  " [" + str(len(player_data["stat_values"]["any_missing_games"])) + " Missing Game(s)]"
             else:
@@ -15366,7 +15366,7 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
                 player_data["stat_values"]["Raw Quals"] +=  " [Missing TOI Games: " + " + ".join(player_data["stat_values"]["any_missing_toi"]) + "]"
             else:
                 player_data["stat_values"]["Raw Quals"] +=  " [No Missing TOI Games!]"
-        elif "missing-toi-count" in extra_stats:
+        elif "missing-toi-count" in extra_stats or player_data["stat_values"]["any_missing_toi"]:
             if player_data["stat_values"]["any_missing_toi"]:
                 player_data["stat_values"]["Raw Quals"] +=  " [" + str(len(player_data["stat_values"]["any_missing_toi"])) + " Missing TOI Game(s)]"
             else:
