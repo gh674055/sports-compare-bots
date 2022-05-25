@@ -1374,16 +1374,6 @@ headers = {
                 "game" : 2009
             }
         },
-        "SF/60M" : {
-            "positive" : True,
-            "type" : "Advanced",
-            "display" : False,
-            "round" : 2,
-            "valid_since" : {
-                "season" : 2009,
-                "game" : 2009
-            }
-        },
         "oiTmS" : {
             "positive" : True,
             "display" : False,
@@ -1399,6 +1389,16 @@ headers = {
             "display" : False,
             "type" : "Advanced",
             "display-value" :  "SA",
+            "valid_since" : {
+                "season" : 2009,
+                "game" : 2009
+            }
+        },
+        "SF/60M" : {
+            "positive" : True,
+            "type" : "Advanced",
+            "display" : False,
+            "round" : 2,
             "valid_since" : {
                 "season" : 2009,
                 "game" : 2009
