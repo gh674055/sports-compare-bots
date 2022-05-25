@@ -5553,12 +5553,6 @@ headers = {
                 "game" : 1955
             }
         },
-        "GA/60M": {
-            "positive" : False,
-            "display" : False,
-            "display-value" : "GA/60",
-            "round" : 2
-        },
         "GSAA/60M" : {
             "positive" : True,
             "display-value" : "GSAA/60",
@@ -5612,11 +5606,11 @@ headers = {
                 "game" : 2016
             }
         },
-        "GAPer60" : {
+        "xEVGAPer60" : {
             "positive" : False,
             "type" : "Advanced",
             "display" : False,
-            "display-value" : "GA/60",
+            "display-value" : "xEVGA/60",
             "round" : 2,
             "valid_since" : {
                 "season" : 2016,
@@ -6369,7 +6363,6 @@ formulas = {
         "W/L%" : "W / (W + L + OTL)",
         "ROW/L%" : "ROW / (ROW + ROL)",
         "SA/GP" : "SA / GP",
-        "GA/60M" : "GA / (TOI / 3600)",
         "SA/60M" : "SA / (TOI / 3600)",
         "SV/60M" : "SV / (TOI / 3600)",
         "SV/GP" : "SV / GP",
@@ -6392,7 +6385,7 @@ formulas = {
         "scSH" :  "scSA / xEVSH",
         "HDscSH" : "HDscSA / xEVSH",
         "xGAPer60" : "xGA / (xEVTOI / 3600)",
-        "GAPer60" : "xEVGA / (xEVTOI / 3600)",
+        "xEVGAPer60" : "xEVGA / (xEVTOI / 3600)",
         "EVGSAx" : "xGA - xEVGA",
         "EVGSAx/GP" : "EVGSAx / GP",
         "EVGSAx/60" : "EVGSAx / (xEVTOI / 3600)",
@@ -40452,7 +40445,7 @@ def handle_table_data(player_data, player_type, over_header, header, highest_val
                 if not (has_season_stats and has_non_playoffs) or not has_any_xg:
                     return "N/A"
         else:
-            if "type" in headers[player_type["da_type"]["type"]][header] and headers[player_type["da_type"]["type"]][header]["type"] == "Advanced" and (header.startswith("sc") or header.startswith("HDsc") or "xG" in header or "xEV" in header or header == "GAPer60" or "Ax" in header):
+            if "type" in headers[player_type["da_type"]["type"]][header] and headers[player_type["da_type"]["type"]][header]["type"] == "Advanced" and (header.startswith("sc") or header.startswith("HDsc") or "xG" in header or "xEV" in header or "Ax" in header):
                 if not (has_season_stats and has_non_playoffs):
                     return "N/A"
         
@@ -40806,7 +40799,7 @@ def is_invalid_stat(stat, player_type, data, count_inconsistent, player_data, co
             report_stats = []
             shot_on_stats = []
             shot_on_on_stats = ["SH", "SA", "SV", "EVSH", "PPSH", "SHSH", "EVSV", "PPSV", "SHSV", "SVEvenStrength", "SVPowerPlay", "SVShorthanded", "SV%", "GA%-", "SH/60M", "SV/60M", "SA/60M", "SH/GP", "SV/GP", "SA/GP"]
-            game_report_stats = ["GF", "GFA", "GAA", "AdjGAA", "GA/60M", "GF/60M"]
+            game_report_stats = ["GF", "GFA", "GAA", "AdjGAA", "GF/60M"]
             on_ice_stats = ["GF", "GFA", "GF/60M"]
             header_indv_shift_stats = goalie_header_indv_shift_stats
 
