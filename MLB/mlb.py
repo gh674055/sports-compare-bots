@@ -36177,8 +36177,16 @@ def get_mlb_game_stats_single_thread(all_rows, has_count_stat, qualifiers, games
     starting_event_start_stats_needed = {}
     starting_event_reversed_stats_needed = {}
     starting_event_start_reversed_stats_needed = {}
-    if "Event Stat" in qualifiers:
-        for qual_obj in qualifiers["Event Stat"]:
+
+    event_stats_negate = False
+    event_stats_reversed_negate = False
+    starting_event_stat_negate = False
+    starting_event_stat_reversed_negate = False
+
+    if "Event Stat" in time_frame["qualifiers"]:
+        for qual_obj in time_frame["qualifiers"]["Event Stat"]:
+            if qual_obj["negate"]:
+                event_stats_negate = True
             if qual_obj["stat"] not in event_stats_needed:
                 event_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
             if qual_obj["values"]["end_val"] < event_stats_needed[qual_obj["stat"]]:
@@ -36187,8 +36195,10 @@ def get_mlb_game_stats_single_thread(all_rows, has_count_stat, qualifiers, games
                 event_start_stats_needed[qual_obj["stat"]] = qual_obj["values"]["start_val"]
             if qual_obj["values"]["start_val"] > event_start_stats_needed[qual_obj["stat"]]:
                 event_start_stats_needed[qual_obj["stat"]] = qual_obj["values"]["start_val"]
-    if "Event Stat Reversed" in qualifiers:
-        for qual_obj in qualifiers["Event Stat Reversed"]:
+    if "Event Stat Reversed" in time_frame["qualifiers"]:
+        for qual_obj in time_frame["qualifiers"]["Event Stat Reversed"]:
+            if qual_obj["negate"]:
+                event_stats_reversed_negate = True
             if qual_obj["stat"] not in event_reversed_stats_needed:
                 event_reversed_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
             if qual_obj["values"]["end_val"] < event_reversed_stats_needed[qual_obj["stat"]]:
@@ -36197,27 +36207,45 @@ def get_mlb_game_stats_single_thread(all_rows, has_count_stat, qualifiers, games
                 event_start_reversed_stats_needed[qual_obj["stat"]] = qual_obj["values"]["start_val"]
             if qual_obj["values"]["start_val"] > event_start_reversed_stats_needed[qual_obj["stat"]]:
                 event_start_reversed_stats_needed[qual_obj["stat"]] = qual_obj["values"]["start_val"]
-    if "Starting Event Stat" in qualifiers:
-        for qual_obj in qualifiers["Starting Event Stat"]:
-            if qual_obj["stat"] not in event_stats_needed:
-                event_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
-            if qual_obj["values"]["end_val"] < event_stats_needed[qual_obj["stat"]]:
-                event_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
+    if "Starting Event Stat" in time_frame["qualifiers"]:
+        for qual_obj in time_frame["qualifiers"]["Starting Event Stat"]:
+            if qual_obj["negate"]:
+                starting_event_stat_negate = True
+            if qual_obj["stat"] not in starting_event_stats_needed:
+                starting_event_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
+            if qual_obj["values"]["end_val"] < starting_event_stats_needed[qual_obj["stat"]]:
+                starting_event_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
             if qual_obj["stat"] not in starting_event_start_stats_needed:
                 starting_event_start_stats_needed[qual_obj["stat"]] = qual_obj["values"]["start_val"]
             if qual_obj["values"]["start_val"] > starting_event_start_stats_needed[qual_obj["stat"]]:
                 starting_event_start_stats_needed[qual_obj["stat"]] = qual_obj["values"]["start_val"]
-    if "Starting Event Stat Reversed" in qualifiers:
-        for qual_obj in qualifiers["Starting Event Stat Reversed"]:
-            if qual_obj["stat"] not in event_reversed_stats_needed:
-                event_reversed_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
-            if qual_obj["values"]["end_val"] < event_reversed_stats_needed[qual_obj["stat"]]:
-                event_reversed_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
+    if "Starting Event Stat Reversed" in time_frame["qualifiers"]:
+        for qual_obj in time_frame["qualifiers"]["Starting Event Stat Reversed"]:
+            if qual_obj["negate"]:
+                starting_event_stat_reversed_negate = True
+            if qual_obj["stat"] not in starting_event_reversed_stats_needed:
+                starting_event_reversed_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
+            if qual_obj["values"]["end_val"] < starting_event_reversed_stats_needed[qual_obj["stat"]]:
+                starting_event_reversed_stats_needed[qual_obj["stat"]] = qual_obj["values"]["end_val"]
             if qual_obj["stat"] not in starting_event_start_reversed_stats_needed:
                 starting_event_start_reversed_stats_needed[qual_obj["stat"]] = qual_obj["values"]["start_val"]
             if qual_obj["values"]["start_val"] > starting_event_start_reversed_stats_needed[qual_obj["stat"]]:
                 starting_event_start_reversed_stats_needed[qual_obj["stat"]] = qual_obj["values"]["start_val"]
     stats_needed = set(list(event_stats_needed.keys()) + list(event_reversed_stats_needed.keys()) + list(starting_event_stats_needed.keys()) + list(starting_event_reversed_stats_needed.keys()))
+
+    og_stats_needed_length = len(stats_needed)
+    if "Event Stats" in time_frame["qualifiers"]:
+        for qual_obj in time_frame["qualifiers"]["Event Stats"]:
+            stats_needed.add(qual_obj["stat"])
+    if "Event Stats Reversed" in time_frame["qualifiers"]:
+        for qual_obj in time_frame["qualifiers"]["Event Stats Reversed"]:
+            stats_needed.add(qual_obj["stat"])
+    if "Starting Event Stats" in time_frame["qualifiers"]:
+        for qual_obj in time_frame["qualifiers"]["Starting Event Stats"]:
+            stats_needed.add(qual_obj["stat"])
+    if "Starting Event Stats Reversed" in time_frame["qualifiers"]:
+        for qual_obj in time_frame["qualifiers"]["Starting Event Stats Reversed"]:
+            stats_needed.add(qual_obj["stat"])
     
     saved_row_data = {}
     for stat in stats_needed:
@@ -36236,46 +36264,65 @@ def get_mlb_game_stats_single_thread(all_rows, has_count_stat, qualifiers, games
 
                 hit_end = False
                 hit_start = False
-                for stat in stats_needed:
-                    if stat in starting_event_stats_needed:
-                        saved_row_data["starting_career_stat_" + stat] = saved_row_data[stat]
-                        if saved_row_data[stat] >= starting_event_start_stats_needed[stat]:
-                            hit_start = True
-                        if saved_row_data[stat] >= starting_event_stats_needed[stat]:
-                            hit_end = True
-                    if stat in starting_event_reversed_stats_needed:
-                        saved_row_data["starting_career_stat_reversed_" + stat] = saved_row_data[stat]
-                        if saved_row_data[stat] >= starting_event_start_reversed_stats_needed[stat]:
-                            hit_start = True
-                        if saved_row_data[stat] >= starting_event_reversed_stats_needed[stat]:
-                            hit_end = True
+                if og_stats_needed_length:
+                    for stat in stats_needed:
+                        if stat in starting_event_stats_needed:
+                            saved_row_data["starting_career_stat_" + stat] = saved_row_data[stat]
+                            if starting_event_stat_negate:
+                                if (saved_row_data[stat] - raw_row_data[stat]) < starting_event_start_stats_needed[stat] or saved_row_data[stat] > starting_event_stats_needed[stat]:
+                                    hit_start = True
+                            else:
+                                if saved_row_data[stat] >= starting_event_start_stats_needed[stat]:
+                                    hit_start = True
+                                if saved_row_data[stat] >= starting_event_stats_needed[stat]:
+                                    hit_end = True
+                        if stat in starting_event_reversed_stats_needed:
+                            saved_row_data["starting_career_stat_reversed_" + stat] = saved_row_data[stat]
+                            if starting_event_stat_reversed_negate:
+                                if (saved_row_data[stat] - raw_row_data[stat]) < starting_event_start_reversed_stats_needed[stat] or saved_row_data[stat] > starting_event_reversed_stats_needed[stat]:
+                                    hit_start = True
+                            else:
+                                if saved_row_data[stat] >= starting_event_start_reversed_stats_needed[stat]:
+                                    hit_start = True
+                                if saved_row_data[stat] >= starting_event_reversed_stats_needed[stat]:
+                                    hit_end = True
 
-                    if stat == "IP":
-                        frac, whole = math.modf(raw_row_data["IP"])
-                        frac = round_value(frac, 1)
-                        innings_pitched_to_use = whole
-                        if frac == 0.3:
-                            innings_pitched_to_use += 1/3
-                        elif frac == 0.7:
-                            innings_pitched_to_use += 2/3
-                        elif frac == 1.0:
-                            innings_pitched_to_use += 1
-                        saved_row_data[stat] += innings_pitched_to_use
-                    else:
-                        saved_row_data[stat] += raw_row_data[stat]
-                
-                    if stat in event_stats_needed:
-                        saved_row_data["career_stat_" + stat] = saved_row_data[stat]
-                        if saved_row_data[stat] >= event_start_stats_needed[stat]:
-                            hit_start = True
-                        if saved_row_data[stat] >= event_stats_needed[stat]:
-                            hit_end = True
-                    if stat in event_reversed_stats_needed:
-                        saved_row_data["career_stat_reversed_" + stat] = saved_row_data[stat]
-                        if saved_row_data[stat] >= event_start_reversed_stats_needed[stat]:
-                            hit_start = True
-                        if saved_row_data[stat] >= event_reversed_stats_needed[stat]:
-                            hit_end = True
+                        if stat == "IP":
+                            frac, whole = math.modf(raw_row_data["IP"])
+                            frac = round_value(frac, 1)
+                            innings_pitched_to_use = whole
+                            if frac == 0.3:
+                                innings_pitched_to_use += 1/3
+                            elif frac == 0.7:
+                                innings_pitched_to_use += 2/3
+                            elif frac == 1.0:
+                                innings_pitched_to_use += 1
+                            saved_row_data[stat] += innings_pitched_to_use
+                        else:
+                            saved_row_data[stat] += raw_row_data[stat]
+                    
+                        if stat in event_stats_needed:
+                            saved_row_data["career_stat_" + stat] = saved_row_data[stat]
+                            if event_stats_negate:
+                                if (saved_row_data[stat] - raw_row_data[stat]) < event_start_stats_needed[stat] or saved_row_data[stat] > event_stats_needed[stat]:
+                                    hit_start = True
+                            else:
+                                if saved_row_data[stat] >= event_start_stats_needed[stat]:
+                                    hit_start = True
+                                if saved_row_data[stat] >= event_stats_needed[stat]:
+                                    hit_end = True
+                        if stat in event_reversed_stats_needed:
+                            saved_row_data["career_stat_reversed_" + stat] = saved_row_data[stat]
+                            if event_stats_reversed_negate:
+                                if (saved_row_data[stat] - raw_row_data[stat]) < event_start_reversed_stats_needed[stat] or saved_row_data[stat] > event_reversed_stats_needed[stat]:
+                                    hit_start = True
+                            else:
+                                if saved_row_data[stat] >= event_start_reversed_stats_needed[stat]:
+                                    hit_start = True
+                                if saved_row_data[stat] >= event_reversed_stats_needed[stat]:
+                                    hit_end = True
+                else:
+                    hit_start = True
                 
                 percent_complete = 100 * (count_info["count"] / count_info["total_count"])
                 if count_info["total_count"] >= 10 and percent_complete >= count_info["current_percent"]:
