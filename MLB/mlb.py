@@ -40298,6 +40298,7 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
                                 sub_men_on_base = int(sub_man_on_first) + int(sub_man_on_second) + int(sub_man_on_third)
 
                                 if play["postPlay"] == player_data["mlb_id"]:
+                                    inherited_runners += sub_men_on_base
                     elif play["details"]["eventType"] == "offensive_substitution":
                         pinch_hitter = play["postPlay"]
                         old_player = play["replacedPlayer"]["id"] if "replacedPlayer" in play else None
