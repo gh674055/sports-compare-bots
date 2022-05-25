@@ -36183,8 +36183,8 @@ def get_mlb_game_stats_single_thread(all_rows, has_count_stat, qualifiers, games
     starting_event_stat_negate = False
     starting_event_stat_reversed_negate = False
 
-    if "Event Stat" in time_frame["qualifiers"]:
-        for qual_obj in time_frame["qualifiers"]["Event Stat"]:
+    if "Event Stat" in qualifiers:
+        for qual_obj in qualifiers["Event Stat"]:
             if qual_obj["negate"]:
                 event_stats_negate = True
             if qual_obj["stat"] not in event_stats_needed:
@@ -36195,8 +36195,8 @@ def get_mlb_game_stats_single_thread(all_rows, has_count_stat, qualifiers, games
                 event_start_stats_needed[qual_obj["stat"]] = qual_obj["values"]["start_val"]
             if qual_obj["values"]["start_val"] > event_start_stats_needed[qual_obj["stat"]]:
                 event_start_stats_needed[qual_obj["stat"]] = qual_obj["values"]["start_val"]
-    if "Event Stat Reversed" in time_frame["qualifiers"]:
-        for qual_obj in time_frame["qualifiers"]["Event Stat Reversed"]:
+    if "Event Stat Reversed" in qualifiers:
+        for qual_obj in qualifiers["Event Stat Reversed"]:
             if qual_obj["negate"]:
                 event_stats_reversed_negate = True
             if qual_obj["stat"] not in event_reversed_stats_needed:
@@ -36207,8 +36207,8 @@ def get_mlb_game_stats_single_thread(all_rows, has_count_stat, qualifiers, games
                 event_start_reversed_stats_needed[qual_obj["stat"]] = qual_obj["values"]["start_val"]
             if qual_obj["values"]["start_val"] > event_start_reversed_stats_needed[qual_obj["stat"]]:
                 event_start_reversed_stats_needed[qual_obj["stat"]] = qual_obj["values"]["start_val"]
-    if "Starting Event Stat" in time_frame["qualifiers"]:
-        for qual_obj in time_frame["qualifiers"]["Starting Event Stat"]:
+    if "Starting Event Stat" in qualifiers:
+        for qual_obj in qualifiers["Starting Event Stat"]:
             if qual_obj["negate"]:
                 starting_event_stat_negate = True
             if qual_obj["stat"] not in starting_event_stats_needed:
@@ -36219,8 +36219,8 @@ def get_mlb_game_stats_single_thread(all_rows, has_count_stat, qualifiers, games
                 starting_event_start_stats_needed[qual_obj["stat"]] = qual_obj["values"]["start_val"]
             if qual_obj["values"]["start_val"] > starting_event_start_stats_needed[qual_obj["stat"]]:
                 starting_event_start_stats_needed[qual_obj["stat"]] = qual_obj["values"]["start_val"]
-    if "Starting Event Stat Reversed" in time_frame["qualifiers"]:
-        for qual_obj in time_frame["qualifiers"]["Starting Event Stat Reversed"]:
+    if "Starting Event Stat Reversed" in qualifiers:
+        for qual_obj in qualifiers["Starting Event Stat Reversed"]:
             if qual_obj["negate"]:
                 starting_event_stat_reversed_negate = True
             if qual_obj["stat"] not in starting_event_reversed_stats_needed:
@@ -36234,17 +36234,17 @@ def get_mlb_game_stats_single_thread(all_rows, has_count_stat, qualifiers, games
     stats_needed = set(list(event_stats_needed.keys()) + list(event_reversed_stats_needed.keys()) + list(starting_event_stats_needed.keys()) + list(starting_event_reversed_stats_needed.keys()))
 
     og_stats_needed_length = len(stats_needed)
-    if "Event Stats" in time_frame["qualifiers"]:
-        for qual_obj in time_frame["qualifiers"]["Event Stats"]:
+    if "Event Stats" in qualifiers:
+        for qual_obj in qualifiers["Event Stats"]:
             stats_needed.add(qual_obj["stat"])
-    if "Event Stats Reversed" in time_frame["qualifiers"]:
-        for qual_obj in time_frame["qualifiers"]["Event Stats Reversed"]:
+    if "Event Stats Reversed" in qualifiers:
+        for qual_obj in qualifiers["Event Stats Reversed"]:
             stats_needed.add(qual_obj["stat"])
-    if "Starting Event Stats" in time_frame["qualifiers"]:
-        for qual_obj in time_frame["qualifiers"]["Starting Event Stats"]:
+    if "Starting Event Stats" in qualifiers:
+        for qual_obj in qualifiers["Starting Event Stats"]:
             stats_needed.add(qual_obj["stat"])
-    if "Starting Event Stats Reversed" in time_frame["qualifiers"]:
-        for qual_obj in time_frame["qualifiers"]["Starting Event Stats Reversed"]:
+    if "Starting Event Stats Reversed" in qualifiers:
+        for qual_obj in qualifiers["Starting Event Stats Reversed"]:
             stats_needed.add(qual_obj["stat"])
     
     saved_row_data = {}
