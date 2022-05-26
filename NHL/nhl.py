@@ -12348,10 +12348,10 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
 
                             if compare_type == "first":
                                 time_start = datetime.datetime.min.replace(microsecond=0)
-                                time_end = dateutil.relativedelta.relativedelta(years=years, months=months, weeks=weeks, days=days, hours=hours, minutes=minutes, seconds=seconds)
+                                time_end = dateutil.relativedelta.relativedelta(years=years, months=months, weeks=weeks, days=days, hours=hours, minutes=minutes, seconds=seconds - 1)
                             else:
                                 time_end = datetime.datetime.today().replace(microsecond=0)
-                                time_start = (time_end - dateutil.relativedelta.relativedelta(years=years, months=months, weeks=weeks, days=days, hours=hours, minutes=minutes, seconds=seconds)).replace(microsecond=0)
+                                time_start = (time_end - dateutil.relativedelta.relativedelta(years=years, months=months, weeks=weeks, days=days, hours=hours, minutes=minutes, seconds=seconds - 1)).replace(microsecond=0)
 
                             qualifier_obj = {}
                             qualifier_obj["negate"] = bool(last_match.group(1))
