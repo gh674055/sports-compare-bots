@@ -7752,7 +7752,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 
                                 qualifier_obj["values"]["start_val"] = qualifier_obj["values"]["start_val"].replace(microsecond=0)
                                 qualifier_obj["values"]["end_val"] = qualifier_obj["values"]["end_val"].replace(microsecond=0)
-                            elif qualifier_str.startswith("event-datetime:") or qualifier_str.startswith("event-datetime:"):
+                            elif qualifier_str.startswith("event-datetime:") or qualifier_str.startswith("event-date-time:"):
                                 if qualifier_str.startswith("event-datetime:"):
                                     qual_str = "event-datetime:"
                                     qual_type = "Event DateTime"
