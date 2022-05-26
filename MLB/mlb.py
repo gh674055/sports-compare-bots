@@ -16529,12 +16529,22 @@ def handle_player_data(player_data, time_frame, player_type, player_page, valid_
                     new_rows.append(row_data)
             all_rows = new_rows
 
+        needs_start_time = False
+        if "Event DateTime" in time_frame["qualifiers"]:
+            for qual_obj in time_frame["qualifiers"]["Event DateTime"]:
+                if isinstance(qual_obj["values"]["end_val"], dateutil.relativedelta.relativedelta):
+                    needs_start_time = True
+                    break
+
         if "National Game" in time_frame["qualifiers"] or "Any National Game" in time_frame["qualifiers"] or "TV Network" in time_frame["qualifiers"] or "Radio Network" in time_frame["qualifiers"] or "Raw TV Network" in time_frame["qualifiers"] or "Raw Radio Network" in time_frame["qualifiers"] or "National TV Network" in time_frame["qualifiers"] or "National Raw TV Network" in time_frame["qualifiers"] or "Any National TV Network" in time_frame["qualifiers"] or "Any National Raw TV Network" in time_frame["qualifiers"] or "Current Winning Opponent" in time_frame["qualifiers"] or "Current Losing Opponent" in time_frame["qualifiers"] or "Current Tied Opponent" in time_frame["qualifiers"] or "Current Winning Or Tied Opponent" in time_frame["qualifiers"] or "Current Losing Or Tied Opponent" in time_frame["qualifiers"] or "Current Winning Team" in time_frame["qualifiers"] or "Current Losing Team" in time_frame["qualifiers"] or "Current Tied Team" in time_frame["qualifiers"] or "Current Winning Or Tied Team" in time_frame["qualifiers"] or "Current Losing Or Tied Team" in time_frame["qualifiers"] or "Current Team Win Percentage" in time_frame["qualifiers"] or "Current Opponent Win Percentage" in time_frame["qualifiers"] or "Current Team Wins" in time_frame["qualifiers"] or "Current Team Losses" in time_frame["qualifiers"] or "Current Opponent Wins" in time_frame["qualifiers"] or "Current Opponent Losses" in time_frame["qualifiers"] or "Current Team Games Over 500" in time_frame["qualifiers"] or "Current Opponent Games Over 500" in time_frame["qualifiers"] or "Attendance" in time_frame["qualifiers"] or "Team Stadium" in time_frame["qualifiers"] or "Franchise Stadium" in time_frame["qualifiers"] or "Stadium" in time_frame["qualifiers"] or "Exact Stadium" in time_frame["qualifiers"] or "Start Time" in time_frame["qualifiers"] or "Team Start Time" in time_frame["qualifiers"] or "Opponent Start Time" in time_frame["qualifiers"] or "Exact City" in time_frame["qualifiers"] or "City" in time_frame["qualifiers"] or "Exact State" in time_frame["qualifiers"] or "State" in time_frame["qualifiers"] or "Exact Country" in time_frame["qualifiers"] or "Country" in time_frame["qualifiers"] or "Surface" in time_frame["qualifiers"] or "Condition" in time_frame["qualifiers"] or "Temperature" in time_frame["qualifiers"] or "Wind" in time_frame["qualifiers"] or "Exact Umpire" in time_frame["qualifiers"] or "Exact Home Plate Umpire" in time_frame["qualifiers"] or "Umpire" in time_frame["qualifiers"] or "Home Plate Umpire" in time_frame["qualifiers"] or "Time Zone" in time_frame["qualifiers"] or "Exact Time Zone" in time_frame["qualifiers"] or "Local Start Time" in time_frame["qualifiers"] or "Local Event Time" in time_frame["qualifiers"]:
             get_mlb_game_links_schedule_links(player_data, player_type, player_link, all_rows, time_frame["qualifiers"], s)
         elif ("Event Stat" in time_frame["qualifiers"] or "Event Stat Reversed" in time_frame["qualifiers"] or "Event Stats" in time_frame["qualifiers"] or "Event Stats Reversed" in time_frame["qualifiers"] or "Starting Event Stat" in time_frame["qualifiers"] or "Starting Event Stat Reversed" in time_frame["qualifiers"] or "Starting Event Stats" in time_frame["qualifiers"] or "Starting Event Stats Reversed" in time_frame["qualifiers"]):
             get_mlb_game_links_schedule_links(player_data, player_type, player_link, all_rows, time_frame["qualifiers"], s)
         elif has_result_stat_qual or "Game Number" in time_frame["qualifiers"] or "Run Support" in time_frame["qualifiers"] or "current-stats" in extra_stats or "run-support-record" in extra_stats or "run-support" in extra_stats or "advanced-runner" in extra_stats or "exit-record" in extra_stats:
             get_mlb_game_links_schedule_links(player_data, player_type, player_link, all_rows, time_frame["qualifiers"], s)
+
+        if needs_start_time:
+            fix_neg_event_datetimes(all_rows, time_frame["qualifiers"]["Event DateTime"], player_data, player_type, s)
         
         if "National Game" in time_frame["qualifiers"] or "Any National Game" in time_frame["qualifiers"] or "TV Network" in time_frame["qualifiers"] or "Radio Network" in time_frame["qualifiers"] or "Raw TV Network" in time_frame["qualifiers"] or "Raw Radio Network" in time_frame["qualifiers"] or "National TV Network" in time_frame["qualifiers"] or "National Raw TV Network" in time_frame["qualifiers"] or "Any National TV Network" in time_frame["qualifiers"] or "Any National Raw TV Network" in time_frame["qualifiers"] or "Current Winning Opponent" in time_frame["qualifiers"] or "Current Losing Opponent" in time_frame["qualifiers"] or "Current Tied Opponent" in time_frame["qualifiers"] or "Current Winning Or Tied Opponent" in time_frame["qualifiers"] or "Current Losing Or Tied Opponent" in time_frame["qualifiers"] or "Current Winning Team" in time_frame["qualifiers"] or "Current Losing Team" in time_frame["qualifiers"] or "Current Tied Team" in time_frame["qualifiers"] or "Current Winning Or Tied Team" in time_frame["qualifiers"] or "Current Losing Or Tied Team" in time_frame["qualifiers"] or "Current Team Win Percentage" in time_frame["qualifiers"] or "Current Opponent Win Percentage" in time_frame["qualifiers"] or "Current Team Wins" in time_frame["qualifiers"] or "Current Team Losses" in time_frame["qualifiers"] or "Current Opponent Wins" in time_frame["qualifiers"] or "Current Opponent Losses" in time_frame["qualifiers"] or "Current Team Games Over 500" in time_frame["qualifiers"] or "Current Opponent Games Over 500" in time_frame["qualifiers"] or "Attendance" in time_frame["qualifiers"] or "Team Stadium" in time_frame["qualifiers"] or "Franchise Stadium" in time_frame["qualifiers"] or "Stadium" in time_frame["qualifiers"] or "Exact Stadium" in time_frame["qualifiers"] or "Start Time" in time_frame["qualifiers"] or "Team Start Time" in time_frame["qualifiers"] or "Opponent Start Time" in time_frame["qualifiers"] or "Exact City" in time_frame["qualifiers"] or "City" in time_frame["qualifiers"] or "Exact State" in time_frame["qualifiers"] or "State" in time_frame["qualifiers"] or "Exact Country" in time_frame["qualifiers"] or "Country" in time_frame["qualifiers"] or "Surface" in time_frame["qualifiers"] or "Condition" in time_frame["qualifiers"] or "Temperature" in time_frame["qualifiers"] or "Wind" in time_frame["qualifiers"] or "Exact Umpire" in time_frame["qualifiers"] or "Exact Home Plate Umpire" in time_frame["qualifiers"] or "Umpire" in time_frame["qualifiers"] or "Home Plate Umpire" in time_frame["qualifiers"] or "Time Zone" in time_frame["qualifiers"] or "Exact Time Zone" in time_frame["qualifiers"] or "Local Start Time" in time_frame["qualifiers"] or "Local Event Time" in time_frame["qualifiers"]:
             all_rows, missing_games = handle_mlb_schedule_stats(all_rows, time_frame["qualifiers"], player_data, player_type, missing_games, extra_stats)
@@ -17139,6 +17149,48 @@ def handle_player_data(player_data, time_frame, player_type, player_page, valid_
                 player_data["ind_type"].add(pos)
 
     return all_rows, missing_games, missing_pitch, missing_salary, missing_inf
+
+def fix_neg_event_datetimes(all_rows, qualifiers, player_data, player_type, s):
+    if not all_rows:
+        return
+
+    the_start_time = None
+
+    fake_row_data = copy.deepcopy(sorted(all_rows, key=lambda row: row["DateTime"])[0])
+    fake_game_data, fake_row_data, fake_index, fake_sub_missing_games, fake_sub_missing_pitch = get_live_game_data(-1, False, player_data, fake_row_data, player_type, {}, True, s)
+
+    min_time = None
+    for at_bat_event in fake_game_data["batting_events" if player_type["da_type"] == "Batter" else "pitching_events"]:
+        event_name = at_bat_event["result"]
+        if event_name == "pitch":
+            continue
+        if at_bat_event["event_time"] != None:
+            if min_time == None or at_bat_event["event_time"] < min_time:
+                min_time = at_bat_event["event_time"]
+        if at_bat_event["ind_pitches"]:
+            for pitch_index, ind_pitch in enumerate(at_bat_event["ind_pitches"]):
+                if event_name not in ("run_scored", "stolen_base", "caught_stealing", "pick_off"):
+                    pitch_event_obj = handle_da_pitch_quals(fake_row_data, "batting_events" if player_type["da_type"] == "Batter" else "pitching_events", at_bat_event, {}, player_data, player_type, fake_game_data, pitch_index + 1)
+                    if pitch_event_obj:
+                        if pitch_event_obj["event_time"] != None:
+                            if min_time == None or pitch_event_obj["event_time"] < min_time:
+                                min_time = pitch_event_obj["event_time"]
+    
+    if min_time:
+        the_start_time = min_time
+    elif "StartTime" in fake_row_data and fake_row_data["StartTime"]:
+        the_start_time = fake_row_data["StartTime"]
+    else:
+        the_start_time = datetime.datetime(year=fake_row_data["Date"].year, month=fake_row_data["Date"].month, day=fake_row_data["Date"].day, hour=0, minute=0, second=0)
+
+    if the_start_time:
+        for qual_obj in qualifiers:
+            if isinstance(qual_obj["values"]["end_val"], dateutil.relativedelta.relativedelta):
+                qual_obj["values"]["start_val"] = the_start_time
+                qual_obj["values"]["end_val"] += the_start_time
+                
+                qual_obj["values"]["start_val"] = qual_obj["values"]["start_val"].astimezone(pytz.timezone(qual_obj["values"]["time_zone"])).replace(microsecond=0).replace(tzinfo=None)
+                qual_obj["values"]["end_val"] = qual_obj["values"]["end_val"].astimezone(pytz.timezone(qual_obj["values"]["time_zone"])).replace(microsecond=0).replace(tzinfo=None)
 
 def get_team_map_info(player_data, player_type, valid_teams, comment_obj):
     subbb_frames = [{
