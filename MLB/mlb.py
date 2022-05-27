@@ -38563,8 +38563,8 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
                 missing_games = True
                 game_data["missing_data"] = True
                 return game_data, row_data, row_index, missing_games, missing_pitch
-            elif not all_has_pitch_type_data:
-                missing_pitch = True
+            # elif not all_has_pitch_type_data:
+            #     missing_pitch = True
 
         prev_team_pitcher = starter_team_position_map["P"]
         prev_opp_pitcher = starter_opp_position_map["P"]
