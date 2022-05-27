@@ -39690,8 +39690,7 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
             end_time = None
             if "endTime" in scoring_play["about"] and scoring_play["about"]["endTime"]:
                 end_time = dateutil.parser.parse(scoring_play["about"]["endTime"])
-
-            all_times.add(end_time)
+                all_times.add(end_time)
 
             event_obj = {
                 "batter" : batter,
@@ -40486,8 +40485,7 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
                 sub_end_time = None
                 if "endTime" in sub_play and sub_play["endTime"]:
                     sub_end_time = dateutil.parser.parse(sub_play["endTime"])
-
-                all_times.add(end_time)
+                    all_times.add(end_time)
 
                 sub_event_obj = {
                     "batter" : batter,
@@ -44195,6 +44193,9 @@ def handle_table_data(over_header, player_data, player_datas, player_type, heade
 
 def has_against_quals(extra_stats):
     return "current-stats" in extra_stats
+
+def has_time_quals(qualifiers):
+    return "Event Time" in qualifiers or "Team Event Time" in qualifiers or "Opponent Event Time" in qualifiers or "Local Event Time" in qualifiers or "Event DateTime" in qualifiers or "Team Event DateTime" in qualifiers or "Opponent Event DateTime" in qualifiers or "Local Event DateTime" in qualifiers
 
 def is_against_header(header, over_header, extra_stats, player_type):
     if not has_against_quals(extra_stats):
