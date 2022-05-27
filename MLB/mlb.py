@@ -31966,7 +31966,7 @@ def handle_da_mlb_quals(row, event_name, at_bat_event, qualifiers, player_data, 
                     has_match = True
                 elif name.lower() in manual_country_map and manual_country_map[name.lower()] == player:
                     has_match = True
-                elif player in manual_country_map and manual_country_map[player] == [name.lower()]:
+                elif player in manual_country_map and manual_country_map[player] == name.lower():
                     has_match = True
     
             if qual_object["negate"]:
@@ -31988,7 +31988,7 @@ def handle_da_mlb_quals(row, event_name, at_bat_event, qualifiers, player_data, 
                     has_match = True
                 elif name.lower() in manual_country_map and manual_country_map[name.lower()] == player:
                     has_match = True
-                elif player in manual_country_map and manual_country_map[player] == [name.lower()]:
+                elif player in manual_country_map and manual_country_map[player] == name.lower():
                     has_match = True
 
             if qual_object["negate"]:
