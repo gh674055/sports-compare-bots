@@ -144,6 +144,10 @@ string_stats = ["Tm", "TmLg"]
 
 pitcher_overrides = [150449, 660271]
 
+manual_country_map = {
+    "republic of korea" : "south korea"
+}
+
 position_map = {
     '1': 'P',
     '2': 'C',
@@ -31960,6 +31964,10 @@ def handle_da_mlb_quals(row, event_name, at_bat_event, qualifiers, player_data, 
                 player = re.sub(r"\s+", " ", re.sub(r"[^\w\-\s.']", "", player)).strip()
                 if name.lower() == player:
                     has_match = True
+                elif name.lower() in manual_country_map and manual_country_map[name.lower()] == player:
+                    has_match = True
+                elif player in manual_country_map and manual_country_map[player] == [name.lower()]:
+                    has_match = True
     
             if qual_object["negate"]:
                 if has_match:
@@ -31978,6 +31986,11 @@ def handle_da_mlb_quals(row, event_name, at_bat_event, qualifiers, player_data, 
                 player = re.sub(r"\s+", " ", re.sub(r"[^\w\-\s.']", "", player)).strip()
                 if name.lower() == player:
                     has_match = True
+                elif name.lower() in manual_country_map and manual_country_map[name.lower()] == player:
+                    has_match = True
+                elif player in manual_country_map and manual_country_map[player] == [name.lower()]:
+                    has_match = True
+
             if qual_object["negate"]:
                 if has_match:
                     return False
