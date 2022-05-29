@@ -10685,6 +10685,8 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                             new_vals.extend(["lf", "cf", "rf"])
                                         elif val == "if":
                                             new_vals.extend(["1b", "2b", "3b", "ss"])
+                                        elif val == "f":
+                                            new_vals.extend(["1b", "2b", "3b", "ss", "lf", "cf", "rf"])
                                         else:
                                             new_vals.append(val)
                                     qualifier_obj["values"] = new_vals
