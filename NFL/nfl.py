@@ -14794,7 +14794,7 @@ def handle_min_max_final(stat_val, current_explain_strs, player_data, player_typ
             stat_val["stat_obj"]["explain_str"] += str(match_count) + " Stretches"
         if only_seasons:
             stat_val["stat_obj"]["explain_str"] += "|Only Seasons"
-        #stat_val["stat_obj"]["explain_str"] += "|" + range_str
+        stat_val["stat_obj"]["explain_str"] += "|" + range_str
     if stat_quals:
         stat_val["stat_obj"]["explain_str"] += "|"
         for stat_qual in stat_quals:
