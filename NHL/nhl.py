@@ -17796,15 +17796,15 @@ def handle_live_stats(player_type, player_data, player_link, time_frame, all_row
             is_start = is_player_on_ice(player_shift_data, None, None, 1, 1, player_id, True)
         else:
             for scoring_play in sub_data["liveData"]["plays"]["allPlays"]:
-                found_match = False
+                found_player_match = False
                 if "players" in scoring_play:
                     for score_player in scoring_play["players"]:
                         if score_player["player"]["id"] in goalies:
                             if score_player["player"]["id"] != player_id:
                                 is_start = False
-                            found_match = True
+                            found_player_match = True
                             break
-                if found_match:
+                if found_player_match:
                     break
 
         row_data["GS"] = 0
@@ -33331,6 +33331,7 @@ def handle_min_max_final(stat_val, current_explain_strs, player_data, player_typ
 
     match_count = 0
     total_matching_rows = []
+    total_matching_dates = set()
     if qual_type == "Days" or qual_type == "Weeks" or qual_type == "Months" or qual_type == "Years":
         dates = [row["Date"] for row in all_rows]
         start_date = min(dates)
@@ -33370,18 +33371,13 @@ def handle_min_max_final(stat_val, current_explain_strs, player_data, player_typ
                         elif valid_matching_rows(matching_rows, stat_quals, player_data, player_type):
                             has_match = True
 
-                    found_match = False
-                    for old_row in total_matching_rows:
-                        for new_row in matching_rows:
-                            if new_row["Date"] == old_row["Date"]:
-                                found_match = True
-                                break
-
-                    if not found_match:                   
+                    dates_covered = [current_start_date + datetime.timedelta(x) for x in range(date_diff.days)]
+                    if not total_matching_dates.intersection(dates_covered):   
                         if has_match:
                             if not stat_val["negate"]:
                                 match_count += 1
                                 total_matching_rows.extend(matching_rows)
+                                total_matching_dates.update(dates_covered)
                                 if range_str:
                                     range_str += " + "
                                 else:
@@ -33393,6 +33389,7 @@ def handle_min_max_final(stat_val, current_explain_strs, player_data, player_typ
                         elif stat_val["negate"]:
                             match_count += 1
                             total_matching_rows.extend(matching_rows)
+                            total_matching_dates.update(dates_covered)
                             if range_str:
                                 range_str += " + "
                             else:
@@ -33435,18 +33432,13 @@ def handle_min_max_final(stat_val, current_explain_strs, player_data, player_typ
                         elif valid_matching_rows(matching_rows, stat_quals, player_data, player_type):
                             has_match = True
 
-                    found_match = False
-                    for old_row in total_matching_rows:
-                        for new_row in matching_rows:
-                            if new_row["Date"] == old_row["Date"]:
-                                found_match = True
-                                break
-
-                    if not found_match: 
+                    dates_covered = [current_start_date + datetime.timedelta(x) for x in range(date_diff.days)]
+                    if not total_matching_dates.intersection(dates_covered):
                         if has_match:
                             if not stat_val["negate"]:
                                 match_count += 1
                                 total_matching_rows.extend(matching_rows)
+                                total_matching_dates.update(dates_covered)
                                 if range_str:
                                     range_str += " + "
                                 else:
@@ -33458,6 +33450,7 @@ def handle_min_max_final(stat_val, current_explain_strs, player_data, player_typ
                         elif stat_val["negate"]:
                             match_count += 1
                             total_matching_rows.extend(matching_rows)
+                            total_matching_dates.update(dates_covered)
                             if range_str:
                                 range_str += " + "
                             else:
@@ -33485,18 +33478,13 @@ def handle_min_max_final(stat_val, current_explain_strs, player_data, player_typ
                         elif valid_matching_rows(matching_rows, stat_quals, player_data, player_type):
                             has_match = True
                     
-                    found_match = False
-                    for old_row in total_matching_rows:
-                        for new_row in matching_rows:
-                            if new_row["Date"] == old_row["Date"]:
-                                found_match = True
-                                break
-
-                    if not found_match:
+                    dates_covered = [current_start_date + datetime.timedelta(x) for x in range(date_diff.days)]
+                    if not total_matching_dates.intersection(dates_covered):
                         if has_match:
                             if not stat_val["negate"]:
                                 match_count += 1
                                 total_matching_rows.extend(matching_rows)
+                                total_matching_dates.update(dates_covered)
                                 if range_str:
                                     range_str += " + "
                                 else:
@@ -33505,6 +33493,7 @@ def handle_min_max_final(stat_val, current_explain_strs, player_data, player_typ
                         elif stat_val["negate"]:
                             match_count += 1
                             total_matching_rows.extend(matching_rows)
+                            total_matching_dates.update(dates_covered)
                             if range_str:
                                 range_str += " + "
                             else:
@@ -33529,18 +33518,13 @@ def handle_min_max_final(stat_val, current_explain_strs, player_data, player_typ
                         elif valid_matching_rows(matching_rows, stat_quals, player_data, player_type):
                             has_match = True
                     
-                    found_match = False
-                    for old_row in total_matching_rows:
-                        for new_row in matching_rows:
-                            if new_row["Date"] == old_row["Date"]:
-                                found_match = True
-                                break
-
-                    if not found_match:                    
+                    dates_covered = [current_start_date + datetime.timedelta(x) for x in range(date_diff.days)]
+                    if not total_matching_dates.intersection(dates_covered):           
                         if has_match:
                             if not stat_val["negate"]:
                                 match_count += 1
                                 total_matching_rows.extend(matching_rows)
+                                total_matching_dates.update(dates_covered)
                                 if range_str:
                                     range_str += " + "
                                 else:
@@ -33549,6 +33533,7 @@ def handle_min_max_final(stat_val, current_explain_strs, player_data, player_typ
                         elif stat_val["negate"]:
                             match_count += 1
                             total_matching_rows.extend(matching_rows)
+                            total_matching_dates.update(dates_covered)
                             if range_str:
                                 range_str += " + "
                             else:
@@ -33576,7 +33561,7 @@ def handle_min_max_final(stat_val, current_explain_strs, player_data, player_typ
                     found_match = False
                     for old_row in total_matching_rows:
                         for new_row in matching_rows:
-                            if new_row["Date"] == old_row["Date"]:
+                            if new_row["NHLGameLink"] == old_row["NHLGameLink"]:
                                 found_match = True
                                 break
 
@@ -33728,18 +33713,13 @@ def handle_min_max_final(stat_val, current_explain_strs, player_data, player_typ
                         season = str(season) + "-" + str(season + 1)
                         current_end_season = str(current_end_season) + "-" + str(current_end_season + 1)
                     
-                    found_match = False
-                    for old_row in total_matching_rows:
-                        for new_row in matching_rows:
-                            if new_row["Date"] == old_row["Date"]:
-                                found_match = True
-                                break
-
-                    if not found_match:             
+                    dates_covered = [season + x for x in range(current_end_season - season + 1)]
+                    if not total_matching_dates.intersection(dates_covered):
                         if has_match:
                             if not stat_val["negate"]:
                                 match_count += 1
                                 total_matching_rows.extend(matching_rows)
+                                total_matching_dates.update(dates_covered)
                                 if range_str:
                                     range_str += " + "
                                 else:
@@ -33767,6 +33747,7 @@ def handle_min_max_final(stat_val, current_explain_strs, player_data, player_typ
                         elif stat_val["negate"]:
                             match_count += 1
                             total_matching_rows.extend(matching_rows)
+                            total_matching_dates.update(dates_covered)
                             if range_str:
                                 range_str += " + "
                             else:
@@ -33820,24 +33801,8 @@ def handle_min_max_final(stat_val, current_explain_strs, player_data, player_typ
                             elif valid_matching_rows(matching_rows, stat_quals, player_data, player_type):
                                 has_match = True
                         
-                        found_match = False
-                        for old_row in total_matching_rows:
-                            for new_row in matching_rows:
-                                if new_row["Date"] == old_row["Date"]:
-                                    found_match = True
-                                    break
-
-                        if not found_match:
-                            if has_match:
-                                if not stat_val["negate"]:
-                                    match_count += 1
-                                    total_matching_rows.extend(matching_rows)
-                                    if range_str:
-                                        range_str += " + "
-                                    else:
-                                        range_str += qual_type + ":" + qual_num_str + "|"
-                                    range_str += team.upper()
-                            elif stat_val["negate"]:
+                        if has_match:
+                            if not stat_val["negate"]:
                                 match_count += 1
                                 total_matching_rows.extend(matching_rows)
                                 if range_str:
@@ -33845,6 +33810,14 @@ def handle_min_max_final(stat_val, current_explain_strs, player_data, player_typ
                                 else:
                                     range_str += qual_type + ":" + qual_num_str + "|"
                                 range_str += team.upper()
+                        elif stat_val["negate"]:
+                            match_count += 1
+                            total_matching_rows.extend(matching_rows)
+                            if range_str:
+                                range_str += " + "
+                            else:
+                                range_str += qual_type + ":" + qual_num_str + "|"
+                            range_str += team.upper()
         else:
             teams = set([row[row_stat] for row in all_rows])
             for team in teams:
@@ -33863,24 +33836,8 @@ def handle_min_max_final(stat_val, current_explain_strs, player_data, player_typ
                         elif valid_matching_rows(matching_rows, stat_quals, player_data, player_type):
                             has_match = True
                     
-                    found_match = False
-                    for old_row in total_matching_rows:
-                        for new_row in matching_rows:
-                            if new_row["Date"] == old_row["Date"]:
-                                found_match = True
-                                break
-
-                    if not found_match:
-                        if has_match:
-                            if not stat_val["negate"]:
-                                match_count += 1
-                                total_matching_rows.extend(matching_rows)
-                                if range_str:
-                                    range_str += " + "
-                                else:
-                                    range_str += qual_type + ":" + qual_num_str + "|"
-                                range_str += team.upper()
-                        elif stat_val["negate"]:
+                    if has_match:
+                        if not stat_val["negate"]:
                             match_count += 1
                             total_matching_rows.extend(matching_rows)
                             if range_str:
@@ -33888,6 +33845,14 @@ def handle_min_max_final(stat_val, current_explain_strs, player_data, player_typ
                             else:
                                 range_str += qual_type + ":" + qual_num_str + "|"
                             range_str += team.upper()
+                    elif stat_val["negate"]:
+                        match_count += 1
+                        total_matching_rows.extend(matching_rows)
+                        if range_str:
+                            range_str += " + "
+                        else:
+                            range_str += qual_type + ":" + qual_num_str + "|"
+                        range_str += team.upper()
             
     if not range_str:
         if not match_all:
@@ -34335,7 +34300,7 @@ def handle_max_streak_calc(new_rows, stat_objs, player_data, player_type, all_ro
                         for old_rows in all_streak_obj[key]:
                             for old_row in old_rows:
                                 for new_row in matching_rows:
-                                    if new_row["Date"] == old_row["Date"]:
+                                    if new_row["NHLGameLink"] == old_row["NHLGameLink"]:
                                         found_match = True
                                         break
                     if not found_match:
@@ -34349,7 +34314,7 @@ def handle_max_streak_calc(new_rows, stat_objs, player_data, player_type, all_ro
                         for old_rows in all_streak_obj[key]:
                             for old_row in old_rows:
                                 for new_row in matching_rows:
-                                    if new_row["Date"] == old_row["Date"]:
+                                    if new_row["NHLGameLink"] == old_row["NHLGameLink"]:
                                         found_match = True
                                         break
                     if not found_match:
@@ -34416,33 +34381,15 @@ def handle_max_streak_calc(new_rows, stat_objs, player_data, player_type, all_ro
                 matching_rows = handle_streak_game_rows(i, player_data, player_type, stat_objs, team_rows, only_seasons, False)
                 if matching_rows:
                     if not stat_quals:
-                        found_match = False
-                        for key in all_streak_obj:
-                            for old_rows in all_streak_obj[key]:
-                                for old_row in old_rows:
-                                    for new_row in matching_rows:
-                                        if new_row["Date"] == old_row["Date"]:
-                                            found_match = True
-                                            break
-                        if not found_match:
-                            streak_length = len(matching_rows)
-                            if not streak_length in all_streak_obj:
-                                all_streak_obj[streak_length] = []
-                            all_streak_obj[streak_length].append(matching_rows)
+                        streak_length = len(matching_rows)
+                        if not streak_length in all_streak_obj:
+                            all_streak_obj[streak_length] = []
+                        all_streak_obj[streak_length].append(matching_rows)
                     elif valid_matching_rows(matching_rows, stat_quals, player_data, player_type):
-                        found_match = False
-                        for key in all_streak_obj:
-                            for old_rows in all_streak_obj[key]:
-                                for old_row in old_rows:
-                                    for new_row in matching_rows:
-                                        if new_row["Date"] == old_row["Date"]:
-                                            found_match = True
-                                            break
-                        if not found_match:
-                            streak_length = len(matching_rows)
-                            if not streak_length in all_streak_obj:
-                                all_streak_obj[streak_length] = []
-                            all_streak_obj[streak_length].append(matching_rows)
+                        streak_length = len(matching_rows)
+                        if not streak_length in all_streak_obj:
+                            all_streak_obj[streak_length] = []
+                        all_streak_obj[streak_length].append(matching_rows)
                 elif only_seasons and (is_start == True or is_start == False):
                     break_next = True
 
@@ -34674,7 +34621,7 @@ def handle_max_stretch_calc(new_rows, stat_objs, player_data, player_type, all_r
                         for old_rows in all_streak_obj[key]:
                             for old_row in old_rows:
                                 for new_row in matching_rows:
-                                    if new_row["Date"] == old_row["Date"]:
+                                    if new_row["NHLGameLink"] == old_row["NHLGameLink"]:
                                         found_match = True
                                         break
                     if not found_match:
@@ -34688,7 +34635,7 @@ def handle_max_stretch_calc(new_rows, stat_objs, player_data, player_type, all_r
                         for old_rows in all_streak_obj[key]:
                             for old_row in old_rows:
                                 for new_row in matching_rows:
-                                    if new_row["Date"] == old_row["Date"]:
+                                    if new_row["NHLGameLink"] == old_row["NHLGameLink"]:
                                         found_match = True
                                         break
                     if not found_match:
