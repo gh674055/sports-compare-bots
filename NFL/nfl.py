@@ -119,7 +119,7 @@ all_months_re = r"(?:" + "|".join([month + "-?" for month in all_months]) + r")+
 all_days = [day.lower() for day in calendar.day_name[0:len(calendar.day_name)] + calendar.day_abbr[0:len(calendar.day_abbr)]]
 all_days_re = r"(?:" + "|".join([day + "-?" for day in all_days]) + r")+"
 
-string_stats = ["Tm"]
+string_stats = ["Tm", "Opponent"]
 
 year_weeks_played = [
     {
@@ -5225,7 +5225,7 @@ def handle_player_string(comment, player_type, is_fantasy, last_updated, hide_ta
             else:
                 worst_games_table = 1
 
-    if remove_duplicates or remove_duplicate_games or "score" in extra_stats or "record" in extra_stats or "current-stats" in extra_stats or "ats-record" in extra_stats or "ou-record" in extra_stats or "game" in extra_stats or best_games_table or worst_games_table:
+    if remove_duplicates or remove_duplicate_games or "score" in extra_stats or "record" in extra_stats or "current-stats" in extra_stats or "ats-record" in extra_stats or "ou-record" in extra_stats or "game" in extra_stats or "show-stat-opponent" in extra_stats or best_games_table or worst_games_table:
         for subb_frame in parse_time_frames:
             for subbb_frame in subb_frame:
                 for time_frame in subbb_frame:
@@ -7083,7 +7083,7 @@ def combine_player_datas(player_datas, player_type, any_missing_games, time_fram
                             elif stat in string_stats:
                                 if not player_data["stat_values"][over_header][stat]:
                                     player_data["stat_values"][over_header][stat] = ""
-                                player_data["stat_values"][over_header][stat] += calculated_values["stat_values"][over_header][stat] + "-"
+                                player_data["stat_values"][over_header][stat] += calculated_values["stat_values"][over_header][stat].upper() + "-"
                         else:
                             if stat not in player_data["stat_values"][over_header]:
                                 player_data["stat_values"][over_header][stat] = calculated_values["stat_values"][over_header][stat]
@@ -7725,7 +7725,7 @@ def calculate_values(all_rows, player_type, og_player_data, extra_stats={}):
                 elif stat in string_stats:
                     if not player_data["stat_values"][over_header][stat]:
                         player_data["stat_values"][over_header][stat] = ""
-                    player_data["stat_values"][over_header][stat] += row_data[over_header][stat] + "-"
+                    player_data["stat_values"][over_header][stat] += row_data[over_header][stat].upper() + "-"
 
     for over_header in player_data["stat_values"]:
         for stat in player_data["stat_values"][over_header]:

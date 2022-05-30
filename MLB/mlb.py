@@ -140,7 +140,7 @@ all_months_re = r"(?:" + "|".join([month + "-?" for month in all_months]) + r")+
 all_days = [day.lower() for day in calendar.day_name[0:len(calendar.day_name)] + calendar.day_abbr[0:len(calendar.day_abbr)]]
 all_days_re = r"(?:" + "|".join([day + "-?" for day in all_days]) + r")+"
 
-string_stats = ["Tm", "TmLg"]
+string_stats = ["Tm", "TmLg", "Opponent", "OppLg"]
 
 pitcher_overrides = [150449, 660271]
 
@@ -184,7 +184,15 @@ headers = {
             "positive" : True,
             "display" : False
         },
+        "Opponent" : {
+            "positive" : True,
+            "display" : False
+        },
         "TmLg" : {
+            "positive" : True,
+            "display" : False
+        },
+        "OppLg" : {
             "positive" : True,
             "display" : False
         },
@@ -2194,7 +2202,15 @@ headers = {
             "positive" : True,
             "display" : False
         },
+        "Opponent" : {
+            "positive" : True,
+            "display" : False
+        },
         "TmLg" : {
+            "positive" : True,
+            "display" : False
+        },
+        "OppLg" : {
             "positive" : True,
             "display" : False
         },
@@ -12783,7 +12799,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
     if "hide-advanced" in extra_stats and "current-stats" in extra_stats:
         extra_stats.remove("current-stats")    
             
-    if remove_duplicates or remove_duplicate_games or "score" in extra_stats or "record" in extra_stats or "game" in extra_stats or "current-stats" in extra_stats or "run-support" in extra_stats or "advanced-runner" in extra_stats or "run-support-record" in extra_stats or "exit-record" in extra_stats or best_games_table or worst_games_table:
+    if remove_duplicates or remove_duplicate_games or "score" in extra_stats or "record" in extra_stats or "game" in extra_stats or "current-stats" in extra_stats or "run-support" in extra_stats or "advanced-runner" in extra_stats or "run-support-record" in extra_stats or "exit-record" in extra_stats or "show-stat-opponent" in extra_stats or "show-stat-opplg" in extra_stats or best_games_table or worst_games_table:
         for subb_frame in parse_time_frames:
             for subbb_frame in subb_frame:
                 for time_frame in subbb_frame:
@@ -15227,7 +15243,7 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
                         elif stat in string_stats:
                             if not player_data["stat_values"][stat]:
                                 player_data["stat_values"][stat] = ""
-                            player_data["stat_values"][stat] += calculated_values["stat_values"][stat] + "-"
+                            player_data["stat_values"][stat] += calculated_values["stat_values"][stat].upper() + "-"
                     else:
                         if stat not in player_data["stat_values"]:
                             player_data["stat_values"][stat] = calculated_values["stat_values"][stat]
@@ -15519,7 +15535,7 @@ def calculate_values(all_rows, player_type, time_frames, og_player_data, extra_s
             elif stat in string_stats:
                 if not player_data["stat_values"][stat]:
                     player_data["stat_values"][stat] = ""
-                player_data["stat_values"][stat] += row_data[stat] + "-"
+                player_data["stat_values"][stat] += row_data[stat].upper() + "-"
 
     if "IP" in player_data["stat_values"]:
         frac, whole = math.modf(player_data["stat_values"]["IP"])

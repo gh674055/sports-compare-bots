@@ -3446,6 +3446,10 @@ stat_groups = {
             "positive" : True,
             "display" : False
         },
+        "Opponent" : {
+            "positive" : True,
+            "display" : False
+        },
         "RawTm" : {
             "positive" : True,
             "display" : False

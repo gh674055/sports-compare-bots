@@ -132,7 +132,7 @@ all_months_re = r"(?:" + "|".join([month + "-?" for month in all_months]) + r")+
 all_days = [day.lower() for day in calendar.day_name[0:len(calendar.day_name)] + calendar.day_abbr[0:len(calendar.day_abbr)]]
 all_days_re = r"(?:" + "|".join([day + "-?" for day in all_days]) + r")+"
 
-string_stats = ["Tm"]
+string_stats = ["Tm", "Opponent"]
 
 manual_country_map = {
 }
@@ -186,6 +186,10 @@ headers = {
             "display" : False
         },
         "Tm" : {
+            "positive" : True,
+            "display" : False
+        },
+        "Opponent" : {
             "positive" : True,
             "display" : False
         },
@@ -4617,6 +4621,10 @@ headers = {
             "display" : False
         },
         "Tm" : {
+            "positive" : True,
+            "display" : False
+        },
+        "Opponent" : {
             "positive" : True,
             "display" : False
         },
@@ -13463,7 +13471,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
     if "hide-advanced" in extra_stats and "current-stats" in extra_stats:
         extra_stats.remove("current-stats")
 
-    if remove_duplicates or remove_duplicate_games or "score" in extra_stats or "record" in extra_stats or "star" in extra_stats or "game" in extra_stats or "penalties" in extra_stats or "fight" in extra_stats or "current-stats" in extra_stats or best_games_table or worst_games_table:
+    if remove_duplicates or remove_duplicate_games or "score" in extra_stats or "record" in extra_stats or "star" in extra_stats or "game" in extra_stats or "penalties" in extra_stats or "fight" in extra_stats or "current-stats" in extra_stats or "show-stat-opponent" in extra_stats or best_games_table or worst_games_table:
         for subb_frame in parse_time_frames:
             for subbb_frame in subb_frame:
                 for time_frame in subbb_frame:
@@ -15374,7 +15382,7 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
                         elif stat in string_stats:
                             if not player_data["stat_values"][stat]:
                                 player_data["stat_values"][stat] = ""
-                            player_data["stat_values"][stat] += calculated_values["stat_values"][stat] + "-"
+                            player_data["stat_values"][stat] += calculated_values["stat_values"][stat].upper() + "-"
                     else:
                         if stat not in player_data["stat_values"]:
                             player_data["stat_values"][stat] = calculated_values["stat_values"][stat]
@@ -16234,7 +16242,7 @@ def calculate_values(all_rows, player_type, og_player_data, extra_stats={}):
             elif stat in string_stats:
                 if not player_data["stat_values"][stat]:
                     player_data["stat_values"][stat] = ""
-                player_data["stat_values"][stat] += row_data[stat] + "-"
+                player_data["stat_values"][stat] += row_data[stat].upper() + "-"
 
     for stat in player_data["stat_values"]:
         if stat in string_stats:
