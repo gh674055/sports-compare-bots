@@ -22455,6 +22455,7 @@ def handle_min_max_final(stat_val, current_explain_strs, player_data, player_typ
             for date in dateutil.rrule.rrule(dateutil.rrule.WEEKLY, dtstart=start_date, until=end_date):
                 tmp_real_end_date = date - datetime.timedelta(days=date.weekday())
                 real_end_date = tmp_real_end_date + datetime.timedelta(days=6)
+                date_diff = real_end_date - date + datetime.timedelta(days=1)
 
                 stat_value, matching_rows = handle_week_rows(player_data, player_type, stat, date, all_rows)
                 if matching_rows:
@@ -22471,7 +22472,7 @@ def handle_min_max_final(stat_val, current_explain_strs, player_data, player_typ
                         elif valid_matching_rows(matching_rows, stat_quals, player_type, player_data):
                             has_match = True
                     
-                    dates_covered = [current_start_date + datetime.timedelta(x) for x in range(date_diff.days)]
+                    dates_covered = [date + datetime.timedelta(x) for x in range(date_diff.days)]
                     if not total_matching_dates.intersection(dates_covered):
                         if has_match:
                             if not stat_val["negate"]:
@@ -22502,6 +22503,7 @@ def handle_min_max_final(stat_val, current_explain_strs, player_data, player_typ
             start_date = datetime.datetime(start_date.year, start_date.month, 1)
             end_date = datetime.datetime(end_date.year, end_date.month, calendar.monthrange(end_date.year, end_date.month)[1])
             for date in dateutil.rrule.rrule(dateutil.rrule.MONTHLY, dtstart=start_date, until=end_date):
+                date_diff = datetime.datetime(date.year, date.month, calendar.monthrange(date.year, date.month)[1]) - date + datetime.timedelta(days=1)
                 stat_value, matching_rows = handle_month_rows(player_data, player_type, stat, date, all_rows)
                 if matching_rows:
                     has_match = False
@@ -22517,7 +22519,7 @@ def handle_min_max_final(stat_val, current_explain_strs, player_data, player_typ
                         elif valid_matching_rows(matching_rows, stat_quals, player_type, player_data):
                             has_match = True
                     
-                    dates_covered = [current_start_date + datetime.timedelta(x) for x in range(date_diff.days)]
+                    dates_covered = [date + datetime.timedelta(x) for x in range(date_diff.days)]
                     if not total_matching_dates.intersection(dates_covered):
                         if has_match:
                             if not stat_val["negate"]:
@@ -22542,6 +22544,7 @@ def handle_min_max_final(stat_val, current_explain_strs, player_data, player_typ
             start_date = datetime.datetime(start_date.year, 1, 1)
             end_date = datetime.datetime(end_date.year, 12, calendar.monthrange(end_date.year, 12)[1])
             for date in dateutil.rrule.rrule(dateutil.rrule.YEARLY, dtstart=start_date, until=end_date):
+                date_diff = datetime.datetime(date.year, 12, calendar.monthrange(date.year, 12)[1]) - date + datetime.timedelta(days=1)
                 stat_value, matching_rows = handle_year_rows(player_data, player_type, stat, date, all_rows)
                 if matching_rows:
                     has_match = False
@@ -22557,7 +22560,7 @@ def handle_min_max_final(stat_val, current_explain_strs, player_data, player_typ
                         elif valid_matching_rows(matching_rows, stat_quals, player_type, player_data):
                             has_match = True
                     
-                    dates_covered = [current_start_date + datetime.timedelta(x) for x in range(date_diff.days)]
+                    dates_covered = [date + datetime.timedelta(x) for x in range(date_diff.days)]
                     if not total_matching_dates.intersection(dates_covered):        
                         if has_match:
                             if not stat_val["negate"]:
