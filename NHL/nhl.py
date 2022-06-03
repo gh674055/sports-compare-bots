@@ -8414,7 +8414,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                             extra_stats.add(m.group(1))
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
                         
-                        last_match = re.finditer(r"\bshow(?: |-)?(only(?: |-)?)?(goalie-record|record|faceoff|slash|score|scoring|strength-slash|strength-scoring|goal|year|games?-count|seasons-leading|season|date|per-game|game|adjusted|advanced|relative|missing-games-count|missing-game-count|missing-toi-count|missing-game|missing-toi|best-season|worst-season|ng|team|franchise|number|fight|penalty-taken|penalties-taken|penaltie|penalty|award|shot|shift|star|play|nhl-link|strength|toi|href|api)s?\b", time_frame)
+                        last_match = re.finditer(r"\bshow(?: |-)?(only(?: |-)?)?(goalie-record|record|faceoff|slash|score|scoring-toi|scoring-5v5|scoring|strength-slash|strength-scoring-toi|strength-scoring|goal|year|games?-count|seasons-leading|season|date|per-game|game|adjusted|advanced|relative|missing-games-count|missing-game-count|missing-toi-count|missing-game|missing-toi|best-season|worst-season|ng|team|franchise|number|fight|penalty-taken|penalties-taken|penaltie|penalty|award|shot|shift|star|play|nhl-link|strength|toi|href|api)s?\b", time_frame)
                         for m in last_match:
                             if "penalt" in m.group(2):
                                 extra_stats.add("penalties")
@@ -8504,9 +8504,6 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                     extra_stats.add("show-only-stat-g/gp")
                                     extra_stats.add("show-only-stat-a/gp")
                                     extra_stats.add("show-only-stat-p/gp")
-                                    extra_stats.add("show-only-stat-g/60m")
-                                    extra_stats.add("show-only-stat-a/60m")
-                                    extra_stats.add("show-only-stat-p/60m")
                                     player_type["da_type"] = {
                                         "type" : "Skater"
                                     }
@@ -8517,48 +8514,75 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                     extra_stats.add("show-only-stat-g/gp")
                                     extra_stats.add("show-only-stat-a/gp")
                                     extra_stats.add("show-only-stat-p/gp")
-                                    extra_stats.add("show-only-stat-g/60m")
-                                    extra_stats.add("show-only-stat-a/60m")
-                                    extra_stats.add("show-only-stat-p/60m")
                                     extra_stats.add("show-only-stat-evg")
                                     extra_stats.add("show-only-stat-eva")
                                     extra_stats.add("show-only-stat-evp")
                                     extra_stats.add("show-only-stat-evg/gp")
                                     extra_stats.add("show-only-stat-eva/gp")
                                     extra_stats.add("show-only-stat-evp/gp")
-                                    extra_stats.add("show-only-stat-evg/60m")
-                                    extra_stats.add("show-only-stat-eva/60m")
-                                    extra_stats.add("show-only-stat-evp/60m")
                                     extra_stats.add("show-only-stat-ppg")
                                     extra_stats.add("show-only-stat-ppa")
                                     extra_stats.add("show-only-stat-ppp")
                                     extra_stats.add("show-only-stat-ppg/gp")
                                     extra_stats.add("show-only-stat-ppa/gp")
                                     extra_stats.add("show-only-stat-ppp/gp")
-                                    extra_stats.add("show-only-stat-ppg/60m")
-                                    extra_stats.add("show-only-stat-ppa/60m")
-                                    extra_stats.add("show-only-stat-ppp/60m")
                                     extra_stats.add("show-only-stat-shg")
                                     extra_stats.add("show-only-stat-sha")
                                     extra_stats.add("show-only-stat-shp")
                                     extra_stats.add("show-only-stat-shg/gp")
                                     extra_stats.add("show-only-stat-sha/gp")
                                     extra_stats.add("show-only-stat-shp/gp")
-                                    extra_stats.add("show-only-stat-shg/60m")
-                                    extra_stats.add("show-only-stat-sha/60m")
-                                    extra_stats.add("show-only-stat-shp/60m")
                                     extra_stats.add("show-stat-eva/gp")
                                     extra_stats.add("show-stat-ppa/gp")
                                     extra_stats.add("show-stat-sha/gp")
-                                    extra_stats.add("show-stat-eva/60m")
-                                    extra_stats.add("show-stat-ppa/60m")
-                                    extra_stats.add("show-stat-sha/60m")
                                     extra_stats.add("show-stat-shg/gp")
                                     extra_stats.add("show-stat-sha/gp")
                                     extra_stats.add("show-stat-shp/gp")
+                                    player_type["da_type"] = {
+                                        "type" : "Skater"
+                                    }
+                                elif m.group(2) == "scoring-toi":
+                                    extra_stats.add("show-only-stat-toi/gp")
+                                    extra_stats.add("show-only-stat-g/60m")
+                                    extra_stats.add("show-only-stat-a/60m")
+                                    extra_stats.add("show-only-stat-p/60m")
+                                    player_type["da_type"] = {
+                                        "type" : "Skater"
+                                    }
+                                elif m.group(2) == "strength-scoring-toi":
+                                    extra_stats.add("show-only-stat-toi/gp")
+                                    extra_stats.add("show-only-stat-evtoi/gp")
+                                    extra_stats.add("show-only-stat-pptoi/gp")
+                                    extra_stats.add("show-only-stat-shtoi/gp")
+                                    extra_stats.add("show-only-stat-g/60m")
+                                    extra_stats.add("show-only-stat-a/60m")
+                                    extra_stats.add("show-only-stat-p/60m")
+                                    extra_stats.add("show-only-stat-evg/gp")
+                                    extra_stats.add("show-only-stat-eva/gp")
+                                    extra_stats.add("show-only-stat-evp/gp")
+                                    extra_stats.add("show-only-stat-ppg/60m")
+                                    extra_stats.add("show-only-stat-ppa/60m")
+                                    extra_stats.add("show-only-stat-ppp/60m")
+                                    extra_stats.add("show-only-stat-shg/60m")
+                                    extra_stats.add("show-only-stat-sha/60m")
+                                    extra_stats.add("show-only-stat-shp/60m")
+                                    extra_stats.add("show-stat-eva/60m")
+                                    extra_stats.add("show-stat-ppa/60m")
+                                    extra_stats.add("show-stat-sha/60m")
                                     extra_stats.add("show-stat-shg/60m")
                                     extra_stats.add("show-stat-sha/60m")
                                     extra_stats.add("show-stat-shp/60m")
+                                    player_type["da_type"] = {
+                                        "type" : "Skater"
+                                    }
+                                elif m.group(2) == "scoring-5v5":
+                                    extra_stats.add("show-only-stat-toi_5v5/gp")
+                                    extra_stats.add("show-only-stat-5v5_g")
+                                    extra_stats.add("show-only-stat-a_5v5")
+                                    extra_stats.add("show-only-stat-p_5v5")
+                                    extra_stats.add("show-only-stat-5v5_g/60m")
+                                    extra_stats.add("show-only-stat-a_5v5/60m")
+                                    extra_stats.add("show-only-stat-p_5v5/60m")
                                     player_type["da_type"] = {
                                         "type" : "Skater"
                                     }
