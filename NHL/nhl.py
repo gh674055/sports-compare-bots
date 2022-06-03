@@ -2642,6 +2642,14 @@ headers = {
         "OTG" : {
             "positive" : True
         },
+        "OTA" : {
+            "positive" : True,
+            "display" : False
+        },
+        "OTP" : {
+            "positive" : True,
+            "display" : False
+        },
         "GWG" : {
             "positive" : True
         },
@@ -8414,7 +8422,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                             extra_stats.add(m.group(1))
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
                         
-                        last_match = re.finditer(r"\bshow(?: |-)?(only(?: |-)?)?(goalie-record|record|faceoff|slash-5v5|slash|score|scoring-per60|scoring-5v5|scoring|strength-slash|strength-scoring-per60|strength-scoring|goal|year|games?-count|seasons-leading|season|date|per-game|game|adjusted|advanced|relative|missing-games-count|missing-game-count|missing-toi-count|missing-game|missing-toi|best-season|worst-season|ng|team|franchise|number|fight|penalty-taken|penalties-taken|penaltie|penalty|award|shot|shift|star|play|nhl-link|strength|toi|href|api)s?\b", time_frame)
+                        last_match = re.finditer(r"\bshow(?: |-)?(only(?: |-)?)?(goalie-record|record|faceoff|slash-5v5|slash|score|extra-scoring-per60|scoring-per60|scoring-5v5|extra-scoring|scoring|strength-slash|extra-strength-scoring-per60|strength-scoring-per60|extra-strength-scoring|strength-scoring|goal|year|games?-count|seasons-leading|season|date|per-game|game|adjusted|advanced|relative|missing-games-count|missing-game-count|missing-toi-count|missing-game|missing-toi|best-season|worst-season|ng|team|franchise|number|fight|penalty-taken|penalties-taken|penaltie|penalty|award|shot|shift|star|play|nhl-link|strength|toi|href|api)s?\b", time_frame)
                         for m in last_match:
                             if "penalt" in m.group(2):
                                 extra_stats.add("penalties")
@@ -8507,6 +8515,28 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                     player_type["da_type"] = {
                                         "type" : "Skater"
                                     }
+                                elif m.group(2) == "extra-scoring":
+                                    extra_stats.add("show-only-stat-g")
+                                    extra_stats.add("show-only-stat-a")
+                                    extra_stats.add("show-only-stat-p")
+                                    extra_stats.add("show-only-stat-g/gp")
+                                    extra_stats.add("show-only-stat-a/gp")
+                                    extra_stats.add("show-only-stat-p/gp")
+                                    extra_stats.add("show-only-stat-a1")
+                                    extra_stats.add("show-only-stat-otg")
+                                    extra_stats.add("show-only-stat-gwg")
+                                    extra_stats.add("show-only-stat-1stg")
+                                    extra_stats.add("show-only-stat-hat")
+                                    extra_stats.add("show-only-stat-eng")
+                                    extra_stats.add("show-only-stat-ena")
+                                    extra_stats.add("show-only-stat-enp")
+                                    extra_stats.add("show-only-stat-adjg")
+                                    extra_stats.add("show-only-stat-adja")
+                                    extra_stats.add("show-only-stat-adjp")
+                                    extra_stats.add("show-only-stat-a1/gp")
+                                    player_type["da_type"] = {
+                                        "type" : "Skater"
+                                    }
                                 elif m.group(2) == "strength-scoring":
                                     extra_stats.add("show-only-stat-g")
                                     extra_stats.add("show-only-stat-a")
@@ -8538,6 +8568,56 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                     extra_stats.add("show-stat-shg/gp")
                                     extra_stats.add("show-stat-sha/gp")
                                     extra_stats.add("show-stat-shp/gp")
+                                    player_type["da_type"] = {
+                                        "type" : "Skater"
+                                    }
+                                elif m.group(2) == "extra-strength-scoring":
+                                    extra_stats.add("show-only-stat-g")
+                                    extra_stats.add("show-only-stat-a")
+                                    extra_stats.add("show-only-stat-p")
+                                    extra_stats.add("show-only-stat-g/gp")
+                                    extra_stats.add("show-only-stat-a/gp")
+                                    extra_stats.add("show-only-stat-p/gp")
+                                    extra_stats.add("show-only-stat-evg")
+                                    extra_stats.add("show-only-stat-eva")
+                                    extra_stats.add("show-only-stat-evp")
+                                    extra_stats.add("show-only-stat-evg/gp")
+                                    extra_stats.add("show-only-stat-eva/gp")
+                                    extra_stats.add("show-only-stat-evp/gp")
+                                    extra_stats.add("show-only-stat-ppg")
+                                    extra_stats.add("show-only-stat-ppa")
+                                    extra_stats.add("show-only-stat-ppp")
+                                    extra_stats.add("show-only-stat-ppg/gp")
+                                    extra_stats.add("show-only-stat-ppa/gp")
+                                    extra_stats.add("show-only-stat-ppp/gp")
+                                    extra_stats.add("show-only-stat-shg")
+                                    extra_stats.add("show-only-stat-sha")
+                                    extra_stats.add("show-only-stat-shp")
+                                    extra_stats.add("show-only-stat-shg/gp")
+                                    extra_stats.add("show-only-stat-sha/gp")
+                                    extra_stats.add("show-only-stat-shp/gp")
+                                    extra_stats.add("show-stat-eva/gp")
+                                    extra_stats.add("show-stat-ppa/gp")
+                                    extra_stats.add("show-stat-sha/gp")
+                                    extra_stats.add("show-stat-shg/gp")
+                                    extra_stats.add("show-stat-sha/gp")
+                                    extra_stats.add("show-stat-shp/gp")
+                                    extra_stats.add("show-only-stat-a1")
+                                    extra_stats.add("show-only-stat-otg")
+                                    extra_stats.add("show-only-stat-gwg")
+                                    extra_stats.add("show-only-stat-1stg")
+                                    extra_stats.add("show-only-stat-hat")
+                                    extra_stats.add("show-only-stat-eng")
+                                    extra_stats.add("show-only-stat-ena")
+                                    extra_stats.add("show-only-stat-enp")
+                                    extra_stats.add("show-only-stat-adjg")
+                                    extra_stats.add("show-only-stat-adja")
+                                    extra_stats.add("show-only-stat-adjp")
+                                    extra_stats.add("show-only-stat-a1/gp")
+                                    extra_stats.add("show-only-stat-a1/gp")
+                                    extra_stats.add("show-only-stat-eva1/gp")
+                                    extra_stats.add("show-only-stat-ppa1/gp")
+                                    extra_stats.add("show-only-stat-sha1/gp")
                                     player_type["da_type"] = {
                                         "type" : "Skater"
                                     }
@@ -8608,6 +8688,80 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                     extra_stats.add("show-stat-shg/60m")
                                     extra_stats.add("show-stat-sha/60m")
                                     extra_stats.add("show-stat-shp/60m")
+                                    player_type["da_type"] = {
+                                        "type" : "Skater"
+                                    }
+                                elif m.group(2) == "extra-strength-scoring-per60":
+                                    extra_stats.add("show-only-stat-g")
+                                    extra_stats.add("show-only-stat-a")
+                                    extra_stats.add("show-only-stat-p")
+                                    extra_stats.add("show-only-stat-g/gp")
+                                    extra_stats.add("show-only-stat-a/gp")
+                                    extra_stats.add("show-only-stat-p/gp")
+                                    extra_stats.add("show-only-stat-evg")
+                                    extra_stats.add("show-only-stat-eva")
+                                    extra_stats.add("show-only-stat-evp")
+                                    extra_stats.add("show-only-stat-evg/gp")
+                                    extra_stats.add("show-only-stat-eva/gp")
+                                    extra_stats.add("show-only-stat-evp/gp")
+                                    extra_stats.add("show-only-stat-ppg")
+                                    extra_stats.add("show-only-stat-ppa")
+                                    extra_stats.add("show-only-stat-ppp")
+                                    extra_stats.add("show-only-stat-ppg/gp")
+                                    extra_stats.add("show-only-stat-ppa/gp")
+                                    extra_stats.add("show-only-stat-ppp/gp")
+                                    extra_stats.add("show-only-stat-shg")
+                                    extra_stats.add("show-only-stat-sha")
+                                    extra_stats.add("show-only-stat-shp")
+                                    extra_stats.add("show-only-stat-shg/gp")
+                                    extra_stats.add("show-only-stat-sha/gp")
+                                    extra_stats.add("show-only-stat-shp/gp")
+                                    extra_stats.add("show-stat-eva/gp")
+                                    extra_stats.add("show-stat-ppa/gp")
+                                    extra_stats.add("show-stat-sha/gp")
+                                    extra_stats.add("show-stat-shg/gp")
+                                    extra_stats.add("show-stat-sha/gp")
+                                    extra_stats.add("show-stat-shp/gp")
+                                    extra_stats.add("show-only-stat-toi/gp")
+                                    extra_stats.add("show-only-stat-evtoi/gp")
+                                    extra_stats.add("show-only-stat-pptoi/gp")
+                                    extra_stats.add("show-only-stat-shtoi/gp")
+                                    extra_stats.add("show-only-stat-g/60m")
+                                    extra_stats.add("show-only-stat-a/60m")
+                                    extra_stats.add("show-only-stat-p/60m")
+                                    extra_stats.add("show-only-stat-evg/60m")
+                                    extra_stats.add("show-only-stat-eva/60m")
+                                    extra_stats.add("show-only-stat-evp/60m")
+                                    extra_stats.add("show-only-stat-ppg/60m")
+                                    extra_stats.add("show-only-stat-ppa/60m")
+                                    extra_stats.add("show-only-stat-ppp/60m")
+                                    extra_stats.add("show-only-stat-shg/60m")
+                                    extra_stats.add("show-only-stat-sha/60m")
+                                    extra_stats.add("show-only-stat-shp/60m")
+                                    extra_stats.add("show-stat-eva/60m")
+                                    extra_stats.add("show-stat-ppa/60m")
+                                    extra_stats.add("show-stat-sha/60m")
+                                    extra_stats.add("show-stat-shg/60m")
+                                    extra_stats.add("show-stat-sha/60m")
+                                    extra_stats.add("show-stat-shp/60m")
+                                    extra_stats.add("show-only-stat-a1")
+                                    extra_stats.add("show-only-stat-otg")
+                                    extra_stats.add("show-only-stat-gwg")
+                                    extra_stats.add("show-only-stat-1stg")
+                                    extra_stats.add("show-only-stat-hat")
+                                    extra_stats.add("show-only-stat-eng")
+                                    extra_stats.add("show-only-stat-ena")
+                                    extra_stats.add("show-only-stat-enp")
+                                    extra_stats.add("show-only-stat-adjg")
+                                    extra_stats.add("show-only-stat-adja")
+                                    extra_stats.add("show-only-stat-adjp")
+                                    extra_stats.add("show-only-stat-a1/gp")
+                                    extra_stats.add("show-only-stat-eva1/gp")
+                                    extra_stats.add("show-only-stat-ppa1/gp")
+                                    extra_stats.add("show-only-stat-sha1/gp")
+                                    extra_stats.add("show-only-stat-eva1/60m")
+                                    extra_stats.add("show-only-stat-ppa1/60m")
+                                    extra_stats.add("show-only-stat-sha1/60m")
                                     player_type["da_type"] = {
                                         "type" : "Skater"
                                     }
@@ -22459,11 +22613,11 @@ def determine_stat_value(player_game_info, all_events, qualifiers, og_row, playe
     if stat not in row:
         return -1
 
-    goal_stats = ["G", "EVG", "PPG", "SHG", "GWG", "GWP", "ENG", "OTG", "P", "EVP", "PPP", "SHP", "GWP", "ENP", "P1", "EVP1", "PPP1", "SHP1", "GWP1", "ENP1", "OTP1", "1stG", "S", "WristS", "WristG", "DeflectS", "DeflectG", "SlapS" "SlapG", "TipS", "TipG", "BackS", "BackG", "WrapS", "WrapG", "TSA", "HAT"]
+    goal_stats = ["G", "EVG", "PPG", "SHG", "GWG", "GWP", "OTP", "ENG", "OTG", "P", "EVP", "PPP", "SHP", "ENP", "P1", "EVP1", "PPP1", "SHP1", "GWP1", "ENP1", "OTP1", "1stG", "S", "WristS", "WristG", "DeflectS", "DeflectG", "SlapS" "SlapG", "TipS", "TipG", "BackS", "BackG", "WrapS", "WrapG", "TSA", "HAT"]
     shot_stats = ["S", "WristS", "DeflectS", "SlapS", "TipS", "BackS", "WrapS", "TSA"]
     missed_shot_stats = ["PostBar", "TSA", "TSM"]
     blocked_shot_stats = ["TSA", "TSB"]
-    assist_stats = ["GWA", "GWP", "A", "A1", "A2", "EVA", "EVA1", "EVA2", "PPA", "PPA1", "PPA2", "SHA", "SHA1", "SHA2", "ENA", "ENA1", "ENA2", "P", "P1", "EVP", "EVP1", "PPP", "PPP1", "SHP", "SHP1", "ENP", "ENP1"]
+    assist_stats = ["GWA", "GWP", "OTA", "OTP", "A", "A1", "A2", "EVA", "EVA1", "EVA2", "PPA", "PPA1", "PPA2", "SHA", "SHA1", "SHA2", "ENA", "ENA1", "ENA2", "P", "P1", "EVP", "EVP1", "PPP", "PPP1", "SHP", "SHP1", "ENP", "ENP1"]
     hit_stats = ["HIT"]
     hit_taken_stats = ["HITTkn"]
     block_stats = ["BLK"]
@@ -22586,6 +22740,8 @@ def determine_stat_value(player_game_info, all_events, qualifiers, og_row, playe
                             row["GWA"] += 1
                         if goal_event["emptyNet"]:
                             row["ENA"] += 1
+                        if goal_event["period"] == 4 or (not player_game_info["is_shootout"] and goal_event["period"] > 4):
+                            row["OTA"] += 1
                         if goal_event["is_primary"]:
                             row["A1"] += 1
                         else:
@@ -27814,6 +27970,8 @@ def perform_metadata_quals(qualifiers, player_type, row, player_game_info, nhl_p
                     row["GWA"] += 1
                 if goal_event["emptyNet"]:
                     row["ENA"] += 1
+                if goal_event["period"] == 4 or (not player_game_info["is_shootout"] and goal_event["period"] > 4):
+                    row["OTA"] += 1
                 if goal_event["is_primary"]:
                     row["A1"] += 1
                 else:
@@ -30767,6 +30925,7 @@ def clear_row_attrs(row, player_type):
         row["GWG"] = 0
         row["GWA"] = 0
         row["OTG"] = 0
+        row["OTA"] = 0
         row["1stG"] = 0
         row["ENG"] = 0
         row["ENA"] = 0
@@ -30827,6 +30986,7 @@ def clear_row_attrs(row, player_type):
 
         row["ENP"] = 0
         row["GWP"] = 0
+        row["OTP"] = 0
 
         row["HAT"] = 0
 
@@ -30876,6 +31036,7 @@ def calculate_row_attrs(row, player_type):
 
         row["ENP"] = row["ENG"] + row["ENA"]
         row["GWP"] = row["GWG"] + row["GWA"]
+        row["OTP"] = row["OTG"] + row["OTA"]
 
         row["HAT"] = int(row["G"] >= 3)
 
@@ -41334,13 +41495,13 @@ def is_against_header(header, over_header, extra_stats, player_type, has_toi_sta
     if "Assisted By" in extra_stats:
         return header not in ("G", "Shft", "Shft/GP", "TOI", "TOI/Shft", "OTG", "EVTOI",  "PPTOI",  "SHTOI", "EVTOI/GP",  "PPTOI/GP",  "SHTOI/GP", "GWG", "1stG", "HAT", "ENG", "EVG", "AdjG", "PPG", "SHG", "G/GP", "EVG/GP", "PPG/GP", "SHG/GP", "G/GP", "G/60M", "EVG/60M", "PPG/60M", "SHG/60M")
     if "Assisted On" in extra_stats:
-        return header not in ("A", "A/GP", "A/60M", "Shft", "TOI", "Shft/GP", "TOI/Shft", "EVTOI",  "PPTOI",  "SHTOI", "EVTOI/GP",  "PPTOI/GP",  "SHTOI/GP", "GWA", "ENA", "A1", "A1%", "A1/GP", "A1/60M", "AdjA", "EVA", "EVA/GP", "EVA/60M", "EVA1", "EVA1/60M", "EVA1%", "EVA1/GP", "SHA", "SHA/GP", "SHA/60M", "SHA1", "SHA1/60M", "SHA1%", "SHA1/GP", "PPA", "PPA/GP", "PPA/60M", "PPA1", "PPA1/60M", "PPA1%", "PPA1/GP")
+        return header not in ("A", "A/GP", "A/60M", "Shft", "TOI", "Shft/GP", "TOI/Shft", "EVTOI",  "PPTOI",  "SHTOI", "EVTOI/GP",  "PPTOI/GP",  "SHTOI/GP", "GWA", "OTA", "ENA", "A1", "A1%", "A1/GP", "A1/60M", "AdjA", "EVA", "EVA/GP", "EVA/60M", "EVA1", "EVA1/60M", "EVA1%", "EVA1/GP", "SHA", "SHA/GP", "SHA/60M", "SHA1", "SHA1/60M", "SHA1%", "SHA1/GP", "PPA", "PPA/GP", "PPA/60M", "PPA1", "PPA1/60M", "PPA1%", "PPA1/GP")
     if "Points On" in extra_stats:
-        return header not in ("P", "P/GP", "P/60M", "P1", "P1/GP", "P1/60M", "Shft", "Shft/GP", "TOI", "TOI/Shft", "EVTOI",  "PPTOI",  "SHTOI", "EVTOI/GP",  "PPTOI/GP",  "SHTOI/GP", "GWP", "ENP", "AdjP", "EVP", "EVP/GP", "EVP/60M", "SHP", "SHP/GP", "SHP/60M", "PPP", "PPP/GP", "PPP/60M", "EVP1", "EVP1/GP", "EVP1/60M", "SHP1", "SHP1/GP", "SHP1/60M", "PPP1", "PPP1/GP", "PPP1/60M")
+        return header not in ("P", "P/GP", "P/60M", "P1", "P1/GP", "P1/60M", "Shft", "Shft/GP", "TOI", "TOI/Shft", "EVTOI",  "PPTOI",  "SHTOI", "EVTOI/GP",  "PPTOI/GP",  "SHTOI/GP", "GWP", "OTP", "ENP", "AdjP", "EVP", "EVP/GP", "EVP/60M", "SHP", "SHP/GP", "SHP/60M", "PPP", "PPP/GP", "PPP/60M", "EVP1", "EVP1/GP", "EVP1/60M", "SHP1", "SHP1/GP", "SHP1/60M", "PPP1", "PPP1/GP", "PPP1/60M")
     if "scoring-stats-oi" in extra_stats:
-        return header not in ("G", "OTG", "Shft", "Shft/GP", "TOI", "TOI/Shft", "EVTOI",  "PPTOI",  "SHTOI", "EVTOI/GP",  "PPTOI/GP",  "SHTOI/GP", "GWG", "GWA", "GWP", "1stG", "HAT", "ENG", "ENA", "ENP", "EVG", "AdjG", "PPG", "SHG", "G/GP", "EVG/GP", "EVG/60M", "PPG/GP", "PPG/60M", "G/60M", "A", "A/GP", "A/60M", "A1", "A1%", "A1/GP", "A1/60M", "AdjA", "EVA", "SHA", "PPA", "P", "P/GP", "P/60M", "P1", "P1%", "P1/GP", "P1/60M", "AdjP", "EVP", "EVP/GP", "EVP/60M", "SHP", "PPP", "PPP/GP", "PPP/60M", "EVA1%", "EVP1%", "SHA1%", "SHP1%", "PPA1%", "PPP1%", "EVA1", "EVP1", "SHA1", "SHP1", "PPA1", "PPP1", "SHG/GP", "SHP/GP", "SHP/60M", "SHG/60M", "GF", "GA", "GF/60M", "GA/60M", "GFPer", "GFRel/60M", "GARel/60M", "GFRelPer", "IPP", "TmTOI%")
+        return header not in ("G", "OTG", "Shft", "Shft/GP", "TOI", "TOI/Shft", "EVTOI",  "PPTOI",  "SHTOI", "EVTOI/GP",  "PPTOI/GP",  "SHTOI/GP", "GWG", "GWA", "GWP", "OTA", "OTP", "1stG", "HAT", "ENG", "ENA", "ENP", "EVG", "AdjG", "PPG", "SHG", "G/GP", "EVG/GP", "EVG/60M", "PPG/GP", "PPG/60M", "G/60M", "A", "A/GP", "A/60M", "A1", "A1%", "A1/GP", "A1/60M", "AdjA", "EVA", "SHA", "PPA", "P", "P/GP", "P/60M", "P1", "P1%", "P1/GP", "P1/60M", "AdjP", "EVP", "EVP/GP", "EVP/60M", "SHP", "PPP", "PPP/GP", "PPP/60M", "EVA1%", "EVP1%", "SHA1%", "SHP1%", "PPA1%", "PPP1%", "EVA1", "EVP1", "SHA1", "SHP1", "PPA1", "PPP1", "SHG/GP", "SHP/GP", "SHP/60M", "SHG/60M", "GF", "GA", "GF/60M", "GA/60M", "GFPer", "GFRel/60M", "GARel/60M", "GFRelPer", "IPP", "TmTOI%")
     if "scoring-stats" in extra_stats:
-        return header not in ("G", "OTG", "Shft", "Shft/GP", "TOI", "TOI/Shft", "EVTOI",  "PPTOI",  "SHTOI", "EVTOI/GP",  "PPTOI/GP",  "SHTOI/GP", "GWG", "GWA", "GWP", "1stG", "HAT", "ENG", "ENA", "ENP", "EVG", "AdjG", "PPG", "SHG", "G/GP", "EVG/GP", "EVG/60M", "PPG/GP", "PPG/60M", "G/60M", "A", "A/GP", "A/60M", "A1", "A1%", "A1/GP", "A1/60M", "AdjA", "EVA", "SHA", "PPA", "P", "P/GP", "P/60M", "P1", "P1%", "P1/GP", "P1/60M", "AdjP", "EVP", "EVP/GP", "EVP/60M", "SHP", "PPP", "PPP/GP", "PPP/60M", "EVA1%", "EVP1%", "SHA1%", "SHP1%", "PPA1%", "PPP1%", "EVA1", "EVP1", "SHA1", "SHP1", "PPA1", "PPP1", "SHG/GP", "SHP/GP", "SHP/60M", "SHG/60M")
+        return header not in ("G", "OTG", "Shft", "Shft/GP", "TOI", "TOI/Shft", "EVTOI",  "PPTOI",  "SHTOI", "EVTOI/GP",  "PPTOI/GP",  "SHTOI/GP", "GWG", "GWA", "GWP", "OTA", "OTP", "1stG", "HAT", "ENG", "ENA", "ENP", "EVG", "AdjG", "PPG", "SHG", "G/GP", "EVG/GP", "EVG/60M", "PPG/GP", "PPG/60M", "G/60M", "A", "A/GP", "A/60M", "A1", "A1%", "A1/GP", "A1/60M", "AdjA", "EVA", "SHA", "PPA", "P", "P/GP", "P/60M", "P1", "P1%", "P1/GP", "P1/60M", "AdjP", "EVP", "EVP/GP", "EVP/60M", "SHP", "PPP", "PPP/GP", "PPP/60M", "EVA1%", "EVP1%", "SHA1%", "SHP1%", "PPA1%", "PPP1%", "EVA1", "EVP1", "SHA1", "SHP1", "PPA1", "PPP1", "SHG/GP", "SHP/GP", "SHP/60M", "SHG/60M")
     if "Hit On" in extra_stats:
         return header not in ("HIT", "HIT/GP", "HIT/60M")
     if "Block On" in extra_stats:
