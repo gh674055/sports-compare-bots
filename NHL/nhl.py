@@ -8614,10 +8614,15 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                     extra_stats.add("show-only-stat-adja")
                                     extra_stats.add("show-only-stat-adjp")
                                     extra_stats.add("show-only-stat-a1/gp")
-                                    extra_stats.add("show-only-stat-a1/gp")
+                                    extra_stats.add("show-only-stat-eva1")
+                                    extra_stats.add("show-only-stat-ppa1")
+                                    extra_stats.add("show-only-stat-sha1")
                                     extra_stats.add("show-only-stat-eva1/gp")
                                     extra_stats.add("show-only-stat-ppa1/gp")
                                     extra_stats.add("show-only-stat-sha1/gp")
+                                    extra_stats.add("show-stat-eva1/gp")
+                                    extra_stats.add("show-stat-ppa1/gp")
+                                    extra_stats.add("show-stat-sha1/gp")
                                     player_type["da_type"] = {
                                         "type" : "Skater"
                                     }
@@ -8756,12 +8761,21 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                     extra_stats.add("show-only-stat-adja")
                                     extra_stats.add("show-only-stat-adjp")
                                     extra_stats.add("show-only-stat-a1/gp")
+                                    extra_stats.add("show-only-stat-eva1")
+                                    extra_stats.add("show-only-stat-ppa1")
+                                    extra_stats.add("show-only-stat-sha1")
                                     extra_stats.add("show-only-stat-eva1/gp")
                                     extra_stats.add("show-only-stat-ppa1/gp")
                                     extra_stats.add("show-only-stat-sha1/gp")
                                     extra_stats.add("show-only-stat-eva1/60m")
                                     extra_stats.add("show-only-stat-ppa1/60m")
                                     extra_stats.add("show-only-stat-sha1/60m")
+                                    extra_stats.add("show-stat-eva1/gp")
+                                    extra_stats.add("show-stat-ppa1/gp")
+                                    extra_stats.add("show-stat-sha1/gp")
+                                    extra_stats.add("show-stat-eva1/60m")
+                                    extra_stats.add("show-stat-ppa1/60m")
+                                    extra_stats.add("show-stat-sha1/60m")
                                     player_type["da_type"] = {
                                         "type" : "Skater"
                                     }
