@@ -17974,15 +17974,15 @@ def get_live_game(player_link, player_data, player_type, time_frame, s):
         elif game_type == 3 and not time_frame["playoffs"]:
             return
         
-        game_status = latest_game["status"]["abstractGameState"]
-        if game_status != "Live" and game_status != "Final":
-            return
-
         game_link = latest_game["link"]
 
         game_date = sub_data["dates"][0]["date"]
 
         sub_data = url_request_json(s, "https://statsapi.web.nhl.com" + game_link)
+
+        game_status = sub_data["gameData"]["status"]["abstractGameState"]
+        if game_status != "Live" and game_status != "Final":
+            return
 
         is_home = sub_data["gameData"]["teams"]["home"]["id"] == current_team
         team_str = "home" if is_home else "away"
