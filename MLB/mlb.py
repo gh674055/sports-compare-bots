@@ -7090,7 +7090,7 @@ def sub_parse_input(curr, comment, debug_mode, comment_obj, force_through):
                         reply_comment = comment_obj["comment"].reply(reddit_message)
                         comment_obj["reply"].delete()
                         comment_obj["reply"] = None
-                    logger.info("#" + str(threading.get_ident()) + "#   " + "MESSAGE: " + reddit_message)
+                logger.info("#" + str(threading.get_ident()) + "#   " + "MESSAGE: " + reddit_message)
             except praw.exceptions.APIException as e:
                 if (e.error_type == "RATELIMIT"):
                     if failed_counter == 0 and not isinstance(comment_obj["reply"], Message):
