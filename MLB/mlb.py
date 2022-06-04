@@ -18272,8 +18272,8 @@ def handle_season_only_stats(player_page, field_player_page, player_data, player
         stat_sum_range = ",".join(all_years) if len(all_years) > 1 else list(all_years)[0] + "-" + list(all_years)[0]
     
     is_full_current_year = min_year == max_year and min_year == current_season
-        
-    if stat_sum_range and (not has_team_quals or is_full_teams):
+    
+    if stat_sum_range and (not has_team_quals or is_full_teams or all_teams_unique):
         if player_type["da_type"] != "Batter":
             split_table_names.append("pitching_start")
             split_table_names.append("pitching_win_probability")
@@ -18291,7 +18291,7 @@ def handle_season_only_stats(player_page, field_player_page, player_data, player
     has_pitch_waa = False
     has_pos_waa = False
     for table_index, table_name in enumerate(split_table_names):
-        table_has_teeam_quals = has_team_quals and not is_full_teams
+        table_has_teeam_quals = has_team_quals and not is_full_teams and not all_teams_unique
 
         player_page_to_use = player_page
         if stat_sum_range and not table_has_teeam_quals:
@@ -18839,7 +18839,7 @@ def handle_season_only_stats(player_page, field_player_page, player_data, player
                                 all_rows[len(all_rows) - 1]["WAR7yr"] = float(str(war_value))
                                 all_rows[len(all_rows) - 1]["JAWS"] = float(str(war_value))
     
-    if stat_sum_range and (not has_team_quals or is_full_teams):
+    if stat_sum_range and (not has_team_quals or is_full_teams or all_teams_unique):
         total_salary_stats = {}
         total_infl_salary_stats = {}
         for row in all_rows:
@@ -18883,7 +18883,7 @@ def handle_season_only_stats(player_page, field_player_page, player_data, player
                     if "Salary" not in row:
                         row[stat] = 0
 
-    if stat_sum_range and (not has_team_quals or is_full_teams):
+    if stat_sum_range and (not has_team_quals or is_full_teams or all_teams_unique):
         if "WAR7yr" not in all_rows[len(all_rows) - 1]:
             all_rows[len(all_rows) - 1]["WAR7yr"] = calculate_manual_war_7yr(all_rows, player_data, player_type, time_frame, is_pitching_jaws)
     
