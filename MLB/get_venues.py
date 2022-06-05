@@ -77,9 +77,7 @@ def main():
                             sub_data = url_request_json(s, "https://statsapi.mlb.com" + game["link"])
                         except urllib.error.HTTPError as err:
                             if err.status == 404:
-                                missing_games = True
-                                game_data["missing_data"] = True
-                                return game_data, row_data, row_index, missing_games, missing_pitch
+                                continue
                             else:
                                 raise
 
@@ -88,13 +86,13 @@ def main():
 
                         team_venues[venue_id] = {
                             "values" : [],
-                            "city" : sub_data["gameData"]["venue"]["location"]["city"] if "city" in sub_data["gameData"]["venue"]["location"] else None,
-                            "state" : sub_data["gameData"]["venue"]["location"]["stateAbbrev"] if "stateAbbrev" in sub_data["gameData"]["venue"]["location"] else None,
-                            "country" : country_codes[sub_data["gameData"]["venue"]["location"]["country"]] if "country" in sub_data["gameData"]["venue"]["location"] else None,
-                            "time_zone" : sub_data["gameData"]["venue"]["timeZone"]["id"]
+                            "city" : sub_data["gameData"]["venue"]["location"]["city"].strip() if "city" in sub_data["gameData"]["venue"]["location"] else None,
+                            "state" : sub_data["gameData"]["venue"]["location"]["stateAbbrev"].strip() if "stateAbbrev" in sub_data["gameData"]["venue"]["location"] else None,
+                            "country" : country_codes[sub_data["gameData"]["venue"]["location"]["country"]].strip() if "country" in sub_data["gameData"]["venue"]["location"] else None,
+                            "time_zone" : sub_data["gameData"]["venue"]["timeZone"]["id"].strip()
                         }
                     if team_name not in team_venues[venue_id]["values"]:
-                        team_venues[venue_id]["values"].append(team_name)
+                        team_venues[venue_id]["values"].append(team_name.strip())
 
             print(sub_year)
 

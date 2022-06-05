@@ -5,7 +5,8 @@
         "state": "OH",
         "time_zone": "America/New_York",
         "venues": [
-            "League Park"
+            "League Park",
+            "Elk's Field"
         ]
     },
     "AKR01": {
@@ -218,6 +219,15 @@
             "Rogers Centre"
         ]
     },
+    "BUF96": {
+        "city": "Buffalo",
+        "country": "US",
+        "state": "NY",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Canisius Field"
+        ]
+    },
     "BUF97": {
         "city": "Buffalo",
         "country": "US",
@@ -264,6 +274,24 @@
         "venues": [
             "Bank of America Stadium",
             "Ericsson Stadium"
+        ]
+    },
+    "CHI84": {
+        "city": "Chicago",
+        "country": "US",
+        "state": "IL",
+        "time_zone": "America/Chicago",
+        "venues": [
+            "Pullman Athletic Field"
+        ]
+    },
+    "CHI86": {
+        "city": "Chicago",
+        "country": "US",
+        "state": "IL",
+        "time_zone": "America/Chicago",
+        "venues": [
+            "Logan Square Park"
         ]
     },
     "CHI87": {
@@ -384,6 +412,15 @@
             "Memorial Stadium (Champaign)"
         ]
     },
+    "CHL00": {
+        "city": "Champaign",
+        "country": "US",
+        "state": "IL",
+        "time_zone": "America/Chicago",
+        "venues": [
+            "McKinley Field"
+        ]
+    },
     "CIN00": {
         "city": "Cincinnati",
         "country": "US",
@@ -493,7 +530,7 @@
         "state": "OH",
         "time_zone": "America/New_York",
         "venues": [
-            "West Side Athletic Club Field "
+            "West Side Athletic Club Field"
         ]
     },
     "COL99": {
@@ -572,6 +609,15 @@
             "Ford Field"
         ]
     },
+    "DET95": {
+        "city": "Detroit",
+        "country": "US",
+        "state": "MI",
+        "time_zone": "America/Detroit",
+        "venues": [
+            "Mack Park"
+        ]
+    },
     "DET96": {
         "city": "Portsmouth",
         "country": "US",
@@ -628,6 +674,15 @@
             "Erie Stadium"
         ]
     },
+    "FTW00": {
+        "city": "Fort Wayne",
+        "country": "US",
+        "state": "IN",
+        "time_zone": "America/Indiana/Indianapolis",
+        "venues": [
+            "League Park"
+        ]
+    },
     "FYJ00": {
         "city": "Philadelphia",
         "country": "US",
@@ -681,6 +736,15 @@
         "time_zone": "America/Chicago",
         "venues": [
             "Turner Field"
+        ]
+    },
+    "HAM01": {
+        "city": "Gary",
+        "country": "US",
+        "state": "IN",
+        "time_zone": "America/Chicago",
+        "venues": [
+            "Gleason Park"
         ]
     },
     "HAW00": {
@@ -742,7 +806,7 @@
         "city": "East Hartford",
         "country": "US",
         "state": "CT",
-        "time_zone": "America/Chicago",
+        "time_zone": "America/New_York",
         "venues": [
             "East Hartford Velodrome"
         ]
@@ -896,6 +960,15 @@
             "Tottenham Stadium"
         ]
     },
+    "LOR00": {
+        "city": "Lorain",
+        "country": "US",
+        "state": "OH",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Lorain Athletic Field"
+        ]
+    },
     "LOU00": {
         "city": "Louisville",
         "country": "US",
@@ -903,6 +976,24 @@
         "time_zone": "America/Kentucky/Louisville",
         "venues": [
             "Parkway Field"
+        ]
+    },
+    "LOU01": {
+        "city": "Louisville",
+        "country": "US",
+        "state": "KY",
+        "time_zone": "America/Kentucky/Louisville",
+        "venues": [
+            "Kentucky Fairgrounds"
+        ]
+    },
+    "LOU02": {
+        "city": "Louisville",
+        "country": "US",
+        "state": "KY",
+        "time_zone": "America/Kentucky/Louisville",
+        "venues": [
+            "Eclipse Park"
         ]
     },
     "MAD00": {
@@ -1056,6 +1147,24 @@
             "Metropolitan Stadium"
         ]
     },
+    "MON99": {
+        "city": "Monmouth",
+        "country": "US",
+        "state": "IL",
+        "time_zone": "America/Chicago",
+        "venues": [
+            "Monmouth College Athletic Park"
+        ]
+    },
+    "MUN00": {
+        "city": "Muncie",
+        "country": "US",
+        "state": "IN",
+        "time_zone": "America/Indiana/Indianapolis",
+        "venues": [
+            "Walnut Street Park"
+        ]
+    },
     "NAS00": {
         "city": "Nashville",
         "country": "US",
@@ -1132,6 +1241,15 @@
         "venues": [
             "MetLife Stadium",
             "New Meadowlands Stadium"
+        ]
+    },
+    "NYC95": {
+        "city": "New Haven",
+        "country": "US",
+        "state": "CT",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Weiss Field"
         ]
     },
     "NYC96": {
@@ -1235,7 +1353,8 @@
         "state": "PA",
         "time_zone": "America/New_York",
         "venues": [
-            "Baker Bowl"
+            "Baker Bowl",
+            "National League Park"
         ]
     },
     "PHI96": {
@@ -1318,7 +1437,7 @@
         "state": "PA",
         "time_zone": "America/New_York",
         "venues": [
-            "Pitt Stadium "
+            "Pitt Stadium"
         ]
     },
     "PIT99": {
@@ -1367,6 +1486,24 @@
             "Horlick Legion Athletic Field"
         ]
     },
+    "RCK00": {
+        "city": "Rockford",
+        "country": "US",
+        "state": "IL",
+        "time_zone": "America/Chicago",
+        "venues": [
+            "Kishwaukee Park"
+        ]
+    },
+    "RIC00": {
+        "city": "Richmond",
+        "country": "US",
+        "state": "VA",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Boulevard Field"
+        ]
+    },
     "RII00": {
         "city": "Rock Island",
         "country": "US",
@@ -1383,6 +1520,15 @@
         "time_zone": "America/New_York",
         "venues": [
             "Edgerton Park"
+        ]
+    },
+    "ROC01": {
+        "city": "Rochester",
+        "country": "US",
+        "state": "NY",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Rochester Baseball Park"
         ]
     },
     "SAN00": {
@@ -1594,7 +1740,8 @@
         "state": "DC",
         "time_zone": "America/New_York",
         "venues": [
-            "Griffith Stadium"
+            "Griffith Stadium",
+            "American League Park"
         ]
     },
     "WAS99": {
@@ -1624,6 +1771,15 @@
         "time_zone": "America/New_York",
         "venues": [
             "Laidley Field"
+        ]
+    },
+    "ZAN00": {
+        "city": "Zanesville",
+        "country": "US",
+        "state": "OH",
+        "time_zone": "America/New_York",
+        "venues": [
+            "Mark Athletic Field"
         ]
     }
 }

@@ -80,7 +80,10 @@ def main():
                         country = "US"
 
                     if state:
-                        location = geolocate(geolocator, city + " " + state + " " + country)
+                        state_to_use = state
+                        if state == "CT":
+                            state_to_use = "Connecticut"
+                        location = geolocate(geolocator, city + " " + state_to_use + " " + country)
                     else:
                         location = geolocate(geolocator, city + " " + country)
 
@@ -106,7 +109,7 @@ def main():
                                 break
 
                     paragraphs = meta_tag.find_all("p")
-                    venues = [current_name]
+                    venues = [current_name.strip()]
                     for paragraph in paragraphs:
                         paragraph_text = str(paragraph.find(text=True))
                         if paragraph_text.startswith("Known As:"):
@@ -116,17 +119,17 @@ def main():
                             for venue_text in text_split:
                                 venue_name = re.search(r"(.+) \(\d{4}-\d{4}\)", venue_text.strip()).group(1).strip()
                                 if venue_name not in venues:
-                                    venues.append(venue_name)
+                                    venues.append(venue_name.strip())
                             break
 
                     if not city or not country or not time_zone or not venues:
-                        print("Invalid arena " + venue_ids)
+                        print("Invalid arena " + venue_id)
 
                     team_venues[venue_id] = {
-                        "city" : city,
-                        "state" : state,
-                        "country" : country,
-                        "time_zone" : time_zone,
+                        "city" : city.strip(),
+                        "state" : state.strip() if state else None,
+                        "country" : country.strip(),
+                        "time_zone" : time_zone.strip(),
                         "venues" : venues
                     }
 

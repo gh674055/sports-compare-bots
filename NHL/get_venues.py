@@ -119,15 +119,6 @@ manual_arenas = {
             "Patrick Arena"
         ]
     },
-    "ralph-wilson-stadium": {
-        "city": "Orchard Park",
-        "country": "US",
-        "state": "NY",
-        "time_zone": "America/New_York",
-        "venues": [
-            "Ralph Wilson Stadium"
-        ]
-    },
     "saitama-super-arena": {
         "city": "Saitama",
         "country": "JP",
@@ -297,14 +288,17 @@ def main():
                                                     if country == "CZ":
                                                         arena_names[index] = "O2 Czech Republic"
 
+                                            for index, arena_name in enumerate(arena_names):
+                                                arena_names[index] = arena_name.strip()
+
                                             if not city or not country or not time_zone or not arena_names:
                                                 print("Invalid Arena " + arena_id)
                                             
                                             team_venues[arena_id] = {
-                                                "city" : city,
-                                                "state" : state,
-                                                "country" : country,
-                                                "time_zone" : time_zone,
+                                                "city" : city.strip(),
+                                                "state" : state.strip() if state else None,
+                                                "country" : country.strip(),
+                                                "time_zone" : time_zone.strip(),
                                                 "venues" : arena_names
                                             }
 

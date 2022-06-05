@@ -329,7 +329,8 @@
         "state": "PA",
         "time_zone": "America/New_York",
         "values": [
-            "BB&T Ballpark"
+            "BB&T Ballpark",
+            "Muncy Bank Ballpark"
         ]
     },
     "2756": {
@@ -619,7 +620,7 @@
         ]
     },
     "3135": {
-        "city": "Bloomington ",
+        "city": "Bloomington",
         "country": "US",
         "state": "MI",
         "time_zone": "America/Chicago",
@@ -682,7 +683,7 @@
         ]
     },
     "3142": {
-        "city": "San Francisco  ",
+        "city": "San Francisco",
         "country": "US",
         "state": "CA",
         "time_zone": "America/Los_Angeles",
