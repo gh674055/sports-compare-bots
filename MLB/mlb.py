@@ -9020,25 +9020,6 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 qual_type = "Walk Off"
                                 extra_stats.add("current-stats")
                                 extra_stats.add("walk-off")
-                                extra_stats.add("show-only-stat-h")
-                                extra_stats.add("show-only-stat-1b")
-                                extra_stats.add("show-only-stat-2b")
-                                extra_stats.add("show-only-stat-3b")
-                                extra_stats.add("show-only-stat-hr")
-                                extra_stats.add("show-only-stat-slam")
-                                extra_stats.add("show-only-stat-xbh")
-                                extra_stats.add("show-only-stat-walkoff")
-                                extra_stats.add("show-only-stat-r")
-                                extra_stats.add("show-only-stat-rbi")
-                                extra_stats.add("show-only-stat-bb")
-                                extra_stats.add("show-only-stat-k")
-                                extra_stats.add("show-only-stat-sb")
-                                extra_stats.add("show-only-stat-cs")
-                                extra_stats.add("show-only-stat-ibb")
-                                extra_stats.add("show-only-stat-hbp")
-                                extra_stats.add("show-only-stat-sh")
-                                extra_stats.add("show-only-stat-sf")
-                                extra_stats.add("show-only-stat-gdp")
                             elif qualifier_str == "game-tying-opp":
                                 qual_type = "Game Tying Opportunity"
                                 extra_stats.add("current-stats")
@@ -38590,7 +38571,7 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
                                         elif event_type in ["sac_bunt_double_play"]:
                                             event_type = "sac_bunt"
 
-                                        if event_type.startswith("stolen_base"):
+                                        if event_type.startswith("stolen_base") or event_type.startswith("passed_ball"):
                                             event_type = "no_stats_sb"
                                         else:
                                             if event_type not in event_type_stat_mappings or event_type in ["caught_stealing", "run_scored", "pick_off"]:
@@ -38711,7 +38692,7 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
             elif event_type in ["sac_bunt_double_play"]:
                 event_type = "sac_bunt"
 
-            if event_type.startswith("stolen_base"):
+            if event_type.startswith("stolen_base") or event_type.startswith("passed_ball"):
                 event_type = "no_stats_sb"
             else:
                 if event_type not in event_type_stat_mappings or event_type in ["caught_stealing", "run_scored", "pick_off"]:
@@ -38973,7 +38954,7 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
                     elif event_type in ["sac_bunt_double_play"]:
                         event_type = "sac_bunt"
 
-                    if event_type.startswith("stolen_base"):
+                    if event_type.startswith("stolen_base") or event_type.startswith("passed_ball"):
                         event_type = "no_stats_sb"
                     else:
                         if event_type not in event_type_stat_mappings or event_type in ["caught_stealing", "run_scored", "pick_off"]:
@@ -39354,7 +39335,7 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
             elif event_type in ["sac_bunt_double_play"]:
                 event_type = "sac_bunt"
 
-            if event_type.startswith("stolen_base"):
+            if event_type.startswith("stolen_base") or event_type.startswith("passed_ball"):
                 event_type = "no_stats_sb"
             else:
                 if event_type not in event_type_stat_mappings or event_type in ["caught_stealing", "run_scored", "pick_off"]:
