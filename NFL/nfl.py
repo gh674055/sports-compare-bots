@@ -6236,7 +6236,7 @@ def handle_the_same_games_quals(sub_name, qual_str, subbb_frames, time_frame, pl
     names = re.split(r"(?<!\\)\+", sub_name.strip())
 
     extra_stats = copy.deepcopy(extra_stats)
-    if new_qual_type in ["Age, "Season Age"] and "current-stats" in extra_stats:
+    if new_qual_type in ["Age", "Season Age"] and "current-stats" in extra_stats:
         extra_stats.remove("current-stats")
 
     for name in names:

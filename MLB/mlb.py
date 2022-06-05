@@ -14096,7 +14096,7 @@ def handle_the_same_games_quals(sub_name, qual_str, subbb_frames, time_frame, pl
     extra_stats = copy.deepcopy(extra_stats)
     if new_qual_type == "Pit" and player_type["da_type"] == "Batter":
         extra_stats.add("current-stats")
-    elif new_qual_type in ["Age, "Season Age"] and "current-stats" in extra_stats:
+    elif new_qual_type in ["Age", "Season Age"] and "current-stats" in extra_stats:
         extra_stats.remove("current-stats")
 
     for name in names:
