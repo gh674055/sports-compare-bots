@@ -14093,9 +14093,11 @@ def handle_the_same_games_quals(sub_name, qual_str, subbb_frames, time_frame, pl
 
     names = re.split(r"(?<!\\)\+", sub_name.strip())
 
+    extra_stats = copy.deepcopy(extra_stats)
     if new_qual_type == "Pit" and player_type["da_type"] == "Batter":
-        extra_stats = copy.deepcopy(extra_stats)
         extra_stats.add("current-stats")
+    elif "current-stats" in extra_stats:
+        extra_stats.remove("current-stats")
 
     for name in names:
         min_value = float("inf")
@@ -28041,7 +28043,27 @@ def get_team_schedule(player_data, seasons, needs_reg_season, needs_playoffs, ne
 def handle_mlb_game_stats(all_rows, has_count_stat, qualifiers, player_data, player_type, missing_games, missing_pitch, extra_stats, s):
     if not all_rows:
         return [], missing_games, missing_pitch
+    
+    games_to_skip = get_games_to_skip(all_rows, qualifiers, player_data, player_type)
+    return get_mlb_game_stats(all_rows, has_count_stat, qualifiers, games_to_skip, player_data, missing_games, missing_pitch, player_type, extra_stats, True, s)
 
+def handle_event_stats(qual, all_rows, games_to_skip, qualifiers, player_type, player_data):
+    if qual in qualifiers:
+        for row_data in all_rows:
+            row_data["DateStart"] = [row_data["Date"]]
+            prev_is_playofs = row_data["is_playoffs"]
+            if row_data["is_playoffs"]:
+                row_data["is_playoffs"] = "Only"
+            else:
+                row_data["is_playoffs"] = None
+
+            for qual_obj in qualifiers[qual]:
+                if is_invalid_stat(qual_obj["stat"], player_type, row_data, False)["all_invalid"]:
+                    games_to_skip.add(row_data["GameID"])
+            
+            row_data["is_playoffs"] = prev_is_playofs
+
+def get_games_to_skip(all_rows, qualifiers, player_data, player_type):
     games_to_skip = set()
     if "Batting Against" in qualifiers:
         for row_data in all_rows:
@@ -28554,481 +28576,46 @@ def handle_mlb_game_stats(all_rows, has_count_stat, qualifiers, player_data, pla
                             has_match = True
             if not has_match:
                 games_to_skip.add(row_data["GameID"])
+    if "Leading Off Game" in qualifiers:
+        for row_data in all_rows:
+            has_match = False
+            for qual_object in qualifiers["Leading Off Game"]:
+                if not qual_object["negate"]:
+                    if player_type["da_type"] == "Batter":
+                        if ("BOP" not in row_data or not row_data["BOP"]) or row_data["BOP"] == 1:
+                            has_match = True
+                    else:
+                        has_match = True
+                else:
+                    has_match = True
+                
+            if not has_match:
+                games_to_skip.add(row_data["GameID"])
+    if "Leading Off Whole Game" in qualifiers:
+        for row_data in all_rows:
+            has_match = False
+            for qual_object in qualifiers["Leading Off Whole Game"]:
+                if not qual_object["negate"]:
+                    if player_type["da_type"] == "Batter":
+                        if ("BOP" not in row_data or not row_data["BOP"]) or row_data["BOP"] == 1:
+                            has_match = True
+                    else:
+                        has_match = True
+                else:
+                    has_match = True
+                
+            if not has_match:
+                games_to_skip.add(row_data["GameID"])
     for qual in ["Event Stat", "Event Stat Reversed", "Event Stats", "Event Stats Reversed", "Starting Event Stat", "Starting Event Stat Reversed", "Starting Event Stats", "Starting Event Stats Reversed", "Game Event Stat", "Game Event Stat Reversed", "Game Event Stats", "Game Event Stats Reversed", "Starting Game Event Stat", "Starting Game Event Stat Reversed", "Starting Game Event Stats", "Starting Game Event Stats Reversed"]:
         handle_event_stats(qual, all_rows, games_to_skip, qualifiers, player_type, player_data)
 
-    return get_mlb_game_stats(all_rows, has_count_stat, qualifiers, games_to_skip, player_data, missing_games, missing_pitch, player_type, extra_stats, True, s)
-
-def handle_event_stats(qual, all_rows, games_to_skip, qualifiers, player_type, player_data):
-    if qual in qualifiers:
-        for row_data in all_rows:
-            row_data["DateStart"] = [row_data["Date"]]
-            prev_is_playofs = row_data["is_playoffs"]
-            if row_data["is_playoffs"]:
-                row_data["is_playoffs"] = "Only"
-            else:
-                row_data["is_playoffs"] = None
-
-            for qual_obj in qualifiers[qual]:
-                if is_invalid_stat(qual_obj["stat"], player_type, row_data, False)["all_invalid"]:
-                    games_to_skip.add(row_data["GameID"])
-            
-            row_data["is_playoffs"] = prev_is_playofs
+    return games_to_skip
 
 def handle_mlb_game_stats_single_thread(all_rows, has_count_stat, qualifiers, player_data, player_type, missing_games, missing_pitch, extra_stats, s):
     if not all_rows:
         return [], missing_games, missing_pitch
-
-    games_to_skip = set()
-    if "Batting Against" in qualifiers:
-        for row_data in all_rows:
-            for qual_object in qualifiers["Batting Against"]:
-                if not qual_object["negate"]:
-                    has_match = False
-                    for player in qual_object["values"]:
-                        if row_data["Tm"].lower() in player["games"] and row_data["GameID"] in player["games"][row_data["Tm"].lower()]:
-                            has_match = True
-                
-                    if not has_match:
-                        games_to_skip.add(row_data["GameID"])
-    if "Pitching Against" in qualifiers:
-        for row_data in all_rows:
-            for qual_object in qualifiers["Pitching Against"]:
-                if not qual_object["negate"]:
-                    has_match = False
-                    for player in qual_object["values"]:
-                        if row_data["Tm"].lower() in player["games"] and row_data["GameID"] in player["games"][row_data["Tm"].lower()]:
-                            has_match = True
-                
-                    if not has_match:
-                        games_to_skip.add(row_data["GameID"])
-    if "Teammate On First" in qualifiers:
-        for row_data in all_rows:
-            for qual_object in qualifiers["Teammate On First"]:
-                if not qual_object["negate"]:
-                    has_match = False
-                    for player in qual_object["values"]:
-                        if row_data["Tm"].lower() in player["games"] and row_data["GameID"] in player["games"][row_data["Tm"].lower()]:
-                            has_match = True
-                
-                    if not has_match:
-                        games_to_skip.add(row_data["GameID"])
-    if "Teammate On Second" in qualifiers:
-        for row_data in all_rows:
-            for qual_object in qualifiers["Teammate On Second"]:
-                if not qual_object["negate"]:
-                    has_match = False
-                    for player in qual_object["values"]:
-                        if row_data["Tm"].lower() in player["games"] and row_data["GameID"] in player["games"][row_data["Tm"].lower()]:
-                            has_match = True
-                
-                    if not has_match:
-                        games_to_skip.add(row_data["GameID"])
-    if "Teammate On Third" in qualifiers:
-        for row_data in all_rows:
-            for qual_object in qualifiers["Teammate On Third"]:
-                if not qual_object["negate"]:
-                    has_match = False
-                    for player in qual_object["values"]:
-                        if row_data["Tm"].lower() in player["games"] and row_data["GameID"] in player["games"][row_data["Tm"].lower()]:
-                            has_match = True
-                
-                    if not has_match:
-                        games_to_skip.add(row_data["GameID"])
-    if "Teammate On Base" in qualifiers:
-        for row_data in all_rows:
-            for qual_object in qualifiers["Teammate On Base"]:
-                if not qual_object["negate"]:
-                    has_match = False
-                    for player in qual_object["values"]:
-                        if row_data["Tm"].lower() in player["games"] and row_data["GameID"] in player["games"][row_data["Tm"].lower()]:
-                            has_match = True
-                
-                    if not has_match:
-                        games_to_skip.add(row_data["GameID"])
-    if "Opponent On First" in qualifiers:
-        for row_data in all_rows:
-            for qual_object in qualifiers["Opponent On First"]:
-                if not qual_object["negate"]:
-                    has_match = False
-                    for player in qual_object["values"]:
-                        if row_data["Tm"].lower() in player["games"] and row_data["GameID"] in player["games"][row_data["Tm"].lower()]:
-                            has_match = True
-                
-                    if not has_match:
-                        games_to_skip.add(row_data["GameID"])
-    if "Opponent On Second" in qualifiers:
-        for row_data in all_rows:
-            for qual_object in qualifiers["Opponent On Second"]:
-                if not qual_object["negate"]:
-                    has_match = False
-                    for player in qual_object["values"]:
-                        if row_data["Tm"].lower() in player["games"] and row_data["GameID"] in player["games"][row_data["Tm"].lower()]:
-                            has_match = True
-                
-                    if not has_match:
-                        games_to_skip.add(row_data["GameID"])
-    if "Opponent On Third" in qualifiers:
-        for row_data in all_rows:
-            for qual_object in qualifiers["Opponent On Third"]:
-                if not qual_object["negate"]:
-                    has_match = False
-                    for player in qual_object["values"]:
-                        if row_data["Tm"].lower() in player["games"] and row_data["GameID"] in player["games"][row_data["Tm"].lower()]:
-                            has_match = True
-                
-                    if not has_match:
-                        games_to_skip.add(row_data["GameID"])
-    if "Opponent On Base" in qualifiers:
-        for row_data in all_rows:
-            for qual_object in qualifiers["Opponent On Base"]:
-                if not qual_object["negate"]:
-                    has_match = False
-                    for player in qual_object["values"]:
-                        if row_data["Tm"].lower() in player["games"] and row_data["GameID"] in player["games"][row_data["Tm"].lower()]:
-                            has_match = True
-                
-                    if not has_match:
-                        games_to_skip.add(row_data["GameID"])
-    if "Batting In Front Of Stat Rank" in qualifiers:
-        for row_data in all_rows:
-            for qual_object in qualifiers["Batting In Front Of Stat Rank"]:
-                if "year_map_obj" not in qual_object:
-                    games_to_skip.add(row_data["GameID"])
-    if "Batting In Front Of League Stat Rank" in qualifiers:
-        for row_data in all_rows:
-            for qual_object in qualifiers["Batting In Front Of League Stat Rank"]:
-                if "year_map_obj" not in qual_object:
-                    games_to_skip.add(row_data["GameID"])
-    if "Batting In Front Of AL Stat Rank" in qualifiers:
-        for row_data in all_rows:
-            for qual_object in qualifiers["Batting In Front Of AL Stat Rank"]:
-                if "year_map_obj" not in qual_object:
-                    games_to_skip.add(row_data["GameID"])
-    if "Batting In Front Of NL Stat Rank" in qualifiers:
-        for row_data in all_rows:
-            for qual_object in qualifiers["Batting In Front Of NL Stat Rank"]:
-                if "year_map_obj" not in qual_object:
-                    games_to_skip.add(row_data["GameID"])
-    if "Batting In Front Of Stat Percent" in qualifiers:
-        for row_data in all_rows:
-            for qual_object in qualifiers["Batting In Front Of Stat Percent"]:
-                if "year_map_obj" not in qual_object:
-                    games_to_skip.add(row_data["GameID"])
-    if "Batting In Front Of League Stat Percent" in qualifiers:
-        for row_data in all_rows:
-            for qual_object in qualifiers["Batting In Front Of League Stat Percent"]:
-                if "year_map_obj" not in qual_object:
-                    games_to_skip.add(row_data["GameID"])
-    if "Batting In Front Of AL Stat Percent" in qualifiers:
-        for row_data in all_rows:
-            for qual_object in qualifiers["Batting In Front Of AL Stat Percent"]:
-                if "year_map_obj" not in qual_object:
-                    games_to_skip.add(row_data["GameID"])
-    if "Batting In Front Of NL Stat Percent" in qualifiers:
-        for row_data in all_rows:
-            for qual_object in qualifiers["Batting In Front Of NL Stat Percent"]:
-                if "year_map_obj" not in qual_object:
-                    games_to_skip.add(row_data["GameID"])
-    if "Batting In Front Of Stat" in qualifiers:
-        for row_data in all_rows:
-            for qual_object in qualifiers["Batting In Front Of Stat"]:
-                if "year_map_obj" not in qual_object:
-                    games_to_skip.add(row_data["GameID"])
-    if "Batting In Front Of AL Stat" in qualifiers:
-        for row_data in all_rows:
-            for qual_object in qualifiers["Batting In Front Of AL Stat"]:
-                if "year_map_obj" not in qual_object:
-                    games_to_skip.add(row_data["GameID"])
-    if "Batting In Front Of NL Stat" in qualifiers:
-        for row_data in all_rows:
-            for qual_object in qualifiers["Batting In Front Of NL Stat"]:
-                if "year_map_obj" not in qual_object:
-                    games_to_skip.add(row_data["GameID"])
-    if "Batting Behind Stat Rank" in qualifiers:
-        for row_data in all_rows:
-            for qual_object in qualifiers["Batting Behind Stat Rank"]:
-                if "year_map_obj" not in qual_object:
-                    games_to_skip.add(row_data["GameID"])
-    if "Batting Behind League Stat Rank" in qualifiers:
-        for row_data in all_rows:
-            for qual_object in qualifiers["Batting Behind League Stat Rank"]:
-                if "year_map_obj" not in qual_object:
-                    games_to_skip.add(row_data["GameID"])
-    if "Batting Behind AL Stat Rank" in qualifiers:
-        for row_data in all_rows:
-            for qual_object in qualifiers["Batting Behind AL Stat Rank"]:
-                if "year_map_obj" not in qual_object:
-                    games_to_skip.add(row_data["GameID"])
-    if "Batting Behind NL Stat Rank" in qualifiers:
-        for row_data in all_rows:
-            for qual_object in qualifiers["Batting Behind NL Stat Rank"]:
-                if "year_map_obj" not in qual_object:
-                    games_to_skip.add(row_data["GameID"])
-    if "Batting Behind Stat Percent" in qualifiers:
-        for row_data in all_rows:
-            for qual_object in qualifiers["Batting Behind Stat Percent"]:
-                if "year_map_obj" not in qual_object:
-                    games_to_skip.add(row_data["GameID"])
-    if "Batting Behind League Stat Percent" in qualifiers:
-        for row_data in all_rows:
-            for qual_object in qualifiers["Batting Behind League Stat Percent"]:
-                if "year_map_obj" not in qual_object:
-                    games_to_skip.add(row_data["GameID"])
-    if "Batting Behind AL Stat Percent" in qualifiers:
-        for row_data in all_rows:
-            for qual_object in qualifiers["Batting Behind AL Stat Percent"]:
-                if "year_map_obj" not in qual_object:
-                    games_to_skip.add(row_data["GameID"])
-    if "Batting Behind NL Stat Percent" in qualifiers:
-        for row_data in all_rows:
-            for qual_object in qualifiers["Batting Behind NL Stat Percent"]:
-                if "year_map_obj" not in qual_object:
-                    games_to_skip.add(row_data["GameID"])
-    if "Batting Behind Stat" in qualifiers:
-        for row_data in all_rows:
-            for qual_object in qualifiers["Batting Behind Stat"]:
-                if "year_map_obj" not in qual_object:
-                    games_to_skip.add(row_data["GameID"])
-    if "Batting Behind AL Stat" in qualifiers:
-        for row_data in all_rows:
-            for qual_object in qualifiers["Batting Behind AL Stat"]:
-                if "year_map_obj" not in qual_object:
-                    games_to_skip.add(row_data["GameID"])
-    if "Batting Behind NL Stat" in qualifiers:
-        for row_data in all_rows:
-            for qual_object in qualifiers["Batting Behind NL Stat"]:
-                if "year_map_obj" not in qual_object:
-                    games_to_skip.add(row_data["GameID"])
-    if "Batting Next To Stat Rank" in qualifiers:
-        for row_data in all_rows:
-            for qual_object in qualifiers["Batting Next To Stat Rank"]:
-                if "year_map_obj" not in qual_object:
-                    games_to_skip.add(row_data["GameID"])
-    if "Batting Next To League Stat Rank" in qualifiers:
-        for row_data in all_rows:
-            for qual_object in qualifiers["Batting Next To League Stat Rank"]:
-                if "year_map_obj" not in qual_object:
-                    games_to_skip.add(row_data["GameID"])
-    if "Batting Next To AL Stat Rank" in qualifiers:
-        for row_data in all_rows:
-            for qual_object in qualifiers["Batting Next To AL Stat Rank"]:
-                if "year_map_obj" not in qual_object:
-                    games_to_skip.add(row_data["GameID"])
-    if "Batting Next To NL Stat Rank" in qualifiers:
-        for row_data in all_rows:
-            for qual_object in qualifiers["Batting Next To NL Stat Rank"]:
-                if "year_map_obj" not in qual_object:
-                    games_to_skip.add(row_data["GameID"])
-    if "Batting Next To Stat Percent" in qualifiers:
-        for row_data in all_rows:
-            for qual_object in qualifiers["Batting Next To Stat Percent"]:
-                if "year_map_obj" not in qual_object:
-                    games_to_skip.add(row_data["GameID"])
-    if "Batting Next To League Stat Percent" in qualifiers:
-        for row_data in all_rows:
-            for qual_object in qualifiers["Batting Next To League Stat Percent"]:
-                if "year_map_obj" not in qual_object:
-                    games_to_skip.add(row_data["GameID"])
-    if "Batting Next To AL Stat Percent" in qualifiers:
-        for row_data in all_rows:
-            for qual_object in qualifiers["Batting Next To AL Stat Percent"]:
-                if "year_map_obj" not in qual_object:
-                    games_to_skip.add(row_data["GameID"])
-    if "Batting Next To NL Stat Percent" in qualifiers:
-        for row_data in all_rows:
-            for qual_object in qualifiers["Batting Next To NL Stat Percent"]:
-                if "year_map_obj" not in qual_object:
-                    games_to_skip.add(row_data["GameID"])
-    if "Batting Next To Stat" in qualifiers:
-        for row_data in all_rows:
-            for qual_object in qualifiers["Batting Next To Stat"]:
-                if "year_map_obj" not in qual_object:
-                    games_to_skip.add(row_data["GameID"])
-    if "Batting Next To AL Stat" in qualifiers:
-        for row_data in all_rows:
-            for qual_object in qualifiers["Batting Next To AL Stat"]:
-                if "year_map_obj" not in qual_object:
-                    games_to_skip.add(row_data["GameID"])
-    if "Batting Next To NL Stat" in qualifiers:
-        for row_data in all_rows:
-            for qual_object in qualifiers["Batting Next To NL Stat"]:
-                if "year_map_obj" not in qual_object:
-                    games_to_skip.add(row_data["GameID"])
-    if "Driven In" in qualifiers:
-        for row_data in all_rows:
-            for qual_object in qualifiers["Driven In"]:
-                if not qual_object["negate"]:
-                    has_match = False
-                    for player in qual_object["values"]:
-                        if row_data["Tm"].lower() in player["games"] and row_data["GameID"] in player["games"][row_data["Tm"].lower()]:
-                            has_match = True
-                
-                    if not has_match:
-                        games_to_skip.add(row_data["GameID"])
-    if "Batted In" in qualifiers:
-        for row_data in all_rows:
-            for qual_object in qualifiers["Batted In"]:
-                if not qual_object["negate"]:
-                    has_match = False
-                    for player in qual_object["values"]:
-                        if row_data["Tm"].lower() in player["games"] and row_data["GameID"] in player["games"][row_data["Tm"].lower()]:
-                            has_match = True
-                
-                    if not has_match:
-                        games_to_skip.add(row_data["GameID"])
-    if "Back To Back With" in qualifiers:
-        for row_data in all_rows:
-            for qual_object in qualifiers["Back To Back With"]:
-                if not qual_object["negate"]:
-                    has_match = False
-                    for player in qual_object["values"]:
-                        if row_data["Tm"].lower() in player["games"] and row_data["GameID"] in player["games"][row_data["Tm"].lower()]:
-                            has_match = True
-                
-                    if not has_match:
-                        games_to_skip.add(row_data["GameID"])
-    if "Batting In Front Of" in qualifiers:
-        for row_data in all_rows:
-            for qual_object in qualifiers["Batting In Front Of"]:
-                if not qual_object["negate"]:
-                    has_match = False
-                    for player in qual_object["values"]:
-                        if row_data["Tm"].lower() in player["games"] and row_data["GameID"] in player["games"][row_data["Tm"].lower()]:
-                            has_match = True
-                
-                    if not has_match:
-                        games_to_skip.add(row_data["GameID"])
-    if "Batting Behind" in qualifiers:
-        for row_data in all_rows:
-            for qual_object in qualifiers["Batting Behind"]:
-                if not qual_object["negate"]:
-                    has_match = False
-                    for player in qual_object["values"]:
-                        if row_data["Tm"].lower() in player["games"] and row_data["GameID"] in player["games"][row_data["Tm"].lower()]:
-                            has_match = True
-                
-                    if not has_match:
-                        games_to_skip.add(row_data["GameID"])
-    if "Batting Next To" in qualifiers:
-        for row_data in all_rows:
-            for qual_object in qualifiers["Batting Next To"]:
-                if not qual_object["negate"]:
-                    has_match = False
-                    for player in qual_object["values"]:
-                        if row_data["Tm"].lower() in player["games"] and row_data["GameID"] in player["games"][row_data["Tm"].lower()]:
-                            has_match = True
-                
-                    if not has_match:
-                        games_to_skip.add(row_data["GameID"])
-    if "Caught By" in qualifiers:
-        for row_data in all_rows:
-            for qual_object in qualifiers["Caught By"]:
-                if not qual_object["negate"]:
-                    has_match = False
-                    for player in qual_object["values"]:
-                        if row_data["Tm"].lower() in player["games"] and row_data["GameID"] in player["games"][row_data["Tm"].lower()]:
-                            has_match = True
-                
-                    if not has_match:
-                        games_to_skip.add(row_data["GameID"])
-    if "Stealing On" in qualifiers:
-        for row_data in all_rows:
-            for qual_object in qualifiers["Stealing On"]:
-                if not qual_object["negate"]:
-                    has_match = False
-                    for player in qual_object["values"]:
-                        if row_data["Tm"].lower() in player["games"] and row_data["GameID"] in player["games"][row_data["Tm"].lower()]:
-                            has_match = True
-                
-                    if not has_match:
-                        games_to_skip.add(row_data["GameID"])
-    if "On Field With" in qualifiers:
-        for row_data in all_rows:
-            for qual_object in qualifiers["On Field With"]:
-                if not qual_object["negate"]:
-                    has_match = False
-                    for player in qual_object["values"]:
-                        if row_data["Tm"].lower() in player["games"] and row_data["GameID"] in player["games"][row_data["Tm"].lower()]:
-                            has_match = True
-                
-                    if not has_match:
-                        games_to_skip.add(row_data["GameID"])
-    if "On Field Against" in qualifiers:
-        for row_data in all_rows:
-            for qual_object in qualifiers["On Field Against"]:
-                if not qual_object["negate"]:
-                    has_match = False
-                    for player in qual_object["values"]:
-                        if row_data["Tm"].lower() in player["games"] and row_data["GameID"] in player["games"][row_data["Tm"].lower()]:
-                            has_match = True
-                
-                    if not has_match:
-                        games_to_skip.add(row_data["GameID"])
-    if "Event Sub Query" in qualifiers:
-        for row_data in all_rows:
-            for qual_object in qualifiers["Event Sub Query"]:
-                if not qual_object["negate"]:
-                    has_match = False
-                    for player in qual_object["values"]:
-                        if row_data["GameID"] in player["games"]:
-                            has_match = True
-                
-                    if not has_match:
-                        games_to_skip.add(row_data["GameID"])
-    if "Or Event Sub Query" in qualifiers:
-        for row_data in all_rows:
-            has_match = False
-            for qual_object in qualifiers["Or Event Sub Query"]:
-                if not qual_object["negate"]:
-                    for player in qual_object["values"]:
-                        if row_data["GameID"] in player["games"]:
-                            has_match = True
-                else:
-                    has_match = True
-                
-            if not has_match:
-                games_to_skip.add(row_data["GameID"])
-    if "Walk Off" in qualifiers:
-        for row_data in all_rows:
-            has_match = False
-            for qual_object in qualifiers["Walk Off"]:
-                if not qual_object["negate"]:
-                    if player_type["da_type"] == "Batter":
-                        if row_data["Location"] and row_data["Result"] in ["W", None] and (row_data["Team Score"] - row_data["Opponent Score"]) <= 4:
-                            has_match = True
-                    else:
-                        if not row_data["Location"] and row_data["Result"] in ["L", None] and (row_data["Opponent Score"] - row_data["Team Score"]) <= -4:
-                            has_match = True
-                else:
-                    has_match = True
-                
-            if not has_match:
-                games_to_skip.add(row_data["GameID"])
-    if "Position" in qualifiers:
-        for row_data in all_rows:
-            has_match = False
-            if "Pos" in row_data:
-                qual_str = re.split(r"\s+", row_data["Pos"].replace("*", "").replace("/", ""))
-                if qual_str:
-                    for qual_object in qualifiers["Position"]:
-                        if not qual_object["negate"]:
-                            has_match = False
-                            for pos in qual_object["values"]:
-                                pos = pos.upper()
-                                other_pos = pos
-                                if pos in position_map:
-                                    other_pos = position_map[pos]
-                                if pos in qual_str or other_pos in qual_str:
-                                    has_match = True
-                                    break
-                        else:
-                            has_match = True
-            if not has_match:
-                games_to_skip.add(row_data["GameID"])
-    for qual in ["Event Stat", "Event Stat Reversed", "Event Stats", "Event Stats Reversed", "Starting Event Stat", "Starting Event Stat Reversed", "Starting Event Stats", "Starting Event Stats Reversed", "Game Event Stat", "Game Event Stat Reversed", "Game Event Stats", "Game Event Stats Reversed", "Starting Game Event Stat", "Starting Game Event Stat Reversed", "Starting Game Event Stats", "Starting Game Event Stats Reversed"]:
-        handle_event_stats(qual, all_rows, games_to_skip, qualifiers, player_type, player_data)
-
+    
+    games_to_skip = get_games_to_skip(all_rows, qualifiers, player_data, player_type)
     return get_mlb_game_stats_single_thread(all_rows, has_count_stat, qualifiers, games_to_skip, player_data, missing_games, missing_pitch, player_type, extra_stats, s)
 
 def setup_career_stats(row_data, player_game_info, saved_row_data, index, player_type, player_data, qualifiers):
