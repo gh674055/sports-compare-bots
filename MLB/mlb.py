@@ -37581,6 +37581,9 @@ def parse_mlb_team_year_link(team_id, sub_year, qualifiers, all_rows, team, s):
                 elif broadcast["type"] in ["AM", "FM"]:
                     radio_networks.append(call_sign.lower())
         for index, row_data in enumerate(all_rows):
+            if "FoundScheduleGame" in row_data:
+                continue
+
             if row_data["Date"] == game_date:
                 if row_data["DateTime"] == game_datetime or (str(game_date) in special_doubleheaders and team in special_doubleheaders[str(game_date)]["single_teams"]):
                     team_match = False
