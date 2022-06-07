@@ -1,5 +1,12 @@
 {
     "cycle": {
+        "escobed01" : [
+            {
+                "date": "2022-06-06",
+                "is_playoffs": false,
+                "team": "NYM"
+            }
+        ],
         "rosared01": [
             {
                 "date": "2021-09-19",
