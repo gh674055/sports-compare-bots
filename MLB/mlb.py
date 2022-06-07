@@ -12085,7 +12085,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
 
                                 if not skip_time:
                                     time_unit = last_match.group(3)
-                                    if time_unit and "season" not in time_unit:
+                                    if time_unit and "season" not in time_unit and "game" not in time_unit:
                                         time_unit = ordinal_to_number(time_unit)
                                         if time_unit < 1:
                                             time_unit = 1
