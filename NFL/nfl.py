@@ -4949,10 +4949,32 @@ def handle_player_string(comment, player_type, is_fantasy, last_updated, hide_ta
                             time_start = datetime.date.min.year
                             time_end = current_season
                         else:
+                            last_match = re.search(r"\b(?:years?|seasons?)(?: |-)([\w-]+)((?: |-)reversed?)?\b", time_frame)
+                            if last_match:
+                                time_unit = re.split(r"(?<!\\)-", last_match.group(1))
+                                time_start = None
+                                time_end = None
+                                try:
+                                    if len(time_unit) == 1:
+                                        time_start = ordinal_to_number(time_unit[0])
+                                        time_end = ordinal_to_number(time_unit[0])
+                                    else:
+                                        time_start = ordinal_to_number(time_unit[0])
+                                        time_end = ordinal_to_number(time_unit[1])
+                                except Exception:
+                                    pass
+
+                                if time_start != None:
+                                    time_frame_type = "season-range"
+                                    if last_match.group(2):
+                                        time_frame_type = "season-range-reversed"
+                                    
+                                    time_frame = re.sub(r"\s+", " ", time_frame.replace(last_match.group(0), "", 1)).strip()
+
                             unit = None
-                            last_match = re.search(r"(first|1st|last|this|past)? ?(\S*)? ?((?:(?:calendar|date)(?: |-))?days?|(?:(?:calendar|date)(?: |-))?weeks?|(?:(?:calendar|date)(?: |-))?months?|(?:(?:calendar|date)(?: |-))?years?|seasons?)( ([\w-]+)( reversed?)?)?", time_frame)
+                            last_match = re.search(r"\b(first|1st|last|this|past)? ?(\S*)? ?((?:(?:calendar|date)(?: |-))?days?|(?:(?:calendar|date)(?: |-))?weeks?|(?:(?:calendar|date)(?: |-))?months?|(?:(?:calendar|date)(?: |-))?years?|seasons?)\b", time_frame)
                             if not last_match:
-                                last_match = re.search(r"(first|1st|last|this|past) ?(\S*)", time_frame)
+                                last_match = re.search(r"\b(first|1st|last|this|past) ?(\S*)\b", time_frame)
                                 unit = "season"
                                 if last_match and not last_match.group(2).endswith("to") and not last_match.group(2).endswith("yester") and playoffs_set:
                                     time_frame_type = "special-qual"
@@ -4979,26 +5001,12 @@ def handle_player_string(comment, player_type, is_fantasy, last_updated, hide_ta
                                 if ("calendar" in last_match.group(2) or "date" in last_match.group(2)):
                                     unit = last_match.group(2) + unit
                                 if unit.startswith("season"):
-                                    if len(last_match.groups()) > 2 and last_match.group(5):
-                                        time_unit = re.split(r"(?<!\\)-", last_match.group(5))
-                                        if len(time_unit) == 1:
-                                            time_start = ordinal_to_number(time_unit[0])
-                                            time_end = ordinal_to_number(time_unit[0])
-                                        else:
-                                            time_start = ordinal_to_number(time_unit[0])
-                                            time_end = ordinal_to_number(time_unit[1])
-
-                                        if time_frame_type != "special-qual":
-                                            time_frame_type = "season-range"
-                                            if last_match.group(6):
-                                                time_frame_type = "season-range-reversed"
+                                    if time_frame_type != "special-qual":
+                                        time_frame_type = "season"
+                                    if compare_type == "first":
+                                        time_start = time_unit
                                     else:
-                                        if time_frame_type != "special-qual":
-                                            time_frame_type = "season"
-                                        if compare_type == "first":
-                                            time_start = time_unit
-                                        else:
-                                            time_end = time_unit
+                                        time_end = time_unit
                                 else:
                                     days = 0
                                     weeks = 0
@@ -5014,26 +5022,11 @@ def handle_player_string(comment, player_type, is_fantasy, last_updated, hide_ta
                                         if "date" in unit or "calendar" in unit:
                                             years = time_unit
                                         else:
-                                            if len(last_match.groups()) > 2 and last_match.group(5):
-                                                time_unit = re.split(r"(?<!\\)-", last_match.group(5))
-                                                time_start = -float("inf")
-                                                time_end = float("inf")
-                                                if len(time_unit) == 1:
-                                                    time_start = ordinal_to_number(time_unit[0])
-                                                    time_end = ordinal_to_number(time_unit[0])
-                                                else:
-                                                    time_start = ordinal_to_number(time_unit[0])
-                                                    time_end = ordinal_to_number(time_unit[1])
-
-                                                time_frame_type = "season-range"
-                                                if last_match.group(6):
-                                                    time_frame_type = "season-range-reversed"
+                                            time_frame_type = "season"
+                                            if compare_type == "first":
+                                                time_start = time_unit
                                             else:
-                                                time_frame_type = "season"
-                                                if compare_type == "first":
-                                                    time_start = time_unit
-                                                else:
-                                                    time_end = time_unit
+                                                time_end = time_unit
                                             is_seasons = True
                                     else:
                                         days = time_unit
