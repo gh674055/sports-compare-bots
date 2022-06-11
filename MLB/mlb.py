@@ -12520,11 +12520,9 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                             time_start = datetime.date.min.year
                             time_end = current_season
                         else:
-                            last_match = re.search(r"\b(?:years?|seasons?)(?: |-)([\w-]+)((?: |-)reversed?)?\b", time_frame)
-                            if last_match:
+                            last_matches = re.finditer(r"\b(?:years?|seasons?)(?: |-)([\w-]+)((?: |-)reversed?)?\b", time_frame)
+                            for last_match in last_matches:
                                 time_unit = re.split(r"(?<!\\)-", last_match.group(1))
-                                time_start = None
-                                time_end = None
                                 try:
                                     if len(time_unit) == 1:
                                         time_start = ordinal_to_number(time_unit[0])
@@ -12533,135 +12531,137 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                         time_start = ordinal_to_number(time_unit[0])
                                         time_end = ordinal_to_number(time_unit[1])
                                 except Exception:
-                                    pass
+                                    continue
 
-                                if time_start != None:
-                                    time_frame_type = "season-range"
-                                    if last_match.group(2):
-                                        time_frame_type = "season-range-reversed"
-                                    
-                                    time_frame = re.sub(r"\s+", " ", time_frame.replace(last_match.group(0), "", 1)).strip()
+                                time_frame_type = "season-range"
+                                if last_match.group(2):
+                                    time_frame_type = "season-range-reversed"
+                                
+                                time_frame = re.sub(r"\s+", " ", time_frame.replace(last_match.group(0), "", 1)).strip()
 
-                            unit = None
-                            last_match = re.search(r"\b(first|1st|last|this|past)? ?(\S*)? ?((?:(?:calendar|date)(?: |-))?days?|(?:(?:calendar|date)(?: |-))?weeks?|(?:(?:calendar|date)(?: |-))?months?|(?:(?:calendar|date)(?: |-))?years?|seasons?)\b", time_frame)
-                            if not last_match:
-                                last_match = re.search(r"\b(first|1st|last|this|past) ?(\S*)\b", time_frame)
-                                unit = "season"
-                                if last_match and not last_match.group(2).endswith("to") and not last_match.group(2).endswith("yester") and playoffs_set:
-                                    time_frame_type = "special-qual"
-                            if last_match and not last_match.group(2).endswith("to") and not last_match.group(2).endswith("yester"):
-                                compare_type = last_match.group(1)
-                                if not compare_type or not compare_type.strip():
-                                    if unit == "season" or (last_match.group(3) and (last_match.group(3).startswith("season") or last_match.group(3).startswith("year"))):
-                                        compare_type = "special"
+                            while True:
+                                unit = None
+                                last_match = re.search(r"\b(first|1st|last|this|past)? ?(\S*)? ?((?:(?:calendar|date)(?: |-))?days?|(?:(?:calendar|date)(?: |-))?weeks?|(?:(?:calendar|date)(?: |-))?months?|(?:(?:calendar|date)(?: |-))?years?|seasons?)\b", time_frame)
+                                if not last_match:
+                                    last_match = re.search(r"\b(first|1st|last|this|past) ?(\S*)\b", time_frame)
+                                    unit = "season"
+                                    if last_match and not last_match.group(2).endswith("to") and not last_match.group(2).endswith("yester") and playoffs_set:
+                                        time_frame_type = "special-qual"
+                                if last_match and not last_match.group(2).endswith("to") and not last_match.group(2).endswith("yester"):
+                                    compare_type = last_match.group(1)
+                                    if not compare_type or not compare_type.strip():
+                                        if unit == "season" or (last_match.group(3) and (last_match.group(3).startswith("season") or last_match.group(3).startswith("year"))):
+                                            compare_type = "special"
+                                        else:
+                                            compare_type = "last"
+
+                                    if compare_type == "1st":
+                                        compare_type = "first"
+
+                                    time_unit = last_match.group(2)
+                                    if time_unit and not ("calendar" in time_unit or "date" in time_unit):
+                                        time_unit = ordinal_to_number(time_unit)
+                                        if time_unit < 1:
+                                            time_unit = 1
                                     else:
-                                        compare_type = "last"
-
-                                if compare_type == "1st":
-                                    compare_type = "first"
-
-                                time_unit = last_match.group(2)
-                                if time_unit and not ("calendar" in time_unit or "date" in time_unit):
-                                    time_unit = ordinal_to_number(time_unit)
-                                    if time_unit < 1:
                                         time_unit = 1
-                                else:
-                                    time_unit = 1
-                                if not unit:
-                                    unit = last_match.group(3)
-                                if ("calendar" in last_match.group(2) or "date" in last_match.group(2)):
-                                    unit = last_match.group(2) + unit
-                                if unit.startswith("season"):
-                                    if time_frame_type != "special-qual":
-                                        time_frame_type = "season"
-                                    if compare_type == "first":
-                                        time_start = time_unit
-                                    else:
-                                        time_end = time_unit
-                                else:
-                                    days = 0
-                                    weeks = 0
-                                    months = 0
-                                    years = 0
-
-                                    is_seasons = False
-                                    if "week" in unit:
-                                        weeks = time_unit
-                                    elif "month" in unit:
-                                        months = time_unit
-                                    elif "year" in unit:
-                                        if "date" in unit or "calendar" in unit:
-                                            years = time_unit
-                                        else:
+                                    if not unit:
+                                        unit = last_match.group(3)
+                                    if ("calendar" in last_match.group(2) or "date" in last_match.group(2)):
+                                        unit = last_match.group(2) + unit
+                                    if unit.startswith("season"):
+                                        if time_frame_type != "special-qual":
                                             time_frame_type = "season"
-                                            if compare_type == "first":
-                                                time_start = time_unit
-                                            else:
-                                                time_end = time_unit
-                                            is_seasons = True
-                                    else:
-                                        days = time_unit
-
-                                    if not is_seasons:
                                         if compare_type == "first":
-                                            time_start = datetime.date.min
-                                            time_end = dateutil.relativedelta.relativedelta(years=years, months=months, weeks=weeks, days=days - 1)
-
-                                            if "week" in unit:
-                                                time_end.seconds = 1
-                                                time_end.minutes = weeks
-                                            elif "month" in unit:
-                                                time_end.seconds = 2
-                                                time_end.minutes = months
-                                            elif "year" in unit:
-                                                time_end.seconds = 3
-                                                time_end.minutes = years
-                                            else:
-                                                time_end.minutes = days
-
-                                            if "calendar" in unit:
-                                                time_end.microseconds = 1
+                                            time_start = time_unit
                                         else:
-                                            time_end = datetime.date.today()
-                                            if "calendar" in unit:
+                                            time_end = time_unit
+                                    else:
+                                        days = 0
+                                        weeks = 0
+                                        months = 0
+                                        years = 0
+
+                                        is_seasons = False
+                                        if "week" in unit:
+                                            weeks = time_unit
+                                        elif "month" in unit:
+                                            months = time_unit
+                                        elif "year" in unit:
+                                            if "date" in unit or "calendar" in unit:
+                                                years = time_unit
+                                            else:
+                                                time_frame_type = "season"
+                                                if compare_type == "first":
+                                                    time_start = time_unit
+                                                else:
+                                                    time_end = time_unit
+                                                is_seasons = True
+                                        else:
+                                            days = time_unit
+
+                                        if not is_seasons:
+                                            if compare_type == "first":
+                                                time_start = datetime.date.min
+                                                time_end = dateutil.relativedelta.relativedelta(years=years, months=months, weeks=weeks, days=days - 1)
+
                                                 if "week" in unit:
-                                                    time_end = time_end + datetime.timedelta(days=6 - time_end.weekday())
-                                                    if datetime.date.today().weekday() <= 3:
-                                                        time_end -= dateutil.relativedelta.relativedelta(years=0, months=0, weeks=1, days=0)
-                                                    time_start = time_end - dateutil.relativedelta.relativedelta(years=years, months=months, weeks=weeks, days=days - 1)
+                                                    time_end.seconds = 1
+                                                    time_end.minutes = weeks
                                                 elif "month" in unit:
-                                                    if datetime.date.today().day > 15:
-                                                        time_end = datetime.datetime(time_end.year, time_end.month, calendar.monthrange(time_end.year, time_end.month)[1]).date()
-                                                    else:
-                                                        if time_end.month == 1:
-                                                            time_end = datetime.datetime(time_end.year - 1, 12, calendar.monthrange(time_end.year, 12)[1]).date()
-                                                        else:
-                                                            time_end = datetime.datetime(time_end.year, time_end.month - 1, calendar.monthrange(time_end.year, time_end.month - 1)[1]).date()
-                                                    time_start = time_end - dateutil.relativedelta.relativedelta(years=years, months=months, weeks=weeks, days=days - 1)
-                                                    original_day = time_start.day
-                                                    time_start = time_start.replace(day=1)
-                                                    if original_day > 15:
-                                                        if time_start.month == 12:
-                                                            time_start = time_start.replace(month=1, year=time_start.year + 1)
-                                                        else:
-                                                            time_start = time_start.replace(month=(time_start.month + 1))
+                                                    time_end.seconds = 2
+                                                    time_end.minutes = months
                                                 elif "year" in unit:
-                                                    time_end = datetime.datetime(time_end.year, 12, calendar.monthrange(time_end.year, 12)[1]).date()
-                                                    if datetime.date.today().month <= 6:
-                                                        time_end -=- dateutil.relativedelta.relativedelta(years=1, months=0, weeks=0, days=0)
-                                                    time_start = time_end - dateutil.relativedelta.relativedelta(years=years, months=months, weeks=weeks, days=days - 1)
+                                                    time_end.seconds = 3
+                                                    time_end.minutes = years
+                                                else:
+                                                    time_end.minutes = days
+
+                                                if "calendar" in unit:
+                                                    time_end.microseconds = 1
+                                            else:
+                                                time_end = datetime.date.today()
+                                                if "calendar" in unit:
+                                                    if "week" in unit:
+                                                        time_end = time_end + datetime.timedelta(days=6 - time_end.weekday())
+                                                        if datetime.date.today().weekday() <= 3:
+                                                            time_end -= dateutil.relativedelta.relativedelta(years=0, months=0, weeks=1, days=0)
+                                                        time_start = time_end - dateutil.relativedelta.relativedelta(years=years, months=months, weeks=weeks, days=days - 1)
+                                                    elif "month" in unit:
+                                                        if datetime.date.today().day > 15:
+                                                            time_end = datetime.datetime(time_end.year, time_end.month, calendar.monthrange(time_end.year, time_end.month)[1]).date()
+                                                        else:
+                                                            if time_end.month == 1:
+                                                                time_end = datetime.datetime(time_end.year - 1, 12, calendar.monthrange(time_end.year, 12)[1]).date()
+                                                            else:
+                                                                time_end = datetime.datetime(time_end.year, time_end.month - 1, calendar.monthrange(time_end.year, time_end.month - 1)[1]).date()
+                                                        time_start = time_end - dateutil.relativedelta.relativedelta(years=years, months=months, weeks=weeks, days=days - 1)
+                                                        original_day = time_start.day
+                                                        time_start = time_start.replace(day=1)
+                                                        if original_day > 15:
+                                                            if time_start.month == 12:
+                                                                time_start = time_start.replace(month=1, year=time_start.year + 1)
+                                                            else:
+                                                                time_start = time_start.replace(month=(time_start.month + 1))
+                                                    elif "year" in unit:
+                                                        time_end = datetime.datetime(time_end.year, 12, calendar.monthrange(time_end.year, 12)[1]).date()
+                                                        if datetime.date.today().month <= 6:
+                                                            time_end -=- dateutil.relativedelta.relativedelta(years=1, months=0, weeks=0, days=0)
+                                                        time_start = time_end - dateutil.relativedelta.relativedelta(years=years, months=months, weeks=weeks, days=days - 1)
+                                                    else:
+                                                        time_start = time_end - dateutil.relativedelta.relativedelta(years=years, months=months, weeks=weeks, days=days - 1)
                                                 else:
                                                     time_start = time_end - dateutil.relativedelta.relativedelta(years=years, months=months, weeks=weeks, days=days - 1)
-                                            else:
-                                                time_start = time_end - dateutil.relativedelta.relativedelta(years=years, months=months, weeks=weeks, days=days - 1)
-                                
-                                if compare_type == "special" and time_frame_type == "season":
-                                    time_frame_type = "season-range"
-                                
-                                if time_frame_type == "special-qual":
-                                    time_frame_type = "season"
+                                    
+                                    if compare_type == "special" and time_frame_type == "season":
+                                        time_frame_type = "season-range"
+                                    
+                                    if time_frame_type == "special-qual":
+                                        time_frame_type = "season"
 
-                                time_frame = re.sub(r"\s+", " ", time_frame.replace(last_match.group(0), "", 1)).strip()
+                                    time_frame = re.sub(r"\s+", " ", time_frame.replace(last_match.group(0), "", 1)).strip()
+                                else:
+                                    break
                             
                             if time_frame:
                                 replace_first_year = {
@@ -12718,8 +12718,9 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
 
                                     time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
                                 
-                                time_start = datetime.date.min.year
-                                time_end = current_season
+                                if time_start == None and time_end == None:
+                                    time_start = datetime.date.min.year
+                                    time_end = current_season
 
                                 if time_frame:
                                     find_all_match = tuple(re.finditer(r"(?<!\\)-", time_frame))
