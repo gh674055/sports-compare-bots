@@ -3283,6 +3283,7 @@ headers = {
         },
         "FIP-": {
             "positive" : False,
+            "display" : False,
             "type" : "Adjusted"
         },
         "SO9": {
