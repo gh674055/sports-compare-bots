@@ -1,5 +1,12 @@
 {
     "cycle": {
+        "walshja01" : [
+            {
+                "date": "2022-06-11",
+                "is_playoffs": false,
+                "team": "LAA"
+            }
+        ],
         "escobed01" : [
             {
                 "date": "2022-06-06",
