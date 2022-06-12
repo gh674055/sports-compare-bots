@@ -16374,8 +16374,8 @@ def handle_player_data(player_data, time_frame, player_type, player_page, valid_
         playoff_data = None
         if time_frame["playoffs"]:
             playoff_data = parse_table(player_data, None, None, player_type)
-            if not (time_frame["type"] == "date" and (isinstance(time_frame["time_start"], int) or isinstance(time_frame["time_end"], int))):
-                valid_years = add_valid_playoff_years(valid_years, playoff_data, time_frame)
+            # if not (time_frame["type"] == "date" and (isinstance(time_frame["time_start"], int) or isinstance(time_frame["time_end"], int))):
+            #     valid_years = add_valid_playoff_years(valid_years, playoff_data, time_frame)
 
         if time_frame["type"].startswith("season"):
             if not valid_years:

@@ -8080,9 +8080,9 @@ def handle_player_data(player_data, time_frame, player_type, player_page, is_fan
             
         playoff_data = parse_table(playoff_player_page, player_data, None, None, player_type, ind_player_type, gwd_data, pick_six_data, penalty_data)
     
-    if time_frame["playoffs"]:
-        if not (time_frame["type"] == "date" and (isinstance(time_frame["time_start"], int) or isinstance(time_frame["time_end"], int))):
-            valid_years = add_valid_playoff_years(valid_years, playoff_data, time_frame)
+    # if time_frame["playoffs"]:
+    #     if not (time_frame["type"] == "date" and (isinstance(time_frame["time_start"], int) or isinstance(time_frame["time_end"], int))):
+    #         valid_years = add_valid_playoff_years(valid_years, playoff_data, time_frame)
 
     if time_frame["type"].startswith("season"):
         if not valid_years:
