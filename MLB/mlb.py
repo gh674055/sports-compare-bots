@@ -12658,24 +12658,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                         time_frame_type = "season-range"
                                     
                                     if time_frame_type == "special-qual":
-                                        qualifier_obj = {}
-                                        qualifier_obj["negate"] = False
-                                        qual_str = "Season Reversed" if time_start == None else "Season"
-                                        if not time_start or not time_end:    
-                                            time_end = time_start if time_start else time_end
-                                            time_start = 1
-                                        qualifier_obj["values"] = {
-                                            "start_val" : time_start,
-                                            "end_val" : time_end
-                                        }
-
-                                        if not qual_str in qualifiers:
-                                            qualifiers[qual_str] = []
-                                        qualifiers[qual_str].append(qualifier_obj)
-
-                                        time_frame_type = "date"
-                                        time_start = datetime.date.min.year
-                                        time_end = current_season
+                                        time_frame_type = "season"
 
                                     time_frame = re.sub(r"\s+", " ", time_frame.replace(last_match.group(0), "", 1)).strip()
                                 else:
