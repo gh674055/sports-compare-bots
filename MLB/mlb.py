@@ -1356,7 +1356,27 @@ headers = {
                 "inconsistent-game" : 1939,
                 "inconsistent" : 1939
             }
-        }, "BA" : {
+        }, "GDPO" : {
+            "positive" : True,
+            "display" : False,
+            "valid_since" : {
+                "season" : 1933,
+                "game" : 1933,
+                "inconsistent-game" : 1939,
+                "inconsistent" : 1939
+            }
+        }, "GDP%" : {
+            "positive" : False,
+            "display" : False,
+            "round" : "percent",
+            "type" : "Per Game/Advanced",
+            "valid_since" : {
+                "season" : 1933,
+                "game" : 1933,
+                "inconsistent-game" : 1939,
+                "inconsistent" : 1939
+            }
+        },"BA" : {
             "positive" : True,
             "round" : 3,
             "display-value" : "AVG"
@@ -3592,6 +3612,26 @@ headers = {
                 "season" : 1901,
                 "game" : 1901
             }
+        }, "GDPO" : {
+            "positive" : True,
+            "display" : False,
+            "valid_since" : {
+                "season" : 1933,
+                "game" : 1933,
+                "inconsistent-game" : 1939,
+                "inconsistent" : 1939
+            }
+        }, "GDP%" : {
+            "positive" : True,
+            "display" : False,
+            "round" : "percent",
+            "type" : "Per Game/Advanced",
+            "valid_since" : {
+                "season" : 1933,
+                "game" : 1933,
+                "inconsistent-game" : 1939,
+                "inconsistent" : 1939
+            }
         },
         "SB": {
             "positive" : False,
@@ -4613,6 +4653,7 @@ formulas = {
         "BB/SO" : "BB / SO",
         "IBB%" : "IBB / PA",
         "HBP%" : "HBP / PA",
+        "GDP%" : "GDP / GDPO",
         "H/162" : "H / (G / 162)",
         "2B/162" : "2B / (G / 162)",
         "3B/162" : "3B / (G / 162)",
@@ -4750,6 +4791,7 @@ formulas = {
         "SO%" : "SO / BF",
         "IBB%" : "IBB / BF",
         "HBP%" : "HBP / BF",
+        "GDP%" : "GDP / GDPO",
         "SV%" : "SV / (SV + BSv)",
         "QS%" : "QS / GS",
         "CG%" : "CG / GS",
@@ -12848,12 +12890,12 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                     else:
                                         stats = [sub_qual_object["stat"]]
                             for stat in stats:
-                                if "gwrbi" in stat or "slam" in stat or "walkoff" in stat or "drivenin" in stat or "gwdrivenin" in stat:
+                                if "gwrbi" in stat or "slam" in stat or "walkoff" in stat or "drivenin" in stat or "gwdrivenin" in stat or "gdpo" in stat or "gdp%" in stat:
                                     extra_stats.add("current-stats")
                                 for header_stat in headers[player_type["da_type"]]:
                                     if "display-value" in headers[player_type["da_type"]][header_stat] and headers[player_type["da_type"]][header_stat]["display-value"].lower() == stat:
                                         stat = header_stat.lower()
-                                        if "gwrbi" in stat or "slam" in stat or "walkoff" in stat or "drivenin" in stat or "gwdrivenin" in stat:
+                                        if "gwrbi" in stat or "slam" in stat or "walkoff" in stat or "drivenin" in stat or "gwdrivenin" in stat or "gdpo" in stat or "gdp%" in stat:
                                             extra_stats.add("current-stats")
                                         break
         
@@ -12861,12 +12903,12 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
     for extra_stat in extra_stats:
         if extra_stat.startswith("show-stat-"):
             stat = extra_stat.split("show-stat-", 1)[1]
-            if "gwrbi" in stat or "slam" in stat or "walkoff" in stat or "drivenin" in stat or "gwdrivenin" in stat:
+            if "gwrbi" in stat or "slam" in stat or "walkoff" in stat or "drivenin" in stat or "gwdrivenin" in stat or "gdpo" in stat or "gdp%" in stat:
                 add_play = True
             for header_stat in headers[player_type["da_type"]]:
                 if "display-value" in headers[player_type["da_type"]][header_stat] and headers[player_type["da_type"]][header_stat]["display-value"].lower() == stat:
                     stat = header_stat.lower()
-                    if "gwrbi" in stat or "slam" in stat or "walkoff" in stat or "drivenin" in stat or "gwdrivenin" in stat:
+                    if "gwrbi" in stat or "slam" in stat or "walkoff" in stat or "drivenin" in stat or "gwdrivenin" in stat or "gdpo" in stat or "gdp%" in stat:
                         add_play = True
                     break
 
@@ -16521,7 +16563,7 @@ def handle_player_data(player_data, time_frame, player_type, player_page, valid_
                             else:
                                 stats = [sub_qual_object["stat"]]
                     for stat in stats:
-                        if "tmh" in stat or "tmr" in stat or "tmrbi" in stat or "tmhr" in stat or "opph" in stat or "oppr" in stat or "opprbi" in stat or "opphr" in stat or "ttlh" in stat or "hdiff" in stat or "ttlr" in stat or "rdiff" in stat or "ttlrbi" in stat or "rbidiff" in stat or "ttlhr" in stat or "hrdiff" in stat or "gwrbi" in stat or "slam" in stat or "walkoff" in stat or "drivenin" in stat or "gwdrivenin" in stat:
+                        if "tmh" in stat or "tmr" in stat or "tmrbi" in stat or "tmhr" in stat or "opph" in stat or "oppr" in stat or "opprbi" in stat or "opphr" in stat or "ttlh" in stat or "hdiff" in stat or "ttlr" in stat or "rdiff" in stat or "ttlrbi" in stat or "rbidiff" in stat or "ttlhr" in stat or "hrdiff" in stat or "gwrbi" in stat or "slam" in stat or "walkoff" in stat or "drivenin" in stat or "gwdrivenin" in stat or "gdpo" in stat or "gdp%" in stat:
                             has_result_stat_qual = True
                         for count_stat in count_stats:
                             if count_stat.lower() in stat:
@@ -16530,7 +16572,7 @@ def handle_player_data(player_data, time_frame, player_type, player_page, valid_
                         for header_stat in headers[player_type["da_type"]]:
                             if "display-value" in headers[player_type["da_type"]][header_stat] and headers[player_type["da_type"]][header_stat]["display-value"].lower() == stat:
                                 stat = header_stat.lower()
-                                if "tmh" in stat or "tmr" in stat or "tmrbi" in stat or "tmhr" in stat or "opph" in stat or "oppr" in stat or "opprbi" in stat or "opphr" in stat or "ttlh" in stat or "hdiff" in stat or "ttlr" in stat or "rdiff" in stat or "ttlrbi" in stat or "rbidiff" in stat or "ttlhr" in stat or "hrdiff" in stat or "gwrbi" in stat or "slam" in stat or "walkoff" in stat or "drivenin" in stat or "gwdrivenin" in stat:
+                                if "tmh" in stat or "tmr" in stat or "tmrbi" in stat or "tmhr" in stat or "opph" in stat or "oppr" in stat or "opprbi" in stat or "opphr" in stat or "ttlh" in stat or "hdiff" in stat or "ttlr" in stat or "rdiff" in stat or "ttlrbi" in stat or "rbidiff" in stat or "ttlhr" in stat or "hrdiff" in stat or "gwrbi" in stat or "slam" in stat or "walkoff" in stat or "drivenin" in stat or "gwdrivenin" in stat or "gdpo" in stat or "gdp%" in stat:
                                     has_result_stat_qual = True
                                 for count_stat in count_stats:
                                     if count_stat.lower() in stat:
@@ -16541,7 +16583,7 @@ def handle_player_data(player_data, time_frame, player_type, player_page, valid_
         for extra_stat in extra_stats:
             if extra_stat.startswith("show-stat-"):
                 stat = extra_stat.split("show-stat-", 1)[1]
-                if "tmh" in stat or "tmr" in stat or "tmrbi" in stat or "tmhr" in stat or "opph" in stat or "oppr" in stat or "opprbi" in stat or "opphr" in stat or "ttlh" in stat or "hdiff" in stat or "ttlr" in stat or "rdiff" in stat or "ttlrbi" in stat or "rbidiff" in stat or "ttlhr" in stat or "hrdiff" in stat or "gwrbi" in stat or "slam" in stat or "walkoff" in stat or "drivenin" in stat or "gwdrivenin" in stat:
+                if "tmh" in stat or "tmr" in stat or "tmrbi" in stat or "tmhr" in stat or "opph" in stat or "oppr" in stat or "opprbi" in stat or "opphr" in stat or "ttlh" in stat or "hdiff" in stat or "ttlr" in stat or "rdiff" in stat or "ttlrbi" in stat or "rbidiff" in stat or "ttlhr" in stat or "hrdiff" in stat or "gwrbi" in stat or "slam" in stat or "walkoff" in stat or "drivenin" in stat or "gwdrivenin" in stat or "gdpo" in stat or "gdp%" in stat:
                     has_result_stat_qual = True
                 for count_stat in count_stats:
                     if count_stat.lower() in stat:
@@ -16550,7 +16592,7 @@ def handle_player_data(player_data, time_frame, player_type, player_page, valid_
                 for header_stat in headers[player_type["da_type"]]:
                     if "display-value" in headers[player_type["da_type"]][header_stat] and headers[player_type["da_type"]][header_stat]["display-value"].lower() == stat:
                         stat = header_stat.lower()
-                        if "tmh" in stat or "tmr" in stat or "tmrbi" in stat or "tmhr" in stat or "opph" in stat or "oppr" in stat or "opprbi" in stat or "opphr" in stat or "ttlh" in stat or "hdiff" in stat or "ttlr" in stat or "rdiff" in stat or "ttlrbi" in stat or "rbidiff" in stat or "ttlhr" in stat or "hrdiff" in stat or "gwrbi" in stat or "slam" in stat or "walkoff" in stat or "drivenin" in stat or "gwdrivenin" in stat:
+                        if "tmh" in stat or "tmr" in stat or "tmrbi" in stat or "tmhr" in stat or "opph" in stat or "oppr" in stat or "opprbi" in stat or "opphr" in stat or "ttlh" in stat or "hdiff" in stat or "ttlr" in stat or "rdiff" in stat or "ttlrbi" in stat or "rbidiff" in stat or "ttlhr" in stat or "hrdiff" in stat or "gwrbi" in stat or "slam" in stat or "walkoff" in stat or "drivenin" in stat or "gwdrivenin" in stat or "gdpo" in stat or "gdp%" in stat:
                             has_result_stat_qual = True
                         for count_stat in count_stats:
                             if count_stat.lower() in stat:
@@ -31103,6 +31145,9 @@ def add_row_numbers(row, at_bat_event, event_name, qualifiers, player_type):
 
         if "home_run" in event_name and at_bat_event["rbis"] == 4:
             row["Slam"] += 1
+
+        if at_bat_event["man_on_first"] and at_bat_event["outs"] < 2:
+            row["GDPO"] += 1
         
         if at_bat_event["num_outs"] == 1:
             row["IP"] += 1/3
@@ -40567,6 +40612,7 @@ def clear_data(row):
     row["Str"] = 0
     row["Bal"] = 0
     row["GDP"] = 0
+    row["GDPO"] = 0
     row["R"] = 0
     row["RBI"] = 0
     row["GWRBI"] = 0
@@ -42477,7 +42523,7 @@ def print_player_data(player_datas, player_type, highest_vals, lowest_vals, has_
                 if seasons_leading and header in div_id_to_stat[player_type["da_type"]].values():
                     override_show = True
                 if "current-stats" in extra_stats:
-                    if header == "AB" or header == "1B" or header == "2B" or header == "3B" or header == "HR" or header == "GWRBI" or header == "Slam":
+                    if header == "AB" or header == "1B" or header == "2B" or header == "3B" or header == "HR" or header == "GWRBI" or header == "Slam" or header == "GDP%":
                         override_show = True
                 if "walk-off" in extra_stats:
                      if header == "WalkOff":
@@ -42797,7 +42843,7 @@ def get_reddit_player_table(player_datas, player_type, debug_mode, original_comm
                 if seasons_leading and header in div_id_to_stat[player_type["da_type"]].values():
                     override_show = True
                 if "current-stats" in extra_stats:
-                    if header == "AB" or header == "1B" or header == "2B" or header == "3B" or header == "HR" or header == "GWRBI" or header == "Slam":
+                    if header == "AB" or header == "1B" or header == "2B" or header == "3B" or header == "HR" or header == "GWRBI" or header == "Slam" or header == "GDP%":
                         override_show = True
                 if "walk-off" in extra_stats:
                      if header == "WalkOff":
@@ -43589,7 +43635,7 @@ def handle_table_data(over_header, player_data, player_datas, player_type, heade
     if header in ("TmScore", "OppScore", "TtlScore", "ScoreDiff", "TmScore/G", "OppScore/G", "TtlScore/G", "ScoreDiff/G") and "score" in extra_stats:
         override_show = True
     if "current-stats" in extra_stats:
-        if header == "AB" or header == "1B" or header == "2B" or header == "3B" or header == "HR" or header == "GWRBI" or header == "Slam":
+        if header == "AB" or header == "1B" or header == "2B" or header == "3B" or header == "HR" or header == "GWRBI" or header == "Slam" or header == "GDP%":
             override_show = True
     if "walk-off" in extra_stats:
         if header == "WalkOff":
@@ -43821,7 +43867,7 @@ def is_against_header(header, over_header, extra_stats, player_type):
     if "stolen-base" in extra_stats and header not in ("SB", "CS", "NS", "SB%", "PO"):
         return True
 
-    if "at-bat" in extra_stats and header not in ("AB", "H", "1B", "2B", "3B", "HR", "XBH", "TB", "Cycle", "SO", "GDP", "BA", "SLG", "X/H%", "EV", "HardHit%", "SwtSpt%", "LA", "HitDist", "Slam"):
+    if "at-bat" in extra_stats and header not in ("AB", "H", "1B", "2B", "3B", "HR", "XBH", "TB", "Cycle", "SO", "GDP", "GDPO", "GDP%", "BA", "SLG", "X/H%", "EV", "HardHit%", "SwtSpt%", "LA", "HitDist", "Slam"):
         return True
 
     if player_type["da_type"] == "Batter":
