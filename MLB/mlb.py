@@ -31146,8 +31146,9 @@ def add_row_numbers(row, at_bat_event, event_name, qualifiers, player_type):
         if "home_run" in event_name and at_bat_event["rbis"] == 4:
             row["Slam"] += 1
 
-        if at_bat_event["man_on_first"] and at_bat_event["outs"] < 2:
-            row["GDPO"] += 1
+        if event_name not in ("no_stats", "no_stats_sb"):
+            if at_bat_event["man_on_first"] and at_bat_event["outs"] < 2:
+                row["GDPO"] += 1
         
         if at_bat_event["num_outs"] == 1:
             row["IP"] += 1/3
