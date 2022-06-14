@@ -38207,8 +38207,8 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
             # elif not all_has_pitch_type_data:
             #     missing_pitch = True
 
-        prev_team_pitcher = starter_team_position_map["P"]
-        prev_opp_pitcher = starter_opp_position_map["P"]
+        prev_team_pitcher = starter_team_position_map["P"] if "P" in starter_team_position_map else None
+        prev_opp_pitcher = starter_opp_position_map["P"] if "P" in starter_opp_position_map else None
 
         for index, scoring_play in enumerate(sub_data["liveData"]["plays"]["allPlays"]):
             if scoring_play["result"]["type"] != "atBat" or "eventType" not in scoring_play["result"]:
