@@ -776,6 +776,7 @@ missing_player_data = {
     "has_season_stats" : True,
     "has_award_stats" : True,
     "error_getting_pen" : False,
+    "error_getting_fan" : False,
     "error_getting_fmb_lst" : False,
     "error_getting_adv" : False,
     "error_getting_adj" : False,
@@ -1004,6 +1005,7 @@ yearly_game_splits_url_format = "https://www.pro-football-reference.com/players/
 gwd_url_format = "https://www.pro-football-reference.com/play-index/comeback.cgi?player={}"
 penalties_url = "https://www.pro-football-reference.com/players/{}/{}/penalties"
 pick6_url = "https://www.pro-football-reference.com/players/{}/{}/pick-sixes"
+fantasy_url = "https://www.pro-football-reference.com/players/{}/{}/fantasy/{}"
 team_schedule_url_format = "https://www.pro-football-reference.com/teams/{}/{}.htm"
 team_injury_url_format = "https://www.pro-football-reference.com/teams/{}/{}_injuries.htm"
 team_spread_url_format = "https://www.pro-football-reference.com/teams/{}/{}_lines.htm"
@@ -6799,6 +6801,7 @@ def combine_player_datas(player_datas, player_type, any_missing_games, time_fram
     has_season_stats = True
     has_award_stats = True
     error_getting_pen = False
+    error_getting_fan = False
     error_getting_fmb_lst = False
     error_getting_adv = False
     error_getting_gwd = False
@@ -7018,6 +7021,8 @@ def combine_player_datas(player_datas, player_type, any_missing_games, time_fram
             has_award_stats = False
         if sub_player_data["error_getting_pen"]:
             error_getting_pen = True
+        if sub_player_data["error_getting_fan"]:
+            error_getting_fan = True
         if sub_player_data["error_getting_fmb_lst"]:
             error_getting_fmb_lst = True
         if sub_player_data["error_getting_adv"]:
@@ -7038,6 +7043,7 @@ def combine_player_datas(player_datas, player_type, any_missing_games, time_fram
     player_data["has_season_stats"] = has_season_stats
     player_data["has_award_stats"] = has_award_stats
     player_data["error_getting_pen"] = error_getting_pen
+    player_data["error_getting_fan"] = error_getting_fan
     player_data["error_getting_fmb_lst"] = error_getting_fmb_lst
     player_data["error_getting_adv"] = error_getting_adv
     player_data["error_getting_adj"] = False
@@ -7878,6 +7884,7 @@ def handle_multi_player_data(player_id, time_frames, player_type, player_page, i
     player_data["has_season_stats"] = True
     player_data["has_award_stats"] = True
     player_data["error_getting_pen"] = False
+    player_data["error_getting_fan"] = False
     player_data["error_getting_fmb_lst"] = False
     player_data["error_getting_adv"] = False
     player_data["error_getting_pick"] = False
@@ -8192,6 +8199,17 @@ def handle_player_data(player_data, time_frame, player_type, player_page, is_fan
                 handle_fumbles_lost(player_data, all_rows, player_type, ind_player_type, time_frame)
             except Exception:
                 player_data["error_getting_fmb_lst"] = True
+
+    if "Passing" in headers[player_type["da_type"]] and (is_fantasy and "Fantasy" in headers[player_type["da_type"]]):
+        try:
+            handle_fantasy(player_data, all_rows)
+        except Exception:
+            player_data["error_getting_fan"] = True
+
+    if "Fantasy" in headers[player_type["da_type"]]:
+        handle_fantasy_formulas(all_rows)
+
+    if not is_game_page:
         handle_missing_playoff_rows(player_page, player_data, valid_years, all_rows, player_type, ind_player_type, time_frame)
 
     if is_game:
@@ -11826,7 +11844,7 @@ def perform_post_qualifier(player_data, player_type, ind_player_type, row, quali
                     header_match = r"(?:era adjusted passing|total)"
                 elif header == "Scrimmage/All Purpose":
                     header_match = r"(?:scrimmage/all purpose|scrimmage)"
-                for stat in get_constant_data.stat_groups[over_header]:
+                for stat in get_constant_data.stat_groups[header]:
                     has_match = False
                     for formula_match in formula_matches:
                         if formula_match.group() == header.lower():
@@ -14889,7 +14907,7 @@ def handle_season_stats(all_rows, player_data, player_type, qualifiers):
                         header_match = r"(?:era adjusted passing|total)"
                     elif header == "Scrimmage/All Purpose":
                         header_match = r"(?:scrimmage/all purpose|scrimmage)"
-                    for stat in get_constant_data.stat_groups[over_header]:
+                    for stat in get_constant_data.stat_groups[header]:
                         has_match = False
                         for formula_match in formula_matches:
                             if formula_match.group() == header.lower():
@@ -17828,28 +17846,6 @@ def parse_table(player_page, player_data, time_frame, year, player_type, ind_pla
                     if not row_data:
                         continue
 
-                    if "Fantasy" in headers[player_type["da_type"]]:
-                        for over_header in list(row_data):
-                            if over_header in get_constant_data.formulas["Fantasy"]:
-                                for stat in get_constant_data.formulas["Fantasy"][over_header]:
-                                    formula = get_constant_data.formulas["Fantasy"][over_header][stat]
-                                    value = calculate_fantasy_formula(stat, formula, row_data, over_header)
-
-                                    if not "Fantasy" in row_data:
-                                        row_data["Fantasy"] = {}
-                                    if not over_header in row_data["Fantasy"]:
-                                            row_data["Fantasy"][over_header] = {}
-                                    row_data["Fantasy"][over_header][stat] = value
-
-                        if "Fantasy" in row_data:
-                            for over_header in list(row_data["Fantasy"]):
-                                for stat in row_data["Fantasy"][over_header]:
-                                    if not stat in row_data["Fantasy"]:
-                                        row_data["Fantasy"][stat] = 0.0
-
-                                    row_data["Fantasy"][stat] += row_data["Fantasy"][over_header][stat]
-                                row_data["Fantasy"].pop(over_header, None)
-
                     if hide_first_downs:
                         row_data["Shared"]["hide_first_downs"] = True
 
@@ -18611,6 +18607,83 @@ def handle_pick_sixes(player_data):
                         pick_six_data[date_type][season_year][team][date] += 1
 
     return pick_six_data
+
+def handle_fantasy(player_data, all_rows):
+    years_need_data = set([row["Shared"]["Year"] for row in all_rows if row["Shared"]["Year"] >= 1994])
+
+    for year_need in years_need_data:
+        player_url = fantasy_url.format(player_data["id"][0].upper(), player_data["id"], year_need)
+        request = urllib.request.Request(player_url, headers=request_headers)
+        try:
+            response, player_page = url_request(request)
+        except urllib.error.HTTPError as err:
+            if err.status == 404:
+                return
+            else:
+                raise
+
+        tables = player_page.find_all("table", id="player_fantasy")
+
+        for table in tables:
+            standard_table_rows = table.find("tbody").find_all("tr")
+            if standard_table_rows:
+                for row in standard_table_rows:
+                    date = dateutil.parser.parse(str(row.find("td", {"data-stat" : "game_date"}).find(text=True))).date()
+                    team = str(row.find("td", {"data-stat" : "team"}).find(text=True))
+
+                    fant_points = row.find("td", {"data-stat" : "fantasy_points"}).find(text=True)
+                    if not fant_points:
+                        fant_points = "0"
+                    fant_points = float(fant_points)
+
+                    for row_data in all_rows:
+                        if row_data["Shared"]["Date"] == date:
+                            calculate_current_fant_point(row_data, fant_points)
+                            break
+
+def handle_fantasy_formulas(all_rows):
+    for row_data in all_rows:
+        for over_header in list(row_data):
+            if over_header in get_constant_data.formulas["Fantasy"]:
+                for stat in get_constant_data.formulas["Fantasy"][over_header]:
+                    formula = get_constant_data.formulas["Fantasy"][over_header][stat]
+                    value = calculate_fantasy_formula(stat, formula, row_data, over_header)
+
+                    if not "Fantasy" in row_data:
+                        row_data["Fantasy"] = {}
+                    if not over_header in row_data["Fantasy"]:
+                            row_data["Fantasy"][over_header] = {}
+                    row_data["Fantasy"][over_header][stat] = value
+
+        if "Fantasy" in row_data:
+            for over_header in list(row_data["Fantasy"]):
+                for stat in row_data["Fantasy"][over_header]:
+                    if not stat in row_data["Fantasy"]:
+                        row_data["Fantasy"][stat] = 0.0
+
+                    row_data["Fantasy"][stat] += row_data["Fantasy"][over_header][stat]
+                row_data["Fantasy"].pop(over_header, None)
+
+def calculate_current_fant_point(row_data, fant_points):
+    current_fant_points = 0
+    if "Passing" in row_data:
+        current_fant_points += (row_data["Passing"].get("Yds", 0) / 25)
+        current_fant_points += (row_data["Passing"].get("TD", 0) * 4)
+        current_fant_points -= (row_data["Passing"].get("Int", 0) * 2)
+    if "Rushing" in row_data:
+        current_fant_points += (row_data["Rushing"].get("Yds", 0)) / 10
+        current_fant_points += (row_data["Rushing"].get("TD", 0)) * 6
+    if "Receiving" in row_data:
+        current_fant_points += (row_data["Receiving"].get("Yds", 0)) / 10
+        current_fant_points += (row_data["Receiving"].get("TD", 0)) * 6
+    if "Scrimmage/All Purpose" in row_data:
+        current_fant_points += (row_data["Scrimmage/All Purpose"].get("2PM", 0)) * 2
+        current_fant_points -= (row_data["Scrimmage/All Purpose"].get("FmbLst", 0)) * 2
+
+    missing_2pm = round((fant_points - current_fant_points) / 2)    
+    if "Passing" not in row_data:
+        row_data["Passing"] = {}
+    row_data["Passing"]["2PM"] = missing_2pm
 
 def handle_playoffs_data(all_rows, player_data, player_type, ind_player_type, playoff_data, time_frame, is_fantasy):
     data_to_include = []
@@ -21594,6 +21667,11 @@ def print_player_data(player_datas, player_type, highest_vals, lowest_vals, has_
         if player_data["error_getting_pen"]:
             error_getting_pen = True
             break
+    error_getting_fan = False
+    for player_data in player_datas:
+        if player_data["error_getting_fan"]:
+            error_getting_fan = True
+            break
     error_getting_fmb_lst = False
     for player_data in player_datas:
         if player_data["error_getting_fmb_lst"]:
@@ -21771,6 +21849,9 @@ def print_player_data(player_datas, player_type, highest_vals, lowest_vals, has_
             elif "FmbLst" in header or "Tnv" in header:
                 if error_getting_fmb_lst:
                     continue
+            elif over_header == "Fantasy" or (over_header == "Passing" and header == "2PM"):
+                if error_getting_fan:
+                    continue
 
             if player_data["add_type"] == "minus":
                 if (over_header == "Era Adjusted Passing" and header.startswith("Rec")) or header == "TmRec" or header == "ATS TmRec" or header == "O/U TmRec":
@@ -21838,6 +21919,9 @@ def print_player_data(player_datas, player_type, highest_vals, lowest_vals, has_
                                 continue
                     elif "FmbLst" in header or "Tnv" in header:
                         if error_getting_fmb_lst:
+                            continue
+                    elif over_header == "Fantasy" or (over_header == "Passing" and header == "2PM"):
+                        if error_getting_fan:
                             continue
                     value = handle_table_data(player_data, player_type, header, over_header, highest_vals, lowest_vals, index, has_non_playoffs, False, is_fantasy, header_index, error_getting_adj, extra_stats)
                     if value:
@@ -21961,6 +22045,11 @@ def get_reddit_player_table(player_datas, player_type, is_fantasy, debug_mode, o
     for player_data in player_datas:
         if player_data["error_getting_pen"]:
             error_getting_pen = True
+            break
+    error_getting_fan = False
+    for player_data in player_datas:
+        if player_data["error_getting_fan"]:
+            error_getting_fan = True
             break
     error_getting_fmb_lst = False
     for player_data in player_datas:
@@ -22125,6 +22214,9 @@ def get_reddit_player_table(player_datas, player_type, is_fantasy, debug_mode, o
             elif "FmbLst" in header or "Tnv" in header:
                 if error_getting_fmb_lst:
                     continue
+            elif over_header == "Fantasy" or (over_header == "Passing" and header == "2PM"):
+                if error_getting_fan:
+                    continue
 
             if player_data["add_type"] == "minus":
                 if (over_header == "Era Adjusted Passing" and header.startswith("Rec")) or header == "TmRec" or header == "ATS TmRec" or header == "O/U TmRec":
@@ -22196,6 +22288,9 @@ def get_reddit_player_table(player_datas, player_type, is_fantasy, debug_mode, o
                                 continue
                     elif "FmbLst" in header or "Tnv" in header:
                         if error_getting_fmb_lst:
+                            continue
+                    elif over_header == "Fantasy" or (over_header == "Passing" and header == "2PM"):
+                        if error_getting_fan:
                             continue
                     value = handle_table_data(player_data, player_type, header, over_header, highest_vals, lowest_vals, index, has_non_playoffs, True, is_fantasy, header_index, error_getting_adj, extra_stats)
                     if value:

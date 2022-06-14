@@ -69,6 +69,14 @@ stat_groups = {
         "TD": {
             "positive" : True
         },
+        "2PM": {
+            "positive" : True,
+            "display" : False,
+            "valid_since" : {
+                "season" : 1994,
+                "game" : 1994
+            }
+        },
         "Int": {
             "positive" : False
         },
@@ -208,6 +216,15 @@ stat_groups = {
         "TD/17G": {
             "positive" : True,
             "round" : 2
+        },
+        "2PM/17G": {
+            "positive" : True,
+            "display" : False,
+            "round" : 2,
+            "valid_since" : {
+                "season" : 1994,
+                "game" : 1994
+            }
         },
         "Int/17G": {
             "positive" : False,
@@ -1542,7 +1559,11 @@ stat_groups = {
             "positive" : True
         },
         "2PM": {
-            "positive" : True
+            "positive" : True,
+            "valid_since" : {
+                "season" : 1994,
+                "game" : 1994
+            }
         },
         "Fmb": {
             "positive" : False,
@@ -1619,7 +1640,11 @@ stat_groups = {
         },
         "2PM/17G": {
             "positive" : True,
-            "round" : 2
+            "round" : 2,
+            "valid_since" : {
+                "season" : 1994,
+                "game" : 1994
+            }
         },
         "Fmb/17G": {
             "positive" : False,
@@ -4687,6 +4712,7 @@ formulas = {
         "ANY/A": "(Yds - SkYds + 20*(TD) - 45*(Int)) / (Att + Sk)",
         "TD/G" : "TD / G",
         "TD/17G" : "TD / (G / 17)",
+        "2PM/17G" : "2PM / (G / 17)",
         "TD%" : "TD / Att",
         "Int/G" : "Int / G",
         "Int/17G" : "Int / (G / 17)",
@@ -4978,7 +5004,7 @@ formulas = {
     },
     "Fantasy" : {
         "Passing" : {
-            "STD" : "(4 * TD) + (Yds / 25) - (2 * Int)",
+            "STD" : "(4 * TD) + (Yds / 25) - (2 * Int) + (2 * 2PM)",
             "0.5PPR" : "STD",
             "PPR" : "STD"
         },
@@ -6132,6 +6158,10 @@ def calculate_team_win_losses(data, all_rows, result):
     return result_count
 
 def calculate_earliest_invalid_date(stat, header, data, formula, earliest_invalid_date, real_stat, formula_matches):
+    if real_stat in ["STD", "0.5PPR", "PPR"]:
+        if stat == "2PM":
+            return
+        
     if real_stat == "custom_formula":
         if header in data and stat in data[header]:
             header_match = r"(?:" + header.lower() + r")"
