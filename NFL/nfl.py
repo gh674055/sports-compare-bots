@@ -18679,6 +18679,12 @@ def calculate_current_fant_point(row_data, fant_points):
     if "Scrimmage/All Purpose" in row_data:
         current_fant_points += (row_data["Scrimmage/All Purpose"].get("2PM", 0)) * 2
         current_fant_points -= (row_data["Scrimmage/All Purpose"].get("FmbLst", 0)) * 2
+    if "Kick Returns" in row_data:
+        current_fant_points += (row_data["Kick Returns"].get("TD", 0)) * 6
+    if "Punt Returns" in row_data:
+        current_fant_points += (row_data["Punt Returns"].get("TD", 0)) * 6
+    if "Defense" in row_data:
+        current_fant_points += (row_data["Defense"].get("TtlTD", 0)) * 6
 
     missing_2pm = round((fant_points - current_fant_points) / 2)    
     if "Passing" not in row_data:
