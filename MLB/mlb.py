@@ -148,6 +148,13 @@ manual_country_map = {
     "republic of korea" : "south korea"
 }
 
+manual_stadium_map = {
+    "yankee stadium i" : 9,
+    "yankee stadium 1" : 9,
+    "yankee stadium ii" : 3313,
+    "yankee stadium 2" : 3313
+}
+
 position_map = {
     '1': 'P',
     '2': 'C',
@@ -37208,6 +37215,10 @@ def perform_mlb_schedule_qualifiers(row, qualifiers):
                     if int(stadium) == row["StadiumID"]:
                         has_match = True
                         break
+                elif stadium in manual_stadium_map:
+                    if manual_stadium_map[stadium] == row["StadiumID"]:
+                        has_match = True
+                        break
                 else:
                     for sub_stadium in team_venues[str(row["StadiumID"])]["values"]:
                         if re.sub(r"[^A-Za-z\s]", "", stadium).strip() in re.sub(r"[^A-Za-z\s]", "", sub_stadium.lower()).strip():
@@ -37231,6 +37242,10 @@ def perform_mlb_schedule_qualifiers(row, qualifiers):
             for stadium in qual_object["values"]:
                 if stadium.isdigit():
                     if int(stadium) == row["StadiumID"]:
+                        has_match = True
+                        break
+                elif stadium in manual_stadium_map:
+                    if manual_stadium_map[stadium] == row["StadiumID"]:
                         has_match = True
                         break
                 else:

@@ -121,6 +121,8 @@ all_days_re = r"(?:" + "|".join([day + "-?" for day in all_days]) + r")+"
 
 string_stats = ["Tm", "Opponent"]
 
+manual_stadium_map = {}
+
 year_weeks_played = [
     {
         "start_year" : None,
@@ -9816,10 +9818,15 @@ def perform_nfl_game_qualifiers(row, qualifiers):
                         has_match = True
                         break
                 else:
-                    for sub_stadium in venue_obj["venues"]:
-                        if re.sub(r"[^A-Za-z\s]", "", stadium).strip() in re.sub(r"[^A-Za-z\s]", "", sub_stadium.lower()).strip():
+                    if stadium in manual_stadium_map:
+                        if manual_stadium_map[stadium] == row["Shared"]["StadiumID"]:
                             has_match = True
                             break
+                    else:
+                        for sub_stadium in venue_obj["venues"]:
+                            if re.sub(r"[^A-Za-z\s]", "", stadium).strip() in re.sub(r"[^A-Za-z\s]", "", sub_stadium.lower()).strip():
+                                has_match = True
+                                break
                     if has_match:
                         break
             if qual_object["negate"]:
@@ -9841,9 +9848,14 @@ def perform_nfl_game_qualifiers(row, qualifiers):
                         has_match = True
                         break
                 else:
-                    if stadium == row["Shared"]["Stadium"].lower():
-                        has_match = True
-                        break
+                    if stadium in manual_stadium_map:
+                        if manual_stadium_map[stadium] == row["Shared"]["StadiumID"]:
+                            has_match = True
+                            break
+                    else:
+                        if stadium == row["Shared"]["Stadium"].lower():
+                            has_match = True
+                            break
             if qual_object["negate"]:
                 if has_match:
                     return False

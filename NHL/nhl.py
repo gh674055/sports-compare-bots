@@ -137,6 +137,8 @@ string_stats = ["Tm", "Opponent"]
 manual_country_map = {
 }
 
+manual_stadium_map = {}
+
 skater_header_indv_shift_stats = ["CF", "CA", "CFPer", "CF/60M", "CA/60M", "FF", "FA", "FFPer", "SF/60M", "SA/60M", "oiOppS", "oiTmS", "SFPer", "FF/60M", "FA/60M", "offIGF", "offIGA", "TmGF", "OppGF", "TtlGF", "GFDiff", "offICF", "offICA", "TmCF", "OppCF", "TtlCF", "CFDiff", "offIFF", "offIFA", "TmFF", "OppFF", "TtlFF", "FFDiff", "offISF", "offISA", "TmSF", "OppSF", "TtlSF", "SFDiff", "offIGF/60M", "offICA/60M", "offIFF/60M" , "offISA/60M", "offIGA/60M", "offICF/60M", "offIFA/60M", "offISF/60M", "offIG/60M", "offIC/60M", "offIF/60M", "offIS/60M", "GFRel/60M", "CFRel/60M", "FFRel/60M", "SFRel/60M", "GARel/60M", "CARel/60M", "FARel/60M", "SARel/60M", "CFRelPer", "FFRelPer", "GFRelPer", "SFRelPer", "oiSPer", "oiSVPer", "PDO", "oiSRelPer", "oiSVRelPer", "PDORel", "OZPer", "offIOZ", "offINZ", "offIDZ", "offIOZPer", "OZPerRel", "TSA", "TSM", "TSB", "TSA/GP", "TSA/60M", "TSB/GP", "TSB/60M", "TSM/GP", "TSM/60M", "TS%", "SThr%", "offITOI", "offITOI/GP", "iTtlTOI", "iTtlTOI/GP", "TmTtlTOI", "TmTtlTOI/GP", "iTOI%", "TmTOI%"]
 goalie_header_indv_shift_stats = []
 
@@ -37638,10 +37640,15 @@ def perform_schedule_qualifiers(row, qualifiers):
                     has_match = True
                     break
                 else:
-                    for sub_arena in team_venue_obj["venues"]:
-                        if re.sub(r"[^A-Za-z\s]", "", arena).strip() in re.sub(r"[^A-Za-z\s]", "", sub_arena.lower()).strip():
+                    if stadium in manual_stadium_map:
+                        if manual_stadium_map[stadium] == venue_id_to_use:
                             has_match = True
                             break
+                    else:
+                        for sub_arena in team_venue_obj["venues"]:
+                            if re.sub(r"[^A-Za-z\s]", "", arena).strip() in re.sub(r"[^A-Za-z\s]", "", sub_arena.lower()).strip():
+                                has_match = True
+                                break
             if qual_object["negate"]:
                 if has_match:
                     return False
@@ -37665,6 +37672,10 @@ def perform_schedule_qualifiers(row, qualifiers):
                 if re.sub(r"[^A-Za-z\s]", "", arena).strip() == re.sub(r"[^A-Za-z\s]", "", venue_id_to_use).strip():
                     has_match = True
                     break
+                elif stadium in manual_stadium_map:
+                    if manual_stadium_map[stadium] == venue_id_to_use:
+                        has_match = True
+                        break
                 elif arena == row["Arena"].lower():
                     has_match = True
                     break
