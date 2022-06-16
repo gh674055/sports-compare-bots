@@ -37640,8 +37640,8 @@ def perform_schedule_qualifiers(row, qualifiers):
                     has_match = True
                     break
                 else:
-                    if stadium in manual_stadium_map:
-                        if manual_stadium_map[stadium] == venue_id_to_use:
+                    if arena in manual_stadium_map:
+                        if manual_stadium_map[arena] == venue_id_to_use:
                             has_match = True
                             break
                     else:
@@ -37672,8 +37672,8 @@ def perform_schedule_qualifiers(row, qualifiers):
                 if re.sub(r"[^A-Za-z\s]", "", arena).strip() == re.sub(r"[^A-Za-z\s]", "", venue_id_to_use).strip():
                     has_match = True
                     break
-                elif stadium in manual_stadium_map:
-                    if manual_stadium_map[stadium] == venue_id_to_use:
+                elif arena in manual_stadium_map:
+                    if manual_stadium_map[arena] == venue_id_to_use:
                         has_match = True
                         break
                 elif arena == row["Arena"].lower():
