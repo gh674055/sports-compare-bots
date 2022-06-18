@@ -9082,10 +9082,12 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                             elif qualifier_str == "inside-the-park-hr":
                                 qual_type = "Inside The Park HR"
                                 extra_stats.add("current-stats")
+                                extra_stats.add("show-only-stat-hr")
                             elif qualifier_str == "walk-off":
                                 qual_type = "Walk Off"
                                 extra_stats.add("current-stats")
                                 extra_stats.add("walk-off")
+                                extra_stats.add("hide-rate")
                             elif qualifier_str == "game-tying-opp":
                                 qual_type = "Game Tying Opportunity"
                                 extra_stats.add("current-stats")
@@ -9104,21 +9106,25 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                             elif qualifier_str == "go-ahead":
                                 qual_type = "Go Ahead"
                                 extra_stats.add("current-stats")
+                                extra_stats.add("hide-rate")
                             elif qualifier_str == "go-ahead-or-game-tying-opp":
                                 qual_type = "Go Ahead Or Game Tying Opportunity"
                                 extra_stats.add("current-stats")
                             elif qualifier_str == "go-ahead-or-game-tying":
                                 qual_type = "Go Ahead Or Game Tying"
                                 extra_stats.add("current-stats")
+                                extra_stats.add("hide-rate")
                             elif qualifier_str == "game-tying-or-go-ahead-opp":
                                 qual_type = "Go Ahead Or Game Tying Opportunity"
                                 extra_stats.add("current-stats")
                             elif qualifier_str == "game-tying-or-go-ahead":
                                 qual_type = "Go Ahead Or Game Tying"
                                 extra_stats.add("current-stats")
+                                extra_stats.add("hide-rate")
                             elif qualifier_str == "game-winning":
                                 qual_type = "Game Winning"
                                 extra_stats.add("current-stats")
+                                extra_stats.add("hide-rate")
                             elif qualifier_str == "last-inning":
                                 qual_type = "Last Inning"
                                 extra_stats.add("current-stats")
@@ -43884,6 +43890,9 @@ def is_against_header(header, over_header, extra_stats, player_type):
         return True
 
     if "at-bat" in extra_stats and header not in ("AB", "H", "1B", "2B", "3B", "HR", "XBH", "TB", "Cycle", "SO", "GDP", "GDPO", "GDP%", "BA", "SLG", "X/H%", "EV", "HardHit%", "SwtSpt%", "LA", "HitDist", "Slam"):
+        return True
+
+    if "hide-rate" in extra_stats and header not in ("AB", "H", "1B", "2B", "3B", "HR", "XBH", "TB", "Cycle", "SO", "GDP", "GDPO", "PA", "BB", "IBB", "HBP", "Slam", "WalkOff", "R", "RBI", "GWRBI", "SB", "CS", "NS", "TOB", "SH", "SF"):
         return True
 
     if player_type["da_type"] == "Batter":
