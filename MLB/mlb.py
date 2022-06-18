@@ -173,8 +173,7 @@ position_map = {
 position_map_reversed = {v: k for k, v in position_map.items()}
 
 count_stats = ["Pit", "PitBall", "Chase", "PitStrike", "LkStr", "Str", "1stStr", "SwStr", "SwgStr", "CntStr", "Bal", "2StrPit"]
-
-non_rate_stats = ["IP", "BF", "Pit", "PO", "ER", "AB", "H", "1B", "2B", "3B", "HR", "XBH", "TB", "Cycle", "SO", "GDP", "GDPO", "PA", "BB", "IBB", "HBP", "Slam", "WalkOff", "R", "RBI", "GWRBI", "SB", "CS", "TOB", "SH", "SF"]
+non_rate_stats = ["IP", "BF", "Pit", "PO", "ER", "AB", "H", "1B", "2B", "3B", "HR", "XBH", "TB", "Cycle", "SO", "GDP", "GDPO", "PA", "BB", "IBB", "HBP", "Slam", "WalkOff", "R", "RBI", "GWRBI", "SB", "CS", "TOB", "SH", "SF", "Pit", "PitBall", "Chase", "PitStrike", "LkStr", "Str", "1stStr", "SwStr", "SwgStr", "CntStr", "Bal", "2StrPit"]
 non_rate_stats_lower = [non_rate_stat.lower() for non_rate_stat in non_rate_stats]
 
 headers = {
@@ -12093,14 +12092,15 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                     if pot_stat.lower() == qual_type:
                                         stat = pot_stat
                                         break
-                                stat = qual_type.upper()
 
                             if stat in headers["Batter"] and stat not in headers["Pitcher"]:
                                 player_type["da_type"] = "Batter"
                             elif stat in headers["Pitcher"] and stat not in headers["Batter"]:
                                 player_type["da_type"] = "Pitcher"
                             
-                            if stat in ["Pit"]:
+                            if stat in count_stats:
+                                extra_stats.add("statcast")
+                            elif stat in ["Pit"]:
                                 extra_stats.add("show-stat-pit")
 
                             qual_type_to_use = "Event Stat"

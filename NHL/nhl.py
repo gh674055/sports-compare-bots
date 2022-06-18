@@ -12645,7 +12645,6 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                     if pot_stat.lower() == qual_type:
                                         stat = pot_stat
                                         break
-                                stat = qual_type.upper()
 
                             if stat in headers["Skater"] and stat not in headers["Goalie"]:
                                 player_type["da_type"] = {
