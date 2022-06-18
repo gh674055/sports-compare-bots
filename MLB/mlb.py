@@ -152,7 +152,11 @@ manual_stadium_map = {
     "yankee stadium i" : 9,
     "yankee stadium 1" : 9,
     "yankee stadium ii" : 3313,
-    "yankee stadium 2" : 3313
+    "yankee stadium 2" : 3313,
+    "busch stadium ii" : 30,
+    "busch stadium 2" : 30,
+    "busch stadium iii" : 2889,
+    "busch stadium 3" : 2889,
 }
 
 position_map = {
