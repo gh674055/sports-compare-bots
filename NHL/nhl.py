@@ -142,6 +142,46 @@ manual_stadium_map = {}
 skater_header_indv_shift_stats = ["CF", "CA", "CFPer", "CF/60M", "CA/60M", "FF", "FA", "FFPer", "SF/60M", "SA/60M", "oiOppS", "oiTmS", "SFPer", "FF/60M", "FA/60M", "offIGF", "offIGA", "TmGF", "OppGF", "TtlGF", "GFDiff", "offICF", "offICA", "TmCF", "OppCF", "TtlCF", "CFDiff", "offIFF", "offIFA", "TmFF", "OppFF", "TtlFF", "FFDiff", "offISF", "offISA", "TmSF", "OppSF", "TtlSF", "SFDiff", "offIGF/60M", "offICA/60M", "offIFF/60M" , "offISA/60M", "offIGA/60M", "offICF/60M", "offIFA/60M", "offISF/60M", "offIG/60M", "offIC/60M", "offIF/60M", "offIS/60M", "GFRel/60M", "CFRel/60M", "FFRel/60M", "SFRel/60M", "GARel/60M", "CARel/60M", "FARel/60M", "SARel/60M", "CFRelPer", "FFRelPer", "GFRelPer", "SFRelPer", "oiSPer", "oiSVPer", "PDO", "oiSRelPer", "oiSVRelPer", "PDORel", "OZPer", "offIOZ", "offINZ", "offIDZ", "offIOZPer", "OZPerRel", "TSA", "TSM", "TSB", "TSA/GP", "TSA/60M", "TSB/GP", "TSB/60M", "TSM/GP", "TSM/60M", "TS%", "SThr%", "offITOI", "offITOI/GP", "iTtlTOI", "iTtlTOI/GP", "TmTtlTOI", "TmTtlTOI/GP", "iTOI%", "TmTOI%"]
 goalie_header_indv_shift_stats = []
 
+goal_stats = ["G", "EVG", "PPG", "SHG", "GWG", "GWP", "OTP", "ENG", "OTG", "P", "EVP", "PPP", "SHP", "ENP", "P1", "EVP1", "PPP1", "SHP1", "GWP1", "ENP1", "OTP1", "1stG", "S", "WristS", "WristG", "DeflectS", "DeflectG", "SlapS" "SlapG", "TipS", "TipG", "BackS", "BackG", "WrapS", "WrapG", "TSA", "HAT"]
+shot_stats = ["S", "WristS", "DeflectS", "SlapS", "TipS", "BackS", "WrapS", "TSA"]
+missed_shot_stats = ["PostBar", "TSA", "TSM"]
+blocked_shot_stats = ["TSA", "TSB"]
+assist_stats = ["GWA", "GWP", "OTA", "OTP", "A", "A1", "A2", "EVA", "EVA1", "EVA2", "PPA", "PPA1", "PPA2", "SHA", "SHA1", "SHA2", "ENA", "ENA1", "ENA2", "P", "P1", "EVP", "EVP1", "PPP", "PPP1", "SHP", "SHP1", "ENP", "ENP1"]
+hit_stats = ["HIT"]
+hit_taken_stats = ["HITTkn"]
+block_stats = ["BLK"]
+faceoff_stats = ["FO", "FOW", "FOL", "OZFO", "OZFOW", "OZFOL", "NZFO", "NZFOW", "NZFOL", "DZFO", "DZFOW", "DZFOL"]
+oi_all_faceoff_stats = ["OZ", "NZ", "DZ"]
+all_faceoff_stats = ["offIOZ", "offINZ", "offIDZ"]
+takeaway_stats = ["TK", "GV"]
+penalty_stats = ["PIM", "PEN", "PenDrawn", "NetPEN", "Minor", "Major", "Misconduct", "GameMisconduct", "Match", "Fight"]
+oi_all_team_goals_stats = ["GF", "GD", "PlusMinus", "EVGF", "PPGF", "SHGF", "EVGD", "PPGD", "SHGD", "TmGF", "TtlGF", "GFDiff"]
+oi_all_opp_goals_stats = ["GA", "GD", "PlusMinus", "EVGA", "PPGA", "SHGA", "EVGD", "PPGD", "SHGD", "OppGF", "TtlGF", "GFDiff"]
+oi_all_team_shots_stats = ["CF", "TmCF", "TtlCF", "CFDiff"]
+oi_all_opp_shots_stats = ["CA", "OppCF", "TtlCF", "CFDiff"]
+oi_all_team_shots_og_stats = ["oiTmS", "TmSF", "TtlSF", "SFDiff"]
+oi_all_opp_shots_og_stats = ["oiOppS", "OppSF", "TtlSF", "SFDiff"]
+oi_all_team_unblocked_shots_stats = ["FF", "TmFF", "TtlFF", "FFDiff"]
+oi_all_opp_unblocked_shots_stats = ["FA", "OppFF", "TtlFF", "FFDiff"]
+all_team_goals_stats = ["offIGF", "TmGF", "TtlGF", "GFDiff"]
+all_opp_goals_stats = ["offIGA", "OppGF", "TtlGF", "GFDiff"]
+all_team_shots_stats = ["offICF", "TmCF", "TtlCF", "CFDiff"]
+all_opp_shots_stats = ["offICA", "OppCF", "TtlCF", "CFDiff"]
+all_team_shots_og_stats = ["offISF", "TmSF", "TtlSF", "SFDiff"]
+all_opp_shots_og_stats = ["offISA", "OppSF", "TtlSF", "SFDiff"]
+all_team_unblocked_shots_stats = ["offIFF", "TmFF", "TtlFF", "FFDiff"]
+all_opp_unblocked_shots_stats = ["offIFA", "OppFF", "TtlFF", "FFDiff"]
+goal_against_stats = ["GA", "SA", "EVGA", "EVSV", "EVSH", "PPGA", "PPSV", "PPSH", "SHGA", "SHSV", "SHSH"]
+save_against_stats = ["SV", "SA", "EVSH", "PPSH", "SHSH",  "EVSV", "PPSV", "SHSV"]
+missed_shot_against_stats = ["SV", "SA"]
+goalie_goal_against_stats = ["GF"]
+toi_stats = ["TOI", "iTtlTOI", "TmTtlTOI", "EVTOI", "PPTOI", "SHTOI"]
+off_toi_stats = ["offITOI", "iTtlTOI"]
+event_stats = ["Event"]
+
+all_combined_event_stats = goal_stats + shot_stats + missed_shot_stats + blocked_shot_stats + assist_stats + hit_stats + hit_taken_stats + block_stats + faceoff_stats + oi_all_faceoff_stats + all_faceoff_stats + takeaway_stats + penalty_stats + oi_all_team_goals_stats + oi_all_opp_goals_stats + oi_all_team_shots_stats + oi_all_opp_shots_stats + oi_all_team_shots_og_stats + oi_all_opp_shots_og_stats + oi_all_team_unblocked_shots_stats + oi_all_opp_unblocked_shots_stats + all_team_goals_stats + all_opp_goals_stats + all_team_shots_stats + all_opp_shots_stats + all_team_shots_og_stats + all_opp_shots_og_stats + all_team_unblocked_shots_stats + all_opp_unblocked_shots_stats + goal_against_stats + save_against_stats + missed_shot_against_stats + goalie_goal_against_stats + toi_stats + off_toi_stats + event_stats
+all_combined_event_stats_lower = [all_combined_event_stat.lower() for all_combined_event_stat in all_combined_event_stats]
+
 headers = {
     "Skater" : {
         "Player" : {
@@ -12513,7 +12553,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
 
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
                     
-                        last_matches = re.finditer(r"\b(no(?:t|n)?(?: |-))?(first|1st|last|this|past)?(?: ?(\S*) (starting-)?(game-)?(total-minute|total-second|total-min|total-toi|minute|second|min|toi|shots?-faced|shots?-against|goals?-allowed|team-shot-attempt|team-goal|team-shot|opp-shot-attempt|opp-goal|opp-shot|total-shot-attempt|total-goal|total-shot|save|total-shot|shot|period|shift|goal|assist|point)s?)\b", time_frame)
+                        last_matches = re.finditer(r"\b(no(?:t|n)?(?: |-))?(first|1st|last|this|past)?(?: ?(\S*) (starting-)?(game-)?(total-minute|total-second|total-min|total-toi|minute|second|min|toi|shots?-faced|shots?-against|goals?-allowed|team-shot-attempt|team-goal|team-shot|opp-shot-attempt|opp-goal|opp-shot|total-shot-attempt|total-goal|total-shot|save|total-shot|shot|period|shift|goal|assist|point|" + "|".join(all_combined_event_stats_lower) + r")s?)\b", time_frame)
                         for last_match in last_matches:
                             compare_type = last_match.group(2)
                             time_unit = last_match.group(3)
@@ -12601,6 +12641,10 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                             elif qual_type == "save":
                                 stat = "SV"
                             else:
+                                for pot_stat in all_combined_event_stats:
+                                    if pot_stat.lower() == qual_type:
+                                        stat = pot_stat
+                                        break
                                 stat = qual_type.upper()
 
                             if stat in headers["Skater"] and stat not in headers["Goalie"]:
@@ -21357,7 +21401,7 @@ def perform_sub_nhl_period_qualifiers(row, qualifiers, player_game_info, player_
     
     return overall_has_match, row
 
-def is_period_match(period, qualifiers):
+def is_period_match(player_game_info, period, qualifiers):
     if "Period" in qualifiers:
         has_row_match = True
         for qual_object in qualifiers["Period"]:
@@ -21582,12 +21626,12 @@ def setup_career_stats(row_data, player_game_info, saved_row_data, index, player
                     value_to_use = -1
                     if not hit_end:
                         if stat == "Per":
-                            if is_period_match(period, qualifiers) and not (player_game_info["is_shootout"] and period == 5):
+                            if is_period_match(player_game_info, period, qualifiers) and not (player_game_info["is_shootout"] and period == 5):
                                 if not has_period_match:
                                     career_stats_info[stat] += 1
                                     has_period_match = True
                         elif stat == "Shft":
-                            if is_period_match(period, qualifiers) and not (player_game_info["is_shootout"] and period == 5):
+                            if is_period_match(player_game_info, period, qualifiers) and not (player_game_info["is_shootout"] and period == 5):
                                 shift_index = get_shift_index(time_events)
                                 if shift_index and not shift_index in matching_shifts:
                                     career_stats_info[stat] += 1
@@ -21628,12 +21672,12 @@ def setup_career_stats(row_data, player_game_info, saved_row_data, index, player
                     value_to_use = -1
                     if not hit_end:
                         if stat == "Per":
-                            if is_period_match(period, qualifiers) and not (player_game_info["is_shootout"] and period == 5):
+                            if is_period_match(player_game_info, period, qualifiers) and not (player_game_info["is_shootout"] and period == 5):
                                 if not has_period_match:
                                     career_stats_info[stat] += 1
                                     has_period_match = True
                         elif stat == "Shft":
-                            if is_period_match(period, qualifiers) and not (player_game_info["is_shootout"] and period == 5):
+                            if is_period_match(player_game_info, period, qualifiers) and not (player_game_info["is_shootout"] and period == 5):
                                 shift_index = get_shift_index(time_events)
                                 if shift_index and not shift_index in matching_shifts:
                                     career_stats_info[stat] += 1
@@ -21667,12 +21711,12 @@ def setup_career_stats(row_data, player_game_info, saved_row_data, index, player
                 time_events = player_game_info["all_events"][period][period_time]
                 for stat in events_stats_needed:
                     if stat == "Per":
-                        if is_period_match(period, {}) and not (player_game_info["is_shootout"] and period == 5):
+                        if is_period_match(player_game_info, period, {}) and not (player_game_info["is_shootout"] and period == 5):
                             if not has_period_match:
                                 career_stats_info[stat] += 1
                                 has_period_match = True
                     elif stat == "Shft":
-                        if is_period_match(period, {}) and not (player_game_info["is_shootout"] and period == 5):
+                        if is_period_match(player_game_info, period, {}) and not (player_game_info["is_shootout"] and period == 5):
                             shift_index = get_shift_index(time_events)
                             if shift_index and not shift_index in matching_shifts:
                                 career_stats_info[stat] += 1
@@ -21698,12 +21742,12 @@ def setup_career_stats(row_data, player_game_info, saved_row_data, index, player
                 time_events = player_game_info["all_events"][period][period_time]
                 for stat in events_reversed_stats_needed:
                     if stat == "Per":
-                        if is_period_match(period, {}) and not (player_game_info["is_shootout"] and period == 5):
+                        if is_period_match(player_game_info, period, {}) and not (player_game_info["is_shootout"] and period == 5):
                             if not has_period_match:
                                 career_stats_info[stat] += 1
                                 has_period_match = True
                     elif stat == "Shft":
-                        if is_period_match(period, {}) and not (player_game_info["is_shootout"] and period == 5):
+                        if is_period_match(player_game_info, period, {}) and not (player_game_info["is_shootout"] and period == 5):
                             shift_index = get_shift_index(time_events)
                             if shift_index and not shift_index in matching_shifts:
                                 career_stats_info[stat] += 1
@@ -21783,12 +21827,12 @@ def setup_game_stats(row_data, player_game_info, index, player_type, player_link
                     value_to_use = -1
                     if not hit_end:
                         if stat == "Per":
-                            if is_period_match(period, qualifiers) and not (player_game_info["is_shootout"] and period == 5):
+                            if is_period_match(player_game_info, period, qualifiers) and not (player_game_info["is_shootout"] and period == 5):
                                 if not has_period_match:
                                     career_stats_info[stat] += 1
                                     has_period_match = True
                         elif stat == "Shft":
-                            if is_period_match(period, qualifiers) and not (player_game_info["is_shootout"] and period == 5):
+                            if is_period_match(player_game_info, period, qualifiers) and not (player_game_info["is_shootout"] and period == 5):
                                 shift_index = get_shift_index(time_events)
                                 if shift_index and not shift_index in matching_shifts:
                                     career_stats_info[stat] += 1
@@ -21826,12 +21870,12 @@ def setup_game_stats(row_data, player_game_info, index, player_type, player_link
                     value_to_use = -1
                     if not hit_end:
                         if stat == "Per":
-                            if is_period_match(period, qualifiers) and not (player_game_info["is_shootout"] and period == 5):
+                            if is_period_match(player_game_info, period, qualifiers) and not (player_game_info["is_shootout"] and period == 5):
                                 if not has_period_match:
                                     career_stats_info[stat] += 1
                                     has_period_match = True
                         elif stat == "Shft":
-                            if is_period_match(period, qualifiers) and not (player_game_info["is_shootout"] and period == 5):
+                            if is_period_match(player_game_info, period, qualifiers) and not (player_game_info["is_shootout"] and period == 5):
                                 shift_index = get_shift_index(time_events)
                                 if shift_index and not shift_index in matching_shifts:
                                     career_stats_info[stat] += 1
@@ -21862,12 +21906,12 @@ def setup_game_stats(row_data, player_game_info, index, player_type, player_link
                 time_events = player_game_info["all_events"][period][period_time]
                 for stat in events_stats_needed:
                     if stat == "Per":
-                        if is_period_match(period, {}) and not (player_game_info["is_shootout"] and period == 5):
+                        if is_period_match(player_game_info, period, {}) and not (player_game_info["is_shootout"] and period == 5):
                             if not has_period_match:
                                 career_stats_info[stat] += 1
                                 has_period_match = True
                     elif stat == "Shft":
-                        if is_period_match(period, {}) and not (player_game_info["is_shootout"] and period == 5):
+                        if is_period_match(player_game_info, period, {}) and not (player_game_info["is_shootout"] and period == 5):
                             shift_index = get_shift_index(time_events)
                             if shift_index and not shift_index in matching_shifts:
                                 career_stats_info[stat] += 1
@@ -21890,12 +21934,12 @@ def setup_game_stats(row_data, player_game_info, index, player_type, player_link
                 time_events = player_game_info["all_events"][period][period_time]
                 for stat in events_reversed_stats_needed:
                     if stat == "Per":
-                        if is_period_match(period, {}) and not (player_game_info["is_shootout"] and period == 5):
+                        if is_period_match(player_game_info, period, {}) and not (player_game_info["is_shootout"] and period == 5):
                             if not has_period_match:
                                 career_stats_info[stat] += 1
                                 has_period_match = True
                     elif stat == "Shft":
-                        if is_period_match(period, {}) and not (player_game_info["is_shootout"] and period == 5):
+                        if is_period_match(player_game_info, period, {}) and not (player_game_info["is_shootout"] and period == 5):
                             shift_index = get_shift_index(time_events)
                             if shift_index and not shift_index in matching_shifts:
                                 career_stats_info[stat] += 1
@@ -21988,12 +22032,12 @@ def setup_starting_career_stats(row_data, player_game_info, saved_row_data, inde
                             hit_end = True
 
                         if stat == "Per":
-                            if is_period_match(period, qualifiers) and not (player_game_info["is_shootout"] and period == 5):
+                            if is_period_match(player_game_info, period, qualifiers) and not (player_game_info["is_shootout"] and period == 5):
                                 if not has_period_match:
                                     career_stats_info[stat] += 1
                                     has_period_match = True
                         elif stat == "Shft":
-                            if is_period_match(period, qualifiers) and not (player_game_info["is_shootout"] and period == 5):
+                            if is_period_match(player_game_info, period, qualifiers) and not (player_game_info["is_shootout"] and period == 5):
                                 shift_index = get_shift_index(time_events)
                                 if shift_index and not shift_index in matching_shifts:
                                     career_stats_info[stat] += 1
@@ -22035,13 +22079,13 @@ def setup_starting_career_stats(row_data, player_game_info, saved_row_data, inde
                             hit_end = True
 
                         if stat == "Per":
-                            if is_period_match(period, qualifiers) and not (player_game_info["is_shootout"] and period == 5):
+                            if is_period_match(player_game_info, period, qualifiers) and not (player_game_info["is_shootout"] and period == 5):
                                 if not (player_game_info["is_shootout"] and period == 5):
                                     if not has_period_match:
                                         career_stats_info[stat] += 1
                                         has_period_match = True
                         elif stat == "Shft":
-                            if is_period_match(period, qualifiers) and not (player_game_info["is_shootout"] and period == 5):
+                            if is_period_match(player_game_info, period, qualifiers) and not (player_game_info["is_shootout"] and period == 5):
                                 shift_index = get_shift_index(time_events)
                                 if shift_index and not shift_index in matching_shifts:
                                     career_stats_info[stat] += 1
@@ -22067,12 +22111,12 @@ def setup_starting_career_stats(row_data, player_game_info, saved_row_data, inde
                 for stat in events_stats_needed:
                     value_to_use = career_stats_info[stat]
                     if stat == "Per":
-                        if is_period_match(period, {}) and not (player_game_info["is_shootout"] and period == 5):
+                        if is_period_match(player_game_info, period, {}) and not (player_game_info["is_shootout"] and period == 5):
                             if not has_period_match:
                                 career_stats_info[stat] += 1
                                 has_period_match = True
                     elif stat == "Shft":
-                        if is_period_match(period, {}) and not (player_game_info["is_shootout"] and period == 5):
+                        if is_period_match(player_game_info, period, {}) and not (player_game_info["is_shootout"] and period == 5):
                             shift_index = get_shift_index(time_events)
                             if shift_index and not shift_index in matching_shifts:
                                 career_stats_info[stat] += 1
@@ -22098,12 +22142,12 @@ def setup_starting_career_stats(row_data, player_game_info, saved_row_data, inde
                 for stat in events_reversed_stats_needed:
                     value_to_use = career_stats_info[stat]
                     if stat == "Per":
-                        if is_period_match(period, {}) and not (player_game_info["is_shootout"] and period == 5):
+                        if is_period_match(player_game_info, period, {}) and not (player_game_info["is_shootout"] and period == 5):
                             if not has_period_match:
                                 career_stats_info[stat] += 1
                                 has_period_match = True
                     elif stat == "Shft":
-                        if is_period_match(period, {}) and not (player_game_info["is_shootout"] and period == 5):
+                        if is_period_match(player_game_info, period, {}) and not (player_game_info["is_shootout"] and period == 5):
                             shift_index = get_shift_index(time_events)
                             if shift_index and not shift_index in matching_shifts:
                                 career_stats_info[stat] += 1
@@ -22192,12 +22236,12 @@ def setup_starting_game_stats(row_data, player_game_info, index, player_type, pl
                             hit_end = True
 
                         if stat == "Per":
-                            if is_period_match(period, qualifiers) and not (player_game_info["is_shootout"] and period == 5):
+                            if is_period_match(player_game_info, period, qualifiers) and not (player_game_info["is_shootout"] and period == 5):
                                 if not has_period_match:
                                     career_stats_info[stat] += 1
                                     has_period_match = True
                         elif stat == "Shft":
-                            if is_period_match(period, qualifiers) and not (player_game_info["is_shootout"] and period == 5):
+                            if is_period_match(player_game_info, period, qualifiers) and not (player_game_info["is_shootout"] and period == 5):
                                 shift_index = get_shift_index(time_events)
                                 if shift_index and not shift_index in matching_shifts:
                                     career_stats_info[stat] += 1
@@ -22236,12 +22280,12 @@ def setup_starting_game_stats(row_data, player_game_info, index, player_type, pl
                             hit_end = True
 
                         if stat == "Per":
-                            if is_period_match(period, qualifiers) and not (player_game_info["is_shootout"] and period == 5):
+                            if is_period_match(player_game_info, period, qualifiers) and not (player_game_info["is_shootout"] and period == 5):
                                 if not has_period_match:
                                     career_stats_info[stat] += 1
                                     has_period_match = True
                         elif stat == "Shft":
-                            if is_period_match(period, qualifiers) and not (player_game_info["is_shootout"] and period == 5):
+                            if is_period_match(player_game_info, period, qualifiers) and not (player_game_info["is_shootout"] and period == 5):
                                 shift_index = get_shift_index(time_events)
                                 if shift_index and not shift_index in matching_shifts:
                                     career_stats_info[stat] += 1
@@ -22264,12 +22308,12 @@ def setup_starting_game_stats(row_data, player_game_info, index, player_type, pl
                 for stat in events_stats_needed:
                     value_to_use = career_stats_info[stat]
                     if stat == "Per":
-                        if is_period_match(period, {}) and not (player_game_info["is_shootout"] and period == 5):
+                        if is_period_match(player_game_info, period, {}) and not (player_game_info["is_shootout"] and period == 5):
                             if not has_period_match:
                                 career_stats_info[stat] += 1
                                 has_period_match = True
                     elif stat == "Shft":
-                        if is_period_match(period, {}) and not (player_game_info["is_shootout"] and period == 5):
+                        if is_period_match(player_game_info, period, {}) and not (player_game_info["is_shootout"] and period == 5):
                             shift_index = get_shift_index(time_events)
                             if shift_index and not shift_index in matching_shifts:
                                 career_stats_info[stat] += 1
@@ -22292,12 +22336,12 @@ def setup_starting_game_stats(row_data, player_game_info, index, player_type, pl
                 for stat in events_reversed_stats_needed:
                     value_to_use = career_stats_info[stat]
                     if stat == "Per":
-                        if is_period_match(period, {}) and not (player_game_info["is_shootout"] and period == 5):
+                        if is_period_match(player_game_info, period, {}) and not (player_game_info["is_shootout"] and period == 5):
                             if not has_period_match:
                                 career_stats_info[stat] += 1
                                 has_period_match = True
                     elif stat == "Shft":
-                        if is_period_match(period, {}) and not (player_game_info["is_shootout"] and period == 5):
+                        if is_period_match(player_game_info, period, {}) and not (player_game_info["is_shootout"] and period == 5):
                             shift_index = get_shift_index(time_events)
                             if shift_index and not shift_index in matching_shifts:
                                 career_stats_info[stat] += 1
@@ -22327,43 +22371,6 @@ def determine_stat_value(player_game_info, all_events, qualifiers, og_row, playe
 
     if stat not in row:
         return -1
-
-    goal_stats = ["G", "EVG", "PPG", "SHG", "GWG", "GWP", "OTP", "ENG", "OTG", "P", "EVP", "PPP", "SHP", "ENP", "P1", "EVP1", "PPP1", "SHP1", "GWP1", "ENP1", "OTP1", "1stG", "S", "WristS", "WristG", "DeflectS", "DeflectG", "SlapS" "SlapG", "TipS", "TipG", "BackS", "BackG", "WrapS", "WrapG", "TSA", "HAT"]
-    shot_stats = ["S", "WristS", "DeflectS", "SlapS", "TipS", "BackS", "WrapS", "TSA"]
-    missed_shot_stats = ["PostBar", "TSA", "TSM"]
-    blocked_shot_stats = ["TSA", "TSB"]
-    assist_stats = ["GWA", "GWP", "OTA", "OTP", "A", "A1", "A2", "EVA", "EVA1", "EVA2", "PPA", "PPA1", "PPA2", "SHA", "SHA1", "SHA2", "ENA", "ENA1", "ENA2", "P", "P1", "EVP", "EVP1", "PPP", "PPP1", "SHP", "SHP1", "ENP", "ENP1"]
-    hit_stats = ["HIT"]
-    hit_taken_stats = ["HITTkn"]
-    block_stats = ["BLK"]
-    faceoff_stats = ["FO", "FOW", "FOL", "OZFO", "OZFOW", "OZFOL", "NZFO", "NZFOW", "NZFOL", "DZFO", "DZFOW", "DZFOL"]
-    oi_all_faceoff_stats = ["OZ", "NZ", "DZ"]
-    all_faceoff_stats = ["offIOZ", "offINZ", "offIDZ"]
-    takeaway_stats = ["TK", "GV"]
-    penalty_stats = ["PIM", "PEN", "PenDrawn", "NetPEN", "Minor", "Major", "Misconduct", "GameMisconduct", "Match", "Fight"]
-    oi_all_team_goals_stats = ["GF", "GD", "PlusMinus", "EVGF", "PPGF", "SHGF", "EVGD", "PPGD", "SHGD", "TmGF", "TtlGF", "GFDiff"]
-    oi_all_opp_goals_stats = ["GA", "GD", "PlusMinus", "EVGA", "PPGA", "SHGA", "EVGD", "PPGD", "SHGD", "OppGF", "TtlGF", "GFDiff"]
-    oi_all_team_shots_stats = ["CF", "TmCF", "TtlCF", "CFDiff"]
-    oi_all_opp_shots_stats = ["CA", "OppCF", "TtlCF", "CFDiff"]
-    oi_all_team_shots_og_stats = ["oiTmS", "TmSF", "TtlSF", "SFDiff"]
-    oi_all_opp_shots_og_stats = ["oiOppS", "OppSF", "TtlSF", "SFDiff"]
-    oi_all_team_unblocked_shots_stats = ["FF", "TmFF", "TtlFF", "FFDiff"]
-    oi_all_opp_unblocked_shots_stats = ["FA", "OppFF", "TtlFF", "FFDiff"]
-    all_team_goals_stats = ["offIGF", "TmGF", "TtlGF", "GFDiff"]
-    all_opp_goals_stats = ["offIGA", "OppGF", "TtlGF", "GFDiff"]
-    all_team_shots_stats = ["offICF", "TmCF", "TtlCF", "CFDiff"]
-    all_opp_shots_stats = ["offICA", "OppCF", "TtlCF", "CFDiff"]
-    all_team_shots_og_stats = ["offISF", "TmSF", "TtlSF", "SFDiff"]
-    all_opp_shots_og_stats = ["offISA", "OppSF", "TtlSF", "SFDiff"]
-    all_team_unblocked_shots_stats = ["offIFF", "TmFF", "TtlFF", "FFDiff"]
-    all_opp_unblocked_shots_stats = ["offIFA", "OppFF", "TtlFF", "FFDiff"]
-    goal_against_stats = ["GA", "SA", "EVGA", "EVSV", "EVSH", "PPGA", "PPSV", "PPSH", "SHGA", "SHSV", "SHSH"]
-    save_against_stats = ["SV", "SA", "EVSH", "PPSH", "SHSH",  "EVSV", "PPSV", "SHSV"]
-    missed_shot_against_stats = ["SV", "SA"]
-    goalie_goal_against_stats = ["GF"]
-    toi_stats = ["TOI", "iTtlTOI", "TmTtlTOI", "EVTOI", "PPTOI", "SHTOI"]
-    off_toi_stats = ["offITOI", "iTtlTOI"]
-    event_stats = ["Event"]
 
     if count_misses:
         missed_shot_stats.append("S")
@@ -22659,7 +22666,7 @@ def determine_stat_value(player_game_info, all_events, qualifiers, og_row, playe
 
         if stat in event_stats:
             for goal_event in player_game_info["all_raw_events"]:
-                if perform_metadata_qual("raw_event", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], skip_career_events=skip_career_events):
+                if perform_metadata_qual("raw_event", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"]):
                     row["Event"] += 1
 
         if stat in toi_stats:

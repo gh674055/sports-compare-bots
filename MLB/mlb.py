@@ -174,6 +174,9 @@ position_map_reversed = {v: k for k, v in position_map.items()}
 
 count_stats = ["Pit", "PitBall", "Chase", "PitStrike", "LkStr", "Str", "1stStr", "SwStr", "SwgStr", "CntStr", "Bal", "2StrPit"]
 
+non_rate_stats = ["IP", "BF", "Pit", "PO", "ER", "AB", "H", "1B", "2B", "3B", "HR", "XBH", "TB", "Cycle", "SO", "GDP", "GDPO", "PA", "BB", "IBB", "HBP", "Slam", "WalkOff", "R", "RBI", "GWRBI", "SB", "CS", "TOB", "SH", "SF"]
+non_rate_stats_lower = [non_rate_stat.lower() for non_rate_stat in non_rate_stats]
+
 headers = {
     "Batter" : {
         "Player" : {
@@ -12045,7 +12048,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
 
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
 
-                        last_matches = re.finditer(r"\b(no(?:t|n)?(?: |-))?(first|1st|last|this|past)?(?: ?(\S*) (starting-)?(game-)?(innings?-pitched|inning|ip|plate-appearance|pa|batters?-faced|bf|at-bat|ab|pitche?|pit|h|1b|2b|3b|hr|tb|xbh|tob|sb|cs|k|so|po|bb|ibb|hbp|sh|sf|gdp|r|er|rbi)s?)\b", time_frame)
+                        last_matches = re.finditer(r"\b(no(?:t|n)?(?: |-))?(first|1st|last|this|past)?(?: ?(\S*) (starting-)?(game-)?(innings?-pitched|inning|ip|plate-appearance|pa|batters?-faced|bf|at-bat|ab|pitche?|pit|" + "|".join(non_rate_stats_lower) + r")s?)\b", time_frame)
                         for last_match in last_matches:
                             compare_type = last_match.group(2)
                             time_unit = last_match.group(3)
@@ -12086,6 +12089,10 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 time_end = round_value(frac + whole, 2)
                                 stat = "IP"
                             else:
+                                for pot_stat in non_rate_stats:
+                                    if pot_stat.lower() == qual_type:
+                                        stat = pot_stat
+                                        break
                                 stat = qual_type.upper()
 
                             if stat in headers["Batter"] and stat not in headers["Pitcher"]:
@@ -28865,7 +28872,7 @@ def setup_career_stats(row_data, player_game_info, saved_row_data, index, player
                                 sub_at_bat_event["career_stat_" + stat] = career_stats_info[stat]
                         at_bat_event["career_stat_" + stat] = career_stats_info[stat]
                     else:
-                        career_stats_info[stat] += event_type_stat_mappings[at_bat_event["result"]].get(stat, 0)
+                        career_stats_info[stat] += calculate_row_numbers(at_bat_event, at_bat_event["result"], copied_quals, player_type, stat)
                         at_bat_event["career_stat_" + stat] = career_stats_info[stat]
                     
                     if not hit_start:
@@ -29004,7 +29011,7 @@ def setup_career_stats(row_data, player_game_info, saved_row_data, index, player
                                 sub_at_bat_event["career_stat_reversed_" + stat] = career_stats_info[stat]
                         at_bat_event["career_stat_reversed_" + stat] = career_stats_info[stat]
                     else:
-                        career_stats_info[stat] += event_type_stat_mappings[at_bat_event["result"]].get(stat, 0)
+                        career_stats_info[stat] += calculate_row_numbers(at_bat_event, at_bat_event["result"], copied_quals, player_type, stat)
                         at_bat_event["career_stat_reversed_" + stat] = career_stats_info[stat]
                     
                     if not hit_start:
@@ -29077,7 +29084,7 @@ def setup_career_stats(row_data, player_game_info, saved_row_data, index, player
                             sub_at_bat_event["career_stats_" + stat] = career_stats_info[stat]
                     at_bat_event["career_stats_" + stat] = career_stats_info[stat]
                 else:
-                    career_stats_info[stat] += event_type_stat_mappings[at_bat_event["result"]].get(stat, 0)
+                    career_stats_info[stat] += calculate_row_numbers(at_bat_event, at_bat_event["result"], copied_quals, player_type, stat)
                     at_bat_event["career_stats_" + stat] = career_stats_info[stat]
 
             if player_type["da_type"] != "Batter":
@@ -29187,7 +29194,7 @@ def setup_career_stats(row_data, player_game_info, saved_row_data, index, player
                             sub_at_bat_event["career_stats_reversed_" + stat] = career_stats_info[stat]
                     at_bat_event["career_stats_reversed_" + stat] = career_stats_info[stat]
                 else:
-                    career_stats_info[stat] += event_type_stat_mappings[at_bat_event["result"]].get(stat, 0)
+                    career_stats_info[stat] += calculate_row_numbers(at_bat_event, at_bat_event["result"], copied_quals, player_type, stat)
                     at_bat_event["career_stats_reversed_" + stat] = career_stats_info[stat]
 
             if player_type["da_type"] != "Batter":
@@ -29309,7 +29316,7 @@ def setup_game_stats(row_data, player_game_info, player_type, player_data, quali
                                 sub_at_bat_event["game_stat_" + stat] = career_stats_info[stat]
                         at_bat_event["game_stat_" + stat] = career_stats_info[stat]
                     else:
-                        career_stats_info[stat] += event_type_stat_mappings[at_bat_event["result"]].get(stat, 0)
+                        career_stats_info[stat] += calculate_row_numbers(at_bat_event, at_bat_event["result"], copied_quals, player_type, stat)
                         at_bat_event["game_stat_" + stat] = career_stats_info[stat]
             
                     if not hit_start:
@@ -29445,7 +29452,7 @@ def setup_game_stats(row_data, player_game_info, player_type, player_data, quali
                                 sub_at_bat_event["game_stat_reversed_" + stat] = career_stats_info[stat]
                         at_bat_event["game_stat_reversed_" + stat] = career_stats_info[stat]
                     else:
-                        career_stats_info[stat] += event_type_stat_mappings[at_bat_event["result"]].get(stat, 0)
+                        career_stats_info[stat] += calculate_row_numbers(at_bat_event, at_bat_event["result"], copied_quals, player_type, stat)
                         at_bat_event["game_stat_reversed_" + stat] = career_stats_info[stat]
                     
                     if not hit_start:
@@ -29515,7 +29522,7 @@ def setup_game_stats(row_data, player_game_info, player_type, player_data, quali
                             sub_at_bat_event["game_stats_" + stat] = career_stats_info[stat]
                     at_bat_event["game_stats_" + stat] = career_stats_info[stat]
                 else:
-                    career_stats_info[stat] += event_type_stat_mappings[at_bat_event["result"]].get(stat, 0)
+                    career_stats_info[stat] += calculate_row_numbers(at_bat_event, at_bat_event["result"], copied_quals, player_type, stat)
                     at_bat_event["game_stats_" + stat] = career_stats_info[stat]
 
             if player_type["da_type"] != "Batter":
@@ -29622,7 +29629,7 @@ def setup_game_stats(row_data, player_game_info, player_type, player_data, quali
                             sub_at_bat_event["game_stats_reversed_" + stat] = career_stats_info[stat]
                     at_bat_event["game_stats_reversed_" + stat] = career_stats_info[stat]
                 else:
-                    career_stats_info[stat] += event_type_stat_mappings[at_bat_event["result"]].get(stat, 0)
+                    career_stats_info[stat] += calculate_row_numbers(at_bat_event, at_bat_event["result"], copied_quals, player_type, stat)
                     at_bat_event["game_stats_reversed_" + stat] = career_stats_info[stat]
 
             if player_type["da_type"] != "Batter":
@@ -29750,7 +29757,7 @@ def setup_starting_career_stats(row_data, player_game_info, saved_row_data, inde
                         at_bat_event["starting_career_stat_" + stat] = career_stats_info[stat]
                     else:
                         at_bat_event["starting_career_stat_" + stat] = career_stats_info[stat]
-                        career_stats_info[stat] += event_type_stat_mappings[at_bat_event["result"]].get(stat, 0)
+                        career_stats_info[stat] += calculate_row_numbers(at_bat_event, at_bat_event["result"], copied_quals, player_type, stat)
 
             if player_type["da_type"] != "Batter":
                 if at_bat_event["event_id"] in player_game_info["pitch_event_to_run_event"]:
@@ -29883,7 +29890,7 @@ def setup_starting_career_stats(row_data, player_game_info, saved_row_data, inde
                         at_bat_event["starting_career_stat_reversed_" + stat] = career_stats_info[stat]
                     else:
                         at_bat_event["starting_career_stat_reversed_" + stat] = career_stats_info[stat]
-                        career_stats_info[stat] += event_type_stat_mappings[at_bat_event["result"]].get(stat, 0)
+                        career_stats_info[stat] += calculate_row_numbers(at_bat_event, at_bat_event["result"], copied_quals, player_type, stat)
 
             if player_type["da_type"] != "Batter":
                 if at_bat_event["event_id"] in player_game_info["pitch_event_to_run_event"]:
@@ -29941,7 +29948,7 @@ def setup_starting_career_stats(row_data, player_game_info, saved_row_data, inde
                     at_bat_event["starting_career_stats_" + stat] = career_stats_info[stat]
                 else:
                     at_bat_event["starting_career_stats_" + stat] = career_stats_info[stat]
-                    career_stats_info[stat] += event_type_stat_mappings[at_bat_event["result"]].get(stat, 0)
+                    career_stats_info[stat] += calculate_row_numbers(at_bat_event, at_bat_event["result"], copied_quals, player_type, stat)
 
             if player_type["da_type"] != "Batter":
                 if at_bat_event["event_id"] in player_game_info["pitch_event_to_run_event"]:
@@ -30045,7 +30052,7 @@ def setup_starting_career_stats(row_data, player_game_info, saved_row_data, inde
                     at_bat_event["starting_career_stats_reversed_" + stat] = career_stats_info[stat]
                 else:
                     at_bat_event["starting_career_stats_reversed_" + stat] = career_stats_info[stat]
-                    career_stats_info[stat] += event_type_stat_mappings[at_bat_event["result"]].get(stat, 0)
+                    career_stats_info[stat] += calculate_row_numbers(at_bat_event, at_bat_event["result"], copied_quals, player_type, stat)
 
             if player_type["da_type"] != "Batter":
                 if at_bat_event["event_id"] in player_game_info["pitch_event_to_run_event"]:
@@ -30170,7 +30177,7 @@ def setup_starting_game_stats(row_data, player_game_info, player_type, player_da
                         at_bat_event["starting_game_stat_" + stat] = career_stats_info[stat]
                     else:
                         at_bat_event["starting_game_stat_" + stat] = career_stats_info[stat]
-                        career_stats_info[stat] += event_type_stat_mappings[at_bat_event["result"]].get(stat, 0)
+                        career_stats_info[stat] += calculate_row_numbers(at_bat_event, at_bat_event["result"], copied_quals, player_type, stat)
 
             if player_type["da_type"] != "Batter":
                 if at_bat_event["event_id"] in player_game_info["pitch_event_to_run_event"]:
@@ -30301,7 +30308,7 @@ def setup_starting_game_stats(row_data, player_game_info, player_type, player_da
                         at_bat_event["starting_game_stat_reversed_" + stat] = career_stats_info[stat]
                     else:
                         at_bat_event["starting_game_stat_reversed_" + stat] = career_stats_info[stat]
-                        career_stats_info[stat] += event_type_stat_mappings[at_bat_event["result"]].get(stat, 0)
+                        career_stats_info[stat] += calculate_row_numbers(at_bat_event, at_bat_event["result"], copied_quals, player_type, stat)
 
             if player_type["da_type"] != "Batter":
                 if at_bat_event["event_id"] in player_game_info["pitch_event_to_run_event"]:
@@ -30356,7 +30363,7 @@ def setup_starting_game_stats(row_data, player_game_info, player_type, player_da
                     at_bat_event["starting_game_stats_" + stat] = career_stats_info[stat]
                 else:
                     at_bat_event["starting_game_stats_" + stat] = career_stats_info[stat]
-                    career_stats_info[stat] += event_type_stat_mappings[at_bat_event["result"]].get(stat, 0)
+                    career_stats_info[stat] += calculate_row_numbers(at_bat_event, at_bat_event["result"], copied_quals, player_type, stat)
 
             if player_type["da_type"] != "Batter":
                 if at_bat_event["event_id"] in player_game_info["pitch_event_to_run_event"]:
@@ -30457,7 +30464,7 @@ def setup_starting_game_stats(row_data, player_game_info, player_type, player_da
                     at_bat_event["starting_game_stats_reversed_" + stat] = career_stats_info[stat]
                 else:
                     at_bat_event["starting_game_stats_reversed_" + stat] = career_stats_info[stat]
-                    career_stats_info[stat] += event_type_stat_mappings[at_bat_event["result"]].get(stat, 0)
+                    career_stats_info[stat] += calculate_row_numbers(at_bat_event, at_bat_event["result"], copied_quals, player_type, stat)
 
             if player_type["da_type"] != "Batter":
                 if at_bat_event["event_id"] in player_game_info["pitch_event_to_run_event"]:
@@ -30773,6 +30780,15 @@ def perform_sub_mlb_game_qualifiers(row, player_data, qualifiers, player_game_in
     calculate_data(row, player_type)
 
     return True, raw_row_data
+
+def calculate_row_numbers(at_bat_event, event_name, qualifiers, player_type, stat):
+    new_row = {}
+    clear_data(new_row)
+    add_row_numbers(new_row, at_bat_event, event_name, qualifiers, player_type)
+    if stat in new_row:
+        return new_row[stat]
+    else:
+        return -1
 
 def add_row_numbers(row, at_bat_event, event_name, qualifiers, player_type):
     row_event_info = event_type_stat_mappings[event_name]
@@ -43892,7 +43908,7 @@ def is_against_header(header, over_header, extra_stats, player_type):
     if "at-bat" in extra_stats and header not in ("AB", "H", "1B", "2B", "3B", "HR", "XBH", "TB", "Cycle", "SO", "GDP", "GDPO", "GDP%", "BA", "SLG", "X/H%", "EV", "HardHit%", "SwtSpt%", "LA", "HitDist", "Slam"):
         return True
 
-    if "hide-rate" in extra_stats and header not in ("AB", "H", "1B", "2B", "3B", "HR", "XBH", "TB", "Cycle", "SO", "GDP", "GDPO", "PA", "BB", "IBB", "HBP", "Slam", "WalkOff", "R", "RBI", "GWRBI", "SB", "CS", "NS", "TOB", "SH", "SF"):
+    if "hide-rate" in extra_stats and header not in non_rate_stats:
         return True
 
     if player_type["da_type"] == "Batter":
