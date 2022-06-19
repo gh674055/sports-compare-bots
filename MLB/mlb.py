@@ -40960,7 +40960,7 @@ def get_opponent_schedule(seasons, is_schedule_diff, is_runs_diff):
                             row_data["Runs"] = runs
                             all_runs.append(row_data["Runs"])
 
-                            if team not in park_factors[constant_year]:
+                            if tm_text not in park_factors[constant_year]:
                                 all_wrc_plus.append(-1)
                                 continue
                             
@@ -41014,7 +41014,7 @@ def get_opponent_schedule(seasons, is_schedule_diff, is_runs_diff):
                             all_runs_allowed.append(row_data["RunsAllowed"])
                             all_runs_diff.append(row_data["RunDiff"])
 
-                            if team not in park_factors[constant_year]:
+                            if tm_text not in park_factors[constant_year]:
                                 all_era_minus.append(-1)
                                 continue
 
