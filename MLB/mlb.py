@@ -8894,7 +8894,12 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 qual_type = "Earned"
                                 extra_stats.add("current-stats")
                                 extra_stats.add("show-only-stat-r")
-                                extra_stats.add("show-only-stat-r/162g")
+                                extra_stats.add("show-only-stat-rbi")
+                                extra_stats.add("show-only-stat-gwrbi")
+                                extra_stats.add("show-stat-drivenin")
+                                extra_stats.add("show-stat-gwdrivenin")
+                                extra_stats.add("show-only-stat-drivenin")
+                                extra_stats.add("show-only-stat-gwdrivenin")
                             elif qualifier_str == "batter-reached-base":
                                 qual_type = "Batter Reached Base"
                                 extra_stats.add("current-stats")
@@ -30815,7 +30820,7 @@ def add_row_numbers(row, at_bat_event, event_name, qualifiers, player_type):
                 row["WalkOff"] += 1
 
     if event_name not in ("run_scored", "stolen_base", "caught_stealing", "pick_off"):
-        if "Walk Off" in qualifiers or "Game Tying" in qualifiers or "Go Ahead" in qualifiers or "Go Ahead Or Game Tying" in qualifiers or "Game Winning" in qualifiers or "Driven In" in qualifiers or "Batted In" in qualifiers:
+        if "Walk Off" in qualifiers or "Game Tying" in qualifiers or "Go Ahead" in qualifiers or "Go Ahead Or Game Tying" in qualifiers or "Game Winning" in qualifiers or "Driven In" in qualifiers or "Batted In" in qualifiers or "Earned" in qualifiers:
             is_rbi = True
             matching_rbi_players = []
             is_winning_rbi = True
@@ -31073,7 +31078,7 @@ def add_row_numbers(row, at_bat_event, event_name, qualifiers, player_type):
                         if not is_sub_winning_driven_in:
                             is_winning_driven_in = False
 
-            if "Driven In" in qualifiers or "Batted In" in qualifiers:
+            if "Driven In" in qualifiers or "Batted In" in qualifiers or "Earned" in qualifiers:
                 for index, sub_player in enumerate(at_bat_event["runners_batted_in"]):
                     if "Driven In" in qualifiers:
                         found_player_match = True
@@ -31097,6 +31102,18 @@ def add_row_numbers(row, at_bat_event, event_name, qualifiers, player_type):
                             for player in qual_object["values"]:
                                 if sub_player == player["mlb_id"]:
                                     has_match = True
+                            if qual_object["negate"]:
+                                if has_match:
+                                    found_player_match = False
+                            else:
+                                if not has_match:
+                                    found_player_match = False
+                        if found_player_match == False:
+                            continue
+                    if "Earned" in qualifiers:
+                        found_player_match = True
+                        for qual_object in qualifiers["Earned"]:
+                            has_match = at_bat_event["earned_runners_batted_in"][index]
                             if qual_object["negate"]:
                                 if has_match:
                                     found_player_match = False
@@ -31139,6 +31156,18 @@ def add_row_numbers(row, at_bat_event, event_name, qualifiers, player_type):
                             for player in qual_object["values"]:
                                 if sub_player == player["mlb_id"]:
                                     has_match = True
+                            if qual_object["negate"]:
+                                if has_match:
+                                    found_player_match = False
+                            else:
+                                if not has_match:
+                                    found_player_match = False
+                        if found_player_match == False:
+                            continue
+                    if "Earned" in qualifiers:
+                        found_player_match = True
+                        for qual_object in qualifiers["Earned"]:
+                            has_match = at_bat_event["earned_runners_driven_in"][index]
                             if qual_object["negate"]:
                                 if has_match:
                                     found_player_match = False
@@ -33252,17 +33281,15 @@ def handle_da_mlb_quals(row, event_name, at_bat_event, qualifiers, player_data, 
                     return False
 
     if "Earned" in qualifiers:
-        if event_name not in ["pitching_run_events", "run_scored"]:
-            return False
-
-        is_earned = at_bat_event["is_unearned_run"]
-        for qual_object in qualifiers["Inherited"]:
-            if qual_object["negate"]:
-                if is_earned:
-                    return False
-            else:
-                if not is_earned:
-                    return False
+        if event_name == "pitching_run_events" or at_bat_event["result"] == "run_scored":
+            is_earned = not at_bat_event["is_unearned_run"]
+            for qual_object in qualifiers["Earned"]:
+                if qual_object["negate"]:
+                    if is_earned:
+                        return False
+                else:
+                    if not is_earned:
+                        return False
     
     if "Batter Reached Base" in qualifiers:
         if not handle_bool_qual(at_bat_event, qualifiers["Batter Reached Base"], "reached_base"):
@@ -35741,6 +35768,8 @@ def handle_da_pitch_quals(row, event_name, at_bat_event, qualifiers, player_data
         "pitcher_country" : pitcher_country,
         "runners_driven_in" : at_bat_event["runners_driven_in"],
         "runners_batted_in" : at_bat_event["runners_batted_in"],
+        "eanred_runners_driven_in" : at_bat_event["earned_runners_driven_in"],
+        "earned_runners_batted_in" : at_bat_event["earned_runners_batted_in"],
         "description" : sub_play["details"]["description"] if "description" in sub_play["details"] and sub_play["details"]["description"] else None,
         "pitches" : first_pitch_num_pitches,
         "ind_pitches" : sub_pitches,
@@ -38783,6 +38812,8 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
             last_pitch_index = -1
             runners_driven_in = []
             runners_batted_in = []
+            earned_runners_driven_in = []
+            earned_runners_batted_in = []
             all_runners_rbi_index = []
             all_runners_driven_in_index = []
             all_runners_index = []
@@ -39028,13 +39059,16 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
                         all_runners_index.append(runner["details"]["runner"]["id"])
                         if runner["details"]["rbi"]:
                             runners_batted_in.append(runner["details"]["runner"]["id"])
+                            earned_runners_batted_in.append(runner["details"]["earned"])
                             runners_driven_in.append(runner["details"]["runner"]["id"])
+                            earned_runners_driven_in.append(runner["details"]["earned"])
                             all_runners_driven_in_index.append(True)
                         else:
                             sub_play_index = runner["details"]["playIndex"]
                             sub_play = scoring_play["playEvents"][sub_play_index]
                             if ("isInPlay" in sub_play["details"] and sub_play["details"]["isInPlay"]) or (runner["details"]["rbi"]):
                                 runners_driven_in.append(runner["details"]["runner"]["id"])
+                                earned_runners_driven_in.append(runner["details"]["earned"])
                                 all_runners_driven_in_index.append(True)
                             else:
                                 all_runners_driven_in_index.append(False)
@@ -39044,13 +39078,16 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
                 all_runners_index.append(last_runner_to_add["details"]["runner"]["id"])
                 if last_runner_to_add["details"]["rbi"]:
                     runners_batted_in.append(last_runner_to_add["details"]["runner"]["id"])
+                    earned_runners_batted_in.append(last_runner_to_add["details"]["earned"])
                     runners_driven_in.append(last_runner_to_add["details"]["runner"]["id"])
+                    earned_runners_driven_in.append(last_runner_to_add["details"]["earned"])
                     all_runners_driven_in_index.append(True)
                 else:
                     sub_play_index = last_runner_to_add["details"]["playIndex"]
                     sub_play = scoring_play["playEvents"][sub_play_index]
                     if ("isInPlay" in sub_play["details"] and sub_play["details"]["isInPlay"]) or (last_runner_to_add["details"]["rbi"]):
                         runners_driven_in.append(last_runner_to_add["details"]["runner"]["id"])
+                        earned_runners_driven_in.append(last_runner_to_add["details"]["earned"])
                         all_runners_driven_in_index.append(True)
                     else:
                         all_runners_driven_in_index.append(False)
@@ -39421,6 +39458,8 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
                 "event_time" : end_time,
                 "runners_driven_in" : runners_driven_in,
                 "runners_batted_in" : runners_batted_in,
+                "earned_runners_driven_in" : earned_runners_driven_in,
+                "earned_runners_batted_in" : earned_runners_batted_in,
                 "description" : scoring_play["result"]["description"] if "description" in scoring_play["result"] and scoring_play["result"]["description"] else None,
                 "pitches" : num_pitches,
                 "ind_pitches" : pitches,
@@ -40216,6 +40255,8 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
                     "event_time" : sub_end_time,
                     "runners_driven_in" : runners_driven_in,
                     "runners_batted_in" : runners_batted_in,
+                    "earned_runners_driven_in" : earned_runners_driven_in,
+                    "earned_runners_batted_in" : earned_runners_batted_in,
                     "description" : sub_play["details"]["description"] if "description" in sub_play["details"] and sub_play["details"]["description"] else None,
                     "pitches" : first_pitch_num_pitches,
                     "ind_pitches" : sub_pitches,
