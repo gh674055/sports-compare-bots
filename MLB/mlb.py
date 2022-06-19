@@ -33282,7 +33282,7 @@ def handle_da_mlb_quals(row, event_name, at_bat_event, qualifiers, player_data, 
                     return False
 
     if "Earned" in qualifiers:
-        if event_name == "pitching_run_events" or at_bat_event["result"] == "run_scored":
+        if at_bat_event["result"] == "run_scored":
             is_earned = not at_bat_event["is_unearned_run"]
             for qual_object in qualifiers["Earned"]:
                 if qual_object["negate"]:
