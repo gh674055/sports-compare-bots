@@ -41301,12 +41301,12 @@ def is_invalid_stat(stat, player_type, data, count_inconsistent, player_data, co
             header_indv_shift_stats = skater_header_indv_shift_stats
         else:
             header_shift_stats = []
-            report_2_stats = ["SH", "SA", "SV", "EVSH", "PPSH", "SHSH", "EVSV", "PPSV", "SHSV", "SVEvenStrength", "SVPowerPlay", "SVShorthanded", "SV%", "GA%-", "SH/60M", "SV/60M", "SA/60M", "SH/GP", "SV/GP", "SA/GP"]
+            report_2_stats = ["SH", "SA", "SV", "EVSH", "PPSH", "SHSH", "EVSV", "PPSV", "SHSV", "SVEvenStrength", "SVPowerPlay", "SVShorthanded", "SHEvenStrength", "SHPowerPlay", "SHShorthanded", "SV%", "GA%-", "SH/60M", "SV/60M", "SA/60M", "SH/GP", "SV/GP", "SA/GP"]
             report_3_stats = []
             strength_stats = []
             report_stats = []
             shot_on_stats = []
-            shot_on_on_stats = ["SH", "SA", "SV", "EVSH", "PPSH", "SHSH", "EVSV", "PPSV", "SHSV", "SVEvenStrength", "SVPowerPlay", "SVShorthanded", "SV%", "GA%-", "SH/60M", "SV/60M", "SA/60M", "SH/GP", "SV/GP", "SA/GP"]
+            shot_on_on_stats = ["SH", "SA", "SV", "EVSH", "PPSH", "SHSH", "EVSV", "PPSV", "SHSV", "SVEvenStrength", "SVPowerPlay", "SVShorthanded", "SHEvenStrength", "SHPowerPlay", "SHShorthanded", "SV%", "GA%-", "SH/60M", "SV/60M", "SA/60M", "SH/GP", "SV/GP", "SA/GP"]
             game_report_stats = ["GF", "GFA", "GAA", "AdjGAA", "GF/60M"]
             on_ice_stats = ["GF", "GFA", "GF/60M"]
             header_indv_shift_stats = goalie_header_indv_shift_stats
