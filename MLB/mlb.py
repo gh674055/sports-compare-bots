@@ -8894,7 +8894,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 qual_type = "Earned"
                                 extra_stats.add("current-stats")
                                 extra_stats.add("show-only-stat-r")
-                                extra_stats.add("show-only-stat-r/162")
+                                extra_stats.add("show-only-stat-r/162g")
                             elif qualifier_str == "batter-reached-base":
                                 qual_type = "Batter Reached Base"
                                 extra_stats.add("current-stats")
