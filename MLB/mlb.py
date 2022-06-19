@@ -24911,7 +24911,9 @@ def get_player_type(player_page):
     else:
         player_type_el = player_info.parent.text.replace("Position:", "").strip().split(" ")
 
-    return "Batter" if "pitcher" not in player_type_el[0].replace(",", "").strip().lower() else "Pitcher"
+    position = player_type_el[0].replace(",", "").strip().lower()
+
+    return "Batter" if ("pitcher" not in position and "starting" not in position and "relief" not in position) else "Pitcher"
 
 def get_player_position(player_page):
     player_info = player_page.find("div", {"id" : "meta"}).find("strong", text="Position:")
@@ -24949,7 +24951,7 @@ def get_player_position(player_page):
         return "PH"
     elif main_pos.startswith("pinch runner"):
         return "PR"
-    elif "pitcher" in main_pos:
+    elif "pitcher" in main_pos or "starting" in main_pos or "relief" in main_pos:
         throws_pos = player_page.find("div", {"id" : "meta"}).find("strong", text="Throws: ")
         if throws_pos:
             throw_next_sibling = throws_pos.next_sibling
