@@ -41005,6 +41005,8 @@ def get_opponent_schedule(seasons, is_schedule_diff, is_runs_diff):
                             wRCPlus += lgRPA - ((park_factor / 100) * lgRPA)
                             wRCPlus /= (totals[sleague]["Batter"][constant_year]["pitcherless_values"]["wRC"] / totals[sleague]["Batter"][constant_year]["pitcherless_values"]["PA"])
                             row_data["wRC+"] = wRCPlus * 100
+                            if row_data["wRC+"] < -100:
+                                row_data["wRC+"] = -100
                             all_wrc_plus.append(row_data["wRC+"])
                         else:
                             row_data["RunsAllowed"] = runs
@@ -41318,6 +41320,9 @@ def calculate_advanced_stats(data, all_rows, player_type, time_frames):
                 wRCPlus += lgRPA - ((park_factor / 100) * lgRPA)
                 wRCPlus /= (totals[sleague]["Batter"][constant_year]["pitcherless_values"]["wRC"] / totals[sleague]["Batter"][constant_year]["pitcherless_values"]["PA"])
                 wRCPlus *= 100
+
+                if wRCPlus < -100:
+                    wRCPlus = -100
 
                 woba_weight = yearly_woba_stats[year][team]["AB"] + yearly_woba_stats[year][team]["BB"] - yearly_woba_stats[year][team]["IBB"] + yearly_woba_stats[year][team]["SF"] + yearly_woba_stats[year][team]["HBP"]
                 wrcplus_weight = yearly_woba_stats[year][team]["PA"]
