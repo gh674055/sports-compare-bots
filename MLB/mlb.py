@@ -8900,6 +8900,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 extra_stats.add("show-stat-gwdrivenin")
                                 extra_stats.add("show-only-stat-drivenin")
                                 extra_stats.add("show-only-stat-gwdrivenin")
+                                player_type["da_type"] = "Batter"
                             elif qualifier_str == "batter-reached-base":
                                 qual_type = "Batter Reached Base"
                                 extra_stats.add("current-stats")
