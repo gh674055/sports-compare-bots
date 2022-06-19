@@ -17214,13 +17214,13 @@ def fill_row(row, player_data, player_type, lower=True, stats=None):
         if stats == None or set(stats["Shared"]).intersection(get_constant_data.formulas["Shared"].keys()):
             for stat in stats["Shared"]:
                 if stat in get_constant_data.formulas["Shared"]:
-                    calculate_recursive_formula("Shared", stat, player_data, player_type, row, None)
+                    calculate_recursive_formula("Shared", stat, player_data, player_type, row, [])
     for over_header in headers[player_type["da_type"]]:
         if stats == None or over_header in stats:
             if stats == None or set(stats[over_header]).intersection(get_constant_data.formulas[over_header].keys()):
                 for stat in stats[over_header]:
                     if stat in get_constant_data.formulas[over_header]:
-                        calculate_recursive_formula(over_header, stat, player_data, player_type, row, None)
+                        calculate_recursive_formula(over_header, stat, player_data, player_type, row, [])
 
     if "Fantasy" in row and "STD/G" not in row["Fantasy"]:
         for fantasy_stat in list(row["Fantasy"]):

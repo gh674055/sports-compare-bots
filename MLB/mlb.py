@@ -24753,7 +24753,7 @@ def fill_row(row, player_data, player_type, lower=True, stats=None):
     if stats == None or set(stats).intersection(formulas[player_type["da_type"]].keys()):
         for stat in stats:
             if stat in formulas[player_type["da_type"]]:
-                calculate_recursive_formula(stat, player_data, player_type, row, None)
+                calculate_recursive_formula(stat, player_data, player_type, row, [])
 
     if stats == None or set(stats).intersection(advanced_stats[player_type["da_type"]]):
         missing_advanced = False

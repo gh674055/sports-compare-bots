@@ -35717,7 +35717,7 @@ def fill_row(row, player_data, player_type, lower=True, stats=None):
     if stats == None or set(stats).intersection(formulas[player_type["da_type"]["type"]].keys()):
         for stat in stats:
             if stat in formulas[player_type["da_type"]["type"]]:
-                calculate_recursive_formula(stat, player_data, player_type, row, None)
+                calculate_recursive_formula(stat, player_data, player_type, row, [])
 
     row["DateStart"] = [row["Date"]]
     row["YearStart"] = [row["Year"]]
@@ -41442,6 +41442,10 @@ def ordinal_to_number(ordinal):
         if is_percent:
             ordinal = ordinal.replace('%', '')
         ordinal = ordinal.replace('*', '')
+
+        is_time = ":" in ordinal
+        if is_time:
+            ordinal = ordinal.replace(':', '.')
         
         try:
             ordinal = float(numeral.roman2int(ordinal))
@@ -41484,6 +41488,10 @@ def ordinal_to_number(ordinal):
 
         if is_percent:
             ordinal = ordinal / 100
+
+        if is_time:
+            frac, whole = math.modf(ordinal)
+            ordinal = float(round((whole * 60) + (frac * 100)))
         
         if is_exclusive:
             if is_start_val:
