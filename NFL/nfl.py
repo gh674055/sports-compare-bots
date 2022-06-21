@@ -6567,7 +6567,7 @@ def get_player(name, player_type, time_frames):
                         for time_frame in time_frames:
                             frame_start = time_frame["time_start"]
                             frame_end = time_frame["time_end"]
-                            if frame_start and frame_end:
+                            if frame_start and frame_end and not isinstance(frame_start, dateutil.relativedelta.relativedelta) and not isinstance(frame_end, dateutil.relativedelta.relativedelta):
                                 if not (isinstance(frame_start, int) or isinstance(frame_end, int)):
                                     frame_start = frame_start.year
                                     frame_end = frame_end.year
