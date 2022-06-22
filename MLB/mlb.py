@@ -7530,6 +7530,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 player_type["da_type"] = "Batter"
                                 extra_stats.add("current-stats")
                                 extra_stats.add("no-steals")
+                                extra_stats.add("hide-rate")
                                 extra_stats.add("show-stat-drivenin")
                                 extra_stats.add("show-stat-gwdrivenin")
                             elif qualifier_str.startswith("batted-in:"):
@@ -7537,18 +7538,21 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 qual_type = "Batted In"
                                 player_type["da_type"] = "Batter"
                                 extra_stats.add("current-stats")
+                                extra_stats.add("hide-rate")
                                 extra_stats.add("no-steals")
                             elif qualifier_str.startswith("back-to-back-with:"):
                                 qual_str = "back-to-back-with:"
                                 qual_type = "Back To Back With"
                                 player_type["da_type"] = "Batter"
                                 extra_stats.add("current-stats")
+                                extra_stats.add("hide-rate")
                                 extra_stats.add("no-steals")
                             elif qualifier_str.startswith("back-to-back:"):
                                 qual_str = "back-to-back:"
                                 qual_type = "Back To Back With"
                                 player_type["da_type"] = "Batter"
                                 extra_stats.add("current-stats")
+                                extra_stats.add("hide-rate")
                                 extra_stats.add("no-steals")
                             elif qualifier_str.startswith("batting-behind:"):
                                 qual_str = "batting-behind:"
@@ -11936,6 +11940,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                     player_type["da_type"] = "Batter"
                                     extra_stats.add("current-stats")
                                     extra_stats.add("no-steals")
+                                    extra_stats.add("hide-rate")
                                     extra_stats.add("show-stat-drivenin")
                                     extra_stats.add("show-stat-gwdrivenin")
                                 elif qualifier_str.startswith("batted-in"):
@@ -11944,18 +11949,21 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                     player_type["da_type"] = "Batter"
                                     extra_stats.add("current-stats")
                                     extra_stats.add("no-steals")
+                                    extra_stats.add("hide-rate")
                                 elif qualifier_str.startswith("back-to-back-with"):
                                     qual_str = "back-to-back-with"
                                     qual_type = "Back To Back With"
                                     player_type["da_type"] = "Batter"
                                     extra_stats.add("current-stats")
                                     extra_stats.add("no-steals")
+                                    extra_stats.add("hide-rate")
                                 elif qualifier_str.startswith("back-to-back"):
                                     qual_str = "back-to-back"
                                     qual_type = "Back To Back With"
                                     player_type["da_type"] = "Batter"
                                     extra_stats.add("current-stats")
                                     extra_stats.add("no-steals")
+                                    extra_stats.add("hide-rate")
                                 elif qualifier_str.startswith("batting-behind"):
                                     qual_str = "batting-behind:"
                                     qual_type = "Batting Behind"
