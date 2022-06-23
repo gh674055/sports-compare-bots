@@ -28732,27 +28732,6 @@ def get_games_to_skip(all_rows, qualifiers, player_data, player_type):
                 
             if not has_match:
                 games_to_skip.add(row_data["GameID"])
-    if "Position" in qualifiers:
-        for row_data in all_rows:
-            has_match = False
-            if "Pos" in row_data:
-                qual_str = re.split(r"\s+", row_data["Pos"].replace("*", "").replace("/", ""))
-                if qual_str:
-                    for qual_object in qualifiers["Position"]:
-                        if not qual_object["negate"]:
-                            has_match = False
-                            for pos in qual_object["values"]:
-                                pos = pos.upper()
-                                other_pos = pos
-                                if pos in position_map:
-                                    other_pos = position_map[pos]
-                                if pos in qual_str or other_pos in qual_str:
-                                    has_match = True
-                                    break
-                        else:
-                            has_match = True
-            if not has_match:
-                games_to_skip.add(row_data["GameID"])
     if "Leading Off Game" in qualifiers:
         for row_data in all_rows:
             has_match = False
