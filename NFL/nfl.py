@@ -7303,13 +7303,13 @@ def combine_player_datas(player_datas, player_type, any_missing_games, time_fram
 
         if "date-count" in extra_stats:
             the_dates = set()
-            for row in player_data["stat_values"]["all_rows"]:
+            for row in player_data["stat_values"]["Shared"]["all_rows"]:
                 the_dates.add(row["Shared"]["Date"])
 
             if the_dates:
-                player_data["stat_values"]["Raw Quals"] +=  " [" + str(len(the_dates)) + " Date(s)]"
+                player_data["stat_values"]["Shared"]["Raw Quals"] +=  " [" + str(len(the_dates)) + " Date(s)]"
             else:
-                player_data["stat_values"]["Raw Quals"] +=  " [No Dates!]"
+                player_data["stat_values"]["Shared"]["Raw Quals"] +=  " [No Dates!]"
     
     player_data["stat_values"]["Shared"]["Raw Quals"] = player_data["stat_values"]["Shared"]["Raw Quals"].strip()
 
