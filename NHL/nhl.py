@@ -8464,7 +8464,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                             extra_stats.add(m.group(1))
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
                         
-                        last_match = re.finditer(r"\bshow(?: |-)?(only(?: |-)?)?(goalie-record|record|faceoff|slash-5v5|slash|score|extra-scoring-per60|scoring-per60|scoring-5v5|extra-scoring|scoring|strength-slash|extra-strength-scoring-per60|strength-scoring-per60|extra-strength-scoring|strength-scoring|goal|year|games?-count|seasons-leading|season|date|per-game|game|adjusted|advanced|relative|missing-games-count|missing-game-count|missing-toi-count|missing-game|missing-toi|best-season|worst-season|ng|team|franchise|number|fight|penalty-taken|penalties-taken|penaltie|penalty|award|shot|shift|star|play|nhl-link|strength|toi|href|api)s?\b", time_frame)
+                        last_match = re.finditer(r"\bshow(?: |-)?(only(?: |-)?)?(goalie-record|record|faceoff|slash-5v5|slash|score|extra-scoring-per60|scoring-per60|scoring-5v5|extra-scoring|scoring|strength-slash|extra-strength-scoring-per60|strength-scoring-per60|extra-strength-scoring|strength-scoring|goal|year|games?-count|seasons-leading|season|dates?-count|date|per-game|game|adjusted|advanced|relative|missing-games-count|missing-game-count|missing-toi-count|missing-game|missing-toi|best-season|worst-season|ng|team|franchise|number|fight|penalty-taken|penalties-taken|penaltie|penalty|award|shot|shift|star|play|nhl-link|strength|toi|href|api)s?\b", time_frame)
                         for m in last_match:
                             if "penalt" in m.group(2):
                                 extra_stats.add("penalties")
@@ -8473,6 +8473,8 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 }
                             elif m.group(2) == "season":
                                 extra_stats.add("year")
+                            elif m.group(2) == "dates-count":
+                                extra_stats.add("date-count")
                             elif m.group(2) == "missing-games-count":
                                 extra_stats.add("missing-game-count")
                             else:
@@ -15973,6 +15975,16 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
                 player_data["stat_values"]["Raw Quals"] +=  " [" + str(len(player_data["stat_values"]["any_missing_toi"])) + " Missing TOI Game(s)]"
             else:
                 player_data["stat_values"]["Raw Quals"] +=  " [No Missing TOI Games!]"
+
+        if "date-count" in extra_stats:
+            the_dates = set()
+            for row in player_data["stat_values"]["all_rows"]:
+                the_dates.add(row["Date"])
+
+            if the_dates:
+                player_data["stat_values"]["Raw Quals"] +=  " [" + str(len(the_dates)) + " Date(s)]"
+            else:
+                player_data["stat_values"]["Raw Quals"] +=  " [No Dates!]"
 
     player_data["stat_values"]["Raw Quals"] = player_data["stat_values"]["Raw Quals"].strip()
 

@@ -1782,13 +1782,15 @@ def handle_player_string(comment, player_type, is_fantasy, last_updated, hide_ta
                             extra_stats.add(m.group(1))
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
                         
-                        last_match = re.finditer(r"\bshow(?: |-)?(only(?: |-)?)?(ats-record|ou-record|qb-record|era-adjusted|era-adjusted-passing|record|score|year|games?-count|seasons-leading|season|date|game|best-season|worst-season|team|franchise|number|award|play)s?\b", time_frame)
+                        last_match = re.finditer(r"\bshow(?: |-)?(only(?: |-)?)?(ats-record|ou-record|qb-record|era-adjusted|era-adjusted-passing|record|score|year|games?-count|seasons-leading|season|dates?-count|date|game|best-season|worst-season|team|franchise|number|award|play)s?\b", time_frame)
                         for m in last_match:
                             extra_stats.add(m.group(2))
                             if m.group(2) == "play":
                                 extra_stats.add("current-stats")
                             elif m.group(2) == "season":
                                 extra_stats.add("year")
+                            elif m.group(2) == "dates-count":
+                                extra_stats.add("date-count")
                             elif m.group(2) == "game-count" or m.group(2) == "games-count":
                                 extra_stats.add("show-only-stat-g")
                                 extra_stats.add("show-only-stat-gs")
@@ -7298,6 +7300,16 @@ def combine_player_datas(player_datas, player_type, any_missing_games, time_fram
         
         if player_data["stat_values"]["Shared"]["any_missing_games"]:
             player_data["stat_values"]["Shared"]["Raw Quals"] +=  " [Missing Game(s)]"
+
+        if "date-count" in extra_stats:
+            the_dates = set()
+            for row in player_data["stat_values"]["all_rows"]:
+                the_dates.add(row["Shared"]["Date"])
+
+            if the_dates:
+                player_data["stat_values"]["Raw Quals"] +=  " [" + str(len(the_dates)) + " Date(s)]"
+            else:
+                player_data["stat_values"]["Raw Quals"] +=  " [No Dates!]"
     
     player_data["stat_values"]["Shared"]["Raw Quals"] = player_data["stat_values"]["Shared"]["Raw Quals"].strip()
 

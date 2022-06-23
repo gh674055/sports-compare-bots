@@ -8084,7 +8084,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                             extra_stats.add(m.group(1))
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
                         
-                        last_match = re.finditer(r"\bshow(?: |-)?(only(?: |-)?)?(pitcher-record|record|slash|score|year|pitch-type|games?-count|seasons-leading|season|date|missing-games-count|missing-pitches-count|missing-game-count|missing-pitches-count|missing-pitch-count|missing-game|missing-pitches|missing-pitch|per-game|game|play|run-support|run-support-record|exit-record|statcast|advanced-runner|advanced|best-season|worst-season|team|franchise|number|award|driven-in|mlb-link)s?\b", time_frame)
+                        last_match = re.finditer(r"\bshow(?: |-)?(only(?: |-)?)?(pitcher-record|record|slash|score|year|pitch-type|games?-count|seasons-leading|season|dates?-count|date|missing-games-count|missing-pitches-count|missing-game-count|missing-pitches-count|missing-pitch-count|missing-game|missing-pitches|missing-pitch|per-game|game|play|run-support|run-support-record|exit-record|statcast|advanced-runner|advanced|best-season|worst-season|team|franchise|number|award|driven-in|mlb-link)s?\b", time_frame)
                         for m in last_match:
                             extra_stats.add(m.group(2))
                             if m.group(2) == "play":
@@ -8095,6 +8095,8 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 extra_stats.add("show-stat-pit%")
                             elif m.group(2) == "season":
                                 extra_stats.add("year")
+                            elif m.group(2) == "dates-count":
+                                extra_stats.add("date-count")
                             elif m.group(2) == "missing-games-count":
                                 extra_stats.add("missing-game-count")
                             elif m.group(2) == "missing-pitches":
@@ -15617,6 +15619,16 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
                 player_data["stat_values"]["Raw Quals"] +=  " [" + str(len(player_data["stat_values"]["any_missing_pitch"])) + " Missing Pitch Game(s)]"
             else:
                 player_data["stat_values"]["Raw Quals"] +=  " [No Missing Pitch Games!]"
+
+        if "date-count" in extra_stats:
+            the_dates = set()
+            for row in player_data["stat_values"]["all_rows"]:
+                the_dates.add(row["Date"])
+
+            if the_dates:
+                player_data["stat_values"]["Raw Quals"] +=  " [" + str(len(the_dates)) + " Date(s)]"
+            else:
+                player_data["stat_values"]["Raw Quals"] +=  " [No Dates!]"
     
     player_data["stat_values"]["Raw Quals"] = player_data["stat_values"]["Raw Quals"].strip()
 
