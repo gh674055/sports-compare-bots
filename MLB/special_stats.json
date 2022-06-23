@@ -1,5 +1,12 @@
 {
     "cycle": {
+        "haysau01" : [
+            {
+                "date": "2022-06-22",
+                "is_playoffs": false,
+                "team": "BAL"
+            }
+        ],
         "walshja01" : [
             {
                 "date": "2022-06-11",
