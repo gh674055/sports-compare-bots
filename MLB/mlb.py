@@ -39765,12 +39765,12 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
                                         if old_player in sub_tm_position_map[position]:
                                             sub_tm_position_map[position].remove(old_player)
                                             if play["position"]["abbreviation"] == "PH":
-                                                ub_next_play_pinch = position
+                                                sub_next_play_pinch = position
                                     else:
                                         if sub_tm_position_map[position] == old_player:
                                             sub_tm_position_map[position] = None
                                             if play["position"]["abbreviation"] == "PH":
-                                                ub_next_play_pinch = position
+                                                sub_next_play_pinch = position
                                 
                                 if old_player in sub_team_batting_order_map:
                                     del sub_team_batting_order_map[old_player]
@@ -39783,12 +39783,12 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
                                         if old_player in sub_opp_position_map[position]:
                                             sub_opp_position_map[position].remove(old_player)
                                             if play["position"]["abbreviation"] == "PH":
-                                                ub_next_play_pinch = position
+                                                sub_next_play_pinch = position
                                     else:
                                         if sub_opp_position_map[position] == old_player:
                                             sub_opp_position_map[position] = None
                                             if play["position"]["abbreviation"] == "PH":
-                                                ub_next_play_pinch = position
+                                                sub_next_play_pinch = position
                                 
                                 if old_player in sub_opp_batting_order_map:
                                     del sub_opp_batting_order_map[old_player]
@@ -40548,9 +40548,8 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
                     game_data["pitching_events"].append(event_obj)
                 else:
                     is_pitching = False
-                            
+
             if event_type not in ["no_stats", "no_stats_sb"]:
-                next_play_pinch = None
                 batter_matchup_map[batter]["current_ab"] += 1
                 pitcher_matchup_map[pitcher]["current_ab"] += 1
                 batter_matchup_map[batter]["current_pa"] += 1
@@ -40565,6 +40564,8 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
                 if pitcher_matchup_map[pitcher]["current_ab"] == 9:
                     pitcher_matchup_map[pitcher]["current_ab"] = 0
                     pitcher_matchup_map[pitcher]["times_around"] += 1
+            
+            next_play_pinch = None
 
             if is_pitching:
                 if is_team_batting:
