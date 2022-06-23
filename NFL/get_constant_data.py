@@ -4696,6 +4696,13 @@ stat_groups = {
     }
 }
 
+special_formula_stats = {
+    "TmRec" : ["TmW", "TmL", "TmT"],
+    "Rec/17G" : ["QBW/17G", "QBL/17G", "QBT/17G"],
+    "TD%" : ["TtlTD"],
+    "TtlTD%" : ["TtlTD"]
+}
+
 formulas = {
     "Passing" : {
         "Att/G" : "Att / G",
@@ -5258,6 +5265,7 @@ qualifier_map = {
         True : "Birthday",
         False : "Not Birthday"
     },
+    "Formula Query" : {},
     "Sub Query" : {},
     "Or Sub Query" : {},
     "Day Of Sub Query" : {},
@@ -5831,7 +5839,7 @@ def calculate_formula(stat, formula, data, header, headers, player_data, player_
             return value
         elif stat == "DaysSpan":
             value = 0
-            if "seperate_rows" in player_data["stat_values"]["Shared"]:
+            if "stat_values" in player_data and "seperate_rows" in player_data["stat_values"]["Shared"]:
                 for sub_rows in player_data["stat_values"]["Shared"]["seperate_rows"]:
                     if sub_rows:
                         first_date = min(row["Shared"]["Date"] for row in sub_rows)
@@ -5981,7 +5989,7 @@ def calculate_formula(stat, formula, data, header, headers, player_data, player_
         earliest_invalid_date = None
         formula = formula.lower()
 
-        formula_matches = list(re.finditer(r"(?:(?:[A-Za-z_:~])\d?|\d?(?:[A-Za-z_:~]))+", formula))
+        formula_matches = list(re.finditer(r"((?:(?:[A-Za-z_:~])\d?|\d?(?:[A-Za-z_:~]))+)", formula))
 
         if all_rows:
             if is_invalid_stat(header, stat, data, False) == float("inf"):
@@ -6171,7 +6179,7 @@ def calculate_earliest_invalid_date(stat, header, data, formula, earliest_invali
                 header_match = r"(?:scrimmage/all purpose|scrimmage)"
             has_match = False
             for formula_match in formula_matches:
-                if formula_match.group() == header_match + "~" + stat.lower():
+                if formula_match.group(1) == header_match + "~" + stat.lower():
                     has_match = True
                     break
             if has_match:
@@ -6181,7 +6189,7 @@ def calculate_earliest_invalid_date(stat, header, data, formula, earliest_invali
                         return invalid_date
             else:
                 for formula_match in formula_matches:
-                    if formula_match.group() == stat.lower():
+                    if formula_match.group(1) == stat.lower():
                         has_match = True
                         break
                 if has_match:
@@ -6192,7 +6200,7 @@ def calculate_earliest_invalid_date(stat, header, data, formula, earliest_invali
     else:
         has_match = False
         for formula_match in formula_matches:
-            if formula_match.group() == stat.lower():
+            if formula_match.group(1) == stat.lower():
                 has_match = True
                 break
         if has_match:
@@ -6201,7 +6209,7 @@ def calculate_earliest_invalid_date(stat, header, data, formula, earliest_invali
                 if not earliest_invalid_date or invalid_date > earliest_invalid_date:
                     return invalid_date
 
-def replace_formula(data, header, stat, formula, all_rows, earliest_invalid_date, real_stat, formula_matches):
+def replace_formula(data, header, stat, formula, all_rows, earliest_invalid_date, real_stat, formula_matches, query_regex=r"((?:(?:[A-Za-z_:~])\d?|\d?(?:[A-Za-z_:~]))+)"):
     if real_stat == "custom_formula":
         if header in data and stat in data[header]:
             value = data[header][stat]
@@ -6213,27 +6221,27 @@ def replace_formula(data, header, stat, formula, all_rows, earliest_invalid_date
             elif header == "Scrimmage/All Purpose":
                 header_match = r"(?:scrimmage/all purpose|scrimmage)"
 
-            old_formula = formulas
-            formula, formula_matches = perform_replacement(formula_matches, header_match + "~" + stat, header, value, formula, earliest_invalid_date, all_rows)
+            old_formula = formula
+            formula, formula_matches = perform_replacement(formula_matches, header_match + "~" + stat, header, value, formula, earliest_invalid_date, all_rows, query_regex, True)
             if old_formula == formula:
-                formula, formula_matches = perform_replacement(formula_matches, stat, header, value, formula, earliest_invalid_date, all_rows)
+                formula, formula_matches = perform_replacement(formula_matches, stat, header, value, formula, earliest_invalid_date, all_rows, query_regex, False)
         return formula, formula_matches
     else:
         value = data[header][stat]
         if isinstance(value, (int, float)):
-            return perform_replacement(formula_matches, stat, header, value, formula, earliest_invalid_date, all_rows)
+            return perform_replacement(formula_matches, stat, header, value, formula, earliest_invalid_date, all_rows, query_regex, False)
         else:
             return formula, formula_matches
 
-def perform_replacement(formula_matches, stat, header, value, formula, earliest_invalid_date, all_rows):
+def perform_replacement(formula_matches, stat, header, value, formula, earliest_invalid_date, all_rows, query_regex, regex_match):
     for formula_match in formula_matches:
-        if formula_match.group() == stat.lower():
+        if (regex_match and re.match(header, formula_match.group(1))) or (not regex_match and formula_match.group(1) == stat.lower()):
             if isinstance(value, (int, float)):
                 value = str(calculate_valid_value(stat, header, value, earliest_invalid_date, all_rows))
             span = formula_match.span()
             formula = formula[:span[0]] + value + formula[span[1]:]
-            formula_matches = list(re.finditer(r"(?:(?:[A-Za-z_:~])\d?|\d?(?:[A-Za-z_:~]))+", formula))
-            return perform_replacement(formula_matches, stat, header, value, formula, earliest_invalid_date, all_rows)
+            formula_matches = list(re.finditer(query_regex, formula))
+            return perform_replacement(formula_matches, stat, header, value, formula, earliest_invalid_date, all_rows, query_regex, regex_match)
     
     return formula, formula_matches
             

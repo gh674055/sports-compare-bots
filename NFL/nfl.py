@@ -1459,6 +1459,37 @@ def handle_player_string(comment, player_type, is_fantasy, last_updated, hide_ta
                             qualifiers[qual_type].append(qualifier_obj)
 
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
+                        
+                        last_match = re.finditer(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?((?:formula-query):((?<!\\)\(.*?(?<!\\)\)))(?<!\\)\{(.*?)(?<!\\)\}", time_frame)
+                        last_match = list(last_match)
+                        # if len(last_match) > 10:
+                        #     raise get_constant_data.CustomMessageException("Only can have a max of 10 sub queries!")
+                        for m in last_match:
+                            # if is_sub_query:
+                            #     raise get_constant_data.CustomMessageException("Cannot have nested sub queries!")
+
+                            qualifier_obj = {}
+                            negate_str = m.group(1)
+                            if negate_str:
+                                qualifier_obj["negate"] = True
+                            else:
+                                qualifier_obj["negate"] = False
+
+                            qualifier_str = m.group(2)
+
+                            if qualifier_str.startswith("formula-query:"):
+                                qual_str = "formula-query:"
+                                qual_type = "Formula Query"
+
+                            qualifier_obj["values"] = re.split(r"(?<!\\)\~", m.group(3))
+                            qualifier_obj["values"] = [value.strip() for value in qualifier_obj["values"]]
+                            qualifier_obj["formula"] = unescape_string(m.group(4).strip())
+
+                            if not qual_type in qualifiers:
+                                qualifiers[qual_type] = []
+                            qualifiers[qual_type].append(qualifier_obj)
+
+                            time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
 
                         last_match = re.finditer(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?((?:w|(?:playing|starting)-with|a|(?:playing|starting)-against|(?:playing|starting)-same-game|prv-w|previous-playing-with|prv-a|previous-playing-against|upc-w|upcoming-playing-with|upc-a|upcoming-playing-against|(?:playing|starting)-same-opponents?|(?:playing|starting)-same-dates?|holidays?|dts|dates|stadium|exact-stadium|arena|exact-arena|opponent-city|opponent-exact-city|team-city|team-exact-city|city|exact-city|surface|roof|thrown-to|injury|exact-official|exact-referee|exact-umpire|exact-team-head-coach|exact-opponent-head-coach|official|referee|umpire|team-head-coach|opponent-head-coach|start-time):(?<!\\)\(.*?(?<!\\)\))", time_frame)
                         for m in last_match:
@@ -5383,13 +5414,22 @@ def handle_player_string(comment, player_type, is_fantasy, last_updated, hide_ta
                             if player_str not in player_str_set:
                                 sub_name_count += 1
                                 player_str_set.add(player_str)
+                if "Formula Query" in subbbb_date["qualifiers"]:
+                    for qual in subbbb_date["qualifiers"]["Formula Query"]:
+                        if "time_frame_str" in qual:
+                            continue
+                        for player_str in (qual["values"] if "values" in qual else subb_names_against):
+                            player_str = determine_player_str(qual, player_str, subbbb_date, "Formula Query")
+                            if player_str not in player_str_set:
+                                sub_name_count += 1
+                                player_str_set.add(player_str)
             name_count += len(subbb_date) - 1
 
     if name_count > 30:
         raise get_constant_data.CustomMessageException("You can only compare a max of 30 players!")
 
     if sub_name_count > 30:
-        raise CustomMessageException("You can only have a max of 30 sub-players!")
+        raise get_constant_data.CustomMessageException("You can only have a max of 30 sub-players!")
 
     years_table = "year" in extra_stats
     years_table_career = "career-year" in extra_stats
@@ -5998,6 +6038,8 @@ def handle_against_qual(names, time_frames, comment_obj):
                     handle_the_quals(time_frame["qualifiers"], "Playing Same Date", subb_names_against, time_frame, "Date", comment_obj, players_map)
                 if "Thrown To" in time_frame["qualifiers"]:
                     handle_the_quals(time_frame["qualifiers"], "Thrown To", subb_names_with, time_frame, "Tm", comment_obj, players_map)
+                if "Formula Query" in time_frame["qualifiers"]:
+                    handle_the_quals(time_frame["qualifiers"], "Formula Query", sub_matching_names, time_frame, "RowGame", comment_obj, players_map)
 
 def handle_same_games_qual(names, player_type, time_frames, comment_obj):
     qual_map = {}
@@ -6116,7 +6158,9 @@ def sub_handle_the_quals(players, qualifier, qual_str, player_str, time_frame, k
         player_games = {}
         missing_games = player_data["stat_values"]["Shared"]["any_missing_games"]
 
+        all_rows = []
         if "all_rows" in player_data["stat_values"]["Shared"]:
+            all_rows = player_data["stat_values"]["Shared"]["all_rows"]
             for row in player_data["stat_values"]["Shared"]["all_rows"]:
                 if key == "Same Opponent":
                     date = row["Shared"]["Year"]
@@ -6126,6 +6170,8 @@ def sub_handle_the_quals(players, qualifier, qual_str, player_str, time_frame, k
                     player_games[opponent].add(date)
                 elif key == "Game":
                     player_games[row["Shared"]["GameLink"]] = True
+                elif key == "RowGame":
+                    player_games[row["Shared"]["GameLink"]] = row
                 elif key == "Season":
                     player_games[row["Shared"]["Year"]] = True
                 elif key == "Date":
@@ -6164,6 +6210,10 @@ def sub_handle_the_quals(players, qualifier, qual_str, player_str, time_frame, k
                 "games" : player_games,
                 "is_raw_query" : is_raw_query
             })
+            if qual_str == "Formula Query":
+                players[len(players) - 1]["player_type"] = player_type
+                players[len(players) - 1]["player_data"] = player_data
+                players[len(players) - 1]["all_rows"] = all_rows
 
     # if comment_obj and new_search and comment_obj["is_approved"] and "time_frame_str" not in qualifier:
     #     try:
@@ -6777,6 +6827,11 @@ def combine_player_datas(player_datas, player_type, any_missing_games, time_fram
                             any_missing_games = True
             if "Thrown To" in time_frame["qualifiers"]:
                 for qualifier in time_frame["qualifiers"]["Thrown To"]:
+                    for player in qualifier["values"]:
+                        if player["missing_games"]:
+                            any_missing_games = True
+            if "Formula Query" in time_frame["qualifiers"]:
+                for qualifier in time_frame["qualifiers"]["Formula Query"]:
                     for player in qualifier["values"]:
                         if player["missing_games"]:
                             any_missing_games = True
@@ -7464,6 +7519,22 @@ def determine_raw_str(subbb_frame):
                         else:
                             query = player["query"].replace("Query: ", "", 1)
                             qual_str += player_url_str + ((" (" + query + ")") if query and player["is_raw_query"] else "")
+                elif qualifier == "Formula Query":
+                    for player in qual_obj["values"]:
+                        if not sub_sub_sub_first:
+                            qual_str += " OR "
+                        else:
+                            sub_sub_sub_first = False
+                        if qual_obj["negate"]:
+                            qual_str += "Not "
+                        player_url_str = create_player_url_string(player["name"], player["id"], {})
+                        if player_url_str == "No Player Match!":
+                            qual_str += player_url_str + " (Searched Term: \"" + "+".join(player["search_term"]) + "\")"
+                        else:
+                            query = player["query"].replace("Query: ", "", 1)
+                            qual_str += player_url_str + ((" (" + query + ")") if query and player["is_raw_query"] else "")
+                        
+                        qual_str += " - Formula: " + qual_obj["formula"].upper()
                 elif qualifier == "Sub Query" or qualifier == "Or Sub Query" or qualifier == "Day Of Sub Query" or qualifier == "Day After Sub Query" or qualifier == "Day Before Sub Query" or qualifier == "Game After Sub Query" or qualifier == "Game Before Sub Query" or qualifier == "Season Sub Query" or qualifier == "Or Season Sub Query" or qualifier == "Season After Sub Query" or qualifier == "Season Before Sub Query":
                     for player in qual_obj["values"]:
                         if not sub_sub_sub_first:
@@ -11858,10 +11929,10 @@ def perform_post_qualifier(player_data, player_type, ind_player_type, row, quali
                     return False
     
     if "Formula" in qualifiers:
-        stats = set()
+        stats = {}
         for qual_object in qualifiers["Formula"]:
             formula = qual_object["values"][0]
-            formula_matches = list(re.finditer(r"(?:(?:[A-Za-z_:~])\d?|\d?(?:[A-Za-z_:~]))+", formula))
+            formula_matches = list(re.finditer(r"((?:(?:[A-Za-z_:~])\d?|\d?(?:[A-Za-z_:~]))+)", formula))
             for header in list(headers[player_type["da_type"]].keys()) + ["Shared"]:
                 header_match = r"(?:" + header.lower() + r")"
                 if header == "Era Adjusted Passing":
@@ -11871,14 +11942,14 @@ def perform_post_qualifier(player_data, player_type, ind_player_type, row, quali
                 for stat in get_constant_data.stat_groups[header]:
                     has_match = False
                     for formula_match in formula_matches:
-                        if formula_match.group() == header.lower():
+                        if re.match(header_match + r"~" + stat.lower(), formula_match.group(1)) or formula_match.group(1) == stat.lower():
                             has_match = True
                             break
                     if has_match:
                         if header not in stats:
                             stats[header] = set()
-                        stats[header].add(header)
-            
+                        stats[header].add(stat)
+                    
         row_normal = fill_row(row, player_data, player_type, lower=False, stats=stats)
         for qual_object in qualifiers["Formula"]:
             formula = qual_object["values"][0]
@@ -11886,6 +11957,35 @@ def perform_post_qualifier(player_data, player_type, ind_player_type, row, quali
                 has_match = bool(get_constant_data.calculate_formula("custom_formula", formula, row_normal, None, headers, player_data, player_type, all_rows, safe_eval=True))
             except Exception:
                 return False
+
+            if qual_object["negate"]:
+                if has_match:
+                    return False
+            else:
+                if not has_match:
+                    return False
+    
+    if "Formula Query" in qualifiers:
+        for qual_object in qualifiers["Formula Query"]:
+            formula = qual_object["formula"].lower()
+            formula = perform_formula_replace(formula, row, 1, player_type, player_data, all_rows)
+
+            for index, player in enumerate(qual_object["values"]):
+                if row["Shared"]["GameLink"] not in player["games"]:
+                    if qual_object["negate"]:
+                        return True
+                    else:
+                        return False
+
+                query_row =  player["games"][row["Shared"]["GameLink"]]
+                formula = perform_formula_replace(formula, query_row, index + 2, player["player_type"], player["player_data"], player["all_rows"])
+            
+            try:
+                has_match = numexpr.evaluate(formula)
+            except ZeroDivisionError:
+                has_match = False
+            except Exception:
+                raise get_constant_data.CustomMessageException("Invalid formula!")
 
             if qual_object["negate"]:
                 if has_match:
@@ -11993,6 +12093,51 @@ def perform_post_qualifier(player_data, player_type, ind_player_type, row, quali
                     return False
 
     return True
+
+def perform_formula_replace(formula, query_row, index, player_type, player_data, all_rows):
+    stats = {}
+    formula_matches = list(re.finditer(r"(?:(?:\$" + str(index) + r"\.([A-Za-z_:~]+))\d?|\d?(?:\$" + str(index) + r"\.([A-Za-z_:~]+)))", formula))
+    for header in list(headers[player_type["da_type"]].keys()) + ["Shared"]:
+        header_match = r"(?:" + header.lower() + r")"
+        if header == "Era Adjusted Passing":
+            header_match = r"(?:era adjusted passing|total)"
+        elif header == "Scrimmage/All Purpose":
+            header_match = r"(?:scrimmage/all purpose|scrimmage)"
+        for stat in get_constant_data.stat_groups[header]:
+            has_match = False
+            for formula_match in formula_matches:
+                if re.match(header_match + r"~" + stat.lower(), formula_match.group(1)) or formula_match.group(1) == stat.lower():
+                    has_match = True
+                    break
+            if has_match:
+                if header not in stats:
+                    stats[header] = set()
+                stats[header].add(stat)
+    
+    row_normal = fill_row(query_row, player_data, player_type, lower=False, stats=stats)
+    earliest_invalid_date = None
+    for over_header in headers[player_type["da_type"]]:
+        if over_header != "Shared":
+            for sub_stat in row_normal[over_header]:
+                temp_earliest_invalid_date = get_constant_data.calculate_earliest_invalid_date(sub_stat, over_header, row_normal, formula, earliest_invalid_date, "custom_formula", formula_matches)
+                if temp_earliest_invalid_date:
+                    earliest_invalid_date = temp_earliest_invalid_date
+    if "Shared" in row_normal:
+        for sub_stat in row_normal["Shared"]:
+            temp_earliest_invalid_date = get_constant_data.calculate_earliest_invalid_date(sub_stat, "Shared", row_normal, formula, earliest_invalid_date, "custom_formula", formula_matches)
+            if temp_earliest_invalid_date:
+                earliest_invalid_date = temp_earliest_invalid_date
+
+    for over_header in headers[player_type["da_type"]]:
+        if over_header != "Shared":
+            for sub_stat in row_normal[over_header]:
+                formula, formula_matches = get_constant_data.replace_formula(row_normal, over_header, sub_stat, formula, all_rows, earliest_invalid_date, "custom_formula", formula_matches, query_regex=r"(?:(?:\$" + str(index) + r"\.([A-Za-z_:~]+))\d?|\d?(?:\$" + str(index) + r"\.([A-Za-z_:~]+)))")
+
+    if "Shared" in row_normal:
+        for sub_stat in row_normal["Shared"]:
+            formula, formula_matches = get_constant_data.replace_formula(row_normal, "Shared", sub_stat, formula, all_rows, earliest_invalid_date, "custom_formula", formula_matches, query_regex=r"(?:(?:\$" + str(index) + r"\.([A-Za-z_:~]+))\d?|\d?(?:\$" + str(index) + r"\.([A-Za-z_:~]+)))")
+
+    return formula
 
 def perform_qualifier(player_data, player_type, ind_player_type, row, time_frame, all_rows):
     qualifiers = time_frame["qualifiers"]
@@ -14922,9 +15067,9 @@ def handle_season_stats(all_rows, player_data, player_type, qualifiers):
                 "Year" : season
             }
         if "Season Formula" in qualifiers:
-            stats = set()
+            stats = {}
             for qual_object in qualifiers["Season Formula"]:
-                formula_matches = list(re.finditer(r"(?:(?:[A-Za-z_:~])\d?|\d?(?:[A-Za-z_:~]))+", formula))
+                formula_matches = list(re.finditer(r"((?:(?:[A-Za-z_:~])\d?|\d?(?:[A-Za-z_:~]))+)", formula))
                 for header in list(headers[player_type["da_type"]].keys()) + ["Shared"]:
                     header_match = r"(?:" + header.lower() + r")"
                     if header == "Era Adjusted Passing":
@@ -14934,13 +15079,13 @@ def handle_season_stats(all_rows, player_data, player_type, qualifiers):
                     for stat in get_constant_data.stat_groups[header]:
                         has_match = False
                         for formula_match in formula_matches:
-                            if formula_match.group() == header.lower():
+                            if re.match(header_match + r"~" + stat.lower(), formula_match.group(1)) or formula_match.group(1) == stat.lower():
                                 has_match = True
                                 break
                         if has_match:
                             if header not in stats:
                                 stats[header] = set()
-                            stats[header].add(header)
+                            stats[header].add(stat)
 
             season_row_map[season]["comb_row_upper"] = comb_rows(season_matching_rows, player_data, player_type, False, stats=stats)
             season_row_map[season]["comb_row_upper"]["Shared"] = {
@@ -16281,17 +16426,22 @@ def comb_rows(matching_rows, player_data, player_type, lower=True, stats=None):
 
 def calculate_recursive_formula(over_header, stat, player_data, player_type, comb_row, matching_rows):
     formula = get_constant_data.formulas[over_header][stat]
-    formula_matches = list(re.finditer(r"(?:(?:[A-Za-z_:~])\d?|\d?(?:[A-Za-z_:~]))+", formula.lower()))
-    for header_stat in get_constant_data.formulas[over_header]:
-        if header_stat == stat:
-            break
-        has_match = False
-        for formula_match in formula_matches:
-            if formula_match.group() == header_stat.lower():
-                has_match = True
+    if formula == "Special":
+        if stat in get_constant_data.special_formula_stats:
+            for header_stat in get_constant_data.special_formula_stats[stat]:
+                calculate_recursive_formula(over_header, header_stat, player_data, player_type, comb_row, matching_rows)
+    else:
+        formula_matches = list(re.finditer(r"((?:(?:[A-Za-z_:~])\d?|\d?(?:[A-Za-z_:~]))+)", formula.lower()))
+        for header_stat in get_constant_data.formulas[over_header]:
+            if header_stat == stat:
                 break
-        if has_match:
-            calculate_recursive_formula(over_header, header_stat, player_data, player_type, comb_row, matching_rows)
+            has_match = False
+            for formula_match in formula_matches:
+                if formula_match.group(1) == header_stat.lower():
+                    has_match = True
+                    break
+            if has_match:
+                calculate_recursive_formula(over_header, header_stat, player_data, player_type, comb_row, matching_rows)
     comb_row[over_header][stat] = get_constant_data.calculate_formula(stat, formula, comb_row, over_header, headers, player_data, player_type, matching_rows)
 
 def handle_date_rows(player_data, player_type, stat, the_over_stat, start_date, date_diff, all_rows):
@@ -17221,7 +17371,7 @@ def fill_row(row, player_data, player_type, lower=True, stats=None):
         row["Scrimmage/All Purpose"]["TD"] = tds
         row["Scrimmage/All Purpose"]["APYds"] = apyds
         row["Scrimmage/All Purpose"]["APTD"] = aptd
-    
+
     if stats == None or "Shared" in stats:
         if stats == None or set(stats["Shared"]).intersection(get_constant_data.formulas["Shared"].keys()):
             for stat in stats["Shared"]:
