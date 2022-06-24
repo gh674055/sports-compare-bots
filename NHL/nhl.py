@@ -8533,7 +8533,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                             extra_stats.add(m.group(1))
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
                         
-                        last_match = re.finditer(r"\bshow(?: |-)?(only(?: |-)?)?(goalie-record|record|faceoff|slash-5v5|slash|score|extra-scoring-per60|scoring-per60|scoring-5v5|extra-scoring|scoring|strength-slash|extra-strength-scoring-per60|strength-scoring-per60|extra-strength-scoring|strength-scoring|goal|year|games?-count|seasons-leading|season|dates?-count|date|per-game|game|adjusted|advanced|relative|missing-games-count|missing-game-count|missing-toi-count|missing-game|missing-toi|best-season|worst-season|ng|team|franchise|number|fight|penalty-taken|penalties-taken|penaltie|penalty|award|shot|shift|star|play|nhl-link|strength|toi|href|api)s?\b", time_frame)
+                        last_match = re.finditer(r"\bshow(?: |-)?(only(?: |-)?)?(goalie-record|record|faceoff|extra-slash-per-game|slash-per-game|slash-5v5|slash|score|scoring-5v5|extra-scoring|scoring|extra-strength-slash-per-game|strength-slash-per-game|strength-slash|extra-strength-scoring|strength-scoring|goal|year|games?-count|seasons-leading|season|dates?-count|date|per-game|game|adjusted|advanced|relative|missing-games-count|missing-game-count|missing-toi-count|missing-game|missing-toi|best-season|worst-season|ng|team|franchise|number|fight|penalty-taken|penalties-taken|penaltie|penalty|award|shot|shift|star|play|nhl-link|strength|toi|href|api)s?\b", time_frame)
                         for m in last_match:
                             if "penalt" in m.group(2):
                                 extra_stats.add("penalties")
@@ -8618,7 +8618,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                     player_type["da_type"] = {
                                         "type" : "Skater"
                                     }
-                                elif m.group(2) == "scoring":
+                                elif m.group(2) == "slash-per-game":
                                     extra_stats.add("show-only-stat-g")
                                     extra_stats.add("show-only-stat-a")
                                     extra_stats.add("show-only-stat-p")
@@ -8628,7 +8628,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                     player_type["da_type"] = {
                                         "type" : "Skater"
                                     }
-                                elif m.group(2) == "extra-scoring":
+                                elif m.group(2) == "extra-slash-per-game":
                                     extra_stats.add("show-only-stat-g")
                                     extra_stats.add("show-only-stat-a")
                                     extra_stats.add("show-only-stat-p")
@@ -8650,7 +8650,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                     player_type["da_type"] = {
                                         "type" : "Skater"
                                     }
-                                elif m.group(2) == "strength-scoring":
+                                elif m.group(2) == "strength-slash-per-game":
                                     extra_stats.add("show-only-stat-g")
                                     extra_stats.add("show-only-stat-a")
                                     extra_stats.add("show-only-stat-p")
@@ -8684,7 +8684,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                     player_type["da_type"] = {
                                         "type" : "Skater"
                                     }
-                                elif m.group(2) == "extra-strength-scoring":
+                                elif m.group(2) == "extra-strength-slash-per-game":
                                     extra_stats.add("show-only-stat-g")
                                     extra_stats.add("show-only-stat-a")
                                     extra_stats.add("show-only-stat-p")
@@ -8739,7 +8739,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                     player_type["da_type"] = {
                                         "type" : "Skater"
                                     }
-                                elif m.group(2) == "scoring-per60":
+                                elif m.group(2) == "scoring":
                                     extra_stats.add("show-only-stat-g")
                                     extra_stats.add("show-only-stat-a")
                                     extra_stats.add("show-only-stat-p")
@@ -8753,7 +8753,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                     player_type["da_type"] = {
                                         "type" : "Skater"
                                     }
-                                elif m.group(2) == "strength-scoring-per60":
+                                elif m.group(2) == "strength-scoring":
                                     extra_stats.add("show-only-stat-g")
                                     extra_stats.add("show-only-stat-a")
                                     extra_stats.add("show-only-stat-p")
@@ -8809,7 +8809,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                     player_type["da_type"] = {
                                         "type" : "Skater"
                                     }
-                                elif m.group(2) == "extra-strength-scoring-per60":
+                                elif m.group(2) == "extra-strength-scoring":
                                     extra_stats.add("show-only-stat-g")
                                     extra_stats.add("show-only-stat-a")
                                     extra_stats.add("show-only-stat-p")
