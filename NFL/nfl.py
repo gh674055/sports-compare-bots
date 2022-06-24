@@ -1392,6 +1392,37 @@ def handle_player_string(comment, player_type, is_fantasy, last_updated, hide_ta
                         for m in last_match:
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip() + " " + m.group(3)
 
+                        last_match = re.finditer(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?((?:formula-sub-query):\{((?<!\\).*?(?<!\\))\})(?<!\\)\{(.*?)(?<!\\)\}", time_frame)
+                        last_match = list(last_match)
+                        # if len(last_match) > 10:
+                        #     raise CustomMessageException("Only can have a max of 10 sub queries!")
+                        for m in last_match:
+                            # if is_sub_query:
+                            #     raise CustomMessageException("Cannot have nested sub queries!")
+
+                            qualifier_obj = {}
+                            negate_str = m.group(1)
+                            if negate_str:
+                                qualifier_obj["negate"] = True
+                            else:
+                                qualifier_obj["negate"] = False
+
+                            qualifier_str = m.group(2)
+
+                            if qualifier_str.startswith("formula-sub-query:"):
+                                qual_str = "formula-sub-query:"
+                                qual_type = "Formula Sub Query"
+
+                            qualifier_obj["values"] = re.split(r"(?<!\\)\~", m.group(3))
+                            qualifier_obj["values"] = [value.strip() for value in qualifier_obj["values"]]
+                            qualifier_obj["formula"] = unescape_string(m.group(4).strip())
+
+                            if not qual_type in qualifiers:
+                                qualifiers[qual_type] = []
+                            qualifiers[qual_type].append(qualifier_obj)
+
+                            time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
+
                         last_match = re.finditer(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?((?:sub-query|event-sub-query|or-sub-query|or-event-sub-query|day-after-sub-query|day-before-sub-query|day-of-sub-query|game-after-sub-query|game-before-sub-query|season-sub-query|or-season-sub-query|season-after-sub-query|season-before-sub-query):(?<!\\)\{.*?(?<!\\)\})", time_frame)
                         last_match = list(last_match)
                         # if len(last_match) > 10:
@@ -6040,6 +6071,8 @@ def handle_against_qual(names, time_frames, comment_obj):
                     handle_the_quals(time_frame["qualifiers"], "Thrown To", subb_names_with, time_frame, "Tm", comment_obj, players_map)
                 if "Formula Query" in time_frame["qualifiers"]:
                     handle_the_quals(time_frame["qualifiers"], "Formula Query", sub_matching_names, time_frame, "RowGame", comment_obj, players_map)
+                if "Formula Sub Query" in time_frame["qualifiers"]:
+                    handle_the_quals(time_frame["qualifiers"], "Formula Sub Query", sub_matching_names, time_frame, "RowGame", comment_obj, players_map)
 
 def handle_same_games_qual(names, player_type, time_frames, comment_obj):
     qual_map = {}
@@ -6210,7 +6243,7 @@ def sub_handle_the_quals(players, qualifier, qual_str, player_str, time_frame, k
                 "games" : player_games,
                 "is_raw_query" : is_raw_query
             })
-            if qual_str == "Formula Query":
+            if qual_str == "Formula Query" or qual_str == "Formula Sub Query":
                 players[len(players) - 1]["player_type"] = player_type
                 players[len(players) - 1]["player_data"] = player_data
                 players[len(players) - 1]["all_rows"] = all_rows
@@ -6777,6 +6810,11 @@ def combine_player_datas(player_datas, player_type, any_missing_games, time_fram
                             any_missing_games = True
             if "Season Before Sub Query" in time_frame["qualifiers"]:
                 for qualifier in time_frame["qualifiers"]["Season Before Sub Query"]:
+                    for player in qualifier["values"]:
+                        if player["missing_games"]:
+                            any_missing_games = True
+            if "Formula Sub Query" in time_frame["qualifiers"]:
+                for qualifier in time_frame["qualifiers"]["Formula Sub Query"]:
                     for player in qualifier["values"]:
                         if player["missing_games"]:
                             any_missing_games = True
@@ -7544,6 +7582,17 @@ def determine_raw_str(subbb_frame):
                         if qual_obj["negate"]:
                             qual_str += "Not "
                         qual_str += "(" + player["query"].replace("Query: ", "", 1) + ")"
+                elif qualifier == "Formula Sub Query":
+                    for player in qual_obj["values"]:
+                        if not sub_sub_sub_first:
+                            qual_str += " OR "
+                        else:
+                            sub_sub_sub_first = False
+                        if qual_obj["negate"]:
+                            qual_str += "Not "
+                        qual_str += "(" + player["query"].replace("Query: ", "", 1) + ")"
+
+                        qual_str += " - Formula: " + qual_obj["formula"].upper()
                 elif qualifier == "Days Rest" or qualifier == "Upcoming Days Rest" or qualifier == "Starts Days Rest" or qualifier == "Upcoming Starts Days Rest" or qualifier == "Days In A Row" or qualifier == "Games In A Row" or qualifier == "Starts In A Row" or qualifier == "Games Rest" or qualifier == "Starts Rest" or qualifier == "Team Score" or qualifier == "Opponent Score" or qualifier == "Previous Team Score" or qualifier == "Previous Opponent Score" or qualifier == "Upcoming Team Score" or qualifier == "Upcoming Opponent Score" or qualifier == "Over/Under" or qualifier == "Super Bowl" or qualifier == "Number" or qualifier == "Team Wins" or qualifier == "Team Losses" or qualifier == "Team Ties" or qualifier == "Opponent Wins" or qualifier == "Opponent Losses" or qualifier == "Opponent Ties" or qualifier == "Current Team Wins" or qualifier == "Current Team Losses" or qualifier == "Current Team Ties" or qualifier == "Current Opponent Wins" or qualifier == "Current Opponent Losses" or qualifier == "Current Opponent Ties" or qualifier == "Team Games Over 500" or qualifier == "Opponent Games Over 500" or qualifier == "Current Team Games Over 500" or qualifier == "Current Opponent Games Over 500" or qualifier == "Attendance":
                     if qual_obj["negate"]:
                         qual_str += "Not "
@@ -11967,6 +12016,35 @@ def perform_post_qualifier(player_data, player_type, ind_player_type, row, quali
     
     if "Formula Query" in qualifiers:
         for qual_object in qualifiers["Formula Query"]:
+            formula = qual_object["formula"].lower()
+            formula = perform_formula_replace(formula, row, 1, player_type, player_data, all_rows)
+
+            for index, player in enumerate(qual_object["values"]):
+                if row["Shared"]["GameLink"] not in player["games"]:
+                    if qual_object["negate"]:
+                        return True
+                    else:
+                        return False
+
+                query_row =  player["games"][row["Shared"]["GameLink"]]
+                formula = perform_formula_replace(formula, query_row, index + 2, player["player_type"], player["player_data"], player["all_rows"])
+            
+            try:
+                has_match = numexpr.evaluate(formula)
+            except ZeroDivisionError:
+                has_match = False
+            except Exception:
+                raise get_constant_data.CustomMessageException("Invalid formula!")
+
+            if qual_object["negate"]:
+                if has_match:
+                    return False
+            else:
+                if not has_match:
+                    return False
+
+    if "Formula Sub Query" in qualifiers:
+        for qual_object in qualifiers["Formula Sub Query"]:
             formula = qual_object["formula"].lower()
             formula = perform_formula_replace(formula, row, 1, player_type, player_data, all_rows)
 

@@ -5266,6 +5266,7 @@ qualifier_map = {
         False : "Not Birthday"
     },
     "Formula Query" : {},
+    "Formula Sub Query" : {},
     "Sub Query" : {},
     "Or Sub Query" : {},
     "Day Of Sub Query" : {},
