@@ -18116,12 +18116,13 @@ def determine_row_data(game_data, player_type, player_data, player_id, current_t
         row_data["L"] = game["losses"]
         row_data["SV"]  = game["saves"]
         row_data["Hold"] = game["holds"]
+        row_data["BSv"] = game["blownSaves"]
         row_data["ER"] = game["earnedRuns"]	
         row_data["BF"] = game["battersFaced"]
         row_data["CG"] = game["completeGames"]
         row_data["SHO"] = game["shutouts"]
-        row_data["Str"] = game["strikes"]
-        row_data["Bal"] = game["balls"]
+        row_data["Str"] = game.get("strikes", 0)
+        row_data["Bal"] = game.get("balls", 0)
         row_data["HPB"] = game["hitBatsmen"]
         row_data["PO"] = game["pickoffs"]
         row_data["SF"] = game["sacFlies"]
@@ -18197,7 +18198,6 @@ def determine_row_data(game_data, player_type, player_data, player_id, current_t
         men_on_base_entered = None
         men_in_scoring_entered = None
         run_diff = None
-        exit_run_diff = None
 
         for index, scoring_play in enumerate(sub_data["liveData"]["plays"]["allPlays"]):
             for sub_play in scoring_play["playEvents"]:
@@ -18282,11 +18282,6 @@ def determine_row_data(game_data, player_type, player_data, player_id, current_t
                             men_on_base_entered = num_occupied
                             men_in_scoring_entered = int(sub_man_on_second) + int(sub_man_on_third)
                             break
-                        elif inning_entered != None:
-                            if is_home_team:
-                                exit_run_diff = sub_play["details"]["homeScore"] - sub_play["details"]["awayScore"]
-                            else:
-                                exit_run_diff = sub_play["details"]["awayScore"] - sub_play["details"]["homeScore"]
 
         if inning_entered == None:
             for index, scoring_play in enumerate(sub_data["liveData"]["plays"]["allPlays"]):
@@ -18317,9 +18312,6 @@ def determine_row_data(game_data, player_type, player_data, player_id, current_t
                                 run_diff = sub_data["liveData"]["plays"]["allPlays"][index - 1]["result"]["awayScore"] - sub_data["liveData"]["plays"]["allPlays"][index - 1]["result"]["homeScore"]
                         break
 
-        if exit_run_diff == None:
-            exit_run_diff = row_data["Team Score"] - row_data["Opponent Score"]
-
         row_data["SaveOpp"] = is_save_situation
         row_data["InningEntered"] = inning_entered
         row_data["TopInningEntered"] = top_inning_entered
@@ -18328,10 +18320,6 @@ def determine_row_data(game_data, player_type, player_data, player_id, current_t
         row_data["MenOnBaseEntered"] = men_on_base_entered
         row_data["MenInScoringEntered"] = men_in_scoring_entered
         row_data["ScoreMarginEntered"] = run_diff
-
-        if is_save_situation:
-            if exit_run_diff <= 0:
-                row_data["BSv"] = 1
 
     if is_final:
         if player_type["da_type"] == "Batter":
