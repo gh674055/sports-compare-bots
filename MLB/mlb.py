@@ -10043,7 +10043,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                     extra_stats.add("current-stats")
                                 elif qualifier_str.startswith("men-on-base:"):
                                     qual_str = "men-on-base:"
-                                    qual_type = "Men On Base"
+                                    qual_type = "Number Of Men On Base"
                                     extra_stats.add("current-stats")
                                 elif qualifier_str.startswith("time-facing-opponent:"):
                                     qual_str = "time-facing-opponent:"
