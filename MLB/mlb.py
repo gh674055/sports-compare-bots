@@ -17710,12 +17710,10 @@ def get_teammate_info(player_data, player_type, comment_obj):
     }
 
     teammate_map = {}
-    current_percent = 10
-
     with requests.Session() as s:
         with ThreadPoolExecutor(max_workers=5) as sub_executor:
-            for row_index, row_data in enumerate(sorted(sub_player_data["rows"], key=lambda row: row["DateTime"])):
-                future = sub_executor.submit(get_live_game_data, row_index, False, sub_player_data, row_data, player_type, subbb_frames, False, s)
+            for row_data in sub_player_data["rows"]:
+                future = sub_executor.submit(get_teammate_data, sub_player_data, row_data, s)
                 future.add_done_callback(functools.partial(teammate_result_callback, teammate_map, sub_player_data, row_data, count_info))
 
     if count_info["exception"]:
@@ -17731,6 +17729,34 @@ def get_teammate_info(player_data, player_type, comment_obj):
             if date < player_data["valid_teammates"][teammate]:
                 player_data["valid_teammates"][teammate] = date
 
+def get_teammate_data(player_data, row_data, s):
+    teammates = set()
+    if "MLBGameLink" not in row_data:
+        sleague = row_data["TmLg"]
+        if sleague in ["AL", "NL"]:
+            raise Exception("#" + str(threading.get_ident()) + "#   " + "Unable to get MLB game data for BRef ID : " + player_data["id"] + " and date " + str(row_data["DateTime"]) + ". Will be missing game")
+        else:
+            return teammates
+
+    try:
+        sub_data = url_request_json(s, "https://statsapi.mlb.com/api/v1.1/game/" + str(row_data["MLBGameLink"]) + "/feed/live")
+    except urllib.error.HTTPError as err:
+        if err.status == 404:
+            return teammates
+        else:
+            raise
+
+    if "message" in sub_data:
+        return teammates
+    
+    team_str = "home" if row_data["Location"] else "away"
+    for sub_player in sub_data["liveData"]["boxscore"]["teams"][team_str]["players"]:
+        sub_player = sub_data["liveData"]["boxscore"]["teams"][team_str]["players"][sub_player]
+        if (sub_player["stats"]["batting"] and sub_player["stats"]["batting"]["gamesPlayed"]) or (sub_player["stats"]["pitching"] and sub_player["stats"]["pitching"]["gamesPitched"]):
+            teammates.add(sub_player["person"]["id"])
+    
+    return teammates
+
 def teammate_result_callback(teammate_map, player_data, old_row_data, count_info, result):
     try:
         if result.exception():
@@ -17744,10 +17770,7 @@ def teammate_result_callback(teammate_map, player_data, old_row_data, count_info
             count_info["count"] += 1
             return
 
-        game_data = result.result()[0]
-
-        if game_data and not game_data["missing_data"]:
-            teammate_map[old_row_data["DateTime"]] = game_data["teammates"]
+        teammate_map[old_row_data["DateTime"]] = result.result()
 
         percent_complete = 100 * (count_info["count"] / count_info["total_count"])
         if count_info["total_count"] >= 10 and percent_complete >= count_info["current_percent"]:
@@ -38544,8 +38567,7 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
         "OppHR" : None,
         "Wind" : None,
         "Number" : None,
-        "final_team_position_map" : None,
-        "teammates" : set()
+        "final_team_position_map" : None
     }
 
     if "MLBGameLink" not in row_data:
@@ -38628,12 +38650,6 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
         game_data["OppR"] = sub_data["liveData"]["boxscore"]["teams"]["home"]["teamStats"]["batting"]["runs"]
         game_data["OppRBI"] = sub_data["liveData"]["boxscore"]["teams"]["home"]["teamStats"]["batting"]["rbi"]
         game_data["OppHR"] = sub_data["liveData"]["boxscore"]["teams"]["home"]["teamStats"]["batting"]["homeRuns"]
-    
-    team_str = "home" if is_home_team else "away"
-    for sub_player in sub_data["liveData"]["boxscore"]["teams"][team_str]["players"]:
-        sub_player = sub_data["liveData"]["boxscore"]["teams"][team_str]["players"][sub_player]
-        if (sub_player["stats"]["batting"] and sub_player["stats"]["batting"]["gamesPlayed"]) or (sub_player["stats"]["pitching"] and sub_player["stats"]["pitching"]["gamesPitched"]):
-            game_data["teammates"].add(sub_player["person"]["id"])
 
     if needs_plays:
         if not sub_data["liveData"]["plays"]["allPlays"]:

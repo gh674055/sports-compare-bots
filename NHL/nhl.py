@@ -6493,6 +6493,9 @@ qualifier_map = {
     "Rookie" : {},
     "Facing Former Team" : {},
     "Facing Former Franchise" : {},
+    "On Ice Against Former Teammate" : {},
+    "Shot On Former Teammate" : {},
+    "Shot By Former Teammate" : {},
     "Decision" : {},
     "Age" : {},
     "Season Age" : {},
@@ -9269,7 +9272,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
 
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
                                                 
-                        last_match = re.finditer(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?((?:(?:playing|starting)-with|(?:playing|starting)-against|(?:playing|starting)-same-game|prv-w|previous-playing-with|prv-a|previous-playing-against|upc-w|upcoming-playing-with|upc-a|upcoming-playing-against|(?:playing|starting)-same-opponents?|(?:playing|starting)-same-dates?|shot-on-birth-country|shot-by-birth-country|shot-on-nationality|shot-by-nationality|shot-on|shot-by|on-ice-with|on-ice-against|on-ice-together|on-line-with|on-line-against|on-line-together|assisted-on|assisted-with|points-with|assisted-by|primary-assisted-on|primary-assisted-with|primary-points-with|primary-assisted-by|hit-on|block-on|penalty-on|faceoff-against|fight-against|fighting-against))\b", time_frame)
+                        last_match = re.finditer(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?((?:(?:playing|starting)-with|(?:playing|starting)-against|(?:playing|starting)-same-game|prv-w|previous-playing-with|prv-a|previous-playing-against|upc-w|upcoming-playing-with|upc-a|upcoming-playing-against|(?:playing|starting)-same-opponents?|(?:playing|starting)-same-dates?|shot-on-former-teammate|shot-by-former-teammate|shot-on-birth-country|shot-by-birth-country|shot-on-nationality|shot-by-nationality|shot-on|shot-by|on-ice-with|on-ice-against-former-teammate|on-ice-against|on-ice-together|on-line-with|on-line-against|on-line-together|assisted-on|assisted-with|points-with|assisted-by|primary-assisted-on|primary-assisted-with|primary-points-with|primary-assisted-by|hit-on|block-on|penalty-on|faceoff-against|fight-against|fighting-against))\b", time_frame)
                         for m in last_match:
                             qualifier_obj = {}
                             negate_str = m.group(1)
@@ -9280,7 +9283,11 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
 
                             qualifier_str = m.group(2)
 
-                            if qualifier_str.startswith("shot-on-birth-country") or qualifier_str.startswith("shot-on-birth-country") or qualifier_str.startswith("shot-on-nationality") or qualifier_str.startswith("shot-on-nationality"):
+                            if qualifier_str.startswith("shot-on-birth-country") or qualifier_str.startswith("shot-on-birth-country") or qualifier_str.startswith("shot-on-nationality") or qualifier_str.startswith("shot-on-nationality") or qualifier_str.startswith("shot-on-former-teammate"):
+                                continue
+                            if qualifier_str.startswith("shot-by-birth-country") or qualifier_str.startswith("shot-by-birth-country") or qualifier_str.startswith("shot-by-nationality") or qualifier_str.startswith("shot-by-nationality") or qualifier_str.startswith("shot-by-former-teammate"):
+                                continue
+                            if qualifier_str.startswith("on-ice-against-former-teammate"):
                                 continue
 
                             if qualifier_str.startswith("starting-"):
@@ -9881,7 +9888,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
 
                                 time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
                         
-                        last_match = re.finditer(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?(current-season-age|first-minutes?|current-minutes?|first-shots?|current-shots?|first-periods?|current-shots?|first-games?|current-games?|first-seasons?|current-seasons?|last-minutes?|last-shots?|last-periods?|last-games?|last-seasons?|first-starts?|last-starts?|start-if-goalie|decision|current-age|rook|rookie|facing-former-franchise|facing-former-team|even-calendar-year|odd-calendar-year|even-year|odd-year|interconference|intraconference|interdivision|intradivision|complete-games?|current-winning-opponents?|current-losing-opponents?|current-tied-opponents?|current-winning-or-tied-opponents?|current-losing-or-tied-opponents?|winning-opponents?|losing-opponents?|winning-or-tied-opponents?|losing-or-tied-opponents?|tied-opponents?|playoff-opponents?|cup-winner-opponent|conf-winner-opponent|current-winning-teams?|current-losing-teams?|current-tied-teams?|current-winning-or-tied-teams?|current-losing-or-tied-teams?|winning-teams?|losing-teams?|tied-teams?|winning-or-tied-teams?|losing-or-tied-teams?|playoff-teams?|cup-winner-team|conf-winner-team|penalty-shot|shootout|overtime|game-winning|offensive-zone|defensive-zone|neutral-zone|left-side|right-side|faceoff-circle|goalie-crease|goalie-circle|unassisted|un-assisted|single-assist|single-assisted|even-skaters|team-goalie-pulled|opponent-goalie-pulled|more-skaters|less-skaters|power-play|short-handed|even-strength|facing-lefty|facing-righty|elimination-or-clinching|clinching-or-elimination|elimination(?:-games?)?|eliminating(?:-games?)?|clinching(?:-games?)?|clinch(?:-games?)?|winner-take-all|behind-in-series|ahead-in-series|even-in-series|(?:nhl(?: |-))?(?:finals?|championship)|stanley(?: |-)cup|stanley|cup|sc|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?(?:league|conference)(?:(?: |-)finals?|(?: |-)championship)|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?cf|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?second(?: |-)?round|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?sr|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?(?:league|conference) semi-?finals?|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?cs|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?first(?: |-)?round|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?fr|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?(?:league|conference) quarter-?finals?|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?cq|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?qr|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?qualify(?:ing|er)?(?:(?: |-)?round)?|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?pr|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?play(?:-| )?in(?:(?: |-)?round)?|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?rr|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?(?:round(?: |-)?)?robin|leading(:?-in-game)?|trailing(:?-in-game)?|tied?(:?(?:-in)?-game)?|force-dates|first-half|second-half|pre-all-star|post-all-star|outdoors|indoors|winter-classic|heritage-classic|stadium-series|t:[\w-]+|o:[\w-]+|m:[\w-]+|d:[\w-]+|dt:[\w-]+|exact-shot-type:[\w-]+|shot-type:[\w-]+|game-misconduct|bench-minor|minor|major|match|misconduct|stick-infraction|tip-in|deflected|deflection|wrist-shot|slap-shot|snap-shot|back-hand|wrap-around|team-franchise:[\w-]+|opponent-franchise:[\w-]+|franchise:[\w-]+|tf:[\w-]+|of:[\w-]+|f:[\w-]+|team-stadium:[\w-]+|team-arena:[\w-]+|franchise-stadium:[\w-]+|franchise-arena:[\w-]+|team:[\w-]+|opponent:[\w-]+|new-moon|waning-crescent|third-quarter|waning-gibbous|full-moon|waxing-gibbous|first-quarter|waxing-crescent|tv-network:[\S]+|exact-tv-network:[\S]+|national-tv-network:[\S]+|national-exact-tv-network:[\S]+|any-national-tv-network:[\S]+|any-national-exact-tv-network:[\S]+|any-usa-national-game|usa-national-game|any-can-national-game|can-national-game|any-national-game|national-game|local-event-time:[\S-]+|local-start-time:[\S-]+|team-start-time:[\S-]+|opponent-start-time:[\S-]+|team-event-time:[\S-]+|opponent-event-time:[\S-]+|previous-event(?:-type)?:[\w-]+|previous-exact-event(?:-type)?:[\w-]+|upcoming-player-event(?:-type)?:[\w-]+|upcoming-exact-player-event(?:-type)?:[\w-]+|previous-player-event(?:-type)?:[\w-]+|previous-exact-player-event(?:-type)?:[\w-]+|upcoming-event(?:-type)?:[\w-]+|upcoming-exact-event(?:-type)?:[\w-]+|event(?:-type)?:[\w-]+|exact-event(?:-type)?:[\w-]+|team-central-european-time-zone|team-eastern-european-time-zone|team-japan-time-zone|team-hawaii-time-zone|team-greenwich-time-zone|team-australian-time-zone|team-atlantic-time-zone|team-eastern-time-zone|team-central-time-zone|team-mountain-time-zone|team-pacific-time-zone|opponent-central-european-time-zone|opponent-eastern-european-time-zone|opponent-japan-time-zone|opponent-hawaii-time-zone|opponent-greenwich-time-zone|opponent-australian-time-zone|opponent-atlantic-time-zone|opponent-eastern-time-zone|opponent-central-time-zone|opponent-mountain-time-zone|opponent-pacific-time-zone|central-european-time-zone|eastern-european-time-zone|japan-time-zone|hawaii-time-zone|greenwich-time-zone|australian-time-zone|atlantic-time-zone|eastern-time-zone|central-time-zone|mountain-time-zone|pacific-time-zone|time-zone:[\S-]+|exact-time-zone:[\S-]+|state:[\w-]+|exact-state:[\w-]+|province:[\w-]+|exact-province:[\w-]+|team-time-zone:[\S-]+|team-exact-time-zone:[\S-]+|team-state:[\w-]+|team-exact-state:[\w-]+|team-province:[\w-]+|team-exact-province:[\w-]+|opponent-time-zone:[\S-]+|opponent-exact-time-zone:[\S-]+|opponent-state:[\w-]+|opponent-exact-state:[\w-]+|opponent-province:[\w-]+|opponent-exact-province:[\w-]+|shot-on-birth-country:[\w-]+|shot-by-birth-country:[\w-]+|shot-on-nationality:[\w-]+|shot-by-nationality:[\w-]+|player-time-after-event:[\S-]+|player-time-before-event:[\S-]+|time-after-event:[\S-]+|time-before-event:[\S-]+|opponent-country:[\w-]+|opponent-exact-country:[\w-]+|team-country:[\w-]+|team-exact-country:[\w-]+|country:[\w-]+|exact-country:[\w-]+|month:[\w-]+|day:[\w-]+|date:[\w-]+|series-game:[\w-]+|gm:[\w-]+|game:[\w-]+|season-gm:[\w-]+|season-game:[\w-]+|playoff-season-index:[\w-]+|playoff-season-index-reversed:[\w-]+|season-index:[\w-]+|season-index-reversed:[\w-]+|season:[\w-]+|season-reversed:[\w-]+|seasons:[\w-]+|seasons-reversed:[\w-]+|crgm:[\w-]+|career-games?-reversed:[\w-]+|team-games?-reversed:[\w-]+|season-games?-reversed:[\w-]+|games?-reversed:[\w-]+|career-games?:[\w-]+|tmgm:[\w-]+|team-games?:[\w-]+|game-number:[\w-]+|season-number:[\w-]+|number:[\w-]+|games-in-days:[\S-]+|starts-in-days:[\S-]+|dr:[\w-]+|starts-days-rest:[\w-]+|days-rest:[\w-]+|prv-dr:[\w-]+|previous-days-rest:[\w-]+|upc-dr:[\w-]+|upcoming-starts-days-rest:[\w-]+|upcoming-days-rest:[\w-]+|gr:[\w-]+|games-rest:[\w-]+|starts-rest:[\w-]+|prv-gr:[\w-]+|-?starts?|-?started|-?starting|-?ignore-starts?|-?ignore-started?|-?ignore-starting|previous-games-rest:[\w-]+|upc-gr:[\w-]+|upcoming-games-rest:[\w-]+|days-in-a-row:[\w-]+|games-in-a-row:[\w-]+|starts-in-a-row:[\w-]+|prv-t:[\w-]+|prv-o:[\w-]+|upc-t:[\w-]+|upc-o:[\w-]+|upcoming-same-opponent|previous-same-opponent|previous-franchise:[\w-]+|previous-team-franchise:[\w-]+|previous-opponent-franchise:[\w-]+|upcoming-franchise:[\w-]+|upcoming-team-franchise:[\w-]+|upcoming-opponent-franchise:[\w-]+|previous-team:[\w-]+|previous-opponent:[\w-]+|upcoming-team:[\w-]+|upcoming-opponent:[\w-]+|goalie-angle:[\S-]+|score:[\S-]+|final-score:[\S-]+|previous-score:[\S-]+|upcoming-score:[\S-]+|final-team-score:[\w-]+|final-opponent-score:[\w-]+|final-score-margin:[\S-]+|final-score-difference:[\S-]+|team-score:[\w-]+|opponent-score:[\w-]+|score-margin:[\S-]+|score-difference:[\S-]+|penalty-minutes:[\w-]+|period:[\w-]+|raw-x-coordinate:[\S-]+|raw-y-coordinate:[\S-]+|raw-coordinates:[\S-]+|absolute-x-coordinate:[\w-]+|absolute-y-coordinate:[\w-]+|absolute-coordinates:[\w-]+|x-coordinate:[\S-]+|y-coordinate:[\S-]+|coordinates:[\S-]+|within-distance:[\S-]+|raw-within-distance:[\S-]+|absolute-within-distance:[\S-]+|team-skaters:[\w-]+|opponent-skaters:[\w-]+|team-players:[\w-]+|opponent-players:[\w-]+|game-time-remaining:[\S-]+|game-time:[\S-]+|period-time-remaining:[\S-]+|period-time:[\S-]+|period-stat:[\S-]+|shift-stat:[\S-]+|prv-season-st:[\S-]+|previous-season-stat:[\S-]+|upc-season-st:[\S-]+|upcoming-season-stat:[\S-]+|season-st:[\S-]+|season-stat:[\S-]+|st:[\S-]+|stat:[\S-]+|prv-st:[\S-]+|previous-stat:[\S-]+|upc-st:[\S-]+|upcoming-stat:[\S-]+|min-st:[\S-]+|min-stat:[\S-]+|max-st:[\S-]+|max-stat:[\S-]+|totalgames-st:[\S-]+|totalgames-stat:[\S-]+|max-str:[\S-]+|max-streak:[\S-]+|ctn-str:[\S-]+|count-streak:[\S-]+|q:[\S-]+|quickest:[\S-]+|s:[\S-]+|slowest:[\S-]+|individual-event-stat:[\S-]+|indv-event-stat:[\S-]+|ind-event-stat:[\S-]+|game-event-stat:[\S-]+|game-event-stat-reversed:[\S-]+|game-event-stats:[\S-]+|game-event-stats-reversed:[\S-]+|event-stat:[\S-]+|event-stat-reversed:[\S-]+|event-stats:[\S-]+|event-stats-reversed:[\S-]+|starting-game-event-stat:[\S-]+|starting-game-event-stat-reversed:[\S-]+|starting-game-event-stats:[\S-]+|starting-game-event-stats-reversed:[\S-]+|starting-event-stat:[\S-]+|starting-event-stat-reversed:[\S-]+|starting-event-stats:[\S-]+|starting-event-stats-reversed:[\S-]+|with-new-team|with-new-franchise|summer|spring|winter|fall|autumn|away|home|road|previous-away|previous-home|previous-road|upcoming-away|upcoming-home|upcoming-road|win(?:s)?|loss(?:es)?|tie(?:es)?|w-ot|w-so|l-ot|l-so|so|ot|w|l|t|prv-w|prv-l|prv-t|prv-w-ot|prv-w-so|prv-l-ot|prv-l-so|prv-so|prv-ot|upc-w|upc-l|upc-t|upc-w-ot|upc-w-so|upc-l-ot|upc-l-so|upc-so|upc-ot|previous-win(?:s)?|previous-loss(?:es)?|previous-tie(?:es)|upcoming-win(?:s)?|upcoming-loss(?:es)?|upcoming-tie(?:es)|prv-t-w|prv-t-l|prv-t-t|prv-t-w-ot|prv-t-w-so|prv-t-l-ot|prv-t-l-so|prv-t-so|prv-t-ot|upc-t-w|upc-t-l|upc-t-t|upc-t-w-ot|upc-t-w-so|upc-t-l-ot|upc-t-l-so|upc-t-so|upc-t-ot|previous-team-win(?:s)?|previous-team-loss(?:es)?|previous-team-tie(?:es)|upcoming-team-win(?:s)?|upcoming-team-loss(?:es)?|upcoming-team-tie(?:es)|series-team-wins:[\w-]+|series-opponent-wins:[\w-]+|series-score-margin:[\S-]+|series-score-difference:[\S-]+|series-score:[\w-]+|current-team-wins:[\w-]+|current-team-losses:[\w-]+|current-team-ties:[\w-]+|current-team-points:[\w-]+|current-team-games-over-500:[\S-]+|current-opponent-wins:[\w-]+|current-opponent-losses:[\w-]+|current-opponent-ties:[\w-]+|current-opponent-points:[\w-]+|current-opponent-games-over-500:[\S-]+|attendance:[\w-]+|team-wins:[\w-]+|team-losses:[\w-]+|team-ties:[\w-]+|team-points:[\w-]+|team-games-over-500:[\S-]+|opponent-wins:[\w-]+|opponent-losses:[\w-]+|opponent-ties:[\w-]+|opponent-points:[\w-]+|opponent-games-over-500:[\S-]+|opponent-goals?-rank:[\S-]+|opponent-standings-rank:[\S-]+|opponent-goals?-allowed-rank:[\S-]+|current-opponent-win(?:ning)?-percent:[\S-]+|opponent-win(?:ning)?-percent:[\S-]+|current-opponent-points-percent:[\S-]+|opponent-points-percent:[\S-]+|team-goals?-rank:[\S-]+|team-standings-rank:[\S-]+|team-goals?-allowed-rank:[\S-]+|calendar-years?:[\w-]+|years?:[\w-]+|current-team-win(?:ning)?-percent:[\S-]+|team-win(?:ning)?-percent:[\S-]+|current-team-points-percent:[\S-]+|team-points-percent:[\S-]+|early-?afternoon|late-?afternoon|morning|early|afternoon|day|night(?:time)?|evening|late|team-conference:[\S-]+|opponent-conference:[\S-]+|team-division:[\S-]+|opponent-division:[\S-]+|birthda(?:y|te)|skat(?:(?:er)|(?:ing))|left-wing(?:er)?|right-wing(?:er)?|center|defense(?:man)?|wing(?:er)?|forward|goalie|skater|" + all_months_re + r"|" + all_days_re + r")(?!\S+)", time_frame)
+                        last_match = re.finditer(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?(current-season-age|first-minutes?|current-minutes?|first-shots?|current-shots?|first-periods?|current-shots?|first-games?|current-games?|first-seasons?|current-seasons?|last-minutes?|last-shots?|last-periods?|last-games?|last-seasons?|first-starts?|last-starts?|start-if-goalie|decision|current-age|rook|rookie|on-ice-against-former-teammate|shot-by-former-teammate|shot-on-former-teammate|facing-former-franchise|facing-former-team|even-calendar-year|odd-calendar-year|even-year|odd-year|interconference|intraconference|interdivision|intradivision|complete-games?|current-winning-opponents?|current-losing-opponents?|current-tied-opponents?|current-winning-or-tied-opponents?|current-losing-or-tied-opponents?|winning-opponents?|losing-opponents?|winning-or-tied-opponents?|losing-or-tied-opponents?|tied-opponents?|playoff-opponents?|cup-winner-opponent|conf-winner-opponent|current-winning-teams?|current-losing-teams?|current-tied-teams?|current-winning-or-tied-teams?|current-losing-or-tied-teams?|winning-teams?|losing-teams?|tied-teams?|winning-or-tied-teams?|losing-or-tied-teams?|playoff-teams?|cup-winner-team|conf-winner-team|penalty-shot|shootout|overtime|game-winning|offensive-zone|defensive-zone|neutral-zone|left-side|right-side|faceoff-circle|goalie-crease|goalie-circle|unassisted|un-assisted|single-assist|single-assisted|even-skaters|team-goalie-pulled|opponent-goalie-pulled|more-skaters|less-skaters|power-play|short-handed|even-strength|facing-lefty|facing-righty|elimination-or-clinching|clinching-or-elimination|elimination(?:-games?)?|eliminating(?:-games?)?|clinching(?:-games?)?|clinch(?:-games?)?|winner-take-all|behind-in-series|ahead-in-series|even-in-series|(?:nhl(?: |-))?(?:finals?|championship)|stanley(?: |-)cup|stanley|cup|sc|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?(?:league|conference)(?:(?: |-)finals?|(?: |-)championship)|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?cf|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?second(?: |-)?round|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?sr|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?(?:league|conference) semi-?finals?|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?cs|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?first(?: |-)?round|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?fr|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?(?:league|conference) quarter-?finals?|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?cq|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?qr|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?qualify(?:ing|er)?(?:(?: |-)?round)?|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?pr|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?play(?:-| )?in(?:(?: |-)?round)?|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?rr|(?:(?:(?:eastern|e|western|w|campbell|cb|wales|wl)(?:(?: |-)league)?)(?: |-)?)?(?:round(?: |-)?)?robin|leading(:?-in-game)?|trailing(:?-in-game)?|tied?(:?(?:-in)?-game)?|force-dates|first-half|second-half|pre-all-star|post-all-star|outdoors|indoors|winter-classic|heritage-classic|stadium-series|t:[\w-]+|o:[\w-]+|m:[\w-]+|d:[\w-]+|dt:[\w-]+|exact-shot-type:[\w-]+|shot-type:[\w-]+|game-misconduct|bench-minor|minor|major|match|misconduct|stick-infraction|tip-in|deflected|deflection|wrist-shot|slap-shot|snap-shot|back-hand|wrap-around|team-franchise:[\w-]+|opponent-franchise:[\w-]+|franchise:[\w-]+|tf:[\w-]+|of:[\w-]+|f:[\w-]+|team-stadium:[\w-]+|team-arena:[\w-]+|franchise-stadium:[\w-]+|franchise-arena:[\w-]+|team:[\w-]+|opponent:[\w-]+|new-moon|waning-crescent|third-quarter|waning-gibbous|full-moon|waxing-gibbous|first-quarter|waxing-crescent|tv-network:[\S]+|exact-tv-network:[\S]+|national-tv-network:[\S]+|national-exact-tv-network:[\S]+|any-national-tv-network:[\S]+|any-national-exact-tv-network:[\S]+|any-usa-national-game|usa-national-game|any-can-national-game|can-national-game|any-national-game|national-game|local-event-time:[\S-]+|local-start-time:[\S-]+|team-start-time:[\S-]+|opponent-start-time:[\S-]+|team-event-time:[\S-]+|opponent-event-time:[\S-]+|previous-event(?:-type)?:[\w-]+|previous-exact-event(?:-type)?:[\w-]+|upcoming-player-event(?:-type)?:[\w-]+|upcoming-exact-player-event(?:-type)?:[\w-]+|previous-player-event(?:-type)?:[\w-]+|previous-exact-player-event(?:-type)?:[\w-]+|upcoming-event(?:-type)?:[\w-]+|upcoming-exact-event(?:-type)?:[\w-]+|event(?:-type)?:[\w-]+|exact-event(?:-type)?:[\w-]+|team-central-european-time-zone|team-eastern-european-time-zone|team-japan-time-zone|team-hawaii-time-zone|team-greenwich-time-zone|team-australian-time-zone|team-atlantic-time-zone|team-eastern-time-zone|team-central-time-zone|team-mountain-time-zone|team-pacific-time-zone|opponent-central-european-time-zone|opponent-eastern-european-time-zone|opponent-japan-time-zone|opponent-hawaii-time-zone|opponent-greenwich-time-zone|opponent-australian-time-zone|opponent-atlantic-time-zone|opponent-eastern-time-zone|opponent-central-time-zone|opponent-mountain-time-zone|opponent-pacific-time-zone|central-european-time-zone|eastern-european-time-zone|japan-time-zone|hawaii-time-zone|greenwich-time-zone|australian-time-zone|atlantic-time-zone|eastern-time-zone|central-time-zone|mountain-time-zone|pacific-time-zone|time-zone:[\S-]+|exact-time-zone:[\S-]+|state:[\w-]+|exact-state:[\w-]+|province:[\w-]+|exact-province:[\w-]+|team-time-zone:[\S-]+|team-exact-time-zone:[\S-]+|team-state:[\w-]+|team-exact-state:[\w-]+|team-province:[\w-]+|team-exact-province:[\w-]+|opponent-time-zone:[\S-]+|opponent-exact-time-zone:[\S-]+|opponent-state:[\w-]+|opponent-exact-state:[\w-]+|opponent-province:[\w-]+|opponent-exact-province:[\w-]+|shot-on-birth-country:[\w-]+|shot-by-birth-country:[\w-]+|shot-on-nationality:[\w-]+|shot-by-nationality:[\w-]+|player-time-after-event:[\S-]+|player-time-before-event:[\S-]+|time-after-event:[\S-]+|time-before-event:[\S-]+|opponent-country:[\w-]+|opponent-exact-country:[\w-]+|team-country:[\w-]+|team-exact-country:[\w-]+|country:[\w-]+|exact-country:[\w-]+|month:[\w-]+|day:[\w-]+|date:[\w-]+|series-game:[\w-]+|gm:[\w-]+|game:[\w-]+|season-gm:[\w-]+|season-game:[\w-]+|playoff-season-index:[\w-]+|playoff-season-index-reversed:[\w-]+|season-index:[\w-]+|season-index-reversed:[\w-]+|season:[\w-]+|season-reversed:[\w-]+|seasons:[\w-]+|seasons-reversed:[\w-]+|crgm:[\w-]+|career-games?-reversed:[\w-]+|team-games?-reversed:[\w-]+|season-games?-reversed:[\w-]+|games?-reversed:[\w-]+|career-games?:[\w-]+|tmgm:[\w-]+|team-games?:[\w-]+|game-number:[\w-]+|season-number:[\w-]+|number:[\w-]+|games-in-days:[\S-]+|starts-in-days:[\S-]+|dr:[\w-]+|starts-days-rest:[\w-]+|days-rest:[\w-]+|prv-dr:[\w-]+|previous-days-rest:[\w-]+|upc-dr:[\w-]+|upcoming-starts-days-rest:[\w-]+|upcoming-days-rest:[\w-]+|gr:[\w-]+|games-rest:[\w-]+|starts-rest:[\w-]+|prv-gr:[\w-]+|-?starts?|-?started|-?starting|-?ignore-starts?|-?ignore-started?|-?ignore-starting|previous-games-rest:[\w-]+|upc-gr:[\w-]+|upcoming-games-rest:[\w-]+|days-in-a-row:[\w-]+|games-in-a-row:[\w-]+|starts-in-a-row:[\w-]+|prv-t:[\w-]+|prv-o:[\w-]+|upc-t:[\w-]+|upc-o:[\w-]+|upcoming-same-opponent|previous-same-opponent|previous-franchise:[\w-]+|previous-team-franchise:[\w-]+|previous-opponent-franchise:[\w-]+|upcoming-franchise:[\w-]+|upcoming-team-franchise:[\w-]+|upcoming-opponent-franchise:[\w-]+|previous-team:[\w-]+|previous-opponent:[\w-]+|upcoming-team:[\w-]+|upcoming-opponent:[\w-]+|goalie-angle:[\S-]+|score:[\S-]+|final-score:[\S-]+|previous-score:[\S-]+|upcoming-score:[\S-]+|final-team-score:[\w-]+|final-opponent-score:[\w-]+|final-score-margin:[\S-]+|final-score-difference:[\S-]+|team-score:[\w-]+|opponent-score:[\w-]+|score-margin:[\S-]+|score-difference:[\S-]+|penalty-minutes:[\w-]+|period:[\w-]+|raw-x-coordinate:[\S-]+|raw-y-coordinate:[\S-]+|raw-coordinates:[\S-]+|absolute-x-coordinate:[\w-]+|absolute-y-coordinate:[\w-]+|absolute-coordinates:[\w-]+|x-coordinate:[\S-]+|y-coordinate:[\S-]+|coordinates:[\S-]+|within-distance:[\S-]+|raw-within-distance:[\S-]+|absolute-within-distance:[\S-]+|team-skaters:[\w-]+|opponent-skaters:[\w-]+|team-players:[\w-]+|opponent-players:[\w-]+|game-time-remaining:[\S-]+|game-time:[\S-]+|period-time-remaining:[\S-]+|period-time:[\S-]+|period-stat:[\S-]+|shift-stat:[\S-]+|prv-season-st:[\S-]+|previous-season-stat:[\S-]+|upc-season-st:[\S-]+|upcoming-season-stat:[\S-]+|season-st:[\S-]+|season-stat:[\S-]+|st:[\S-]+|stat:[\S-]+|prv-st:[\S-]+|previous-stat:[\S-]+|upc-st:[\S-]+|upcoming-stat:[\S-]+|min-st:[\S-]+|min-stat:[\S-]+|max-st:[\S-]+|max-stat:[\S-]+|totalgames-st:[\S-]+|totalgames-stat:[\S-]+|max-str:[\S-]+|max-streak:[\S-]+|ctn-str:[\S-]+|count-streak:[\S-]+|q:[\S-]+|quickest:[\S-]+|s:[\S-]+|slowest:[\S-]+|individual-event-stat:[\S-]+|indv-event-stat:[\S-]+|ind-event-stat:[\S-]+|game-event-stat:[\S-]+|game-event-stat-reversed:[\S-]+|game-event-stats:[\S-]+|game-event-stats-reversed:[\S-]+|event-stat:[\S-]+|event-stat-reversed:[\S-]+|event-stats:[\S-]+|event-stats-reversed:[\S-]+|starting-game-event-stat:[\S-]+|starting-game-event-stat-reversed:[\S-]+|starting-game-event-stats:[\S-]+|starting-game-event-stats-reversed:[\S-]+|starting-event-stat:[\S-]+|starting-event-stat-reversed:[\S-]+|starting-event-stats:[\S-]+|starting-event-stats-reversed:[\S-]+|with-new-team|with-new-franchise|summer|spring|winter|fall|autumn|away|home|road|previous-away|previous-home|previous-road|upcoming-away|upcoming-home|upcoming-road|win(?:s)?|loss(?:es)?|tie(?:es)?|w-ot|w-so|l-ot|l-so|so|ot|w|l|t|prv-w|prv-l|prv-t|prv-w-ot|prv-w-so|prv-l-ot|prv-l-so|prv-so|prv-ot|upc-w|upc-l|upc-t|upc-w-ot|upc-w-so|upc-l-ot|upc-l-so|upc-so|upc-ot|previous-win(?:s)?|previous-loss(?:es)?|previous-tie(?:es)|upcoming-win(?:s)?|upcoming-loss(?:es)?|upcoming-tie(?:es)|prv-t-w|prv-t-l|prv-t-t|prv-t-w-ot|prv-t-w-so|prv-t-l-ot|prv-t-l-so|prv-t-so|prv-t-ot|upc-t-w|upc-t-l|upc-t-t|upc-t-w-ot|upc-t-w-so|upc-t-l-ot|upc-t-l-so|upc-t-so|upc-t-ot|previous-team-win(?:s)?|previous-team-loss(?:es)?|previous-team-tie(?:es)|upcoming-team-win(?:s)?|upcoming-team-loss(?:es)?|upcoming-team-tie(?:es)|series-team-wins:[\w-]+|series-opponent-wins:[\w-]+|series-score-margin:[\S-]+|series-score-difference:[\S-]+|series-score:[\w-]+|current-team-wins:[\w-]+|current-team-losses:[\w-]+|current-team-ties:[\w-]+|current-team-points:[\w-]+|current-team-games-over-500:[\S-]+|current-opponent-wins:[\w-]+|current-opponent-losses:[\w-]+|current-opponent-ties:[\w-]+|current-opponent-points:[\w-]+|current-opponent-games-over-500:[\S-]+|attendance:[\w-]+|team-wins:[\w-]+|team-losses:[\w-]+|team-ties:[\w-]+|team-points:[\w-]+|team-games-over-500:[\S-]+|opponent-wins:[\w-]+|opponent-losses:[\w-]+|opponent-ties:[\w-]+|opponent-points:[\w-]+|opponent-games-over-500:[\S-]+|opponent-goals?-rank:[\S-]+|opponent-standings-rank:[\S-]+|opponent-goals?-allowed-rank:[\S-]+|current-opponent-win(?:ning)?-percent:[\S-]+|opponent-win(?:ning)?-percent:[\S-]+|current-opponent-points-percent:[\S-]+|opponent-points-percent:[\S-]+|team-goals?-rank:[\S-]+|team-standings-rank:[\S-]+|team-goals?-allowed-rank:[\S-]+|calendar-years?:[\w-]+|years?:[\w-]+|current-team-win(?:ning)?-percent:[\S-]+|team-win(?:ning)?-percent:[\S-]+|current-team-points-percent:[\S-]+|team-points-percent:[\S-]+|early-?afternoon|late-?afternoon|morning|early|afternoon|day|night(?:time)?|evening|late|team-conference:[\S-]+|opponent-conference:[\S-]+|team-division:[\S-]+|opponent-division:[\S-]+|birthda(?:y|te)|skat(?:(?:er)|(?:ing))|left-wing(?:er)?|right-wing(?:er)?|center|defense(?:man)?|wing(?:er)?|forward|goalie|skater|" + all_months_re + r"|" + all_days_re + r")(?!\S+)", time_frame)
                         for m in last_match:
                             qualifier_obj = {}
                             
@@ -10078,6 +10085,17 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 qual_type = "Facing Former Team"
                             elif qualifier_str == "facing-former-franchise":
                                 qual_type = "Facing Former Franchise"
+                            elif qualifier_str == "on-ice-against-former-teammate":
+                                qual_type = "On Ice Against Former Teammate"
+                                extra_stats.add("current-stats")
+                            elif qualifier_str == "shot-by-former-teammate":
+                                qual_type = "Shot By Former Teammate"
+                                extra_stats.add("Shot By")
+                                extra_stats.add("current-stats")
+                            elif qualifier_str == "shot-on-former-teammate":
+                                qual_type = "Shot On Former Teammate"
+                                extra_stats.add("Shot On")
+                                extra_stats.add("current-stats")
                             elif qualifier_str == "decision":
                                 player_type["da_type"] = {
                                     "type" : "Goalie"
@@ -16326,7 +16344,7 @@ def determine_raw_str(subbb_frame):
 
                 if qualifier == "Start" or qualifier == "Birthday":
                     qual_str += qualifier_map[qualifier][not qual_obj["negate"]]
-                elif qualifier == "Rookie" or qualifier == "Facing Former Franchise" or qualifier == "Facing Former Team" or qualifier == "Previous Same Opponent" or qualifier == "Upcoming Same Opponent" or qualifier == "With New Team" or qualifier == "With New Franchise" or qualifier == "Even Calendar Year" or qualifier == "Odd Calendar Year" or qualifier == "Even Year" or qualifier == "Odd Year" or qualifier == "Decision" or qualifier == "Interconference" or qualifier == "Intraconference" or qualifier == "Interdivision" or qualifier == "Intradivision" or qualifier == "First Half" or qualifier == "Second Half" or qualifier == "Post All-Star" or qualifier == "Pre All-Star" or qualifier == "Complete Game" or qualifier == "Penalty Shot" or qualifier == "Shootout" or qualifier == "Overtime" or qualifier == "Game Winning" or qualifier == "Offensive Zone" or qualifier == "Defensive Zone" or qualifier == "Neutral Zone" or qualifier == "Left Side" or qualifier == "Right Side" or qualifier == "Faceoff Circle" or qualifier == "Goalie Crease" or qualifier == "Goalie Circle" or qualifier == "Unassisted" or qualifier == "Single Assist" or qualifier == "Even Skaters" or qualifier == "More Skaters" or qualifier == "Less Skaters" or qualifier == "Team Goalie Pulled" or qualifier == "Opponent Goalie Pulled" or qualifier == "Power Play" or qualifier == "Short Handed" or qualifier == "Even Strength" or qualifier == "Elimination" or qualifier == "Clinching" or qualifier == "Elimination Or Clinching" or qualifier == "Winner Take All" or qualifier == "Ahead In Series" or qualifier == "Behind In Series" or qualifier == "Even In Series" or qualifier == "Winning Opponent" or qualifier == "Losing Opponent" or qualifier == "Tied Opponent" or qualifier == "Winning Or Tied Opponent" or qualifier == "Losing Or Tied Opponent" or qualifier == "Current Winning Opponent" or qualifier == "Current Losing Opponent" or qualifier == "Current Tied Opponent" or qualifier == "Current Winning Or Tied Opponent" or qualifier == "Current Losing Or Tied Opponent" or qualifier == "Playoff Opponent"  or qualifier == "Cup Winner Opponent" or qualifier == "Conference Winner Opponent" or qualifier == "Winning Team" or qualifier == "Losing Team" or qualifier == "Tied Team" or qualifier == "Winning Or Tied Team" or qualifier == "Losing Or Tied Team" or qualifier == "Current Winning Team" or qualifier == "Current Losing Team" or qualifier == "Current Tied Team" or qualifier == "Current Winning Or Tied Team" or qualifier == "Current Losing Or Tied Team" or qualifier == "Playoff Team" or qualifier == "Cup Winner Team" or qualifier == "Conference Winner Team" or qualifier == "National Game" or qualifier == "Any National Game" or qualifier == "USA National Game" or qualifier == "Any USA National Game" or qualifier == "CAN National Game" or qualifier == "Any CAN National Game" or qualifier == "Facing Lefty" or qualifier == "Facing Righty" or qualifier == "Outdoors" or qualifier == "Indoors" or qualifier == "On Line Together":
+                elif qualifier == "Rookie" or qualifier == "On Ice Against Former Teammate" or qualifier == "Shot By Former Teammate" or qualifier == "Shot On Former Teammate" or qualifier == "Facing Former Franchise" or qualifier == "Facing Former Team" or qualifier == "Previous Same Opponent" or qualifier == "Upcoming Same Opponent" or qualifier == "With New Team" or qualifier == "With New Franchise" or qualifier == "Even Calendar Year" or qualifier == "Odd Calendar Year" or qualifier == "Even Year" or qualifier == "Odd Year" or qualifier == "Decision" or qualifier == "Interconference" or qualifier == "Intraconference" or qualifier == "Interdivision" or qualifier == "Intradivision" or qualifier == "First Half" or qualifier == "Second Half" or qualifier == "Post All-Star" or qualifier == "Pre All-Star" or qualifier == "Complete Game" or qualifier == "Penalty Shot" or qualifier == "Shootout" or qualifier == "Overtime" or qualifier == "Game Winning" or qualifier == "Offensive Zone" or qualifier == "Defensive Zone" or qualifier == "Neutral Zone" or qualifier == "Left Side" or qualifier == "Right Side" or qualifier == "Faceoff Circle" or qualifier == "Goalie Crease" or qualifier == "Goalie Circle" or qualifier == "Unassisted" or qualifier == "Single Assist" or qualifier == "Even Skaters" or qualifier == "More Skaters" or qualifier == "Less Skaters" or qualifier == "Team Goalie Pulled" or qualifier == "Opponent Goalie Pulled" or qualifier == "Power Play" or qualifier == "Short Handed" or qualifier == "Even Strength" or qualifier == "Elimination" or qualifier == "Clinching" or qualifier == "Elimination Or Clinching" or qualifier == "Winner Take All" or qualifier == "Ahead In Series" or qualifier == "Behind In Series" or qualifier == "Even In Series" or qualifier == "Winning Opponent" or qualifier == "Losing Opponent" or qualifier == "Tied Opponent" or qualifier == "Winning Or Tied Opponent" or qualifier == "Losing Or Tied Opponent" or qualifier == "Current Winning Opponent" or qualifier == "Current Losing Opponent" or qualifier == "Current Tied Opponent" or qualifier == "Current Winning Or Tied Opponent" or qualifier == "Current Losing Or Tied Opponent" or qualifier == "Playoff Opponent"  or qualifier == "Cup Winner Opponent" or qualifier == "Conference Winner Opponent" or qualifier == "Winning Team" or qualifier == "Losing Team" or qualifier == "Tied Team" or qualifier == "Winning Or Tied Team" or qualifier == "Losing Or Tied Team" or qualifier == "Current Winning Team" or qualifier == "Current Losing Team" or qualifier == "Current Tied Team" or qualifier == "Current Winning Or Tied Team" or qualifier == "Current Losing Or Tied Team" or qualifier == "Playoff Team" or qualifier == "Cup Winner Team" or qualifier == "Conference Winner Team" or qualifier == "National Game" or qualifier == "Any National Game" or qualifier == "USA National Game" or qualifier == "Any USA National Game" or qualifier == "CAN National Game" or qualifier == "Any CAN National Game" or qualifier == "Facing Lefty" or qualifier == "Facing Righty" or qualifier == "Outdoors" or qualifier == "Indoors" or qualifier == "On Line Together":
                     qual_str += str(not qual_obj["negate"])
                 elif qualifier == "Playing With" or qualifier == "Playing Against" or qualifier == "Playing Same Game" or qualifier == "Previous Playing With" or qualifier == "Previous Playing Against" or qualifier == "Upcoming Playing With" or qualifier == "Upcoming Playing Against" or qualifier == "Playing Same Opponents" or qualifier == "Playing Same Date" or qualifier == "Shot On" or qualifier == "Shot By" or qualifier == "On Ice With" or qualifier == "On Ice Against" or qualifier == "Assisted On" or qualifier == "Assisted With" or qualifier == "Points With" or qualifier == "Assisted By" or qualifier == "Primary Assisted On" or qualifier == "Primary Assisted With" or qualifier == "Primary Points With" or qualifier == "Primary Assisted By" or qualifier == "Hit On" or qualifier == "Block On" or qualifier == "Penalty On" or qualifier == "Faceoff Against" or qualifier == "Fight Against":
                     for player in qual_obj["values"]:
@@ -16923,6 +16941,8 @@ def handle_multi_player_data(player_id, time_frames, player_type, player_page, r
             get_team_map_info(player_data, player_type, valid_teams_raw_key, comment_obj)
         if ("Game After Sub Query" in time_frame["qualifiers"] or "Game Before Sub Query" in time_frame["qualifiers"] or "Games Rest" in time_frame["qualifiers"] or "Starts Rest" in time_frame["qualifiers"] or "Days In A Row" in time_frame["qualifiers"] or "Games In A Row" in time_frame["qualifiers"] or "Starts In A Row" in time_frame["qualifiers"] or "Game Days Rest" in time_frame["qualifiers"] or "Start Days Rest" in time_frame["qualifiers"] or "Start Days In A Row" in time_frame["qualifiers"] or "Game Days In A Row" in time_frame["qualifiers"] or "Days Rest" in time_frame["qualifiers"] or "Starts Days Rest" in time_frame["qualifiers"] or "Upcoming Days Rest" in time_frame["qualifiers"] or "Upcoming Starts Days Rest" in time_frame["qualifiers"] or "Games In Days" in time_frame["qualifiers"] or "Starts In Days" in time_frame["qualifiers"]) and not "all_games" in player_data:
             get_all_games(player_data, time_frame, player_type, comment_obj)
+        if ("On Ice Against Former Teammate" in time_frame["qualifiers"] or "Shot By Former Teammate" in time_frame["qualifiers"] or "Shot On Former Teammate" in time_frame["qualifiers"]) and not "valid_teammates" in player_data:
+            get_teammate_info(player_data, player_type, comment_obj)
         row, missing_games, missing_toi = handle_player_data(player_data, time_frame, player_type, player_page, valid_teams, valid_year_teams, skip_games, extra_stats)
 
         if remove_duplicates:
@@ -17709,6 +17729,123 @@ def get_team_map_info(player_data, player_type, valid_teams, comment_obj):
         "team" : team_ranges,
         "franchise" : franc_ranges
     }
+
+def get_teammate_info(player_data, player_type, comment_obj):
+    subbb_frames = [{
+        "time_start" : datetime.date.min.year,
+        "time_end" : current_season,
+        "type" : "date",
+        "add_type" : "add", 
+        "playoffs" : "Include",
+        "qualifiers" : {
+            "Force Dates" : [{
+                "negate" : False
+            }]
+        }
+    }]
+
+    player_url = main_page_url_format.format(player_data["id"][0], player_data["id"])
+    request = urllib.request.Request(player_url, headers=request_headers)
+    try:
+        player_page = url_request(request)[1]
+    except urllib.error.HTTPError as err:
+        if err.status == 404:
+            return None, None
+        else:
+            raise
+
+    sub_player_data = handle_multi_player_data(player_data["id"], subbb_frames, player_type, player_page, False, False, False, set(), comment_obj)[0]
+
+    count_info = {
+        "current_percent" : 10,
+        "count" : 1,
+        "total_count" : len(sub_player_data["rows"]),
+        "missing_games" : False,
+        "missing_pitch" : False,
+        "exception" : None
+    }
+
+    teammate_map = {}
+    with requests.Session() as s:
+        with ThreadPoolExecutor(max_workers=5) as sub_executor:
+            for row_data in sub_player_data["rows"]:
+                if row_data["NHLGameLink"]:
+                    future = sub_executor.submit(get_teammate_data, sub_player_data, row_data, s)
+                    future.add_done_callback(functools.partial(teammate_result_callback, teammate_map, sub_player_data, row_data, count_info))
+
+    if count_info["exception"]:
+        raise count_info["exception"]
+
+    logger.info("#" + str(threading.get_ident()) + "#   " + sub_player_data["id"] + " completed teammate game data")
+    
+    player_data["valid_teammates"] = {}
+    for date in teammate_map:
+        for teammate in teammate_map[date]:
+            if teammate not in player_data["valid_teammates"]:
+                player_data["valid_teammates"][teammate] = date
+            if date < player_data["valid_teammates"][teammate]:
+                player_data["valid_teammates"][teammate] = date
+
+def get_teammate_data(player_data, row_data, s):
+    teammates = set()    
+    try:
+        sub_data = url_request_json(s, "https://statsapi.web.nhl.com/api/v1/game/" + str(row_data["NHLGameLink"]) + "/feed/live")
+    except urllib.error.HTTPError as err:
+        if err.status == 404:
+            return teammates
+        else:
+            raise
+
+    if "message" in sub_data:
+        return teammates
+    
+    team_str = "home" if row_data["Location"] else "away"
+    for player in sub_data["liveData"]["boxscore"]["teams"][team_str]["players"]:
+        player = sub_data["liveData"]["boxscore"]["teams"][team_str]["players"][player]
+        if player["person"]["id"] in sub_data["liveData"]["boxscore"]["teams"][team_str]["scratches"]:
+            continue
+        stat_str = "skaterStats" if not player["position"]["code"] == "G" else "goalieStats"
+        if stat_str not in player["stats"]:
+            continue
+        if stat_str == "goalieStats" and not start_time_to_str(player["stats"]["goalieStats"]["timeOnIce"]):
+            continue
+        teammates.add(player["person"]["id"])
+    
+    return teammates
+
+def teammate_result_callback(teammate_map, player_data, old_row_data, count_info, result):
+    try:
+        if result.exception():
+            logger.info("Error parsing date " + str(old_row_data["Date"]) + " for player " + str(player_data["id"]))
+            if not count_info["exception"]:
+                count_info["exception"] = result.exception()
+            percent_complete = 100 * (count_info["count"] / count_info["total_count"])
+            if count_info["total_count"] >= 10 and percent_complete >= count_info["current_percent"]:
+                logger.info("#" + str(threading.get_ident()) + "#   " + player_data["id"] + " teammate game data " + str(count_info["current_percent"]) + "% complete")
+                count_info["current_percent"] += 10
+            count_info["count"] += 1
+            return
+
+        teammate_map[old_row_data["Date"]] = result.result()
+
+        percent_complete = 100 * (count_info["count"] / count_info["total_count"])
+        if count_info["total_count"] >= 10 and percent_complete >= count_info["current_percent"]:
+            logger.info("#" + str(threading.get_ident()) + "#   " + player_data["id"] + " teammate game data " + str(count_info["current_percent"]) + "% complete")
+            count_info["current_percent"] += 10
+        count_info["count"] += 1
+    except Exception as err:
+        try:
+            if not count_info["exception"]:
+                count_info["exception"] = err
+            percent_complete = 100 * (count_info["count"] / count_info["total_count"])
+            if count_info["total_count"] >= 10 and percent_complete >= count_info["current_percent"]:
+                logger.info("#" + str(threading.get_ident()) + "#   " + player_data["id"] + " teammate game data " + str(count_info["current_percent"]) + "% complete")
+                count_info["current_percent"] += 10
+            count_info["count"] += 1
+        except Exception as err:
+            if not count_info["exception"]:
+                count_info["exception"] = err
+        return
 
 def get_all_games(player_data, time_frame, player_type, comment_obj):
     subbb_frames = [{
@@ -24174,6 +24311,7 @@ def setup_game_data(player_data, row_data, player_id, player_type, time_frame, e
         "player_type" : player_type,
         "player_id" : player_id,
         "id" : player_data["id"],
+        "player_data" : player_data,
         "extra_stats" : extra_stats,
         "team_skaters" : set(),
         "team_goalies" : set(),
@@ -24529,6 +24667,7 @@ def setup_href_game_data(player_data, row_data, player_id, player_type, time_fra
         "player_type" : player_type,
         "player_id" : player_id,
         "id" : player_data["id"],
+        "player_data" : player_data,
         "extra_stats" : extra_stats,
         "team_skaters" : set(),
         "team_goalies" : set(),
@@ -27458,6 +27597,51 @@ def perform_sub_game_quals(qualifiers, player_game_info, row):
         if not has_row_match:
             return False
 
+    if "On Ice Against Former Teammate" in qualifiers:
+        has_row_match = True
+        for qual_object in qualifiers["On Ice Against Former Teammate"]:
+            if not qual_object["negate"]:
+                has_match = False
+                for player in player_game_info["player_data"]["valid_teammates"]:
+                    if player in player_game_info["opp_players"]:
+                        if row["Date"] > player_game_info["player_data"]["valid_teammates"][player]:
+                            has_match = True
+    
+                if not has_match:
+                    has_row_match = False
+        if not has_row_match:
+            return False
+
+    if "Shot On Former Teammate" in qualifiers:
+        has_row_match = True
+        for qual_object in qualifiers["Shot On Former Teammate"]:
+            if not qual_object["negate"]:
+                has_match = False
+                for player in player_game_info["player_data"]["valid_teammates"]:
+                    if player in player_game_info["opp_players"]:
+                        if row["Date"] > player_game_info["player_data"]["valid_teammates"][player]:
+                            has_match = True
+    
+                if not has_match:
+                    has_row_match = False
+        if not has_row_match:
+            return False
+
+    if "Shot By Former Teammate" in qualifiers:
+        has_row_match = True
+        for qual_object in qualifiers["Shot By Former Teammate"]:
+            if not qual_object["negate"]:
+                has_match = False
+                for player in player_game_info["player_data"]["valid_teammates"]:
+                    if player in player_game_info["opp_players"]:
+                        if row["Date"] > player_game_info["player_data"]["valid_teammates"][player]:
+                            has_match = True
+    
+                if not has_match:
+                    has_row_match = False
+        if not has_row_match:
+            return False
+
     if "On Ice With Stat" in qualifiers:
         has_row_match = True
         for qual_object in qualifiers["On Ice With Stat"]:
@@ -28180,7 +28364,7 @@ def is_period_qual(qual_object):
     return True
 
 def has_shift_quals(qualifiers):
-    return "On Ice With" in qualifiers or "On Ice Against" in qualifiers or "On Line With" in qualifiers or "On Line Against" in qualifiers or "On Line Together" in qualifiers or "Strength" in qualifiers or "Even Skaters" in qualifiers or "More Skaters" in qualifiers or "Less Skaters" in qualifiers or "Team Goalie Pulled" in qualifiers or "Opponent Goalie Pulled" in qualifiers or "Team Skaters" in qualifiers or "Opponent Skaters" in qualifiers or "Team Players" in qualifiers or "Opponent Players" in qualifiers or "On Ice With Stat" in qualifiers or "Shot On Stat" in qualifiers or "Shot By Stat" in qualifiers or "On Ice Against Stat" in qualifiers or "On Ice With Stat Rank" in qualifiers or "On Ice Against Stat Rank" in qualifiers or "Shot On Stat Rank" in qualifiers or "Shot By Stat Rank" in qualifiers or "On Ice With Stat Percent" in qualifiers or "On Ice Against Stat Percent" in qualifiers or "Shot On Stat Percent" in qualifiers or "Shot By Stat Percent" in qualifiers
+    return "On Ice With" in qualifiers or "On Ice Against" in qualifiers or "On Line With" in qualifiers or "On Line Against" in qualifiers or "On Line Together" in qualifiers or "Strength" in qualifiers or "Even Skaters" in qualifiers or "More Skaters" in qualifiers or "Less Skaters" in qualifiers or "Team Goalie Pulled" in qualifiers or "Opponent Goalie Pulled" in qualifiers or "Team Skaters" in qualifiers or "Opponent Skaters" in qualifiers or "Team Players" in qualifiers or "Opponent Players" in qualifiers or "On Ice Against Former Teammate" in qualifiers or "Shot On Former Teammate" in qualifiers or "Shot By Former Teammate" in qualifiers or "On Ice With Stat" in qualifiers or "Shot On Stat" in qualifiers or "Shot By Stat" in qualifiers or "On Ice Against Stat" in qualifiers or "On Ice With Stat Rank" in qualifiers or "On Ice Against Stat Rank" in qualifiers or "Shot On Stat Rank" in qualifiers or "Shot By Stat Rank" in qualifiers or "On Ice With Stat Percent" in qualifiers or "On Ice Against Stat Percent" in qualifiers or "Shot On Stat Percent" in qualifiers or "Shot By Stat Percent" in qualifiers
 
 def has_line_quals(qualifiers):
     return "On Line With" in qualifiers or "On Line Against" in qualifiers or "On Line Together" in qualifiers
@@ -28230,6 +28414,40 @@ def perform_metadata_qual(event_name, goal_event, qualifiers, player_game_info, 
                 has_match = False
                 for player in qual_object["values"]:
                     if goal_event["scorer"] == player["nhl_id"]:
+                        has_match = True
+            
+                if qual_object["negate"]:
+                    if has_match:
+                        return False
+                else:
+                    if not has_match:
+                        return False
+
+        if "Shot On Former Teammate" in qualifiers:
+            if event_name != "goal" and event_name != "shot":
+                return False
+
+            for qual_object in qualifiers["Shot On Former Teammate"]:
+                has_match = False
+                if goal_event["goalie"] in player_game_info["player_data"]["valid_teammates"]:
+                    if row["Date"] > player_game_info["player_data"]["valid_teammates"][goal_event["goalie"]]:
+                        has_match = True
+            
+                if qual_object["negate"]:
+                    if has_match:
+                        return False
+                else:
+                    if not has_match:
+                        return False
+
+        if "Shot By Former Teammate" in qualifiers:
+            if event_name != "goal_against" and event_name != "save_against":
+                return False
+
+            for qual_object in qualifiers["Shot By Former Teammate"]:
+                has_match = False
+                if goal_event["scorer"] in player_game_info["player_data"]["valid_teammates"]:
+                    if row["Date"] > player_game_info["player_data"]["valid_teammates"][goal_event["scorer"]]:
                         has_match = True
             
                 if qual_object["negate"]:
@@ -29053,6 +29271,10 @@ def perform_metadata_qual(event_name, goal_event, qualifiers, player_game_info, 
         else:
             if not perform_sub_on_ice_qual(qualifiers["On Line Against"], player_game_info["player_shift_data"], goal_event, row, goal_event["period"], goal_event["periodTime"], False, is_faceoff, False):
                 return False
+
+    if "On Ice Against Former Teammate" in qualifiers:
+        if not perform_teammate_on_ice_qual(qualifiers["On Ice Against Former Teammate"], player_game_info, player_data, player_game_info["player_shift_data"], goal_event, row, goal_event["period"], goal_event["periodTime"], is_faceoff):
+            return False
     
     if "On Ice With Stat" in qualifiers:
         if not perform_stat_sub_on_ice_qual(qualifiers["On Ice With Stat"], player_game_info["player_shift_data"], goal_event, row, goal_event["period"], goal_event["periodTime"], True, is_faceoff, player_game_info["player_id"]):
@@ -30223,6 +30445,29 @@ def perform_sub_line_on_ice_qual(qualifers, player_shift_data, player_id, goal_e
             has_row_match = False
     else:
         has_row_match = True
+
+    return has_row_match
+
+def perform_teammate_on_ice_qual(qualifers, player_game_info, player_data, player_shift_data, goal_event, row, period, second, is_faceoff):
+    has_row_match = True
+    team_on_ice = goal_event["team_on_ice"] if "team_on_ice" in goal_event else None
+    opp_on_ice = goal_event["opp_on_ice"] if "opp_on_ice" in goal_event else None
+    for qual_object in qualifers:
+        has_match = True
+        for opponent in player_game_info["opp_players"]:
+            if opponent in player_game_info["player_data"]["valid_teammates"]:
+                if row["Date"] > player_game_info["player_data"]["valid_teammates"][opponent]:
+                    is_on_ice = is_player_on_ice(player_shift_data, team_on_ice, opp_on_ice, period, second, opponent, False, is_faceoff)
+                    if is_on_ice:
+                        has_match = True
+                        break
+
+        if qual_object["negate"]:
+            if has_match:
+                has_row_match = False
+        else:
+            if not has_match:
+                has_row_match = False
 
     return has_row_match
 
