@@ -30453,7 +30453,7 @@ def perform_teammate_on_ice_qual(qualifers, player_game_info, player_data, playe
     team_on_ice = goal_event["team_on_ice"] if "team_on_ice" in goal_event else None
     opp_on_ice = goal_event["opp_on_ice"] if "opp_on_ice" in goal_event else None
     for qual_object in qualifers:
-        has_match = True
+        has_match = False
         for opponent in player_game_info["opp_players"]:
             if opponent in player_game_info["player_data"]["valid_teammates"]:
                 if row["Date"] > player_game_info["player_data"]["valid_teammates"][opponent]:
