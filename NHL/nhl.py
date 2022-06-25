@@ -29273,7 +29273,7 @@ def perform_metadata_qual(event_name, goal_event, qualifiers, player_game_info, 
                 return False
 
     if "On Ice Against Former Teammate" in qualifiers:
-        if not perform_teammate_on_ice_qual(qualifiers["On Ice Against Former Teammate"], player_game_info, player_data, player_game_info["player_shift_data"], goal_event, row, goal_event["period"], goal_event["periodTime"], is_faceoff):
+        if not perform_teammate_on_ice_qual(qualifiers["On Ice Against Former Teammate"], player_game_info, player_game_info["player_data"], player_game_info["player_shift_data"], goal_event, row, goal_event["period"], goal_event["periodTime"], is_faceoff):
             return False
     
     if "On Ice With Stat" in qualifiers:
