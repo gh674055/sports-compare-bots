@@ -5313,6 +5313,8 @@ qualifier_map = {
     "Season Reversed" : {},
     "Season Index" : {},
     "Season Index Reversed" : {},
+    "Playoff Season Index" : {},
+    "Playoff Season Index Reversed" : {},
     "Season Game" : {},
     "Career Game" : {},
     "Team Game" : {},
