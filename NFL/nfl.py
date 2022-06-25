@@ -5183,9 +5183,9 @@ def handle_player_string(comment, player_type, is_fantasy, last_updated, hide_ta
                                 }
 
                                 while True:
-                                    m = re.search(r"no(?:t|n)?(?: |-)(.+)(?=no(?:t|n)?(?: |-)(?:.+))", time_frame)
+                                    m = re.search(r"no(?:t|n)?(?: |-)(\S+)(?=no(?:t|n)?(?: |-)(?:\S+))", time_frame)
                                     if not m:
-                                        m = re.search(r"no(?:t|n)?(?: |-)(.+)", time_frame)
+                                        m = re.search(r"no(?:t|n)?(?: |-)(\S+)", time_frame)
                                     if not m:
                                         break
 
