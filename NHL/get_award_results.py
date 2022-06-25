@@ -29,7 +29,7 @@ request_headers = {
 }
 
 def main():
-    for season in range(1924, 2021):
+    for season in range(1924, 2022):
         if season != 2004:
             print(season)
             award_results[season] = {}

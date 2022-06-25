@@ -529,7 +529,7 @@
             "harvedo01": 153.0,
             "pronoma01": 7.0,
             "stewaro01": 13.0,
-            "vote_denom": 780.0
+            "vote_denom": 309.0
         },
         "Selke": {},
         "Vezina": {}
@@ -550,7 +550,7 @@
             "harvedo01": 48.0,
             "johnsto01": 92.0,
             "pronoma01": 58.0,
-            "vote_denom": 770.0
+            "vote_denom": 299.0
         },
         "Selke": {},
         "Vezina": {}
@@ -571,7 +571,7 @@
             "pilotpi01": 33.0,
             "pronoma01": 39.0,
             "stanlal01": 42.0,
-            "vote_denom": 620.0
+            "vote_denom": 275.0
         },
         "Selke": {},
         "Vezina": {}
@@ -592,7 +592,7 @@
             "pilotpi01": 24.0,
             "pronoma01": 52.0,
             "stanlal01": 27.0,
-            "vote_denom": 695.0
+            "vote_denom": 280.0
         },
         "Selke": {},
         "Vezina": {}
@@ -616,7 +616,7 @@
             "harvedo01": 102.0,
             "pilotpi01": 47.0,
             "talboje01": 46.0,
-            "vote_denom": 550.0
+            "vote_denom": 236.0
         },
         "Selke": {},
         "Vezina": {}
@@ -637,7 +637,7 @@
             "hortoti01": 37.0,
             "pilotpi01": 98.0,
             "vaskomo01": 28.0,
-            "vote_denom": 650.0
+            "vote_denom": 269.0
         },
         "Selke": {},
         "Vezina": {}
@@ -665,7 +665,7 @@
             "laperja01": 25.0,
             "pilotpi01": 138.0,
             "vaskomo01": 28.0,
-            "vote_denom": 720.0
+            "vote_denom": 287.0
         },
         "Selke": {},
         "Vezina": {}
@@ -693,7 +693,7 @@
             "pronoma01": 20.0,
             "trembjc01": 1.0,
             "vaskomo01": 1.0,
-            "vote_denom": 810.0
+            "vote_denom": 324.0
         },
         "Selke": {},
         "Vezina": {}
@@ -714,7 +714,7 @@
             "pilotpi01": 54.0,
             "staplpa01": 40.0,
             "trembjc01": 32.0,
-            "vote_denom": 670.0
+            "vote_denom": 245.0
         },
         "Selke": {},
         "Vezina": {}
@@ -748,7 +748,7 @@
             "orrbo01": 36.0,
             "pilotpi01": 95.0,
             "trembjc01": 18.0,
-            "vote_denom": 810.0
+            "vote_denom": 324.0
         },
         "Selke": {},
         "Vezina": {}
@@ -769,7 +769,7 @@
             "neilsji01": 26.0,
             "orrbo01": 68.0,
             "trembjc01": 31.0,
-            "vote_denom": 430.0
+            "vote_denom": 170.0
         },
         "Selke": {},
         "Vezina": {}
@@ -7989,6 +7989,168 @@
             "varlasi01": 11.0,
             "vasilan02": 99.0,
             "vote_denom": 155.0
+        }
+    },
+    "2021": {
+        "AllStar": {
+            "anderfr01": 185.0,
+            "barkoal01": 19.0,
+            "bergepa01": 5.0,
+            "bobrose01": 4.0,
+            "burnsbr01": 1.0,
+            "carlsjo01": 65.0,
+            "chaboth01": 1.0,
+            "connoky01": 5.0,
+            "crosbsi01": 4.0,
+            "demkoth01": 6.0,
+            "draisle01": 130.0,
+            "duchema01": 15.0,
+            "ekblaaa01": 96.0,
+            "faulkju01": 3.0,
+            "forsbfi01": 1.0,
+            "foxad01": 276.0,
+            "gaudrjo01": 779.0,
+            "hedmavi01": 599.0,
+            "heiskmi01": 8.0,
+            "huberjo01": 584.0,
+            "hughequ01": 20.0,
+            "hussovi01": 4.0,
+            "jarrytr01": 1.0,
+            "josiro01": 920.0,
+            "kanepa01": 48.0,
+            "kapriki01": 297.0,
+            "kreidch01": 17.0,
+            "kucheni01": 14.0,
+            "kuempda01": 9.0,
+            "letankr01": 89.0,
+            "lindhel01": 1.0,
+            "mackina01": 1.0,
+            "makarca01": 950.0,
+            "marksja02": 315.0,
+            "marnemi01": 697.0,
+            "matthau01": 805.0,
+            "mcavoch01": 286.0,
+            "mcdavco01": 709.0,
+            "mcdonry01": 1.0,
+            "meierti01": 2.0,
+            "millejt01": 5.0,
+            "ovechal01": 27.0,
+            "panarar01": 6.0,
+            "pastrda01": 37.0,
+            "paveljo01": 4.0,
+            "pietral01": 1.0,
+            "quickjo01": 1.0,
+            "rantami01": 341.0,
+            "rasktu01": 1.0,
+            "riellmo01": 14.0,
+            "roberja01": 11.0,
+            "sarosju01": 107.0,
+            "seidemo01": 1.0,
+            "shestig01": 952.0,
+            "slavija01": 53.0,
+            "sorokil01": 72.0,
+            "spurgja01": 1.0,
+            "stamkst01": 42.0,
+            "tanevch01": 1.0,
+            "tarasvl01": 25.0,
+            "tkachma01": 543.0,
+            "toewsde01": 65.0,
+            "vasilan02": 71.0,
+            "vote_denom": 5760.0,
+            "weegama01": 5.0,
+            "zuccama01": 1.0
+        },
+        "Hart": {
+            "barkoal01": 4.0,
+            "draisle01": 28.0,
+            "gaudrjo01": 617.0,
+            "huberjo01": 506.0,
+            "josiro01": 241.0,
+            "kapriki01": 126.0,
+            "makarca01": 48.0,
+            "matthau01": 1630.0,
+            "mcdavco01": 1111.0,
+            "millejt01": 1.0,
+            "ovechal01": 10.0,
+            "roberja01": 3.0,
+            "shestig01": 738.0,
+            "stamkst01": 6.0,
+            "tkachma01": 1.0,
+            "vote_denom": 1950.0
+        },
+        "Norris": {
+            "carlsjo01": 28.0,
+            "ekblaaa01": 74.0,
+            "faulkju01": 1.0,
+            "foxad01": 248.0,
+            "hedmavi01": 940.0,
+            "heiskmi01": 9.0,
+            "hughequ01": 9.0,
+            "josiro01": 1606.0,
+            "letankr01": 73.0,
+            "makarca01": 1631.0,
+            "mcavoch01": 358.0,
+            "pietral01": 1.0,
+            "riellmo01": 10.0,
+            "slavija01": 38.0,
+            "spurgja01": 1.0,
+            "tanevch01": 1.0,
+            "toewsde01": 38.0,
+            "vote_denom": 1950.0,
+            "weegama01": 4.0
+        },
+        "Selke": {
+            "ahose01": 32.0,
+            "asplura01": 11.0,
+            "backlmi01": 45.0,
+            "barkoal01": 736.0,
+            "bergepa01": 1808.0,
+            "cirelan01": 385.0,
+            "coppan01": 5.0,
+            "crosbsi01": 1.0,
+            "danauph01": 78.0,
+            "eriksjo02": 113.0,
+            "fastje01": 13.0,
+            "foligma01": 77.0,
+            "gaudrjo01": 3.0,
+            "hintzro01": 10.0,
+            "horvabo01": 1.0,
+            "kadrina01": 3.0,
+            "kampfda01": 3.0,
+            "kopitan01": 163.0,
+            "lindhel01": 878.0,
+            "lundean01": 1.0,
+            "marchbr03": 53.0,
+            "marchma01": 13.0,
+            "marnemi01": 24.0,
+            "matthau01": 70.0,
+            "millejt01": 6.0,
+            "nichuva01": 11.0,
+            "oreilry01": 415.0,
+            "pageaje01": 1.0,
+            "paveljo01": 6.0,
+            "puljuje01": 3.0,
+            "rafflmi01": 3.0,
+            "reinhsa01": 3.0,
+            "rodriev01": 1.0,
+            "sissoco01": 4.0,
+            "staaljo01": 58.0,
+            "tkachma01": 3.0,
+            "trochvi01": 5.0,
+            "vote_denom": 1950.0,
+            "zibanmi01": 25.0
+        },
+        "Vezina": {
+            "anderfr01": 21.0,
+            "demkoth01": 1.0,
+            "hussovi01": 1.0,
+            "jarrytr01": 1.0,
+            "marksja02": 53.0,
+            "sarosju01": 32.0,
+            "shestig01": 154.0,
+            "sorokil01": 11.0,
+            "vasilan02": 14.0,
+            "vote_denom": 160.0
         }
     }
 }
