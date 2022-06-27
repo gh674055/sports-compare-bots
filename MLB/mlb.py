@@ -12736,13 +12736,13 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
 
                             while True:
                                 unit = None
-                                last_match = re.search(r"\b(first|1st|last|this|past)? ?(\S*)? ?((?:(?:calendar|date)(?: |-))?days?|(?:(?:calendar|date)(?: |-))?weeks?|(?:(?:calendar|date)(?: |-))?months?|(?:(?:calendar|date)(?: |-))?years?|seasons?)\b", time_frame)
+                                last_match = re.search(r"\b(first|1st|last|this|past)? ?(\S*(?<!to)(?<!yester))? ?((?:(?:calendar|date)(?: |-))?days?|(?:(?:calendar|date)(?: |-))?weeks?|(?:(?:calendar|date)(?: |-))?months?|(?:(?:calendar|date)(?: |-))?years?|seasons?)\b", time_frame)
                                 if not last_match:
-                                    last_match = re.search(r"\b(first|1st|last|this|past) ?(\S*)\b", time_frame)
+                                    last_match = re.search(r"\b(first|1st|last|this|past) ?(\S*(?<!to)(?<!yester))\b", time_frame)
                                     unit = "season"
-                                    if last_match and not last_match.group(2).endswith("to") and not last_match.group(2).endswith("yester") and playoffs_set:
+                                    if last_match and playoffs_set:
                                         time_frame_type = "special-qual"
-                                if last_match and not last_match.group(2).endswith("to") and not last_match.group(2).endswith("yester"):
+                                if last_match:
                                     compare_type = last_match.group(1)
                                     if not compare_type or not compare_type.strip():
                                         if unit == "season" or (last_match.group(3) and (last_match.group(3).startswith("season") or last_match.group(3).startswith("year"))):
