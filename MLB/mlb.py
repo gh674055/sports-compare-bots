@@ -16906,7 +16906,7 @@ def handle_player_data(player_data, time_frame, player_type, player_page, valid_
             get_mlb_game_links_schedule_links(player_data, player_type, player_link, all_rows, time_frame["qualifiers"], s)
         elif ("Event Stat" in time_frame["qualifiers"] or "Event Stat Reversed" in time_frame["qualifiers"] or "Event Stats" in time_frame["qualifiers"] or "Event Stats Reversed" in time_frame["qualifiers"] or "Starting Event Stat" in time_frame["qualifiers"] or "Starting Event Stat Reversed" in time_frame["qualifiers"] or "Starting Event Stats" in time_frame["qualifiers"] or "Starting Event Stats Reversed" in time_frame["qualifiers"]):
             get_mlb_game_links_schedule_links(player_data, player_type, player_link, all_rows, time_frame["qualifiers"], s)
-        elif has_result_stat_qual or "Game Number" in time_frame["qualifiers"] or "Run Support" in time_frame["qualifiers"] or "current-stats" in extra_stats or "run-support-record" in extra_stats or "run-support" in extra_stats or "advanced-runner" in extra_stats or "exit-record" in extra_stats or "mlb-link" in extra_stats:
+        elif has_result_stat_qual or needs_reg_season_round_stats or "Game Number" in time_frame["qualifiers"] or "Run Support" in time_frame["qualifiers"] or "current-stats" in extra_stats or "run-support-record" in extra_stats or "run-support" in extra_stats or "advanced-runner" in extra_stats or "exit-record" in extra_stats or "mlb-link" in extra_stats:
             get_mlb_game_links_schedule_links(player_data, player_type, player_link, all_rows, time_frame["qualifiers"], s)
 
         if needs_start_time:
@@ -27349,7 +27349,7 @@ def perform_schedule_qualifiers(row, qualifiers):
 
 def perform_round_qualifiers(row, qualifiers):
     if "Series Game" in qualifiers:
-        if not row["is_playoffs"] and not "RoundGame" in row:
+        if not "RoundGame" in row:
             return False
 
         for qual_object in qualifiers["Series Game"]:
@@ -27361,7 +27361,7 @@ def perform_round_qualifiers(row, qualifiers):
                     return False
 
     if "Series Team Wins" in qualifiers:
-        if not row["is_playoffs"] and not "RoundGame" in row:
+        if not "RoundGame" in row:
             return False
 
         for qual_object in qualifiers["Series Team Wins"]:
@@ -27373,7 +27373,7 @@ def perform_round_qualifiers(row, qualifiers):
                     return False
 
     if "Series Opponent Wins" in qualifiers:
-        if not row["is_playoffs"] and not "RoundGame" in row:
+        if not "RoundGame" in row:
             return False
 
         for qual_object in qualifiers["Series Opponent Wins"]:
@@ -27385,7 +27385,7 @@ def perform_round_qualifiers(row, qualifiers):
                     return False
     
     if "Series Score Margin" in qualifiers:
-        if not row["is_playoffs"] and not "RoundGame" in row:
+        if not "RoundGame" in row:
             return False
 
         for qual_object in qualifiers["Series Score Margin"]:
@@ -27397,7 +27397,7 @@ def perform_round_qualifiers(row, qualifiers):
                     return False
     
     if "Series Score Difference" in qualifiers:
-        if not row["is_playoffs"] and not "RoundGame" in row:
+        if not "RoundGame" in row:
             return False
 
         for qual_object in qualifiers["Series Score Difference"]:
@@ -27409,7 +27409,7 @@ def perform_round_qualifiers(row, qualifiers):
                     return False
 
     if "Elimination" in qualifiers:
-        if not row["is_playoffs"] and not "RoundGame" in row:
+        if not "RoundGame" in row:
             return False
 
         for qual_object in qualifiers["Elimination"]:
@@ -27421,7 +27421,7 @@ def perform_round_qualifiers(row, qualifiers):
                     return False
 
     if "Clinching" in qualifiers:
-        if not row["is_playoffs"] and not "RoundGame" in row:
+        if not "RoundGame" in row:
             return False
 
         for qual_object in qualifiers["Clinching"]:
@@ -27433,7 +27433,7 @@ def perform_round_qualifiers(row, qualifiers):
                     return False
     
     if "Elimination Or Clinching" in qualifiers:
-        if not row["is_playoffs"] and not "RoundGame" in row:
+        if not "RoundGame" in row:
             return False
 
         for qual_object in qualifiers["Elimination Or Clinching"]:
@@ -27445,7 +27445,7 @@ def perform_round_qualifiers(row, qualifiers):
                     return False
     
     if "Winner Take All" in qualifiers:
-        if not row["is_playoffs"] and not "RoundGame" in row:
+        if not "RoundGame" in row:
             return False
 
         for qual_object in qualifiers["Winner Take All"]:
@@ -27457,7 +27457,7 @@ def perform_round_qualifiers(row, qualifiers):
                     return False
     
     if "Ahead In Series" in qualifiers:
-        if not row["is_playoffs"] and not "RoundGame" in row:
+        if not "RoundGame" in row:
             return False
 
         for qual_object in qualifiers["Ahead In Series"]:
@@ -27469,7 +27469,7 @@ def perform_round_qualifiers(row, qualifiers):
                     return False
     
     if "Behind In Series" in qualifiers:
-        if not row["is_playoffs"] and not "RoundGame" in row:
+        if not "RoundGame" in row:
             return False
 
         for qual_object in qualifiers["Behind In Series"]:
@@ -27481,7 +27481,7 @@ def perform_round_qualifiers(row, qualifiers):
                     return False
     
     if "Even In Series" in qualifiers:
-        if not row["is_playoffs"] and not "RoundGame" in row:
+        if not "RoundGame" in row:
             return False
 
         for qual_object in qualifiers["Even In Series"]:
