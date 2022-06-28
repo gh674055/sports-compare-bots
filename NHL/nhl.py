@@ -31973,9 +31973,6 @@ def perform_qualifier(player_data, player_type, row, time_frame, all_rows):
                     return False
 
     if "First Half" in qualifiers:
-        if row["TmGm"] == None:
-            return False
-
         for qual_object in qualifiers["First Half"]:
             year = row["Year"]
             if str(year) in all_star_games:
@@ -31988,6 +31985,9 @@ def perform_qualifier(player_data, player_type, row, time_frame, all_rows):
                     if row["Date"] >= all_star_date.date():
                         return False
             else:
+                if row["TmGm"] == None:
+                    return False
+
                 is_first_half = row["TmGm"] / player_data["team_games_map"][row["Year"]][row["Tm"]] <= 0.5
                 if qual_object["negate"]:
                     if is_first_half:
@@ -31997,9 +31997,6 @@ def perform_qualifier(player_data, player_type, row, time_frame, all_rows):
                         return False
 
     if "Second Half" in qualifiers:
-        if row["TmGm"] == None:
-            return False
-
         for qual_object in qualifiers["Second Half"]:
             year = row["Year"]
             if str(year) in all_star_games:
@@ -32012,6 +32009,9 @@ def perform_qualifier(player_data, player_type, row, time_frame, all_rows):
                     if row["Date"] < all_star_date.date():
                         return False
             else:
+                if row["TmGm"] == None:
+                    return False
+
                 is_second_half = row["TmGm"] / player_data["team_games_map"][row["Year"]][row["Tm"]] > 0.5
                 if qual_object["negate"]:
                     if is_second_half:
