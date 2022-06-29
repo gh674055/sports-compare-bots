@@ -89,7 +89,8 @@ subreddits_to_crawl = [
     "predators",
     "edmontonoilers",
     "hawks",
-    "habs"
+    "habs",
+    "tampabaylightning"
 ]
 
 approved_subreddits = [
