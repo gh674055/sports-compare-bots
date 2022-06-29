@@ -8283,12 +8283,12 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 })
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
 
-                        if is_sub_query:
-                            has_hide_advanced = "hide-advanced" in extra_stats
-                            extra_stats = set()
-                            sort_vals = []
-                            if has_hide_advanced:
-                                extra_stats.add("hide-advanced")
+                        # if is_sub_query:
+                        #     has_hide_advanced = "hide-advanced" in extra_stats
+                        #     extra_stats = set()
+                        #     sort_vals = []
+                        #     if has_hide_advanced:
+                        #         extra_stats.add("hide-advanced")
 
                         playoffs_set = False
                         last_match = re.search(r"\b(no(?:t|n)?(?: -)?)?(?:(?<!-)includes?|(?<!-)including|(?<!-)and|(?<!-)with)(?: |-)?(?:playoffs?|post(?:-| )?seasons?|regular(?:-| )?seasons?)(?!-)\b", time_frame)

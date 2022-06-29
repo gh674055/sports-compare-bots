@@ -1925,12 +1925,12 @@ def handle_player_string(comment, player_type, is_fantasy, last_updated, hide_ta
                                 })
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
 
-                        if is_sub_query:
-                            has_hide_advanced = "hide-advanced" in extra_stats
-                            extra_stats = set()
-                            sort_vals = []
-                            if has_hide_advanced:
-                                extra_stats.add("hide-advanced")
+                        # if is_sub_query:
+                        #     has_hide_advanced = "hide-advanced" in extra_stats
+                        #     extra_stats = set()
+                        #     sort_vals = []
+                        #     if has_hide_advanced:
+                        #         extra_stats.add("hide-advanced")
                         
                         last_match = re.search(r"\b(no(?:t|n)? ?)?-?fantasy(?!-)\b", time_frame)
                         if last_match:
