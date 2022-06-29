@@ -14849,7 +14849,7 @@ def determine_player_str(qualifier, player_str, time_frame, qual_str):
     bracket_index = re.search(r"(?<!\\)]", player_str).start()
     if "Event Sub Query" in qual_str:
         player_str = player_str[:bracket_index] + " show-advanced" + player_str[bracket_index:]
-    else:
+    elif not "Sub Query" in qual_str:
         player_str = player_str[:bracket_index] + " hide-advanced" + player_str[bracket_index:]
     
     if "Ignore Start" not in time_frame["qualifiers"]:
