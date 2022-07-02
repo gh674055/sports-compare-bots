@@ -54,6 +54,11 @@
                 "date": "2017-06-18",
                 "is_playoffs": false,
                 "team": "COL"
+            },
+            {
+                "date": "2022-07-01",
+                "is_playoffs": false,
+                "team": "STL"
             }
         ],
         "averiea01": [
