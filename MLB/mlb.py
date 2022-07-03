@@ -17883,7 +17883,10 @@ def get_live_game(player_link, player_data, player_type, time_frame, do_live, s)
     if "currentTeam" not in sub_data["people"][0]:
         return
 
-    current_team = sub_data["people"][0]["currentTeam"]["id"]
+    if "parentOrgId" in sub_data["people"][0]["currentTeam"]:
+        current_team = sub_data["people"][0]["currentTeam"]["parentOrgId"]
+    else:
+        current_team = sub_data["people"][0]["currentTeam"]["id"]
 
     da_dates = []
     # for month_int in range(1, (datetime.datetime.now().month + 1)):
