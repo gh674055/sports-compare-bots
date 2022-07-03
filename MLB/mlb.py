@@ -40172,6 +40172,9 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
             run_event = None
 
             for runner_index, runner in enumerate(scoring_play["runners"]):
+                if runner["details"]["runner"]["id"] == batter:
+                    runner_index = len(scoring_play["runners"]) - 1
+
                 sub_play_index = runner["details"]["playIndex"]
                 sub_play = scoring_play["playEvents"][sub_play_index]
 
@@ -40603,30 +40606,31 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
                 sub_current_away_score = sub_away_score
                 sub_play_outs = sub_outs
                 for sub_runner_index, sub_runner in enumerate(scoring_play["runners"]):
-                    sub_runner_index = len(scoring_play["runners"]) - sub_runner_index - 1
+                    if sub_runner["details"]["runner"]["id"] == batter:
+                        sub_runner_index = len(scoring_play["runners"]) - 1
                     if sub_runner["details"]["playIndex"] == sub_play_index:
                         if sub_runner["movement"]["isOut"]:
                             if sub_runner_index > runner_index:
                                 sub_play_outs += 1
                         elif sub_runner["details"]["isScoringEvent"]:
                             if is_team_batting:
-                                if sub_runner_index >= runner_index:
+                                if sub_runner_index <= runner_index:
                                     if is_home_team:
                                         sub_current_home_score += 1
                                     else:
                                         sub_current_away_score += 1
-                                    if sub_runner_index > runner_index:
+                                    if sub_runner_index < runner_index:
                                         if is_home_team:
                                             sub_play_home_score += 1
                                         else:
                                             sub_play_away_score += 1
                             else:
-                                if sub_runner_index >= runner_index:
+                                if sub_runner_index <= runner_index:
                                     if is_home_team:
                                         sub_current_away_score += 1
                                     else:
                                         sub_current_home_score += 1
-                                    if sub_runner_index > runner_index:
+                                    if sub_runner_index < runner_index:
                                         if is_home_team:
                                             sub_play_away_score += 1
                                         else:
