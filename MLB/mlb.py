@@ -8971,6 +8971,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                             elif qualifier_str == "inherited":
                                 qual_type = "Inherited"
                                 extra_stats.add("current-stats")
+                                extra_stats.add("show-only-stat-ip")
                                 extra_stats.add("show-only-stat-er")
                                 extra_stats.add("show-only-stat-r")
                                 extra_stats.add("show-only-stat-era")
