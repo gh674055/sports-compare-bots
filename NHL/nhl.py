@@ -34034,7 +34034,8 @@ def handle_min_max_final(stat_val, current_explain_strs, player_data, player_typ
                         elif valid_matching_rows(matching_rows, stat_quals, player_data, player_type):
                             has_match = True
 
-                    dates_covered = [current_start_date + datetime.timedelta(x) for x in range(date_diff.days)]
+                    time_date_diff = (current_start_date + date_diff) - current_start_date
+                    dates_covered = [current_start_date + datetime.timedelta(x) for x in range(time_date_diff.days + 1)]
                     if not total_matching_dates.intersection(dates_covered):   
                         if has_match:
                             if not stat_val["negate"]:
