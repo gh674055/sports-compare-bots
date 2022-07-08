@@ -33888,15 +33888,16 @@ def handle_da_mlb_quals(row, event_name, at_bat_event, qualifiers, player_data, 
             return False
     
     if "Inherited" in qualifiers:
-        if event_name != "pitching_run_events":
-            return False
+        is_inherited = False
+        if event_name == "pitching_run_events" and at_bat_event["is_inherited"]:
+            is_inherited = True
 
         for qual_object in qualifiers["Inherited"]:
             if qual_object["negate"]:
-                if at_bat_event["is_inherited"]:
+                if is_inherited:
                     return False
             else:
-                if not at_bat_event["is_inherited"]:
+                if not is_inherited:
                     return False
 
     if "Earned" in qualifiers:
