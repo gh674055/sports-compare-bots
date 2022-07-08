@@ -4614,9 +4614,17 @@ def handle_player_string(comment, player_type, is_fantasy, last_updated, hide_ta
                                     stat_quals = []
                                     for value in values:
                                         sub_split_vals = re.split(r"(?<!\\)\=", value)
-                                        sub_stat = unescape_string(sub_split_vals[0])
-                                        sub_split_vals = re.split(r"(?<!\\)(?<!^)\-", sub_split_vals[1], 1)
+                                        sub_stat = sub_split_vals[0]
+
+                                        sub_sub_split_vals = re.split(r"(?<!\\)\>", sub_stat)
+                                        if len(sub_sub_split_vals) == 1:
+                                            over_stat = None
+                                            sub_stat = unescape_string(sub_sub_split_vals[0])
+                                        else:
+                                            over_stat = sub_sub_split_vals[0]
+                                            sub_stat = unescape_string(sub_sub_split_vals[1])
                                         
+                                        sub_split_vals = re.split(r"(?<!\\)(?<!^)\-", sub_split_vals[1], 1)
                                         if len(sub_split_vals) == 1:
                                             start_val = ordinal_to_number(sub_split_vals[0])
                                             if start_val > 0:
@@ -4628,12 +4636,14 @@ def handle_player_string(comment, player_type, is_fantasy, last_updated, hide_ta
                                                 end_val = start_val
                                             stat_quals.append({
                                                 "stat" : sub_stat,
+                                                "over_stat" : over_stat,
                                                 "start_val" : start_val,
                                                 "end_val" : end_val
                                             })
                                         else:
                                             stat_quals.append({
                                                 "stat" : sub_stat,
+                                                "over_stat" : over_stat,
                                                 "start_val" : ordinal_to_number(sub_split_vals[0]),
                                                 "end_val" : ordinal_to_number(sub_split_vals[1])
                                             })
