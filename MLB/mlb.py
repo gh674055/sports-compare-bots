@@ -23223,9 +23223,6 @@ def handle_min_max_final(stat_val, current_explain_strs, player_data, player_typ
     if not stat:
         stat = "datestart"
         match_all = True
-
-    if not match_all:
-        stat_val["stat_obj"]["explain_str"] += stat.upper() + ":" + ",".join(transformed_vals)
     
     format_str = "b" if player_type["da_type"] == "Batter" else "p"
 
@@ -23289,8 +23286,7 @@ def handle_min_max_final(stat_val, current_explain_strs, player_data, player_typ
                                     range_str += str(current_start_date)
                                 else:
                                     range_str += "[" + str(current_start_date) + " - " +  str(current_start_date + date_diff - datetime.timedelta(days=1)) + "]"
-                                if stat_quals:
-                                    range_str += " (" + get_matching_row_val(matching_rows, stat_quals, player_type, player_data) + ")"
+                                range_str += " (" + get_matching_row_val(match_all, stat, matching_rows, stat_quals, player_type, player_data) + ")"
                         elif stat_val["negate"]:
                             match_count += 1
                             total_matching_rows.extend(matching_rows)
@@ -23303,8 +23299,7 @@ def handle_min_max_final(stat_val, current_explain_strs, player_data, player_typ
                                 range_str += "[" + str(current_start_date) + "]"
                             else:
                                 range_str += "[" + str(current_start_date) + " - " +  str(current_start_date + date_diff - datetime.timedelta(days=1)) + "]"
-                            if stat_quals:
-                                range_str += " (" + get_matching_row_val(matching_rows, stat_quals, player_type, player_data) + ")"
+                            range_str += " (" + get_matching_row_val(match_all, stat, matching_rows, stat_quals, player_type, player_data) + ")"
             
             if qual_num >= qual_num_end:
                 break
@@ -23353,8 +23348,7 @@ def handle_min_max_final(stat_val, current_explain_strs, player_data, player_typ
                                     range_str += str(date)
                                 else:
                                     range_str += "[" + str(date.date()) + " - " + str(real_end_date.date()) + "]"
-                                if stat_quals:
-                                    range_str += " (" + get_matching_row_val(matching_rows, stat_quals, player_type, player_data) + ")"
+                                range_str += " (" + get_matching_row_val(match_all, stat, matching_rows, stat_quals, player_type, player_data) + ")"
                         elif stat_val["negate"]:
                             match_count += 1
                             total_matching_rows.extend(matching_rows)
@@ -23365,8 +23359,7 @@ def handle_min_max_final(stat_val, current_explain_strs, player_data, player_typ
                                 range_str += str(date)
                             else:
                                 range_str += "[" + str(date.date()) + " - " + str(real_end_date.date()) + "]"
-                                if stat_quals:
-                                    range_str += " (" + get_matching_row_val(matching_rows, stat_quals, player_type, player_data) + ")"
+                                range_str += " (" + get_matching_row_val(match_all, stat, matching_rows, stat_quals, player_type, player_data) + ")"
         elif qual_type == "Calendar-Months":
             start_date = datetime.datetime(start_date.year, start_date.month, 1)
             end_date = datetime.datetime(end_date.year, end_date.month, calendar.monthrange(end_date.year, end_date.month)[1])
@@ -23397,8 +23390,7 @@ def handle_min_max_final(stat_val, current_explain_strs, player_data, player_typ
                                 if range_str:
                                     range_str += " + "
                                 range_str += "[" + calendar.month_name[date.month] + " " + str(date.year)  + "]"
-                                if stat_quals:
-                                    range_str += " (" + get_matching_row_val(matching_rows, stat_quals, player_type, player_data) + ")"
+                                range_str += " (" + get_matching_row_val(match_all, stat, matching_rows, stat_quals, player_type, player_data) + ")"
                         elif stat_val["negate"]:
                             match_count += 1
                             total_matching_rows.extend(matching_rows)
@@ -23406,8 +23398,7 @@ def handle_min_max_final(stat_val, current_explain_strs, player_data, player_typ
                             if range_str:
                                 range_str += " + "
                             range_str += "[" + calendar.month_name[date.month] + " " + str(date.year)  + "]"
-                            if stat_quals:
-                                range_str += " (" + get_matching_row_val(matching_rows, stat_quals, player_type, player_data) + ")"
+                            range_str += " (" + get_matching_row_val(match_all, stat, matching_rows, stat_quals, player_type, player_data) + ")"
         elif qual_type == "Calendar-Years":
             start_date = datetime.datetime(start_date.year, 1, 1)
             end_date = datetime.datetime(end_date.year, 12, calendar.monthrange(end_date.year, 12)[1])
@@ -23438,8 +23429,7 @@ def handle_min_max_final(stat_val, current_explain_strs, player_data, player_typ
                                 if range_str:
                                     range_str += " + "
                                 range_str += str(date.year)
-                                if stat_quals:
-                                    range_str += " (" + get_matching_row_val(matching_rows, stat_quals, player_type, player_data) + ")"
+                                range_str += " (" + get_matching_row_val(match_all, stat, matching_rows, stat_quals, player_type, player_data) + ")"
                         elif stat_val["negate"]:
                             match_count += 1
                             total_matching_rows.extend(matching_rows)
@@ -23447,8 +23437,7 @@ def handle_min_max_final(stat_val, current_explain_strs, player_data, player_typ
                             if range_str:
                                 range_str += " + "
                             range_str += str(date.year)
-                            if stat_quals:
-                                range_str += " (" + get_matching_row_val(matching_rows, stat_quals, player_type, player_data) + ")"
+                            range_str += " (" + get_matching_row_val(match_all, stat, matching_rows, stat_quals, player_type, player_data) + ")"
     elif qual_type == "Games":
         qual_num = qual_num_start
         while (True):
@@ -23519,8 +23508,7 @@ def handle_min_max_final(stat_val, current_explain_strs, player_data, player_typ
                                         range_str += str(start_date)
                                     else:
                                         range_str += "[" + str(start_date)  + " - " + str(end_date) + "]"
-                                    if stat_quals:
-                                        range_str += " (" + get_matching_row_val(matching_rows, stat_quals, player_type, player_data) + ")"
+                                        range_str += " (" + get_matching_row_val(match_all, stat, matching_rows, stat_quals, player_type, player_data) + ")"
                         elif stat_val["negate"]:
                             dates = [matching_row["DateTime"] for matching_row in matching_rows]
                             start_date = min(dates)
@@ -23563,8 +23551,7 @@ def handle_min_max_final(stat_val, current_explain_strs, player_data, player_typ
                                     range_str += str(start_date)
                                 else:
                                     range_str += "[" + str(start_date)  + " - " + str(end_date) + "]"
-                                if stat_quals:
-                                    range_str += " (" + get_matching_row_val(matching_rows, stat_quals, player_type, player_data) + ")"
+                                range_str += " (" + get_matching_row_val(match_all, stat, matching_rows, stat_quals, player_type, player_data) + ")"
             
             if qual_num >= qual_num_end:
                 break
@@ -23624,8 +23611,7 @@ def handle_min_max_final(stat_val, current_explain_strs, player_data, player_typ
                                     range_str += str(start_date)
                                 else:
                                     range_str += "[" + str(start_date) + " to " + str(end_date) + "]"
-                                if stat_quals:
-                                    range_str += " (" + get_matching_row_val(matching_rows, stat_quals, player_type, player_data) + ")"
+                                range_str += " (" + get_matching_row_val(match_all, stat, matching_rows, stat_quals, player_type, player_data) + ")"
                         elif stat_val["negate"]:
                             match_count += 1
                             total_matching_rows.extend(matching_rows)
@@ -23648,8 +23634,7 @@ def handle_min_max_final(stat_val, current_explain_strs, player_data, player_typ
                                 range_str += str(start_date)
                             else:
                                 range_str += "[" + str(start_date) + " to " + str(end_date) + "]"
-                            if stat_quals:
-                                range_str += " (" + get_matching_row_val(matching_rows, stat_quals, player_type, player_data) + ")"
+                            range_str += " (" + get_matching_row_val(match_all, stat, matching_rows, stat_quals, player_type, player_data) + ")"
             
             if qual_num >= qual_num_end:
                 break
@@ -23686,16 +23671,14 @@ def handle_min_max_final(stat_val, current_explain_strs, player_data, player_typ
                                 if range_str:
                                     range_str += " + "
                                 range_str += team.upper()
-                                if stat_quals:
-                                    range_str += " (" + get_matching_row_val(matching_rows, stat_quals, player_type, player_data) + ")"
+                                range_str += " (" + get_matching_row_val(match_all, stat, matching_rows, stat_quals, player_type, player_data) + ")"
                         elif stat_val["negate"]:
                             match_count += 1
                             total_matching_rows.extend(matching_rows)
                             if range_str:
                                 range_str += " + "
                             range_str += team.upper()
-                            if stat_quals:
-                                range_str += " (" + get_matching_row_val(matching_rows, stat_quals, player_type, player_data) + ")"
+                            range_str += " (" + get_matching_row_val(match_all, stat, matching_rows, stat_quals, player_type, player_data) + ")"
         else:
             teams = set([row[row_stat] for row in all_rows])
             for team in teams:
@@ -23721,16 +23704,14 @@ def handle_min_max_final(stat_val, current_explain_strs, player_data, player_typ
                             if range_str:
                                 range_str += " + "
                             range_str += team.upper()
-                            if stat_quals:
-                                range_str += " (" + get_matching_row_val(matching_rows, stat_quals, player_type, player_data) + ")"
+                            range_str += " (" + get_matching_row_val(match_all, stat, matching_rows, stat_quals, player_type, player_data) + ")"
                     elif stat_val["negate"]:
                         match_count += 1
                         total_matching_rows.extend(matching_rows)
                         if range_str:
                             range_str += " + "
                         range_str += team.upper()
-                        if stat_quals:
-                            range_str += " (" + get_matching_row_val(matching_rows, stat_quals, player_type, player_data) + ")"
+                        range_str += " (" + get_matching_row_val(match_all, stat, matching_rows, stat_quals, player_type, player_data) + ")"
     elif qual_type == "Batters" or qual_type == "Pitchers":
         if only_seasons:
             seasons = sorted(list(set([row["Year"] for row in all_rows])))
@@ -23760,16 +23741,14 @@ def handle_min_max_final(stat_val, current_explain_strs, player_data, player_typ
                                 if range_str:
                                     range_str += " + "
                                 range_str += "[" + opponent_name + "](https://www.mlb.com/player/" + str(opponent) + ")"
-                                if stat_quals:
-                                    range_str += " (" + get_matching_row_val(matching_rows, stat_quals, player_type, player_data) + ")"
+                                range_str += " (" + get_matching_row_val(match_all, stat, matching_rows, stat_quals, player_type, player_data) + ")"
                         elif stat_val["negate"]:
                             match_count += 1
                             total_matching_rows.extend(matching_rows)
                             if range_str:
                                 range_str += " + "
                             range_str += "[" + opponent_name + "](https://www.mlb.com/player/" + str(opponent) + ")"
-                            if stat_quals:
-                                range_str += " (" + get_matching_row_val(matching_rows, stat_quals, player_type, player_data) + ")"
+                            range_str += " (" + get_matching_row_val(match_all, stat, matching_rows, stat_quals, player_type, player_data) + ")"
         else:
             opponents = get_all_opponents(all_rows, player_type)
             for opponent in opponents:
@@ -23795,33 +23774,23 @@ def handle_min_max_final(stat_val, current_explain_strs, player_data, player_typ
                             if range_str:
                                 range_str += " + "
                             range_str += "[" + opponent_name + "](https://www.mlb.com/player/" + str(opponent) + ")"
-                            if stat_quals:
-                                range_str += " (" + get_matching_row_val(matching_rows, stat_quals, player_type, player_data) + ")"
+                            range_str += " (" + get_matching_row_val(match_all, stat, matching_rows, stat_quals, player_type, player_data) + ")"
                     elif stat_val["negate"]:
                         match_count += 1
                         total_matching_rows.extend(matching_rows)
                         if range_str:
                             range_str += " + "
                         range_str += "[" + opponent_name + "](https://www.mlb.com/player/" + str(opponent) + ")"
-                        if stat_quals:
-                            range_str += " (" + get_matching_row_val(matching_rows, stat_quals, player_type, player_data) + ")"
+                        range_str += " (" + get_matching_row_val(match_all, stat, matching_rows, stat_quals, player_type, player_data) + ")"
 
-    if not range_str:
-        if not match_all:
-            stat_val["stat_obj"]["explain_str"] = stat.upper()
-            stat_val["stat_obj"]["explain_str"] += "|" + str(match_count) + " " + (qual_type[:-1] + "(s)" if qual_type in ["Calendar-Weeks", "Calendar-Months", "Calendar-Years", "Teams", "Opponents", "Batters", "Pitchers"] else "Stretch(es)")
-        else:
-            stat_val["stat_obj"]["explain_str"] += str(match_count) + " " + (qual_type[:-1] + "(s)" if qual_type in ["Calendar-Weeks", "Calendar-Months", "Calendar-Years", "Teams", "Opponents", "Batters", "Pitchers"] else "Stretch(es)")
-        if only_seasons:
-            stat_val["stat_obj"]["explain_str"] += "|Only Seasons"
+    if not match_all:
+        stat_val["stat_obj"]["explain_str"] = stat.upper()
+        stat_val["stat_obj"]["explain_str"] += "|" + str(match_count) + " " + (qual_type[:-1] + "(s)" if qual_type in ["Calendar-Weeks", "Calendar-Months", "Calendar-Years", "Teams", "Opponents", "Batters", "Pitchers"] else "Stretch(es)")
     else:
-        if not match_all:
-            stat_val["stat_obj"]["explain_str"] += "|" + str(match_count) + " " + (qual_type[:-1] + "(s)" if qual_type in ["Calendar-Weeks", "Calendar-Months", "Calendar-Years", "Teams", "Opponents", "Batters", "Pitchers"] else "Stretch(es)")
-        else:
-            stat_val["stat_obj"]["explain_str"] += str(match_count) + " " + (qual_type[:-1] + "(s)" if qual_type in ["Calendar-Weeks", "Calendar-Months", "Calendar-Years", "Teams", "Opponents", "Batters", "Pitchers"] else "Stretch(es)")
-        if only_seasons:
-            stat_val["stat_obj"]["explain_str"] += "|Only Seasons"
-        stat_val["stat_obj"]["explain_str"] += "|" + range_str 
+        stat_val["stat_obj"]["explain_str"] += str(match_count) + " " + (qual_type[:-1] + "(s)" if qual_type in ["Calendar-Weeks", "Calendar-Months", "Calendar-Years", "Teams", "Opponents", "Batters", "Pitchers"] else "Stretch(es)")
+    if only_seasons:
+        stat_val["stat_obj"]["explain_str"] += "|Only Seasons"
+    stat_val["stat_obj"]["explain_str"] += "|" + range_str 
     if stat_quals:
         stat_val["stat_obj"]["explain_str"] += "|"
         for stat_qual in stat_quals:
@@ -24984,7 +24953,14 @@ def valid_matching_rows(matching_rows, stat_quals, player_type, player_data):
     
     return True
 
-def get_matching_row_val(matching_rows, stat_quals, player_type, player_data):
+def get_matching_row_val(match_all, stat, matching_rows, stat_quals, player_type, player_data):
+    if not stat_quals:
+        stat_quals = []
+    if not match_all:
+        stat_quals = copy.copy(stat_quals)
+        stat_quals.insert(0, {
+            "stat" : stat
+        })
     stats = set()
     find_sub_stat_match(stat_quals, player_type, stats)
     row_lower = comb_rows(matching_rows, player_data, player_type, stats=stats)
