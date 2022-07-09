@@ -11843,7 +11843,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                             start_level = 1
                                             end_level = 1
                                             stat_quals = None
-                                            time_frame_obj = handle_stat_time_frame(split_vals[1])
+                                            time_frame_obj = handle_stat_time_frame(split_vals[1], player_type, extra_stats)
                                         except Exception:
                                             time_frame_obj = None
                                             levels = re.split(r"(?<!\\)\-", split_vals[1])
@@ -11886,7 +11886,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                                         })
                                     elif len(split_vals) == 3:
                                         try:
-                                            time_frame_obj = handle_stat_time_frame(split_vals[1])
+                                            time_frame_obj = handle_stat_time_frame(split_vals[1], player_type, extra_stats)
                                             levels = re.split(r"(?<!\\)\-", split_vals[2])
                                             try:
                                                 if len(levels) == 1:
@@ -11969,7 +11969,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                                             "end_val" : ordinal_to_number(sub_split_vals[1])
                                                         })
                                     else:
-                                        time_frame_obj = handle_stat_time_frame(split_vals[1])
+                                        time_frame_obj = handle_stat_time_frame(split_vals[1], player_type, extra_stats)
                                         levels = re.split(r"(?<!\\)\-", split_vals[3])
                                         if len(levels) == 1:
                                             start_level = 1
@@ -12025,7 +12025,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 for value in values:
                                     split_vals = re.split(r"(?<!\\)\:", value)
                                     stat_quals = None
-                                    time_frame_obj = handle_stat_time_frame(split_vals[0])
+                                    time_frame_obj = handle_stat_time_frame(split_vals[0], player_type, extra_stats)
                                     values = re.split(r"(?<!\\)\~", split_vals[1])
                                     stat_quals = []
                                     for value in values:
@@ -13985,8 +13985,8 @@ def clear_time_frames(subb_frames):
                         for sub_qualifier in qual_obj["values"]:
                             sub_qualifier.pop("explain_str", None)
 
-def handle_stat_time_frame(time_frame, hide_exceptions=False):
-    match = re.match(r"\b(only-season-?(?:st-?)?(?:end-?)?)?(games?-start(?:~[\S]+)?|games?-end(?:~[\S]+)?|seasons?-end(?:~[\S]+)?|totalgames?(?:~[\S]+)?|days?(?:~[\S]+)?|weeks?(?:~[\S]+)?|months?(?:~[\S]+)?|years?(?:~[\S]+)?|calendarweeks?(?:~[\S]+)?|calendarmonths?(?:~[\S]+)?|calendaryears?(?:~[\S]+)?|games?(?:~[\S]+)?|seasons?(?:~[\S]+)?|teams?(?:~[\S]+)?|opponents?(?:~[\S]+)?|g-st(?:~[\S]+)?|tg(?:~[\S]+)?|s-st(?:~[\S]+)?|g-end(?:~[\S]+)?|s-end(?:~[\S]+)?|d(?:~[\S]+)?|w(?:~[\S]+)?|m(?:~[\S]+)?|y(?:~[\S]+)?|g(?:~[\S]+)?|s(?:~[\S]+)?|t(?:~[\S]+)?|o(?:~[\S]+)?)?", time_frame)
+def handle_stat_time_frame(time_frame, player_type, extra_stats):
+    match = re.match(r"\b(only-season-?(?:st-?)?(?:end-?)?)?(games?-start(?:~[\S]+)?|games?-end(?:~[\S]+)?|seasons?-end(?:~[\S]+)?|totalgames?(?:~[\S]+)?|days?(?:~[\S]+)?|weeks?(?:~[\S]+)?|months?(?:~[\S]+)?|years?(?:~[\S]+)?|calendarweeks?(?:~[\S]+)?|calendarmonths?(?:~[\S]+)?|calendaryears?(?:~[\S]+)?|games?(?:~[\S]+)?|seasons?(?:~[\S]+)?|teams?(?:~[\S]+)?|opponents?(?:~[\S]+)?|batter?(?:~[\S]+)?|pitcher?(?:~[\S]+)?|g-st(?:~[\S]+)?|tg(?:~[\S]+)?|s-st(?:~[\S]+)?|g-end(?:~[\S]+)?|s-end(?:~[\S]+)?|d(?:~[\S]+)?|w(?:~[\S]+)?|m(?:~[\S]+)?|y(?:~[\S]+)?|g(?:~[\S]+)?|s(?:~[\S]+)?|t(?:~[\S]+)?|o(?:~[\S]+)?|b(?:~[\S]+)?|p(?:~[\S]+)?)?", time_frame)
     
     qualifier = match.group(2)
     if not qualifier:
@@ -14019,6 +14019,14 @@ def handle_stat_time_frame(time_frame, hide_exceptions=False):
         qual_type = "Teams"
     elif qualifier.startswith("o") or qualifier.startswith("opponent"):
         qual_type = "Opponents"
+    elif qualifier.startswith("b") or qualifier.startswith("batter"):
+        qual_type = "Batters"
+        player_type["da_type"] = "Pitcher"
+        extra_stats.add("current-stats")
+    elif qualifier.startswith("p") or qualifier.startswith("pitcher"):
+        qual_type = "Pitchers"
+        player_type["da_type"] = "Batter"
+        extra_stats.add("current-stats")
 
     if match.group(1):
         qual_type = "Only-Season-" + qual_type
@@ -22681,7 +22689,7 @@ def handle_max_min_data(all_rows, player_data, player_type, qualifiers, extra_st
                                 "counter" : 0
                             })
                 else:
-                    handle_min_max_calc(min_stats, stat_quals, player_data, player_type, stat, time_frame, all_rows)
+                    handle_min_max_calc(min_stats, stat_quals, player_data, player_type, stat, time_frame, all_rows, qualifiers)
 
                 if start_level == float("inf"):
                     start_level = len(min_stats) - 1
@@ -22733,7 +22741,7 @@ def handle_max_min_data(all_rows, player_data, player_type, qualifiers, extra_st
                                 "counter" : 0
                             })
                 else:
-                    handle_min_max_calc(max_stats, stat_quals, player_data, player_type, stat, time_frame, all_rows)
+                    handle_min_max_calc(max_stats, stat_quals, player_data, player_type, stat, time_frame, all_rows, qualifiers)
 
                 if start_level == float("inf"):
                     start_level = len(max_stats) - 1
@@ -22827,7 +22835,7 @@ def handle_max_min_data(all_rows, player_data, player_type, qualifiers, extra_st
                     has_value_match = False
                     for single_stat in stat_val["values"]:
                         if single_stat["value"] == row_lower[stat]:
-                            if single_stat["counter"] == single_stat["index"]:
+                            if True:#if single_stat["counter"] == single_stat["index"]:
                                 has_value_match = True
                             single_stat["counter"] += 1
                     if has_value_match:
@@ -22843,7 +22851,7 @@ def handle_max_min_data(all_rows, player_data, player_type, qualifiers, extra_st
     
     return [row for n, row in enumerate(new_rows) if row not in new_rows[:n]]
 
-def handle_min_max_calc(the_stats, stat_quals, player_data, player_type, stat, time_frame, all_rows):
+def handle_min_max_calc(the_stats, stat_quals, player_data, player_type, stat, time_frame, all_rows, qualifiers):
     if not all_rows:
         return
 
@@ -23120,7 +23128,76 @@ def handle_min_max_calc(the_stats, stat_quals, player_data, player_type, stat, t
                             "value" : stat_value,
                             "counter" : 0
                         })
-        
+    elif qual_type == "Batters" or qual_type == "Pitchers":
+        if only_seasons:
+            seasons = sorted(list(set([row["Year"] for row in all_rows])))
+            for season in seasons:
+                season_rows = [row for row in all_rows if row["Year"] == season]
+                opponents = get_all_opponents(all_rows, player_type)
+                for opponent in opponents:
+                    stat_value, matching_rows, opponent_name = handle_opponent_rows(opponent, player_data, player_type, stat, season_rows, qualifiers)
+                    if matching_rows:
+                        if not stat_quals:
+                            single_index = 0
+                            for single_stat in the_stats:
+                                if single_stat["value"] == stat_value:
+                                    single_index += 1
+                            the_stats.append({
+                                "index" : single_index,
+                                "value" : stat_value,
+                                "counter" : 0
+                            })
+                        elif valid_matching_rows(matching_rows, stat_quals, player_type, player_data):
+                            single_index = 0
+                            for single_stat in the_stats:
+                                if single_stat["value"] == stat_value:
+                                    single_index += 1
+                            the_stats.append({
+                                "index" : single_index,
+                                "value" : stat_value,
+                                "counter" : 0
+                            })
+        else:
+            opponents = get_all_opponents(all_rows, player_type)
+            for opponent in opponents:
+                stat_value, matching_rows, opponent_name = handle_opponent_rows(opponent, player_data, player_type, stat, all_rows, qualifiers)
+                if matching_rows:
+                    if not stat_quals:
+                        single_index = 0
+                        for single_stat in the_stats:
+                            if single_stat["value"] == stat_value:
+                                single_index += 1
+                        the_stats.append({
+                            "index" : single_index,
+                            "value" : stat_value,
+                            "counter" : 0
+                        })
+                    elif valid_matching_rows(matching_rows, stat_quals, player_type, player_data):
+                        single_index = 0
+                        for single_stat in the_stats:
+                            if single_stat["value"] == stat_value:
+                                single_index += 1
+                        the_stats.append({
+                            "index" : single_index,
+                            "value" : stat_value,
+                            "counter" : 0
+                        })
+
+def get_all_opponents(all_rows, player_type):
+    opponents = set()
+    for row_data in all_rows:
+        for at_bat_event in row_data["play_events"]:
+            opponents.add(at_bat_event["pitcher"] if player_type["da_type"] == "Batter" else at_bat_event["batter"])
+            if at_bat_event["result"] not in ("run_scored", "stolen_base", "caught_stealing", "pick_off"):
+                if at_bat_event["ind_pitches"]:
+                    for pitch_index, ind_pitch in enumerate(at_bat_event["ind_pitches"]):
+                        if pitch_index in at_bat_event["play_pitch_events"]:
+                            pitch_event_obj = at_bat_event["play_pitch_events"][pitch_index]
+                            opponents.add(pitch_event_obj["pitcher"] if player_type["da_type"] == "Batter" else pitch_event_obj["batter"])
+        for at_bat_event in row_data["play_pitch_run_events"]:
+            opponents.add(at_bat_event["pitcher"] if player_type["da_type"] == "Batter" else at_bat_event["batter"])
+    return opponents
+
 def handle_min_max_final(stat_val, current_explain_strs, player_data, player_type, stat, qualifiers, all_rows, transformed_vals, extra_stats):
     if not all_rows:
         stat_val["stat_obj"]["explain_str"] = current_explain_strs
@@ -23187,7 +23264,7 @@ def handle_min_max_final(stat_val, current_explain_strs, player_data, player_typ
                     has_value_match = False
                     for single_stat in stat_val["values"]:
                         if single_stat["value"] == stat_value:
-                            if single_stat["counter"] == single_stat["index"]:
+                            if True:#if single_stat["counter"] == single_stat["index"]:
                                 has_value_match = True
                             single_stat["counter"] += 1
                     if has_value_match or match_all:
@@ -23212,6 +23289,8 @@ def handle_min_max_final(stat_val, current_explain_strs, player_data, player_typ
                                     range_str += str(current_start_date)
                                 else:
                                     range_str += "[" + str(current_start_date) + " - " +  str(current_start_date + date_diff - datetime.timedelta(days=1)) + "]"
+                                if stat_quals:
+                                    range_str += " (" + get_matching_row_val(matching_rows, stat_quals, player_type, player_data) + ")"
                         elif stat_val["negate"]:
                             match_count += 1
                             total_matching_rows.extend(matching_rows)
@@ -23224,6 +23303,8 @@ def handle_min_max_final(stat_val, current_explain_strs, player_data, player_typ
                                 range_str += "[" + str(current_start_date) + "]"
                             else:
                                 range_str += "[" + str(current_start_date) + " - " +  str(current_start_date + date_diff - datetime.timedelta(days=1)) + "]"
+                            if stat_quals:
+                                range_str += " (" + get_matching_row_val(matching_rows, stat_quals, player_type, player_data) + ")"
             
             if qual_num >= qual_num_end:
                 break
@@ -23250,7 +23331,7 @@ def handle_min_max_final(stat_val, current_explain_strs, player_data, player_typ
                     has_value_match = False
                     for single_stat in stat_val["values"]:
                         if single_stat["value"] == stat_value:
-                            if single_stat["counter"] == single_stat["index"]:
+                            if True:#if single_stat["counter"] == single_stat["index"]:
                                 has_value_match = True
                             single_stat["counter"] += 1
                     if has_value_match or match_all:
@@ -23268,24 +23349,24 @@ def handle_min_max_final(stat_val, current_explain_strs, player_data, player_typ
                                 total_matching_dates.update(dates_covered)
                                 if range_str:
                                     range_str += " + "
-                                else:
-                                    range_str += qual_type + ":" + qual_num_str + "|"
                                 if date ==  real_end_date:
                                     range_str += str(date)
                                 else:
                                     range_str += "[" + str(date.date()) + " - " + str(real_end_date.date()) + "]"
+                                if stat_quals:
+                                    range_str += " (" + get_matching_row_val(matching_rows, stat_quals, player_type, player_data) + ")"
                         elif stat_val["negate"]:
                             match_count += 1
                             total_matching_rows.extend(matching_rows)
                             total_matching_dates.update(dates_covered)
                             if range_str:
                                 range_str += " + "
-                            else:
-                                range_str += qual_type + ":" + qual_num_str + "|"
                             if date ==  real_end_date:
                                 range_str += str(date)
                             else:
                                 range_str += "[" + str(date.date()) + " - " + str(real_end_date.date()) + "]"
+                                if stat_quals:
+                                    range_str += " (" + get_matching_row_val(matching_rows, stat_quals, player_type, player_data) + ")"
         elif qual_type == "Calendar-Months":
             start_date = datetime.datetime(start_date.year, start_date.month, 1)
             end_date = datetime.datetime(end_date.year, end_date.month, calendar.monthrange(end_date.year, end_date.month)[1])
@@ -23297,7 +23378,7 @@ def handle_min_max_final(stat_val, current_explain_strs, player_data, player_typ
                     has_value_match = False
                     for single_stat in stat_val["values"]:
                         if single_stat["value"] == stat_value:
-                            if single_stat["counter"] == single_stat["index"]:
+                            if True:#if single_stat["counter"] == single_stat["index"]:
                                 has_value_match = True
                             single_stat["counter"] += 1
                     if has_value_match or match_all:
@@ -23315,18 +23396,18 @@ def handle_min_max_final(stat_val, current_explain_strs, player_data, player_typ
                                 total_matching_dates.update(dates_covered)
                                 if range_str:
                                     range_str += " + "
-                                else:
-                                    range_str += qual_type + ":" + qual_num_str + "|"
                                 range_str += "[" + calendar.month_name[date.month] + " " + str(date.year)  + "]"
+                                if stat_quals:
+                                    range_str += " (" + get_matching_row_val(matching_rows, stat_quals, player_type, player_data) + ")"
                         elif stat_val["negate"]:
                             match_count += 1
                             total_matching_rows.extend(matching_rows)
                             total_matching_dates.update(dates_covered)
                             if range_str:
                                 range_str += " + "
-                            else:
-                                range_str += qual_type + ":" + qual_num_str + "|"
                             range_str += "[" + calendar.month_name[date.month] + " " + str(date.year)  + "]"
+                            if stat_quals:
+                                range_str += " (" + get_matching_row_val(matching_rows, stat_quals, player_type, player_data) + ")"
         elif qual_type == "Calendar-Years":
             start_date = datetime.datetime(start_date.year, 1, 1)
             end_date = datetime.datetime(end_date.year, 12, calendar.monthrange(end_date.year, 12)[1])
@@ -23338,7 +23419,7 @@ def handle_min_max_final(stat_val, current_explain_strs, player_data, player_typ
                     has_value_match = False
                     for single_stat in stat_val["values"]:
                         if single_stat["value"] == stat_value:
-                            if single_stat["counter"] == single_stat["index"]:
+                            if True:#if single_stat["counter"] == single_stat["index"]:
                                 has_value_match = True
                             single_stat["counter"] += 1
                     if has_value_match or match_all:
@@ -23356,18 +23437,18 @@ def handle_min_max_final(stat_val, current_explain_strs, player_data, player_typ
                                 total_matching_dates.update(dates_covered)
                                 if range_str:
                                     range_str += " + "
-                                else:
-                                    range_str += qual_type + ":" + qual_num_str + "|"
                                 range_str += str(date.year)
+                                if stat_quals:
+                                    range_str += " (" + get_matching_row_val(matching_rows, stat_quals, player_type, player_data) + ")"
                         elif stat_val["negate"]:
                             match_count += 1
                             total_matching_rows.extend(matching_rows)
                             total_matching_dates.update(dates_covered)
                             if range_str:
                                 range_str += " + "
-                            else:
-                                range_str += qual_type + ":" + qual_num_str + "|"
                             range_str += str(date.year)
+                            if stat_quals:
+                                range_str += " (" + get_matching_row_val(matching_rows, stat_quals, player_type, player_data) + ")"
     elif qual_type == "Games":
         qual_num = qual_num_start
         while (True):
@@ -23378,7 +23459,7 @@ def handle_min_max_final(stat_val, current_explain_strs, player_data, player_typ
                     has_value_match = False
                     for single_stat in stat_val["values"]:
                         if single_stat["value"] == stat_value:
-                            if single_stat["counter"] == single_stat["index"]:
+                            if True:#if single_stat["counter"] == single_stat["index"]:
                                 has_value_match = True
                             single_stat["counter"] += 1
                     if has_value_match or match_all:
@@ -23438,6 +23519,8 @@ def handle_min_max_final(stat_val, current_explain_strs, player_data, player_typ
                                         range_str += str(start_date)
                                     else:
                                         range_str += "[" + str(start_date)  + " - " + str(end_date) + "]"
+                                    if stat_quals:
+                                        range_str += " (" + get_matching_row_val(matching_rows, stat_quals, player_type, player_data) + ")"
                         elif stat_val["negate"]:
                             dates = [matching_row["DateTime"] for matching_row in matching_rows]
                             start_date = min(dates)
@@ -23480,6 +23563,8 @@ def handle_min_max_final(stat_val, current_explain_strs, player_data, player_typ
                                     range_str += str(start_date)
                                 else:
                                     range_str += "[" + str(start_date)  + " - " + str(end_date) + "]"
+                                if stat_quals:
+                                    range_str += " (" + get_matching_row_val(matching_rows, stat_quals, player_type, player_data) + ")"
             
             if qual_num >= qual_num_end:
                 break
@@ -23505,7 +23590,7 @@ def handle_min_max_final(stat_val, current_explain_strs, player_data, player_typ
                     has_value_match = False
                     for single_stat in stat_val["values"]:
                         if single_stat["value"] == stat_value:
-                            if single_stat["counter"] == single_stat["index"]:
+                            if True:#if single_stat["counter"] == single_stat["index"]:
                                 has_value_match = True
                             single_stat["counter"] += 1
                     if has_value_match or match_all:
@@ -23539,6 +23624,8 @@ def handle_min_max_final(stat_val, current_explain_strs, player_data, player_typ
                                     range_str += str(start_date)
                                 else:
                                     range_str += "[" + str(start_date) + " to " + str(end_date) + "]"
+                                if stat_quals:
+                                    range_str += " (" + get_matching_row_val(matching_rows, stat_quals, player_type, player_data) + ")"
                         elif stat_val["negate"]:
                             match_count += 1
                             total_matching_rows.extend(matching_rows)
@@ -23561,6 +23648,8 @@ def handle_min_max_final(stat_val, current_explain_strs, player_data, player_typ
                                 range_str += str(start_date)
                             else:
                                 range_str += "[" + str(start_date) + " to " + str(end_date) + "]"
+                            if stat_quals:
+                                range_str += " (" + get_matching_row_val(matching_rows, stat_quals, player_type, player_data) + ")"
             
             if qual_num >= qual_num_end:
                 break
@@ -23581,7 +23670,7 @@ def handle_min_max_final(stat_val, current_explain_strs, player_data, player_typ
                         has_value_match = False
                         for single_stat in stat_val["values"]:
                             if single_stat["value"] == stat_value:
-                                if single_stat["counter"] == single_stat["index"]:
+                                if True:#if single_stat["counter"] == single_stat["index"]:
                                     has_value_match = True
                                 single_stat["counter"] += 1
                         if has_value_match or match_all:
@@ -23596,17 +23685,17 @@ def handle_min_max_final(stat_val, current_explain_strs, player_data, player_typ
                                 total_matching_rows.extend(matching_rows)
                                 if range_str:
                                     range_str += " + "
-                                else:
-                                    range_str += qual_type + ":" + qual_num_str + "|"
                                 range_str += team.upper()
+                                if stat_quals:
+                                    range_str += " (" + get_matching_row_val(matching_rows, stat_quals, player_type, player_data) + ")"
                         elif stat_val["negate"]:
                             match_count += 1
                             total_matching_rows.extend(matching_rows)
                             if range_str:
                                 range_str += " + "
-                            else:
-                                range_str += qual_type + ":" + qual_num_str + "|"
                             range_str += team.upper()
+                            if stat_quals:
+                                range_str += " (" + get_matching_row_val(matching_rows, stat_quals, player_type, player_data) + ")"
         else:
             teams = set([row[row_stat] for row in all_rows])
             for team in teams:
@@ -23616,7 +23705,7 @@ def handle_min_max_final(stat_val, current_explain_strs, player_data, player_typ
                     has_value_match = False
                     for single_stat in stat_val["values"]:
                         if single_stat["value"] == stat_value:
-                            if single_stat["counter"] == single_stat["index"]:
+                            if True:#if single_stat["counter"] == single_stat["index"]:
                                 has_value_match = True
                             single_stat["counter"] += 1
                     if has_value_match or match_all:
@@ -23631,33 +23720,105 @@ def handle_min_max_final(stat_val, current_explain_strs, player_data, player_typ
                             total_matching_rows.extend(matching_rows)
                             if range_str:
                                 range_str += " + "
-                            else:
-                                range_str += qual_type + ":" + qual_num_str + "|"
                             range_str += team.upper()
+                            if stat_quals:
+                                range_str += " (" + get_matching_row_val(matching_rows, stat_quals, player_type, player_data) + ")"
                     elif stat_val["negate"]:
                         match_count += 1
                         total_matching_rows.extend(matching_rows)
                         if range_str:
                             range_str += " + "
-                        else:
-                            range_str += qual_type + ":" + qual_num_str + "|"
                         range_str += team.upper()
+                        if stat_quals:
+                            range_str += " (" + get_matching_row_val(matching_rows, stat_quals, player_type, player_data) + ")"
+    elif qual_type == "Batters" or qual_type == "Pitchers":
+        if only_seasons:
+            seasons = sorted(list(set([row["Year"] for row in all_rows])))
+            for season in seasons:
+                season_rows = [row for row in all_rows if row["Year"] == season]
+                opponents = get_all_opponents(all_rows, player_type)
+                for opponent in opponents:
+                    stat_value, matching_rows, opponent_name = handle_opponent_rows(opponent, player_data, player_type, stat, season_rows, qualifiers)
+                    if matching_rows:
+                        has_match = False
+                        has_value_match = False
+                        for single_stat in stat_val["values"]:
+                            if single_stat["value"] == stat_value:
+                                if True:#if single_stat["counter"] == single_stat["index"]:
+                                    has_value_match = True
+                                single_stat["counter"] += 1
+                        if has_value_match or match_all:
+                            if not stat_quals:
+                                has_match = True
+                            elif valid_matching_rows(matching_rows, stat_quals, player_type, player_data):
+                                has_match = True
+                        
+                        if has_match:
+                            if not stat_val["negate"]:
+                                match_count += 1
+                                total_matching_rows.extend(matching_rows)
+                                if range_str:
+                                    range_str += " + "
+                                range_str += "[" + opponent_name + "](https://www.mlb.com/player/" + str(opponent) + ")"
+                                if stat_quals:
+                                    range_str += " (" + get_matching_row_val(matching_rows, stat_quals, player_type, player_data) + ")"
+                        elif stat_val["negate"]:
+                            match_count += 1
+                            total_matching_rows.extend(matching_rows)
+                            if range_str:
+                                range_str += " + "
+                            range_str += "[" + opponent_name + "](https://www.mlb.com/player/" + str(opponent) + ")"
+                            if stat_quals:
+                                range_str += " (" + get_matching_row_val(matching_rows, stat_quals, player_type, player_data) + ")"
+        else:
+            opponents = get_all_opponents(all_rows, player_type)
+            for opponent in opponents:
+                stat_value, matching_rows, opponent_name = handle_opponent_rows(opponent, player_data, player_type, stat, all_rows, qualifiers)
+                if matching_rows:
+                    has_match = False
+                    has_value_match = False
+                    for single_stat in stat_val["values"]:
+                        if single_stat["value"] == stat_value:
+                            if True:#if single_stat["counter"] == single_stat["index"]:
+                                has_value_match = True
+                            single_stat["counter"] += 1
+                    if has_value_match or match_all:
+                        if not stat_quals:
+                            has_match = True
+                        elif valid_matching_rows(matching_rows, stat_quals, player_type, player_data):
+                            has_match = True
+
+                    if has_match:
+                        if not stat_val["negate"]:
+                            match_count += 1
+                            total_matching_rows.extend(matching_rows)
+                            if range_str:
+                                range_str += " + "
+                            range_str += "[" + opponent_name + "](https://www.mlb.com/player/" + str(opponent) + ")"
+                            if stat_quals:
+                                range_str += " (" + get_matching_row_val(matching_rows, stat_quals, player_type, player_data) + ")"
+                    elif stat_val["negate"]:
+                        match_count += 1
+                        total_matching_rows.extend(matching_rows)
+                        if range_str:
+                            range_str += " + "
+                        range_str += "[" + opponent_name + "](https://www.mlb.com/player/" + str(opponent) + ")"
+                        if stat_quals:
+                            range_str += " (" + get_matching_row_val(matching_rows, stat_quals, player_type, player_data) + ")"
 
     if not range_str:
         if not match_all:
-            stat_val["stat_obj"]["explain_str"] = stat.upper() + "|" + qual_type + ":" + qual_num_str
-            if match_count != 1:
-                stat_val["stat_obj"]["explain_str"] += "|" + str(match_count) + " Stretches"
+            stat_val["stat_obj"]["explain_str"] = stat.upper()
+            stat_val["stat_obj"]["explain_str"] += "|" + str(match_count) + " " + (qual_type[:-1] + "(s)" if qual_type in ["Calendar-Weeks", "Calendar-Months", "Calendar-Years", "Teams", "Opponents", "Batters", "Pitchers"] else "Stretch(es)")
         else:
-            stat_val["stat_obj"]["explain_str"] += str(match_count) + " Stretches"
+            stat_val["stat_obj"]["explain_str"] += str(match_count) + " " + (qual_type[:-1] + "(s)" if qual_type in ["Calendar-Weeks", "Calendar-Months", "Calendar-Years", "Teams", "Opponents", "Batters", "Pitchers"] else "Stretch(es)")
         if only_seasons:
             stat_val["stat_obj"]["explain_str"] += "|Only Seasons"
     else:
         if not match_all:
-            if match_count != 1:
-                stat_val["stat_obj"]["explain_str"] += "|" + str(match_count) + " Stretches"
+            stat_val["stat_obj"]["explain_str"] += "|" + str(match_count) + " " + (qual_type[:-1] + "(s)" if qual_type in ["Calendar-Weeks", "Calendar-Months", "Calendar-Years", "Teams", "Opponents", "Batters", "Pitchers"] else "Stretch(es)")
         else:
-            stat_val["stat_obj"]["explain_str"] += str(match_count) + " Stretches"
+            stat_val["stat_obj"]["explain_str"] += str(match_count) + " " + (qual_type[:-1] + "(s)" if qual_type in ["Calendar-Weeks", "Calendar-Months", "Calendar-Years", "Teams", "Opponents", "Batters", "Pitchers"] else "Stretch(es)")
         if only_seasons:
             stat_val["stat_obj"]["explain_str"] += "|Only Seasons"
         stat_val["stat_obj"]["explain_str"] += "|" + range_str 
@@ -24823,6 +24984,77 @@ def valid_matching_rows(matching_rows, stat_quals, player_type, player_data):
     
     return True
 
+def get_matching_row_val(matching_rows, stat_quals, player_type, player_data):
+    stats = set()
+    find_sub_stat_match(stat_quals, player_type, stats)
+    row_lower = comb_rows(matching_rows, player_data, player_type, stats=stats)
+    stat_str = ""
+    for qual_object in stat_quals:
+        has_match = False
+        stat = qual_object["stat"]
+
+        if stat.startswith("season"):
+            season_num = len(set([row["Year"] for row in matching_rows]))
+            if stat_str:
+                stat_str += ","
+            stat_str += "Season=" + str(season_num)
+        else:
+            if stat not in row_lower:
+                for header_stat in headers[player_type["da_type"]]:
+                    if "display-value" in headers[player_type["da_type"]][header_stat] and headers[player_type["da_type"]][header_stat]["display-value"].lower() == stat:
+                        stat = header_stat.lower()
+        
+            if stat in row_lower:
+                value = row_lower[stat]
+                real_stat = None
+                for header_stat in headers[player_type["da_type"]]:
+                    if header_stat.lower() == stat or ("display-value" in headers[player_type["da_type"]][header_stat] and headers[player_type["da_type"]][header_stat]["display-value"].lower() == stat):
+                        real_stat = header_stat
+
+                if isinstance(value, numbers.Number):
+                    if real_stat and "round" in headers[player_type["da_type"]][real_stat]:
+                        round_val = headers[player_type["da_type"]][real_stat]["round"]
+                        if isinstance(round_val, str):
+                            if round_val == "percent":
+                                value = ("{:.2f}").format(round_value(100 * value, 2)) + "%"
+                            elif round_val.startswith("percent-"):
+                                rount_int = int(round_val.split("-")[1])
+                                value = ("{:." + str(rount_int) + "f}").format(round_value(100 * value, rount_int)) + "%"
+                            elif round_val == "dollar":
+                                value = round_value(value / 1000000, 2)
+                                value = ("{:." + str(2) + "f}").format(value)
+                                value = "$" + value + "m"
+                            else:
+                                frac, whole = math.modf(value)
+                                if round_val == "innings-round":
+                                    frac = round_value(frac / (10/3), 2)
+                                else:
+                                    frac = round_value(frac / (10/3), 1)
+                                if frac == 0.3:
+                                    frac = 0
+                                    whole += 1
+                                value = round_value(frac + whole, 2)
+                                if round_val == "innings-round":
+                                    value = ("{:.2f}").format(value)
+                                else:
+                                    value = ("{:.1f}").format(value)
+                        else: 
+                            value = round_value(value, round_val)
+                            value = ("{:." + str(round_val) + "f}").format(value)
+                    else:
+                        value = round_value(value)
+                elif real_stat == "TmRec":
+                    rec_split = value.split(":")
+                    value = str(round_value(float(rec_split[0]))) + ":" + str(round_value(float(rec_split[1])))
+                    if len(rec_split) == 3:
+                        value += ":" + str(round_value(float(rec_split[2])))
+
+                if stat_str:
+                    stat_str += ","
+                stat_str += real_stat + "=" + str(value)
+
+    return stat_str
+
 def comb_rows(matching_rows, player_data, player_type, lower=True, stats=None):
     parse_formula_stats = stats == None or set(stats).intersection(formulas[player_type["da_type"]].keys())
     parse_advanced_stats = stats == None or set(stats).intersection(advanced_stats[player_type["da_type"]])
@@ -25378,6 +25610,54 @@ def handle_team_rows(team, row_stat, player_data, player_type, stat, all_rows):
         matching_rows = []
 
     return stat_value, matching_rows
+
+def handle_opponent_rows(opponent, player_data, player_type, stat, all_rows, qualifiers):
+    stat_value = 0
+    matching_rows = []
+    opponent_name = None
+    for row in all_rows:
+        any_match = False
+        cleared_row = copy.copy(row)
+        clear_data(cleared_row)
+        for at_bat_event in row["play_events"]:
+            if (at_bat_event["pitcher"] if player_type["da_type"] == "Batter" else at_bat_event["batter"]) == opponent:
+                add_row_numbers(cleared_row, at_bat_event, at_bat_event["result"], qualifiers, player_type)
+                any_match = True
+                opponent_name = row["play_full_names"][opponent]
+            if at_bat_event["result"] not in ("run_scored", "stolen_base", "caught_stealing", "pick_off"):
+                if at_bat_event["ind_pitches"]:
+                    for pitch_index, ind_pitch in enumerate(at_bat_event["ind_pitches"]):
+                        if pitch_index in at_bat_event["play_pitch_events"]:
+                            pitch_event_obj = at_bat_event["play_pitch_events"][pitch_index]
+                            if (pitch_event_obj["pitcher"] if player_type["da_type"] == "Batter" else pitch_event_obj["batter"]) == opponent:
+                                add_pitch_row_numbers(cleared_row, at_bat_event, at_bat_event["result"], qualifiers, pitch_index, ind_pitch, pitch_event_obj)
+                                any_match = True
+                                opponent_name = row["play_full_names"][opponent]
+        for at_bat_event in row["play_pitch_run_events"]:
+            if (at_bat_event["pitcher"] if player_type["da_type"] == "Batter" else at_bat_event["batter"]) == opponent:
+                cleared_row["R"] += 1
+                if "is_unearned_run" not in at_bat_event or not at_bat_event["is_unearned_run"]:
+                    cleared_row["ER"] += 1
+                any_match = True
+                opponent_name = row["play_full_names"][opponent]
+        
+        if any_match:
+            matching_rows.append(cleared_row)
+
+    stats = set()
+    find_sub_sub_stat_match(stat, player_type, stats)
+    combined_row = comb_rows(matching_rows, player_data, player_type, stats=stats)
+    if stat not in combined_row:
+        for header_stat in headers[player_type["da_type"]]:
+            if "display-value" in headers[player_type["da_type"]][header_stat] and headers[player_type["da_type"]][header_stat]["display-value"].lower() == stat:
+                stat = header_stat.lower()
+                
+    if stat in combined_row:
+        stat_value = combined_row[stat]
+    else:
+        matching_rows = []
+
+    return stat_value, matching_rows, opponent_name
             
 def fill_row(row, player_data, player_type, lower=True, stats=None):
     for header in headers[player_type["da_type"]].keys():
@@ -31304,6 +31584,20 @@ def perform_sub_mlb_game_qualifiers(row, player_data, qualifiers, player_game_in
     
     #include_all_games = "Event Stat" in qualifiers or "Event Stat Reversed" in qualifiers or "Event Stats" in qualifiers or "Event Stats Reversed" in qualifiers or "Starting Event Stat" in qualifiers or "Starting Event Stat Reversed" in qualifiers or "Starting Event Stats" in qualifiers or "Starting Event Stats Reversed" in qualifiers
     include_all_games = True
+    
+    add_play_events = False
+    for qualifier in qualifiers:
+        if qualifier == "Max Stat" or qualifier == "Min Stat" or qualifier == "Max Streak" or qualifier == "Count Streak" or qualifier == "Quickest" or qualifier == "Slowest":
+            for qual_object in qualifiers[qualifier]:
+                for stat_obj in qual_object["values"]:
+                    if stat_obj["time_frame"] and stat_obj["time_frame"]["qual_type"] in ["Batters", "Pitchers", "Plate Appearances"]:
+                        add_play_events = True
+                        break
+    
+    if add_play_events:
+        row["play_events"] = []
+        row["play_pitch_run_events"] = []
+        row["play_full_names"] = player_game_info["full_names"]
 
     raw_row_data = copy.copy(row)
     
@@ -31317,12 +31611,17 @@ def perform_sub_mlb_game_qualifiers(row, player_data, qualifiers, player_game_in
 
             if not (skip_run_events and event_name in ("run_scored", "stolen_base", "caught_stealing")):
                 has_any_match = True
+
+            if add_play_events:
+                row["play_events"].append(at_bat_event)
         
         if handle_da_mlb_quals(row, "batting_events" if player_type["da_type"] == "Batter" else "pitching_events", at_bat_event, qualifiers, player_data, player_type, player_game_info, skip_career_events=True):
             add_row_numbers(raw_row_data, at_bat_event, event_name, qualifiers, player_type)
         
         if event_name not in ("run_scored", "stolen_base", "caught_stealing", "pick_off"):
             if at_bat_event["ind_pitches"]:
+                if add_play_events:
+                    at_bat_event["play_pitch_events"] = {}
                 for pitch_index, ind_pitch in enumerate(at_bat_event["ind_pitches"]):
                     pitch_event_obj = handle_da_pitch_quals(row, "batting_events" if player_type["da_type"] == "Batter" else "pitching_events", at_bat_event, qualifiers, player_data, player_type, player_game_info, pitch_index + 1)
                     if pitch_event_obj:
@@ -31330,6 +31629,9 @@ def perform_sub_mlb_game_qualifiers(row, player_data, qualifiers, player_game_in
 
                         if not (skip_run_events and event_name in ("run_scored", "stolen_base", "caught_stealing")):
                             has_any_match = True
+
+                        if add_play_events:
+                            at_bat_event["play_pitch_events"][pitch_index] = pitch_event_obj
                     
                     pitch_event_obj = handle_da_pitch_quals(row, "batting_events" if player_type["da_type"] == "Batter" else "pitching_events", at_bat_event, qualifiers, player_data, player_type, player_game_info, pitch_index + 1, skip_career_events=True)
                     if pitch_event_obj:
@@ -31380,6 +31682,9 @@ def perform_sub_mlb_game_qualifiers(row, player_data, qualifiers, player_game_in
                     row["ER"] += 1
 
                 has_any_match = True
+
+                if add_play_events:
+                    row["play_pitch_run_events"].append(at_bat_event)
             if handle_da_mlb_quals(row, "pitching_run_events", at_bat_event, qualifiers, player_data, player_type, player_game_info, skip_career_events=True):
                 raw_row_data["R"] += 1
                 if "is_unearned_run" not in at_bat_event or not at_bat_event["is_unearned_run"]:
@@ -38786,6 +39091,7 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
         game_data["first_names"] = {}
         game_data["birth_first_names"] = {}
         game_data["last_names"] = {}
+        game_data["full_names"] = {}
         game_data["countries"] = {}
         game_data["pitch_sides"] = {}
         game_data["bat_sides"] = {}
@@ -38803,8 +39109,9 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
             else:
                 game_data["first_names"][player["id"]] = player["firstName"]
             game_data["birth_first_names"][player["id"]] = player["firstName"]
-            
             game_data["last_names"][player["id"]] = player["lastName"]
+            game_data["full_names"][player["id"]] = player["fullName"]
+
             if "birthCountry" in player:
                 game_data["countries"][player["id"]] = player["birthCountry"]
             game_data["pitch_sides"][player["id"]] = player["pitchHand"]["code"]
