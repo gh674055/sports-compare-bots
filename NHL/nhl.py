@@ -8502,7 +8502,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 extra_stats.add("show-only-table-" + unescape_string(stat.strip()))
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
                         
-                        last_match = re.finditer(r"\b(hide(?: |-)?table:)\(.+?\)", time_frame)
+                        last_match = re.finditer(r"\b((?:hide|skip)(?: |-)?table:)\(.+?\)", time_frame)
                         for m in last_match:
                             for stat in re.split(r"(?<!\\)\-", re.split(r"(?<!\\)" + m.group(1), m.group(0))[1][1:-1]):
                                 extra_stats.add("hide-table-" + unescape_string(stat.strip()))
@@ -8977,7 +8977,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                             
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
                                                 
-                        last_match = re.finditer(r"\bhide(?: |-)?(name|year|season|live|date|query|queries|advanced|href-quals|href|missing|toi|play|strength)s?\b", time_frame)
+                        last_match = re.finditer(r"\(?:hide|skip)(?: |-)?(name|year|season|live|date|query|queries|advanced|href-quals|href|missing|toi|play|strength)s?\b", time_frame)
                         for m in last_match:
                             if m.group(1) == "date" or m.group(1) == "season":
                                 extra_stats.add("hide-year")
@@ -9013,7 +9013,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 extra_stats.add("show-stat-" + stat_value)
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
 
-                        last_match = re.finditer(r"\b(hide(?: |-)?stat:)[\S-]+", time_frame)
+                        last_match = re.finditer(r"\b((?:hide|skip)(?: |-)?stat:)[\S-]+", time_frame)
                         for m in last_match:
                             for stat in re.split(r"(?<!\\)\-", re.split(r"(?<!\\)" + m.group(1), m.group(0))[1][1:-1]):
                                 stat_value = unescape_string(stat.strip())
@@ -36016,8 +36016,8 @@ def comb_rows(matching_rows, player_data, player_type, lower=True, stats=None):
         comb_row["is_href_stats"] = is_href_stats
         comb_row["is_toi_stats"] = is_toi_stats
 
-    if parse_advanced_stats:
-        calculate_advanced_stats(comb_row, matching_rows, player_type["da_type"]["type"], player_type["da_type"]["position"], player_data)
+    # if parse_advanced_stats:
+    #     calculate_advanced_stats(comb_row, matching_rows, player_type["da_type"]["type"], player_type["da_type"]["position"], player_data)
 
     if parse_formula_stats:
         for stat in stats:
@@ -36500,15 +36500,15 @@ def fill_row(row, player_data, player_type, lower=True, stats=None):
             if not header in formulas[player_type["da_type"]["type"]]:
                 row[header] = 0.0
     
-    if stats == None or set(stats).intersection(advanced_stats):
-        missing_advanced = False
-        for advanced_stat in advanced_stats:
-            if not advanced_stat in row:
-                missing_advanced = True
-                break
+    # if stats == None or set(stats).intersection(advanced_stats):
+    #     missing_advanced = False
+    #     for advanced_stat in advanced_stats:
+    #         if not advanced_stat in row:
+    #             missing_advanced = True
+    #             break
 
-        if missing_advanced:
-            calculate_advanced_stats(row, [row], player_type["da_type"]["type"], player_type["da_type"]["position"], player_data)
+    #     if missing_advanced:
+    #         calculate_advanced_stats(row, [row], player_type["da_type"]["type"], player_type["da_type"]["position"], player_data)
     
     if stats == None or set(stats).intersection(formulas[player_type["da_type"]["type"]].keys()):
         for stat in stats:

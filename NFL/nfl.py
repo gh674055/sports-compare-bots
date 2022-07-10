@@ -1805,7 +1805,7 @@ def handle_player_string(comment, player_type, is_fantasy, last_updated, hide_ta
                                 extra_stats.add("show-only-table-" + unescape_string(stat.strip()))
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
                         
-                        last_match = re.finditer(r"\b(hide(?: |-)?table:)\(.+?\)", time_frame)
+                        last_match = re.finditer(r"\b((?:hide|skip)(?: |-)?table:)\(.+?\)", time_frame)
                         for m in last_match:
                             for stat in re.split(r"(?<!\\)\-", re.split(r"(?<!\\)" + m.group(1), m.group(0))[1][1:-1]):
                                 extra_stats.add("hide-table-" + unescape_string(stat.strip()))
@@ -1886,7 +1886,7 @@ def handle_player_string(comment, player_type, is_fantasy, last_updated, hide_ta
 
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
                         
-                        last_match = re.finditer(r"\bhide(?: |-)?(name|year|season|date|query|queries|advanced)s?\b", time_frame)
+                        last_match = re.finditer(r"\(?:hide|skip)(?: |-)?(name|year|season|date|query|queries|advanced)s?\b", time_frame)
                         for m in last_match:
                             if m.group(1) == "date" or m.group(1) == "season":
                                 extra_stats.add("hide-year")
@@ -1909,7 +1909,7 @@ def handle_player_string(comment, player_type, is_fantasy, last_updated, hide_ta
                                 extra_stats.add("show-stat-" + unescape_string(stat.strip()))
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
 
-                        last_match = re.finditer(r"\b(hide(?: |-)?stat:)[\S-]+", time_frame)
+                        last_match = re.finditer(r"\b((?:hide|skip)(?: |-)?stat:)[\S-]+", time_frame)
                         for m in last_match:
                             for stat in re.split(r"(?<!\\)\-", re.split(r"(?<!\\)" + m.group(1), m.group(0))[1][1:-1]):
                                 extra_stats.add("hide-stat-" + unescape_string(stat.strip()))
@@ -16894,8 +16894,8 @@ def comb_rows(matching_rows, player_data, player_type, lower=True, stats=None):
                 comb_row["Fantasy"][stat + " Variance"] = variance
 
 
-    if stats == None or ("Era Adjusted Passing" in stats and set(stats["Era Adjusted Passing"]).intersection(advanced_stats)):
-        calculate_advanced_stats(comb_row, matching_rows, player_data, player_type)
+    # if stats == None or ("Era Adjusted Passing" in stats and set(stats["Era Adjusted Passing"]).intersection(advanced_stats)):
+    #     calculate_advanced_stats(comb_row, matching_rows, player_data, player_type)
 
     headers_to_remove = {}
     for over_header in comb_row:
@@ -17887,16 +17887,16 @@ def fill_row(row, player_data, player_type, lower=True, stats=None):
                 row["Fantasy"][fantasy_stat + "/G"] = per_game_val
                 row["Fantasy"][fantasy_stat + "/17G"] = per_game_val * 17
     
-    if stats == None or ("Era Adjusted Passing" in stats and set(stats["Era Adjusted Passing"]).intersection(advanced_stats)):
-        missing_advanced = False
-        if "Era Adjusted Passing" in row:
-            for advanced_stat in advanced_stats:
-                if not advanced_stat in row["Era Adjusted Passing"]:
-                    missing_advanced = True
-                    break
+    # if stats == None or ("Era Adjusted Passing" in stats and set(stats["Era Adjusted Passing"]).intersection(advanced_stats)):
+    #     missing_advanced = False
+    #     if "Era Adjusted Passing" in row:
+    #         for advanced_stat in advanced_stats:
+    #             if not advanced_stat in row["Era Adjusted Passing"]:
+    #                 missing_advanced = True
+    #                 break
 
-        if missing_advanced:
-            calculate_advanced_stats(row, [row], player_data, player_type)
+    #     if missing_advanced:
+    #         calculate_advanced_stats(row, [row], player_data, player_type)
 
     row["Shared"]["DateStart"] = [row["Shared"]["Date"]]
     row["Shared"]["YearStart"] = [row["Shared"]["Year"]]
