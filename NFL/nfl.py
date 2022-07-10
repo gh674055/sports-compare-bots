@@ -7412,77 +7412,77 @@ def combine_player_datas(player_datas, player_type, any_missing_games, time_fram
 
                 player_data["stat_values"]["Shared"]["Raw Quals"] += qual_str
         
-        if remove_duplicates:
-            if first_qual:
-                first_qual = False
-            
-            player_data["stat_values"]["Shared"]["Raw Quals"] += " [Duplicates Removed]"
+    if remove_duplicates:
+        if first_qual:
+            first_qual = False
         
-        if remove_duplicate_games:
-            if first_qual:
-                first_qual = False
-            
-            player_data["stat_values"]["Shared"]["Raw Quals"] += " [Duplicate Games Removed]"
+        player_data["stat_values"]["Shared"]["Raw Quals"] += " [Duplicates Removed]"
+    
+    if remove_duplicate_games:
+        if first_qual:
+            first_qual = False
         
-        if best_table:
-            if first_qual:
-                first_qual = False
-            
-            if best_table == 1:
-                player_data["stat_values"]["Shared"]["Raw Quals"] += " [Best Season]"
-            else:
-                player_data["stat_values"]["Shared"]["Raw Quals"] += " [Best " + str(best_table) + " Seasons]"
+        player_data["stat_values"]["Shared"]["Raw Quals"] += " [Duplicate Games Removed]"
+    
+    if best_table:
+        if first_qual:
+            first_qual = False
         
-        if worst_table:
-            if first_qual:
-                first_qual = False
-            
-            if best_table == 1:
-                player_data["stat_values"]["Shared"]["Raw Quals"] += " [Worst Season]"
-            else:
-                player_data["stat_values"]["Shared"]["Raw Quals"] += " [Worst " + str(worst_table) + " Seasons]"
+        if best_table == 1:
+            player_data["stat_values"]["Shared"]["Raw Quals"] += " [Best Season]"
+        else:
+            player_data["stat_values"]["Shared"]["Raw Quals"] += " [Best " + str(best_table) + " Seasons]"
+    
+    if worst_table:
+        if first_qual:
+            first_qual = False
         
-        if best_games_table:
-            if first_qual:
-                first_qual = False
-            
-            if best_games_table == 1:
-                player_data["stat_values"]["Shared"]["Raw Quals"] += " [Best Game]"
-            else:
-                player_data["stat_values"]["Shared"]["Raw Quals"] += " [Best " + str(best_games_table) + " Games]"
+        if best_table == 1:
+            player_data["stat_values"]["Shared"]["Raw Quals"] += " [Worst Season]"
+        else:
+            player_data["stat_values"]["Shared"]["Raw Quals"] += " [Worst " + str(worst_table) + " Seasons]"
+    
+    if best_games_table:
+        if first_qual:
+            first_qual = False
         
-        if worst_games_table:
-            if first_qual:
-                first_qual = False
-            
-            if worst_games_table == 1:
-                player_data["stat_values"]["Shared"]["Raw Quals"] += " [Worst Game]"
-            else:
-                player_data["stat_values"]["Shared"]["Raw Quals"] += " [Worst " + str(worst_games_table) + " Games]"
+        if best_games_table == 1:
+            player_data["stat_values"]["Shared"]["Raw Quals"] += " [Best Game]"
+        else:
+            player_data["stat_values"]["Shared"]["Raw Quals"] += " [Best " + str(best_games_table) + " Games]"
+    
+    if worst_games_table:
+        if first_qual:
+            first_qual = False
         
-        if seasons_leading_start:
-            if first_qual:
-                first_qual = False
-            
-            if seasons_leading_start == seasons_leading_end:
-                player_data["stat_values"]["Shared"]["Raw Quals"] += " [Seasons In " + get_time_str(seasons_leading_start, True) + "]"
-            elif seasons_leading_end == 1:
-                player_data["stat_values"]["Shared"]["Raw Quals"] += " [Seasons In Top " + str(seasons_leading_end) + "]"
-            else:
-                player_data["stat_values"]["Shared"]["Raw Quals"] +=  " [Seasons In Top " + str(seasons_leading_start) + "-" + str(seasons_leading_end) + "]"
+        if worst_games_table == 1:
+            player_data["stat_values"]["Shared"]["Raw Quals"] += " [Worst Game]"
+        else:
+            player_data["stat_values"]["Shared"]["Raw Quals"] += " [Worst " + str(worst_games_table) + " Games]"
+    
+    if seasons_leading_start:
+        if first_qual:
+            first_qual = False
         
-        if player_data["stat_values"]["Shared"]["any_missing_games"]:
-            player_data["stat_values"]["Shared"]["Raw Quals"] +=  " [Missing Game(s)]"
+        if seasons_leading_start == seasons_leading_end:
+            player_data["stat_values"]["Shared"]["Raw Quals"] += " [Seasons In " + get_time_str(seasons_leading_start, True) + "]"
+        elif seasons_leading_end == 1:
+            player_data["stat_values"]["Shared"]["Raw Quals"] += " [Seasons In Top " + str(seasons_leading_end) + "]"
+        else:
+            player_data["stat_values"]["Shared"]["Raw Quals"] +=  " [Seasons In Top " + str(seasons_leading_start) + "-" + str(seasons_leading_end) + "]"
+    
+    if player_data["stat_values"]["Shared"]["any_missing_games"]:
+        player_data["stat_values"]["Shared"]["Raw Quals"] +=  " [Missing Game(s)]"
 
-        if "date-count" in extra_stats:
-            the_dates = set()
-            for row in player_data["stat_values"]["Shared"]["all_rows"]:
-                the_dates.add(row["Shared"]["Date"])
+    if "date-count" in extra_stats:
+        the_dates = set()
+        for row in player_data["stat_values"]["Shared"]["all_rows"]:
+            the_dates.add(row["Shared"]["Date"])
 
-            if the_dates:
-                player_data["stat_values"]["Shared"]["Raw Quals"] +=  " [" + str(len(the_dates)) + " Date(s)]"
-            else:
-                player_data["stat_values"]["Shared"]["Raw Quals"] +=  " [No Dates!]"
+        if the_dates:
+            player_data["stat_values"]["Shared"]["Raw Quals"] +=  " [" + str(len(the_dates)) + " Date(s)]"
+        else:
+            player_data["stat_values"]["Shared"]["Raw Quals"] +=  " [No Dates!]"
     
     player_data["stat_values"]["Shared"]["Raw Quals"] = player_data["stat_values"]["Shared"]["Raw Quals"].strip()
 

@@ -16085,110 +16085,110 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
 
                 player_data["stat_values"]["Raw Quals"] += qual_str
         
-        if remove_duplicates:
-            if first_qual:
-                first_qual = False
-            
-            player_data["stat_values"]["Raw Quals"] += " [Duplicates Removed]"
+    if remove_duplicates:
+        if first_qual:
+            first_qual = False
         
-        if remove_duplicate_games:
-            if first_qual:
-                first_qual = False
-            
-            player_data["stat_values"]["Raw Quals"] += " [Duplicate Games Removed]"
-        
-        if best_table:
-            if first_qual:
-                first_qual = False
-            
-            if best_table == 1:
-                player_data["stat_values"]["Raw Quals"] += " [Best Season]"
-            else:
-                player_data["stat_values"]["Raw Quals"] += " [Best " + str(best_table) + " Seasons]"
-        
-        if worst_table:
-            if first_qual:
-                first_qual = False
-            
-            if best_table == 1:
-                player_data["stat_values"]["Raw Quals"] += " [Worst Season]"
-            else:
-                player_data["stat_values"]["Raw Quals"] += " [Worst " + str(worst_table) + " Seasons]"
-        
-        if best_games_table:
-            if first_qual:
-                first_qual = False
-            
-            if best_games_table == 1:
-                player_data["stat_values"]["Raw Quals"] += " [Best Game]"
-            else:
-                player_data["stat_values"]["Raw Quals"] += " [Best " + str(best_games_table) + " Games]"
-        
-        if worst_games_table:
-            if first_qual:
-                first_qual = False
-            
-            if worst_games_table == 1:
-                player_data["stat_values"]["Raw Quals"] += " [Worst Game]"
-            else:
-                player_data["stat_values"]["Raw Quals"] += " [Worst " + str(worst_games_table) + " Games]"
-        
-        if seasons_leading_start:
-            if first_qual:
-                first_qual = False
-            
-            if seasons_leading_start == seasons_leading_end:
-                player_data["stat_values"]["Raw Quals"] += " [Seasons In " + get_time_str(seasons_leading_start, True) + "]"
-            elif seasons_leading_end == 1:
-                player_data["stat_values"]["Raw Quals"] += " [Seasons In Top " + str(seasons_leading_end) + "]"
-            else:
-                player_data["stat_values"]["Raw Quals"] +=  " [Seasons In Top " + str(seasons_leading_start) + "-" + str(seasons_leading_end) + "]"
-        
-        if "missing-game" in extra_stats:
-            if player_data["stat_values"]["any_missing_games"]:
-                if len(player_data["stat_values"]["any_missing_games"]) > 20:
-                    if player_data["stat_values"]["any_missing_games"]:
-                        player_data["stat_values"]["Raw Quals"] +=  " [" + str(len(player_data["stat_values"]["any_missing_games"])) + " Missing Game(s)]"
-                    else:
-                        player_data["stat_values"]["Raw Quals"] +=  " [No Missing Games!]"
-                else:
-                    player_data["stat_values"]["any_missing_games"] = sorted(player_data["stat_values"]["any_missing_games"], key=customGameDateSort)
-                    player_data["stat_values"]["Raw Quals"] +=  " [Missing Games: " + " + ".join(player_data["stat_values"]["any_missing_games"]) + "]"
-            else:
-                player_data["stat_values"]["Raw Quals"] +=  " [No Missing Games!]"
-        elif "missing-game-count" in extra_stats or player_data["stat_values"]["any_missing_games"]:
-            if player_data["stat_values"]["any_missing_games"]:
-                player_data["stat_values"]["Raw Quals"] +=  " [" + str(len(player_data["stat_values"]["any_missing_games"])) + " Missing Game(s)]"
-            else:
-                player_data["stat_values"]["Raw Quals"] +=  " [No Missing Games!]"
+        player_data["stat_values"]["Raw Quals"] += " [Duplicates Removed]"
     
-        if "missing-toi" in extra_stats:
-            if player_data["stat_values"]["any_missing_toi"]:
-                if len(player_data["stat_values"]["any_missing_toi"]) > 20:
-                    if player_data["stat_values"]["any_missing_toi"]:
-                        player_data["stat_values"]["Raw Quals"] +=  " [" + str(len(player_data["stat_values"]["any_missing_toi"])) + " Missing TOI Game(s)]"
-                    else:
-                        player_data["stat_values"]["Raw Quals"] +=  " [No Missing TOI Games!]"
+    if remove_duplicate_games:
+        if first_qual:
+            first_qual = False
+        
+        player_data["stat_values"]["Raw Quals"] += " [Duplicate Games Removed]"
+    
+    if best_table:
+        if first_qual:
+            first_qual = False
+        
+        if best_table == 1:
+            player_data["stat_values"]["Raw Quals"] += " [Best Season]"
+        else:
+            player_data["stat_values"]["Raw Quals"] += " [Best " + str(best_table) + " Seasons]"
+    
+    if worst_table:
+        if first_qual:
+            first_qual = False
+        
+        if best_table == 1:
+            player_data["stat_values"]["Raw Quals"] += " [Worst Season]"
+        else:
+            player_data["stat_values"]["Raw Quals"] += " [Worst " + str(worst_table) + " Seasons]"
+    
+    if best_games_table:
+        if first_qual:
+            first_qual = False
+        
+        if best_games_table == 1:
+            player_data["stat_values"]["Raw Quals"] += " [Best Game]"
+        else:
+            player_data["stat_values"]["Raw Quals"] += " [Best " + str(best_games_table) + " Games]"
+    
+    if worst_games_table:
+        if first_qual:
+            first_qual = False
+        
+        if worst_games_table == 1:
+            player_data["stat_values"]["Raw Quals"] += " [Worst Game]"
+        else:
+            player_data["stat_values"]["Raw Quals"] += " [Worst " + str(worst_games_table) + " Games]"
+    
+    if seasons_leading_start:
+        if first_qual:
+            first_qual = False
+        
+        if seasons_leading_start == seasons_leading_end:
+            player_data["stat_values"]["Raw Quals"] += " [Seasons In " + get_time_str(seasons_leading_start, True) + "]"
+        elif seasons_leading_end == 1:
+            player_data["stat_values"]["Raw Quals"] += " [Seasons In Top " + str(seasons_leading_end) + "]"
+        else:
+            player_data["stat_values"]["Raw Quals"] +=  " [Seasons In Top " + str(seasons_leading_start) + "-" + str(seasons_leading_end) + "]"
+    
+    if "missing-game" in extra_stats:
+        if player_data["stat_values"]["any_missing_games"]:
+            if len(player_data["stat_values"]["any_missing_games"]) > 20:
+                if player_data["stat_values"]["any_missing_games"]:
+                    player_data["stat_values"]["Raw Quals"] +=  " [" + str(len(player_data["stat_values"]["any_missing_games"])) + " Missing Game(s)]"
                 else:
-                    player_data["stat_values"]["any_missing_toi"] = sorted(player_data["stat_values"]["any_missing_toi"], key=customGameDateSort)
-                    player_data["stat_values"]["Raw Quals"] +=  " [Missing TOI Games: " + " + ".join(player_data["stat_values"]["any_missing_toi"]) + "]"
+                    player_data["stat_values"]["Raw Quals"] +=  " [No Missing Games!]"
             else:
-                player_data["stat_values"]["Raw Quals"] +=  " [No Missing TOI Games!]"
-        elif "missing-toi-count" in extra_stats or player_data["stat_values"]["any_missing_toi"]:
-            if player_data["stat_values"]["any_missing_toi"]:
-                player_data["stat_values"]["Raw Quals"] +=  " [" + str(len(player_data["stat_values"]["any_missing_toi"])) + " Missing TOI Game(s)]"
-            else:
-                player_data["stat_values"]["Raw Quals"] +=  " [No Missing TOI Games!]"
+                player_data["stat_values"]["any_missing_games"] = sorted(player_data["stat_values"]["any_missing_games"], key=customGameDateSort)
+                player_data["stat_values"]["Raw Quals"] +=  " [Missing Games: " + " + ".join(player_data["stat_values"]["any_missing_games"]) + "]"
+        else:
+            player_data["stat_values"]["Raw Quals"] +=  " [No Missing Games!]"
+    elif "missing-game-count" in extra_stats or player_data["stat_values"]["any_missing_games"]:
+        if player_data["stat_values"]["any_missing_games"]:
+            player_data["stat_values"]["Raw Quals"] +=  " [" + str(len(player_data["stat_values"]["any_missing_games"])) + " Missing Game(s)]"
+        else:
+            player_data["stat_values"]["Raw Quals"] +=  " [No Missing Games!]"
 
-        if "date-count" in extra_stats:
-            the_dates = set()
-            for row in player_data["stat_values"]["all_rows"]:
-                the_dates.add(row["Date"])
-
-            if the_dates:
-                player_data["stat_values"]["Raw Quals"] +=  " [" + str(len(the_dates)) + " Date(s)]"
+    if "missing-toi" in extra_stats:
+        if player_data["stat_values"]["any_missing_toi"]:
+            if len(player_data["stat_values"]["any_missing_toi"]) > 20:
+                if player_data["stat_values"]["any_missing_toi"]:
+                    player_data["stat_values"]["Raw Quals"] +=  " [" + str(len(player_data["stat_values"]["any_missing_toi"])) + " Missing TOI Game(s)]"
+                else:
+                    player_data["stat_values"]["Raw Quals"] +=  " [No Missing TOI Games!]"
             else:
-                player_data["stat_values"]["Raw Quals"] +=  " [No Dates!]"
+                player_data["stat_values"]["any_missing_toi"] = sorted(player_data["stat_values"]["any_missing_toi"], key=customGameDateSort)
+                player_data["stat_values"]["Raw Quals"] +=  " [Missing TOI Games: " + " + ".join(player_data["stat_values"]["any_missing_toi"]) + "]"
+        else:
+            player_data["stat_values"]["Raw Quals"] +=  " [No Missing TOI Games!]"
+    elif "missing-toi-count" in extra_stats or player_data["stat_values"]["any_missing_toi"]:
+        if player_data["stat_values"]["any_missing_toi"]:
+            player_data["stat_values"]["Raw Quals"] +=  " [" + str(len(player_data["stat_values"]["any_missing_toi"])) + " Missing TOI Game(s)]"
+        else:
+            player_data["stat_values"]["Raw Quals"] +=  " [No Missing TOI Games!]"
+
+    if "date-count" in extra_stats:
+        the_dates = set()
+        for row in player_data["stat_values"]["all_rows"]:
+            the_dates.add(row["Date"])
+
+        if the_dates:
+            player_data["stat_values"]["Raw Quals"] +=  " [" + str(len(the_dates)) + " Date(s)]"
+        else:
+            player_data["stat_values"]["Raw Quals"] +=  " [No Dates!]"
 
     player_data["stat_values"]["Raw Quals"] = player_data["stat_values"]["Raw Quals"].strip()
 
