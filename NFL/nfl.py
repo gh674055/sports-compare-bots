@@ -16606,7 +16606,7 @@ def add_explain_qualls(total_matching_strs, match_all, stat, over_stat, stat_qua
     for str_index, total_matching_str in enumerate(total_matching_strs):
         if str_index > 0:
             str_to_use += " + "
-        stat_str = total_matching_str["strs"] + ">"
+        stat_str = total_matching_str["strs"] + ": "
         for index, stat in enumerate(total_matching_str["stat_objs"]):
             if index > 0:
                 stat_str += ","
