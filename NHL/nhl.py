@@ -34582,7 +34582,7 @@ def handle_min_max_final(stat_val, current_explain_strs, player_data, player_typ
                 stat_val["stat_obj"]["explain_str"] += (get_time_str(stat_qual["start_val"], False)) + "-" + (get_time_str(stat_qual["end_val"], False))
             stat_val["stat_obj"]["explain_str"] += ","
         stat_val["stat_obj"]["explain_str"] = stat_val["stat_obj"]["explain_str"][:-1]
-    if match_count <= 20:
+    if match_count > 0 and match_count <= 20:
         stat_val["stat_obj"]["explain_str"] += "|" + add_explain_qualls(total_matching_strs, match_all, stat, stat_quals, player_data, player_type)
 
     stat_val["stat_obj"]["explain_str"] = current_explain_strs + [stat_val["stat_obj"]["explain_str"]]
