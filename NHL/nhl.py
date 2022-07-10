@@ -8977,7 +8977,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                             
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
                                                 
-                        last_match = re.finditer(r"\(?:hide|skip)(?: |-)?(name|year|season|live|date|query|queries|advanced|href-quals|href|missing|toi|play|strength)s?\b", time_frame)
+                        last_match = re.finditer(r"\b(?:hide|skip)(?: |-)?(name|year|season|live|date|query|queries|advanced|href-quals|href|missing|toi|play|strength)s?\b", time_frame)
                         for m in last_match:
                             if m.group(1) == "date" or m.group(1) == "season":
                                 extra_stats.add("hide-year")
