@@ -14364,7 +14364,10 @@ def sub_handle_the_quals(players, qualifier, real_player_type, qual_str, player_
                 elif key == "Game":
                     player_games[row["GameID"]] = True
                 elif key == "GameEventID":
-                    player_games[row["GameID"]] = row["play_event_ids"]
+                    player_games[row["GameID"]] = {
+                        "play_event_ids" : row["play_event_ids"],
+                        "play_pitch_event_ids" : row["play_pitch_event_ids"]
+                    }
                 elif key == "RowGame":
                     player_games[row["GameID"]] = row
                 elif key == "Season":
@@ -31697,6 +31700,7 @@ def perform_sub_mlb_game_qualifiers(row, player_data, qualifiers, player_game_in
     add_play_event_ids = "event-id" in extra_stats
     if add_play_event_ids:
         row["play_event_ids"] = set()
+        row["play_pitch_event_ids"] = set()
 
     raw_row_data = copy.copy(row)
     
@@ -31776,8 +31780,11 @@ def perform_sub_mlb_game_qualifiers(row, player_data, qualifiers, player_game_in
                             if pitch_speed == None:
                                 has_pitch_match = False
                     if has_pitch_match:
-                        if handle_da_pitch_quals(row, "batting_events" if player_type["da_type"] == "Batter" else "pitching_events", at_bat_event, qualifiers, player_data, player_type, player_game_info, pitch_index + 1, skip_pitch_events=True):
+                        pitch_event_obj = handle_da_pitch_quals(row, "batting_events" if player_type["da_type"] == "Batter" else "pitching_events", at_bat_event, qualifiers, player_data, player_type, player_game_info, pitch_index + 1, skip_pitch_events=True)
+                        if pitch_event_obj:
                             row["TtlPit"] += 1
+                            if add_play_event_ids:
+                                row["play_pitch_event_ids"].add(pitch_event_obj["unique_event_id"])
 
     if player_type["da_type"] != "Batter":
         for at_bat_event in player_game_info["pitching_run_events"]:
@@ -36059,7 +36066,10 @@ def handle_da_mlb_quals(row, event_name, at_bat_event, qualifiers, player_data, 
             has_match = False
             for player in qual_object["values"]:
                 if row["GameID"] in player["games"]:
-                    has_match = at_bat_event["unique_event_id"] in player["games"][row["GameID"]]
+                    if skip_pitch_events:
+                        has_match = at_bat_event["unique_event_id"] in player["games"][row["GameID"]]["play_pitch_event_ids"]
+                    else:
+                        has_match = at_bat_event["unique_event_id"] in player["games"][row["GameID"]]["play_event_ids"]
             if qual_object["negate"]:
                 if has_match:
                     return False
@@ -36073,7 +36083,10 @@ def handle_da_mlb_quals(row, event_name, at_bat_event, qualifiers, player_data, 
             has_match = False
             for player in qual_object["values"]:
                 if row["GameID"] in player["games"]:
-                    has_match = at_bat_event["unique_event_id"] in player["games"][row["GameID"]]
+                    if skip_pitch_events:
+                        has_match = at_bat_event["unique_event_id"] in player["games"][row["GameID"]]["play_pitch_event_ids"]
+                    else:
+                        has_match = at_bat_event["unique_event_id"] in player["games"][row["GameID"]]["play_event_ids"]
             if qual_object["negate"]:
                 if not has_match:
                     has_any_match = True
