@@ -176,8 +176,8 @@ position_map = {
 }
 position_map_reversed = {v: k for k, v in position_map.items()}
 
-count_stats = ["Pit", "PitBall", "Chase", "PitStrike", "LkStr", "Str", "1stStr", "SwStr", "SwgStr", "CntStr", "Bal", "2StrPit"]
-non_rate_stats = ["IP", "BF", "Pit", "PO", "ER", "AB", "H", "1B", "2B", "3B", "HR", "XBH", "TB", "Cycle", "SO", "GDP", "GDPO", "PA", "BB", "IBB", "HBP", "Slam", "WalkOff", "R", "RBI", "GWRBI", "SB", "CS", "TOB", "SH", "SF", "Pit", "PitBall", "Chase", "PitStrike", "LkStr", "Str", "1stStr", "SwStr", "SwgStr", "CntStr", "Bal", "2StrPit"]
+count_stats = ["Pit", "PitBall", "Chase", "PitStrike", "LkStr", "Str", "1stStr", "SwStr", "SwgStr", "CntStr", "FoulStr", "Bal", "2StrPit"]
+non_rate_stats = ["IP", "BF", "Pit", "PO", "ER", "AB", "H", "1B", "2B", "3B", "HR", "XBH", "TB", "Cycle", "SO", "GDP", "GDPO", "PA", "BB", "IBB", "HBP", "Slam", "WalkOff", "R", "RBI", "GWRBI", "SB", "CS", "TOB", "SH", "SF", "Pit", "PitBall", "Chase", "PitStrike", "LkStr", "Str", "1stStr", "SwStr", "SwgStr", "CntStr", "FoulStr", "Bal", "2StrPit"]
 non_rate_stats_lower = [non_rate_stat.lower() for non_rate_stat in non_rate_stats]
 
 headers = {
@@ -1040,6 +1040,14 @@ headers = {
         },
         "CntStr": {
             "positive" : False,
+            "display" : False,
+            "valid_since" : {
+                "season" : 1988,
+                "game" : 1988
+            }
+        },
+        "FoulStr": {
+            "positive" : True,
             "display" : False,
             "valid_since" : {
                 "season" : 1988,
@@ -3191,6 +3199,14 @@ headers = {
         },
         "CntStr": {
             "positive" : True,
+            "display" : False,
+            "valid_since" : {
+                "season" : 1988,
+                "game" : 1988
+            }
+        },
+        "FoulStr": {
+            "positive" : False,
             "display" : False,
             "valid_since" : {
                 "season" : 1988,
@@ -32358,6 +32374,8 @@ def add_pitch_row_numbers(row, at_bat_event, event_name, qualifiers, pitch_index
         row["Str"] += 1
         if pitch_index == 0:
             row["1stStr"] += 1
+        if ind_pitch in ("T", "F", "O", "L"):
+            row["FoulStr"] += 1
     elif ind_pitch in ("B", "I", "H", "V", "P"):
         row["Bal"] += 1
     
@@ -37650,7 +37668,7 @@ def handle_mlb_schedule_stats(all_rows, qualifiers, player_data, player_type, mi
     new_rows = []
     for row in all_rows:
         if "MLBGameLink" not in row:
-            missing_games.append("[" + str(row_data["Date"]) + "](" + "https://www.mlb.com/gameday/" + str(row["MLBGameLink"]) + ")")
+            missing_games.append("[" + str(row["Date"]) + "](" + "https://www.mlb.com/gameday/" + str(row["MLBGameLink"]) + ")")
             continue
         if perform_mlb_schedule_qualifiers(row, qualifiers):
             new_rows.append(row)
@@ -41805,6 +41823,7 @@ def clear_data(row):
     row["2StrPit"] = 0
     row["2StrK"] = 0
     row["CntStr"] = 0
+    row["FoulStr"] = 0
     row["1stStr"] = 0
     row["WalkOff"] = 0
     row["Pit"] = 0
