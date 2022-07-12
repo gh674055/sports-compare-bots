@@ -8541,7 +8541,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                             extra_stats.add(m.group(1))
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
                         
-                        last_match = re.finditer(r"\bshow(?: |-)?(only(?: |-)?)?(goalie-record|record|faceoff|extra-slash-per-game|slash-per-game|slash-5v5|slash|score|scoring-5v5|extra-scoring|scoring|extra-strength-slash-per-game|strength-slash-per-game|strength-slash|extra-strength-scoring|strength-scoring|goal|year|games?-count|seasons-leading|season|dates?-count|game-link|date|per-game|game|adjusted|advanced|relative|missing-games-count|missing-game-count|missing-toi-count|missing-game|missing-toi|best-season|worst-season|ng|team|franchise|number|fight|penalty-taken|penalties-taken|penaltie|penalty|award|shot|shift|star|play|nhl-link|strength|toi|href|api)s?\b", time_frame)
+                        last_match = re.finditer(r"\bshow(?: |-)?(only(?: |-)?)?(goalie-record|record|faceoff|extra-slash-per-game|slash-per-game|slash-5v5|slash|score|scoring-5v5|extra-scoring|scoring|extra-strength-slash-per-game|strength-slash-per-game|strength-slash|extra-strength-scoring|strength-scoring|goal|year|games?-count|seasons-leading|season|dates?-count|game-link|date|per-game|game|adjusted|advanced|relative|missing-games-count|missing-game-count|missing-toi-count|missing-game|missing-toi|best-season|worst-season|ng|team|franchise|number|fight|penalty-taken|penalties-taken|penaltie|penalty|award|shot|shift|star|play|nhl-link|strength|toi|href|api|event-id)s?\b", time_frame)
                         for m in last_match:
                             if "penalt" in m.group(2):
                                 extra_stats.add("penalties")
@@ -14542,11 +14542,11 @@ def handle_against_qual(names, time_frames, comment_obj, extra_stats):
                 if "Sub Query" in time_frame["qualifiers"]:
                     handle_the_quals(time_frame["qualifiers"], "Sub Query", sub_matching_names, time_frame, "Game", comment_obj, players_map, extra_stats)
                 if "Event Sub Query" in time_frame["qualifiers"]:
-                    handle_the_quals(time_frame["qualifiers"], "Event Sub Query", sub_matching_names, time_frame, "Game", comment_obj, players_map, extra_stats)
+                    handle_the_quals(time_frame["qualifiers"], "Event Sub Query", sub_matching_names, time_frame, "GameEventID", comment_obj, players_map, extra_stats)
                 if "Or Sub Query" in time_frame["qualifiers"]:
                     handle_the_quals(time_frame["qualifiers"], "Or Sub Query", sub_matching_names, time_frame, "Game", comment_obj, players_map, extra_stats)
                 if "Or Event Sub Query" in time_frame["qualifiers"]:
-                    handle_the_quals(time_frame["qualifiers"], "Or Event Sub Query", sub_matching_names, time_frame, "Game", comment_obj, players_map, extra_stats)
+                    handle_the_quals(time_frame["qualifiers"], "Or Event Sub Query", sub_matching_names, time_frame, "GameEventID", comment_obj, players_map, extra_stats)
                 if "Day Of Sub Query" in time_frame["qualifiers"]:
                     handle_the_quals(time_frame["qualifiers"], "Day Of Sub Query", sub_matching_names, time_frame, "Date", comment_obj, players_map, extra_stats)
                 if "Day After Sub Query" in time_frame["qualifiers"]:
@@ -14786,6 +14786,8 @@ def sub_handle_the_quals(players, qualifier, qual_str, player_str, time_frame, k
                     player_games[opponent].add(date)
                 elif key == "Game":
                     player_games[row["NHLGameLink"]] = True
+                elif key == "GameEventID":
+                    player_games[row["NHLGameLink"]] = row["play_event_ids"]
                 elif key == "RowGame":
                     player_games[row["NHLGameLink"]] = row
                 elif key == "Season":
@@ -14829,12 +14831,6 @@ def sub_handle_the_quals(players, qualifier, qual_str, player_str, time_frame, k
                 "games" : player_games,
                 "is_raw_query" : is_raw_query
             })
-            if "Event Sub Query" in qual_str:
-                if player_name != "No Player Match!":
-                    players[len(players) - 1]["quals"] = player_data["quals"][qual_index]
-                    qual_index += 1
-                else:
-                    players[len(players) - 1]["quals"] = []
             if qual_str == "Formula Query" or qual_str == "Formula Sub Query":
                 players[len(players) - 1]["player_type"] = player_type
                 players[len(players) - 1]["player_data"] = player_data
@@ -14904,7 +14900,7 @@ def determine_player_str(qualifier, player_str, time_frame, qual_str):
     
     bracket_index = re.search(r"(?<!\\)]", player_str).start()
     if "Event Sub Query" in qual_str:
-        player_str = player_str[:bracket_index] + " show-advanced" + player_str[bracket_index:]
+        player_str = player_str[:bracket_index] + " show-advanced show-event-id" + player_str[bracket_index:]
     elif not "Sub Query" in qual_str:
         player_str = player_str[:bracket_index] + " hide-advanced" + player_str[bracket_index:]
     
@@ -23027,7 +23023,7 @@ def determine_stat_value(player_game_info, all_events, qualifiers, og_row, playe
 
         if stat in event_stats:
             for goal_event in player_game_info["all_raw_events"]:
-                if perform_metadata_qual("raw_event", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"]):
+                if perform_metadata_qual(set(), "raw_event", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"]):
                     row["Event"] += 1
 
         if stat in toi_stats:
@@ -23052,7 +23048,7 @@ def determine_stat_value(player_game_info, all_events, qualifiers, og_row, playe
     return row[stat]
 
 def determine_event_match(goal_event, qualifiers, player_game_info, row, is_faceoff=False, is_toi=False, is_off_ice=False):
-    return perform_metadata_qual(goal_event["event_name"], goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], is_faceoff=is_faceoff, is_toi=is_toi, is_off_ice=is_off_ice, skip_career_events=True)
+    return perform_metadata_qual(set(), goal_event["event_name"], goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], is_faceoff=is_faceoff, is_toi=is_toi, is_off_ice=is_off_ice, skip_career_events=True)
 
 def is_player_on_ice(player_shift_data, team_on_ice, opp_on_ice, period, period_time, player_id, is_team, is_faceoff=False):
     if is_team and team_on_ice:
@@ -24257,6 +24253,7 @@ def get_game_data(index, player_data, row_data, player_id, player_type, time_fra
         for goal_event in game_data[event_str]:
             if not isinstance(goal_event, dict) or not "periodTime" in goal_event:
                 continue
+            goal_event["unique_event_id"] = str(goal_event["event_id"]) + "-" + event_str
             if goal_event["period"] not in game_data["all_events"]:
                 game_data["all_events"][goal_event["period"]] = {}
             if goal_event["periodTime"] not in game_data["all_events"][goal_event["period"]]:
@@ -27614,12 +27611,16 @@ def perform_sub_nhl_game_qualifiers(row, qualifiers, player_game_info, player_ty
         return False, row
 
     raw_row_data = copy.copy(row)
+
+    add_play_event_ids = "event-id" in extra_stats
+    if add_play_event_ids:
+        row["play_event_ids"] = set()
     
-    perform_metadata_quals(qualifiers, player_type, row, player_game_info, player_id, False, needs_five_stats) 
+    perform_metadata_quals(qualifiers, player_type, row, player_game_info, player_id, False, needs_five_stats, extra_stats) 
     calculate_toi(row, qualifiers, player_game_info, player_id, player_link, saved_row_data, player_type, index, False, needs_five_stats, extra_stats)
 
     if saved_row_data:
-        perform_metadata_quals(qualifiers, player_type, raw_row_data, player_game_info, player_id, True, needs_five_stats) 
+        perform_metadata_quals(qualifiers, player_type, raw_row_data, player_game_info, player_id, True, needs_five_stats, extra_stats) 
         calculate_toi(raw_row_data, qualifiers, player_game_info, player_id, player_link, saved_row_data, player_type, index, True, needs_five_stats, extra_stats)
 
     return True, raw_row_data
@@ -28005,7 +28006,7 @@ def perform_sub_game_quals(qualifiers, player_game_info, row):
 
     return True
 
-def perform_metadata_quals(qualifiers, player_type, row, player_game_info, nhl_player_id, skip_career_events, needs_five_stats):
+def perform_metadata_quals(qualifiers, player_type, row, player_game_info, nhl_player_id, skip_career_events, needs_five_stats, extra_stats):
     count_misses = False
     if not "Shot On" in player_game_info["extra_stats"] and not "Shot By" in player_game_info["extra_stats"]:
         if "Penalty Shot" in qualifiers or "Shootout" in qualifiers:
@@ -28013,7 +28014,7 @@ def perform_metadata_quals(qualifiers, player_type, row, player_game_info, nhl_p
 
     if player_type["da_type"]["type"] == "Skater":
         for goal_event in player_game_info["goal"]:
-            if perform_metadata_qual("goal", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], skip_career_events=skip_career_events):
+            if perform_metadata_qual(extra_stats, "goal", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], skip_career_events=skip_career_events):
                 row["G"] += 1
                 strength = determine_strength(player_game_info, goal_event["period"], goal_event["periodTime"], goal_event)
                 if strength:
@@ -28060,7 +28061,7 @@ def perform_metadata_quals(qualifiers, player_type, row, player_game_info, nhl_p
                             if player_game_info["is_html_stats"]:
                                 row["TSA_5v5"] += 1
         for goal_event in player_game_info["shot"]:
-            if perform_metadata_qual("shot", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], skip_career_events=skip_career_events):
+            if perform_metadata_qual(extra_stats, "shot", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], skip_career_events=skip_career_events):
                 row["S"] += 1
                 if goal_event["shotType"] == "Wrist Shot":
                     row["WristS"] += 1
@@ -28083,7 +28084,7 @@ def perform_metadata_quals(qualifiers, player_type, row, player_game_info, nhl_p
                     if player_game_info["is_html_stats"]:
                         row["TSA_5v5"] += 1
         for goal_event in player_game_info["missed_shot"]:
-            if perform_metadata_qual("missed_shot", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], skip_career_events=skip_career_events):
+            if perform_metadata_qual(extra_stats, "missed_shot", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], skip_career_events=skip_career_events):
                 if goal_event["description"] and (goal_event["description"].endswith(" Goalpost") or goal_event["description"].endswith("Hit Crossbar")):
                     row["PostBar"] += 1
                 if count_misses:
@@ -28095,7 +28096,7 @@ def perform_metadata_quals(qualifiers, player_type, row, player_game_info, nhl_p
                         row["TSA_5v5"] += 1
                         row["TSM_5v5"] += 1
         for goal_event in player_game_info["blocked_shot"]:
-            if perform_metadata_qual("blocked_shot", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], skip_career_events=skip_career_events):
+            if perform_metadata_qual(extra_stats, "blocked_shot", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], skip_career_events=skip_career_events):
                 if player_game_info["is_html_stats"]:
                     row["TSA"] += 1
                     row["TSB"] += 1
@@ -28103,7 +28104,7 @@ def perform_metadata_quals(qualifiers, player_type, row, player_game_info, nhl_p
                         row["TSA_5v5"] += 1
                         row["TSB_5v5"] += 1
         for goal_event in player_game_info["assist"]:
-            if perform_metadata_qual("assist", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], skip_career_events=skip_career_events):
+            if perform_metadata_qual(extra_stats, "assist", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], skip_career_events=skip_career_events):
                 row["A"] += 1
                 if goal_event["gameWinningGoal"]:
                     row["GWA"] += 1
@@ -28129,16 +28130,16 @@ def perform_metadata_quals(qualifiers, player_type, row, player_game_info, nhl_p
                     else:
                         row["A2_5v5"] += 1
         for goal_event in player_game_info["hit"]:
-            if perform_metadata_qual("hit", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], skip_career_events=skip_career_events):
+            if perform_metadata_qual(extra_stats, "hit", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], skip_career_events=skip_career_events):
                 row["HIT"] += 1
         for goal_event in player_game_info["hit_taken"]:
-            if perform_metadata_qual("hit_taken", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], skip_career_events=skip_career_events):
+            if perform_metadata_qual(extra_stats, "hit_taken", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], skip_career_events=skip_career_events):
                 row["HITTkn"] += 1
         for goal_event in player_game_info["block"]:
-            if perform_metadata_qual("block", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], skip_career_events=skip_career_events):
+            if perform_metadata_qual(extra_stats, "block", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], skip_career_events=skip_career_events):
                 row["BLK"] += 1
         for goal_event in player_game_info["faceoff"]:
-            if perform_metadata_qual("faceoff", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], is_faceoff=True, skip_career_events=skip_career_events):
+            if perform_metadata_qual(extra_stats, "faceoff", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], is_faceoff=True, skip_career_events=skip_career_events):
                 row["FO"] += 1
                 if goal_event["winner"]:
                     row["FOW"] += 1
@@ -28152,20 +28153,20 @@ def perform_metadata_quals(qualifiers, player_type, row, player_game_info, nhl_p
                         row[goal_event["zone"] + "FOL"] += 1
         for goal_event in player_game_info["oi_all_faceoffs"]:
             if goal_event["zone"]:
-                if perform_metadata_qual("oi_all_faceoffs", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], is_faceoff=True, skip_career_events=skip_career_events):
+                if perform_metadata_qual(extra_stats, "oi_all_faceoffs", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], is_faceoff=True, skip_career_events=skip_career_events):
                     row[goal_event["zone"]] += 1
         for goal_event in player_game_info["all_faceoffs"]:
             if goal_event["zone"]:
-                if perform_metadata_qual("all_faceoffs", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], is_faceoff=True, is_off_ice=True, skip_career_events=skip_career_events):
+                if perform_metadata_qual(extra_stats, "all_faceoffs", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], is_faceoff=True, is_off_ice=True, skip_career_events=skip_career_events):
                     row["offI" + goal_event["zone"]] += 1
         for goal_event in player_game_info["takeaway"]:
-            if perform_metadata_qual("takeaway", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], skip_career_events=skip_career_events):
+            if perform_metadata_qual(extra_stats, "takeaway", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], skip_career_events=skip_career_events):
                 if goal_event["is_takeaway"]:
                     row["TK"] += 1
                 else:
                     row["GV"] += 1
         for goal_event in player_game_info["penalty"]:
-            if perform_metadata_qual("penalty", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], skip_career_events=skip_career_events):
+            if perform_metadata_qual(extra_stats, "penalty", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], skip_career_events=skip_career_events):
                 if goal_event["player_penalty"]:
                     row["PEN"] += 1
                     row["PIM"] += goal_event["penalty_minutes"]
@@ -28179,7 +28180,7 @@ def perform_metadata_quals(qualifiers, player_type, row, player_game_info, nhl_p
                 else:
                     row["PenDrawn"] += 1
         for goal_event in player_game_info["oi_all_team_goals"]:
-            if perform_metadata_qual("oi_all_team_goals", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], skip_career_events=skip_career_events):
+            if perform_metadata_qual(extra_stats, "oi_all_team_goals", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], skip_career_events=skip_career_events):
                 row["GF"] += 1
                 row["GD"] += 1
                 row["TmGF"] += 1
@@ -28190,7 +28191,7 @@ def perform_metadata_quals(qualifiers, player_type, row, player_game_info, nhl_p
                     if strength == "EV" or strength == "SH":
                         row["PlusMinus"] += 1
         for goal_event in player_game_info["oi_all_opp_goals"]:
-            if perform_metadata_qual("oi_all_opp_goals", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], skip_career_events=skip_career_events):
+            if perform_metadata_qual(extra_stats, "oi_all_opp_goals", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], skip_career_events=skip_career_events):
                 row["GA"] += 1
                 row["GD"] -= 1
                 row["OppGF"] += 1
@@ -28202,7 +28203,7 @@ def perform_metadata_quals(qualifiers, player_type, row, player_game_info, nhl_p
                         row["PlusMinus"] -= 1
     else:
         for goal_event in player_game_info["goal_against"]:
-            if perform_metadata_qual("goal_against", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], skip_career_events=skip_career_events):
+            if perform_metadata_qual(extra_stats, "goal_against", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], skip_career_events=skip_career_events):
                 row["GA"] += 1
                 strength = determine_strength(player_game_info, goal_event["period"], goal_event["periodTime"], goal_event)
                 if strength:
@@ -28215,7 +28216,7 @@ def perform_metadata_quals(qualifiers, player_type, row, player_game_info, nhl_p
                 if player_game_info["is_html_stats"]:
                     row["SA"] += 1
         for goal_event in player_game_info["save_against"]:
-            if perform_metadata_qual("save_against", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], skip_career_events=skip_career_events):
+            if perform_metadata_qual(extra_stats, "save_against", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], skip_career_events=skip_career_events):
                 strength = determine_strength(player_game_info, goal_event["period"], goal_event["periodTime"], goal_event)
                 if strength:
                     if strength == "PP":
@@ -28227,78 +28228,78 @@ def perform_metadata_quals(qualifiers, player_type, row, player_game_info, nhl_p
                 row["SA"] += 1
         if count_misses:
             for goal_event in player_game_info["missed_shot_against"]:
-                if perform_metadata_qual("missed_shot_against", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], skip_career_events=skip_career_events):
+                if perform_metadata_qual(extra_stats, "missed_shot_against", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], skip_career_events=skip_career_events):
                     row["SV"] += 1
                     row["SA"] += 1
         for goal_event in player_game_info["oi_all_team_goals"]:
-            if perform_metadata_qual("oi_all_team_goals", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], skip_career_events=skip_career_events):
+            if perform_metadata_qual(extra_stats, "oi_all_team_goals", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], skip_career_events=skip_career_events):
                 row["GF"] += 1
 
     for goal_event in player_game_info["oi_all_team_shots_og"]:
-        if perform_metadata_qual("oi_all_team_shots_og", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], skip_career_events=skip_career_events):
+        if perform_metadata_qual(extra_stats, "oi_all_team_shots_og", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], skip_career_events=skip_career_events):
             row["oiTmS"] += 1
             row["TmSF"] += 1
     for goal_event in player_game_info["oi_all_opp_shots_og"]:
-        if perform_metadata_qual("all_opp_shots_og", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], skip_career_events=skip_career_events):
+        if perform_metadata_qual(extra_stats, "all_opp_shots_og", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], skip_career_events=skip_career_events):
             row["oiOppS"] += 1
             row["OppSF"] += 1
     for goal_event in player_game_info["oi_all_team_shots"]:
-        if perform_metadata_qual("oi_all_team_shots", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], skip_career_events=skip_career_events):
+        if perform_metadata_qual(extra_stats, "oi_all_team_shots", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], skip_career_events=skip_career_events):
             row["CF"] += 1
             row["TmCF"] += 1
             if needs_five_stats and is_five_toi(player_game_info, goal_event, goal_event["period"], goal_event["periodTime"]):
                 row["CF_5v5"] += 1
     for goal_event in player_game_info["oi_all_opp_shots"]:
-        if perform_metadata_qual("oi_all_opp_shots", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], skip_career_events=skip_career_events):
+        if perform_metadata_qual(extra_stats, "oi_all_opp_shots", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], skip_career_events=skip_career_events):
             row["CA"] += 1
             row["OppCF"] += 1
             if needs_five_stats and is_five_toi(player_game_info, goal_event, goal_event["period"], goal_event["periodTime"]):
                 row["CA_5v5"] += 1
     for goal_event in player_game_info["oi_all_team_unblocked_shots"]:
-        if perform_metadata_qual("oi_all_team_unblocked_shots", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], skip_career_events=skip_career_events):
+        if perform_metadata_qual(extra_stats, "oi_all_team_unblocked_shots", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], skip_career_events=skip_career_events):
             row["FF"] += 1
             row["TmFF"] += 1
             if needs_five_stats and is_five_toi(player_game_info, goal_event, goal_event["period"], goal_event["periodTime"]):
                 row["FF_5v5"] += 1
     for goal_event in player_game_info["oi_all_opp_unblocked_shots"]:
-        if perform_metadata_qual("oi_all_opp_unblocked_shots", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], skip_career_events=skip_career_events):
+        if perform_metadata_qual(extra_stats, "oi_all_opp_unblocked_shots", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], skip_career_events=skip_career_events):
             row["FA"] += 1
             row["OppFF"] += 1
             if needs_five_stats and is_five_toi(player_game_info, goal_event, goal_event["period"], goal_event["periodTime"]):
                 row["FA_5v5"] += 1
     for goal_event in player_game_info["all_team_goals"]:
-        if perform_metadata_qual("all_team_goals", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], is_off_ice=True, skip_career_events=skip_career_events):
+        if perform_metadata_qual(extra_stats, "all_team_goals", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], is_off_ice=True, skip_career_events=skip_career_events):
             row["offIGF"] += 1
     for goal_event in player_game_info["all_opp_goals"]:
-        if perform_metadata_qual("all_opp_goals", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], is_off_ice=True, skip_career_events=skip_career_events):
+        if perform_metadata_qual(extra_stats, "all_opp_goals", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], is_off_ice=True, skip_career_events=skip_career_events):
             row["offIGA"] += 1
     for goal_event in player_game_info["all_team_shots"]:
-        if perform_metadata_qual("all_team_shots", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], is_off_ice=True, skip_career_events=skip_career_events):
+        if perform_metadata_qual(extra_stats, "all_team_shots", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], is_off_ice=True, skip_career_events=skip_career_events):
             row["offICF"] += 1
             row["TmCF"] += 1
     for goal_event in player_game_info["all_opp_shots"]:
-        if perform_metadata_qual("all_opp_shots", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], is_off_ice=True, skip_career_events=skip_career_events):
+        if perform_metadata_qual(extra_stats, "all_opp_shots", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], is_off_ice=True, skip_career_events=skip_career_events):
             row["offICA"] += 1
             row["OppCF"] += 1
     for goal_event in player_game_info["all_team_unblocked_shots"]:
-        if perform_metadata_qual("all_team_unblocked_shots", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], is_off_ice=True, skip_career_events=skip_career_events):
+        if perform_metadata_qual(extra_stats, "all_team_unblocked_shots", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], is_off_ice=True, skip_career_events=skip_career_events):
             row["offIFF"] += 1
             row["TmFF"] += 1
     for goal_event in player_game_info["all_opp_unblocked_shots"]:
-        if perform_metadata_qual("all_opp_unblocked_shots", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], is_off_ice=True, skip_career_events=skip_career_events):
+        if perform_metadata_qual(extra_stats, "all_opp_unblocked_shots", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], is_off_ice=True, skip_career_events=skip_career_events):
             row["offIFA"] += 1
             row["OppFF"] += 1
     for goal_event in player_game_info["all_team_shots_og"]:
-        if perform_metadata_qual("all_team_shots_og", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], is_off_ice=True, skip_career_events=skip_career_events):
+        if perform_metadata_qual(extra_stats, "all_team_shots_og", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], is_off_ice=True, skip_career_events=skip_career_events):
             row["offISF"] += 1
             row["TmSF"] += 1
     for goal_event in player_game_info["all_opp_shots_og"]:
-        if perform_metadata_qual("all_opp_shots_og", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], is_off_ice=True, skip_career_events=skip_career_events):
+        if perform_metadata_qual(extra_stats, "all_opp_shots_og", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], is_off_ice=True, skip_career_events=skip_career_events):
             row["offISA"] += 1
             row["OppSF"] += 1
 
     for goal_event in player_game_info["all_raw_events"]:
-        if perform_metadata_qual("raw_event", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], skip_career_events=skip_career_events):
+        if perform_metadata_qual(extra_stats, "raw_event", goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], skip_career_events=skip_career_events):
             row["Event"] += 1
 
     for period in player_game_info["all_events"]:
@@ -28306,7 +28307,7 @@ def perform_metadata_quals(qualifiers, player_type, row, player_game_info, nhl_p
             goal_events = player_game_info["all_events"][period][period_time]
             found_per_match = False
             for goal_event in goal_events:
-                if perform_metadata_qual(goal_event["event_name"], goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], skip_career_events=skip_career_events):
+                if perform_metadata_qual(extra_stats, goal_event["event_name"], goal_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], skip_career_events=skip_career_events):
                     row["Per"] += 1
                     found_per_match = True
                     break
@@ -28338,7 +28339,7 @@ def calculate_toi(row, qualifiers, player_game_info, player_id, player_link, sav
     matching_shifts = set()
     for shift_event in player_game_info["shift_events"]:
         if not needs_on_ice or perform_on_ice_quals(qualifiers, player_shift_data, shift_event, row, shift_event["period"], shift_event["periodTime"], teammate_on_ice_quals, teammate_off_ice_quals):
-            if perform_metadata_qual("shift_events", shift_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], is_toi=True, skip_career_events=skip_career_events):
+            if perform_metadata_qual(extra_stats, "shift_events", shift_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], is_toi=True, skip_career_events=skip_career_events):
                 row["TOI"] += 1
                 row["TmTtlTOI"] += 1
                 if not ("strength-stats" in extra_stats or "hide-strength" in extra_stats) or "strength" in extra_stats:
@@ -28355,7 +28356,7 @@ def calculate_toi(row, qualifiers, player_game_info, player_id, player_link, sav
     
     for shift_event in player_game_info["all_shift_events"]:
         if not needs_on_ice or perform_on_ice_quals(qualifiers, player_shift_data, shift_event, row, shift_event["period"], shift_event["periodTime"], teammate_on_ice_quals, teammate_off_ice_quals):
-            if perform_metadata_qual("all_shift_events", shift_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], is_toi=True, is_off_ice=True, skip_career_events=skip_career_events):
+            if perform_metadata_qual(extra_stats, "all_shift_events", shift_event, qualifiers, player_game_info, row, row["is_playoffs"], row["Year"], is_toi=True, is_off_ice=True, skip_career_events=skip_career_events):
                 row["offITOI"] += 1
                 row["TmTtlTOI"] += 1
 
@@ -28450,7 +28451,7 @@ def has_shift_quals(qualifiers):
 def has_line_quals(qualifiers):
     return "On Line With" in qualifiers or "On Line Against" in qualifiers or "On Line Together" in qualifiers
 
-def perform_metadata_qual(event_name, goal_event, qualifiers, player_game_info, row, is_playoffs, year, is_faceoff=False, is_toi=False, is_off_ice=False, skip_career_events=False):
+def perform_metadata_qual(extra_stats, event_name, goal_event, qualifiers, player_game_info, row, is_playoffs, year, is_faceoff=False, is_toi=False, is_off_ice=False, skip_career_events=False):
     if not is_toi:
         if "Shot On" in qualifiers:
             if event_name != "goal" and event_name != "shot":
@@ -30032,7 +30033,7 @@ def perform_metadata_qual(event_name, goal_event, qualifiers, player_game_info, 
             has_match = False
             for player in qual_object["values"]:
                 if row["NHLGameLink"] in player["games"]:
-                    has_match = perform_metadata_qual(event_name, goal_event, player["quals"], player_game_info, row, is_playoffs, year, is_faceoff, is_toi, is_off_ice, skip_career_events)
+                    has_match = goal_event["unique_event_id"] in player["games"][row["NHLGameLink"]]
             if qual_object["negate"]:
                 if has_match:
                     return False
@@ -30046,7 +30047,7 @@ def perform_metadata_qual(event_name, goal_event, qualifiers, player_game_info, 
             has_match = False
             for player in qual_object["values"]:
                 if row["NHLGameLink"] in player["games"]:
-                    has_match = perform_metadata_qual(event_name, goal_event, player["quals"], player_game_info, row, is_playoffs, year, is_faceoff, is_toi, is_off_ice, skip_career_events)
+                    has_match = goal_event["unique_event_id"] in player["games"][row["NHLGameLink"]]
             if qual_object["negate"]:
                 if not has_match:
                     has_any_match = True
@@ -30065,6 +30066,10 @@ def perform_metadata_qual(event_name, goal_event, qualifiers, player_game_info, 
                 return False
         else:
             return False
+
+    add_play_event_ids = "event-id" in extra_stats
+    if add_play_event_ids:
+        row["play_event_ids"].add(goal_event["unique_event_id"])
 
     return True
 

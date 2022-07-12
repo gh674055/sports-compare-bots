@@ -8157,7 +8157,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                             extra_stats.add(m.group(1))
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
                         
-                        last_match = re.finditer(r"\bshow(?: |-)?(only(?: |-)?)?(pitcher-record|record|slash|score|year|pitch-type|games?-count|seasons-leading|season|dates?-count|game-link|date|missing-games-count|missing-pitches-count|missing-game-count|missing-pitches-count|missing-pitch-count|missing-game|missing-pitches|missing-pitch|per-game|game|play|run-support|run-support-record|exit-record|statcast|advanced-runner|advanced|best-season|worst-season|team|franchise|number|award|driven-in|mlb-link)s?\b", time_frame)
+                        last_match = re.finditer(r"\bshow(?: |-)?(only(?: |-)?)?(pitcher-record|record|slash|score|year|pitch-type|games?-count|seasons-leading|season|dates?-count|game-link|date|missing-games-count|missing-pitches-count|missing-game-count|missing-pitches-count|missing-pitch-count|missing-game|missing-pitches|missing-pitch|per-game|game|play|run-support|run-support-record|exit-record|statcast|advanced-runner|advanced|best-season|worst-season|team|franchise|number|award|driven-in|mlb-link|event-id)s?\b", time_frame)
                         for m in last_match:
                             if m.group(2) == "date":
                                 extra_stats.add("show-game-link")
@@ -14094,11 +14094,11 @@ def handle_against_qual(names, time_frames, player_type, comment_obj, extra_stat
                 if "Sub Query" in time_frame["qualifiers"]:
                     handle_the_quals(time_frame["qualifiers"], player_type, "Sub Query", sub_matching_names, time_frame, "Game", comment_obj, players_map, extra_stats)
                 if "Event Sub Query" in time_frame["qualifiers"]:
-                    handle_the_quals(time_frame["qualifiers"], player_type, "Event Sub Query", sub_matching_names, time_frame, "Game", comment_obj, players_map, extra_stats)
+                    handle_the_quals(time_frame["qualifiers"], player_type, "Event Sub Query", sub_matching_names, time_frame, "GameEventID", comment_obj, players_map, extra_stats)
                 if "Or Sub Query" in time_frame["qualifiers"]:
                     handle_the_quals(time_frame["qualifiers"], player_type, "Or Sub Query", sub_matching_names, time_frame, "Game", comment_obj, players_map, extra_stats)
                 if "Or Event Sub Query" in time_frame["qualifiers"]:
-                    handle_the_quals(time_frame["qualifiers"], player_type, "Or Event Sub Query", sub_matching_names, time_frame, "Game", comment_obj, players_map, extra_stats)
+                    handle_the_quals(time_frame["qualifiers"], player_type, "Or Event Sub Query", sub_matching_names, time_frame, "GameEventID", comment_obj, players_map, extra_stats)
                 if "Day Of Sub Query" in time_frame["qualifiers"]:
                     handle_the_quals(time_frame["qualifiers"], player_type, "Day Of Sub Query", sub_matching_names, time_frame, "Date", comment_obj, players_map, extra_stats)
                 if "Day After Sub Query" in time_frame["qualifiers"]:
@@ -14363,6 +14363,8 @@ def sub_handle_the_quals(players, qualifier, real_player_type, qual_str, player_
                     player_games[opponent].add(date)
                 elif key == "Game":
                     player_games[row["GameID"]] = True
+                elif key == "GameEventID":
+                    player_games[row["GameID"]] = row["play_event_ids"]
                 elif key == "RowGame":
                     player_games[row["GameID"]] = row
                 elif key == "Season":
@@ -14413,12 +14415,6 @@ def sub_handle_the_quals(players, qualifier, real_player_type, qual_str, player_
                     players[len(players) - 1]["pos"] = og_player_str["pos"]
                 else:
                     players[len(players) - 1]["pos"] = ["ANY"]
-            if "Event Sub Query" in qual_str:
-                if player_name != "No Player Match!":
-                    players[len(players) - 1]["quals"] = player_data["quals"][qual_index]
-                    qual_index += 1
-                else:
-                    players[len(players) - 1]["quals"] = []
             if qual_str == "Formula Query" or qual_str == "Formula Sub Query":
                 players[len(players) - 1]["player_type"] = player_type
                 players[len(players) - 1]["player_data"] = player_data
@@ -14488,7 +14484,7 @@ def determine_player_str(qualifier, player_type, player_str, time_frame, qual_st
 
     bracket_index = re.search(r"(?<!\\)]", player_str).start()
     if "Event Sub Query" in qual_str:
-        player_str = player_str[:bracket_index] + " show-advanced" + player_str[bracket_index:]
+        player_str = player_str[:bracket_index] + " show-advanced show-event-id" + player_str[bracket_index:]
     elif not "Sub Query" in qual_str:
         player_str = player_str[:bracket_index] + " hide-advanced" + player_str[bracket_index:]
     
@@ -18381,7 +18377,7 @@ def determine_row_data(game_data, player_type, player_data, player_id, current_t
 
         fake_row_data = copy.deepcopy(row_data)
         fake_game_data, fake_row_data, fake_index, fake_sub_missing_games, fake_sub_missing_pitch = get_live_game_data(-1, False, player_data, fake_row_data, player_type, {}, True, s)
-        perform_sub_mlb_game_qualifiers(fake_row_data, player_data, {}, fake_game_data, player_type, True)
+        perform_sub_mlb_game_qualifiers(fake_row_data, player_data, {}, fake_game_data, player_type, set(), True)
         row_data["GDP"] = fake_row_data["GDP"]
 
         innings = game["inningsPitched"]
@@ -31489,7 +31485,7 @@ def setup_starting_game_stats(row_data, player_game_info, player_type, player_da
                             for stat in events_reversed_stats_needed:
                                 sub_at_bat_event["starting_game_stats_reversed_" + stat] = at_bat_event["starting_game_stats_reversed_" + stat]
 
-def perform_sub_mlb_inning_qualifiers(row, player_data, qualifiers, player_game_info, player_type):
+def perform_sub_mlb_inning_qualifiers(row, player_data, qualifiers, player_game_info, player_type, extra_stats):
     clear_data(row)
 
     if not player_game_info or player_game_info["missing_data"]:
@@ -31541,7 +31537,7 @@ def perform_sub_mlb_inning_qualifiers(row, player_data, qualifiers, player_game_
         
         row_copy = copy.copy(row)
 
-        perform_sub_mlb_game_qualifiers(row_copy, player_data, qualifiers, new_plater_game_info, player_type, True)
+        perform_sub_mlb_game_qualifiers(row_copy, player_data, qualifiers, new_plater_game_info, player_type, set(), True)
 
         has_all_match = True
         if "Inning Stat" in qualifiers:
@@ -31573,7 +31569,7 @@ def perform_sub_mlb_inning_qualifiers(row, player_data, qualifiers, player_game_
 
         if has_all_match:
             row["Ing"] += 1
-            raw_row_data = perform_sub_mlb_game_qualifiers(row, player_data, qualifiers, new_plater_game_info, player_type, False)[1]
+            raw_row_data = perform_sub_mlb_game_qualifiers(row, player_data, qualifiers, new_plater_game_info, player_type, extra_stats, False)[1]
             overall_has_match = True
     
     return overall_has_match, raw_row_data
@@ -31666,7 +31662,7 @@ def perform_sub_game_quals(qualifiers, player_game_info, row):
     
     return True
 
-def perform_sub_mlb_game_qualifiers(row, player_data, qualifiers, player_game_info, player_type, do_clear):
+def perform_sub_mlb_game_qualifiers(row, player_data, qualifiers, player_game_info, player_type, extra_stats, do_clear):
     if do_clear:
         clear_data(row)
 
@@ -31698,6 +31694,10 @@ def perform_sub_mlb_game_qualifiers(row, player_data, qualifiers, player_game_in
         row["play_pitch_run_events"] = []
         row["play_full_names"] = player_game_info["full_names"]
 
+    add_play_event_ids = "event-id" in extra_stats
+    if add_play_event_ids:
+        row["play_event_ids"] = set()
+
     raw_row_data = copy.copy(row)
     
     has_any_match = include_all_games
@@ -31713,6 +31713,9 @@ def perform_sub_mlb_game_qualifiers(row, player_data, qualifiers, player_game_in
 
             if add_play_events:
                 row["play_events"].append(at_bat_event)
+
+            if add_play_event_ids:
+                row["play_event_ids"].add(at_bat_event["unique_event_id"])
         
         if handle_da_mlb_quals(row, "batting_events" if player_type["da_type"] == "Batter" else "pitching_events", at_bat_event, qualifiers, player_data, player_type, player_game_info, skip_career_events=True):
             add_row_numbers(raw_row_data, at_bat_event, event_name, qualifiers, player_type)
@@ -31731,6 +31734,9 @@ def perform_sub_mlb_game_qualifiers(row, player_data, qualifiers, player_game_in
 
                         if add_play_events:
                             at_bat_event["play_pitch_events"][pitch_index] = pitch_event_obj
+
+                        if add_play_event_ids:
+                            row["play_event_ids"].add(pitch_event_obj["unique_event_id"])
                     
                     pitch_event_obj = handle_da_pitch_quals(row, "batting_events" if player_type["da_type"] == "Batter" else "pitching_events", at_bat_event, qualifiers, player_data, player_type, player_game_info, pitch_index + 1, skip_career_events=True)
                     if pitch_event_obj:
@@ -31784,6 +31790,9 @@ def perform_sub_mlb_game_qualifiers(row, player_data, qualifiers, player_game_in
 
                 if add_play_events:
                     row["play_pitch_run_events"].append(at_bat_event)
+
+                if add_play_event_ids:
+                    row["play_event_ids"].add(at_bat_event["unique_event_id"])
             if handle_da_mlb_quals(row, "pitching_run_events", at_bat_event, qualifiers, player_data, player_type, player_game_info, skip_career_events=True):
                 raw_row_data["R"] += 1
                 if "is_unearned_run" not in at_bat_event or not at_bat_event["is_unearned_run"]:
@@ -35010,7 +35019,7 @@ def handle_da_mlb_quals(row, event_name, at_bat_event, qualifiers, player_data, 
             "pitch_event_to_run_event" : {}
         }
         sub_player_game_info[event_name].append(at_bat_event)
-        perform_sub_mlb_game_qualifiers(at_bat_event_copy, player_data, {}, sub_player_game_info, player_type, True)
+        perform_sub_mlb_game_qualifiers(at_bat_event_copy, player_data, {}, sub_player_game_info, player_type, set(), True)
 
         at_bat_event_copy = {k.lower(): v for k, v in at_bat_event_copy.items()}
 
@@ -35045,7 +35054,7 @@ def handle_da_mlb_quals(row, event_name, at_bat_event, qualifiers, player_data, 
             "pitch_event_to_run_event" : {}
         }
         sub_player_game_info[event_name].append(at_bat_event)
-        perform_sub_mlb_game_qualifiers(at_bat_event_copy, player_data, {}, sub_player_game_info, player_type, True)
+        perform_sub_mlb_game_qualifiers(at_bat_event_copy, player_data, {}, sub_player_game_info, player_type, set(), True)
 
         at_bat_event_copy = {k.lower(): v for k, v in at_bat_event_copy.items()}
 
@@ -36050,7 +36059,7 @@ def handle_da_mlb_quals(row, event_name, at_bat_event, qualifiers, player_data, 
             has_match = False
             for player in qual_object["values"]:
                 if row["GameID"] in player["games"]:
-                    has_match = handle_da_mlb_quals(row, event_name, at_bat_event, player["quals"], player_data, player_type, player_game_info, skip_pitch_events, skip_career_events)
+                    has_match = at_bat_event["unique_event_id"] in player["games"][row["GameID"]]
             if qual_object["negate"]:
                 if has_match:
                     return False
@@ -36064,7 +36073,7 @@ def handle_da_mlb_quals(row, event_name, at_bat_event, qualifiers, player_data, 
             has_match = False
             for player in qual_object["values"]:
                 if row["GameID"] in player["games"]:
-                    has_match = handle_da_mlb_quals(row, event_name, at_bat_event, player["quals"], player_data, player_type, player_game_info, skip_pitch_events, skip_career_events)
+                    has_match = at_bat_event["unique_event_id"] in player["games"][row["GameID"]]
             if qual_object["negate"]:
                 if not has_match:
                     has_any_match = True
@@ -36972,6 +36981,7 @@ def handle_da_pitch_quals(row, event_name, at_bat_event, qualifiers, player_data
         "WalkOff" : sub_walk_off,
         "WalkOffOpp" : sub_walk_off_opp,
         "event_id" : at_bat_event["event_id"],
+        "unique_event_id" : str(at_bat_event["event_id"]) + "-pitch-" + str(pitch_index),
         "playEvents" : at_bat_event["playEvents"],
         "runners" : at_bat_event["runners"],
         "is_home_team" : at_bat_event["is_home_team"],
@@ -38637,7 +38647,7 @@ def handle_result_qualifiers(game_data, index, row_data, sub_missing_games, sub_
             count_info["missing_games"].append("[" + str(row_data["Date"]) + "](" + "https://www.mlb.com/gameday/" + str(row_data["MLBGameLink"]) + ")")
         if sub_missing_pitch:
             count_info["missing_pitch"].append("[" + str(row_data["Date"]) + "](" + "https://www.mlb.com/gameday/" + str(row_data["MLBGameLink"]) + ")")
-        has_match, raw_row_data = perform_sub_mlb_game_qualifiers(row_data, player_data, qualifiers, game_data, player_type, True)
+        has_match, raw_row_data = perform_sub_mlb_game_qualifiers(row_data, player_data, qualifiers, game_data, player_type, extra_stats, True)
         if not has_match:
             return False, raw_row_data
     
@@ -38646,7 +38656,7 @@ def handle_result_qualifiers(game_data, index, row_data, sub_missing_games, sub_
             count_info["missing_games"].append("[" + str(row_data["Date"]) + "](" + "https://www.mlb.com/gameday/" + str(row_data["MLBGameLink"]) + ")")
         if sub_missing_pitch:
             count_info["missing_pitch"].append("[" + str(row_data["Date"]) + "](" + "https://www.mlb.com/gameday/" + str(row_data["MLBGameLink"]) + ")")
-        has_match, raw_row_data = perform_sub_mlb_inning_qualifiers(row_data, player_data, qualifiers, game_data, player_type)
+        has_match, raw_row_data = perform_sub_mlb_inning_qualifiers(row_data, player_data, qualifiers, game_data, player_type, extra_stats)
         if not has_match:
             return False, raw_row_data
 
@@ -40678,6 +40688,7 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
                 "WalkOff" : walk_off,
                 "WalkOffOpp" : walk_off_opp,
                 "event_id" : event_id,
+                "unique_event_id" : str(event_id),
                 "playEvents" : scoring_play["playEvents"],
                 "runners" : scoring_play["runners"],
                 "is_home_team" : is_home_team,
@@ -41512,6 +41523,7 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
                         pitch_run_data["is_unearned_run"] = not runner["details"]["earned"]
                         pitch_run_data["is_inherited"] = is_inherited
                         pitch_run_data["result"] = "run_scored"
+                        pitch_run_data["unique_event_id"] = str(event_id) + "-" + pitch_run_data["result"] + "-" + str(runner_index)
                         game_data["pitching_run_events"].append(pitch_run_data)
                         if event_id not in game_data["pitch_event_to_run_event"]:
                             game_data["pitch_event_to_run_event"][event_id] = []
@@ -41519,6 +41531,7 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
                     elif the_runner == player_data["mlb_id"]:
                         bat_run_data = sub_event_obj.copy()
                         bat_run_data["result"] = "run_scored"
+                        bat_run_data["unique_event_id"] = str(event_id) + "-" + bat_run_data["result"] + "-" + str(runner_index)
                         bat_run_data["is_unearned_run"] = not runner["details"]["earned"]
                         if player_data["mlb_id"] == batter:
                             run_event = bat_run_data
@@ -41537,6 +41550,7 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
                         sb_base = "HP"
                     sb_data = sub_event_obj.copy()
                     sb_data["result"] = "stolen_base"
+                    sb_data["unique_event_id"] = str(event_id) + "-" + sb_data["result"] + "-" + str(runner_index)
                     if runner["details"]["movementReason"] != "r_stolen_base":
                         sb_data["sb_base"] = sb_base
                     if the_runner == player_data["mlb_id"]:
@@ -41550,6 +41564,7 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
                         sb_base = "HP"
                     sb_data = sub_event_obj.copy()
                     sb_data["result"] = "caught_stealing"
+                    sb_data["unique_event_id"] = str(event_id) + "-" + sb_data["result"] + "-" + str(runner_index)
                     if runner["details"]["movementReason"] != "r_caught_stealing" and runner["details"]["movementReason"] != "r_pickoff_caught_stealing":
                         sb_data["sb_base"] = sb_base
                     if the_runner == player_data["mlb_id"]:
@@ -41566,6 +41581,7 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
                 if runner["details"]["movementReason"] == "r_pickoff" or runner["details"]["movementReason"] == "r_pickoff_caught_stealing" or runner["details"]["movementReason"] == "r_pickoff_2b" or runner["details"]["movementReason"] == "r_pickoff_caught_stealing_2b" or runner["details"]["movementReason"] == "r_pickoff_3b" or runner["details"]["movementReason"] == "r_pickoff_caught_stealing_3b" or runner["details"]["movementReason"] == "r_pickoff_home" or runner["details"]["movementReason"] == "r_pickoff_caught_stealing_home":
                     sb_data = sub_event_obj.copy()
                     sb_data["result"] = "pick_off"
+                    sb_data["unique_event_id"] = str(event_id) + "-" + sb_data["result"] + "-" + str(runner_index)
                     if runner["credits"] and runner["credits"][0]["player"] == player_data["mlb_id"] and runner["credits"][0]["position"]["abbreviation"] == "P":
                         game_data["pitching_events"].append(sb_data)
 
