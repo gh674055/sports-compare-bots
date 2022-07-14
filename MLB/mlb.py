@@ -14497,6 +14497,23 @@ def determine_player_str(qualifier, player_type, player_str, time_frame, qual_st
     elif qual_str in ["Batting Against", "Day After Pitching", "Day Before Pitching"]:
         bracket_index = re.search(r"(?<!\\)]", player_str).start()
         player_str = player_str[:bracket_index] + " pitching" + player_str[bracket_index:]
+    elif qual_str in ["On Field With", "On Field Against"]:
+        has_pitching = False
+        has_batting = False
+        for value in qualifier["values"]:
+            for pos in value["pos"]:
+                if pos in ["ANY"]:
+                    has_pitching = True
+                    has_batting = True
+                if pos in ["ANY", "P", "1"]:
+                    has_pitching = True
+                else:
+                    has_batting = True
+
+        if has_pitching and not has_batting:
+            player_str = player_str[:bracket_index] + " pitching" + player_str[bracket_index:]
+        elif has_batting and not has_pitching:
+            player_str = player_str[:bracket_index] + " batting" + player_str[bracket_index:]
     
     bracket_index = re.search(r"(?<!\\)]", player_str).start()
     player_str = player_str[:bracket_index] + " is-sub-query" + player_str[bracket_index:]
