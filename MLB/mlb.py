@@ -168,11 +168,7 @@ position_map = {
     '6': 'SS',
     '7': 'LF',
     '8': 'CF',
-    '9': 'RF',
-    '10': 'OF',
-    '11': 'DH',
-    '12': 'PH',
-    '13': 'PR'
+    '9': 'RF'
 }
 position_map_reversed = {v: k for k, v in position_map.items()}
 
@@ -8110,6 +8106,33 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                         })
                                 qualifier_obj["values"] = new_values
 
+                                new_values = []
+                                for value in qualifier_obj["values"]:
+                                    pitching_pos = []
+                                    batting_pos = []
+                                    for pos in value["pos"]:
+                                        if pos in ["ANY"]:
+                                            pitching_pos.extend(["P"])
+                                            batting_pos.extend(["C", "1B", "2B", "3B", "SS", "LF", "CF", "RF", "PH", "PR", "DH"])
+                                        else:
+                                            if pos in [ "P", "1"]:
+                                                pitching_pos.append(pos)
+                                            else:
+                                                batting_pos.append(pos)
+
+                                    if pitching_pos and batting_pos:
+                                        new_values.append({
+                                            "pos" : pitching_pos,
+                                            "value" : value["value"]
+                                        })
+                                        new_values.append({
+                                            "pos" : batting_pos,
+                                            "value" : value["value"]
+                                        })
+                                    else:
+                                        new_values.append(value)
+                                qualifier_obj["values"] = new_values
+
                             if not qual_type in qualifiers:
                                 qualifiers[qual_type] = []
                             qualifiers[qual_type].append(qualifier_obj)
@@ -12303,6 +12326,41 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                             qualifier_obj["time_frame_str"] = re.sub(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?((?:(?:playing|starting)-with|(?:playing|starting)-against|(?:playing|starting)-same-game|prv-w|previous-playing-with|prv-a|previous-playing-against|upc-w|upcoming-playing-with|upc-a|upcoming-playing-against|(?:playing|starting)-same-opponents?|(?:playing|starting)-same-dates?|batting-against|pitching-against|facing|driven-in|batted-in|back-to-back-with|back-to-back|batting-in-front-of|batting-in-front|batting-ahead|batting-ahead-of|batting-behind|batting-behind-of|batting-next-to|caught-by|stealing-on|on-field-with|on-field-against|-?starts?|-?started|-?starting|-?ignore-starts?|-?ignore-started?|-?ignore-starting))(?!:)\b", "", og_time_str)
                             qualifier_obj["time_frame_str"] = re.sub(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?((?:qual-sub-query):(?<!\\)\(.*?(?<!\\)\))", "", qualifier_obj["time_frame_str"])
 
+                            if "On Field" in qual_type:
+                                qualifier_obj["values"] = [{
+                                    "pos" : ["ANY"],
+                                    "value" : qualifier_obj["time_frame_str"]
+                                }]
+
+                                new_values = []
+                                for value in qualifier_obj["values"]:
+                                    pitching_pos = []
+                                    batting_pos = []
+                                    for pos in value["pos"]:
+                                        if pos in ["ANY"]:
+                                            pitching_pos.extend(["P"])
+                                            batting_pos.extend(["C", "1B", "2B", "3B", "SS", "LF", "CF", "RF", "PH", "PR", "DH"])
+                                        else:
+                                            if pos in [ "P", "1"]:
+                                                pitching_pos.append(pos)
+                                            else:
+                                                batting_pos.append(pos)
+
+                                    if pitching_pos and batting_pos:
+                                        new_values.append({
+                                            "pos" : pitching_pos,
+                                            "value" : value["value"]
+                                        })
+                                        new_values.append({
+                                            "pos" : batting_pos,
+                                            "value" : value["value"]
+                                        })
+                                    else:
+                                        new_values.append(value)
+                                qualifier_obj["values"] = new_values
+
+                                del qualifier_obj["time_frame_str"]
+
                             if not qual_type in qualifiers:
                                 qualifiers[qual_type] = []
                             qualifiers[qual_type].append(qualifier_obj)
@@ -14459,7 +14517,8 @@ def sub_handle_the_quals(players, qualifier, real_player_type, qual_str, player_
     #         logger.error("#" + str(threading.get_ident()) + "#   " + traceback.format_exc())
 
 def determine_player_str(qualifier, player_type, player_str, time_frame, qual_str):
-    if "On Field" in qual_str and isinstance(player_str, dict):
+    if "On Field" in qual_str:
+        on_field_obj = player_str
         player_str = player_str["value"]
     player_str = unescape_string(player_str)
     
@@ -14500,15 +14559,14 @@ def determine_player_str(qualifier, player_type, player_str, time_frame, qual_st
     elif qual_str in ["On Field With", "On Field Against"]:
         has_pitching = False
         has_batting = False
-        for value in qualifier["values"]:
-            for pos in value["pos"]:
-                if pos in ["ANY"]:
-                    has_pitching = True
-                    has_batting = True
-                if pos in ["ANY", "P", "1"]:
-                    has_pitching = True
-                else:
-                    has_batting = True
+        for pos in on_field_obj["pos"]:
+            if pos in ["ANY"]:
+                has_pitching = True
+                has_batting = True
+            if pos in ["ANY", "P", "1"]:
+                has_pitching = True
+            else:
+                has_batting = True
 
         if has_pitching and not has_batting:
             player_str = player_str[:bracket_index] + " pitching" + player_str[bracket_index:]
