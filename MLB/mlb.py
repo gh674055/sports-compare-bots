@@ -12329,7 +12329,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                             if "On Field" in qual_type:
                                 qualifier_obj["values"] = [{
                                     "pos" : ["ANY"],
-                                    "value" : qualifier_obj["time_frame_str"]
+                                    "value" : None
                                 }]
 
                                 new_values = []
@@ -12358,8 +12358,6 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                     else:
                                         new_values.append(value)
                                 qualifier_obj["values"] = new_values
-
-                                del qualifier_obj["time_frame_str"]
 
                             if not qual_type in qualifiers:
                                 qualifiers[qual_type] = []
@@ -14377,7 +14375,11 @@ def handle_the_quals(qualifiers, real_player_type, qual_str, subb_names, time_fr
                 for match_name in subb_names:
                     sub_handle_the_quals(players, qualifier, real_player_type, qual_str, "<" + match_name + "> [" + player_str + "]", time_frame, key, comment_obj, players_map, extra_stats)
             else:
-                sub_handle_the_quals(players, qualifier, real_player_type, qual_str, player_str, time_frame, key, comment_obj, players_map, extra_stats)
+                if "On Field" in qual_str and "time_frame_str" in qualifier:
+                    for match_name in subb_names:
+                        sub_handle_the_quals(players, qualifier, real_player_type, qual_str, player_str, time_frame, key, comment_obj, players_map, extra_stats, match_name)
+                else:
+                    sub_handle_the_quals(players, qualifier, real_player_type, qual_str, player_str, time_frame, key, comment_obj, players_map, extra_stats)
                     
         if seperate_quals:
             for player in players:
@@ -14390,7 +14392,7 @@ def handle_the_quals(qualifiers, real_player_type, qual_str, subb_names, time_fr
     
     qualifiers[qual_str] = new_quals
 
-def sub_handle_the_quals(players, qualifier, real_player_type, qual_str, player_str, time_frame, key, comment_obj, players_map, extra_stats):
+def sub_handle_the_quals(players, qualifier, real_player_type, qual_str, player_str, time_frame, key, comment_obj, players_map, extra_stats, override_name=None):
     new_search = False
     
     is_raw_query = False
@@ -14402,7 +14404,7 @@ def sub_handle_the_quals(players, qualifier, real_player_type, qual_str, player_
 
     og_player_str = player_str
 
-    player_str = determine_player_str(qualifier, real_player_type, player_str, time_frame, qual_str)
+    player_str = determine_player_str(qualifier, real_player_type, player_str, time_frame, qual_str, override_name)
     
     player_type = {
         "da_type" : None
@@ -14516,10 +14518,12 @@ def sub_handle_the_quals(players, qualifier, real_player_type, qual_str, player_
     #     except Exception:
     #         logger.error("#" + str(threading.get_ident()) + "#   " + traceback.format_exc())
 
-def determine_player_str(qualifier, player_type, player_str, time_frame, qual_str):
+def determine_player_str(qualifier, player_type, player_str, time_frame, qual_str, override_name=None):
     if "On Field" in qual_str:
         on_field_obj = player_str
         player_str = player_str["value"]
+        if player_str == None:
+            player_str = override_name
     player_str = unescape_string(player_str)
     
     is_pre_query = "time_frame_str" not in qualifier and not "Sub Query" in qual_str and not re.search(r"(?<!\\)]", player_str)
