@@ -27048,6 +27048,9 @@ def parse_row(row, time_frame, year, is_playoffs, player_type, header_values, pr
             else:
                 included_table = date >= time_frame["time_start"] and date <= time_frame["time_end"]
 
+    if row.find("td", {"data-stat" : "military_service"}):
+        return None
+
     if included_table:
         columns = row.find_all("td", recursive=False)
         is_start = False
