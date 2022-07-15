@@ -17138,6 +17138,7 @@ def handle_player_data(player_data, time_frame, player_type, player_page, valid_
         player_info = get_nhl_player_link(player_data, s)
         if not player_info:
             logger.info("Unable to get NHL player link for HRef ID : " + player_data["id"] + ". Will not get any stats")
+            player_data["nhl_id"] = None
             return [], [], [] 
         player_link, player_name, player_position, handiness = player_info
         if player_position == "D":
