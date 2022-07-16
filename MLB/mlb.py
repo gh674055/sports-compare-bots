@@ -23956,7 +23956,7 @@ def handle_min_max_final(stat_val, current_explain_strs, player_data, player_typ
                 stat_val["stat_obj"]["explain_str"] += (get_time_str(stat_qual["start_val"], False)) + "-" + (get_time_str(stat_qual["end_val"], False))
             stat_val["stat_obj"]["explain_str"] += ","
         stat_val["stat_obj"]["explain_str"] = stat_val["stat_obj"]["explain_str"][:-1]
-    if match_count > 0 and match_count <= 20:
+    if match_count > 0:
         stat_val["stat_obj"]["explain_str"] += "|" + add_explain_qualls(total_matching_strs, match_all, stat, stat_quals, player_data, player_type)
 
     stat_val["stat_obj"]["explain_str"] = current_explain_strs + [stat_val["stat_obj"]["explain_str"]]
@@ -25152,6 +25152,7 @@ def add_explain_qualls(total_matching_strs, match_all, stat, stat_quals, player_
 
     total_matching_strs = sorted(total_matching_strs, key=functools.cmp_to_key(sort_total_matching_strs), reverse=True)
     str_to_use = ""
+    count = 0
     for str_index, total_matching_str in enumerate(total_matching_strs):
         if str_index > 0:
             str_to_use += " + "
@@ -25161,6 +25162,10 @@ def add_explain_qualls(total_matching_strs, match_all, stat, stat_quals, player_
                 stat_str += ","
             stat_str += total_matching_str["stat_objs"][stat]["real_stat"] + "=" + str(total_matching_str["stat_objs"][stat]["round_value"])
         str_to_use += stat_str
+        count += 1
+        if count >= 20:
+            str_to_use += " (" + str(len(total_matching_strs) - count) + " more)..."
+            break
     return str_to_use
 
 def get_matching_row_val(match_all, stat, matching_rows, stat_quals, player_data, player_type):
