@@ -34590,7 +34590,7 @@ def handle_min_max_final(stat_val, current_explain_strs, player_data, player_typ
             stat_val["stat_obj"]["explain_str"] += ","
         stat_val["stat_obj"]["explain_str"] = stat_val["stat_obj"]["explain_str"][:-1]
     if match_count > 0:
-        stat_val["stat_obj"]["explain_str"] += "|" + add_explain_qualls(total_matching_strs, match_all, stat, stat_quals, player_data, player_type)
+        stat_val["stat_obj"]["explain_str"] += "|" + add_explain_qualls(total_matching_strs, match_all, stat, stat_quals, player_data, player_type, qualifiers)
 
     stat_val["stat_obj"]["explain_str"] = current_explain_strs + [stat_val["stat_obj"]["explain_str"]]
 
@@ -35801,7 +35801,7 @@ def valid_matching_rows(matching_rows, stat_quals, player_data, player_type):
     
     return True
 
-def add_explain_qualls(total_matching_strs, match_all, stat, stat_quals, player_data, player_type):
+def add_explain_qualls(total_matching_strs, match_all, stat, stat_quals, player_data, player_type, qualifiers):
     if not stat_quals:
         stat_quals = []
     if not match_all:
@@ -35825,7 +35825,13 @@ def add_explain_qualls(total_matching_strs, match_all, stat, stat_quals, player_
                         elif value_2 and not value_1:
                             return -1
 
-                    positive_to_use = headers[player_type["da_type"]["type"]][header]["positive"]
+                    if "Max Stat" in qualifiers and "Min Stat" in qualifiers:
+                        positive_to_use = headers[player_type["da_type"]["type"]][header]["positive"]
+                    elif "Max Stat" in qualifiers:
+                        positive_to_use = True
+                    else:
+                        positive_to_use = False
+
                     if (value_1 > value_2 and positive_to_use) or (value_1 < value_2 and not positive_to_use):
                         return 1
                     elif (value_1 < value_2 and positive_to_use) or (value_1 > value_2 and not positive_to_use):
