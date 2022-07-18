@@ -12365,7 +12365,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
 
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
 
-                        last_matches = re.finditer(r"\b(no(?:t|n)?(?: |-))?(first|1st|last|this|past)?(?: ?(\S*) (starting-)?(game-)?(innings?-pitched|inning|ip|plate-appearance|pa|batters?-faced|bf|at-bat|ab|pitche?|pit|" + "|".join(non_rate_stats_lower) + r")s?)\b", time_frame)
+                        last_matches = re.finditer(r"\b(no(?:t|n)?(?: |-))?(first|1st|last|this|past)?(?: ?(\S*) (starting-)?(game-)?(innings?-pitched|inning|ip|plate-appearance|pa|batters?-faced|bf|at-bat|ab|pitche?|pit|k|" + "|".join(non_rate_stats_lower) + r")s?)\b", time_frame)
                         for last_match in last_matches:
                             compare_type = last_match.group(2)
                             time_unit = last_match.group(3)
