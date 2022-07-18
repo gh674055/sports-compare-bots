@@ -14101,6 +14101,10 @@ def get_init_type(names, time_frames):
             player_id, player_page = get_player(name, time_frames[index][real_index])
             if player_id and player_page:
                 return get_player_type(player_page)
+    return {
+        "type" : "Skater",
+        "position" : "F"
+    }
 
 def handle_name_threads(sub_name, parse_time_frames, index, player_type, remove_duplicates, remove_duplicate_games, extra_stats, comment_obj):
     try:

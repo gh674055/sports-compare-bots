@@ -13703,6 +13703,7 @@ def get_init_type(names, time_frames):
             player_id, player_page = get_player(name, time_frames[index][real_index])
             if player_page:
                 return get_player_type(player_page)
+    return "Batter"
 
 def get_init_jaws_type(names, time_frames):
     for index, sub_name in enumerate(names):
