@@ -172,8 +172,8 @@ position_map = {
 }
 position_map_reversed = {v: k for k, v in position_map.items()}
 
-count_stats = ["Pit", "PitBall", "Chase", "PitStrike", "LkStr", "Str", "1stStr", "SwStr", "SwgStr", "CntStr", "FoulStr", "Bal", "2StrPit"]
-non_rate_stats = ["IP", "BF", "Pit", "PO", "ER", "AB", "H", "1B", "2B", "3B", "HR", "XBH", "TB", "Cycle", "SO", "GDP", "GDPO", "PA", "BB", "IBB", "HBP", "Slam", "WalkOff", "R", "RBI", "GWRBI", "SB", "CS", "TOB", "SH", "SF", "Pit", "PitBall", "Chase", "PitStrike", "LkStr", "Str", "1stStr", "SwStr", "SwgStr", "CntStr", "FoulStr", "Bal", "2StrPit"]
+count_stats = ["Pit", "PitBall", "Chase", "PitStrike", "LkStr", "Str", "1stStr", "SwStr", "SwgStr", "SwgMiss", "CntStr", "FoulStr", "Bal", "2StrPit"]
+non_rate_stats = ["IP", "BF", "Pit", "PO", "ER", "AB", "H", "1B", "2B", "3B", "HR", "XBH", "TB", "Cycle", "SO", "GDP", "GDPO", "PA", "BB", "IBB", "HBP", "Slam", "WalkOff", "R", "RBI", "GWRBI", "SB", "CS", "TOB", "SH", "SF", "Pit", "PitBall", "Chase", "PitStrike", "LkStr", "Str", "1stStr", "SwStr", "SwgStr", "SwgMiss", "CntStr", "FoulStr", "Bal", "2StrPit"]
 non_rate_stats_lower = [non_rate_stat.lower() for non_rate_stat in non_rate_stats]
 
 headers = {
@@ -1019,6 +1019,14 @@ headers = {
             }
         },
         "SwgStr": {
+            "positive" : False,
+            "display" : False,
+            "valid_since" : {
+                "season" : 1988,
+                "game" : 1988
+            }
+        },
+        "SwgMiss": {
             "positive" : False,
             "display" : False,
             "valid_since" : {
@@ -3178,6 +3186,14 @@ headers = {
             }
         },
         "SwgStr": {
+            "positive" : True,
+            "display" : False,
+            "valid_since" : {
+                "season" : 1988,
+                "game" : 1988
+            }
+        },
+        "SwgMiss": {
             "positive" : True,
             "display" : False,
             "valid_since" : {
@@ -28253,7 +28269,7 @@ def handle_stat_rank_stats(all_rows, qualifiers, player_type, s):
                 "balks": "BK",
                 "pickoffs": "PO",
                 "totalSwings": "Swg",
-                "swingAndMisses": "SwgStr",
+                "swingAndMisses": "SwgMiss",
                 "ballsInPlay": "InPly",
                 "runSupport": "RS",
                 "pitchesPerInning": "P/IP",
@@ -28333,7 +28349,7 @@ def handle_stat_rank_stats(all_rows, qualifiers, player_type, s):
                 "walkOffs": "WO",
                 "flyOuts": "FO",
                 "totalSwings": "Swg",
-                "swingAndMisses": "SwgStr",
+                "swingAndMisses": "SwgMiss",
                 "ballsInPlay": "InPly",
                 "popOuts": "PO",
                 "lineOuts": "LO",
@@ -32567,6 +32583,8 @@ def add_pitch_row_numbers(row, pitch_event_obj):
         row["SwStr"] += 1
         if ind_pitch not in ["M"]:
             row["SwgStr"] += 1
+        if ind_pitch not in ["T", "O"]:
+            row["SwgMiss"] += 1
         row["Str"] += 1
         if pitch_index == 0:
             row["1stStr"] += 1
@@ -42018,6 +42036,7 @@ def clear_data(row):
     row["LkStr"] = 0
     row["SwStr"] = 0
     row["SwgStr"] = 0
+    row["SwgMiss"] = 0
     row["2StrPit"] = 0
     row["2StrK"] = 0
     row["CntStr"] = 0

@@ -1,0 +1,21 @@
+{
+    "B": "Ball",
+    "H": "Hit By Pitch",
+    "D": "In play, no out",
+    "X": "In play, out(s)",
+    "F": "Foul",
+    "C": "Called Strike",
+    "E": "In play, run(s)",
+    "I": "Intent Ball",
+    "S": "Swinging Strike",
+    "L": "Foul Bunt",
+    "P": "Pitchout",
+    "M": "Missed Bunt",
+    "T": "Foul Tip",
+    "Y": "In play, out(s)",
+    "V": "Automatic Ball",
+    "Q": "Swinging Pitchout",
+    "W": "Swinging Strike (Blocked)",
+    "O": "Foul Tip",
+    "R": "Foul Pitchout"
+}
