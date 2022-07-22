@@ -35237,13 +35237,11 @@ def handle_da_mlb_quals(row, event_name, at_bat_event, qualifiers, player_data, 
         at_bat_event_copy["Date"] = row["Date"]
         at_bat_event_copy["DateTime"] = row["DateTime"]
         at_bat_event_copy["is_playoffs"] = row["is_playoffs"]
-        sub_player_game_info = {
-            "missing_data" : False,
-            "batting_events" : [],
-            "pitching_events" : [],
-            "pitching_run_events" : [],
-            "pitch_event_to_run_event" : {}
-        }
+        sub_player_game_info = copy.copy(player_game_info)
+        sub_player_game_info["batting_events"] = []
+        sub_player_game_info["pitching_events"] = []
+        sub_player_game_info["pitching_run_events"] = []
+        sub_player_game_info["pitch_event_to_run_event"] = []
         sub_player_game_info[event_name].append(at_bat_event)
         perform_sub_mlb_game_qualifiers(at_bat_event_copy, player_data, {}, sub_player_game_info, player_type, set(), True)
 
@@ -35272,13 +35270,11 @@ def handle_da_mlb_quals(row, event_name, at_bat_event, qualifiers, player_data, 
         at_bat_event_copy["Date"] = row["Date"]
         at_bat_event_copy["DateTime"] = row["DateTime"]
         at_bat_event_copy["is_playoffs"] = row["is_playoffs"]
-        sub_player_game_info = {
-            "missing_data" : False,
-            "batting_events" : [],
-            "pitching_events" : [],
-            "pitching_run_events" : [],
-            "pitch_event_to_run_event" : {}
-        }
+        sub_player_game_info = copy.copy(player_game_info)
+        sub_player_game_info["batting_events"] = []
+        sub_player_game_info["pitching_events"] = []
+        sub_player_game_info["pitching_run_events"] = []
+        sub_player_game_info["pitch_event_to_run_event"] = []
         sub_player_game_info[event_name].append(at_bat_event)
         perform_sub_mlb_game_qualifiers(at_bat_event_copy, player_data, {}, sub_player_game_info, player_type, set(), True)
 
