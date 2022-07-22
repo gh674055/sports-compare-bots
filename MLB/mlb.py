@@ -172,8 +172,8 @@ position_map = {
 }
 position_map_reversed = {v: k for k, v in position_map.items()}
 
-count_stats = ["Pit", "PitBall", "Chase", "PitStrike", "LkStr", "Str", "1stStr", "SwStr", "SwgStr", "SwgMiss", "CntStr", "FoulStr", "Bal", "2StrPit"]
-non_rate_stats = ["IP", "BF", "Pit", "PO", "ER", "AB", "H", "1B", "2B", "3B", "HR", "XBH", "TB", "Cycle", "SO", "GDP", "GDPO", "PA", "BB", "IBB", "HBP", "Slam", "WalkOff", "R", "RBI", "GWRBI", "SB", "CS", "TOB", "SH", "SF", "Pit", "PitBall", "Chase", "PitStrike", "LkStr", "Str", "1stStr", "SwStr", "SwgStr", "SwgMiss", "CntStr", "FoulStr", "Bal", "2StrPit"]
+count_stats = ["Pit", "PitBall", "Chase", "PitStrike", "LkStr", "Str", "1stStr", "SwStr", "SwgStr", "Swg", "Take", "SwgMiss", "CntStr", "FoulStr", "TipStr", "SwingStr", "Bal", "2StrPit"]
+non_rate_stats = ["IP", "BF", "Pit", "PO", "ER", "AB", "H", "1B", "2B", "3B", "HR", "XBH", "TB", "Cycle", "SO", "GDP", "GDPO", "PA", "BB", "IBB", "HBP", "Slam", "WalkOff", "R", "RBI", "GWRBI", "SB", "CS", "TOB", "SH", "SF", "Pit", "PitBall", "Chase", "PitStrike", "LkStr", "Str", "1stStr", "SwStr", "SwgStr", "SwgMiss", "Swg", "Take", "CntStr", "FoulStr", "TipStr", "SwingStr", "Bal", "2StrPit"]
 non_rate_stats_lower = [non_rate_stat.lower() for non_rate_stat in non_rate_stats]
 
 headers = {
@@ -1018,7 +1018,31 @@ headers = {
                 "game" : 1988
             }
         },
+        "Swg": {
+            "positive" : True,
+            "display" : False,
+            "valid_since" : {
+                "season" : 1988,
+                "game" : 1988
+            }
+        },
+        "Take": {
+            "positive" : True,
+            "display" : False,
+            "valid_since" : {
+                "season" : 1988,
+                "game" : 1988
+            }
+        },
         "SwgStr": {
+            "positive" : False,
+            "display" : False,
+            "valid_since" : {
+                "season" : 1988,
+                "game" : 1988
+            }
+        },
+        "SwingStr": {
             "positive" : False,
             "display" : False,
             "valid_since" : {
@@ -1051,6 +1075,14 @@ headers = {
             }
         },
         "FoulStr": {
+            "positive" : True,
+            "display" : False,
+            "valid_since" : {
+                "season" : 1988,
+                "game" : 1988
+            }
+        },
+        "TipStr": {
             "positive" : True,
             "display" : False,
             "valid_since" : {
@@ -3177,6 +3209,22 @@ headers = {
                 "season" : 1988
             }
         },
+        "Swg": {
+            "positive" : True,
+            "display" : False,
+            "valid_since" : {
+                "season" : 1988,
+                "game" : 1988
+            }
+        },
+        "Take": {
+            "positive" : True,
+            "display" : False,
+            "valid_since" : {
+                "season" : 1988,
+                "game" : 1988
+            }
+        },
         "SwStr": {
             "positive" : True,
             "display" : False,
@@ -3186,6 +3234,14 @@ headers = {
             }
         },
         "SwgStr": {
+            "positive" : True,
+            "display" : False,
+            "valid_since" : {
+                "season" : 1988,
+                "game" : 1988
+            }
+        },
+        "SwingStr": {
             "positive" : True,
             "display" : False,
             "valid_since" : {
@@ -3218,6 +3274,14 @@ headers = {
             }
         },
         "FoulStr": {
+            "positive" : False,
+            "display" : False,
+            "valid_since" : {
+                "season" : 1988,
+                "game" : 1988
+            }
+        },
+        "TipStr": {
             "positive" : False,
             "display" : False,
             "valid_since" : {
@@ -32577,26 +32641,36 @@ def add_pitch_row_numbers(row, pitch_event_obj):
     if ind_pitch == "C":
         row["LkStr"] += 1
         row["Str"] += 1
+        row["Take"] += 1
         if pitch_index == 0:
             row["1stStr"] += 1
     elif ind_pitch in ("S", "M", "Q", "W", "T", "O"):
+        row["SwingStr"] += 1
         row["SwStr"] += 1
+        row["Swg"] += 1
         if ind_pitch not in ["M"]:
             row["SwgStr"] += 1
         if ind_pitch not in ["T", "O"]:
             row["SwgMiss"] += 1
+        else:
+            row["TipStr"] += 1
+            row["FoulStr"] += 1
         row["Str"] += 1
         if pitch_index == 0:
             row["1stStr"] += 1
     elif ind_pitch in ("F", "L", "R", "X", "E", "D", "Y"):
+        if ind_pitch not in ["X", "E", "D", "Y"]:
+            row["SwingStr"] += 1
         row["CntStr"] += 1
         row["Str"] += 1
+        row["Swg"] += 1
         if pitch_index == 0:
             row["1stStr"] += 1
         if ind_pitch in ("T", "F", "O", "L"):
             row["FoulStr"] += 1
     elif ind_pitch in ("B", "I", "H", "V", "P"):
         row["Bal"] += 1
+        row["Take"] += 1
     
     two_str_qual = [{
         "negate" : False,
@@ -42034,6 +42108,8 @@ def clear_data(row):
     row["L/SO"] = 0
     row["S/SO"] = 0
     row["LkStr"] = 0
+    row["Swg"] = 0
+    row["Take"] = 0
     row["SwStr"] = 0
     row["SwgStr"] = 0
     row["SwgMiss"] = 0
@@ -42041,6 +42117,8 @@ def clear_data(row):
     row["2StrK"] = 0
     row["CntStr"] = 0
     row["FoulStr"] = 0
+    row["TipStr"] = 0
+    row["SwingStr"] = 0
     row["1stStr"] = 0
     row["WalkOff"] = 0
     row["Pit"] = 0
