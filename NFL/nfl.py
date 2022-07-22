@@ -1847,7 +1847,7 @@ def handle_player_string(comment, player_type, is_fantasy, last_updated, hide_ta
                         last_match = re.finditer(r"\bshow(?: |-)?(only(?: |-)?)?(ats-record|ou-record|qb-record|era-adjusted|era-adjusted-passing|record|score|year|games?-count|seasons-leading|season|dates?-count|game-link|date|game|best-season|worst-season|team|franchise|number|award|play)s?\b", time_frame)
                         for m in last_match:
                             if m.group(2) == "date":
-                                extra_stats.add("show-game-link")
+                                extra_stats.add("game-link")
                             else:
                                 extra_stats.add(m.group(2))
                                 if m.group(2) == "play":
@@ -1886,9 +1886,9 @@ def handle_player_string(comment, player_type, is_fantasy, last_updated, hide_ta
 
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
                         
-                        last_match = re.finditer(r"\b(?:hide|skip)(?: |-)?(name|year|season|date|query|queries|advanced)s?\b", time_frame)
+                        last_match = re.finditer(r"\b(?:hide|skip)(?: |-)?(name|year|season|date|game-link|query|queries|advanced)s?\b", time_frame)
                         for m in last_match:
-                            if m.group(1) == "date" or m.group(1) == "season":
+                            if m.group(1) == "date" or m.group(1) == "season" or m.group(1) == "game-link":
                                 extra_stats.add("hide-year")
                             elif m.group(1).startswith("quer"):
                                 extra_stats.add("hide-query")
@@ -7022,7 +7022,7 @@ def combine_player_datas(player_datas, player_type, any_missing_games, time_fram
                 if date_end in sub_player_data["game_valid_years"]:
                     date_end = "[" + str(date_end) + "](" + yearly_game_splits_url_format.format(sub_player_data["id"][0].upper(), sub_player_data["id"], str(date_end)) + ")"
                 
-                if "date" not in extra_stats:
+                if "game-link" not in extra_stats:
                     if date_start == date_end:
                         raw_sub_range += str(date_start)
                     else:
@@ -7068,7 +7068,7 @@ def combine_player_datas(player_datas, player_type, any_missing_games, time_fram
                 date_start = "[" + str(date_start) + "](" + date_start_link + ")"
                 date_end = "[" + str(date_end) + "](" + date_end_link + ")"
 
-                if "date" not in extra_stats:
+                if "game-link" not in extra_stats:
                     if date_start == date_end:
                         raw_sub_range += str(date_start)
                     else:
