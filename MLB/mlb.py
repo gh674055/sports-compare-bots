@@ -42976,6 +42976,7 @@ def calculate_advanced_stats(data, all_rows, player_type, time_frames):
             total_eraminus_weight = 0
             total_eraminus_weight = 0
             total_fipminus_weight = 0
+            total_k_bb_weight = 0
 
             total_FIP = 0.0
             total_ERAMinus = 0.0
