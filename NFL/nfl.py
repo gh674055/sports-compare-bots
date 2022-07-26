@@ -1846,7 +1846,7 @@ def handle_player_string(comment, player_type, is_fantasy, last_updated, hide_ta
                             extra_stats.add(m.group(1))
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
                         
-                        last_match = re.finditer(r"\bshow(?: |-)?(only(?: |-)?)?(ats-record|ou-record|qb-record|era-adjusted|era-adjusted-passing|record|score|year|games?-count|seasons-leading|season|dates?-count|game-link|date|game|best-season|worst-season|team|franchise|number|award|play)s?\b", time_frame)
+                        last_match = re.finditer(r"\bshow(?: |-)?(only(?: |-)?)?(player-count|ats-record|ou-record|qb-record|era-adjusted|era-adjusted-passing|record|score|year|games?-count|seasons-leading|season|dates?-count|game-link|date|game|best-season|worst-season|team|franchise|number|award|play)s?\b", time_frame)
                         for m in last_match:
                             if m.group(2) == "date":
                                 extra_stats.add("game-link")
@@ -23861,23 +23861,32 @@ def handle_table_data(player_data, player_type, header, over_header, highest_val
                         value = player_data["stat_values"][over_header][header] if over_header in player_data["stat_values"] and header in player_data["stat_values"][over_header] else 0.0
                         if header == "Player":
                             players = value
-                            value = ""
-                            first = True
-                            for index, player in enumerate(players):
-                                if not first:
-                                    value += "/"
-                                else:
-                                    first = False
-
-                                if len(players) > 1:
+                            if "player-count" in extra_stats:
+                                player_count = 0
+                                for player in players:
                                     if player != "No Player Match!":
-                                        parsed_name = create_human_name(player)
-                                        player = parsed_name.last
+                                        player_count += 1
+                                value = str(player_count) + " Player"
+                                if player_count != 1:
+                                    value += "s"
+                            else:
+                                value = ""
+                                first = True
+                                for index, player in enumerate(players):
+                                    if not first:
+                                        value += "/"
+                                    else:
+                                        first = False
 
-                                if for_reddit and player_data["ids"]:
-                                    value += create_player_url_string(player, player_data["ids"][index], extra_stats)
-                                else:
-                                    value += player
+                                    if len(players) > 1:
+                                        if player != "No Player Match!":
+                                            parsed_name = create_human_name(player)
+                                            player = parsed_name.last
+
+                                    if for_reddit and player_data["ids"]:
+                                        value += create_player_url_string(player, player_data["ids"][index], extra_stats)
+                                    else:
+                                        value += player
                         else:
                             has_valid_stat = False
                             if "all_rows" in player_data["stat_values"]["Shared"]:

@@ -8543,7 +8543,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                             extra_stats.add(m.group(1))
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
                         
-                        last_match = re.finditer(r"\bshow(?: |-)?(only(?: |-)?)?(goalie-record|record|faceoff|extra-slash-per-game|slash-per-game|slash-5v5|slash|score|scoring-5v5|extra-scoring|scoring|extra-strength-slash-per-game|strength-slash-per-game|strength-slash|extra-strength-scoring|strength-scoring|goal|year|games?-count|seasons-leading|season|dates?-count|game-link|date|per-game|game|adjusted|advanced|relative|missing-games-count|missing-game-count|missing-toi-count|missing-game|missing-toi|best-season|worst-season|ng|team|franchise|number|fight|penalty-taken|penalties-taken|penaltie|penalty|award|shot|shift|star|play|nhl-link|strength|toi|href|api|event-id)s?\b", time_frame)
+                        last_match = re.finditer(r"\bshow(?: |-)?(only(?: |-)?)?(player-count|goalie-record|record|faceoff|extra-slash-per-game|slash-per-game|slash-5v5|slash|score|scoring-5v5|extra-scoring|scoring|extra-strength-slash-per-game|strength-slash-per-game|strength-slash|extra-strength-scoring|strength-scoring|goal|year|games?-count|seasons-leading|season|dates?-count|game-link|date|per-game|game|adjusted|advanced|relative|missing-games-count|missing-game-count|missing-toi-count|missing-game|missing-toi|best-season|worst-season|ng|team|franchise|number|fight|penalty-taken|penalties-taken|penaltie|penalty|award|shot|shift|star|play|nhl-link|strength|toi|href|api|event-id)s?\b", time_frame)
                         for m in last_match:
                             if "penalt" in m.group(2):
                                 extra_stats.add("penalties")
@@ -41952,23 +41952,32 @@ def handle_table_data(player_data, player_type, over_header, header, highest_val
 
         if header.startswith("Player"):
             players = value
-            value = ""
-            first = True
-            for index, player in enumerate(players):
-                if not first:
-                    value += "/"
-                else:
-                    first = False
-
-                if len(players) > 1:
+            if "player-count" in extra_stats:
+                player_count = 0
+                for player in players:
                     if player != "No Player Match!":
-                        parsed_name = create_human_name(player)
-                        player = parsed_name.last
+                        player_count += 1
+                value = str(player_count) + " Player"
+                if player_count != 1:
+                    value += "s"
+            else:
+                value = ""
+                first = True
+                for index, player in enumerate(players):
+                    if not first:
+                        value += "/"
+                    else:
+                        first = False
 
-                if for_reddit and player_data["ids"]:
-                    value += create_player_url_string(player, player_data["ids"][index], extra_stats)
-                else:
-                    value += player
+                    if len(players) > 1:
+                        if player != "No Player Match!":
+                            parsed_name = create_human_name(player)
+                            player = parsed_name.last
+
+                    if for_reddit and player_data["ids"]:
+                        value += create_player_url_string(player, player_data["ids"][index], extra_stats)
+                    else:
+                        value += player
         else:
             has_valid_stat = False
             if "all_rows" in player_data["stat_values"]:

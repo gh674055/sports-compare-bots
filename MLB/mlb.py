@@ -8283,7 +8283,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                             extra_stats.add(m.group(1))
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
                         
-                        last_match = re.finditer(r"\bshow(?: |-)?(only(?: |-)?)?(pitcher-record|record|slash|score|year|pitch-type|games?-count|seasons-leading|season|dates?-count|game-link|date|missing-games-count|missing-pitches-count|missing-game-count|missing-pitches-count|missing-pitch-count|missing-game|missing-pitches|missing-pitch|per-game|game|play|run-support|run-support-record|exit-record|statcast|advanced-runner|advanced|best-season|worst-season|team|franchise|number|award|driven-in|mlb-link|event-id)s?\b", time_frame)
+                        last_match = re.finditer(r"\bshow(?: |-)?(only(?: |-)?)?(player-count|pitcher-record|record|slash|score|year|pitch-type|games?-count|seasons-leading|season|dates?-count|game-link|date|missing-games-count|missing-pitches-count|missing-game-count|missing-pitches-count|missing-pitch-count|missing-game|missing-pitches|missing-pitch|per-game|game|play|run-support|run-support-record|exit-record|statcast|advanced-runner|advanced|best-season|worst-season|team|franchise|number|award|driven-in|mlb-link|event-id)s?\b", time_frame)
                         for m in last_match:
                             if m.group(2) == "date":
                                 extra_stats.add("game-link")
@@ -45510,23 +45510,32 @@ def handle_table_data(over_header, player_data, player_datas, player_type, heade
 
         if header.startswith("Player"):
             players = value
-            value = ""
-            first = True
-            for index, player in enumerate(players):
-                if not first:
-                    value += "/"
-                else:
-                    first = False
-
-                if len(players) > 1:
+            if "player-count" in extra_stats:
+                player_count = 0
+                for player in players:
                     if player != "No Player Match!":
-                        parsed_name = create_human_name(player)
-                        player = parsed_name.last
+                        player_count += 1
+                value = str(player_count) + " Player"
+                if player_count != 1:
+                    value += "s"
+            else:
+                value = ""
+                first = True
+                for index, player in enumerate(players):
+                    if not first:
+                        value += "/"
+                    else:
+                        first = False
 
-                if for_reddit and player_data["ids"]:
-                    value += create_player_url_string(player, player_data["ids"][index], extra_stats)
-                else:
-                    value += player
+                    if len(players) > 1:
+                        if player != "No Player Match!":
+                            parsed_name = create_human_name(player)
+                            player = parsed_name.last
+
+                    if for_reddit and player_data["ids"]:
+                        value += create_player_url_string(player, player_data["ids"][index], extra_stats)
+                    else:
+                        value += player
         else:
             has_valid_stat = False
             has_missing_park_factors = False
