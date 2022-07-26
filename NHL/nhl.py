@@ -8979,7 +8979,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                             
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
                                                 
-                        last_match = re.finditer(r"\b(?:hide|skip)(?: |-)?(name|year|season|live|date|game-link|query|queries|advanced|href-quals|href|missing|toi|play|strength)s?\b", time_frame)
+                        last_match = re.finditer(r"\b(?:hide|skip)(?: |-)?(name|year|season|live|date|game-link|query|queries|advanced|href-quals|href|missing|toi|play|strength|header|card)s?\b", time_frame)
                         for m in last_match:
                             if m.group(1) == "date" or m.group(1) == "season" or m.group(1) == "game-link":
                                 extra_stats.add("hide-year")
@@ -40104,49 +40104,50 @@ def print_player_data(player_datas, player_type, highest_vals, lowest_vals, has_
             all_unique_quals = False
             break
 
-    ranges_str = ""
-    for index, player_data in enumerate(player_datas):
-        html_info["player_image_url"].append({"urls" : player_data["player_image_url"], "positions" : player_data["player_position"], "teams" : player_data["player_current_team"], "flags" : player_data["player_flag"], "numbers" : player_data["player_current_number"], "hofs" : player_data["player_hof"], "names" : player_data["stat_values"]["Player"], "ids" : player_data["ids"]})
-        if "all_rows" in player_data["stat_values"] and len(player_data["stat_values"]["all_rows"]):
-            player_str = player_data["stat_values"]["Raw Player"]
-        else:
-            player_str = ""
-            for index, player in enumerate(player_data["stat_values"]["Player"]):
-                player_str += create_player_url_string(player, player_data["ids"][index], extra_stats)
-                if index != len(player_data["stat_values"]["Player"]) - 1:
-                    if player_data["add_type"] == "minus":
-                        player_str += " DIFF "
-                    else:
-                        player_str += " + "
-        
-        has_one_player_missing = False
-        missing_all_players = True
-        for player in player_data["stat_values"]["Player"]:
-            if player == "No Player Match!":
-                has_one_player_missing = True
+    if not "hide-header" in extra_stats:
+        ranges_str = ""
+        for index, player_data in enumerate(player_datas):
+            html_info["player_image_url"].append({"urls" : player_data["player_image_url"], "positions" : player_data["player_position"], "teams" : player_data["player_current_team"], "flags" : player_data["player_flag"], "numbers" : player_data["player_current_number"], "hofs" : player_data["player_hof"], "names" : player_data["stat_values"]["Player"], "ids" : player_data["ids"]})
+            if "all_rows" in player_data["stat_values"] and len(player_data["stat_values"]["all_rows"]):
+                player_str = player_data["stat_values"]["Raw Player"]
             else:
-                missing_all_players = False
+                player_str = ""
+                for index, player in enumerate(player_data["stat_values"]["Player"]):
+                    player_str += create_player_url_string(player, player_data["ids"][index], extra_stats)
+                    if index != len(player_data["stat_values"]["Player"]) - 1:
+                        if player_data["add_type"] == "minus":
+                            player_str += " DIFF "
+                        else:
+                            player_str += " + "
+            
+            has_one_player_missing = False
+            missing_all_players = True
+            for player in player_data["stat_values"]["Player"]:
+                if player == "No Player Match!":
+                    has_one_player_missing = True
+                else:
+                    missing_all_players = False
 
-        player_search_str = ""
-        if has_one_player_missing:
-            player_search_str = " Searched Term: \"" + "+".join(player_data["stat_values"]["Search Term"]) + "\""
+            player_search_str = ""
+            if has_one_player_missing:
+                player_search_str = " Searched Term: \"" + "+".join(player_data["stat_values"]["Search Term"]) + "\""
 
-        ranges_str += player_str + player_search_str
-        if missing_all_players:
-            ranges_str += "\n"
-        else:
-            ranges_str += ": "  + player_data["stat_values"]["Raw Range"] + " " + player_data["stat_values"]["Raw Time"] + "\n"
+            ranges_str += player_str + player_search_str
+            if missing_all_players:
+                ranges_str += "\n"
+            else:
+                ranges_str += ": "  + player_data["stat_values"]["Raw Range"] + " " + player_data["stat_values"]["Raw Time"] + "\n"
 
-        if not all_unique_quals:
-            ranges_str += player_data["stat_values"]["Raw Quals"]
-            if index != len(player_datas) - 1:
-                ranges_str += "\n----------------------------------------\n"
-    
-    if all_unique_quals and player_datas[player_index]["stat_values"]["Raw Quals"] != "Query: ":
-         ranges_str += "----------------------------------------\n" + player_datas[player_index]["stat_values"]["Raw Quals"]
+            if not all_unique_quals:
+                ranges_str += player_data["stat_values"]["Raw Quals"]
+                if index != len(player_datas) - 1:
+                    ranges_str += "\n----------------------------------------\n"
+        
+        if all_unique_quals and player_datas[player_index]["stat_values"]["Raw Quals"] != "Query: ":
+            ranges_str += "----------------------------------------\n" + player_datas[player_index]["stat_values"]["Raw Quals"]
 
-    if debug_mode:
-        logger.info("#" + str(threading.get_ident()) + "#   " + ranges_str)
+        if debug_mode:
+            logger.info("#" + str(threading.get_ident()) + "#   " + ranges_str)
 
     rate_headers = dict(filter(lambda header: header[1].get("type") == "Per Game/60 Minutes", headers[player_type["da_type"]["type"]].items()))
     score_sum_headers = dict(filter(lambda header: header[1].get("type") == "Advanced", headers[player_type["da_type"]["type"]].items()))
@@ -40755,47 +40756,50 @@ def get_reddit_player_table(player_datas, player_type, debug_mode, original_comm
             all_unique_quals = False
             break
 
-    ranges_str = ""
-    for index, player_data in enumerate(player_datas):
-        if "all_rows" in player_data["stat_values"] and len(player_data["stat_values"]["all_rows"]):
-            player_str = player_data["stat_values"]["Raw Player"]
-        else:
-            player_str = ""
-            for index, player in enumerate(player_data["stat_values"]["Player"]):
-                player_str += create_player_url_string(player, player_data["ids"][index], extra_stats)
-                if index != len(player_data["stat_values"]["Player"]) - 1:
-                    if player_data["add_type"] == "minus":
-                        player_str += " DIFF "
-                    else:
-                        player_str += " + "
-
-        has_one_player_missing = False
-        missing_all_players = True
-        for player in player_data["stat_values"]["Player"]:
-            if player == "No Player Match!":
-                has_one_player_missing = True
+    if not "hide-header" in extra_stats:
+        ranges_str = ""
+        for index, player_data in enumerate(player_datas):
+            if "all_rows" in player_data["stat_values"] and len(player_data["stat_values"]["all_rows"]):
+                player_str = player_data["stat_values"]["Raw Player"]
             else:
-                missing_all_players = False
+                player_str = ""
+                for index, player in enumerate(player_data["stat_values"]["Player"]):
+                    player_str += create_player_url_string(player, player_data["ids"][index], extra_stats)
+                    if index != len(player_data["stat_values"]["Player"]) - 1:
+                        if player_data["add_type"] == "minus":
+                            player_str += " DIFF "
+                        else:
+                            player_str += " + "
 
-        player_search_str = ""
-        if has_one_player_missing:
-            player_search_str = " Searched Term: \"" + "+".join(player_data["stat_values"]["Search Term"]) + "\""
+            has_one_player_missing = False
+            missing_all_players = True
+            for player in player_data["stat_values"]["Player"]:
+                if player == "No Player Match!":
+                    has_one_player_missing = True
+                else:
+                    missing_all_players = False
 
-        ranges_str += player_str + player_search_str
-        if missing_all_players:
-            ranges_str += "\n\n"
-        else:
-            ranges_str += ": "  + player_data["stat_values"]["Raw Range"] + " " + player_data["stat_values"]["Raw Time"] + "\n\n"
+            player_search_str = ""
+            if has_one_player_missing:
+                player_search_str = " Searched Term: \"" + "+".join(player_data["stat_values"]["Search Term"]) + "\""
 
-        if not all_unique_quals:
-            ranges_str += player_data["stat_values"]["Raw Quals"]
-            if index != len(player_datas) - 1:
-                ranges_str += "\n\n\\----------------------------------------\n\n"
-    
-    if all_unique_quals and player_datas[player_index]["stat_values"]["Raw Quals"] != "Query: ":
-         ranges_str += "\\----------------------------------------\n\n" + player_datas[player_index]["stat_values"]["Raw Quals"]
-                
-    table_str = ranges_str + "\n\n---\n"
+            ranges_str += player_str + player_search_str
+            if missing_all_players:
+                ranges_str += "\n\n"
+            else:
+                ranges_str += ": "  + player_data["stat_values"]["Raw Range"] + " " + player_data["stat_values"]["Raw Time"] + "\n\n"
+
+            if not all_unique_quals:
+                ranges_str += player_data["stat_values"]["Raw Quals"]
+                if index != len(player_datas) - 1:
+                    ranges_str += "\n\n\\----------------------------------------\n\n"
+        
+        if all_unique_quals and player_datas[player_index]["stat_values"]["Raw Quals"] != "Query: ":
+            ranges_str += "\\----------------------------------------\n\n" + player_datas[player_index]["stat_values"]["Raw Quals"]
+                    
+        table_str = ranges_str + "\n\n---\n"
+    else:
+        table_str = ""
 
     error_getting_adv = False
     for player_data in player_datas:
@@ -41294,7 +41298,7 @@ def create_table_html(html_info, player_datas, original_comment, last_updated, c
         # body_div.append(courtesy_div)
 
         total_image_div = soup.new_tag("div")
-        if "hide-name" in extra_stats:
+        if "hide-name" in extra_stats or "hide-card" in extra_stats:
             total_image_div["style"] = "height: 170px; padding-bottom: 10px; display: inline-block;"
         else:
             total_image_div["style"] = "height: 170px; border: dashed; border-width: 0px 1px 1px 0px; padding-bottom: 10px; display: inline-block;"
@@ -41319,7 +41323,7 @@ def create_table_html(html_info, player_datas, original_comment, last_updated, c
         tables_div_tag = soup.new_tag("div")
         parsed_ids = set()
         max_comb_players = 0
-        if not "hide-name" in extra_stats:
+        if not "hide-name" in extra_stats and not "hide-card" in extra_stats:
             for player_image_urls in html_info["player_image_url"]:
                 if len(player_image_urls["urls"]) > max_comb_players:
                     max_comb_players = len(player_image_urls["urls"])
@@ -41502,78 +41506,79 @@ def create_table_html(html_info, player_datas, original_comment, last_updated, c
                 all_unique_quals = False
                 break
 
-        for index, player_data in enumerate(player_datas):
-            current_div = soup.new_tag("div")
-            if True:
-                current_div["style"] = "display: inline-block; vertical-align: top;"
-            else:
-                current_div["style"] = "display: inline-block; border: dashed; border-width: 0px 0px 0px 1px; vertical-align: top;"
-            
-            has_one_player_missing = False
-            missing_all_players = True
-            for player in player_data["stat_values"]["Player"]:
-                if player == "No Player Match!":
-                    has_one_player_missing = True
+        if not "hide-header" in extra_stats:
+            for index, player_data in enumerate(player_datas):
+                current_div = soup.new_tag("div")
+                if True:
+                    current_div["style"] = "display: inline-block; vertical-align: top;"
                 else:
-                    missing_all_players = False
-
-            h2 = soup.new_tag("h2")
-            h2.string = player_data["stat_values"]["Raw Player"]
-            h2["style"] = "float: left; padding-left:10px; padding-right:10px;"
-            raw_range = player_data["stat_values"]["Raw Range"]
-            match = re.search(r"(?:\[([^\]\[]+?)(?<!\\)\])(?:\s*\((?:http[s]?://|www\.)(?:[a-zA-Z]|[0-9]|[$-'\*-_@.&+^]|[!*,]|(?:%[0-9a-fA-F][0-9a-fA-F]))+\))", raw_range)
-            while match:
-                raw_range = raw_range.replace(match.group(0), match.group(1), 1)
-                match = re.search(r"(?:\[([^\]\[]+?)(?<!\\)\])(?:\s*\((?:http[s]?://|www\.)(?:[a-zA-Z]|[0-9]|[$-'\*-_@.&+^]|[!*,]|(?:%[0-9a-fA-F][0-9a-fA-F]))+\))", raw_range)
-
-            if has_one_player_missing:
-                h2_div = soup.new_tag("div")
-                h2_div.string = "Searched Term: \"" + "+".join(player_data["stat_values"]["Search Term"]) + "\""
-                h2_div["style"] = "font-size: medium;"
-                h2.append(h2_div)
-
-            if not missing_all_players:
-                h2_div = soup.new_tag("div")
-                h2_div.string = raw_range
-                h2_div["style"] = "font-size: medium;"
-                h2.append(h2_div)
-
-            if player_data["stat_values"]["Raw Time"] and not missing_all_players:
-                h2_div = soup.new_tag("div")
-                h2_div.string = player_data["stat_values"]["Raw Time"]
-                h2_div["style"] = "font-size: small;"
-                h2.append(h2_div)
+                    current_div["style"] = "display: inline-block; border: dashed; border-width: 0px 0px 0px 1px; vertical-align: top;"
                 
-            if not all_unique_quals and not missing_all_players:
-                raw_quals = player_data["stat_values"]["Raw Quals"]
-                if raw_quals and raw_quals != "Query: ":
-                    match = re.search(r"(?:\[([^\]\[]+?)(?<!\\)\])(?:\s*\((?:http[s]?://|www\.)(?:[a-zA-Z]|[0-9]|[$-'\*-_@.&+^]|[!*,]|(?:%[0-9a-fA-F][0-9a-fA-F]))+\))", raw_quals)
-                    while match:
-                        raw_quals = raw_quals.replace(match.group(0), match.group(1), 1)
-                        match = re.search(r"(?:\[([^\]\[]+?)(?<!\\)\])(?:\s*\((?:http[s]?://|www\.)(?:[a-zA-Z]|[0-9]|[$-'\*-_@.&+^]|[!*,]|(?:%[0-9a-fA-F][0-9a-fA-F]))+\))", raw_quals)
-                        
-                    h2_div = soup.new_tag("div")
-                    h2_div.string = raw_quals
-                    h2_div["style"] = "font-size: x-small;"
-                    h2.append(h2_div)
-            current_div.append(h2)
-            title_div_tag.append(current_div)
+                has_one_player_missing = False
+                missing_all_players = True
+                for player in player_data["stat_values"]["Player"]:
+                    if player == "No Player Match!":
+                        has_one_player_missing = True
+                    else:
+                        missing_all_players = False
 
-        if all_unique_quals and player_datas[player_index]["stat_values"]["Raw Quals"] != "Query: ":
-            h2 = soup.new_tag("h2")
-            raw_quals = player_datas[player_index]["stat_values"]["Raw Quals"]
-            match = re.search(r"(?:\[([^\]\[]+?)(?<!\\)\])(?:\s*\((?:http[s]?://|www\.)(?:[a-zA-Z]|[0-9]|[$-'\*-_@.&+^]|[!*,]|(?:%[0-9a-fA-F][0-9a-fA-F]))+\))", raw_quals)
-            while match:
-                raw_quals = raw_quals.replace(match.group(0), match.group(1), 1)
+                h2 = soup.new_tag("h2")
+                h2.string = player_data["stat_values"]["Raw Player"]
+                h2["style"] = "float: left; padding-left:10px; padding-right:10px;"
+                raw_range = player_data["stat_values"]["Raw Range"]
+                match = re.search(r"(?:\[([^\]\[]+?)(?<!\\)\])(?:\s*\((?:http[s]?://|www\.)(?:[a-zA-Z]|[0-9]|[$-'\*-_@.&+^]|[!*,]|(?:%[0-9a-fA-F][0-9a-fA-F]))+\))", raw_range)
+                while match:
+                    raw_range = raw_range.replace(match.group(0), match.group(1), 1)
+                    match = re.search(r"(?:\[([^\]\[]+?)(?<!\\)\])(?:\s*\((?:http[s]?://|www\.)(?:[a-zA-Z]|[0-9]|[$-'\*-_@.&+^]|[!*,]|(?:%[0-9a-fA-F][0-9a-fA-F]))+\))", raw_range)
+
+                if has_one_player_missing:
+                    h2_div = soup.new_tag("div")
+                    h2_div.string = "Searched Term: \"" + "+".join(player_data["stat_values"]["Search Term"]) + "\""
+                    h2_div["style"] = "font-size: medium;"
+                    h2.append(h2_div)
+
+                if not missing_all_players:
+                    h2_div = soup.new_tag("div")
+                    h2_div.string = raw_range
+                    h2_div["style"] = "font-size: medium;"
+                    h2.append(h2_div)
+
+                if player_data["stat_values"]["Raw Time"] and not missing_all_players:
+                    h2_div = soup.new_tag("div")
+                    h2_div.string = player_data["stat_values"]["Raw Time"]
+                    h2_div["style"] = "font-size: small;"
+                    h2.append(h2_div)
+                    
+                if not all_unique_quals and not missing_all_players:
+                    raw_quals = player_data["stat_values"]["Raw Quals"]
+                    if raw_quals and raw_quals != "Query: ":
+                        match = re.search(r"(?:\[([^\]\[]+?)(?<!\\)\])(?:\s*\((?:http[s]?://|www\.)(?:[a-zA-Z]|[0-9]|[$-'\*-_@.&+^]|[!*,]|(?:%[0-9a-fA-F][0-9a-fA-F]))+\))", raw_quals)
+                        while match:
+                            raw_quals = raw_quals.replace(match.group(0), match.group(1), 1)
+                            match = re.search(r"(?:\[([^\]\[]+?)(?<!\\)\])(?:\s*\((?:http[s]?://|www\.)(?:[a-zA-Z]|[0-9]|[$-'\*-_@.&+^]|[!*,]|(?:%[0-9a-fA-F][0-9a-fA-F]))+\))", raw_quals)
+                            
+                        h2_div = soup.new_tag("div")
+                        h2_div.string = raw_quals
+                        h2_div["style"] = "font-size: x-small;"
+                        h2.append(h2_div)
+                current_div.append(h2)
+                title_div_tag.append(current_div)
+
+            if all_unique_quals and player_datas[player_index]["stat_values"]["Raw Quals"] != "Query: ":
+                h2 = soup.new_tag("h2")
+                raw_quals = player_datas[player_index]["stat_values"]["Raw Quals"]
                 match = re.search(r"(?:\[([^\]\[]+?)(?<!\\)\])(?:\s*\((?:http[s]?://|www\.)(?:[a-zA-Z]|[0-9]|[$-'\*-_@.&+^]|[!*,]|(?:%[0-9a-fA-F][0-9a-fA-F]))+\))", raw_quals)
-            border_div = soup.new_tag("div")
-            border_div["style"] = "border: dashed; border-width: 1px 0px 0px 0px; width: 160px; margin: auto; margin-top: 2px;"
-            h2.append(border_div)
-            h2_div = soup.new_tag("div")
-            h2_div.string = raw_quals
-            h2_div["style"] = "font-size: large;"
-            h2.append(h2_div)
-            title_div_tag.append(h2)
+                while match:
+                    raw_quals = raw_quals.replace(match.group(0), match.group(1), 1)
+                    match = re.search(r"(?:\[([^\]\[]+?)(?<!\\)\])(?:\s*\((?:http[s]?://|www\.)(?:[a-zA-Z]|[0-9]|[$-'\*-_@.&+^]|[!*,]|(?:%[0-9a-fA-F][0-9a-fA-F]))+\))", raw_quals)
+                border_div = soup.new_tag("div")
+                border_div["style"] = "border: dashed; border-width: 1px 0px 0px 0px; width: 160px; margin: auto; margin-top: 2px;"
+                h2.append(border_div)
+                h2_div = soup.new_tag("div")
+                h2_div.string = raw_quals
+                h2_div["style"] = "font-size: large;"
+                h2.append(h2_div)
+                title_div_tag.append(h2)
 
         body_div.append(title_div_tag)
 
