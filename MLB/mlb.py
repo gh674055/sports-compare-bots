@@ -25502,10 +25502,11 @@ def get_matching_row_val(match_all, stat, matching_rows, stat_quals, player_data
     for qual_object in stat_quals:
         has_match = False
         stat = qual_object["stat"]
+        stat_str = stat
 
         if stat.startswith("season"):
             season_num = len(set([row["Year"] for row in matching_rows]))
-            stat_objs[stat] = {
+            stat_objs[stat_str] = {
                 "real_stat" : "Seasons",
                 "round_value" : season_num,
                 "value" : season_num
@@ -25562,7 +25563,7 @@ def get_matching_row_val(match_all, stat, matching_rows, stat_quals, player_data
                     if len(rec_split) == 3:
                         value += ":" + str(round_value(float(rec_split[2])))
 
-                stat_objs[stat] = {
+                stat_objs[stat_str] = {
                     "real_stat" : real_stat,
                     "round_value" : value,
                     "value" : og_value
