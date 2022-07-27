@@ -1296,9 +1296,9 @@ headers = {
             "round" : 1,
             "type" : "Per Game/Advanced",
             "valid_since" : {
-                "game-np" : 1916,
-                "season-np" : 1916,
-                "season" : 1916,
+                "game-np" : 1915,
+                "season-np" : 1915,
+                "season" : 1915,
                 "game" : 1901
             }
         },
@@ -1308,9 +1308,9 @@ headers = {
             "round" : "percent-1",
             "type" : "Per Game/Advanced",
             "valid_since" : {
-                "game-np" : 1916,
-                "season-np" : 1916,
-                "season" : 1916,
+                "game-np" : 1915,
+                "season-np" : 1915,
+                "season" : 1915,
                 "game" : 1901
             }
         },
@@ -1495,9 +1495,9 @@ headers = {
             "round" : 1,
             "type" : "Per Game/Advanced",
             "valid_since" : {
-                "game-np" : 1916,
-                "season-np" : 1916,
-                "season" : 1916,
+                "game-np" : 1915,
+                "season-np" : 1915,
+                "season" : 1915,
                 "game" : 1901
             }
         },
@@ -1507,9 +1507,9 @@ headers = {
             "type" : "Per Game/Advanced",
             "round" : 1,
             "valid_since" : {
-                "game-np" : 1916,
-                "season-np" : 1916,
-                "season" : 1916,
+                "game-np" : 1915,
+                "season-np" : 1915,
+                "season" : 1915,
                 "game" : 1901
             }
         },
@@ -1518,9 +1518,9 @@ headers = {
             "round" : "percent-1",
             "type" : "Per Game/Advanced",
             "valid_since" : {
-                "game-np" : 1916,
-                "season-np" : 1916,
-                "season" : 1916,
+                "game-np" : 1915,
+                "season-np" : 1915,
+                "season" : 1915,
                 "game" : 1901
             }
         },
@@ -1528,9 +1528,9 @@ headers = {
             "positive" : True,
             "round" : 1,
             "valid_since" : {
-                "game-np" : 1916,
-                "season-np" : 1916,
-                "season" : 1916,
+                "game-np" : 1915,
+                "season-np" : 1915,
+                "season" : 1915,
                 "game" : 1901
             },
             "type" : "Per Game/Advanced"
@@ -1565,9 +1565,9 @@ headers = {
             "round" : 1,
             "display" : False,
             "valid_since" : {
-                "game-np" : 1916,
-                "season-np" : 1916,
-                "season" : 1916,
+                "game-np" : 1915,
+                "season-np" : 1915,
+                "season" : 1915,
                 "game" : 1901
             },
             "type" : "Per Game/Advanced"
@@ -3168,24 +3168,24 @@ headers = {
         "BSv": {
             "positive" : False,
             "valid_since" : {
-                "game" : 1916,
-                "season" : 1916
+                "game" : 1915,
+                "season" : 1915
             }
         },
         "SV%": {
             "positive" : True,
             "round" : "percent",
             "valid_since" : {
-                "game" : 1916,
-                "season" : 1916
+                "game" : 1915,
+                "season" : 1915
             }
         },
         "Hold": {
             "positive" : True,
             "display-value" : "HLD",
             "valid_since" : {
-                "game" : 1916,
-                "season" : 1916
+                "game" : 1915,
+                "season" : 1915
             }
         },
         "BF" : {
@@ -3361,7 +3361,7 @@ headers = {
             "positive" : True,
             "type" : "Adjusted",
             "display-value" : "K%+",
-            "valid_since" : {
+             "valid_since" : {
                 "season" : 1916,
                 "game" : 1916
             }
@@ -3369,7 +3369,7 @@ headers = {
         "BB%+" : {
             "positive" : False,
             "type" : "Adjusted",
-            "valid_since" : {
+             "valid_since" : {
                 "season" : 1916,
                 "game" : 1916
             }
@@ -3378,11 +3378,19 @@ headers = {
             "positive" : True,
             "type" : "Adjusted",
             "display" : False,
-            "display-value" : "K-BB%+"
+            "display-value" : "K-BB%+",
+             "valid_since" : {
+                "season" : 1916,
+                "game" : 1916
+            }
         },
         "HR%+" : {
             "positive" : False,
-            "type" : "Adjusted"
+            "type" : "Adjusted",
+             "valid_since" : {
+                "season" : 1916,
+                "game" : 1916
+            }
         },
         "SO/BB+": {
             "positive" : True,
@@ -3398,8 +3406,8 @@ headers = {
             "type" : "Adjusted",
             "display" : False,
             "valid_since" : {
-                "game-np" : 1916,
-                "season-np" : 1916,
+                "game-np" : 1915,
+                "season-np" : 1915,
                 "season" : 1901,
                 "game" : 1901
             }
@@ -3430,8 +3438,8 @@ headers = {
             "positive" : True,
             "display" : False,
             "valid_since" : {
-                "game-np" : 1916,
-                "season-np" : 1916,
+                "game-np" : 1915,
+                "season-np" : 1915,
                 "season" : 1901,
                 "game" : 1901
             }
@@ -3449,8 +3457,8 @@ headers = {
             "positive" : False,
             "display" : False,
             "valid_since" : {
-                "game-np" : 1916,
-                "season-np" : 1916,
+                "game-np" : 1915,
+                "season-np" : 1915,
                 "season" : 1901,
                 "game" : 1901
             }
@@ -3459,8 +3467,8 @@ headers = {
             "positive" : False,
             "display" : False,
             "valid_since" : {
-                "game-np" : 1916,
-                "season-np" : 1916,
+                "game-np" : 1915,
+                "season-np" : 1915,
                 "season" : 1901,
                 "game" : 1901
             }
@@ -3491,8 +3499,8 @@ headers = {
         "TB": {
             "positive" : False,
             "valid_since" : {
-                "game-np" : 1916,
-                "season-np" : 1916,
+                "game-np" : 1915,
+                "season-np" : 1915,
                 "season" : 1901,
                 "game" : 1901
             }
@@ -3500,8 +3508,8 @@ headers = {
         "XBH": {
             "positive" : False,
             "valid_since" : {
-                "game-np" : 1916,
-                "season-np" : 1916,
+                "game-np" : 1915,
+                "season-np" : 1915,
                 "season" : 1901,
                 "game" : 1901
             }
@@ -3560,8 +3568,8 @@ headers = {
             "round" : "percent",
             "type" : "Per Game/Advanced",
             "valid_since" : {
-                "game-np" : 1916,
-                "season-np" : 1916,
+                "game-np" : 1915,
+                "season-np" : 1915,
                 "season" : 1901,
                 "game" : 1901
             }
@@ -3571,8 +3579,8 @@ headers = {
             "round" : "percent",
             "type" : "Per Game/Advanced",
             "valid_since" : {
-                "game-np" : 1916,
-                "season-np" : 1916,
+                "game-np" : 1915,
+                "season-np" : 1915,
                 "season" : 1901,
                 "game" : 1901
             }
@@ -3602,8 +3610,8 @@ headers = {
             "round" : "percent",
             "type" : "Per Game/Advanced",
             "valid_since" : {
-                "game-np" : 1916,
-                "season-np" : 1916,
+                "game-np" : 1915,
+                "season-np" : 1915,
                 "game" : 1912,
                 "season" : 1912,
                 "inconsistent-game" : 1928,
@@ -3743,8 +3751,8 @@ headers = {
         "SB": {
             "positive" : False,
             "valid_since" : {
-                "game-np" : 1916,
-                "season-np" : 1916,
+                "game-np" : 1915,
+                "season-np" : 1915,
                 "season" : 1901,
                 "game" : 1901
             }
@@ -3752,8 +3760,8 @@ headers = {
         "CS" : {
             "positive" : True,
             "valid_since" : {
-                "game-np" : 1916,
-                "season-np" : 1916,
+                "game-np" : 1915,
+                "season-np" : 1915,
                 "game" : 1912,
                 "season" : 1912,
                 "inconsistent-game" : 1928,
@@ -3764,8 +3772,8 @@ headers = {
             "positive" : False,
             "display" : False,
             "valid_since" : {
-                "game-np" : 1916,
-                "season-np" : 1916,
+                "game-np" : 1915,
+                "season-np" : 1915,
                 "game" : 1912,
                 "season" : 1912,
                 "inconsistent-game" : 1928,
@@ -3775,8 +3783,8 @@ headers = {
         "PO": {
             "positive" : True,
             "valid_since" : {
-                "game-np" : 1916,
-                "season-np" : 1916,
+                "game-np" : 1915,
+                "season-np" : 1915,
                 "season" : 1901,
                 "game" : 1901
             }
@@ -3787,8 +3795,8 @@ headers = {
             "type" : "Per Game/Advanced",
             "display-value" : "AVG",
             "valid_since" : {
-                "game-np" : 1916,
-                "season-np" : 1916,
+                "game-np" : 1915,
+                "season-np" : 1915,
                 "season" : 1901,
                 "game" : 1901
             }
@@ -3797,8 +3805,8 @@ headers = {
             "round" : 3,
             "type" : "Per Game/Advanced",
             "valid_since" : {
-                "game-np" : 1916,
-                "season-np" : 1916,
+                "game-np" : 1915,
+                "season-np" : 1915,
                 "season" : 1901,
                 "game" : 1901
             }
@@ -3807,8 +3815,8 @@ headers = {
             "round" : 3,
             "type" : "Per Game/Advanced",
             "valid_since" : {
-                "game-np" : 1916,
-                "season-np" : 1916,
+                "game-np" : 1915,
+                "season-np" : 1915,
                 "season" : 1901,
                 "game" : 1901
             }
@@ -3817,8 +3825,8 @@ headers = {
             "round" : 3,
             "type" : "Per Game/Advanced",
             "valid_since" : {
-                "game-np" : 1916,
-                "season-np" : 1916,
+                "game-np" : 1915,
+                "season-np" : 1915,
                 "season" : 1901,
                 "game" : 1901
             }
@@ -3827,8 +3835,8 @@ headers = {
             "round" : 3,
             "type" : "Per Game/Advanced",
             "valid_since" : {
-                "game-np" : 1916,
-                "season-np" : 1916,
+                "game-np" : 1915,
+                "season-np" : 1915,
                 "season" : 1901,
                 "game" : 1901
             }
@@ -3837,8 +3845,8 @@ headers = {
             "round" : 3,
             "type" : "Per Game/Advanced",
             "valid_since" : {
-                "game-np" : 1916,
-                "season-np" : 1916,
+                "game-np" : 1915,
+                "season-np" : 1915,
                 "season" : 1901,
                 "game" : 1901
             }
@@ -3847,8 +3855,8 @@ headers = {
             "round" : 3,
             "type" : "Per Game/Advanced",
             "valid_since" : {
-                "game-np" : 1916,
-                "season-np" : 1916,
+                "game-np" : 1915,
+                "season-np" : 1915,
                 "season" : 1901,
                 "game" : 1901
             }
@@ -3859,8 +3867,8 @@ headers = {
             "type" : "Per Game/Advanced",
             "display" : False,
             "valid_since" : {
-                "game-np" : 1916,
-                "season-np" : 1916,
+                "game-np" : 1915,
+                "season-np" : 1915,
                 "game" : 1912,
                 "season" : 1912,
                 "inconsistent-game" : 1928,
@@ -3872,8 +3880,8 @@ headers = {
             "type" : "Per Game/Advanced",
             "display" : False,
             "valid_since" : {
-                "game-np" : 1916,
-                "season-np" : 1916,
+                "game-np" : 1915,
+                "season-np" : 1915,
                 "season" : 1901,
                 "game" : 1901
             }
@@ -3884,8 +3892,8 @@ headers = {
             "type" : "Per Game/Advanced",
             "display" : False,
             "valid_since" : {
-                "game-np" : 1916,
-                "season-np" : 1916,
+                "game-np" : 1915,
+                "season-np" : 1915,
                 "season" : 1901,
                 "game" : 1901
             }
@@ -3896,8 +3904,8 @@ headers = {
             "type" : "Per Game/Advanced",
             "display" : False,
             "valid_since" : {
-                "game-np" : 1916,
-                "season-np" : 1916,
+                "game-np" : 1915,
+                "season-np" : 1915,
                 "season" : 1901,
                 "game" : 1901
             }
@@ -3976,9 +3984,9 @@ headers = {
             "round" : 1,
             "display" : False,
             "valid_since" : {
-                "game-np" : 1916,
-                "season-np" : 1916,
-                "season" : 1916,
+                "game-np" : 1930,
+                "season-np" : 1915,
+                "season" : 1915,
                 "game" : 1901
             },
             "type" : "Per Game/Advanced"
@@ -3994,8 +4002,8 @@ headers = {
             "type" : "Per Game/Advanced",
             "valid_since" : {
                 "game-np" : 1930,
-                "season-np" : 1916,
-                "season" : 1916,
+                "season-np" : 1915,
+                "season" : 1915,
                 "game" : 1901
             }
         },
@@ -4006,8 +4014,8 @@ headers = {
             "type" : "Per Game/Advanced",
             "valid_since" : {
                 "game-np" : 1930,
-                "season-np" : 1916,
-                "season" : 1916,
+                "season-np" : 1915,
+                "season" : 1915,
                 "game" : 1901
             }
         },
@@ -4016,9 +4024,9 @@ headers = {
             "round" : "percent-1",
             "type" : "Per Game/Advanced",
             "valid_since" : {
-                "game-np" : 1916,
-                "season-np" : 1916,
-                "season" : 1916,
+                "game-np" : 1915,
+                "season-np" : 1915,
+                "season" : 1915,
                 "game" : 1901
             }
         },
@@ -4027,8 +4035,8 @@ headers = {
             "round" : 1,
             "valid_since" : {
                 "game-np" : 1930,
-                "season-np" : 1916,
-                "season" : 1916,
+                "season-np" : 1915,
+                "season" : 1915,
                 "game" : 1901
             },
             "type" : "Per Game/Advanced"
@@ -27307,7 +27315,7 @@ def fix_prob_data(all_rows, player_data, player_type, all_teams_unique):
                     if row_data["Year"] > max_reg_year:
                         max_reg_year = row_data["Year"]
     
-    if max_reg_year >= 1916:
+    if max_reg_year >= 1915:
         if season_ranges[False]:
             handle_prob_data(player_type, season_ranges[False], player_data, all_rows, False)
         elif full_season_ranges:
@@ -27360,7 +27368,7 @@ def handle_prob_data(player_type, all_season_ranges, player_data, all_rows, is_p
                     if "MLBLiveGame" in pot_row and pot_row["MLBLiveGame"]:
                         continue
                     
-                    if pot_row["Year"] >= (1901 if is_post else 1916) and pot_row["is_playoffs"] == is_post:
+                    if pot_row["Year"] >= (1901 if is_post else 1915) and pot_row["is_playoffs"] == is_post:
                         wpa_str = row.find("td", {"data-stat" : "wpa_" + ("bat" if player_type["da_type"] == "Batter" else "def")}).find(text=True)
                         if wpa_str:
                             if "WPA" not in pot_row:
@@ -27409,7 +27417,7 @@ def handle_season_prob_data(player_type, all_season_ranges, player_data, all_row
         for i in range(len(standard_table_rows)):
             row = standard_table_rows[i]
             for pot_row in all_rows:
-                if pot_row["Year"] >= 1916 and pot_row["is_playoffs"] == False:
+                if pot_row["Year"] >= 1915 and pot_row["is_playoffs"] == False:
                     wpa_str = row.find("td", {"data-stat" : "wpa_" + ("bat" if player_type["da_type"] == "Batter" else "def")}).find(text=True)
                     if wpa_str:
                         if "WPA" not in pot_row:
@@ -42849,7 +42857,7 @@ def calculate_advanced_stats(data, all_rows, player_type, time_frames):
                 team = row_data["Tm"]
                 is_playoffs = row_data["is_playoffs"]
 
-                if player_type["da_type"] != "Batter" and year < 1916 and not is_playoffs:
+                if player_type["da_type"] != "Batter" and year < 1915 and not is_playoffs:
                     continue
                 year = str(year)
                 constant_year = year
