@@ -14215,9 +14215,9 @@ def clear_time_frames(subb_frames):
                             sub_qualifier.pop("explain_str", None)
 
 def handle_stat_time_frame(time_frame, player_type, extra_stats):
-    match = re.match(r"\b(only-season-?(?:st-?)?(?:end-?)?)?(games?-start(?:~[\S]+)?|games?-end(?:~[\S]+)?|seasons?-end(?:~[\S]+)?|totalgames?(?:~[\S]+)?|days?(?:~[\S]+)?|weeks?(?:~[\S]+)?|months?(?:~[\S]+)?|years?(?:~[\S]+)?|calendarweeks?(?:~[\S]+)?|calendarmonths?(?:~[\S]+)?|calendaryears?(?:~[\S]+)?|games?(?:~[\S]+)?|seasons?(?:~[\S]+)?|teams?(?:~[\S]+)?|opponents?(?:~[\S]+)?|batter?(?:~[\S]+)?|pitcher?(?:~[\S]+)?|g-st(?:~[\S]+)?|tg(?:~[\S]+)?|s-st(?:~[\S]+)?|g-end(?:~[\S]+)?|s-end(?:~[\S]+)?|d(?:~[\S]+)?|w(?:~[\S]+)?|m(?:~[\S]+)?|y(?:~[\S]+)?|g(?:~[\S]+)?|s(?:~[\S]+)?|t(?:~[\S]+)?|o(?:~[\S]+)?|b(?:~[\S]+)?|p(?:~[\S]+)?)?", time_frame)
+    match = re.match(r"\b(only-season-?(?:st-?)?(?:end-?)?)?(only-game-?(?:st-?)?(?:end-?)?)?(games?-start(?:~[\S]+)?|games?-end(?:~[\S]+)?|seasons?-end(?:~[\S]+)?|totalgames?(?:~[\S]+)?|days?(?:~[\S]+)?|weeks?(?:~[\S]+)?|months?(?:~[\S]+)?|years?(?:~[\S]+)?|calendarweeks?(?:~[\S]+)?|calendarmonths?(?:~[\S]+)?|calendaryears?(?:~[\S]+)?|games?(?:~[\S]+)?|seasons?(?:~[\S]+)?|teams?(?:~[\S]+)?|opponents?(?:~[\S]+)?|batter?(?:~[\S]+)?|pitcher?(?:~[\S]+)?|g-st(?:~[\S]+)?|tg(?:~[\S]+)?|s-st(?:~[\S]+)?|g-end(?:~[\S]+)?|s-end(?:~[\S]+)?|d(?:~[\S]+)?|w(?:~[\S]+)?|m(?:~[\S]+)?|y(?:~[\S]+)?|g(?:~[\S]+)?|s(?:~[\S]+)?|t(?:~[\S]+)?|o(?:~[\S]+)?|b(?:~[\S]+)?|p(?:~[\S]+)?)?", time_frame)
     
-    qualifier = match.group(2)
+    qualifier = match.group(3)
     if not qualifier:
         if match.group(1):
             qualifier = "games"
@@ -14262,6 +14262,12 @@ def handle_stat_time_frame(time_frame, player_type, extra_stats):
         if "st" in match.group(1):
             qual_type += "-Start"
         elif "end" in match.group(1):
+            qual_type += "-End"
+    elif match.group(2):
+        qual_type = "Only-Game-" + qual_type
+        if "st" in match.group(2):
+            qual_type += "-Start"
+        elif "end" in match.group(2):
             qual_type += "-End"
 
     if qualifier.endswith("-st"):
@@ -23289,6 +23295,11 @@ def handle_min_max_calc(the_stats, stat_quals, player_data, player_type, stat, t
         only_seasons = True
         qual_type = qual_type.replace("Only-Season-", "")
 
+    only_games = False
+    if qual_type.startswith("Only-Game-"):
+        only_games = True
+        qual_type = qual_type.replace("Only-Game-", "")
+
     if qual_type == "Days" or qual_type == "Weeks" or qual_type == "Months" or qual_type == "Years":
         dates = [row["Date"] for row in all_rows]
         start_date = min(dates)
@@ -23582,6 +23593,32 @@ def handle_min_max_calc(the_stats, stat_quals, player_data, player_type, stat, t
                                 "value" : stat_value,
                                 "counter" : 0
                             })
+        elif only_games:
+            for row in all_rows:
+                opponents = get_all_opponents([row], player_type)
+                for opponent in opponents:
+                    stat_value, matching_rows, opponent_name = handle_opponent_rows(opponent, player_data, player_type, stat, [row], qualifiers)
+                    if matching_rows:
+                        if not stat_quals:
+                            single_index = 0
+                            for single_stat in the_stats:
+                                if single_stat["value"] == stat_value:
+                                    single_index += 1
+                            the_stats.append({
+                                "index" : single_index,
+                                "value" : stat_value,
+                                "counter" : 0
+                            })
+                        elif valid_matching_rows(matching_rows, stat_quals, player_type, player_data):
+                            single_index = 0
+                            for single_stat in the_stats:
+                                if single_stat["value"] == stat_value:
+                                    single_index += 1
+                            the_stats.append({
+                                "index" : single_index,
+                                "value" : stat_value,
+                                "counter" : 0
+                            })
         else:
             opponents = get_all_opponents(all_rows, player_type)
             for opponent in opponents:
@@ -23649,6 +23686,11 @@ def handle_min_max_final(stat_val, current_explain_strs, player_data, player_typ
     if qual_type.startswith("Only-Season-"):
         only_seasons = True
         qual_type = qual_type.replace("Only-Season-", "")
+
+    only_games = False
+    if qual_type.startswith("Only-Game-"):
+        only_games = True
+        qual_type = qual_type.replace("Only-Game-", "")
     
     match_all = False
     if not stat:
@@ -24221,6 +24263,46 @@ def handle_min_max_final(stat_val, current_explain_strs, player_data, player_typ
                                 "stat_objs" : get_matching_row_val(match_all, stat, matching_rows, stat_quals, player_data, player_type),
                                 "strs" : sub_range_str
                             })
+        elif only_games:
+            for row in all_rows:
+                opponents = get_all_opponents([row], player_type)
+                for opponent in opponents:
+                    stat_value, matching_rows, opponent_name = handle_opponent_rows(opponent, player_data, player_type, stat, [row], qualifiers)
+                    if matching_rows:
+                        has_match = False
+                        has_value_match = False
+                        for single_stat in stat_val["values"]:
+                            if single_stat["value"] == stat_value:
+                                if True:#if single_stat["counter"] == single_stat["index"]:
+                                    has_value_match = True
+                                single_stat["counter"] += 1
+                        if has_value_match or match_all:
+                            if not stat_quals:
+                                has_match = True
+                            elif valid_matching_rows(matching_rows, stat_quals, player_type, player_data):
+                                has_match = True
+                        
+                        if has_match:
+                            if not stat_val["negate"]:
+                                match_count += 1
+                                total_matching_rows.extend(matching_rows)
+                                sub_range_str = ""
+                                sub_range_str += "[" + opponent_name + "](https://www.mlb.com/player/" + str(opponent) + ")"
+                                total_matching_strs.append({
+                                    "rows" : total_matching_rows,
+                                    "stat_objs" : get_matching_row_val(match_all, stat, matching_rows, stat_quals, player_data, player_type),
+                                    "strs" : sub_range_str
+                                })
+                        elif stat_val["negate"]:
+                            match_count += 1
+                            total_matching_rows.extend(matching_rows)
+                            sub_range_str = ""
+                            sub_range_str += "[" + opponent_name + "](https://www.mlb.com/player/" + str(opponent) + ")"
+                            total_matching_strs.append({
+                                "rows" : total_matching_rows,
+                                "stat_objs" : get_matching_row_val(match_all, stat, matching_rows, stat_quals, player_data, player_type),
+                                "strs" : sub_range_str
+                            })
         else:
             opponents = get_all_opponents(all_rows, player_type)
             for opponent in opponents:
@@ -24267,6 +24349,8 @@ def handle_min_max_final(stat_val, current_explain_strs, player_data, player_typ
         stat_val["stat_obj"]["explain_str"] += qual_type[:-1] + "(s)" + "=" + qual_num_str + "|"
     if only_seasons:
         stat_val["stat_obj"]["explain_str"] += "Only Seasons" + "|"
+    if only_games:
+        stat_val["stat_obj"]["explain_str"] += "Only Games" + "|"
     stat_val["stat_obj"]["explain_str"] += str(match_count) + " " + (qual_type[:-1] + "(s)" if qual_type in ["Calendar-Weeks", "Calendar-Months", "Calendar-Years", "Teams", "Opponents", "Batters", "Pitchers"] else "Stretch(es)")
     if stat_quals:
         stat_val["stat_obj"]["explain_str"] += "|"
@@ -32118,7 +32202,7 @@ def perform_sub_mlb_game_qualifiers(row, player_data, qualifiers, player_game_in
         if qualifier == "Max Stat" or qualifier == "Min Stat" or qualifier == "Max Streak" or qualifier == "Count Streak" or qualifier == "Quickest" or qualifier == "Slowest":
             for qual_object in qualifiers[qualifier]:
                 for stat_obj in qual_object["values"]:
-                    if stat_obj["time_frame"] and stat_obj["time_frame"]["qual_type"] in ["Batters", "Pitchers", "Plate Appearances"]:
+                    if stat_obj["time_frame"] and stat_obj["time_frame"]["qual_type"] in ["Batters", "Pitchers", "Only-Game-Batters", "Only-Game-Pitchers"]:
                         add_play_events = True
                         break
     
