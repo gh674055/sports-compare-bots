@@ -32202,7 +32202,7 @@ def perform_sub_mlb_game_qualifiers(row, player_data, qualifiers, player_game_in
         if qualifier == "Max Stat" or qualifier == "Min Stat" or qualifier == "Max Streak" or qualifier == "Count Streak" or qualifier == "Quickest" or qualifier == "Slowest":
             for qual_object in qualifiers[qualifier]:
                 for stat_obj in qual_object["values"]:
-                    if stat_obj["time_frame"] and stat_obj["time_frame"]["qual_type"] in ["Batters", "Pitchers", "Only-Game-Batters", "Only-Game-Pitchers"]:
+                    if stat_obj["time_frame"] and stat_obj["time_frame"]["qual_type"] in ["Batters", "Pitchers", "Only-Game-Batters", "Only-Game-Pitchers", "Only-Season-Batters", "Only-Season-Pitchers"]:
                         add_play_events = True
                         break
     
