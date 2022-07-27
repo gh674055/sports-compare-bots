@@ -1296,9 +1296,9 @@ headers = {
             "round" : 1,
             "type" : "Per Game/Advanced",
             "valid_since" : {
-                "game-np" : 1915,
-                "season-np" : 1915,
-                "season" : 1915,
+                "game-np" : 1916,
+                "season-np" : 1916,
+                "season" : 1916,
                 "game" : 1901
             }
         },
@@ -1308,9 +1308,9 @@ headers = {
             "round" : "percent-1",
             "type" : "Per Game/Advanced",
             "valid_since" : {
-                "game-np" : 1915,
-                "season-np" : 1915,
-                "season" : 1915,
+                "game-np" : 1916,
+                "season-np" : 1916,
+                "season" : 1916,
                 "game" : 1901
             }
         },
@@ -1495,9 +1495,9 @@ headers = {
             "round" : 1,
             "type" : "Per Game/Advanced",
             "valid_since" : {
-                "game-np" : 1915,
-                "season-np" : 1915,
-                "season" : 1915,
+                "game-np" : 1916,
+                "season-np" : 1916,
+                "season" : 1916,
                 "game" : 1901
             }
         },
@@ -1507,9 +1507,9 @@ headers = {
             "type" : "Per Game/Advanced",
             "round" : 1,
             "valid_since" : {
-                "game-np" : 1915,
-                "season-np" : 1915,
-                "season" : 1915,
+                "game-np" : 1916,
+                "season-np" : 1916,
+                "season" : 1916,
                 "game" : 1901
             }
         },
@@ -1518,9 +1518,9 @@ headers = {
             "round" : "percent-1",
             "type" : "Per Game/Advanced",
             "valid_since" : {
-                "game-np" : 1915,
-                "season-np" : 1915,
-                "season" : 1915,
+                "game-np" : 1916,
+                "season-np" : 1916,
+                "season" : 1916,
                 "game" : 1901
             }
         },
@@ -1528,9 +1528,9 @@ headers = {
             "positive" : True,
             "round" : 1,
             "valid_since" : {
-                "game-np" : 1915,
-                "season-np" : 1915,
-                "season" : 1915,
+                "game-np" : 1916,
+                "season-np" : 1916,
+                "season" : 1916,
                 "game" : 1901
             },
             "type" : "Per Game/Advanced"
@@ -1565,9 +1565,9 @@ headers = {
             "round" : 1,
             "display" : False,
             "valid_since" : {
-                "game-np" : 1915,
-                "season-np" : 1915,
-                "season" : 1915,
+                "game-np" : 1916,
+                "season-np" : 1916,
+                "season" : 1916,
                 "game" : 1901
             },
             "type" : "Per Game/Advanced"
@@ -3168,24 +3168,24 @@ headers = {
         "BSv": {
             "positive" : False,
             "valid_since" : {
-                "game" : 1915,
-                "season" : 1915
+                "game" : 1916,
+                "season" : 1916
             }
         },
         "SV%": {
             "positive" : True,
             "round" : "percent",
             "valid_since" : {
-                "game" : 1915,
-                "season" : 1915
+                "game" : 1916,
+                "season" : 1916
             }
         },
         "Hold": {
             "positive" : True,
             "display-value" : "HLD",
             "valid_since" : {
-                "game" : 1915,
-                "season" : 1915
+                "game" : 1916,
+                "season" : 1916
             }
         },
         "BF" : {
@@ -3360,11 +3360,19 @@ headers = {
         "SO%+" : {
             "positive" : True,
             "type" : "Adjusted",
-            "display-value" : "K%+"
+            "display-value" : "K%+",
+            "valid_since" : {
+                "season" : 1916,
+                "game" : 1916
+            }
         },
         "BB%+" : {
             "positive" : False,
-            "type" : "Adjusted"
+            "type" : "Adjusted",
+            "valid_since" : {
+                "season" : 1916,
+                "game" : 1916
+            }
         },
         "SO-BB%+": {
             "positive" : True,
@@ -3390,8 +3398,8 @@ headers = {
             "type" : "Adjusted",
             "display" : False,
             "valid_since" : {
-                "game-np" : 1915,
-                "season-np" : 1915,
+                "game-np" : 1916,
+                "season-np" : 1916,
                 "season" : 1901,
                 "game" : 1901
             }
@@ -3422,8 +3430,8 @@ headers = {
             "positive" : True,
             "display" : False,
             "valid_since" : {
-                "game-np" : 1915,
-                "season-np" : 1915,
+                "game-np" : 1916,
+                "season-np" : 1916,
                 "season" : 1901,
                 "game" : 1901
             }
@@ -3441,8 +3449,8 @@ headers = {
             "positive" : False,
             "display" : False,
             "valid_since" : {
-                "game-np" : 1915,
-                "season-np" : 1915,
+                "game-np" : 1916,
+                "season-np" : 1916,
                 "season" : 1901,
                 "game" : 1901
             }
@@ -3451,8 +3459,8 @@ headers = {
             "positive" : False,
             "display" : False,
             "valid_since" : {
-                "game-np" : 1915,
-                "season-np" : 1915,
+                "game-np" : 1916,
+                "season-np" : 1916,
                 "season" : 1901,
                 "game" : 1901
             }
@@ -3483,8 +3491,8 @@ headers = {
         "TB": {
             "positive" : False,
             "valid_since" : {
-                "game-np" : 1915,
-                "season-np" : 1915,
+                "game-np" : 1916,
+                "season-np" : 1916,
                 "season" : 1901,
                 "game" : 1901
             }
@@ -3492,8 +3500,8 @@ headers = {
         "XBH": {
             "positive" : False,
             "valid_since" : {
-                "game-np" : 1915,
-                "season-np" : 1915,
+                "game-np" : 1916,
+                "season-np" : 1916,
                 "season" : 1901,
                 "game" : 1901
             }
@@ -3552,8 +3560,8 @@ headers = {
             "round" : "percent",
             "type" : "Per Game/Advanced",
             "valid_since" : {
-                "game-np" : 1915,
-                "season-np" : 1915,
+                "game-np" : 1916,
+                "season-np" : 1916,
                 "season" : 1901,
                 "game" : 1901
             }
@@ -3563,8 +3571,8 @@ headers = {
             "round" : "percent",
             "type" : "Per Game/Advanced",
             "valid_since" : {
-                "game-np" : 1915,
-                "season-np" : 1915,
+                "game-np" : 1916,
+                "season-np" : 1916,
                 "season" : 1901,
                 "game" : 1901
             }
@@ -3594,8 +3602,8 @@ headers = {
             "round" : "percent",
             "type" : "Per Game/Advanced",
             "valid_since" : {
-                "game-np" : 1915,
-                "season-np" : 1915,
+                "game-np" : 1916,
+                "season-np" : 1916,
                 "game" : 1912,
                 "season" : 1912,
                 "inconsistent-game" : 1928,
@@ -3735,8 +3743,8 @@ headers = {
         "SB": {
             "positive" : False,
             "valid_since" : {
-                "game-np" : 1915,
-                "season-np" : 1915,
+                "game-np" : 1916,
+                "season-np" : 1916,
                 "season" : 1901,
                 "game" : 1901
             }
@@ -3744,8 +3752,8 @@ headers = {
         "CS" : {
             "positive" : True,
             "valid_since" : {
-                "game-np" : 1915,
-                "season-np" : 1915,
+                "game-np" : 1916,
+                "season-np" : 1916,
                 "game" : 1912,
                 "season" : 1912,
                 "inconsistent-game" : 1928,
@@ -3756,8 +3764,8 @@ headers = {
             "positive" : False,
             "display" : False,
             "valid_since" : {
-                "game-np" : 1915,
-                "season-np" : 1915,
+                "game-np" : 1916,
+                "season-np" : 1916,
                 "game" : 1912,
                 "season" : 1912,
                 "inconsistent-game" : 1928,
@@ -3767,8 +3775,8 @@ headers = {
         "PO": {
             "positive" : True,
             "valid_since" : {
-                "game-np" : 1915,
-                "season-np" : 1915,
+                "game-np" : 1916,
+                "season-np" : 1916,
                 "season" : 1901,
                 "game" : 1901
             }
@@ -3779,8 +3787,8 @@ headers = {
             "type" : "Per Game/Advanced",
             "display-value" : "AVG",
             "valid_since" : {
-                "game-np" : 1915,
-                "season-np" : 1915,
+                "game-np" : 1916,
+                "season-np" : 1916,
                 "season" : 1901,
                 "game" : 1901
             }
@@ -3789,8 +3797,8 @@ headers = {
             "round" : 3,
             "type" : "Per Game/Advanced",
             "valid_since" : {
-                "game-np" : 1915,
-                "season-np" : 1915,
+                "game-np" : 1916,
+                "season-np" : 1916,
                 "season" : 1901,
                 "game" : 1901
             }
@@ -3799,8 +3807,8 @@ headers = {
             "round" : 3,
             "type" : "Per Game/Advanced",
             "valid_since" : {
-                "game-np" : 1915,
-                "season-np" : 1915,
+                "game-np" : 1916,
+                "season-np" : 1916,
                 "season" : 1901,
                 "game" : 1901
             }
@@ -3809,8 +3817,8 @@ headers = {
             "round" : 3,
             "type" : "Per Game/Advanced",
             "valid_since" : {
-                "game-np" : 1915,
-                "season-np" : 1915,
+                "game-np" : 1916,
+                "season-np" : 1916,
                 "season" : 1901,
                 "game" : 1901
             }
@@ -3819,8 +3827,8 @@ headers = {
             "round" : 3,
             "type" : "Per Game/Advanced",
             "valid_since" : {
-                "game-np" : 1915,
-                "season-np" : 1915,
+                "game-np" : 1916,
+                "season-np" : 1916,
                 "season" : 1901,
                 "game" : 1901
             }
@@ -3829,8 +3837,8 @@ headers = {
             "round" : 3,
             "type" : "Per Game/Advanced",
             "valid_since" : {
-                "game-np" : 1915,
-                "season-np" : 1915,
+                "game-np" : 1916,
+                "season-np" : 1916,
                 "season" : 1901,
                 "game" : 1901
             }
@@ -3839,8 +3847,8 @@ headers = {
             "round" : 3,
             "type" : "Per Game/Advanced",
             "valid_since" : {
-                "game-np" : 1915,
-                "season-np" : 1915,
+                "game-np" : 1916,
+                "season-np" : 1916,
                 "season" : 1901,
                 "game" : 1901
             }
@@ -3851,8 +3859,8 @@ headers = {
             "type" : "Per Game/Advanced",
             "display" : False,
             "valid_since" : {
-                "game-np" : 1915,
-                "season-np" : 1915,
+                "game-np" : 1916,
+                "season-np" : 1916,
                 "game" : 1912,
                 "season" : 1912,
                 "inconsistent-game" : 1928,
@@ -3864,8 +3872,8 @@ headers = {
             "type" : "Per Game/Advanced",
             "display" : False,
             "valid_since" : {
-                "game-np" : 1915,
-                "season-np" : 1915,
+                "game-np" : 1916,
+                "season-np" : 1916,
                 "season" : 1901,
                 "game" : 1901
             }
@@ -3876,8 +3884,8 @@ headers = {
             "type" : "Per Game/Advanced",
             "display" : False,
             "valid_since" : {
-                "game-np" : 1915,
-                "season-np" : 1915,
+                "game-np" : 1916,
+                "season-np" : 1916,
                 "season" : 1901,
                 "game" : 1901
             }
@@ -3888,8 +3896,8 @@ headers = {
             "type" : "Per Game/Advanced",
             "display" : False,
             "valid_since" : {
-                "game-np" : 1915,
-                "season-np" : 1915,
+                "game-np" : 1916,
+                "season-np" : 1916,
                 "season" : 1901,
                 "game" : 1901
             }
@@ -3968,9 +3976,9 @@ headers = {
             "round" : 1,
             "display" : False,
             "valid_since" : {
-                "game-np" : 1930,
-                "season-np" : 1915,
-                "season" : 1915,
+                "game-np" : 1916,
+                "season-np" : 1916,
+                "season" : 1916,
                 "game" : 1901
             },
             "type" : "Per Game/Advanced"
@@ -3986,8 +3994,8 @@ headers = {
             "type" : "Per Game/Advanced",
             "valid_since" : {
                 "game-np" : 1930,
-                "season-np" : 1915,
-                "season" : 1915,
+                "season-np" : 1916,
+                "season" : 1916,
                 "game" : 1901
             }
         },
@@ -3998,8 +4006,8 @@ headers = {
             "type" : "Per Game/Advanced",
             "valid_since" : {
                 "game-np" : 1930,
-                "season-np" : 1915,
-                "season" : 1915,
+                "season-np" : 1916,
+                "season" : 1916,
                 "game" : 1901
             }
         },
@@ -4008,9 +4016,9 @@ headers = {
             "round" : "percent-1",
             "type" : "Per Game/Advanced",
             "valid_since" : {
-                "game-np" : 1915,
-                "season-np" : 1915,
-                "season" : 1915,
+                "game-np" : 1916,
+                "season-np" : 1916,
+                "season" : 1916,
                 "game" : 1901
             }
         },
@@ -4019,8 +4027,8 @@ headers = {
             "round" : 1,
             "valid_since" : {
                 "game-np" : 1930,
-                "season-np" : 1915,
-                "season" : 1915,
+                "season-np" : 1916,
+                "season" : 1916,
                 "game" : 1901
             },
             "type" : "Per Game/Advanced"
@@ -27299,7 +27307,7 @@ def fix_prob_data(all_rows, player_data, player_type, all_teams_unique):
                     if row_data["Year"] > max_reg_year:
                         max_reg_year = row_data["Year"]
     
-    if max_reg_year >= 1915:
+    if max_reg_year >= 1916:
         if season_ranges[False]:
             handle_prob_data(player_type, season_ranges[False], player_data, all_rows, False)
         elif full_season_ranges:
@@ -27352,7 +27360,7 @@ def handle_prob_data(player_type, all_season_ranges, player_data, all_rows, is_p
                     if "MLBLiveGame" in pot_row and pot_row["MLBLiveGame"]:
                         continue
                     
-                    if pot_row["Year"] >= (1901 if is_post else 1915) and pot_row["is_playoffs"] == is_post:
+                    if pot_row["Year"] >= (1901 if is_post else 1916) and pot_row["is_playoffs"] == is_post:
                         wpa_str = row.find("td", {"data-stat" : "wpa_" + ("bat" if player_type["da_type"] == "Batter" else "def")}).find(text=True)
                         if wpa_str:
                             if "WPA" not in pot_row:
@@ -27401,7 +27409,7 @@ def handle_season_prob_data(player_type, all_season_ranges, player_data, all_row
         for i in range(len(standard_table_rows)):
             row = standard_table_rows[i]
             for pot_row in all_rows:
-                if pot_row["Year"] >= 1915 and pot_row["is_playoffs"] == False:
+                if pot_row["Year"] >= 1916 and pot_row["is_playoffs"] == False:
                     wpa_str = row.find("td", {"data-stat" : "wpa_" + ("bat" if player_type["da_type"] == "Batter" else "def")}).find(text=True)
                     if wpa_str:
                         if "WPA" not in pot_row:
@@ -42841,7 +42849,7 @@ def calculate_advanced_stats(data, all_rows, player_type, time_frames):
                 team = row_data["Tm"]
                 is_playoffs = row_data["is_playoffs"]
 
-                if player_type["da_type"] != "Batter" and year < 1915 and not is_playoffs:
+                if player_type["da_type"] != "Batter" and year < 1916 and not is_playoffs:
                     continue
                 year = str(year)
                 constant_year = year
@@ -43436,6 +43444,8 @@ def calculate_advanced_stats(data, all_rows, player_type, time_frames):
                         total_fipminus_weight -= yearly_woba_stats[year][team]["IP"]
                         total_wrcplus_weight -= yearly_woba_stats[year][team]["BF"]
                         total_k_bb_weight -= yearly_woba_stats[year][team]["BB"]
+                    elif int(year) < 1916:
+                        total_wrcplus_weight -= yearly_woba_stats[year][team]["BF"]
 
             for year in real_yearly_woba_stats:
                 constant_year = year
@@ -43594,40 +43604,41 @@ def calculate_advanced_stats(data, all_rows, player_type, time_frames):
                     except ZeroDivisionError:
                         pass
 
-                    try:
-                        hr_per = yearly_woba_stats[year][team]["HR"] / yearly_woba_stats[year][team]["BF"]
-                        league_hr_per = totals[sleague]["Pitcher"][constant_year]["HR"] / totals[sleague]["Pitcher"][constant_year]["TBF"]
-                        hr_plus = 100 + (((hr_per - league_hr_per) / league_hr_per) * 100)
-                        total_HRPlus += hr_plus * (wrcplus_weight / total_wrcplus_weight)
-                    except ZeroDivisionError:
-                        pass
-
-                    try:
-                        k_per = yearly_woba_stats[year][team]["SO"] / yearly_woba_stats[year][team]["BF"]
-                        league_k_per = totals[sleague]["Pitcher"][constant_year]["SO"] / totals[sleague]["Pitcher"][constant_year]["TBF"]
-                        k_plus = 100 + (((k_per - league_k_per) / league_k_per) * 100)
-                        total_KPlus += k_plus * (wrcplus_weight / total_wrcplus_weight)
-                    except ZeroDivisionError:
-                        pass
-
-                    try:
-                        bb_per = yearly_woba_stats[year][team]["BB"] / yearly_woba_stats[year][team]["BF"]
-                        league_bb_per = totals[sleague]["Pitcher"][constant_year]["BB"] / totals[sleague]["Pitcher"][constant_year]["TBF"]
-                        bb_plus = 100 + (((bb_per - league_bb_per) / league_bb_per) * 100)
-                        total_BBPlus += bb_plus * (wrcplus_weight / total_wrcplus_weight)
-                    except ZeroDivisionError:
-                        pass
-
-
-                    if yearly_woba_stats[year][team]["BF"]:
+                    if int(year) >= 1916:
                         try:
-                            kmbb_per = k_per - bb_per
-                            if kmbb_per:
-                                league_kmbb_per = league_k_per - league_bb_per
-                                kmbb_per_plus = 100 + (((kmbb_per - league_kmbb_per) / abs(league_kmbb_per)) * 100)
-                                total_KMBBPlus += kmbb_per_plus * (wrcplus_weight / total_wrcplus_weight)
+                            hr_per = yearly_woba_stats[year][team]["HR"] / yearly_woba_stats[year][team]["BF"]
+                            league_hr_per = totals[sleague]["Pitcher"][constant_year]["HR"] / totals[sleague]["Pitcher"][constant_year]["TBF"]
+                            hr_plus = 100 + (((hr_per - league_hr_per) / league_hr_per) * 100)
+                            total_HRPlus += hr_plus * (wrcplus_weight / total_wrcplus_weight)
                         except ZeroDivisionError:
                             pass
+
+                        try:
+                            k_per = yearly_woba_stats[year][team]["SO"] / yearly_woba_stats[year][team]["BF"]
+                            league_k_per = totals[sleague]["Pitcher"][constant_year]["SO"] / totals[sleague]["Pitcher"][constant_year]["TBF"]
+                            k_plus = 100 + (((k_per - league_k_per) / league_k_per) * 100)
+                            total_KPlus += k_plus * (wrcplus_weight / total_wrcplus_weight)
+                        except ZeroDivisionError:
+                            pass
+
+                        try:
+                            bb_per = yearly_woba_stats[year][team]["BB"] / yearly_woba_stats[year][team]["BF"]
+                            league_bb_per = totals[sleague]["Pitcher"][constant_year]["BB"] / totals[sleague]["Pitcher"][constant_year]["TBF"]
+                            bb_plus = 100 + (((bb_per - league_bb_per) / league_bb_per) * 100)
+                            total_BBPlus += bb_plus * (wrcplus_weight / total_wrcplus_weight)
+                        except ZeroDivisionError:
+                            pass
+
+
+                        if yearly_woba_stats[year][team]["BF"]:
+                            try:
+                                kmbb_per = k_per - bb_per
+                                if kmbb_per:
+                                    league_kmbb_per = league_k_per - league_bb_per
+                                    kmbb_per_plus = 100 + (((kmbb_per - league_kmbb_per) / abs(league_kmbb_per)) * 100)
+                                    total_KMBBPlus += kmbb_per_plus * (wrcplus_weight / total_wrcplus_weight)
+                            except ZeroDivisionError:
+                                pass
             
             data["HR%+"] = total_HRPlus
             data["SO%+"] = total_KPlus
