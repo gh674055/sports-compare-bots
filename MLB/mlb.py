@@ -170,7 +170,11 @@ position_map = {
     '6': 'SS',
     '7': 'LF',
     '8': 'CF',
-    '9': 'RF'
+    '9': 'RF',
+    '10': 'OF',
+    '11': 'DH',
+    '12': 'PH',
+    '13': 'PR'
 }
 position_map_reversed = {v: k for k, v in position_map.items()}
 
