@@ -17971,6 +17971,7 @@ def teammate_result_callback(teammate_map, player_data, old_row_data, count_info
             count_info["current_percent"] += 10
         count_info["count"] += 1
     except Exception as err:
+        logger.info("Error parsing date " + str(old_row_data["Date"]) + " for player " + str(player_data["id"]))
         try:
             if not count_info["exception"]:
                 count_info["exception"] = err
@@ -21624,6 +21625,7 @@ def result_call_back(time_frame, count_info, new_rows, player_type, player_data,
             count_info["current_percent"] += 10
         count_info["count"] += 1
     except Exception as err:
+        logger.info("Error parsing date " + str(old_row_data["Date"]) + " for player " + str(player_data["id"]))
         try:
             if not count_info["exception"]:
                 count_info["exception"] = err

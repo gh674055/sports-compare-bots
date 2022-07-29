@@ -18233,6 +18233,7 @@ def teammate_result_callback(teammate_map, player_data, old_row_data, count_info
             count_info["current_percent"] += 10
         count_info["count"] += 1
     except Exception as err:
+        logger.info("Error parsing date " + str(old_row_data["Date"]) + " for player " + str(player_data["id"]))
         try:
             if not count_info["exception"]:
                 count_info["exception"] = err
@@ -37361,7 +37362,7 @@ def handle_da_pitch_quals(row, event_name, at_bat_event, qualifiers, player_data
     sub_score_diff = sub_pitch_score - sub_bat_score
     if sub_score_diff >= 1:
         sub_game_tying_opp = sub_score_diff <= sub_men_on_base + 1
-        sub_game_tying = sub_num_runs >= sub_score_diff
+        sub_game_tying = sub_num_runs == sub_score_diff
 
     sub_go_ahead = False
     sub_go_ahead_opp = False
@@ -39255,6 +39256,7 @@ def result_call_back(qualifiers, count_info, new_rows, player_type, player_data,
             count_info["current_percent"] += 10
         count_info["count"] += 1
     except Exception as err:
+        logger.info("Error parsing date " + str(old_row_data["Date"]) + " for player " + str(player_data["id"]))
         try:
             if not count_info["exception"]:
                 count_info["exception"] = err
@@ -41042,7 +41044,7 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
             score_diff = pitch_score - bat_score
             if score_diff >= 1:
                 game_tying_opp = score_diff <= men_on_base + 1
-                game_tying = num_runs >= score_diff
+                game_tying = num_runs == score_diff
                 if game_tying:
                     game_tying_index = score_diff - 1
 
@@ -41871,7 +41873,7 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
                 sub_score_diff = sub_play_pitch_score - sub_play_bat_score
                 if sub_score_diff >= 1:
                     sub_game_tying_opp = sub_score_diff <= sub_men_on_base + 1
-                    sub_game_tying = sub_num_runs >= sub_score_diff
+                    sub_game_tying = sub_num_runs == sub_score_diff
 
                 sub_go_ahead = False
                 sub_go_ahead_opp = False

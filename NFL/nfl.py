@@ -9173,6 +9173,7 @@ def result_call_back(qualifiers, count_info, new_rows, player_type, player_data,
             count_info["current_percent"] += 10
         count_info["count"] += 1
     except Exception as err:
+        logger.info("Error parsing date " + str(old_row_data["Shared"]["Date"]) + " for player " + str(player_data["id"]))
         try:
             if not count_info["exception"]:
                 count_info["exception"] = err
