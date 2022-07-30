@@ -42235,7 +42235,7 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
                     sb_data = sub_event_obj.copy()
                     sb_data["result"] = "pick_off"
                     sb_data["unique_event_id"] = str(event_id) + "-" + sb_data["result"] + "-" + str(runner_index)
-                    if runner["credits"] and runner["credits"][0]["player"] == player_data["mlb_id"] and runner["credits"][0]["position"]["abbreviation"] == "P":
+                    if runner["credits"] and runner["credits"][0]["player"]['id'] == player_data["mlb_id"] and runner["credits"][0]["position"]["abbreviation"] == "P":
                         game_data["pitching_events"].append(sb_data)
 
             if is_team_batting:
@@ -42498,6 +42498,7 @@ def clear_data(row):
     row["CS"] = 0
     row["SB"] = 0
     row["NS"] = 0
+    row["PO"] = 0
     row["PitTypes"] = set()
 
 def calculate_data(row, player_type):
