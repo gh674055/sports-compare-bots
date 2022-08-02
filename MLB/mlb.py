@@ -35936,6 +35936,14 @@ def handle_da_mlb_quals(row, event_name, at_bat_event, qualifiers, player_data, 
                     if event_type in ("out", "grounded_into_double_play", "grounded_into_triple_play", "single", "double", "triple", "home_run", "inside_the_park_home_run", "error", "sac_fly", "sac_bunt"):
                         has_match = True
                         break
+                elif stadium == "walk":
+                    if event_type in ("walk", "intent_walk"):
+                        has_match = True
+                        break
+                elif stadium == "home-run":
+                    if event_type in ("home_run", "inside_the_park_home_run"):
+                        has_match = True
+                        break
                 elif stadium in event_type.lower().replace("_", "-"):
                     has_match = True
                     break
@@ -35994,6 +36002,14 @@ def handle_da_mlb_quals(row, event_name, at_bat_event, qualifiers, player_data, 
                         break
                 elif stadium == "inplay":
                     if event_type in ("out", "grounded_into_double_play", "grounded_into_triple_play", "single", "double", "triple", "home_run", "inside_the_park_home_run", "error", "sac_fly", "sac_bunt"):
+                        has_match = True
+                        break
+                elif stadium == "walk":
+                    if event_type in ("walk", "intent_walk"):
+                        has_match = True
+                        break
+                elif stadium == "home-run":
+                    if event_type in ("home_run", "inside_the_park_home_run"):
                         has_match = True
                         break
                 elif stadium in event_type.lower().replace("_", "-"):
@@ -36056,6 +36072,14 @@ def handle_da_mlb_quals(row, event_name, at_bat_event, qualifiers, player_data, 
                     if event_type in ("out", "grounded_into_double_play", "grounded_into_triple_play", "single", "double", "triple", "home_run", "inside_the_park_home_run", "error", "sac_fly", "sac_bunt"):
                         has_match = True
                         break
+                elif stadium == "walk":
+                    if event_type in ("walk", "intent_walk"):
+                        has_match = True
+                        break
+                elif stadium == "home-run":
+                    if event_type in ("home_run", "inside_the_park_home_run"):
+                        has_match = True
+                        break
                 elif stadium in event_type.lower().replace("_", "-"):
                     has_match = True
                     break
@@ -36116,6 +36140,14 @@ def handle_da_mlb_quals(row, event_name, at_bat_event, qualifiers, player_data, 
                     if event_type in ("out", "grounded_into_double_play", "grounded_into_triple_play", "single", "double", "triple", "home_run", "inside_the_park_home_run", "error", "sac_fly", "sac_bunt"):
                         has_match = True
                         break
+                elif stadium == "walk":
+                    if event_type in ("walk", "intent_walk"):
+                        has_match = True
+                        break
+                elif stadium == "home-run":
+                    if event_type in ("home_run", "inside_the_park_home_run"):
+                        has_match = True
+                        break
                 elif stadium in event_type.lower().replace("_", "-"):
                     has_match = True
                     break
@@ -36174,6 +36206,14 @@ def handle_da_mlb_quals(row, event_name, at_bat_event, qualifiers, player_data, 
                         break
                 elif stadium == "inplay":
                     if event_type in ("out", "grounded_into_double_play", "grounded_into_triple_play", "single", "double", "triple", "home_run", "inside_the_park_home_run", "error", "sac_fly", "sac_bunt"):
+                        has_match = True
+                        break
+                elif stadium == "walk":
+                    if event_type in ("walk", "intent_walk"):
+                        has_match = True
+                        break
+                elif stadium == "home-run":
+                    if event_type in ("home_run", "inside_the_park_home_run"):
                         has_match = True
                         break
                 elif stadium in event_type.lower().replace("_", "-"):
