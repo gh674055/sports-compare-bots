@@ -11218,7 +11218,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 qualifier_obj["values"]["end_val"] = qualifier_obj["values"]["end_val"].replace(microsecond=0)
                             elif re.match(all_event_types_re, qualifier):
                                 qualifier_obj["values"] = re.split(r"(?<!\\)\;", qualifier_str)
-                                qual_type = "Exact Event Type"
+                                qual_type = "Event Type"
                                 extra_stats.add("current-stats")
                             elif re.match(all_months_and_dates_re, qualifier):
                                 qualifier_obj["values"] = []
@@ -35936,7 +35936,7 @@ def handle_da_mlb_quals(row, event_name, at_bat_event, qualifiers, player_data, 
                     if event_type in ("out", "grounded_into_double_play", "grounded_into_triple_play", "single", "double", "triple", "home_run", "inside_the_park_home_run", "error", "sac_fly", "sac_bunt"):
                         has_match = True
                         break
-                elif stadium == "walk":
+                elif stadium == "walk":          
                     if event_type in ("walk", "intent_walk"):
                         has_match = True
                         break
@@ -35944,7 +35944,7 @@ def handle_da_mlb_quals(row, event_name, at_bat_event, qualifiers, player_data, 
                     if event_type in ("home_run", "inside_the_park_home_run"):
                         has_match = True
                         break
-                elif stadium in event_type.lower().replace("_", "-"):
+                elif stadium == event_type.lower().replace("_", "-"):
                     has_match = True
                     break
             if qual_object["negate"]:
@@ -36012,7 +36012,7 @@ def handle_da_mlb_quals(row, event_name, at_bat_event, qualifiers, player_data, 
                     if event_type in ("home_run", "inside_the_park_home_run"):
                         has_match = True
                         break
-                elif stadium in event_type.lower().replace("_", "-"):
+                elif stadium == event_type.lower().replace("_", "-"):
                     has_match = True
                     break
             if qual_object["negate"]:
@@ -36080,7 +36080,7 @@ def handle_da_mlb_quals(row, event_name, at_bat_event, qualifiers, player_data, 
                     if event_type in ("home_run", "inside_the_park_home_run"):
                         has_match = True
                         break
-                elif stadium in event_type.lower().replace("_", "-"):
+                elif stadium == event_type.lower().replace("_", "-"):
                     has_match = True
                     break
             if qual_object["negate"]:
@@ -36148,7 +36148,7 @@ def handle_da_mlb_quals(row, event_name, at_bat_event, qualifiers, player_data, 
                     if event_type in ("home_run", "inside_the_park_home_run"):
                         has_match = True
                         break
-                elif stadium in event_type.lower().replace("_", "-"):
+                elif stadium == event_type.lower().replace("_", "-"):
                     has_match = True
                     break
             if qual_object["negate"]:
@@ -36216,7 +36216,7 @@ def handle_da_mlb_quals(row, event_name, at_bat_event, qualifiers, player_data, 
                     if event_type in ("home_run", "inside_the_park_home_run"):
                         has_match = True
                         break
-                elif stadium in event_type.lower().replace("_", "-"):
+                elif stadium == event_type.lower().replace("_", "-"):
                     has_match = True
                     break
             if qual_object["negate"]:

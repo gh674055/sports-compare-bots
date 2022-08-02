@@ -29159,7 +29159,7 @@ def perform_metadata_qual(extra_stats, event_name, goal_event, qualifiers, playe
         for qual_object in qualifiers["Event Type"]:
             has_match = False
             for stadium in qual_object["values"]:
-                if stadium in event_type.lower().replace(" ", ""):
+                if stadium == event_type.lower().replace(" ", ""):
                     has_match = True
                     break
             if qual_object["negate"]:
@@ -29196,7 +29196,7 @@ def perform_metadata_qual(extra_stats, event_name, goal_event, qualifiers, playe
             has_match = False
             for stadium in qual_object["values"]:
                 for event_type in event_types:
-                    if stadium in event_type.lower().replace(" ", ""):
+                    if stadium == event_type.lower().replace(" ", ""):
                         has_match = True
                         break
             if qual_object["negate"]:
@@ -29234,7 +29234,7 @@ def perform_metadata_qual(extra_stats, event_name, goal_event, qualifiers, playe
             has_match = False
             for stadium in qual_object["values"]:
                 for event_type in event_types:
-                    if stadium in event_type.lower().replace(" ", ""):
+                    if stadium == event_type.lower().replace(" ", ""):
                         has_match = True
                         break
             if qual_object["negate"]:
@@ -29272,7 +29272,7 @@ def perform_metadata_qual(extra_stats, event_name, goal_event, qualifiers, playe
             has_match = False
             for stadium in qual_object["values"]:
                 for event_type in event_types:
-                    if stadium in event_type.lower().replace(" ", ""):
+                    if stadium == event_type.lower().replace(" ", ""):
                         has_match = True
                         break
             if qual_object["negate"]:
@@ -29310,7 +29310,7 @@ def perform_metadata_qual(extra_stats, event_name, goal_event, qualifiers, playe
             has_match = False
             for stadium in qual_object["values"]:
                 for event_type in event_types:
-                    if stadium in event_type.lower().replace(" ", ""):
+                    if stadium == event_type.lower().replace(" ", ""):
                         has_match = True
                         break
             if qual_object["negate"]:
