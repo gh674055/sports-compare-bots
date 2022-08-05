@@ -30247,7 +30247,7 @@ def handle_mlb_game_stats_single_thread(all_rows, has_count_stat, qualifiers, pl
     games_to_skip = get_games_to_skip(all_rows, qualifiers, player_data, player_type)
     return get_mlb_game_stats_single_thread(all_rows, has_count_stat, qualifiers, games_to_skip, player_data, missing_games, missing_pitch, player_type, extra_stats, s)
 
-def setup_career_stats(row_data, player_game_info, saved_row_data, index, player_type, player_data, qualifiers):
+def setup_career_stats(row_data, player_game_info, saved_row_data, last_values, index, player_type, player_data, qualifiers):
     if not player_game_info or player_game_info["missing_data"]:
         return
 
@@ -30360,8 +30360,6 @@ def setup_career_stats(row_data, player_game_info, saved_row_data, index, player
                                 else:
                                     if "is_unearned_run" not in at_bat_event or not at_bat_event["is_unearned_run"]:
                                         raw_val += 1
-                            for sub_at_bat_event in player_game_info["pitch_event_to_run_event"][at_bat_event["event_id"]]:
-                                sub_at_bat_event["career_stat_" + stat] = career_stats_info[stat] + (1 if raw_val else 0)
                         at_bat_event["career_stat_" + stat] = career_stats_info[stat] + (1 if raw_val else 0)
                         career_stats_info[stat] += raw_val
                     else:
@@ -30377,41 +30375,38 @@ def setup_career_stats(row_data, player_game_info, saved_row_data, index, player
                     if not hit_start:
                         at_bat_event["career_stat_" + stat] = -1
 
-            if player_type["da_type"] != "Batter":
-                if at_bat_event["event_id"] in player_game_info["pitch_event_to_run_event"]:
-                    for sub_at_bat_event in player_game_info["pitch_event_to_run_event"][at_bat_event["event_id"]]:
-                        if not sub_at_bat_event["is_inherited"]:
-                            for stat in event_stats_needed:
-                                if stat not in ["Pit"] and copied_quals and not handle_da_mlb_quals(row_data, "batting_events" if player_type["da_type"] == "Batter" else "pitching_events", at_bat_event, copied_quals, player_data, player_type, player_game_info):
-                                    continue
+                last_values["career_stat_" + stat] = at_bat_event["career_stat_" + stat]
+
+                if player_type["da_type"] != "Batter":
+                    if at_bat_event["event_id"] in player_game_info["pitch_event_to_run_event"]:
+                        for sub_at_bat_event in player_game_info["pitch_event_to_run_event"][at_bat_event["event_id"]]:
+                            if not sub_at_bat_event["is_inherited"]:
                                 sub_at_bat_event["career_stat_" + stat] = at_bat_event["career_stat_" + stat]
 
-        for at_bat_event in player_game_info["pitching_run_events"]:
-            if copied_quals and not handle_da_mlb_quals(row_data, "pitching_run_events", at_bat_event, copied_quals, player_data, player_type, player_game_info):
-                continue
+        for sub_event_id in player_game_info["pitch_event_to_run_event"]:
+            raw_val = 0
+            for at_bat_event in player_game_info["pitch_event_to_run_event"][sub_event_id]:
+                if copied_quals and not handle_da_mlb_quals(row_data, "pitching_run_events", at_bat_event, copied_quals, player_data, player_type, player_game_info):
+                    continue
 
-            if at_bat_event["is_inherited"]:
-                for stat in event_stats_needed:
-                    if stat == "IP":
-                        frac, whole = math.modf(career_stats_info["IP"])
-                        frac = round_value(frac, 1)
-                        innings_pitched_to_use = whole
-                        if frac == 0.3:
-                            innings_pitched_to_use += 1/3
-                        elif frac == 0.7:
-                            innings_pitched_to_use += 2/3
-                        elif frac == 1.0:
-                            innings_pitched_to_use += 1
-                        at_bat_event["career_stat_IP"] = innings_pitched_to_use
-                    elif stat in ["ER", "R"] and player_type["da_type"] == "Pitcher":
-                        if stat == "R":
-                            career_stats_info[stat] += 1
+                if at_bat_event["is_inherited"]:
+                    for stat in event_stats_needed:
+                        if stat in ["ER", "R"] and player_type["da_type"] == "Pitcher":
+                            if stat == "R":
+                                raw_val += 1
+                            else:
+                                if "is_unearned_run" not in at_bat_event or not at_bat_event["is_unearned_run"]:
+                                    raw_val += 1
+            
+            for at_bat_event in player_game_info["pitch_event_to_run_event"][sub_event_id]:
+                if at_bat_event["is_inherited"]:
+                    for stat in event_stats_needed:
+                        if stat in ["ER", "R"] and player_type["da_type"] == "Pitcher":
+                            at_bat_event["career_stat_" + stat] = career_stats_info[stat] + (1 if raw_val else 0)
                         else:
-                            if "is_unearned_run" not in at_bat_event or not at_bat_event["is_unearned_run"]:
-                                career_stats_info[stat] += 1
-                        at_bat_event["career_stat_" + stat] = career_stats_info[stat]
-                    else:
-                        at_bat_event["career_stat_" + stat] = career_stats_info[stat]
+                            at_bat_event["career_stat_" + stat] = last_values["career_stat_" + stat] if "career_stat_" + stat in last_values else -1
+            
+            career_stats_info[stat] += raw_val
 
     if event_reversed_stats_needed:
         career_stats_info = {}
@@ -30421,32 +30416,30 @@ def setup_career_stats(row_data, player_game_info, saved_row_data, index, player
         for stat in event_reversed_stats_needed:
             career_stats_info[stat] += saved_row_data[stat]
 
-        for at_bat_event in player_game_info["pitching_run_events"]:
-            if copied_quals and not handle_da_mlb_quals(row_data, "pitching_run_events", at_bat_event, copied_quals, player_data, player_type, player_game_info):
-                continue
+        for sub_event_id in player_game_info["pitch_event_to_run_event"]:
+            raw_val = 0
+            for at_bat_event in player_game_info["pitch_event_to_run_event"][sub_event_id]:
+                if copied_quals and not handle_da_mlb_quals(row_data, "pitching_run_events", at_bat_event, copied_quals, player_data, player_type, player_game_info):
+                    continue
+
+                if at_bat_event["is_inherited"]:
+                    for stat in event_reversed_stats_needed:
+                        if stat in ["ER", "R"] and player_type["da_type"] == "Pitcher":
+                            if stat == "R":
+                                raw_val += 1
+                            else:
+                                if "is_unearned_run" not in at_bat_event or not at_bat_event["is_unearned_run"]:
+                                    raw_val += 1
             
-            if at_bat_event["is_inherited"]:
-                for stat in event_reversed_stats_needed:
-                    if stat == "IP":
-                        frac, whole = math.modf(career_stats_info["IP"])
-                        frac = round_value(frac, 1)
-                        innings_pitched_to_use = whole
-                        if frac == 0.3:
-                            innings_pitched_to_use += 1/3
-                        elif frac == 0.7:
-                            innings_pitched_to_use += 2/3
-                        elif frac == 1.0:
-                            innings_pitched_to_use += 1
-                        at_bat_event["career_stat_reversed_IP"] = innings_pitched_to_use
-                    elif stat in ["ER", "R"] and player_type["da_type"] == "Pitcher":
-                        if stat == "R":
-                            career_stats_info[stat] += 1
+            for at_bat_event in player_game_info["pitch_event_to_run_event"][sub_event_id]:
+                if at_bat_event["is_inherited"]:
+                    for stat in event_reversed_stats_needed:
+                        if stat in ["ER", "R"] and player_type["da_type"] == "Pitcher":
+                            at_bat_event["career_stat_reversed_" + stat] = career_stats_info[stat] + (1 if raw_val else 0)
                         else:
-                            if "is_unearned_run" not in at_bat_event or not at_bat_event["is_unearned_run"]:
-                                career_stats_info[stat] += 1
-                        at_bat_event["career_stat_reversed_" + stat] = career_stats_info[stat]
-                    else:
-                        at_bat_event["career_stat_reversed_" + stat] = career_stats_info[stat]
+                            at_bat_event["career_stat_reversed_" + stat] = last_values["career_stat_reversed_" + stat] if "career_stat_reversed_" + stat in last_values else -1
+            
+            career_stats_info[stat] += raw_val
 
         hit_end = False
         hit_start = False
@@ -30503,8 +30496,6 @@ def setup_career_stats(row_data, player_game_info, saved_row_data, index, player
                                 else:
                                     if "is_unearned_run" not in at_bat_event or not at_bat_event["is_unearned_run"]:
                                         raw_val += 1
-                            for sub_at_bat_event in player_game_info["pitch_event_to_run_event"][at_bat_event["event_id"]]:
-                                sub_at_bat_event["career_stat_reversed_" + stat] = career_stats_info[stat] + (1 if raw_val else 0)
                         at_bat_event["career_stat_reversed_" + stat] = career_stats_info[stat] + (1 if raw_val else 0)
                         career_stats_info[stat] += raw_val
                     else:
@@ -30519,14 +30510,13 @@ def setup_career_stats(row_data, player_game_info, saved_row_data, index, player
                     
                     if not hit_start:
                         at_bat_event["career_stat_reversed_" + stat] = -1
+                
+                last_values["career_stat_reversed_" + stat] = at_bat_event["career_stat_reversed_" + stat]
 
-            if player_type["da_type"] != "Batter":
-                if at_bat_event["event_id"] in player_game_info["pitch_event_to_run_event"]:
-                    for sub_at_bat_event in player_game_info["pitch_event_to_run_event"][at_bat_event["event_id"]]:
-                        if not sub_at_bat_event["is_inherited"]:
-                            for stat in event_reversed_stats_needed:
-                                if stat not in ["Pit"] and copied_quals and not handle_da_mlb_quals(row_data, "batting_events" if player_type["da_type"] == "Batter" else "pitching_events", at_bat_event, copied_quals, player_data, player_type, player_game_info):
-                                    continue
+                if player_type["da_type"] != "Batter":
+                    if at_bat_event["event_id"] in player_game_info["pitch_event_to_run_event"]:
+                        for sub_at_bat_event in player_game_info["pitch_event_to_run_event"][at_bat_event["event_id"]]:
+                            if not sub_at_bat_event["is_inherited"]:
                                 sub_at_bat_event["career_stat_reversed_" + stat] = at_bat_event["career_stat_reversed_" + stat]
 
     if events_stats_needed:
@@ -30576,18 +30566,15 @@ def setup_career_stats(row_data, player_game_info, saved_row_data, index, player
                             else:
                                 if "is_unearned_run" not in at_bat_event or not at_bat_event["is_unearned_run"]:
                                     career_stats_info[stat] += 1
-                        for sub_at_bat_event in player_game_info["pitch_event_to_run_event"][at_bat_event["event_id"]]:
-                            sub_at_bat_event["career_stats_" + stat] = career_stats_info[stat]
                     at_bat_event["career_stats_" + stat] = career_stats_info[stat]
                 else:
                     career_stats_info[stat] += calculate_row_numbers(at_bat_event, at_bat_event["result"], copied_quals, player_type, stat)
                     at_bat_event["career_stats_" + stat] = career_stats_info[stat]
 
-            if player_type["da_type"] != "Batter":
-                if at_bat_event["event_id"] in player_game_info["pitch_event_to_run_event"]:
-                    for sub_at_bat_event in player_game_info["pitch_event_to_run_event"][at_bat_event["event_id"]]:
-                        if not sub_at_bat_event["is_inherited"]:
-                            for stat in events_stats_needed:
+                if player_type["da_type"] != "Batter":
+                    if at_bat_event["event_id"] in player_game_info["pitch_event_to_run_event"]:
+                        for sub_at_bat_event in player_game_info["pitch_event_to_run_event"][at_bat_event["event_id"]]:
+                            if not sub_at_bat_event["is_inherited"]:
                                 sub_at_bat_event["career_stats_" + stat] = at_bat_event["career_stats_" + stat]
 
         for at_bat_event in player_game_info["pitching_run_events"]:
@@ -30684,23 +30671,22 @@ def setup_career_stats(row_data, player_game_info, saved_row_data, index, player
                             else:
                                 if "is_unearned_run" not in at_bat_event or not at_bat_event["is_unearned_run"]:
                                     career_stats_info[stat] += 1
-                        for sub_at_bat_event in player_game_info["pitch_event_to_run_event"][at_bat_event["event_id"]]:
-                            sub_at_bat_event["career_stats_reversed_" + stat] = career_stats_info[stat]
                     at_bat_event["career_stats_reversed_" + stat] = career_stats_info[stat]
                 else:
                     career_stats_info[stat] += calculate_row_numbers(at_bat_event, at_bat_event["result"], copied_quals, player_type, stat)
                     at_bat_event["career_stats_reversed_" + stat] = career_stats_info[stat]
 
-            if player_type["da_type"] != "Batter":
-                if at_bat_event["event_id"] in player_game_info["pitch_event_to_run_event"]:
-                    for sub_at_bat_event in player_game_info["pitch_event_to_run_event"][at_bat_event["event_id"]]:
-                        if not sub_at_bat_event["is_inherited"]:
-                            for stat in events_reversed_stats_needed:
+                if player_type["da_type"] != "Batter":
+                    if at_bat_event["event_id"] in player_game_info["pitch_event_to_run_event"]:
+                        for sub_at_bat_event in player_game_info["pitch_event_to_run_event"][at_bat_event["event_id"]]:
+                            if not sub_at_bat_event["is_inherited"]:
                                 sub_at_bat_event["careers_stat_reversed_" + stat] = at_bat_event["career_stats_reversed_" + stat]
 
 def setup_game_stats(row_data, player_game_info, player_type, player_data, qualifiers):
     if not player_game_info or player_game_info["missing_data"]:
         return
+
+    last_values = {}
 
     event_stats_needed = {}
     event_start_stats_needed = {}
@@ -30808,8 +30794,6 @@ def setup_game_stats(row_data, player_game_info, player_type, player_data, quali
                                 else:
                                     if "is_unearned_run" not in at_bat_event or not at_bat_event["is_unearned_run"]:
                                         raw_val += 1
-                            for sub_at_bat_event in player_game_info["pitch_event_to_run_event"][at_bat_event["event_id"]]:
-                                sub_at_bat_event["game_stat_" + stat] = career_stats_info[stat] + (1 if raw_val else 0)
                         at_bat_event["game_stat_" + stat] = career_stats_info[stat] + (1 if raw_val else 0)
                         career_stats_info[stat] += raw_val
                     else:
@@ -30825,73 +30809,68 @@ def setup_game_stats(row_data, player_game_info, player_type, player_data, quali
                     if not hit_start:
                         at_bat_event["game_stat_" + stat] = -1
 
-            if player_type["da_type"] != "Batter":
-                if at_bat_event["event_id"] in player_game_info["pitch_event_to_run_event"]:
-                    for sub_at_bat_event in player_game_info["pitch_event_to_run_event"][at_bat_event["event_id"]]:
-                        if not sub_at_bat_event["is_inherited"]:
-                            for stat in event_stats_needed:
-                                if stat not in ["Pit"] and copied_quals and not handle_da_mlb_quals(row_data, "batting_events" if player_type["da_type"] == "Batter" else "pitching_events", at_bat_event, copied_quals, player_data, player_type, player_game_info):
-                                    continue
+                last_values["game_stat_" + stat] = at_bat_event["game_stat_" + stat]
+
+                if player_type["da_type"] != "Batter":
+                    if at_bat_event["event_id"] in player_game_info["pitch_event_to_run_event"]:
+                        for sub_at_bat_event in player_game_info["pitch_event_to_run_event"][at_bat_event["event_id"]]:
+                            if not sub_at_bat_event["is_inherited"]:
                                 sub_at_bat_event["game_stat_" + stat] = at_bat_event["game_stat_" + stat]
 
-        for at_bat_event in player_game_info["pitching_run_events"]:
-            if copied_quals and not handle_da_mlb_quals(row_data, "pitching_run_events", at_bat_event, copied_quals, player_data, player_type, player_game_info):
-                continue
+        for sub_event_id in player_game_info["pitch_event_to_run_event"]:
+            raw_val = 0
+            for at_bat_event in player_game_info["pitch_event_to_run_event"][sub_event_id]:
+                if copied_quals and not handle_da_mlb_quals(row_data, "pitching_run_events", at_bat_event, copied_quals, player_data, player_type, player_game_info):
+                    continue
+
+                if at_bat_event["is_inherited"]:
+                    for stat in event_stats_needed:
+                        if stat in ["ER", "R"] and player_type["da_type"] == "Pitcher":
+                            if stat == "R":
+                                raw_val += 1
+                            else:
+                                if "is_unearned_run" not in at_bat_event or not at_bat_event["is_unearned_run"]:
+                                    raw_val += 1
             
-            if at_bat_event["is_inherited"]:
-                for stat in event_stats_needed:
-                    if stat == "IP":
-                        frac, whole = math.modf(career_stats_info["IP"])
-                        frac = round_value(frac, 1)
-                        innings_pitched_to_use = whole
-                        if frac == 0.3:
-                            innings_pitched_to_use += 1/3
-                        elif frac == 0.7:
-                            innings_pitched_to_use += 2/3
-                        elif frac == 1.0:
-                            innings_pitched_to_use += 1
-                        at_bat_event["game_stat_IP"] = innings_pitched_to_use
-                    elif stat in ["ER", "R"] and player_type["da_type"] == "Pitcher":
-                        if stat == "R":
-                            career_stats_info[stat] += 1
+            for at_bat_event in player_game_info["pitch_event_to_run_event"][sub_event_id]:
+                if at_bat_event["is_inherited"]:
+                    for stat in event_stats_needed:
+                        if stat in ["ER", "R"] and player_type["da_type"] == "Pitcher":
+                            at_bat_event["game_stat_" + stat] = career_stats_info[stat] + (1 if raw_val else 0)
                         else:
-                            if "is_unearned_run" not in at_bat_event or not at_bat_event["is_unearned_run"]:
-                                career_stats_info[stat] += 1
-                        at_bat_event["game_stat_" + stat] = career_stats_info[stat]
-                    else:
-                        at_bat_event["game_stat_" + stat] = career_stats_info[stat]
+                            at_bat_event["game_stat_" + stat] = last_values["game_stat_" + stat] if "game_stat_" + stat in last_values else -1
+            
+            career_stats_info[stat] += raw_val
 
     if event_reversed_stats_needed:
         career_stats_info = {}
         for stat in event_reversed_stats_needed:
             career_stats_info[stat] = 0
 
-        for at_bat_event in player_game_info["pitching_run_events"]:
-            if copied_quals and not handle_da_mlb_quals(row_data, "pitching_run_events", at_bat_event, copied_quals, player_data, player_type, player_game_info):
-                continue
+        for sub_event_id in player_game_info["pitch_event_to_run_event"]:
+            raw_val = 0
+            for at_bat_event in player_game_info["pitch_event_to_run_event"][sub_event_id]:
+                if copied_quals and not handle_da_mlb_quals(row_data, "pitching_run_events", at_bat_event, copied_quals, player_data, player_type, player_game_info):
+                    continue
+
+                if at_bat_event["is_inherited"]:
+                    for stat in event_reversed_stats_needed:
+                        if stat in ["ER", "R"] and player_type["da_type"] == "Pitcher":
+                            if stat == "R":
+                                raw_val += 1
+                            else:
+                                if "is_unearned_run" not in at_bat_event or not at_bat_event["is_unearned_run"]:
+                                    raw_val += 1
             
-            if at_bat_event["is_inherited"]:
-                for stat in event_reversed_stats_needed:
-                    if stat == "IP":
-                        frac, whole = math.modf(career_stats_info["IP"])
-                        frac = round_value(frac, 1)
-                        innings_pitched_to_use = whole
-                        if frac == 0.3:
-                            innings_pitched_to_use += 1/3
-                        elif frac == 0.7:
-                            innings_pitched_to_use += 2/3
-                        elif frac == 1.0:
-                            innings_pitched_to_use += 1
-                        at_bat_event["game_stat_reversed_IP"] = innings_pitched_to_use
-                    elif stat in ["ER", "R"] and player_type["da_type"] == "Pitcher":
-                        if stat == "R":
-                            career_stats_info[stat] += 1
+            for at_bat_event in player_game_info["pitch_event_to_run_event"][sub_event_id]:
+                if at_bat_event["is_inherited"]:
+                    for stat in event_reversed_stats_needed:
+                        if stat in ["ER", "R"] and player_type["da_type"] == "Pitcher":
+                            at_bat_event["game_stat_reversed_" + stat] = career_stats_info[stat] + (1 if raw_val else 0)
                         else:
-                            if "is_unearned_run" not in at_bat_event or not at_bat_event["is_unearned_run"]:
-                                career_stats_info[stat] += 1
-                        at_bat_event["game_stat_reversed_" + stat] = career_stats_info[stat]
-                    else:
-                        at_bat_event["game_stat_reversed_" + stat] = career_stats_info[stat]
+                            at_bat_event["game_stat_reversed_" + stat] = last_values["game_stat_reversed_" + stat] if "game_stat_reversed_" + stat in last_values else -1
+            
+            career_stats_info[stat] += raw_val
 
         hit_end = False
         hit_start = False
@@ -30948,8 +30927,6 @@ def setup_game_stats(row_data, player_game_info, player_type, player_data, quali
                                 else:
                                     if "is_unearned_run" not in at_bat_event or not at_bat_event["is_unearned_run"]:
                                         raw_val += 1
-                            for sub_at_bat_event in player_game_info["pitch_event_to_run_event"][at_bat_event["event_id"]]:
-                                sub_at_bat_event["game_stat_reversed_" + stat] = career_stats_info[stat] + (1 if raw_val else 0)
                         at_bat_event["game_stat_reversed_" + stat] = career_stats_info[stat] + (1 if raw_val else 0)
                         career_stats_info[stat] += raw_val
                     else:
@@ -30964,14 +30941,13 @@ def setup_game_stats(row_data, player_game_info, player_type, player_data, quali
 
                     if not hit_start:
                         at_bat_event["game_stat_reversed_" + stat] = -1
+                
+                last_values["game_stat_reversed_" + stat] = at_bat_event["game_stat_reversed_" + stat]
 
-            if player_type["da_type"] != "Batter":
-                if at_bat_event["event_id"] in player_game_info["pitch_event_to_run_event"]:
-                    for sub_at_bat_event in player_game_info["pitch_event_to_run_event"][at_bat_event["event_id"]]:
-                        if not sub_at_bat_event["is_inherited"]:
-                            for stat in event_reversed_stats_needed:
-                                if stat not in ["Pit"] and copied_quals and not handle_da_mlb_quals(row_data, "batting_events" if player_type["da_type"] == "Batter" else "pitching_events", at_bat_event, copied_quals, player_data, player_type, player_game_info):
-                                    continue
+                if player_type["da_type"] != "Batter":
+                    if at_bat_event["event_id"] in player_game_info["pitch_event_to_run_event"]:
+                        for sub_at_bat_event in player_game_info["pitch_event_to_run_event"][at_bat_event["event_id"]]:
+                            if not sub_at_bat_event["is_inherited"]:
                                 sub_at_bat_event["game_stat_reversed_" + stat] = at_bat_event["game_stat_reversed_" + stat]
     
 
@@ -31018,18 +30994,15 @@ def setup_game_stats(row_data, player_game_info, player_type, player_data, quali
                             else:
                                 if "is_unearned_run" not in at_bat_event or not at_bat_event["is_unearned_run"]:
                                     career_stats_info[stat] += 1
-                        for sub_at_bat_event in player_game_info["pitch_event_to_run_event"][at_bat_event["event_id"]]:
-                            sub_at_bat_event["game_stats_" + stat] = career_stats_info[stat]
                     at_bat_event["game_stats_" + stat] = career_stats_info[stat]
                 else:
                     career_stats_info[stat] += calculate_row_numbers(at_bat_event, at_bat_event["result"], copied_quals, player_type, stat)
                     at_bat_event["game_stats_" + stat] = career_stats_info[stat]
 
-            if player_type["da_type"] != "Batter":
-                if at_bat_event["event_id"] in player_game_info["pitch_event_to_run_event"]:
-                    for sub_at_bat_event in player_game_info["pitch_event_to_run_event"][at_bat_event["event_id"]]:
-                        if not sub_at_bat_event["is_inherited"]:
-                            for stat in events_stats_needed:
+                if player_type["da_type"] != "Batter":
+                    if at_bat_event["event_id"] in player_game_info["pitch_event_to_run_event"]:
+                        for sub_at_bat_event in player_game_info["pitch_event_to_run_event"][at_bat_event["event_id"]]:
+                            if not sub_at_bat_event["is_inherited"]:
                                 sub_at_bat_event["game_stats_" + stat] = at_bat_event["game_stats_" + stat]
 
         for at_bat_event in player_game_info["pitching_run_events"]:
@@ -31123,18 +31096,15 @@ def setup_game_stats(row_data, player_game_info, player_type, player_data, quali
                             else:
                                 if "is_unearned_run" not in at_bat_event or not at_bat_event["is_unearned_run"]:
                                     career_stats_info[stat] += 1
-                        for sub_at_bat_event in player_game_info["pitch_event_to_run_event"][at_bat_event["event_id"]]:
-                            sub_at_bat_event["game_stats_reversed_" + stat] = career_stats_info[stat]
                     at_bat_event["game_stats_reversed_" + stat] = career_stats_info[stat]
                 else:
                     career_stats_info[stat] += calculate_row_numbers(at_bat_event, at_bat_event["result"], copied_quals, player_type, stat)
                     at_bat_event["game_stats_reversed_" + stat] = career_stats_info[stat]
 
-            if player_type["da_type"] != "Batter":
-                if at_bat_event["event_id"] in player_game_info["pitch_event_to_run_event"]:
-                    for sub_at_bat_event in player_game_info["pitch_event_to_run_event"][at_bat_event["event_id"]]:
-                        if not sub_at_bat_event["is_inherited"]:
-                            for stat in events_reversed_stats_needed:
+                if player_type["da_type"] != "Batter":
+                    if at_bat_event["event_id"] in player_game_info["pitch_event_to_run_event"]:
+                        for sub_at_bat_event in player_game_info["pitch_event_to_run_event"][at_bat_event["event_id"]]:
+                            if not sub_at_bat_event["is_inherited"]:
                                 sub_at_bat_event["game_stats_reversed_" + stat] = at_bat_event["game_stats_reversed_" + stat]
 
 def setup_starting_career_stats(row_data, player_game_info, saved_row_data, index, player_type, player_data, qualifiers):
@@ -31242,8 +31212,6 @@ def setup_starting_career_stats(row_data, player_game_info, saved_row_data, inde
                         at_bat_event["starting_career_stat_" + stat] = career_stats_info[stat]
                         if at_bat_event["event_id"] in player_game_info["pitch_event_to_run_event"]:
                             for sub_at_bat_event in player_game_info["pitch_event_to_run_event"][at_bat_event["event_id"]]:
-                                sub_at_bat_event["starting_career_stat_" + stat] = career_stats_info[stat]
-                            for sub_at_bat_event in player_game_info["pitch_event_to_run_event"][at_bat_event["event_id"]]:
                                 if copied_quals and not handle_da_mlb_quals(row_data, "pitching_run_events", at_bat_event, sub_at_bat_event, player_data, player_type, player_game_info):
                                     continue
                                 if stat == "R":
@@ -31258,13 +31226,10 @@ def setup_starting_career_stats(row_data, player_game_info, saved_row_data, inde
                     if not hit_start:
                         at_bat_event["starting_career_stat_" + stat] = -1
 
-            if player_type["da_type"] != "Batter":
-                if at_bat_event["event_id"] in player_game_info["pitch_event_to_run_event"]:
-                    for sub_at_bat_event in player_game_info["pitch_event_to_run_event"][at_bat_event["event_id"]]:
-                        if not sub_at_bat_event["is_inherited"]:
-                            for stat in event_stats_needed:
-                                if stat not in ["Pit"] and copied_quals and not handle_da_mlb_quals(row_data, "batting_events" if player_type["da_type"] == "Batter" else "pitching_events", at_bat_event, copied_quals, player_data, player_type, player_game_info):
-                                    continue
+                if player_type["da_type"] != "Batter":
+                    if at_bat_event["event_id"] in player_game_info["pitch_event_to_run_event"]:
+                        for sub_at_bat_event in player_game_info["pitch_event_to_run_event"][at_bat_event["event_id"]]:
+                            if not sub_at_bat_event["is_inherited"]:
                                 sub_at_bat_event["starting_career_stat_" + stat] = at_bat_event["starting_career_stat_" + stat]
 
         for at_bat_event in player_game_info["pitching_run_events"]:
@@ -31376,8 +31341,6 @@ def setup_starting_career_stats(row_data, player_game_info, saved_row_data, inde
                         at_bat_event["starting_career_stat_reversed_" + stat] = career_stats_info[stat]
                         if at_bat_event["event_id"] in player_game_info["pitch_event_to_run_event"]:
                             for sub_at_bat_event in player_game_info["pitch_event_to_run_event"][at_bat_event["event_id"]]:
-                                sub_at_bat_event["starting_career_stat_reversed_" + stat] = career_stats_info[stat]
-                            for sub_at_bat_event in player_game_info["pitch_event_to_run_event"][at_bat_event["event_id"]]:
                                 if copied_quals and not handle_da_mlb_quals(row_data, "pitching_run_events", at_bat_event, sub_at_bat_event, player_data, player_type, player_game_info):
                                     continue
                                 if stat == "R":
@@ -31392,13 +31355,10 @@ def setup_starting_career_stats(row_data, player_game_info, saved_row_data, inde
                     if not hit_start:
                         at_bat_event["starting_career_stat_reversed_" + stat] = -1
 
-            if player_type["da_type"] != "Batter":
-                if at_bat_event["event_id"] in player_game_info["pitch_event_to_run_event"]:
-                    for sub_at_bat_event in player_game_info["pitch_event_to_run_event"][at_bat_event["event_id"]]:
-                        if not sub_at_bat_event["is_inherited"]:
-                            for stat in event_reversed_stats_needed:
-                                if stat not in ["Pit"] and copied_quals and not handle_da_mlb_quals(row_data, "batting_events" if player_type["da_type"] == "Batter" else "pitching_events", at_bat_event, copied_quals, player_data, player_type, player_game_info):
-                                    continue
+                if player_type["da_type"] != "Batter":
+                    if at_bat_event["event_id"] in player_game_info["pitch_event_to_run_event"]:
+                        for sub_at_bat_event in player_game_info["pitch_event_to_run_event"][at_bat_event["event_id"]]:
+                            if not sub_at_bat_event["is_inherited"]:
                                 sub_at_bat_event["starting_career_stat_reversed_" + stat] = at_bat_event["starting_career_stat_reversed_" + stat]
     
     if events_stats_needed:
@@ -31440,8 +31400,6 @@ def setup_starting_career_stats(row_data, player_game_info, saved_row_data, inde
                     at_bat_event["starting_career_stats_" + stat] = career_stats_info[stat]
                     if at_bat_event["event_id"] in player_game_info["pitch_event_to_run_event"]:
                         for sub_at_bat_event in player_game_info["pitch_event_to_run_event"][at_bat_event["event_id"]]:
-                            sub_at_bat_event["starting_career_stats_" + stat] = career_stats_info[stat]
-                        for sub_at_bat_event in player_game_info["pitch_event_to_run_event"][at_bat_event["event_id"]]:
                             if stat == "R":
                                 career_stats_info[stat] += 1
                             else:
@@ -31451,11 +31409,10 @@ def setup_starting_career_stats(row_data, player_game_info, saved_row_data, inde
                     at_bat_event["starting_career_stats_" + stat] = career_stats_info[stat]
                     career_stats_info[stat] += calculate_row_numbers(at_bat_event, at_bat_event["result"], copied_quals, player_type, stat)
 
-            if player_type["da_type"] != "Batter":
-                if at_bat_event["event_id"] in player_game_info["pitch_event_to_run_event"]:
-                    for sub_at_bat_event in player_game_info["pitch_event_to_run_event"][at_bat_event["event_id"]]:
-                        if not sub_at_bat_event["is_inherited"]:
-                            for stat in events_stats_needed:
+                if player_type["da_type"] != "Batter":
+                    if at_bat_event["event_id"] in player_game_info["pitch_event_to_run_event"]:
+                        for sub_at_bat_event in player_game_info["pitch_event_to_run_event"][at_bat_event["event_id"]]:
+                            if not sub_at_bat_event["is_inherited"]:
                                 sub_at_bat_event["starting_career_stats_" + stat] = at_bat_event["starting_career_stats_" + stat]
 
         for at_bat_event in player_game_info["pitching_run_events"]:
@@ -31545,8 +31502,6 @@ def setup_starting_career_stats(row_data, player_game_info, saved_row_data, inde
                     at_bat_event["starting_career_stats_reversed_" + stat] = career_stats_info[stat]
                     if at_bat_event["event_id"] in player_game_info["pitch_event_to_run_event"]:
                         for sub_at_bat_event in player_game_info["pitch_event_to_run_event"][at_bat_event["event_id"]]:
-                            sub_at_bat_event["starting_career_stats_reversed_" + stat] = career_stats_info[stat]
-                        for sub_at_bat_event in player_game_info["pitch_event_to_run_event"][at_bat_event["event_id"]]:
                             if stat == "R":
                                 career_stats_info[stat] += 1
                             else:
@@ -31556,11 +31511,10 @@ def setup_starting_career_stats(row_data, player_game_info, saved_row_data, inde
                     at_bat_event["starting_career_stats_reversed_" + stat] = career_stats_info[stat]
                     career_stats_info[stat] += calculate_row_numbers(at_bat_event, at_bat_event["result"], copied_quals, player_type, stat)
 
-            if player_type["da_type"] != "Batter":
-                if at_bat_event["event_id"] in player_game_info["pitch_event_to_run_event"]:
-                    for sub_at_bat_event in player_game_info["pitch_event_to_run_event"][at_bat_event["event_id"]]:
-                        if not sub_at_bat_event["is_inherited"]:
-                            for stat in events_reversed_stats_needed:
+                if player_type["da_type"] != "Batter":
+                    if at_bat_event["event_id"] in player_game_info["pitch_event_to_run_event"]:
+                        for sub_at_bat_event in player_game_info["pitch_event_to_run_event"][at_bat_event["event_id"]]:
+                            if not sub_at_bat_event["is_inherited"]:
                                 sub_at_bat_event["careers_stat_reversed_" + stat] = at_bat_event["starting_career_stats_reversed_" + stat]
 
 def setup_starting_game_stats(row_data, player_game_info, player_type, player_data, qualifiers):
@@ -31666,8 +31620,6 @@ def setup_starting_game_stats(row_data, player_game_info, player_type, player_da
                         at_bat_event["starting_game_stat_" + stat] = career_stats_info[stat]
                         if at_bat_event["event_id"] in player_game_info["pitch_event_to_run_event"]:
                             for sub_at_bat_event in player_game_info["pitch_event_to_run_event"][at_bat_event["event_id"]]:
-                                sub_at_bat_event["starting_game_stat_" + stat] = career_stats_info[stat]
-                            for sub_at_bat_event in player_game_info["pitch_event_to_run_event"][at_bat_event["event_id"]]:
                                 if copied_quals and not handle_da_mlb_quals(row_data, "pitching_run_events", at_bat_event, sub_at_bat_event, player_data, player_type, player_game_info):
                                     continue
                                 if stat == "R":
@@ -31682,13 +31634,10 @@ def setup_starting_game_stats(row_data, player_game_info, player_type, player_da
                     if not hit_start:
                         at_bat_event["starting_game_stat_" + stat] = -1
 
-            if player_type["da_type"] != "Batter":
-                if at_bat_event["event_id"] in player_game_info["pitch_event_to_run_event"]:
-                    for sub_at_bat_event in player_game_info["pitch_event_to_run_event"][at_bat_event["event_id"]]:
-                        if not sub_at_bat_event["is_inherited"]:
-                            for stat in event_stats_needed:
-                                if stat not in ["Pit"] and copied_quals and not handle_da_mlb_quals(row_data, "batting_events" if player_type["da_type"] == "Batter" else "pitching_events", at_bat_event, copied_quals, player_data, player_type, player_game_info):
-                                    continue
+                if player_type["da_type"] != "Batter":
+                    if at_bat_event["event_id"] in player_game_info["pitch_event_to_run_event"]:
+                        for sub_at_bat_event in player_game_info["pitch_event_to_run_event"][at_bat_event["event_id"]]:
+                            if not sub_at_bat_event["is_inherited"]:
                                 sub_at_bat_event["starting_game_stat_" + stat] = at_bat_event["starting_game_stat_" + stat]
 
         for at_bat_event in player_game_info["pitching_run_events"]:
@@ -31798,8 +31747,6 @@ def setup_starting_game_stats(row_data, player_game_info, player_type, player_da
                         at_bat_event["starting_game_stat_reversed_" + stat] = career_stats_info[stat]
                         if at_bat_event["event_id"] in player_game_info["pitch_event_to_run_event"]:
                             for sub_at_bat_event in player_game_info["pitch_event_to_run_event"][at_bat_event["event_id"]]:
-                                sub_at_bat_event["starting_game_stat_reversed_" + stat] = career_stats_info[stat]
-                            for sub_at_bat_event in player_game_info["pitch_event_to_run_event"][at_bat_event["event_id"]]:
                                 if copied_quals and not handle_da_mlb_quals(row_data, "pitching_run_events", at_bat_event, sub_at_bat_event, player_data, player_type, player_game_info):
                                     continue
                                 if stat == "R":
@@ -31814,13 +31761,10 @@ def setup_starting_game_stats(row_data, player_game_info, player_type, player_da
                     if not hit_start:
                         at_bat_event["starting_game_stat_reversed_" + stat] = -1
 
-            if player_type["da_type"] != "Batter":
-                if at_bat_event["event_id"] in player_game_info["pitch_event_to_run_event"]:
-                    for sub_at_bat_event in player_game_info["pitch_event_to_run_event"][at_bat_event["event_id"]]:
-                        if not sub_at_bat_event["is_inherited"]:
-                            for stat in event_reversed_stats_needed:
-                                if stat not in ["Pit"] and copied_quals and not handle_da_mlb_quals(row_data, "batting_events" if player_type["da_type"] == "Batter" else "pitching_events", at_bat_event, copied_quals, player_data, player_type, player_game_info):
-                                    continue
+                if player_type["da_type"] != "Batter":
+                    if at_bat_event["event_id"] in player_game_info["pitch_event_to_run_event"]:
+                        for sub_at_bat_event in player_game_info["pitch_event_to_run_event"][at_bat_event["event_id"]]:
+                            if not sub_at_bat_event["is_inherited"]:
                                 sub_at_bat_event["starting_game_stat_reversed_" + stat] = at_bat_event["starting_game_stat_reversed_" + stat]
     
     if events_stats_needed:
@@ -31859,8 +31803,6 @@ def setup_starting_game_stats(row_data, player_game_info, player_type, player_da
                     at_bat_event["starting_game_stats_" + stat] = career_stats_info[stat]
                     if at_bat_event["event_id"] in player_game_info["pitch_event_to_run_event"]:
                         for sub_at_bat_event in player_game_info["pitch_event_to_run_event"][at_bat_event["event_id"]]:
-                            sub_at_bat_event["starting_game_stats_" + stat] = career_stats_info[stat]
-                        for sub_at_bat_event in player_game_info["pitch_event_to_run_event"][at_bat_event["event_id"]]:
                             if stat == "R":
                                 career_stats_info[stat] += 1
                             else:
@@ -31870,11 +31812,10 @@ def setup_starting_game_stats(row_data, player_game_info, player_type, player_da
                     at_bat_event["starting_game_stats_" + stat] = career_stats_info[stat]
                     career_stats_info[stat] += calculate_row_numbers(at_bat_event, at_bat_event["result"], copied_quals, player_type, stat)
 
-            if player_type["da_type"] != "Batter":
-                if at_bat_event["event_id"] in player_game_info["pitch_event_to_run_event"]:
-                    for sub_at_bat_event in player_game_info["pitch_event_to_run_event"][at_bat_event["event_id"]]:
-                        if not sub_at_bat_event["is_inherited"]:
-                            for stat in events_stats_needed:
+                if player_type["da_type"] != "Batter":
+                    if at_bat_event["event_id"] in player_game_info["pitch_event_to_run_event"]:
+                        for sub_at_bat_event in player_game_info["pitch_event_to_run_event"][at_bat_event["event_id"]]:
+                            if not sub_at_bat_event["is_inherited"]:
                                 sub_at_bat_event["starting_game_stats_" + stat] = at_bat_event["starting_game_stats_" + stat]
 
         for at_bat_event in player_game_info["pitching_run_events"]:
@@ -31961,8 +31902,6 @@ def setup_starting_game_stats(row_data, player_game_info, player_type, player_da
                     at_bat_event["starting_game_stats_reversed_" + stat] = career_stats_info[stat]
                     if at_bat_event["event_id"] in player_game_info["pitch_event_to_run_event"]:
                         for sub_at_bat_event in player_game_info["pitch_event_to_run_event"][at_bat_event["event_id"]]:
-                            sub_at_bat_event["starting_game_stats_reversed_" + stat] = career_stats_info[stat]
-                        for sub_at_bat_event in player_game_info["pitch_event_to_run_event"][at_bat_event["event_id"]]:
                             if stat == "R":
                                 career_stats_info[stat] += 1
                             else:
@@ -31972,11 +31911,10 @@ def setup_starting_game_stats(row_data, player_game_info, player_type, player_da
                     at_bat_event["starting_game_stats_reversed_" + stat] = career_stats_info[stat]
                     career_stats_info[stat] += calculate_row_numbers(at_bat_event, at_bat_event["result"], copied_quals, player_type, stat)
 
-            if player_type["da_type"] != "Batter":
-                if at_bat_event["event_id"] in player_game_info["pitch_event_to_run_event"]:
-                    for sub_at_bat_event in player_game_info["pitch_event_to_run_event"][at_bat_event["event_id"]]:
-                        if not sub_at_bat_event["is_inherited"]:
-                            for stat in events_reversed_stats_needed:
+                if player_type["da_type"] != "Batter":
+                    if at_bat_event["event_id"] in player_game_info["pitch_event_to_run_event"]:
+                        for sub_at_bat_event in player_game_info["pitch_event_to_run_event"][at_bat_event["event_id"]]:
+                            if not sub_at_bat_event["is_inherited"]:
                                 sub_at_bat_event["starting_game_stats_reversed_" + stat] = at_bat_event["starting_game_stats_reversed_" + stat]
 
 def perform_sub_mlb_inning_qualifiers(row, player_data, qualifiers, player_game_info, player_type, extra_stats):
@@ -38203,6 +38141,7 @@ def get_mlb_game_stats_single_thread(all_rows, has_count_stat, qualifiers, games
             stats_needed.add(qual_obj["stat"])
     
     saved_row_data = {}
+    last_values = {}
     for stat in stats_needed:
         saved_row_data[stat] = 0
 
@@ -38212,7 +38151,7 @@ def get_mlb_game_stats_single_thread(all_rows, has_count_stat, qualifiers, games
         if row_data["GameID"] not in games_to_skip:
             try:
                 game_data, row_data, index, sub_missing_games, sub_missing_pitch = get_live_game_data(index, has_count_stat, player_data, row_data, player_type, qualifiers, True, s)
-                has_match, raw_row_data = handle_result_qualifiers(game_data, index, row_data, sub_missing_games, sub_missing_pitch, player_type, player_data, qualifiers, saved_row_data, count_info, extra_stats)
+                has_match, raw_row_data = handle_result_qualifiers(game_data, index, row_data, sub_missing_games, sub_missing_pitch, player_type, player_data, qualifiers, saved_row_data, last_values, count_info, extra_stats)
                 
                 if stat not in raw_row_data:
                     break
@@ -39258,7 +39197,7 @@ def result_call_back(qualifiers, count_info, new_rows, player_type, player_data,
 
         game_data, row_data, index, sub_missing_games, sub_missing_pitch = result.result()
 
-        if handle_result_qualifiers(game_data, index, row_data, sub_missing_games, sub_missing_pitch, player_type, player_data, qualifiers, None, count_info, extra_stats)[0]:
+        if handle_result_qualifiers(game_data, index, row_data, sub_missing_games, sub_missing_pitch, player_type, player_data, qualifiers, None, None, count_info, extra_stats)[0]:
             new_rows.append(row_data)
 
         percent_complete = 100 * (count_info["count"] / count_info["total_count"])
@@ -39287,12 +39226,12 @@ def result_call_back(qualifiers, count_info, new_rows, player_type, player_data,
     #     ps.sort_stats(pstats.SortKey.TIME)
     #     ps.print_stats()
 
-def handle_result_qualifiers(game_data, index, row_data, sub_missing_games, sub_missing_pitch, player_type, player_data, qualifiers, saved_row_data, count_info, extra_stats):
+def handle_result_qualifiers(game_data, index, row_data, sub_missing_games, sub_missing_pitch, player_type, player_data, qualifiers, saved_row_data, last_values, count_info, extra_stats):
     set_row_data(game_data, row_data, player_type)
 
     raw_row_data = row_data
     if "Event Stat" in qualifiers or "Event Stat Reversed" in qualifiers or "Event Stats" in qualifiers or "Event Stats Reversed" in qualifiers:
-        setup_career_stats(row_data, game_data, saved_row_data, index, player_type, player_data, qualifiers)
+        setup_career_stats(row_data, game_data, saved_row_data, last_values, index, player_type, player_data, qualifiers)
     
     if "Starting Event Stat" in qualifiers or "Starting Event Stat Reversed" in qualifiers or "Starting Event Stats" in qualifiers or "Starting Event Stats Reversed" in qualifiers:
         setup_starting_career_stats(row_data, game_data, saved_row_data, index, player_type, player_data, qualifiers)
