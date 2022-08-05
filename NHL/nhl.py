@@ -22067,14 +22067,14 @@ def setup_career_stats(row_data, player_game_info, saved_row_data, index, player
                         else:
                             career_stats_info[stat] += determine_stat_value(player_game_info, time_events, copied_quals, row_data, player_type, player_link, stat)
                         value_to_use = career_stats_info[stat]
-                        
-                        if not hit_start:
-                            value_to_use = -1
                 
                         if career_stats_info[stat] >= event_start_stats_needed[stat]:
                             hit_start = True
                         if career_stats_info[stat] >= event_stats_needed[stat] and stat not in ["Per", "Shft"]:
                             hit_end = True
+                        
+                        if not hit_start:
+                            value_to_use = -1
                     for time_event in time_events:
                         time_event["career_stat_" + stat] = value_to_use
 
@@ -22113,14 +22113,14 @@ def setup_career_stats(row_data, player_game_info, saved_row_data, index, player
                         else:
                             career_stats_info[stat] += determine_stat_value(player_game_info, time_events, copied_quals, row_data, player_type, player_link, stat)
                         value_to_use = career_stats_info[stat]
-                        
-                        if not hit_start:
-                            value_to_use = -1
                 
                         if career_stats_info[stat] >= event_start_reversed_stats_needed[stat]:
                             hit_start = True
                         if career_stats_info[stat] >= event_reversed_stats_needed[stat] and stat not in ["Per", "Shft"]:
                             hit_end = True
+                        
+                        if not hit_start:
+                            value_to_use = -1
                     for time_event in time_events:
                         time_event["career_stat_reversed_" + stat] = value_to_use
 
@@ -22268,14 +22268,14 @@ def setup_game_stats(row_data, player_game_info, index, player_type, player_link
                         else:
                             career_stats_info[stat] += determine_stat_value(player_game_info, time_events, copied_quals, row_data, player_type, player_link, stat)
                         value_to_use = career_stats_info[stat]
-                        
-                        if not hit_start:
-                            value_to_use = -1
                 
                         if career_stats_info[stat] >= event_start_stats_needed[stat]:
                             hit_start = True
                         if career_stats_info[stat] >= event_stats_needed[stat] and stat not in ["Per", "Shft"]:
                             hit_end = True
+
+                        if not hit_start:
+                            value_to_use = -1
                     for time_event in time_events:
                         time_event["game_stat_" + stat] = value_to_use
 
@@ -22311,14 +22311,14 @@ def setup_game_stats(row_data, player_game_info, index, player_type, player_link
                         else:
                             career_stats_info[stat] += determine_stat_value(player_game_info, time_events, copied_quals, row_data, player_type, player_link, stat)
                         value_to_use = career_stats_info[stat]
-                        
-                        if not hit_start:
-                            value_to_use = -1
                 
                         if career_stats_info[stat] >= event_start_reversed_stats_needed[stat]:
                             hit_start = True
                         if career_stats_info[stat] >= event_reversed_stats_needed[stat] and stat not in ["Per", "Shft"]:
                             hit_end = True
+                        
+                        if not hit_start:
+                            value_to_use = -1
                     for time_event in time_events:
                         time_event["game_stat_reversed_" + stat] = value_to_use
 
@@ -22450,9 +22450,6 @@ def setup_starting_career_stats(row_data, player_game_info, saved_row_data, inde
                     value_to_use = -1
                     if not hit_end:
                         value_to_use = career_stats_info[stat]
-                        
-                        if not hit_start:
-                            value_to_use = -1
                 
                         if career_stats_info[stat] >= event_start_stats_needed[stat]:
                             hit_start = True
@@ -22472,6 +22469,9 @@ def setup_starting_career_stats(row_data, player_game_info, saved_row_data, inde
                                     matching_shifts.add(shift_index)
                         else:
                             career_stats_info[stat] += determine_stat_value(player_game_info, time_events, copied_quals, row_data, player_type, player_link, stat)
+                        
+                        if not hit_start:
+                            value_to_use = -1
                     for time_event in time_events:
                         time_event["starting_career_stat_" + stat] = value_to_use
 
@@ -22497,9 +22497,6 @@ def setup_starting_career_stats(row_data, player_game_info, saved_row_data, inde
                     value_to_use = -1
                     if not hit_end:
                         value_to_use = career_stats_info[stat]
-                        
-                        if not hit_start:
-                            value_to_use = -1
                 
                         if career_stats_info[stat] >= event_start_reversed_stats_needed[stat]:
                             hit_start = True
@@ -22520,6 +22517,9 @@ def setup_starting_career_stats(row_data, player_game_info, saved_row_data, inde
                                     matching_shifts.add(shift_index)
                         else:
                             career_stats_info[stat] += determine_stat_value(player_game_info, time_events, copied_quals, row_data, player_type, player_link, stat)
+                        
+                        if not hit_start:
+                            value_to_use = -1
                     for time_event in time_events:
                         time_event["starting_career_stat_reversed_" + stat] = value_to_use
 
@@ -22654,9 +22654,6 @@ def setup_starting_game_stats(row_data, player_game_info, index, player_type, pl
                     value_to_use = -1
                     if not hit_end:
                         value_to_use = career_stats_info[stat]
-                        
-                        if not hit_start:
-                            value_to_use = -1
                 
                         if career_stats_info[stat] >= event_start_stats_needed[stat]:
                             hit_start = True
@@ -22676,6 +22673,9 @@ def setup_starting_game_stats(row_data, player_game_info, index, player_type, pl
                                     matching_shifts.add(shift_index)
                         else:
                             career_stats_info[stat] += determine_stat_value(player_game_info, time_events, copied_quals, row_data, player_type, player_link, stat)
+                        
+                        if not hit_start:
+                            value_to_use = -1
                     for time_event in time_events:
                         time_event["starting_game_stat_" + stat] = value_to_use
 
@@ -22698,9 +22698,6 @@ def setup_starting_game_stats(row_data, player_game_info, index, player_type, pl
                     value_to_use = -1
                     if not hit_end:
                         value_to_use = career_stats_info[stat]
-                        
-                        if not hit_start:
-                            value_to_use = -1
                 
                         if career_stats_info[stat] >= event_start_reversed_stats_needed[stat]:
                             hit_start = True
@@ -22720,6 +22717,9 @@ def setup_starting_game_stats(row_data, player_game_info, index, player_type, pl
                                     matching_shifts.add(shift_index)
                         else:
                             career_stats_info[stat] += determine_stat_value(player_game_info, time_events, copied_quals, row_data, player_type, player_link, stat)
+                        
+                        if not hit_start:
+                            value_to_use = -1
                     for time_event in time_events:
                         time_event["starting_game_stat_reversed_" + stat] = value_to_use
 
