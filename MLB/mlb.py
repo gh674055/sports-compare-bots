@@ -9343,6 +9343,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                             elif qualifier_str == "game-tying":
                                 qual_type = "Game Tying"
                                 extra_stats.add("current-stats")
+                                extra_stats.add("hide-rate")
                             elif qualifier_str == "tying-opp":
                                 qual_type = "Game Tying Opportunity"
                                 extra_stats.add("current-stats")
