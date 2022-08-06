@@ -1676,13 +1676,13 @@ headers = {
             "positive" : True,
             "round" : 1,
             "type" : "Defense/Positional (Baseball Reference)",
-            "display-value" : "Pos WAA"
+            "display-value" : "PosWAA"
         },
         "WAAPitch" : {
             "positive" : True,
             "round" : 1,
             "type" : "Defense/Positional (Baseball Reference)",
-            "display-value" : "Pitch WAA"
+            "display-value" : "PitWAA"
         },
         "WAA" : {
             "positive" : True,
@@ -1703,20 +1703,19 @@ headers = {
             "positive" : True,
             "round" : 1,
             "type" : "Defense/Value (Baseball Reference)",
-            "display-value" : "Pos WAR"
+            "display-value" : "PosWAR"
         },
         "WARPitch" : {
             "positive" : True,
             "round" : 1,
             "type" : "Defense/Value (Baseball Reference)",
-            "display-value" : "Pitch WAR"
+            "display-value" : "PitWAR"
         },
         "WARJAWS" : {
             "positive" : True,
             "display" : False,
             "round" : 1,
-            "type" : "Defense/Value (Baseball Reference)",
-            "display-value" : "Pos WAR"
+            "type" : "Defense/Value (Baseball Reference)"
         },
         "WAR" : {
             "positive" : True,
@@ -1833,12 +1832,12 @@ headers = {
         "WAAPos/Yr" : {
             "positive" : True,
             "type" : "Defense/Value (Baseball Reference)",
-            "display-value" : "Pos WAA/Yr"
+            "display-value" : "PosWAA/Yr"
         },
         "WAAPitch/Yr" : {
             "positive" : True,
             "type" : "Defense/Value (Baseball Reference)",
-            "display-value" : "Pitch WAA/Yr"
+            "display-value" : "PitWAA/Yr"
         },
         "WAA/Yr" : {
             "positive" : True,
@@ -1858,13 +1857,13 @@ headers = {
             "positive" : True,
             "round" : 1,
             "type" : "Defense/Positional (Baseball Reference)",
-            "display-value" : "Pos WAR/Yr"
+            "display-value" : "PosWAR/Yr"
         },
         "WARPitch/Yr" : {
             "positive" : True,
             "round" : 1,
             "type" : "Defense/Positional (Baseball Reference)",
-            "display-value" : "Pitch WAR/Yr"
+            "display-value" : "PitWAR/Yr"
         },
         "WAR/Yr" : {
             "positive" : True,
@@ -1885,7 +1884,7 @@ headers = {
             "positive" : True,
             "round" : 1,
             "type" : "Defense/Value (Baseball Reference)",
-            "display-value" : "Pos WAA/162"
+            "display-value" : "PosWAA/162"
         },
         "oWAR/162" : {
             "positive" : True,
@@ -1903,7 +1902,7 @@ headers = {
             "positive" : True,
             "round" : 1,
             "type" : "Defense/Value (Baseball Reference)",
-            "display-value" : "Pos WAR/162"
+            "display-value" : "PosWAR/162"
         },
         "Salary" : {
             "positive" : False,
@@ -2151,7 +2150,7 @@ headers = {
         },
         "PitchBInk" : {
             "positive" : True,
-            "display-value" : "Pitch B Ink",
+            "display-value" : "Pit B Ink",
             "type" : "Awards/Honors"
         },
         "BInk" : {
@@ -2166,7 +2165,7 @@ headers = {
         },
         "PitchGInk" : {
             "positive" : True,
-            "display-value" : "Pitch G Ink",
+            "display-value" : "Pit G Ink",
             "type" : "Awards/Honors"
         },
         "GInk" : {
@@ -4102,13 +4101,13 @@ headers = {
             "positive" : True,
             "round" : 1,
             "type" : "Defense/Value (Baseball Reference)",
-            "display-value" : "Pitch WAA"
+            "display-value" : "PitWAA"
         },
         "WAAPos" : {
             "positive" : True,
             "round" : 1,
             "type" : "Defense/Value (Baseball Reference)",
-            "display-value" : "Pos WAA"
+            "display-value" : "PosWAA"
         },
         "WAA" : {
             "positive" : True,
@@ -4119,7 +4118,7 @@ headers = {
             "positive" : True,
             "round" : 1,
             "type" : "Defense/Value (Baseball Reference)",
-            "display-value" : "Pitch WAR"
+            "display-value" : "PitWAR"
         },
         "oWAR" : {
             "positive" : True,
@@ -4135,14 +4134,13 @@ headers = {
             "positive" : True,
             "round" : 1,
             "type" : "Defense/Value (Baseball Reference)",
-            "display-value" : "Pos WAR"
+            "display-value" : "PosWAR"
         },
         "WARJAWS" : {
             "positive" : True,
             "display" : False,
             "round" : 1,
-            "type" : "Defense/Value (Baseball Reference)",
-            "display-value" : "Pos WAR"
+            "type" : "Defense/Value (Baseball Reference)"
         },
         "WAR" : {
             "positive" : True,
@@ -4246,12 +4244,12 @@ headers = {
         "WAAPitch/Yr" : {
             "positive" : True,
             "type" : "Defense/Value (Baseball Reference)",
-            "display-value" : "Pitch WAA/Yr"
+            "display-value" : "PitWAA/Yr"
         },
         "WAAPos/Yr" : {
             "positive" : True,
             "type" : "Defense/Value (Baseball Reference)",
-            "display-value" : "Pos WAA/Yr"
+            "display-value" : "PosWAA/Yr"
         },
         "WAA/Yr" : {
             "positive" : True,
@@ -4261,7 +4259,7 @@ headers = {
             "positive" : True,
             "round" : 1,
             "type" : "Defense/Value (Baseball Reference)",
-            "display-value" : "Pitch WAR/Yr"
+            "display-value" : "PitWAR/Yr"
         },
         "oWAR/Yr" : {
             "positive" : True,
@@ -4277,7 +4275,7 @@ headers = {
             "positive" : True,
             "round" : 1,
             "type" : "Defense/Value (Baseball Reference)",
-            "display-value" : "Pos WAR/Yr"
+            "display-value" : "PosWAR/Yr"
         },
         "WAR/Yr" : {
             "positive" : True,
@@ -4546,7 +4544,7 @@ headers = {
         },
         "PitchBInk" : {
             "positive" : True,
-            "display-value" : "Pitch B Ink",
+            "display-value" : "Pit B Ink",
             "type" : "Awards/Honors"
         },
         "BatBInk" : {
@@ -4561,7 +4559,7 @@ headers = {
         },
         "PitchGInk" : {
             "positive" : True,
-            "display-value" : "Pitch G Ink",
+            "display-value" : "Pit G Ink",
             "type" : "Awards/Honors"
         },
         "BatGInk" : {
