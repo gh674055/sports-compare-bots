@@ -21530,6 +21530,8 @@ def get_nhl_game_schedule_single_thread(player_data, all_rows, games_to_skip, pl
             try:
                 game_data, row_data, sub_missing_games = get_game_data(index, player_data, row_data, player_id, player_type, time_frame, extra_stats, s)
                 has_match, raw_row_data = handle_result_qualifiers(game_data, row_data, sub_missing_games, time_frame, index, saved_row_data, count_info, player_type, player_data, player_link, extra_stats)
+                if not has_match:
+                    continue
                 
                 hit_end = False
                 hit_start = False

@@ -38152,6 +38152,8 @@ def get_mlb_game_stats_single_thread(all_rows, has_count_stat, qualifiers, games
             try:
                 game_data, row_data, index, sub_missing_games, sub_missing_pitch = get_live_game_data(index, has_count_stat, player_data, row_data, player_type, qualifiers, True, s)
                 has_match, raw_row_data = handle_result_qualifiers(game_data, index, row_data, sub_missing_games, sub_missing_pitch, player_type, player_data, qualifiers, saved_row_data, last_values, count_info, extra_stats)
+                if not has_match:
+                    continue
                 
                 if stat not in raw_row_data:
                     break
