@@ -8369,7 +8369,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                     for header in ("TmScore", "OppScore", "TtlScore", "ScoreDiff", "TmScore/G", "OppScore/G", "TtlScore/G", "ScoreDiff/G"):
                                         extra_stats.add("show-only-stat-" + header.lower())
                                 elif m.group(2) == "statcast":
-                                    for header in ("Chase%", "EV", "Spin", "MPH", "HardHit%", "SwtSpt%", "LA", "HitDist", "PutAway%", "Whiff%"):
+                                    for header in ("EV", "Spin", "MPH", "HardHit%", "SwtSpt%", "LA", "HitDist", "PutAway%", "Whiff%"):
                                         extra_stats.add("show-only-stat-" + header.lower())
                                 elif m.group(2) == "run-support":
                                     for header in ("RS9", "RS"):
@@ -13347,10 +13347,14 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                             for stat in stats:
                                 if "gwrbi" in stat or "slam" in stat or "walkoff" in stat or "drivenin" in stat or "gwdrivenin" in stat or "gdpo" in stat or "gdp%" in stat:
                                     extra_stats.add("current-stats")
+                                if "pit" in stat and player_type["da_type"] == "Batter":
+                                    extra_stats.add("current-stats")
                                 for header_stat in headers[player_type["da_type"]]:
                                     if "display-value" in headers[player_type["da_type"]][header_stat] and headers[player_type["da_type"]][header_stat]["display-value"].lower() == stat:
                                         stat = header_stat.lower()
                                         if "gwrbi" in stat or "slam" in stat or "walkoff" in stat or "drivenin" in stat or "gwdrivenin" in stat or "gdpo" in stat or "gdp%" in stat:
+                                            extra_stats.add("current-stats")
+                                        if "pit" in stat and player_type["da_type"] == "Batter":
                                             extra_stats.add("current-stats")
                                         break
         
@@ -13360,10 +13364,14 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
             stat = extra_stat.split("show-stat-", 1)[1]
             if "gwrbi" in stat or "slam" in stat or "walkoff" in stat or "drivenin" in stat or "gwdrivenin" in stat or "gdpo" in stat or "gdp%" in stat:
                 add_play = True
+            if "pit" in stat and player_type["da_type"] == "Batter":
+                add_play = True
             for header_stat in headers[player_type["da_type"]]:
                 if "display-value" in headers[player_type["da_type"]][header_stat] and headers[player_type["da_type"]][header_stat]["display-value"].lower() == stat:
                     stat = header_stat.lower()
                     if "gwrbi" in stat or "slam" in stat or "walkoff" in stat or "drivenin" in stat or "gwdrivenin" in stat or "gdpo" in stat or "gdp%" in stat:
+                        add_play = True
+                    if "pit" in stat and player_type["da_type"] == "Batter":
                         add_play = True
                     break
 
@@ -44387,7 +44395,7 @@ def print_player_data(player_datas, player_type, highest_vals, lowest_vals, has_
                      if header == "WalkOff":
                          override_show = True
                 if "statcast" in extra_stats:
-                    if header == "Pit" or header == "Chase%" or header == "EV" or header == "Spin" or header == "MPH" or header == "HardHit%" or header == "SwtSpt%" or header == "LA" or header == "HitDist" or header == "PutAway%" or header == "Whiff%":
+                    if header == "Pit" or header == "EV" or header == "Spin" or header == "MPH" or header == "HardHit%" or header == "SwtSpt%" or header == "LA" or header == "HitDist" or header == "PutAway%" or header == "Whiff%":
                         override_show = True
                 if "run-support" in extra_stats:
                     if header == "RS9" or header == "RS":
@@ -44709,7 +44717,7 @@ def get_reddit_player_table(player_datas, player_type, debug_mode, original_comm
                      if header == "WalkOff":
                          override_show = True
                 if "statcast" in extra_stats:
-                    if header == "Pit" or header == "Chase%" or header == "EV" or header == "Spin" or header == "MPH" or header == "HardHit%" or header == "SwtSpt%" or header == "LA" or header == "HitDist" or header == "PutAway%" or header == "Whiff%":
+                    if header == "Pit" or header == "EV" or header == "Spin" or header == "MPH" or header == "HardHit%" or header == "SwtSpt%" or header == "LA" or header == "HitDist" or header == "PutAway%" or header == "Whiff%":
                         override_show = True
                 if "run-support" in extra_stats:
                     if header == "RS9" or header == "RS":
@@ -45502,7 +45510,7 @@ def handle_table_data(over_header, player_data, player_datas, player_type, heade
         if header == "WalkOff":
             override_show = True
     if "statcast" in extra_stats:
-        if header == "Pit" or header == "Chase%" or header == "EV" or header == "Spin" or header == "MPH" or header == "HardHit%" or header == "SwtSpt%" or header == "LA" or header == "HitDist" or header == "PutAway%" or header == "Whiff%":
+        if header == "Pit" or header == "EV" or header == "Spin" or header == "MPH" or header == "HardHit%" or header == "SwtSpt%" or header == "LA" or header == "HitDist" or header == "PutAway%" or header == "Whiff%":
             override_show = True
     if "run-support" in extra_stats:
         if header == "RS9" or header == "RS":
