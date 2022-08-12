@@ -8250,7 +8250,12 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 extra_stats.add("show-stat-pit")
                                 extra_stats.add("show-stat-pit%")
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
-                        
+
+                        last_match = re.finditer(r"\b(?:hide|skip)-all-tables?\b", time_frame)
+                        for m in last_match:
+                            extra_stats.add("show-only-table-fake-table")
+                            time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
+                                                
                         last_match = re.finditer(r"\b(show(?: |-)?only(?: |-)?table:)\(.+?\)", time_frame)
                         for m in last_match:
                             for stat in re.split(r"(?<!\\)\-", re.split(r"(?<!\\)" + m.group(1), m.group(0))[1][1:-1]):

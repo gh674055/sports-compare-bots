@@ -8497,6 +8497,11 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                             else:
                                 extra_stats.add(m.group(1))
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
+
+                        last_match = re.finditer(r"\b(?:hide|skip)-all-tables?\b", time_frame)
+                        for m in last_match:
+                            extra_stats.add("show-only-table-fake-table")
+                            time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
                         
                         last_match = re.finditer(r"\b(show(?: |-)?only(?: |-)?table:)\(.+?\)", time_frame)
                         for m in last_match:
