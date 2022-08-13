@@ -8860,7 +8860,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
 
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
 
-                        last_match = re.finditer(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?((\S+)-(inning|out|strike|ball|score-game|run-game|men-on-base|man-on-base|time-through-lineup|run|rbi)s?)\b", time_frame)
+                        last_match = re.finditer(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?((\S+)-(inning|out|strike|ball|score-game|run-game|men-on-base|man-on-base|time-through-lineup|run|rbi|pitch-of-whole-game|pitch-of-game)s?)\b", time_frame)
                         for m in last_match:
                             if m.group(3) == "last":
                                 continue
@@ -8904,6 +8904,12 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 extra_stats.add("current-stats")
                             elif qualifier_str == "score-game" or qualifier_str == "run-game":
                                 qual_type = "Score Margin"
+                                extra_stats.add("current-stats")
+                            elif qualifier_str == "pitch-of-whole-game":
+                                qual_type = "Game Pitch Count"
+                                extra_stats.add("current-stats")
+                            elif qualifier_str == "pitch-of-game":
+                                qual_type = "Team Pitch Count"
                                 extra_stats.add("current-stats")
                             
                             try:
