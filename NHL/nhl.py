@@ -14502,7 +14502,7 @@ def clear_time_frames(subb_frames):
                             sub_qualifier.pop("explain_str", None)
                             
 def handle_stat_time_frame(time_frame):
-    match = re.match(r"\b(only-season-?(?:st-?)?(?:end-?)?)?(games?-start(?:~[\S]+)?|games?-end(?:~[\S]+)?|seasons?-end(?:~[\S]+)?|totalgames?(?:~[\S]+)?|days?(?:~[\S]+)?|weeks?(?:~[\S]+)?|months?(?:~[\S]+)?|years?(?:~[\S]+)?|calendarweeks?(?:~[\S]+)?|calendarmonths?(?:~[\S]+)?|calendaryears?(?:~[\S]+)?|games?(?:~[\S]+)?|seasons?(?:~[\S]+)?|teams?(?:~[\S]+)?|opponents?(?:~[\S]+)?|g-st(?:~[\S]+)?|tg(?:~[\S]+)?|s-st(?:~[\S]+)?|g-end(?:~[\S]+)?|s-end(?:~[\S]+)?|d(?:~[\S]+)?|w(?:~[\S]+)?|m(?:~[\S]+)?|y(?:~[\S]+)?|g(?:~[\S]+)?|s(?:~[\S]+)?|t(?:~[\S]+)?|o(?:~[\S]+)?)?", time_frame)
+    match = re.match(r"\b(single-season-?(?:st-?)?(?:end-?)?)?(games?-start(?:~[\S]+)?|games?-end(?:~[\S]+)?|seasons?-end(?:~[\S]+)?|totalgames?(?:~[\S]+)?|days?(?:~[\S]+)?|weeks?(?:~[\S]+)?|months?(?:~[\S]+)?|years?(?:~[\S]+)?|calendarweeks?(?:~[\S]+)?|calendarmonths?(?:~[\S]+)?|calendaryears?(?:~[\S]+)?|games?(?:~[\S]+)?|seasons?(?:~[\S]+)?|teams?(?:~[\S]+)?|opponents?(?:~[\S]+)?|g-st(?:~[\S]+)?|tg(?:~[\S]+)?|s-st(?:~[\S]+)?|g-end(?:~[\S]+)?|s-end(?:~[\S]+)?|d(?:~[\S]+)?|w(?:~[\S]+)?|m(?:~[\S]+)?|y(?:~[\S]+)?|g(?:~[\S]+)?|s(?:~[\S]+)?|t(?:~[\S]+)?|o(?:~[\S]+)?)?", time_frame)
     
     qualifier = match.group(2)
     if not qualifier:
@@ -14537,7 +14537,7 @@ def handle_stat_time_frame(time_frame):
         qual_type = "Opponents"
 
     if match.group(1):
-        qual_type = "Only-Season-" + qual_type
+        qual_type = "Single-Season-" + qual_type
         if "st" in match.group(1):
             qual_type += "-Start"
         elif "end" in match.group(1):
@@ -33809,9 +33809,9 @@ def handle_min_max_calc(the_stats, stat_quals, player_data, player_type, stat, t
     qual_num_end = time_frame["qual_num_end"]
 
     only_seasons = False
-    if qual_type.startswith("Only-Season-"):
+    if qual_type.startswith("Single-Season-"):
         only_seasons = True
-        qual_type = qual_type.replace("Only-Season-", "")
+        qual_type = qual_type.replace("Single-Season-", "")
 
     if qual_type == "Days" or qual_type == "Weeks" or qual_type == "Months" or qual_type == "Years":
         dates = [row["Date"] for row in all_rows]
@@ -34106,9 +34106,9 @@ def handle_min_max_final(stat_val, current_explain_strs, player_data, player_typ
         qual_num_str = str(qual_num_start) + "-" + str(qual_num_end)
 
     only_seasons = False
-    if qual_type.startswith("Only-Season-"):
+    if qual_type.startswith("Single-Season-"):
         only_seasons = True
-        qual_type = qual_type.replace("Only-Season-", "")
+        qual_type = qual_type.replace("Single-Season-", "")
 
     match_all = False
     if not stat:
@@ -34621,7 +34621,7 @@ def handle_min_max_final(stat_val, current_explain_strs, player_data, player_typ
                                 match_count += 1
                                 total_matching_rows.extend(matching_rows)
                                 sub_range_str = ""
-                                sub_range_str += team.upper()
+                                sub_range_str += team.upper() + " - [" + str(season) + "](" + game_splits_url_format.format(player_data["id"][0], player_data["id"], str(season)) + ")"
                                 total_matching_strs.append({
                                     "rows" : total_matching_rows,
                                     "stat_objs" : get_matching_row_val(match_all, stat, matching_rows, stat_quals, player_data, player_type),
@@ -34631,7 +34631,7 @@ def handle_min_max_final(stat_val, current_explain_strs, player_data, player_typ
                             match_count += 1
                             total_matching_rows.extend(matching_rows)
                             sub_range_str = ""
-                            sub_range_str += team.upper()
+                            sub_range_str += team.upper() + " - [" + str(season) + "](" + game_splits_url_format.format(player_data["id"][0], player_data["id"], str(season)) + ")"
                             total_matching_strs.append({
                                 "rows" : total_matching_rows,
                                 "stat_objs" : get_matching_row_val(match_all, stat, matching_rows, stat_quals, player_data, player_type),
@@ -34682,7 +34682,7 @@ def handle_min_max_final(stat_val, current_explain_strs, player_data, player_typ
     if qual_type not in ["Calendar-Weeks", "Calendar-Months", "Calendar-Years", "Teams", "Opponents"]:
         stat_val["stat_obj"]["explain_str"] += qual_type[:-1] + "(s)" + "=" + qual_num_str + "|"
     if only_seasons:
-        stat_val["stat_obj"]["explain_str"] += "Only Seasons" + "|"
+        stat_val["stat_obj"]["explain_str"] += "Single Season" + "|"
     stat_val["stat_obj"]["explain_str"] += str(match_count) + " " + (qual_type[:-1] + "(s)" if qual_type in ["Calendar-Weeks", "Calendar-Months", "Calendar-Years", "Teams", "Opponents"] else "Stretch(es)")
     if stat_quals:
         stat_val["stat_obj"]["explain_str"] += "|"
@@ -35078,9 +35078,9 @@ def handle_max_streak_calc(new_rows, stat_objs, player_data, player_type, all_ro
         qual_type = "Games"
 
     only_seasons = False
-    if qual_type.startswith("Only-Season-"):
+    if qual_type.startswith("Single-Season-"):
         only_seasons = True
-        qual_type = qual_type.replace("Only-Season-", "")
+        qual_type = qual_type.replace("Single-Season-", "")
     
     is_start = None
     if qual_type.endswith("-Start") or qual_type.endswith("-End"):
@@ -35337,7 +35337,7 @@ def handle_max_streak_calc(new_rows, stat_objs, player_data, player_type, all_ro
         stat_objs[0]["explain_str"] += " - "
     stat_objs[0]["explain_str"] = stat_objs[0]["explain_str"][:-3]
     if only_seasons:
-        stat_objs[0]["explain_str"] += "|Only Seasons"
+        stat_objs[0]["explain_str"] += "|Single Season"
     if is_start == True or is_start == False:
         stat_objs[0]["explain_str"] += "|"
         if is_start == True:
@@ -35399,9 +35399,9 @@ def handle_max_stretch_calc(new_rows, stat_objs, player_data, player_type, all_r
         qual_type = "Games"
 
     only_seasons = False
-    if qual_type.startswith("Only-Season-"):
+    if qual_type.startswith("Single-Season-"):
         only_seasons = True
-        qual_type = qual_type.replace("Only-Season-", "")
+        qual_type = qual_type.replace("Single-Season-", "")
     
     is_start = None
     if qual_type.endswith("-Start") or qual_type.endswith("-End"):
@@ -35609,7 +35609,7 @@ def handle_max_stretch_calc(new_rows, stat_objs, player_data, player_type, all_r
         stat_objs[0]["explain_str"] += " - "
     stat_objs[0]["explain_str"] = stat_objs[0]["explain_str"][:-3]
     if only_seasons:
-        stat_objs[0]["explain_str"] += "|Only Seasons"
+        stat_objs[0]["explain_str"] += "|Single Season"
     if is_start == True or is_start == False:
         stat_objs[0]["explain_str"] += "|"
         if is_start == True:
