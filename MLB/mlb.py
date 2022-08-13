@@ -14322,109 +14322,109 @@ def handle_against_qual(names, time_frames, player_type, comment_obj, extra_stat
                             sub_matching_names.append(subbb_name)
             for time_frame in subbb_frames:
                 if "Sub Query" in time_frame["qualifiers"]:
-                    handle_the_quals(time_frame["qualifiers"], player_type, "Sub Query", sub_matching_names, time_frame, "Game", comment_obj, players_map, extra_stats)
+                    handle_the_quals(time_frame["qualifiers"], player_type, "Sub Query", sub_matching_names, time_frame, subbb_frames, "Game", comment_obj, players_map, extra_stats)
                 if "Event Sub Query" in time_frame["qualifiers"]:
-                    handle_the_quals(time_frame["qualifiers"], player_type, "Event Sub Query", sub_matching_names, time_frame, "GameEventID", comment_obj, players_map, extra_stats)
+                    handle_the_quals(time_frame["qualifiers"], player_type, "Event Sub Query", sub_matching_names, time_frame, subbb_frames, "GameEventID", comment_obj, players_map, extra_stats)
                 if "Or Sub Query" in time_frame["qualifiers"]:
-                    handle_the_quals(time_frame["qualifiers"], player_type, "Or Sub Query", sub_matching_names, time_frame, "Game", comment_obj, players_map, extra_stats)
+                    handle_the_quals(time_frame["qualifiers"], player_type, "Or Sub Query", sub_matching_names, time_frame, subbb_frames, "Game", comment_obj, players_map, extra_stats)
                 if "Or Event Sub Query" in time_frame["qualifiers"]:
-                    handle_the_quals(time_frame["qualifiers"], player_type, "Or Event Sub Query", sub_matching_names, time_frame, "GameEventID", comment_obj, players_map, extra_stats)
+                    handle_the_quals(time_frame["qualifiers"], player_type, "Or Event Sub Query", sub_matching_names, time_frame, subbb_frames, "GameEventID", comment_obj, players_map, extra_stats)
                 if "Day Of Sub Query" in time_frame["qualifiers"]:
-                    handle_the_quals(time_frame["qualifiers"], player_type, "Day Of Sub Query", sub_matching_names, time_frame, "Date", comment_obj, players_map, extra_stats)
+                    handle_the_quals(time_frame["qualifiers"], player_type, "Day Of Sub Query", sub_matching_names, time_frame, subbb_frames, "Date", comment_obj, players_map, extra_stats)
                 if "Day After Sub Query" in time_frame["qualifiers"]:
-                    handle_the_quals(time_frame["qualifiers"], player_type, "Day After Sub Query", sub_matching_names, time_frame, "DateAfter", comment_obj, players_map, extra_stats)
+                    handle_the_quals(time_frame["qualifiers"], player_type, "Day After Sub Query", sub_matching_names, time_frame, subbb_frames, "DateAfter", comment_obj, players_map, extra_stats)
                 if "Day Before Sub Query" in time_frame["qualifiers"]:
-                    handle_the_quals(time_frame["qualifiers"], player_type, "Day Before Sub Query", sub_matching_names, time_frame, "DateBefore", comment_obj, players_map, extra_stats)
+                    handle_the_quals(time_frame["qualifiers"], player_type, "Day Before Sub Query", sub_matching_names, time_frame, subbb_frames, "DateBefore", comment_obj, players_map, extra_stats)
                 if "Game After Sub Query" in time_frame["qualifiers"]:
-                    handle_the_quals(time_frame["qualifiers"], player_type, "Game After Sub Query", sub_matching_names, time_frame, "Game", comment_obj, players_map, extra_stats)
+                    handle_the_quals(time_frame["qualifiers"], player_type, "Game After Sub Query", sub_matching_names, time_frame, subbb_frames, "Game", comment_obj, players_map, extra_stats)
                 if "Game Before Sub Query" in time_frame["qualifiers"]:
-                    handle_the_quals(time_frame["qualifiers"], player_type, "Game Before Sub Query", sub_matching_names, time_frame, "Game", comment_obj, players_map, extra_stats)
+                    handle_the_quals(time_frame["qualifiers"], player_type, "Game Before Sub Query", sub_matching_names, time_frame, subbb_frames, "Game", comment_obj, players_map, extra_stats)
                 if "Season Sub Query" in time_frame["qualifiers"]:
-                    handle_the_quals(time_frame["qualifiers"], player_type, "Season Sub Query", sub_matching_names, time_frame, "Season", comment_obj, players_map, extra_stats)
+                    handle_the_quals(time_frame["qualifiers"], player_type, "Season Sub Query", sub_matching_names, time_frame, subbb_frames, "Season", comment_obj, players_map, extra_stats)
                 if "Or Season Sub Query" in time_frame["qualifiers"]:
-                    handle_the_quals(time_frame["qualifiers"], player_type, "Or Season Sub Query", sub_matching_names, time_frame, "Season", comment_obj, players_map, extra_stats)
+                    handle_the_quals(time_frame["qualifiers"], player_type, "Or Season Sub Query", sub_matching_names, time_frame, subbb_frames, "Season", comment_obj, players_map, extra_stats)
                 if "Season After Sub Query" in time_frame["qualifiers"]:
-                    handle_the_quals(time_frame["qualifiers"], player_type, "Season After Sub Query", sub_matching_names, time_frame, "Season", comment_obj, players_map, extra_stats)
+                    handle_the_quals(time_frame["qualifiers"], player_type, "Season After Sub Query", sub_matching_names, time_frame, subbb_frames, "Season", comment_obj, players_map, extra_stats)
                 if "Season Before Sub Query" in time_frame["qualifiers"]:
-                    handle_the_quals(time_frame["qualifiers"], player_type, "Season Before Sub Query", sub_matching_names, time_frame, "Season", comment_obj, players_map, extra_stats)
+                    handle_the_quals(time_frame["qualifiers"], player_type, "Season Before Sub Query", sub_matching_names, time_frame, subbb_frames, "Season", comment_obj, players_map, extra_stats)
                 if "Day After Pitching" in time_frame["qualifiers"]:
-                    handle_the_quals(time_frame["qualifiers"], player_type, "Day After Pitching", sub_matching_names, time_frame, "DateAfter", comment_obj, players_map, extra_stats)
+                    handle_the_quals(time_frame["qualifiers"], player_type, "Day After Pitching", sub_matching_names, time_frame, subbb_frames, "DateAfter", comment_obj, players_map, extra_stats)
                 if "Day After Hitting" in time_frame["qualifiers"]:
-                    handle_the_quals(time_frame["qualifiers"], player_type, "Day After Hitting", sub_matching_names, time_frame, "DateAfter", comment_obj, players_map, extra_stats)
+                    handle_the_quals(time_frame["qualifiers"], player_type, "Day After Hitting", sub_matching_names, time_frame, subbb_frames, "DateAfter", comment_obj, players_map, extra_stats)
                 if "Day Before Pitching" in time_frame["qualifiers"]:
-                    handle_the_quals(time_frame["qualifiers"], player_type, "Day Before Pitching", sub_matching_names, time_frame, "DateBefore", comment_obj, players_map, extra_stats)
+                    handle_the_quals(time_frame["qualifiers"], player_type, "Day Before Pitching", sub_matching_names, time_frame, subbb_frames, "DateBefore", comment_obj, players_map, extra_stats)
                 if "Day Before Hitting" in time_frame["qualifiers"]:
-                    handle_the_quals(time_frame["qualifiers"], player_type, "Day Before Hitting", sub_matching_names, time_frame, "DateBefore", comment_obj, players_map, extra_stats)
+                    handle_the_quals(time_frame["qualifiers"], player_type, "Day Before Hitting", sub_matching_names, time_frame, subbb_frames, "DateBefore", comment_obj, players_map, extra_stats)
                 if "Game After Pitching" in time_frame["qualifiers"]:
-                    handle_the_quals(time_frame["qualifiers"], player_type, "Game After Pitching", sub_matching_names, time_frame, "Game", comment_obj, players_map, extra_stats)
+                    handle_the_quals(time_frame["qualifiers"], player_type, "Game After Pitching", sub_matching_names, time_frame, subbb_frames, "Game", comment_obj, players_map, extra_stats)
                 if "Game After Hitting" in time_frame["qualifiers"]:
-                    handle_the_quals(time_frame["qualifiers"], player_type, "Game After Hitting", sub_matching_names, time_frame, "Game", comment_obj, players_map, extra_stats)
+                    handle_the_quals(time_frame["qualifiers"], player_type, "Game After Hitting", sub_matching_names, time_frame, subbb_frames, "Game", comment_obj, players_map, extra_stats)
                 if "Game Before Pitching" in time_frame["qualifiers"]:
-                    handle_the_quals(time_frame["qualifiers"], player_type, "Game Before Pitching", sub_matching_names, time_frame, "Game", comment_obj, players_map, extra_stats)
+                    handle_the_quals(time_frame["qualifiers"], player_type, "Game Before Pitching", sub_matching_names, time_frame, subbb_frames, "Game", comment_obj, players_map, extra_stats)
                 if "Game Before Hitting" in time_frame["qualifiers"]:
-                    handle_the_quals(time_frame["qualifiers"], player_type, "Game Before Hitting", sub_matching_names, time_frame, "Game", comment_obj, players_map, extra_stats)
+                    handle_the_quals(time_frame["qualifiers"], player_type, "Game Before Hitting", sub_matching_names, time_frame, subbb_frames, "Game", comment_obj, players_map, extra_stats)
                 if "Playing With" in time_frame["qualifiers"]:
-                    handle_the_quals(time_frame["qualifiers"], player_type, "Playing With", subb_names_with, time_frame, "Tm", comment_obj, players_map, extra_stats)
+                    handle_the_quals(time_frame["qualifiers"], player_type, "Playing With", subb_names_with, time_frame, subbb_frames, "Tm", comment_obj, players_map, extra_stats)
                 if "Previous Playing With" in time_frame["qualifiers"]:
-                    handle_the_quals(time_frame["qualifiers"], player_type, "Previous Playing With", subb_names_with, time_frame, "Tm", comment_obj, players_map, extra_stats)
+                    handle_the_quals(time_frame["qualifiers"], player_type, "Previous Playing With", subb_names_with, time_frame, subbb_frames, "Tm", comment_obj, players_map, extra_stats)
                 if "Playing Same Game" in time_frame["qualifiers"]:
-                    handle_the_quals(time_frame["qualifiers"], player_type, "Playing Same Game", subb_names_with, time_frame, "Either", comment_obj, players_map, extra_stats)
+                    handle_the_quals(time_frame["qualifiers"], player_type, "Playing Same Game", subb_names_with, time_frame, subbb_frames, "Either", comment_obj, players_map, extra_stats)
                 if "Upcoming Playing With" in time_frame["qualifiers"]:
-                    handle_the_quals(time_frame["qualifiers"], player_type, "Upcoming Playing With", subb_names_with, time_frame, "Tm", comment_obj, players_map, extra_stats)
+                    handle_the_quals(time_frame["qualifiers"], player_type, "Upcoming Playing With", subb_names_with, time_frame, subbb_frames, "Tm", comment_obj, players_map, extra_stats)
                 if "Playing Against" in time_frame["qualifiers"]:
-                    handle_the_quals(time_frame["qualifiers"], player_type, "Playing Against", subb_names_against, time_frame, "Opponent", comment_obj, players_map, extra_stats)
+                    handle_the_quals(time_frame["qualifiers"], player_type, "Playing Against", subb_names_against, time_frame, subbb_frames, "Opponent", comment_obj, players_map, extra_stats)
                 if "Previous Playing Against" in time_frame["qualifiers"]:
-                    handle_the_quals(time_frame["qualifiers"], player_type, "Previous Playing Against", subb_names_against, time_frame, "Opponent", comment_obj, players_map, extra_stats)
+                    handle_the_quals(time_frame["qualifiers"], player_type, "Previous Playing Against", subb_names_against, time_frame, subbb_frames, "Opponent", comment_obj, players_map, extra_stats)
                 if "Upcoming Playing Against" in time_frame["qualifiers"]:
-                    handle_the_quals(time_frame["qualifiers"], player_type, "Upcoming Playing Against", subb_names_against, time_frame, "Opponent", comment_obj, players_map, extra_stats)
+                    handle_the_quals(time_frame["qualifiers"], player_type, "Upcoming Playing Against", subb_names_against, time_frame, subbb_frames, "Opponent", comment_obj, players_map, extra_stats)
                 if "Playing Same Opponents" in time_frame["qualifiers"]:
-                    handle_the_quals(time_frame["qualifiers"], player_type, "Playing Same Opponents", subb_names_against, time_frame, "Same Opponent", comment_obj, players_map, extra_stats)
+                    handle_the_quals(time_frame["qualifiers"], player_type, "Playing Same Opponents", subb_names_against, time_frame, subbb_frames, "Same Opponent", comment_obj, players_map, extra_stats)
                 if "Playing Same Date" in time_frame["qualifiers"]:
-                    handle_the_quals(time_frame["qualifiers"], player_type, "Playing Same Date", subb_names_against, time_frame, "Date", comment_obj, players_map, extra_stats)
+                    handle_the_quals(time_frame["qualifiers"], player_type, "Playing Same Date", subb_names_against, time_frame, subbb_frames, "Date", comment_obj, players_map, extra_stats)
                 if "Batting Against" in time_frame["qualifiers"]:
-                    handle_the_quals(time_frame["qualifiers"], player_type, "Batting Against", subb_names_against, time_frame, "Opponent", comment_obj, players_map, extra_stats)
+                    handle_the_quals(time_frame["qualifiers"], player_type, "Batting Against", subb_names_against, time_frame, subbb_frames, "Opponent", comment_obj, players_map, extra_stats)
                 if "Pitching Against" in time_frame["qualifiers"]:
-                    handle_the_quals(time_frame["qualifiers"], player_type, "Pitching Against", subb_names_against, time_frame, "Opponent", comment_obj, players_map, extra_stats)
+                    handle_the_quals(time_frame["qualifiers"], player_type, "Pitching Against", subb_names_against, time_frame, subbb_frames, "Opponent", comment_obj, players_map, extra_stats)
                 if "Driven In" in time_frame["qualifiers"]:
-                    handle_the_quals(time_frame["qualifiers"], player_type, "Driven In", subb_names_with, time_frame, "Tm", comment_obj, players_map, extra_stats)
+                    handle_the_quals(time_frame["qualifiers"], player_type, "Driven In", subb_names_with, time_frame, subbb_frames, "Tm", comment_obj, players_map, extra_stats)
                 if "Batted In" in time_frame["qualifiers"]:
-                    handle_the_quals(time_frame["qualifiers"], player_type, "Batted In", subb_names_with, time_frame, "Tm", comment_obj, players_map, extra_stats)
+                    handle_the_quals(time_frame["qualifiers"], player_type, "Batted In", subb_names_with, time_frame, subbb_frames, "Tm", comment_obj, players_map, extra_stats)
                 if "Back To Back With" in time_frame["qualifiers"]:
-                    handle_the_quals(time_frame["qualifiers"], player_type, "Back To Back With", subb_names_with, time_frame, "Tm", comment_obj, players_map, extra_stats)
+                    handle_the_quals(time_frame["qualifiers"], player_type, "Back To Back With", subb_names_with, time_frame, subbb_frames, "Tm", comment_obj, players_map, extra_stats)
                 if "Batting In Front Of" in time_frame["qualifiers"]:
-                    handle_the_quals(time_frame["qualifiers"], player_type, "Batting In Front Of", subb_names_with, time_frame, "Tm", comment_obj, players_map, extra_stats)
+                    handle_the_quals(time_frame["qualifiers"], player_type, "Batting In Front Of", subb_names_with, time_frame, subbb_frames, "Tm", comment_obj, players_map, extra_stats)
                 if "Batting Behind" in time_frame["qualifiers"]:
-                    handle_the_quals(time_frame["qualifiers"], player_type, "Batting Behind", subb_names_with, time_frame, "Tm", comment_obj, players_map, extra_stats)
+                    handle_the_quals(time_frame["qualifiers"], player_type, "Batting Behind", subb_names_with, time_frame, subbb_frames, "Tm", comment_obj, players_map, extra_stats)
                 if "Batting Next To" in time_frame["qualifiers"]:
-                    handle_the_quals(time_frame["qualifiers"], player_type, "Batting Next To", subb_names_with, time_frame, "Tm", comment_obj, players_map, extra_stats)
+                    handle_the_quals(time_frame["qualifiers"], player_type, "Batting Next To", subb_names_with, time_frame, subbb_frames, "Tm", comment_obj, players_map, extra_stats)
                 if "Caught By" in time_frame["qualifiers"]:
-                    handle_the_quals(time_frame["qualifiers"], player_type, "Caught By", subb_names_with, time_frame, "Tm", comment_obj, players_map, extra_stats)
+                    handle_the_quals(time_frame["qualifiers"], player_type, "Caught By", subb_names_with, time_frame, subbb_frames, "Tm", comment_obj, players_map, extra_stats)
                 if "Stealing On" in time_frame["qualifiers"]:
-                    handle_the_quals(time_frame["qualifiers"], player_type, "Stealing On", subb_names_with, time_frame, "Opponent", comment_obj, players_map, extra_stats)
+                    handle_the_quals(time_frame["qualifiers"], player_type, "Stealing On", subb_names_with, time_frame, subbb_frames, "Opponent", comment_obj, players_map, extra_stats)
                 if "Teammate On First" in time_frame["qualifiers"]:
-                    handle_the_quals(time_frame["qualifiers"], player_type, "Teammate On First", subb_names_against, time_frame, "Tm", comment_obj, players_map, extra_stats)
+                    handle_the_quals(time_frame["qualifiers"], player_type, "Teammate On First", subb_names_against, time_frame, subbb_frames, "Tm", comment_obj, players_map, extra_stats)
                 if "Teammate On Second" in time_frame["qualifiers"]:
-                    handle_the_quals(time_frame["qualifiers"], player_type, "Teammate On Second", subb_names_against, time_frame, "Tm", comment_obj, players_map, extra_stats)
+                    handle_the_quals(time_frame["qualifiers"], player_type, "Teammate On Second", subb_names_against, time_frame, subbb_frames, "Tm", comment_obj, players_map, extra_stats)
                 if "Teammate On Third" in time_frame["qualifiers"]:
-                    handle_the_quals(time_frame["qualifiers"], player_type, "Teammate On Third", subb_names_against, time_frame, "Tm", comment_obj, players_map, extra_stats)
+                    handle_the_quals(time_frame["qualifiers"], player_type, "Teammate On Third", subb_names_against, time_frame, subbb_frames, "Tm", comment_obj, players_map, extra_stats)
                 if "Teammate On Base" in time_frame["qualifiers"]:
-                    handle_the_quals(time_frame["qualifiers"], player_type, "Teammate On Base", subb_names_against, time_frame, "Tm", comment_obj, players_map, extra_stats)
+                    handle_the_quals(time_frame["qualifiers"], player_type, "Teammate On Base", subb_names_against, time_frame, subbb_frames, "Tm", comment_obj, players_map, extra_stats)
                 if "Opponent On First" in time_frame["qualifiers"]:
-                    handle_the_quals(time_frame["qualifiers"], player_type, "Opponent On First", subb_names_against, time_frame, "Opponent", comment_obj, players_map, extra_stats)
+                    handle_the_quals(time_frame["qualifiers"], player_type, "Opponent On First", subb_names_against, time_frame, subbb_frames, "Opponent", comment_obj, players_map, extra_stats)
                 if "Opponent On Second" in time_frame["qualifiers"]:
-                    handle_the_quals(time_frame["qualifiers"], player_type, "Opponent On Second", subb_names_against, time_frame, "Opponent", comment_obj, players_map, extra_stats)
+                    handle_the_quals(time_frame["qualifiers"], player_type, "Opponent On Second", subb_names_against, time_frame, subbb_frames, "Opponent", comment_obj, players_map, extra_stats)
                 if "Opponent On Third" in time_frame["qualifiers"]:
-                    handle_the_quals(time_frame["qualifiers"], player_type, "Opponent On Third", subb_names_against, time_frame, "Opponent", comment_obj, players_map, extra_stats)
+                    handle_the_quals(time_frame["qualifiers"], player_type, "Opponent On Third", subb_names_against, time_frame, subbb_frames, "Opponent", comment_obj, players_map, extra_stats)
                 if "Opponent On Base" in time_frame["qualifiers"]:
-                    handle_the_quals(time_frame["qualifiers"], player_type, "Opponent On Base", subb_names_against, time_frame, "Opponent", comment_obj, players_map, extra_stats)
+                    handle_the_quals(time_frame["qualifiers"], player_type, "Opponent On Base", subb_names_against, time_frame, subbb_frames, "Opponent", comment_obj, players_map, extra_stats)
                 if "On Field With" in time_frame["qualifiers"]:
-                    handle_the_quals(time_frame["qualifiers"], player_type, "On Field With", subb_names_with, time_frame, "Tm", comment_obj, players_map, extra_stats)
+                    handle_the_quals(time_frame["qualifiers"], player_type, "On Field With", subb_names_with, time_frame, subbb_frames, "Tm", comment_obj, players_map, extra_stats)
                 if "On Field Against" in time_frame["qualifiers"]:
-                    handle_the_quals(time_frame["qualifiers"], player_type, "On Field Against", subb_names_against, time_frame, "Opponent", comment_obj, players_map, extra_stats)
+                    handle_the_quals(time_frame["qualifiers"], player_type, "On Field Against", subb_names_against, time_frame, subbb_frames, "Opponent", comment_obj, players_map, extra_stats)
                 if "Formula Query" in time_frame["qualifiers"]:
-                    handle_the_quals(time_frame["qualifiers"], player_type, "Formula Query", sub_matching_names, time_frame, "RowGame", comment_obj, players_map, extra_stats)
+                    handle_the_quals(time_frame["qualifiers"], player_type, "Formula Query", sub_matching_names, time_frame, subbb_frames, "RowGame", comment_obj, players_map, extra_stats)
                 if "Formula Sub Query" in time_frame["qualifiers"]:
-                    handle_the_quals(time_frame["qualifiers"], player_type, "Formula Sub Query", sub_matching_names, time_frame, "RowGame", comment_obj, players_map, extra_stats)
+                    handle_the_quals(time_frame["qualifiers"], player_type, "Formula Sub Query", sub_matching_names, time_frame, subb_frames, "RowGame", comment_obj, players_map, extra_stats)
 
 def handle_same_games_qual(names, player_type, time_frames, comment_obj, extra_stats):
     qual_map = {}
@@ -14530,7 +14530,7 @@ def handle_same_games_qual(names, player_type, time_frames, comment_obj, extra_s
                             "compare_str" : compare_str
                         }]
                         
-def handle_the_quals(qualifiers, real_player_type, qual_str, subb_names, time_frame, key, comment_obj, players_map, extra_stats):
+def handle_the_quals(qualifiers, real_player_type, qual_str, subb_names, time_frame, time_frames, key, comment_obj, players_map, extra_stats):
     the_quals = qualifiers[qual_str]
     new_quals = []
     for qualifier in the_quals:
@@ -14539,7 +14539,8 @@ def handle_the_quals(qualifiers, real_player_type, qual_str, subb_names, time_fr
         for player_str in (qualifier["values"] if not seperate_quals else subb_names):
             if "Sub Query" in qual_str:
                 for match_name in subb_names:
-                    sub_handle_the_quals(players, qualifier, real_player_type, qual_str, "<" + match_name + "> [" + player_str + "]", time_frame, key, comment_obj, players_map, extra_stats)
+                    sub_player_id, sub_player_page = get_player(match_name, time_frames)
+                    sub_handle_the_quals(players, qualifier, real_player_type, qual_str, "<" + sub_player_id + "> [" + player_str + "]", time_frame, key, comment_obj, players_map, extra_stats)
             else:
                 if "On Field" in qual_str and "time_frame_str" in qualifier:
                     for match_name in subb_names:
