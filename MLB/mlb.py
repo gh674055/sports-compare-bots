@@ -8197,7 +8197,15 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                     else:
                                         positions = []
                                         for sub_pos in re.split(r"(?<!\\)-", values[0]):
-                                            positions.append(sub_pos.upper().strip())
+                                            sub_pos = sub_pos.upper().strip()
+                                            if sub_pos == "OF":
+                                                positions.extend(["LF", "CF", "RF"])
+                                            elif sub_pos == "IF":
+                                                positions.extend(["1B", "2B", "3B", "SS"])
+                                            elif sub_pos == "F":
+                                                positions.extend(["1B", "2B", "3B", "SS", "LF", "CF", "RF"])
+                                            else:
+                                                positions.append(sub_pos)
                                         if positions == 2 and positions[0].isdigit() and positions[1].isdigit() and int(positions[0]) < int(positions[1]):
                                             positions = range(int(qualifier_obj["values"][0]), int(qualifier_obj["values"][1]) + 1)
                                         new_values.append({
@@ -8215,7 +8223,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                             pitching_pos.extend(["P"])
                                             batting_pos.extend(["C", "1B", "2B", "3B", "SS", "LF", "CF", "RF", "PH", "PR", "DH"])
                                         else:
-                                            if pos in [ "P", "1"]:
+                                            if pos in ["P", "1"]:
                                                 pitching_pos.append(pos)
                                             else:
                                                 batting_pos.append(pos)
@@ -12478,7 +12486,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                             pitching_pos.extend(["P"])
                                             batting_pos.extend(["C", "1B", "2B", "3B", "SS", "LF", "CF", "RF", "PH", "PR", "DH"])
                                         else:
-                                            if pos in [ "P", "1"]:
+                                            if pos in ["P", "1"]:
                                                 pitching_pos.append(pos)
                                             else:
                                                 batting_pos.append(pos)
