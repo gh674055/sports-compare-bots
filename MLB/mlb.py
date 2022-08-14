@@ -1214,7 +1214,6 @@ headers = {
             "positive" : True,
             "type" : "Adjusted",
             "display-value" : "BB/K+",
-            "isinf" : "BB",
             "valid_since" : {
                 "season" : 1910,
                 "game" : 1910
@@ -3347,22 +3346,18 @@ headers = {
         "SO9+": {
             "positive" : True,
             "type" : "Adjusted",
-            "isinf" : "SO",
             "display-value" : "K9+"
         },
         "BB9+": {
             "positive" : False,
-            "isinf" : "BB",
             "type" : "Adjusted"
         },
         "H9+": {
             "positive" : False,
-            "isinf" : "H",
             "type" : "Adjusted"
         },
         "HR9+": {
             "positive" : False,
-            "isinf" : "HR",
             "type" : "Adjusted"
         },
         "SO%+" : {
@@ -3403,12 +3398,10 @@ headers = {
         "SO/BB+": {
             "positive" : True,
             "type" : "Adjusted",
-            "isinf" : "SO",
             "display-value" : "K/BB+"
         },
         "WHIP+": {
             "positive" : False,
-            "isinf" : "BB|H",
             "type" : "Adjusted"
         },
         "wRC+" : {
@@ -3424,7 +3417,6 @@ headers = {
         },
         "ERA-": {
             "positive" : False,
-            "isinf" : "ER",
             "type" : "Adjusted"
         },
         "FIP-": {
@@ -43411,7 +43403,7 @@ def calculate_advanced_stats(data, all_rows, player_type, time_frames):
         data["BAbip+"] = 0
         data["BB/SO+"] = 0
 
-        if data["BF"]:
+        if data["BF"] or data["ER"] or data["R"]:
             total_wrcplus_weight = 0
             total_fip_weight = 0
             total_eraminus_weight = 0
