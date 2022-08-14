@@ -1214,6 +1214,7 @@ headers = {
             "positive" : True,
             "type" : "Adjusted",
             "display-value" : "BB/K+",
+            "isinf" : "BB",
             "valid_since" : {
                 "season" : 1910,
                 "game" : 1910
@@ -3346,18 +3347,22 @@ headers = {
         "SO9+": {
             "positive" : True,
             "type" : "Adjusted",
+            "isinf" : "SO",
             "display-value" : "K9+"
         },
         "BB9+": {
             "positive" : False,
+            "isinf" : "BB",
             "type" : "Adjusted"
         },
         "H9+": {
             "positive" : False,
+            "isinf" : "H",
             "type" : "Adjusted"
         },
         "HR9+": {
             "positive" : False,
+            "isinf" : "HR",
             "type" : "Adjusted"
         },
         "SO%+" : {
@@ -3398,10 +3403,12 @@ headers = {
         "SO/BB+": {
             "positive" : True,
             "type" : "Adjusted",
+            "isinf" : "SO",
             "display-value" : "K/BB+"
         },
         "WHIP+": {
             "positive" : False,
+            "isinf" : "BB|H",
             "type" : "Adjusted"
         },
         "wRC+" : {
@@ -3417,6 +3424,7 @@ headers = {
         },
         "ERA-": {
             "positive" : False,
+            "isinf" : "ER",
             "type" : "Adjusted"
         },
         "FIP-": {
