@@ -43403,7 +43403,7 @@ def calculate_advanced_stats(data, all_rows, player_type, time_frames):
         data["BAbip+"] = 0
         data["BB/SO+"] = 0
 
-        if data["BF"] or data["ER"] or data["R"]:
+        if data["BF"] or data["ER"]:
             total_wrcplus_weight = 0
             total_fip_weight = 0
             total_eraminus_weight = 0
