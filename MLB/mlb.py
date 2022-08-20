@@ -7515,6 +7515,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
 
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
 
+
                         last_match = re.finditer(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?((?:formula-query):((?<!\\)\(.*?(?<!\\)\)))(?<!\\)\{(.*?)(?<!\\)\}", time_frame)
                         last_match = list(last_match)
                         # if len(last_match) > 10:
@@ -14584,12 +14585,13 @@ def sub_handle_the_quals(players, qualifier, real_player_type, qual_str, player_
     }
 
     if player_str in players_map:
-        player_datas = players_map[player_str]
+        player_datas = players_map[player_str]["player_datas"]
+        player_type = players_map[player_str]["player_type"]
     else:
         player_datas, last_updated, original_comment, hide_table, sub_extra_stats = handle_player_string(player_str, player_type, None, False, None)
         if "Event Sub Query" in qual_str:
             extra_stats.update(sub_extra_stats)
-        players_map[player_str] = player_datas
+        players_map[player_str] = {"player_datas" : player_datas, "player_type" : player_type}
         new_search = True
     
     for player_data in player_datas:

@@ -6315,10 +6315,11 @@ def sub_handle_the_quals(players, qualifier, qual_str, player_str, time_frame, k
     }
 
     if player_str in players_map:
-        player_datas = players_map[player_str]
+        player_datas = players_map[player_str]["player_datas"]
+        player_type = players_map[player_str]["player_type"]
     else:
         player_datas = handle_player_string(player_str, player_type, False, None, False, None)[0]
-        players_map[player_str] = player_datas
+        players_map[player_str] = {"player_datas" : player_datas, "player_type" : player_type}
         new_search = True
 
     for player_data in player_datas:

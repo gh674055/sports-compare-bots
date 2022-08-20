@@ -14818,12 +14818,13 @@ def sub_handle_the_quals(players, qualifier, qual_str, player_str, time_frame, k
     }
 
     if player_str in players_map:
-        player_datas = players_map[player_str]
+        player_datas = players_map[player_str]["player_datas"]
+        player_type = players_map[player_str]["player_type"]
     else:
         player_datas, last_updated, original_comment, hide_table, sub_extra_stats = handle_player_string(player_str, player_type, None, False, None)
         if "Event Sub Query" in qual_str:
             extra_stats.update(sub_extra_stats)
-        players_map[player_str] = player_datas
+        players_map[player_str] = {"player_datas" : player_datas, "player_type" : player_type}
         new_search = True
 
     for player_data in player_datas:
