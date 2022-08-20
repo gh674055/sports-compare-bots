@@ -8459,12 +8459,14 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
 
                             if qual_type == "Dates":
                                 new_values = []
+                                has_multi = False
                                 for value in qualifier_obj["values"]:
                                     replace_first_year = {
                                         "replace" : False
                                     }
 
                                     if "to" in value:
+                                        has_multi = True
                                         dates = re.split(r"(?<!\\)to", value)
                                         date1 = dateutil.parser.parse(dates[0].strip()).date()
                                         date2 = dateutil.parser.parse(dates[1].strip()).date()
@@ -8482,6 +8484,9 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                             "start_val" : date1,
                                             "end_val" : date1,
                                         })
+                                if not has_multi:
+                                    if not playoffs:
+                                        playoffs = "Include"
                                 qualifier_obj["values"] = new_values
 
                             if not qual_type in qualifiers:

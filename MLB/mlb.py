@@ -8166,25 +8166,48 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
 
                             if qual_type == "Dates":
                                 new_values = []
+                                has_multi = False
                                 for value in qualifier_obj["values"]:
                                     replace_first_year = {
                                         "replace" : False
                                     }
 
                                     if "to" in value:
+                                        has_multi = True
                                         dates = re.split(r"(?<!\\)to", value)
+
+                                        dates_split = dates[0].split(";")
+                                        if len(dates_split) > 1:
+                                            dates[0] = dates_split[0].strip()
                                         date1 = handle_string_year(dates[0], True, replace_first_year)
-                                        date2 = handle_string_year(dates[1], False, replace_first_year)
+                                        if len(dates_split) > 1:
+                                            date1 = datetime.datetime(year=date1.year, month=date1.month, day=date1.day, hour=ordinal_to_number(dates_split[1].strip()))
+
+                                        dates_split = dates[1].split(";")
+                                        if len(dates_split) > 1:
+                                            dates[1] = dates_split[0].strip()
+                                        date2 = handle_string_year(dates[1], True, replace_first_year)
+                                        if len(dates_split) > 1:
+                                            date2 = datetime.datetime(year=date2.year, month=date2.month, day=date2.day, hour=ordinal_to_number(dates_split[1].strip()))
                                         new_values.append({
                                             "start_val" : date1,
                                             "end_val" : date2,
                                         })
                                     else:
+                                        dates_split = value.split(";")
+                                        if len(dates_split) > 1:
+                                            value = dates_split[0].strip()
                                         date1 = handle_string_year(value, True, replace_first_year)
+                                        if len(dates_split) > 1:
+                                            date1 = datetime.datetime(year=date1.year, month=date1.month, day=date1.day, hour=ordinal_to_number(dates_split[1].strip()))
+
                                         new_values.append({
                                             "start_val" : date1,
                                             "end_val" : date1,
                                         })
+                                if not has_multi:
+                                    if not playoffs:
+                                        playoffs = "Include"
                                 qualifier_obj["values"] = new_values
                             elif "On Field" in qual_type:
                                 new_values = []
@@ -16789,9 +16812,25 @@ def determine_raw_str(subbb_frame):
                             qual_str += "Not "
                         
                         if date_obj["start_val"] == date_obj["end_val"]:
-                            qual_str += get_time_str(date_obj["start_val"], False)
+                            if isinstance(date_obj["start_val"], datetime.datetime):
+                                qual_str += get_time_str(date_obj["start_val"].date(), False)
+                                qual_str += " Game " + str(date_obj["start_val"].hour)
+                            else:
+                                qual_str += get_time_str(date_obj["start_val"], False)
                         else:
-                            qual_str += get_time_str(date_obj["start_val"], False) + " to " + get_time_str(date_obj["end_val"], False)
+                            if isinstance(date_obj["start_val"], datetime.datetime):
+                                qual_str += get_time_str(date_obj["start_val"].date(), False)
+                                qual_str += " Game " + str(date_obj["start_val"].hour)
+                            else:
+                                qual_str += get_time_str(date_obj["start_val"], False)
+
+                            qual_str += " to "
+
+                            if isinstance(date_obj["end_val"], datetime.datetime):
+                                qual_str += get_time_str(date_obj["end_val"].date(), False)
+                                qual_str += " Game " + str(date_obj["end_val"].hour)
+                            else:
+                                qual_str += get_time_str(date_obj["end_val"], False)
                 elif qualifier == "Wind":
                     if qual_obj["negate"]:
                         qual_str += "Not "
@@ -21770,11 +21809,13 @@ def perform_qualifier(player_data, player_type, row, time_frame, all_rows):
         for qual_object in qualifiers["Dates"]:
             has_one_match = False
             for date_obj in qual_object["values"]:
+                date_start_to_use = row["DateTime"] if isinstance(date_obj["start_val"], datetime.datetime) else row["Date"]
+                date_end_to_use = row["DateTime"] if isinstance(date_obj["end_val"], datetime.datetime) else row["Date"]
                 if qual_object["negate"]:
-                    if not (row["Date"] >= date_obj["start_val"] and row["Date"] <= date_obj["end_val"]):
+                    if not (date_start_to_use >= date_obj["start_val"] and date_end_to_use <= date_obj["end_val"]):
                         has_one_match = True
                 else:
-                    if row["Date"] >= date_obj["start_val"] and row["Date"] <= date_obj["end_val"]:
+                    if date_start_to_use >= date_obj["start_val"] and date_end_to_use <= date_obj["end_val"]:
                         has_one_match = True
             if not has_one_match:
                 return False
