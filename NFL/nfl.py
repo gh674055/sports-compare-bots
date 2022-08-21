@@ -5610,6 +5610,10 @@ def handle_player_string(comment, player_type, is_fantasy, last_updated, hide_ta
     numbers_table = "number" in extra_stats
     numbers_table_career = "career-number" in extra_stats
 
+    if years_table or years_table_career or games_table or games_table_career or teams_table or teams_table_career or franchise_table or franchise_table_career or numbers_table or numbers_table_career:
+        if name_count > 1:
+            raise CustomMessageException("Can only query on one player if when doing a split query!")
+
     if comment_obj:
         comment_obj["total_players"] = name_count
         try:
@@ -5656,7 +5660,7 @@ def handle_player_string(comment, player_type, is_fantasy, last_updated, hide_ta
 
     player_datas.sort(key=lambda player_data: player_data["sort_index"])
 
-    if years_table or years_table_career or games_table or teams_table or teams_table_career or franchise_table or franchise_table_career or numbers_table or numbers_table_career:
+    if years_table or years_table_career or games_table or games_table_career or teams_table or teams_table_career or franchise_table or franchise_table_career or numbers_table or numbers_table_career:
         datas_by_index = {}
         for player_data in player_datas:
             if player_data["sort_index"] not in datas_by_index:
