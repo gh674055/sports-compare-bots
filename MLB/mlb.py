@@ -36873,9 +36873,9 @@ def get_is_bref_pitcher(mlb_id, mlb_name):
 
     is_pitcher = "pitcher" in main_pos or "starting" in main_pos or "relief" in main_pos
     if is_pitcher:
-        logger.info("Determined MLB ID : " + str(mlb_id) + " (" + mlb_name + ") to be a pitcher")
+        logger.info("#" + str(threading.get_ident()) + "#   " + "Determined MLB ID : " + str(mlb_id) + " (" + mlb_name + ") to be a pitcher")
     else:
-        logger.info("Determined MLB ID : " + str(mlb_id) + " (" + mlb_name + ") to be a position player")
+        logger.info("#" + str(threading.get_ident()) + "#   " + "Determined MLB ID : " + str(mlb_id) + " (" + mlb_name + ") to be a position player")
 
     return is_pitcher
 
