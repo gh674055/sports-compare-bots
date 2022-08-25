@@ -144,8 +144,6 @@ all_months_and_dates_re =  r"(?:" + "|".join([month + r"\:\w+[-;]?" for month in
 
 string_stats = ["Tm", "TmLg", "Opponent", "OppLg"]
 
-pitcher_overrides = [150449, 660271]
-
 manual_country_map = {
     "republic of korea" : "south korea"
 }
@@ -6986,11 +6984,13 @@ playoffs_url_format = "https://www.baseball-reference.com/players/gl.fcgi?id={}&
 team_schedule_url_format = "https://www.baseball-reference.com/teams/{}/{}-schedule-scores.shtml"
 opponent_schedule_url_format = "https://www.baseball-reference.com/leagues/MLB/{}-standings.shtml"
 opponent_schedule_main_url_format = "https://www.baseball-reference.com/leagues/MLB/{}.shtml"
+bref_team_roster_url_format = "https://www.baseball-reference.com/teams/{}/{}-roster.shtml"
 sum_stats_format = "https://www.baseball-reference.com/tools/span_stats.cgi?html=1&page_id={}&table_id={}&range={}&plink=1"
 total_schedule_url = "https://www.baseball-reference.com/leagues/MLB/{}-schedule.shtml"
 team_roster_url_format = "https://statsapi.mlb.com/api/v1/teams/{}/roster?season={}&hydrate=person"
 mlb_team_schedule_url_format = "https://statsapi.mlb.com/api/v1/schedule?teamId={}&season={}&sportId=1&gameType=R,F,D,L,W"
 mlb_team_schedule_url_date_format = "https://statsapi.mlb.com/api/v1/schedule?teamId={}&startDate={}&endDate={}&sportId=1&gameType=R,F,D,L,W"
+mlb_player_stats_url_format = "https://statsapi.mlb.com/api/v1/people/{}?hydrate=currentTeam,team,stats(type=[yearByYear](team(league)),leagueListId=mlb_hist)"
 mlb_player_schedule_url_format = "https://statsapi.mlb.com/api/v1/people/{}/stats?stats=gameLog&season={}&gameType=R,F,D,L,W"
 mlb_leaderboard_query = "https://bdfed.stitch.mlbinfra.com/bdfed/stats/player?stitch_env=prod&&season={}&playerPool={}&sportId=1&stats=season&group={}&gameType=R&limit={}&offset={}&sortStat={}&order={}"
 mlb_leaderboard_query_no_sort = "https://bdfed.stitch.mlbinfra.com/bdfed/stats/player?stitch_env=prod&&season={}&playerPool={}&sportId=1&stats=season&group={}&gameType=R&limit={}&offset={}"
@@ -7059,6 +7059,10 @@ with open ("team_venue_history.json", "r") as file:
 manual_id_maps = None
 with open ("manual_id_maps.json", "r") as file:
     manual_id_maps = json.load(file)
+
+manual_bref_id_maps = None
+with open ("manual_bref_id_maps.json", "r") as file:
+    manual_bref_id_maps = json.load(file)
 
 event_type_stat_mappings = None
 with open ("event_type_stat_mappings.json", "r") as file:
@@ -35008,9 +35012,13 @@ def handle_da_mlb_quals(row, event_name, at_bat_event, qualifiers, player_data, 
         
     if "Facing Pitcher" in qualifiers:
         if player_type["da_type"] == "Batter":
-            is_pitcher = at_bat_event["pitcher"] in at_bat_event["opp_main_position_map"] and at_bat_event["opp_main_position_map"][at_bat_event["pitcher"]] and (at_bat_event["opp_main_position_map"][at_bat_event["pitcher"]] == "P")
-            if not is_pitcher and at_bat_event["pitcher"] in pitcher_overrides:
-                is_pitcher = True
+            is_pitcher = at_bat_event["pitcher"] in at_bat_event["opp_main_position_map"] and at_bat_event["opp_main_position_map"][at_bat_event["pitcher"]] and (at_bat_event["opp_main_position_map"][at_bat_event["pitcher"]] in ["P", "RP", "SP", "TWP"])
+            if not is_pitcher:
+                if at_bat_event["pitcher"] in player_game_info["position_players_pitching"]:
+                    is_pitcher = player_game_info["position_players_pitching"][at_bat_event["pitcher"]]
+                else:
+                    is_pitcher = get_is_bref_pitcher(at_bat_event["pitcher"], player_game_info["full_names"][at_bat_event["pitcher"]])
+                    player_game_info["position_players_pitching"][at_bat_event["pitcher"]] = is_pitcher
         else:
             is_pitcher = "P" in at_bat_event["opp_position_map"] and at_bat_event["opp_position_map"]["P"] and at_bat_event["opp_position_map"]["P"] == at_bat_event["batter"]
             
@@ -35024,9 +35032,13 @@ def handle_da_mlb_quals(row, event_name, at_bat_event, qualifiers, player_data, 
 
     if "Facing Position Player" in qualifiers:
         if player_type["da_type"] == "Batter":
-            is_pitcher = at_bat_event["pitcher"] in at_bat_event["opp_main_position_map"] and at_bat_event["opp_main_position_map"][at_bat_event["pitcher"]] and (at_bat_event["opp_main_position_map"][at_bat_event["pitcher"]] == "P")
-            if not is_pitcher and at_bat_event["pitcher"] in pitcher_overrides:
-                is_pitcher = True
+            is_pitcher = at_bat_event["pitcher"] in at_bat_event["opp_main_position_map"] and at_bat_event["opp_main_position_map"][at_bat_event["pitcher"]] and (at_bat_event["opp_main_position_map"][at_bat_event["pitcher"]] in ["P", "RP", "SP", "TWP"])
+            if not is_pitcher:
+                if at_bat_event["pitcher"] in player_game_info["position_players_pitching"]:
+                    is_pitcher = player_game_info["position_players_pitching"][at_bat_event["pitcher"]]
+                else:
+                    is_pitcher = get_is_bref_pitcher(at_bat_event["pitcher"], player_game_info["full_names"][at_bat_event["pitcher"]])
+                    player_game_info["position_players_pitching"][at_bat_event["pitcher"]] = is_pitcher
         else:
             is_pitcher = "P" in at_bat_event["opp_position_map"] and at_bat_event["opp_position_map"]["P"] and at_bat_event["opp_position_map"]["P"] == at_bat_event["batter"]
         
@@ -36832,6 +36844,216 @@ def handle_da_mlb_quals(row, event_name, at_bat_event, qualifiers, player_data, 
             return False
 
     return True
+
+def get_is_bref_pitcher(mlb_id, mlb_name):
+    bref_id = get_bref_id(mlb_id, mlb_name)
+    if not bref_id:
+        logger.warn("#" + str(threading.get_ident()) + "#   " + "Unable to get BRef player link for MLB ID : " + str(mlb_id) + " (" + mlb_name + "). Will not consider this a pitcher")
+        return False
+
+    player_url = main_page_url_format.format(bref_id[0], bref_id)
+    request = urllib.request.Request(player_url, headers=request_headers)
+    try:
+        response, player_page = url_request(request)
+    except urllib.error.HTTPError as err:
+        if err.status == 404:
+            logger.warn("#" + str(threading.get_ident()) + "#   " + "Unable to get BRef player page for MLB ID : " + str(mlb_id) + " (" + mlb_name + ")" + " and BRef ID : " + bref_id + ". Will not consider this a pitcher")
+            return False
+        else:
+            raise
+    
+    player_info = player_page.find("div", {"id" : "meta"}).find("strong", text="Position:")
+    if not player_info:
+        player_info = player_page.find("div", {"id" : "meta"}).find("strong", text="Positions:")
+        if not player_info:
+            return False
+        main_pos = player_info.parent.text.replace("Positions:", "").strip().lower()
+    else:
+        main_pos = player_info.parent.text.replace("Position:", "").strip().lower()
+
+    return ("pitcher" in main_pos or "starting" in main_pos or "relief" in main_pos)
+
+def get_bref_id(mlb_id, mlb_name):
+    if mlb_id in manual_bref_id_maps:
+        return manual_bref_id_maps[mlb_id]
+
+    with requests.Session() as s:
+        data = url_request_json(s, mlb_player_stats_url_format.format(mlb_id))["people"][0]
+
+        player_birthday = dateutil.parser.parse(data["birthDate"]).date()
+
+        for team_split in data["stats"][0]["splits"]:
+            year_str = team_split["season"]
+            player_team_abbr = team_split["team"]["abbreviation"]
+           
+            player_team_league = leagues_to_id[team_split["team"]["league"]["name"]]
+            parsed_team_name = team_abbr[player_team_league][player_team_abbr]
+            bref_team_name = None
+            if parsed_team_name in team_name_info:
+                for abbr in team_name_info[parsed_team_name]:
+                    if player_team_league in team_name_info[parsed_team_name][abbr]:
+                        if int(year_str) in team_name_info[parsed_team_name][abbr][player_team_league]:
+                            bref_team_name = abbr
+                            break
+            
+            if not bref_team_name:
+                if parsed_team_name in team_name_info:
+                    for abbr in team_name_info[parsed_team_name]:
+                        if player_team_league in team_name_info[parsed_team_name][abbr]:
+                            bref_team_name = abbr
+            
+            if not bref_team_name:
+                continue
+
+            request = urllib.request.Request(bref_team_roster_url_format.format(bref_team_name, year_str), headers=request_headers)
+            try:
+                response, player_page = url_request(request)
+            except urllib.error.HTTPError as err:
+                if err.status == 404:
+                    continue
+                else:
+                    raise
+
+            table = player_page.find("table", id="appearances")
+            if not table:
+                comments = player_page.find_all(string=lambda text: isinstance(text, Comment))
+                for c in comments:
+                    temp_soup = BeautifulSoup(c, "lxml")
+                    temp_table = temp_soup.find("table", id="appearances")
+                    if temp_table:
+                        table = temp_table
+                        break
+
+            if table:
+                matching_players = []
+                standard_table_rows = table.find("tbody").find_all("tr")
+                for row in standard_table_rows:
+                    player_col = row.find("th", {"data-stat" : "player"})
+                    player_name = str(player_col.find(text=True))
+                    player_id = str(player_col.get("data-append-csv"))
+                    bref_birthdate = dateutil.parser.parse(str(row.find("td", {"data-stat" : "date_of_birth"}).get("csk"))).date()
+                    if bref_birthdate == player_birthday:
+                        matching_players.append({
+                            "name" : player_name,
+                            "id" : player_id
+                        })
+                if len(matching_players) == 1:
+                    logger.info("#" + str(threading.get_ident()) + "#   " + "Found BRef Player " + matching_players[0]["name"] + " (" + str(matching_players[0]["id"]) + ") by birthdate for MLB ID : " + str(mlb_id) + " (" + mlb_name + ")")
+                    return matching_players[0]["id"]
+
+        for team_split in data["stats"][0]["splits"]:
+            year_str = team_split["season"]
+            player_team_abbr = team_split["team"]["abbreviation"]
+           
+            player_team_league = leagues_to_id[team_split["team"]["league"]["name"]]
+            parsed_team_name = team_abbr[player_team_league][player_team_abbr]
+            bref_team_name = None
+            if parsed_team_name in team_name_info:
+                for abbr in team_name_info[parsed_team_name]:
+                    if player_team_league in team_name_info[parsed_team_name][abbr]:
+                        if int(year_str) in team_name_info[parsed_team_name][abbr][player_team_league]:
+                            bref_team_name = abbr
+                            break
+            
+            if not bref_team_name:
+                if parsed_team_name in team_name_info:
+                    for abbr in team_name_info[parsed_team_name]:
+                        if player_team_league in team_name_info[parsed_team_name][abbr]:
+                            bref_team_name = abbr
+            
+            if not bref_team_name:
+                continue
+
+            request = urllib.request.Request(bref_team_roster_url_format.format(bref_team_name, year_str), headers=request_headers)
+            try:
+                response, player_page = url_request(request)
+            except urllib.error.HTTPError as err:
+                if err.status == 404:
+                    continue
+                else:
+                    raise
+
+            table = player_page.find("table", id="appearances")
+            if not table:
+                comments = player_page.find_all(string=lambda text: isinstance(text, Comment))
+                for c in comments:
+                    temp_soup = BeautifulSoup(c, "lxml")
+                    temp_table = temp_soup.find("table", id="appearances")
+                    if temp_table:
+                        table = temp_table
+                        break
+
+            if table:
+                matching_players = []
+                standard_table_rows = table.find("tbody").find_all("tr")
+                for row in standard_table_rows:
+                    player_col = row.find("th", {"data-stat" : "player"})
+                    player_name = str(player_col.find(text=True))
+                    player_id = str(player_col.get("data-append-csv"))
+                    bref_birthdate = dateutil.parser.parse(str(row.find("td", {"data-stat" : "date_of_birth"}).get("csk"))).date()
+                    if bref_birthdate == player_birthday:
+                        is_position_match = data["primaryPosition"]["abbreviation"] == get_main_position(row)
+                
+                        is_exact_match = False
+                        is_first_last_match = False
+                        is_last_match = False
+
+                        if player_name == data["fullName"]:
+                            is_exact_match = True
+                        else:
+                            is_exact_match = False
+                            parsed_name = create_human_name(player_name)
+                            real_human_name = create_human_name(data["fullName"])
+
+                            if parsed_name.first == real_human_name.first and parsed_name.last == real_human_name.last:
+                                is_first_last_match = True
+                            if parsed_name.last == real_human_name.last:
+                                is_last_match = True
+                        
+                        matching_players.append({
+                            "is_exact_match" : is_exact_match,
+                            "is_first_last_match" : is_first_last_match,
+                            "is_last_match" : is_last_match,
+                            "is_position_match" : is_position_match,
+                            "name" : player_name,
+                            "id" : player_id
+                        })
+                if matching_players:
+                    matching_players.sort(key=lambda player: (-player["is_exact_match"], -player["is_first_last_match"], -player["is_last_match"], -player["is_position_match"]))
+                    player = matching_players[0]        
+                    if player["is_exact_match"] or player["is_first_last_match"] or player["is_last_match"]:
+                        if len(matching_players) > 1:
+                            second_player = matching_players[1]
+                            if second_player["is_exact_match"] == player["is_exact_match"] and second_player["is_first_last_match"] and second_player["is_last_match"] == player["is_first_last_match"] and second_player["is_position_match"] == player["is_position_match"]:
+                                continue
+
+                        logger.info("#" + str(threading.get_ident()) + "#   " + "Found BRef Player " + player["name"] + " (" + str(player["id"]) + ") by name for MLB ID : " + str(mlb_id) + " (" + mlb_name + ")")
+                        return player["id"]
+
+
+def get_main_position(row):
+    appearance_vals = {
+        "G_p_app" : 0,
+        "G_c" : 0,
+        "G_1b" : 0,
+        "G_2b" : 0,
+        "G_3b" : 0,
+        "G_ss" : 0,
+        "G_lf_app" : 0,
+        "G_cf_app" : 0,
+        "G_rf_app" : 0,
+        "G_dh" : 0
+    }
+
+    for key in appearance_vals:
+        appearance_vals[key] = int(row.find("td", {"data-stat" : key}).find(text=True))
+
+    max_val = max(appearance_vals, key=appearance_vals.get)
+
+    max_val = max_val[2:]
+    if max_val.endswith("_app"):
+        max_val = max_val[:4][:1]
+    return max_val.upper()
 
 def perform_coordinates_qual(event, qualifiers, is_hit, is_absolute):
     if is_hit:
@@ -39858,6 +40080,7 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
         "pitching_events" : [],
         "pitching_run_events" : [],
         "pitch_event_to_run_event" : {},
+        "position_players_pitching" : {},
         "start_event_time" : None,
         "end_event_time" : None,
         "RS" : None,
