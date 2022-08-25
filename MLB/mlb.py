@@ -36871,7 +36871,13 @@ def get_is_bref_pitcher(mlb_id, mlb_name):
     else:
         main_pos = player_info.parent.text.replace("Position:", "").strip().lower()
 
-    return ("pitcher" in main_pos or "starting" in main_pos or "relief" in main_pos)
+    is_pitcher = "pitcher" in main_pos or "starting" in main_pos or "relief" in main_pos
+    if is_pitcher:
+        logger.info("Determined MLB ID : " + str(mlb_id) + " (" + mlb_name + ") to be a pitcher")
+    else:
+        logger.info("Determined MLB ID : " + str(mlb_id) + " (" + mlb_name + ") to be a position player")
+
+    return is_pitcher
 
 def get_bref_id(mlb_id, mlb_name):
     if mlb_id in manual_bref_id_maps:
