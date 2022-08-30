@@ -29860,7 +29860,7 @@ def perform_metadata_qual(extra_stats, event_name, goal_event, qualifiers, playe
         if not perform_sub_metadata_qual(goal_event, "oppBirthCountry", qualifiers["Shot By Birth Country"], player_game_info, year):
             return False
 
-     if "Shot On Birth State" in qualifiers:
+    if "Shot On Birth State" in qualifiers:
         if event_name != "goal" and event_name != "shot":
             return False
 
