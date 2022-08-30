@@ -7559,7 +7559,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
 
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
 
-                        last_match = re.finditer(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?((?:w|(?:playing|starting)-with|a|(?:playing|starting)-against|(?:playing|starting)-same-game|prv-w|previous-playing-with|prv-a|previous-playing-against|upc-w|upcoming-playing-with|upc-a|upcoming-playing-against|(?:playing|starting)-same-opponents?|(?:playing|starting)-same-dates?|holidays?|dts|dates|stadium|exact-stadium|arena|exact-arena|pitch-type|exact-pitch-type|hit-trajectory|hit-hardness|opponent-city|opponent-exact-city|team-city|team-exact-city|city|exact-city|event-description|exact-event-description|surface|condition|exact-home-plate-umpire|exact-umpire|home-plate-umpire|umpire|exact-home-plate-official|exact-official|home-plate-official|official|teammate-on-first|teammate-on-second|teammate-on-third|teammate-on-base|opponent-on-first|opponent-on-second|opponent-on-third|opponent-on-base|batting-against|pitching-against|batting-against-first-or-birth-name|pitching-against-first-or-birth-name|batting-against-birth-or-first-name|pitching-against-birth-or-first-name|batting-against-birth-name|pitching-against-birth-name|batting-against-first-name|pitching-against-first-name|batting-against-last-name|pitching-against-last-name|batting-against-birth-country|pitching-against-birth-country|batting-against-birth-city|pitching-against-birth-city|batting-against-birth-state|pitching-against-birth-state|facing|facing-first-or-birth-name|facing-birth-or-first-name|facing-birth-name|facing-first-name|facing-last-name|facing-birth-country|facing-birth-city|facing-birth-state|driven-in|batted-in|back-to-back-with|back-to-back|batting-in-front-of|batting-in-front|batting-ahead|batting-ahead-of|batting-behind|batting-behind-of|batting-next-to|caught-by|stealing-on|on-field-with|on-field-against|event-time|event-datetime|local-event-datetime|local-event-date-time|team-event-datetime|opponent-event-datetime|team-event-date-time|opponent-event-date-time|event-date-time|start-time):(?<!\\)\(.*?(?<!\\)\))", time_frame)
+                        last_match = re.finditer(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?((?:w|(?:playing|starting)-with|a|(?:playing|starting)-against|(?:playing|starting)-same-game|prv-w|previous-playing-with|prv-a|previous-playing-against|upc-w|upcoming-playing-with|upc-a|upcoming-playing-against|(?:playing|starting)-same-opponents?|(?:playing|starting)-same-dates?|holidays?|dts|dates|stadium|exact-stadium|arena|exact-arena|pitch-type|exact-pitch-type|hit-trajectory|hit-hardness|opponent-city|opponent-exact-city|team-city|team-exact-city|city|exact-city|event-description|exact-event-description|surface|condition|exact-home-plate-umpire|exact-umpire|home-plate-umpire|umpire|exact-home-plate-official|exact-official|home-plate-official|official|teammate-on-first|teammate-on-second|teammate-on-third|teammate-on-base|opponent-on-first|opponent-on-second|opponent-on-third|opponent-on-base|batting-against|hitting-against|pitching-against|batting-against-first-or-birth-name|hitting-against-first-or-birth-name|pitching-against-first-or-birth-name|batting-against-birth-or-first-name|hitting-against-birth-or-first-name|pitching-against-birth-or-first-name|batting-against-birth-name|hitting-against-birth-name|pitching-against-birth-name|batting-against-first-name|hitting-against-first-name|pitching-against-first-name|batting-against-last-name|hitting-against-last-name|pitching-against-last-name|batting-against-birth-country|hitting-against-birth-country|pitching-against-birth-country|batting-against-birth-city|hitting-against-birth-city|pitching-against-birth-city|batting-against-birth-state|hitting-against-birth-state|pitching-against-birth-state|facing|facing-first-or-birth-name|facing-birth-or-first-name|facing-birth-name|facing-first-name|facing-last-name|facing-birth-country|facing-birth-city|facing-birth-state|driven-in|batted-in|back-to-back-with|back-to-back|batting-in-front-of|batting-in-front|batting-ahead|batting-ahead-of|batting-behind|batting-behind-of|batting-next-to|caught-by|stealing-on|on-field-with|on-field-against|event-time|event-datetime|local-event-datetime|local-event-date-time|team-event-datetime|opponent-event-datetime|team-event-date-time|opponent-event-date-time|event-date-time|start-time):(?<!\\)\(.*?(?<!\\)\))", time_frame)
                         for m in last_match:
                             qualifier_obj = {}
                             negate_str = m.group(1)
@@ -7629,6 +7629,11 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 qual_type = "Batting Against"
                                 player_type["da_type"] = "Batter"
                                 extra_stats.add("current-stats")
+                            elif qualifier_str.startswith("hitting-against:"):
+                                qual_str = "hitting-against:"
+                                qual_type = "Batting Against"
+                                player_type["da_type"] = "Batter"
+                                extra_stats.add("current-stats")
                             elif qualifier_str.startswith("pitching-against:"):
                                 qual_str = "pitching-against:"
                                 qual_type = "Pitching Against"
@@ -7636,6 +7641,11 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 extra_stats.add("current-stats")
                             elif qualifier_str.startswith("batting-against-first-name:"):
                                 qual_str = "batting-against-first-name:"
+                                qual_type = "Batting Against First Name"
+                                player_type["da_type"] = "Batter"
+                                extra_stats.add("current-stats")
+                            elif qualifier_str.startswith("hitting-against-first-name:"):
+                                qual_str = "hitting-against-first-name:"
                                 qual_type = "Batting Against First Name"
                                 player_type["da_type"] = "Batter"
                                 extra_stats.add("current-stats")
@@ -7649,6 +7659,11 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 qual_type = "Batting Against Birth Name"
                                 player_type["da_type"] = "Batter"
                                 extra_stats.add("current-stats")
+                            elif qualifier_str.startswith("hitting-against-birth-name:"):
+                                qual_str = "hitting-against-birth-name:"
+                                qual_type = "Batting Against Birth Name"
+                                player_type["da_type"] = "Batter"
+                                extra_stats.add("current-stats")
                             elif qualifier_str.startswith("pitching-against-birth-name:"):
                                 qual_str = "pitching-against-birth-name:"
                                 qual_type = "Pitching Against Birth Name"
@@ -7656,6 +7671,11 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 extra_stats.add("current-stats")
                             elif qualifier_str.startswith("batting-against-first-or-birth-name:"):
                                 qual_str = "batting-against-first-or-birth-name:"
+                                qual_type = "Batting Against First Or Birth Name"
+                                player_type["da_type"] = "Batter"
+                                extra_stats.add("current-stats")
+                            elif qualifier_str.startswith("hitting-against-first-or-birth-name:"):
+                                qual_str = "hitting-against-first-or-birth-name:"
                                 qual_type = "Batting Against First Or Birth Name"
                                 player_type["da_type"] = "Batter"
                                 extra_stats.add("current-stats")
@@ -7669,6 +7689,11 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 qual_type = "Batting Against First Or Birth Name"
                                 player_type["da_type"] = "Batter"
                                 extra_stats.add("current-stats")
+                            elif qualifier_str.startswith("hitting-against-birth-or-first-name:"):
+                                qual_str = "hitting-against-birth-or-first-name:"
+                                qual_type = "Batting Against First Or Birth Name"
+                                player_type["da_type"] = "Batter"
+                                extra_stats.add("current-stats")
                             elif qualifier_str.startswith("pitching-against-birth-or-first-name:"):
                                 qual_str = "pitching-against-birth-or-first-name:"
                                 qual_type = "Pitching Against First Or Birth Name"
@@ -7676,6 +7701,11 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 extra_stats.add("current-stats")
                             elif qualifier_str.startswith("batting-against-last-name:"):
                                 qual_str = "batting-against-last-name:"
+                                qual_type = "Batting Against Last Name"
+                                player_type["da_type"] = "Batter"
+                                extra_stats.add("current-stats")
+                            elif qualifier_str.startswith("hitting-against-last-name:"):
+                                qual_str = "hitting-against-last-name:"
                                 qual_type = "Batting Against Last Name"
                                 player_type["da_type"] = "Batter"
                                 extra_stats.add("current-stats")
@@ -7689,6 +7719,11 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 qual_type = "Batting Against Birth Country"
                                 player_type["da_type"] = "Batter"
                                 extra_stats.add("current-stats")
+                            elif qualifier_str.startswith("hitting-against-birth-country:"):
+                                qual_str = "hitting-against-birth-country:"
+                                qual_type = "Batting Against Birth Country"
+                                player_type["da_type"] = "Batter"
+                                extra_stats.add("current-stats")
                             elif qualifier_str.startswith("pitching-against-birth-country:"):
                                 qual_str = "pitching-against-birth-country:"
                                 qual_type = "Pitching Against Birth Country"
@@ -7699,6 +7734,11 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 qual_type = "Batting Against Birth City"
                                 player_type["da_type"] = "Batter"
                                 extra_stats.add("current-stats")
+                            elif qualifier_str.startswith("hitting-against-birth-city:"):
+                                qual_str = "hitting-against-birth-city:"
+                                qual_type = "Batting Against Birth City"
+                                player_type["da_type"] = "Batter"
+                                extra_stats.add("current-stats")
                             elif qualifier_str.startswith("pitching-against-birth-city:"):
                                 qual_str = "pitching-against-birth-city:"
                                 qual_type = "Pitching Against Birth City"
@@ -7706,6 +7746,11 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 extra_stats.add("current-stats")
                             elif qualifier_str.startswith("batting-against-birth-state:"):
                                 qual_str = "batting-against-birth-state:"
+                                qual_type = "Batting Against Birth State"
+                                player_type["da_type"] = "Batter"
+                                extra_stats.add("current-stats")
+                            elif qualifier_str.startswith("hitting-against-birth-state:"):
+                                qual_str = "hitting-against-birth-state:"
                                 qual_type = "Batting Against Birth State"
                                 player_type["da_type"] = "Batter"
                                 extra_stats.add("current-stats")
@@ -8545,7 +8590,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                         
                         time_frame = re.sub(r"\s+", " ", re.sub(r"(?:regular(?:-| )?season|playoffs?|post(?:-| )?seasons?)(?!-)", "", time_frame)).strip()
 
-                        last_match = re.finditer(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?((?:facing|batting-against|pitching-against|batting-in-front-of|batting-in-front|batting-ahead|batting-ahead-of|batting-behind|batting-behind-of|batting-next-to)(?:-nl|-al|-league)?-stat(?:-rank|-percent(?:age)?)?(?:-reversed?)?:[\S-]+)", time_frame)
+                        last_match = re.finditer(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?((?:facing|batting-against|hitting-against|pitching-against|batting-in-front-of|batting-in-front|batting-ahead|batting-ahead-of|batting-behind|batting-behind-of|batting-next-to)(?:-nl|-al|-league)?-stat(?:-rank|-percent(?:age)?)?(?:-reversed?)?:[\S-]+)", time_frame)
                         for m in last_match:
                             qualifier_obj = {}
                             
@@ -8566,9 +8611,9 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                             elif "-nl" in qual_str:
                                 qual_str = "NL " + qual_type
 
-                            if qual_str.startswith("facing") or qual_str.startswith("batting-against") or qual_str.startswith("pitching-against"):
+                            if qual_str.startswith("facing") or qual_str.startswith("batting-against") or qual_str.startswith("hitting-against") or qual_str.startswith("pitching-against"):
                                 qual_type = "Facing " + qual_type
-                                if qual_str.startswith("batting-against"):
+                                if qual_str.startswith("batting-against") or qual_str.startswith("hitting-against"):
                                     player_type["da_type"] = "Batter"
                                 elif qual_str.startswith("pitching-against"):
                                     player_type["da_type"] = "Pitcher"
@@ -12360,7 +12405,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
 
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
                         
-                        last_match = re.finditer(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?((?:(?:playing|starting)-with|(?:playing|starting)-against|(?:playing|starting)-same-game|prv-w|previous-playing-with|prv-a|previous-playing-against|upc-w|upcoming-playing-with|upc-a|upcoming-playing-against|(?:playing|starting)-same-opponents?|(?:playing|starting)-same-dates?|teammate-on-first|teammate-on-second|teammate-on-third|teammate-on-base|opponent-on-first|opponent-on-second|opponent-on-third|opponent-on-base|batting-against|pitching-against|facing|driven-in|batted-in|back-to-back-with|back-to-back|batting-in-front-of|batting-in-front|batting-ahead|batting-ahead-of|batting-behind|batting-behind-of|batting-next-to|caught-by|stealing-on|on-field-with|on-field-against))\b", time_frame)
+                        last_match = re.finditer(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?((?:(?:playing|starting)-with|(?:playing|starting)-against|(?:playing|starting)-same-game|prv-w|previous-playing-with|prv-a|previous-playing-against|upc-w|upcoming-playing-with|upc-a|upcoming-playing-against|(?:playing|starting)-same-opponents?|(?:playing|starting)-same-dates?|teammate-on-first|teammate-on-second|teammate-on-third|teammate-on-base|opponent-on-first|opponent-on-second|opponent-on-third|opponent-on-base|batting-against|hitting-against|pitching-against|facing|driven-in|batted-in|back-to-back-with|back-to-back|batting-in-front-of|batting-in-front|batting-ahead|batting-ahead-of|batting-behind|batting-behind-of|batting-next-to|caught-by|stealing-on|on-field-with|on-field-against))\b", time_frame)
                         for m in last_match:
                             qualifier_obj = {}
                             negate_str = m.group(1)
@@ -12377,7 +12422,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                     "negate" : False
                                 })
 
-                            if qualifier_str.startswith("playing-with") or qualifier_str.startswith("playing-against") or qualifier_str.startswith("playing-same-game") or qualifier_str.startswith("starting-same-game:") or qualifier_str.startswith("prv-w") or qualifier_str.startswith("previous-playing-with") or qualifier_str.startswith("prv-a") or qualifier_str.startswith("previous-playing-against") or qualifier_str.startswith("upc-w") or qualifier_str.startswith("upcoming-playing-with") or qualifier_str.startswith("upc-a") or qualifier_str.startswith("upcoming-playing-against") or qualifier_str.startswith("playing-same-opponent")  or qualifier_str.startswith("playing-same-opponents") or qualifier_str.startswith("playing-same-date") or qualifier_str.startswith("playing-same-dates") or qualifier_str.startswith("batting-against") or qualifier_str.startswith("pitching-against") or qualifier_str.startswith("facing") or qualifier_str.startswith("driven-in") or qualifier_str.startswith("batted-in") or qualifier_str.startswith("back-to-back") or qualifier_str.startswith("back-to-back-with") or qualifier_str.startswith("batting-ahead") or qualifier_str.startswith("batting-ahead-of") or qualifier_str.startswith("batting-in-front-of") or qualifier_str.startswith("batting-in-front") or qualifier_str.startswith("batting-behind") or qualifier_str.startswith("batting-behind-of") or qualifier_str.startswith("batting-next-to") or qualifier_str.startswith("caught-by") or qualifier_str.startswith("stealing-on") or qualifier_str.startswith("on-field-with") or qualifier_str.startswith("on-field-against"):
+                            if qualifier_str.startswith("playing-with") or qualifier_str.startswith("playing-against") or qualifier_str.startswith("playing-same-game") or qualifier_str.startswith("starting-same-game:") or qualifier_str.startswith("prv-w") or qualifier_str.startswith("previous-playing-with") or qualifier_str.startswith("prv-a") or qualifier_str.startswith("previous-playing-against") or qualifier_str.startswith("upc-w") or qualifier_str.startswith("upcoming-playing-with") or qualifier_str.startswith("upc-a") or qualifier_str.startswith("upcoming-playing-against") or qualifier_str.startswith("playing-same-opponent")  or qualifier_str.startswith("playing-same-opponents") or qualifier_str.startswith("playing-same-date") or qualifier_str.startswith("playing-same-dates") or qualifier_str.startswith("batting-against") or qualifier_str.startswith("hitting-against") or qualifier_str.startswith("pitching-against") or qualifier_str.startswith("facing") or qualifier_str.startswith("driven-in") or qualifier_str.startswith("batted-in") or qualifier_str.startswith("back-to-back") or qualifier_str.startswith("back-to-back-with") or qualifier_str.startswith("batting-ahead") or qualifier_str.startswith("batting-ahead-of") or qualifier_str.startswith("batting-in-front-of") or qualifier_str.startswith("batting-in-front") or qualifier_str.startswith("batting-behind") or qualifier_str.startswith("batting-behind-of") or qualifier_str.startswith("batting-next-to") or qualifier_str.startswith("caught-by") or qualifier_str.startswith("stealing-on") or qualifier_str.startswith("on-field-with") or qualifier_str.startswith("on-field-against"):
                                 if qualifier_str.startswith("playing-with"):
                                     qual_str = "playing-with"
                                     qual_type = "Playing With"
@@ -12422,6 +12467,11 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                     qual_type = "Playing Same Date"
                                 elif qualifier_str.startswith("batting-against"):
                                     qual_str = "batting-against"
+                                    qual_type = "Batting Against"
+                                    player_type["da_type"] = "Batter"
+                                    extra_stats.add("current-stats")
+                                elif qualifier_str.startswith("hitting-against"):
+                                    qual_str = "hitting-against"
                                     qual_type = "Batting Against"
                                     player_type["da_type"] = "Batter"
                                     extra_stats.add("current-stats")
@@ -12562,7 +12612,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                     qual_str = "playing-same-game:"
                                     qual_type = "Playing Same Game"
 
-                            qualifier_obj["time_frame_str"] = re.sub(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?((?:(?:playing|starting)-with|(?:playing|starting)-against|(?:playing|starting)-same-game|prv-w|previous-playing-with|prv-a|previous-playing-against|upc-w|upcoming-playing-with|upc-a|upcoming-playing-against|(?:playing|starting)-same-opponents?|(?:playing|starting)-same-dates?|batting-against|pitching-against|facing|driven-in|batted-in|back-to-back-with|back-to-back|batting-in-front-of|batting-in-front|batting-ahead|batting-ahead-of|batting-behind|batting-behind-of|batting-next-to|caught-by|stealing-on|on-field-with|on-field-against|-?starts?|-?started|-?starting|-?ignore-starts?|-?ignore-started?|-?ignore-starting))(?!:)\b", "", og_time_str)
+                            qualifier_obj["time_frame_str"] = re.sub(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?((?:(?:playing|starting)-with|(?:playing|starting)-against|(?:playing|starting)-same-game|prv-w|previous-playing-with|prv-a|previous-playing-against|upc-w|upcoming-playing-with|upc-a|upcoming-playing-against|(?:playing|starting)-same-opponents?|(?:playing|starting)-same-dates?|batting-against|hitting-against|pitching-against|facing|driven-in|batted-in|back-to-back-with|back-to-back|batting-in-front-of|batting-in-front|batting-ahead|batting-ahead-of|batting-behind|batting-behind-of|batting-next-to|caught-by|stealing-on|on-field-with|on-field-against|-?starts?|-?started|-?starting|-?ignore-starts?|-?ignore-started?|-?ignore-starting))(?!:)\b", "", og_time_str)
                             qualifier_obj["time_frame_str"] = re.sub(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?((?:qual-sub-query):(?<!\\)\(.*?(?<!\\)\))", "", qualifier_obj["time_frame_str"])
 
                             if "On Field" in qual_type:
