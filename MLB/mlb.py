@@ -12092,7 +12092,10 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                                 for value in values:
                                                     sub_split_vals = re.split(r"(?<!\\)\=", value)
                                                     sub_stat = unescape_string(sub_split_vals[0])
-                                                    sub_split_vals = re.split(r"(?<!\\)(?<!^)\-", sub_split_vals[1], 1)
+                                                    if len(sub_split_vals) > 1:
+                                                        sub_split_vals = re.split(r"(?<!\\)(?<!^)\-", sub_split_vals[1], 1)
+                                                    else:
+                                                        sub_split_vals = ["1"]
                                                     
                                                     if len(sub_split_vals) == 1:
                                                         start_val = ordinal_to_number(sub_split_vals[0])
@@ -12134,7 +12137,10 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                                 for value in values:
                                                     sub_split_vals = re.split(r"(?<!\\)\=", value)
                                                     sub_stat = unescape_string(sub_split_vals[0])
-                                                    sub_split_vals = re.split(r"(?<!\\)(?<!^)\-", sub_split_vals[1], 1)
+                                                    if len(sub_split_vals) > 1:
+                                                        sub_split_vals = re.split(r"(?<!\\)(?<!^)\-", sub_split_vals[1], 1)
+                                                    else:
+                                                        sub_split_vals = ["1"]
                                                     
                                                     if len(sub_split_vals) == 1:
                                                         start_val = ordinal_to_number(sub_split_vals[0])
@@ -12176,7 +12182,10 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                                 for value in values:
                                                     sub_split_vals = re.split(r"(?<!\\)\=", value)
                                                     sub_stat = unescape_string(sub_split_vals[0])
-                                                    sub_split_vals = re.split(r"(?<!\\)(?<!^)\-", sub_split_vals[1], 1)
+                                                    if len(sub_split_vals) > 1:
+                                                        sub_split_vals = re.split(r"(?<!\\)(?<!^)\-", sub_split_vals[1], 1)
+                                                    else:
+                                                        sub_split_vals = ["1"]
                                                     
                                                     if len(sub_split_vals) == 1:
                                                         start_val = ordinal_to_number(sub_split_vals[0])
@@ -12212,7 +12221,10 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                         for value in values:
                                             sub_split_vals = re.split(r"(?<!\\)\=", value)
                                             sub_stat = unescape_string(sub_split_vals[0])
-                                            sub_split_vals = re.split(r"(?<!\\)(?<!^)\-", sub_split_vals[1], 1)
+                                            if len(sub_split_vals) > 1:
+                                                sub_split_vals = re.split(r"(?<!\\)(?<!^)\-", sub_split_vals[1], 1)
+                                            else:
+                                                sub_split_vals = ["1"]
                                             
                                             if len(sub_split_vals) == 1:
                                                 start_val = ordinal_to_number(sub_split_vals[0])
@@ -12261,7 +12273,10 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                     for value in values:
                                         sub_split_vals = re.split(r"(?<!\\)\=", value)
                                         sub_stat = unescape_string(sub_split_vals[0])
-                                        sub_split_vals = re.split(r"(?<!\\)(?<!^)\-", sub_split_vals[1], 1)
+                                        if len(sub_split_vals) > 1:
+                                            sub_split_vals = re.split(r"(?<!\\)(?<!^)\-", sub_split_vals[1], 1)
+                                        else:
+                                            sub_split_vals = ["1"]
                                         
                                         if len(sub_split_vals) == 1:
                                             start_val = ordinal_to_number(sub_split_vals[0])
