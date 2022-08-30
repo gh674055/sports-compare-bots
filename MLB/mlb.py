@@ -148,6 +148,10 @@ manual_country_map = {
     "republic of korea" : "south korea"
 }
 
+manual_city_map = {}
+
+manual_state_map = {}
+
 manual_stadium_map = {
     "yankee stadium i" : 9,
     "yankee stadium 1" : 9,
@@ -6422,6 +6426,10 @@ qualifier_map = {
     "Pitching Against Last Name" : {},
     "Batting Against Birth Country" : {},
     "Pitching Against Birth Country" : {},
+    "Batting Against Birth State" : {},
+    "Pitching Against Birth State" : {},
+    "Batting Against Birth City" : {},
+    "Pitching Against Birth City" : {},
     "Facing Stat Rank" : {},
     "Facing League Stat Rank" : {},
     "Facing AL Stat Rank" : {},
@@ -7551,7 +7559,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
 
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
 
-                        last_match = re.finditer(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?((?:w|(?:playing|starting)-with|a|(?:playing|starting)-against|(?:playing|starting)-same-game|prv-w|previous-playing-with|prv-a|previous-playing-against|upc-w|upcoming-playing-with|upc-a|upcoming-playing-against|(?:playing|starting)-same-opponents?|(?:playing|starting)-same-dates?|holidays?|dts|dates|stadium|exact-stadium|arena|exact-arena|pitch-type|exact-pitch-type|hit-trajectory|hit-hardness|opponent-city|opponent-exact-city|team-city|team-exact-city|city|exact-city|event-description|exact-event-description|surface|condition|exact-home-plate-umpire|exact-umpire|home-plate-umpire|umpire|exact-home-plate-official|exact-official|home-plate-official|official|teammate-on-first|teammate-on-second|teammate-on-third|teammate-on-base|opponent-on-first|opponent-on-second|opponent-on-third|opponent-on-base|batting-against|pitching-against|batting-against-first-or-birth-name|pitching-against-first-or-birth-name|batting-against-birth-or-first-name|pitching-against-birth-or-first-name|batting-against-birth-name|pitching-against-birth-name|batting-against-first-name|pitching-against-first-name|batting-against-last-name|pitching-against-last-name|batting-against-birth-country|pitching-against-birth-country|facing|facing-first-or-birth-name|facing-birth-or-first-name|facing-birth-name|facing-first-name|facing-last-name|facing-birth-country|driven-in|batted-in|back-to-back-with|back-to-back|batting-in-front-of|batting-in-front|batting-ahead|batting-ahead-of|batting-behind|batting-behind-of|batting-next-to|caught-by|stealing-on|on-field-with|on-field-against|event-time|event-datetime|local-event-datetime|local-event-date-time|team-event-datetime|opponent-event-datetime|team-event-date-time|opponent-event-date-time|event-date-time|start-time):(?<!\\)\(.*?(?<!\\)\))", time_frame)
+                        last_match = re.finditer(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?((?:w|(?:playing|starting)-with|a|(?:playing|starting)-against|(?:playing|starting)-same-game|prv-w|previous-playing-with|prv-a|previous-playing-against|upc-w|upcoming-playing-with|upc-a|upcoming-playing-against|(?:playing|starting)-same-opponents?|(?:playing|starting)-same-dates?|holidays?|dts|dates|stadium|exact-stadium|arena|exact-arena|pitch-type|exact-pitch-type|hit-trajectory|hit-hardness|opponent-city|opponent-exact-city|team-city|team-exact-city|city|exact-city|event-description|exact-event-description|surface|condition|exact-home-plate-umpire|exact-umpire|home-plate-umpire|umpire|exact-home-plate-official|exact-official|home-plate-official|official|teammate-on-first|teammate-on-second|teammate-on-third|teammate-on-base|opponent-on-first|opponent-on-second|opponent-on-third|opponent-on-base|batting-against|pitching-against|batting-against-first-or-birth-name|pitching-against-first-or-birth-name|batting-against-birth-or-first-name|pitching-against-birth-or-first-name|batting-against-birth-name|pitching-against-birth-name|batting-against-first-name|pitching-against-first-name|batting-against-last-name|pitching-against-last-name|batting-against-birth-country|pitching-against-birth-country|batting-against-birth-city|pitching-against-birth-city|batting-against-birth-state|pitching-against-birth-state|facing|facing-first-or-birth-name|facing-birth-or-first-name|facing-birth-name|facing-first-name|facing-last-name|facing-birth-country|facing-birth-city|facing-birth-state|driven-in|batted-in|back-to-back-with|back-to-back|batting-in-front-of|batting-in-front|batting-ahead|batting-ahead-of|batting-behind|batting-behind-of|batting-next-to|caught-by|stealing-on|on-field-with|on-field-against|event-time|event-datetime|local-event-datetime|local-event-date-time|team-event-datetime|opponent-event-datetime|team-event-date-time|opponent-event-date-time|event-date-time|start-time):(?<!\\)\(.*?(?<!\\)\))", time_frame)
                         for m in last_match:
                             qualifier_obj = {}
                             negate_str = m.group(1)
@@ -7683,7 +7691,27 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 extra_stats.add("current-stats")
                             elif qualifier_str.startswith("pitching-against-birth-country:"):
                                 qual_str = "pitching-against-birth-country:"
-                                qual_type = "Pitching Against Birth Coutnry"
+                                qual_type = "Pitching Against Birth Country"
+                                player_type["da_type"] = "Pitcher"
+                                extra_stats.add("current-stats")
+                            elif qualifier_str.startswith("batting-against-birth-city:"):
+                                qual_str = "batting-against-birth-city:"
+                                qual_type = "Batting Against Birth City"
+                                player_type["da_type"] = "Batter"
+                                extra_stats.add("current-stats")
+                            elif qualifier_str.startswith("pitching-against-birth-city:"):
+                                qual_str = "pitching-against-birth-city:"
+                                qual_type = "Pitching Against Birth City"
+                                player_type["da_type"] = "Pitcher"
+                                extra_stats.add("current-stats")
+                            elif qualifier_str.startswith("batting-against-birth-state:"):
+                                qual_str = "batting-against-birth-state:"
+                                qual_type = "Batting Against Birth State"
+                                player_type["da_type"] = "Batter"
+                                extra_stats.add("current-stats")
+                            elif qualifier_str.startswith("pitching-against-birth-state:"):
+                                qual_str = "pitching-against-birth-state:"
+                                qual_type = "Pitching Against Birth State"
                                 player_type["da_type"] = "Pitcher"
                                 extra_stats.add("current-stats")
                             elif qualifier_str.startswith("facing:"):
@@ -7713,6 +7741,14 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                             elif qualifier_str.startswith("facing-birth-country:"):
                                 qual_str = "facing-birth-country:"
                                 qual_type = "Facing Birth Country"
+                                extra_stats.add("current-stats")
+                            elif qualifier_str.startswith("facing-birth-state:"):
+                                qual_str = "facing-birth-state:"
+                                qual_type = "Facing Birth State"
+                                extra_stats.add("current-stats")
+                            elif qualifier_str.startswith("facing-birth-city:"):
+                                qual_str = "facing-birth-city:"
+                                qual_type = "Facing Birth City"
                                 extra_stats.add("current-stats")
                             elif qualifier_str.startswith("driven-in:"):
                                 qual_str = "driven-in:"
@@ -13481,7 +13517,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                 objs_to_add = {}
                 objs_to_delete = set()
                 for qual_str in time_frame["qualifiers"]:
-                    if qual_str in ["Facing", "Facing First Name", "Facing Birth Name", "Facing First Or Birth Name", "Facing Last Name", "Facing Birth Country"]:
+                    if qual_str in ["Facing", "Facing First Name", "Facing Birth Name", "Facing First Or Birth Name", "Facing Last Name", "Facing Birth Country", "Facing Birth State", "Facing Birth City"]:
                         objs_to_delete.add(qual_str)
                         if player_type["da_type"] == "Batter":
                             new_qual_str = qual_str.replace("Facing", "Batting Against")
@@ -16688,7 +16724,7 @@ def determine_raw_str(subbb_frame):
                             qual_str += player_url_str + ((" (" + query + ")") if query and player["is_raw_query"] else "")
                         
                         qual_str += " - Formula: " + qual_obj["formula"].upper()
-                elif qualifier == "Batting Against First Name" or qualifier == "Pitching Against First Name" or qualifier == "Batting Against Birth Name" or qualifier == "Pitching Against Birth Name" or qualifier == "Batting Against First Or Birth Name" or qualifier == "Pitching Against First Or Birth Name" or qualifier == "Batting Against Last Name" or qualifier == "Pitching Against Last Name" or qualifier == "Batting Against Birth Country" or qualifier == "Pitching Against Birth Country":
+                elif qualifier == "Batting Against First Name" or qualifier == "Pitching Against First Name" or qualifier == "Batting Against Birth Name" or qualifier == "Pitching Against Birth Name" or qualifier == "Batting Against First Or Birth Name" or qualifier == "Pitching Against First Or Birth Name" or qualifier == "Batting Against Last Name" or qualifier == "Pitching Against Last Name" or qualifier == "Batting Against Birth Country" or qualifier == "Pitching Against Birth Country" or qualifier == "Batting Against Birth State" or qualifier == "Pitching Against Birth State" or qualifier == "Batting Against Birth City" or qualifier == "Pitching Against Birth City":
                     for player in qual_obj["values"]:
                         if not sub_sub_sub_first:
                             qual_str += " OR "
@@ -16696,7 +16732,7 @@ def determine_raw_str(subbb_frame):
                             sub_sub_sub_first = False
                         if qual_obj["negate"]:
                             qual_str += "Not "
-                        if "Birth Country" in qualifier and player == "usa":
+                        if ("Birth Country" in qualifier and player == "usa") or "Birth State" in qualifier:
                             qual_str += player.upper()
                         else:
                             qual_str += player.title()
@@ -33483,9 +33519,97 @@ def handle_da_mlb_quals(row, event_name, at_bat_event, qualifiers, player_data, 
                 player = re.sub(r"\s+", " ", re.sub(r"[^\w\-\s.']", "", player)).strip()
                 if name.lower() == player:
                     has_match = True
+                elif name.lower() in manual_state_map and manual_state_map[name.lower()] == player:
+                    has_match = True
+                elif player in manual_state_map and manual_state_map[player] == name.lower():
+                    has_match = True
+
+            if qual_object["negate"]:
+                if has_match:
+                    return False
+            else:
+                if not has_match:
+                    return False
+
+    if "Batting Against Birth State" in qualifiers:
+        if not at_bat_event["pitcher_state"]:
+            return False
+        for qual_object in qualifiers["Batting Against Birth State"]:
+            has_match = False
+            for player in qual_object["values"]:
+                name = re.sub(r"\s+", " ", re.sub(r"[^\w\-\s.']", "", at_bat_event["pitcher_state"])).strip()
+                player = re.sub(r"\s+", " ", re.sub(r"[^\w\-\s.']", "", player)).strip()
+                if name.lower() == player:
+                    has_match = True
+                elif name.lower() in manual_state_map and manual_state_map[name.lower()] == player:
+                    has_match = True
+                elif player in manual_state_map and manual_state_map[player] == name.lower():
+                    has_match = True
+    
+            if qual_object["negate"]:
+                if has_match:
+                    return False
+            else:
+                if not has_match:
+                    return False
+    
+    if "Pitching Against Birth State" in qualifiers:
+        if not at_bat_event["batter_state"]:
+            return False
+        for qual_object in qualifiers["Pitching Against Birth State"]:
+            has_match = False
+            for player in qual_object["values"]:
+                name = re.sub(r"\s+", " ", re.sub(r"[^\w\-\s.']", "", at_bat_event["batter_state"])).strip()
+                player = re.sub(r"\s+", " ", re.sub(r"[^\w\-\s.']", "", player)).strip()
+                if name.lower() == player:
+                    has_match = True
                 elif name.lower() in manual_country_map and manual_country_map[name.lower()] == player:
                     has_match = True
                 elif player in manual_country_map and manual_country_map[player] == name.lower():
+                    has_match = True
+
+            if qual_object["negate"]:
+                if has_match:
+                    return False
+            else:
+                if not has_match:
+                    return False
+
+    if "Batting Against Birth City" in qualifiers:
+        if not at_bat_event["pitcher_city"]:
+            return False
+        for qual_object in qualifiers["Batting Against Birth City"]:
+            has_match = False
+            for player in qual_object["values"]:
+                name = re.sub(r"\s+", " ", re.sub(r"[^\w\-\s.']", "", at_bat_event["pitcher_city"])).strip()
+                player = re.sub(r"\s+", " ", re.sub(r"[^\w\-\s.']", "", player)).strip()
+                if name.lower() == player:
+                    has_match = True
+                elif name.lower() in manual_city_map and manual_city_map[name.lower()] == player:
+                    has_match = True
+                elif player in manual_city_map and manual_city_map[player] == name.lower():
+                    has_match = True
+    
+            if qual_object["negate"]:
+                if has_match:
+                    return False
+            else:
+                if not has_match:
+                    return False
+    
+    if "Pitching Against Birth City" in qualifiers:
+        if not at_bat_event["batter_city"]:
+            return False
+        for qual_object in qualifiers["Pitching Against Birth City"]:
+            has_match = False
+            for player in qual_object["values"]:
+                name = re.sub(r"\s+", " ", re.sub(r"[^\w\-\s.']", "", at_bat_event["batter_city"])).strip()
+                player = re.sub(r"\s+", " ", re.sub(r"[^\w\-\s.']", "", player)).strip()
+                if name.lower() == player:
+                    has_match = True
+                elif name.lower() in manual_city_map and manual_city_map[name.lower()] == player:
+                    has_match = True
+                elif player in manual_city_map and manual_city_map[player] == name.lower():
                     has_match = True
 
             if qual_object["negate"]:
@@ -37854,6 +37978,10 @@ def handle_da_pitch_quals(row, event_name, at_bat_event, qualifiers, player_data
     pitcher_last = player_game_info["last_names"][current_pitcher]
     batter_country = player_game_info["countries"][current_batter] if current_batter in player_game_info["countries"] else None
     pitcher_country = player_game_info["countries"][current_pitcher] if current_pitcher in player_game_info["countries"] else None
+    batter_city = player_game_info["cities"][current_batter] if current_batter in player_game_info["cities"] else None
+    pitcher_city = player_game_info["cities"][current_pitcher] if current_pitcher in player_game_info["cities"] else None
+    batter_state = player_game_info["states"][current_batter] if current_batter in player_game_info["states"] else None
+    pitcher_state = player_game_info["states"][current_pitcher] if current_pitcher in player_game_info["states"] else None
 
     sub_event_obj = {
         "result" : "pitch",
@@ -37874,6 +38002,10 @@ def handle_da_pitch_quals(row, event_name, at_bat_event, qualifiers, player_data
         "pitcher_last" : pitcher_last,
         "batter_country" : batter_country,
         "pitcher_country" : pitcher_country,
+        "batter_city" : batter_city,
+        "pitcher_city" : pitcher_city,
+        "batter_state" : batter_state,
+        "pitcher_state" : pitcher_state,
         "runners_driven_in" : at_bat_event["runners_driven_in"],
         "runners_batted_in" : at_bat_event["runners_batted_in"],
         "eanred_runners_driven_in" : at_bat_event["earned_runners_driven_in"],
@@ -40224,6 +40356,8 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
         game_data["last_names"] = {}
         game_data["full_names"] = {}
         game_data["countries"] = {}
+        game_data["cities"] = {}
+        game_data["states"] = {}
         game_data["pitch_sides"] = {}
         game_data["bat_sides"] = {}
         for player in sub_data["gameData"]["players"]:
@@ -40245,6 +40379,10 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
 
             if "birthCountry" in player:
                 game_data["countries"][player["id"]] = player["birthCountry"]
+            if "birthCity" in player:
+                game_data["cities"][player["id"]] = player["birthCity"]
+            if "birthStateProvince" in player:
+                game_data["states"][player["id"]] = player["birthStateProvince"]
             game_data["pitch_sides"][player["id"]] = player["pitchHand"]["code"]
             game_data["bat_sides"][player["id"]] = player["batSide"]["code"]
             
@@ -41074,6 +41212,10 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
             pitcher_last = game_data["last_names"][pitcher]
             batter_country = game_data["countries"][batter] if batter in game_data["countries"] else None
             pitcher_country = game_data["countries"][pitcher] if pitcher in game_data["countries"] else None
+            batter_city = game_data["cities"][batter] if batter in game_data["cities"] else None
+            pitcher_city = game_data["cities"][pitcher] if pitcher in game_data["cities"] else None
+            batter_state = game_data["states"][batter] if batter in game_data["states"] else None
+            pitcher_state = game_data["states"][pitcher] if pitcher in game_data["states"] else None
 
             if is_home_team:
                 is_team_batting = False if is_top_inning else True
@@ -41587,6 +41729,10 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
                 "pitcher_last" : pitcher_last,
                 "batter_country" : batter_country,
                 "pitcher_country" : pitcher_country,
+                "batter_city" : batter_city,
+                "pitcher_city" : pitcher_city,
+                "batter_state" : batter_state,
+                "pitcher_state" : pitcher_state,
                 "event_time" : end_time,
                 "runners_driven_in" : runners_driven_in,
                 "runners_batted_in" : runners_batted_in,
@@ -42405,6 +42551,10 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
                     "pitcher_last" : pitcher_last,
                     "batter_country" : batter_country,
                     "pitcher_country" : pitcher_country,
+                    "batter_city" : batter_city,
+                    "pitcher_city" : pitcher_city,
+                    "batter_state" : batter_state,
+                    "pitcher_state" : pitcher_state,
                     "event_time" : sub_end_time,
                     "runners_driven_in" : runners_driven_in,
                     "runners_batted_in" : runners_batted_in,
