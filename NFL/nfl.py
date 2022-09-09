@@ -106,8 +106,8 @@ use_threads_for_game = False
 display_progress_as_edit = True
 ignore_approved = True
 
-current_season = 2021
-show_title_current_season = True
+current_season = 2022
+show_title_current_season = False
 
 alert_message_no_approved = "Comparison received! The comment reply will be made with the comparison is finished\n\nComparisons may be slow due to recent Reddit API changes\n\n---"
 alert_message = "Comparison received! Updates will be provided as players finish\n\n---"
