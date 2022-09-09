@@ -30,8 +30,8 @@ request_headers = {
 }
 
 start_year = 1936
-end_year = 2021
-skip_current_year = False
+end_year = 2022
+skip_current_year = True
 
 current_year_standings_url = "https://www.pro-football-reference.com/years/{}"
 
