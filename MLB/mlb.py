@@ -40638,7 +40638,7 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
                                     play["player"]["id"] = old_player
                                     scoring_play["matchup"]["pitcher"]["id"] = old_player
 
-                                    pitch_pos = game_data["pitch_sides"][current_pitcher]
+                                    pitch_pos = game_data["pitch_sides"][old_player]
                                     if pitch_pos == "S":
                                         bat_pos = game_data["bat_sides"][current_batter if current_batter else scoring_play["matchup"]["batter"]["id"]]
                                         if bat_pos == "S":
@@ -40695,7 +40695,7 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
                                             play["player"]["id"] = old_player
                                             scoring_play["matchup"]["batter"]["id"] = old_player
                                             
-                                            bat_pos = game_data["bat_sides"][current_batter]
+                                            bat_pos = game_data["bat_sides"][old_player]
                                             if bat_pos == "S":
                                                 pitch_pos = game_data["pitch_sides"][current_pitcher if current_pitcher else scoring_play["matchup"]["pitcher"]["id"]]
                                                 if pitch_pos == "S":
