@@ -42765,6 +42765,7 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
 
                         if is_inherited:
                             last_pitch_event = game_data["pitching_events"][len(game_data["pitching_events"]) - 1]
+                            pitch_run_data["time_through_lineup"] = last_pitch_event["time_through_lineup"]
                             pitch_run_data["time_facing_opponent"] = last_pitch_event["time_facing_opponent"]
                             pitch_run_data["starting_pitch_count"] = last_pitch_event["starting_pitch_count"]
                             pitch_run_data["pitch_count"] = last_pitch_event["pitch_count"]
