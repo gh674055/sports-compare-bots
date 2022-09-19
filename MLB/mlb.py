@@ -42764,13 +42764,14 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
                         pitch_run_data = sub_event_obj.copy()
 
                         if is_inherited:
+                            pitch_run_data["time_through_lineup"] = pitcher_matchup_map[run_pitcher]["times_around"]
+                            pitch_run_data["time_facing_opponent"] = pitcher_matchup_map[run_pitcher][batter] if batter in pitcher_matchup_map[run_pitcher] else 1
+                            pitch_run_data["batters_faced"] = pitcher_matchup_map[run_pitcher]["current_pa"]
+                            pitch_run_data["pitcher_first_batter_faced"] = pitcher_matchup_map[run_pitcher]["current_pa"] == 0
+
                             last_pitch_event = game_data["pitching_events"][len(game_data["pitching_events"]) - 1]
-                            pitch_run_data["time_through_lineup"] = last_pitch_event["time_through_lineup"]
-                            pitch_run_data["time_facing_opponent"] = last_pitch_event["time_facing_opponent"]
                             pitch_run_data["starting_pitch_count"] = last_pitch_event["starting_pitch_count"]
                             pitch_run_data["pitch_count"] = last_pitch_event["pitch_count"]
-                            pitch_run_data["batters_faced"] = last_pitch_event["batters_faced"]
-                            pitch_run_data["plate_appearances"] = last_pitch_event["plate_appearances"]
                             pitch_run_data["starting_innings_pitched"] = last_pitch_event["starting_innings_pitched"]
                             pitch_run_data["innings_pitched"] = last_pitch_event["innings_pitched"]
 
