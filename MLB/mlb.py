@@ -18529,7 +18529,7 @@ def get_live_game(player_link, player_data, player_type, time_frame, do_live, s)
     for sub_game in da_dates:
         ids_to_header = {}
         for game in sub_game["games"]:
-            if game["officialDate"] != sub_game["date"]:
+            if "resumedFromDate" in game and game["resumedFromDate"] != sub_game["date"]:
                 continue
             game_type = game["gameType"]
             if game_type != "R" and game_type != "F" and game_type != "D" and game_type != "L" and game_type != "W":
@@ -40028,7 +40028,7 @@ def parse_mlb_team_year_link(team_id, sub_year, qualifiers, all_rows, team, s):
     for sub_game in da_dates:
         ids_to_header = {}
         for game in sub_game["games"]:
-            if game["officialDate"] != sub_game["date"]:
+            if "resumedFromDate" in game and game["resumedFromDate"] != sub_game["date"]:
                 continue
             game_type = game["gameType"]
             if game_type != "R" and game_type != "F" and game_type != "D" and game_type != "L" and game_type != "W":
