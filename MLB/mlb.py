@@ -18534,9 +18534,6 @@ def get_live_game(player_link, player_data, player_type, time_frame, do_live, s)
             game_type = game["gameType"]
             if game_type != "R" and game_type != "F" and game_type != "D" and game_type != "L" and game_type != "W":
                 continue
-            if game["status"]["detailedState"]:
-                if game["status"]["detailedState"] == "Cancelled" or game["status"]["detailedState"] == "Warmup" or game["status"]["detailedState"] == "Postponed" or game["status"]["detailedState"].startswith("Suspended"):
-                    continue
             if not "score" in game["teams"]["home"]:
                 continue
             ids_to_header[game["gamePk"]] = len(ids_to_header)
@@ -40033,9 +40030,6 @@ def parse_mlb_team_year_link(team_id, sub_year, qualifiers, all_rows, team, s):
             game_type = game["gameType"]
             if game_type != "R" and game_type != "F" and game_type != "D" and game_type != "L" and game_type != "W":
                 continue
-            if game["status"]["detailedState"]:
-                if game["status"]["detailedState"] == "Cancelled" or game["status"]["detailedState"] == "Warmup" or game["status"]["detailedState"] == "Postponed" or game["status"]["detailedState"].startswith("Suspended"):
-                    continue
             if not "score" in game["teams"]["home"]:
                 continue
             ids_to_header[game["gamePk"]] = len(ids_to_header)
