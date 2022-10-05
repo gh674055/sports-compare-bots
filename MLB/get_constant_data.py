@@ -275,6 +275,8 @@ request_headers = {
     "User-Agent" : "MLBCompareRedditBot"
 }
 
+request_headers= {}
+
 logname = "mlb-constants.log"
 logger = logging.getLogger("mlb-constants")
 logger.setLevel(logging.INFO)

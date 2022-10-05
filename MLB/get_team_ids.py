@@ -80,6 +80,8 @@ request_headers = {
     "User-Agent" : "MLBCompareRedditBot"
 }
 
+request_headers= {}
+
 current_year = 2022
 add_current_year = False
 

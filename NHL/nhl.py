@@ -104,6 +104,8 @@ request_headers = {
     "User-Agent" : "NHLCompareRedditBot"
 }
 
+request_headers= {}
+
 max_request_retries = 3
 retry_failure_delay = 3
 max_reddit_retries = 3

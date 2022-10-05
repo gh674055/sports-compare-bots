@@ -28,6 +28,8 @@ request_headers = {
     "User-Agent" : "NFLCompareRedditBot"
 }
 
+request_headers= {}
+
 def main():
     id_val = 1
     team_venues = {}

@@ -28,6 +28,8 @@ request_headers = {
     "User-Agent" : "NHLCompareRedditBot"
 }
 
+request_headers= {}
+
 def main():
     for season in range(1924, 2022):
         if season != 2004:

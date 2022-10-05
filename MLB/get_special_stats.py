@@ -41,6 +41,8 @@ request_headers = {
     "User-Agent" : "MLBCompareRedditBot"
 }
 
+request_headers= {}
+
 manual_map = {
     "Andy Thornton" : "thornan01",
     "John Bates" : "batesjo02",

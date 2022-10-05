@@ -26,6 +26,8 @@ request_headers = {
     "User-Agent" : "NHLCompareRedditBot"
 }
 
+request_headers= {}
+
 logname = "nhl-constants.log"
 logger = logging.getLogger("nhl-constants")
 logger.setLevel(logging.INFO)

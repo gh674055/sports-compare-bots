@@ -36,6 +36,8 @@ request_headers = {
     "User-Agent" : "NHLCompareRedditBot"
 }
 
+request_headers= {}
+
 def main():
     team_info = {}
     team_abr = {}

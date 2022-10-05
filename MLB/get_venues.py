@@ -28,6 +28,8 @@ request_headers = {
     "User-Agent" : "MLBCompareRedditBot"
 }
 
+request_headers= {}
+
 end_year = 2022
 
 country_codes = { 

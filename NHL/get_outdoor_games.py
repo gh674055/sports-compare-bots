@@ -15,6 +15,8 @@ request_headers = {
     "User-Agent" : "NHLCompareRedditBot"
 }
 
+request_headers= {}
+
 def main():
     outdoor_games = openpyxl.load_workbook("outdoor_games.xlsx")
 

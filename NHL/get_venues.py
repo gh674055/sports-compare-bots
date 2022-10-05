@@ -32,6 +32,8 @@ request_headers = {
     "User-Agent" : "NHLCompareRedditBot"
 }
 
+request_headers= {}
+
 manual_venue_map = {
     "The Arena" : "Laurier Avenue Arena",
     "Montreal Arena" : "Westmount Arena",

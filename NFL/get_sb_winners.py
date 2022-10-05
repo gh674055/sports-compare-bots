@@ -23,6 +23,8 @@ request_headers = {
     "User-Agent" : "NFLCompareRedditBot"
 }
 
+request_headers= {}
+
 def main():
     request = urllib.request.Request(sb_winners, headers=request_headers)
     response = url_request(request)

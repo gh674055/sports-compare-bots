@@ -29,6 +29,8 @@ request_headers = {
     "User-Agent" : "NFLCompareRedditBot"
 }
 
+request_headers= {}
+
 start_year = 1936
 end_year = 2022
 skip_current_year = True
