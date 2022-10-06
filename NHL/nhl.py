@@ -41468,7 +41468,6 @@ def create_table_html(html_info, player_datas, original_comment, last_updated, c
                     max_comb_players = len(player_image_urls["urls"])
                 for index, player_image_url in enumerate(player_image_urls["urls"]):
                     if player_image_urls["names"][index] != "No Player Match!" and len(parsed_ids) < 10:
-                        url = player_image_url if player_image_url else "file:///" + os.path.abspath("../team_logos/leagues/missing.png")
                         id = player_image_urls["ids"][index]
                         name = player_image_urls["names"][index]
                         parsed_name = create_human_name(name)
@@ -41520,6 +41519,16 @@ def create_table_html(html_info, player_datas, original_comment, last_updated, c
 
                             url_div_tag = soup.new_tag("div")
                             images_tag = soup.new_tag("img")
+
+                            if player_image_url:
+                                image_bytes = url_request_bytes(player_image_url)
+                                temp_image_file_name = dirpath + "/" + str(uuid.uuid1()) + ".jpg"
+                                with open(temp_image_file_name, "wb") as temp_image_file:
+                                    temp_image_file.write(image_bytes)
+                                url = temp_image_file_name
+                            else:
+                                url = "file:///" + os.path.abspath("../team_logos/leagues/missing.png")
+
                             images_tag["src"] = url
                             if player_image_url:
                                 images_tag["style"] = "height: 165px; width: 110px; border-color: " + team_color + "; border-width:2px 2px 3px 2px; border-style: solid;"
