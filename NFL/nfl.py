@@ -22577,8 +22577,7 @@ def print_player_data(player_datas, player_type, highest_vals, lowest_vals, has_
         if over_header.startswith("Awards/Honors") and "hide-table-awards/honors" in extra_stats:
             continue
         if over_header in tables_to_skip:
-            if header_index != 0 or "Shared" in tables_to_skip:
-                continue
+            continue
         if not headers[player_type["da_type"]][over_header] or (over_header == "Fantasy" and not is_fantasy) or (over_header.startswith("Awards/Honors/") and is_fantasy):
             continue
         if over_header.startswith("Advanced/") and not has_season_stats:
@@ -22946,8 +22945,7 @@ def get_reddit_player_table(player_datas, player_type, is_fantasy, debug_mode, o
         if over_header.startswith("Awards/Honors") and "hide-table-awards/honors" in extra_stats:
             continue
         if over_header in tables_to_skip:
-            if header_index != 0 or "Shared" in tables_to_skip:
-                continue
+            continue
         if not headers[player_type["da_type"]][over_header] or (over_header == "Fantasy" and not is_fantasy) or (over_header.startswith("Awards/Honors/") and is_fantasy):
             continue
         if over_header.startswith("Advanced/") and not has_season_stats:
