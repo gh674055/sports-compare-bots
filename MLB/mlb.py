@@ -40407,16 +40407,19 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
             game_data["missing_data"] = True
             return game_data, row_data, row_index, missing_games, missing_pitch
 
-        game_data["strike_zone_map"] = {}
-        game_data["first_names"] = {}
-        game_data["birth_first_names"] = {}
-        game_data["last_names"] = {}
-        game_data["full_names"] = {}
-        game_data["countries"] = {}
-        game_data["cities"] = {}
-        game_data["states"] = {}
-        game_data["pitch_sides"] = {}
-        game_data["bat_sides"] = {}
+        game_data["strike_zone_map"] = collections.defaultdict(lambda : {
+            "strikeZoneTop": -1,
+            "strikeZoneBottom" : -1
+        })
+        game_data["first_names"] = collections.defaultdict(lambda : "")
+        game_data["birth_first_names"] = collections.defaultdict(lambda : "")
+        game_data["last_names"] = collections.defaultdict(lambda : "")
+        game_data["full_names"] = collections.defaultdict(lambda : "")
+        game_data["countries"] = collections.defaultdict(lambda : "")
+        game_data["cities"] = collections.defaultdict(lambda : "")
+        game_data["states"] = collections.defaultdict(lambda : "")
+        game_data["pitch_sides"] = collections.defaultdict(lambda : "")
+        game_data["bat_sides"] = collections.defaultdict(lambda : "")
         for player in sub_data["gameData"]["players"]:
             player = sub_data["gameData"]["players"][player]
 

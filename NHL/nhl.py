@@ -74,6 +74,7 @@ import ssl
 import mergedeep
 import cProfile
 import pstats
+import collections
 
 subreddits_to_crawl = [
     "sportscomparebots",
@@ -121,8 +122,8 @@ use_threads_for_game = False
 display_progress_as_edit = True
 ignore_approved = True
 
-current_season = 2021
-show_title_current_season = True
+current_season = 2022
+show_title_current_season = False
 season_in_progress = True
 
 alert_message_no_approved = "Comparison received! The comment reply will be made with the comparison is finished\n\nComparisons may be slow due to recent Reddit API changes\n\n---"
@@ -24617,14 +24618,14 @@ def setup_game_data(player_data, row_data, player_id, player_type, time_frame, e
         "all_events" : {},
         "shift_events" : [],
         "all_shift_events" : [],
-        "player_names" : {},
-        "player_side_map" : {},
-        "player_first_name_map" : {},
-        "player_last_name_map" : {},
-        "player_birth_country_map" : {},
-        "player_birth_city_map" : {},
-        "player_birth_state_map" : {},
-        "player_nationality_map" : {},
+        "player_names" : collections.defaultdict(lambda : ""),
+        "player_side_map" : collections.defaultdict(lambda : ""),
+        "player_first_name_map" : collections.defaultdict(lambda : ""),
+        "player_last_name_map" : collections.defaultdict(lambda : ""),
+        "player_birth_country_map" : collections.defaultdict(lambda : ""),
+        "player_birth_city_map" : collections.defaultdict(lambda : ""),
+        "player_birth_state_map" : collections.defaultdict(lambda : ""),
+        "player_nationality_map" : collections.defaultdict(lambda : ""),
         "Referee" : [],
         "RefereeID" : [],
         "Linesman" : [],
