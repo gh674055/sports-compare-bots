@@ -22842,10 +22842,10 @@ def get_reddit_player_table(player_datas, player_type, is_fantasy, debug_mode, o
                 if index != len(player_datas) - 1:
                     ranges_str += "\n\n\\----------------------------------------\n\n"
         
-        if all_unique_quals and player_datas[player_index]["stat_values"]["Shared"]["Raw Quals"] != "Query: ":
-            ranges_str += ("\\----------------------------------------\n\n" if not "hide-header" in extra_stats else "") + player_datas[player_index]["stat_values"]["Shared"]["Raw Quals"]
-                    
-        table_str = ranges_str + "\n\n---\n"
+    if all_unique_quals and player_datas[player_index]["stat_values"]["Shared"]["Raw Quals"] != "Query: ":
+        ranges_str += ("\\----------------------------------------\n\n" if not "hide-header" in extra_stats else "") + player_datas[player_index]["stat_values"]["Shared"]["Raw Quals"]
+                
+    table_str = ranges_str + "\n\n---\n"
 
     has_season_stats = True
     for player_data in player_datas:
@@ -23671,7 +23671,7 @@ def create_table_html(html_info, player_datas, original_comment, last_updated, c
             while match:
                 raw_quals = raw_quals.replace(match.group(0), match.group(1), 1)
                 match = re.search(r"(?:\[([^\]\[]+?)(?<!\\)\])(?:\s*\((?:http[s]?://|www\.)(?:[a-zA-Z]|[0-9]|[$-'\*-_@.&+^]|[!*,]|(?:%[0-9a-fA-F][0-9a-fA-F]))+\))", raw_quals)
-            if not "hide-header" in extra_stats
+            if not "hide-header" in extra_stats:
                 border_div = soup.new_tag("div")
                 border_div["style"] = "border: dashed; border-width: 1px 0px 0px 0px; width: 160px; margin: auto; margin-top: 2px;"
                 h2.append(border_div)
