@@ -45946,7 +45946,7 @@ def create_table_html(html_info, player_datas, player_type, original_comment, la
             while match:
                 raw_quals = raw_quals.replace(match.group(0), match.group(1), 1)
                 match = re.search(r"(?:\[([^\]\[]+?)(?<!\\)\])(?:\s*\((?:http[s]?://|www\.)(?:[a-zA-Z]|[0-9]|[$-'\*-_@.&+^]|[!*,]|(?:%[0-9a-fA-F][0-9a-fA-F]))+\))", raw_quals)
-            if not "hide-header" in extra_stats
+            if not "hide-header" in extra_stats:
                 border_div = soup.new_tag("div")
                 border_div["style"] = "border: dashed; border-width: 1px 0px 0px 0px; width: 160px; margin: auto; margin-top: 2px;"
                 h2.append(border_div)
