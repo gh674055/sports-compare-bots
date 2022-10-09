@@ -41801,7 +41801,7 @@ def create_table_html(html_info, player_datas, original_comment, last_updated, c
         comment_div_1 = soup.new_tag("div")
         comment_div_2 = soup.new_tag("div")
         comment_div_1.string = "N/A indicates stat was not tracked at all during the time frame, * indicates stat was not tracked consistently throughout the entire time frame"
-        if not "hide-name" in extra_stats and not "hide-query" in extra-stats:
+        if not "hide-name" in extra_stats and not "hide-query" in extra_stats:
             comment_div_2.string = "Generated from command: " + original_comment
         comment_div.append(comment_div_1)
         comment_div.append(comment_div_2)
