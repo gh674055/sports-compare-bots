@@ -44833,11 +44833,11 @@ def print_player_data(player_datas, player_type, highest_vals, lowest_vals, has_
                 if index != len(player_datas) - 1:
                     ranges_str += "\n----------------------------------------\n"
         
-        if all_unique_quals and player_datas[player_index]["stat_values"]["Raw Quals"] != "Query: ":
-            ranges_str += ("----------------------------------------\n" if not "hide-header" in extra_stats else "") + player_datas[player_index]["stat_values"]["Raw Quals"]
+    if all_unique_quals and player_datas[player_index]["stat_values"]["Raw Quals"] != "Query: ":
+        ranges_str += ("----------------------------------------\n" if not "hide-header" in extra_stats else "") + player_datas[player_index]["stat_values"]["Raw Quals"]
 
-        if debug_mode:
-            logger.info("#" + str(threading.get_ident()) + "#   " + ranges_str)
+    if debug_mode:
+        logger.info("#" + str(threading.get_ident()) + "#   " + ranges_str)
 
     seasons_leading = 0
     for extra_stat in extra_stats:
