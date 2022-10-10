@@ -45271,48 +45271,48 @@ def get_reddit_player_table(player_datas, player_type, debug_mode, original_comm
             all_unique_quals = False
             break
 
-        ranges_str = ""
-        if not "hide-header" in extra_stats:
-            for index, player_data in enumerate(player_datas):
-                if "all_rows" in player_data["stat_values"] and len(player_data["stat_values"]["all_rows"]):
-                    player_str = player_data["stat_values"]["Raw Player"]
+    ranges_str = ""
+    if not "hide-header" in extra_stats:
+        for index, player_data in enumerate(player_datas):
+            if "all_rows" in player_data["stat_values"] and len(player_data["stat_values"]["all_rows"]):
+                player_str = player_data["stat_values"]["Raw Player"]
+            else:
+                player_str = ""
+                for index, player in enumerate(player_data["stat_values"]["Player"]):
+                    player_str += create_player_url_string(player, player_data["ids"][index], extra_stats)
+                    if index != len(player_data["stat_values"]["Player"]) - 1:
+                        if player_data["add_type"] == "minus":
+                            player_str += " DIFF "
+                        else:
+                            player_str += " + "
+            
+            has_one_player_missing = False
+            missing_all_players = True
+            for player in player_data["stat_values"]["Player"]:
+                if player == "No Player Match!":
+                    has_one_player_missing = True
                 else:
-                    player_str = ""
-                    for index, player in enumerate(player_data["stat_values"]["Player"]):
-                        player_str += create_player_url_string(player, player_data["ids"][index], extra_stats)
-                        if index != len(player_data["stat_values"]["Player"]) - 1:
-                            if player_data["add_type"] == "minus":
-                                player_str += " DIFF "
-                            else:
-                                player_str += " + "
+                    missing_all_players = False
+
+            player_search_str = ""
+            if has_one_player_missing:
+                player_search_str = " Searched Term: \"" + "+".join(player_data["stat_values"]["Search Term"]) + "\""
+
+            ranges_str += player_str + player_search_str
+            if missing_all_players:
+                ranges_str += "\n\n"
+            else:
+                ranges_str += ": "  + player_data["stat_values"]["Raw Range"] + " " + player_data["stat_values"]["Raw Time"] + "\n\n"
+
+            if not all_unique_quals:
+                ranges_str += player_data["stat_values"]["Raw Quals"]
+                if index != len(player_datas) - 1:
+                    ranges_str += "\n\n\\----------------------------------------\n\n"
+    
+    if all_unique_quals and player_datas[player_index]["stat_values"]["Raw Quals"] != "Query: ":
+        ranges_str += ("\\----------------------------------------\n\n" if not "hide-header" in extra_stats else "") + player_datas[player_index]["stat_values"]["Raw Quals"]
                 
-                has_one_player_missing = False
-                missing_all_players = True
-                for player in player_data["stat_values"]["Player"]:
-                    if player == "No Player Match!":
-                        has_one_player_missing = True
-                    else:
-                        missing_all_players = False
-
-                player_search_str = ""
-                if has_one_player_missing:
-                    player_search_str = " Searched Term: \"" + "+".join(player_data["stat_values"]["Search Term"]) + "\""
-
-                ranges_str += player_str + player_search_str
-                if missing_all_players:
-                    ranges_str += "\n\n"
-                else:
-                    ranges_str += ": "  + player_data["stat_values"]["Raw Range"] + " " + player_data["stat_values"]["Raw Time"] + "\n\n"
-
-                if not all_unique_quals:
-                    ranges_str += player_data["stat_values"]["Raw Quals"]
-                    if index != len(player_datas) - 1:
-                        ranges_str += "\n\n\\----------------------------------------\n\n"
-        
-        if all_unique_quals and player_datas[player_index]["stat_values"]["Raw Quals"] != "Query: ":
-            ranges_str += ("\\----------------------------------------\n\n" if not "hide-header" in extra_stats else "") + player_datas[player_index]["stat_values"]["Raw Quals"]
-                    
-        table_str = ranges_str + "\n\n---\n"
+    table_str = ranges_str + "\n\n---\n"
     
     for over_header in all_headers:
         for extra_stat in extra_stats:
