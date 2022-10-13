@@ -28248,18 +28248,21 @@ def handle_schedule_stats(player_data, live_game, all_rows, qualifiers, is_playo
                     
                     if row_data["DateTime"] == data["DateTime"] and row_data["Tm"] == data["Tm"]:
                         if row_data["Round"] == "wc" and row_data["Year"] != 2020:
-                            row_data["Elimination"] = True
-                            row_data["Clinching"] = True
+                            if row_data["Year"] >= 2022:
+                                round_length = 2
+                            else:
+                                round_length = 1
                         else:
                             round_length = playoff_rounds[round_index]
-                            if opponent_wins == round_length - 1:  
-                                row_data["Elimination"] = True
-                            else:
-                                row_data["Elimination"] = False
-                            if team_wins == round_length - 1:
-                                row_data["Clinching"] = True
-                            else:
-                                row_data["Clinching"] = False
+
+                        if opponent_wins == round_length - 1:  
+                            row_data["Elimination"] = True
+                        else:
+                            row_data["Elimination"] = False
+                        if team_wins == round_length - 1:
+                            row_data["Clinching"] = True
+                        else:
+                            row_data["Clinching"] = False
                         
                         row_data["SeriesTeamWins"] = team_wins
                         row_data["SeriesOpponentWins"] = opponent_wins
