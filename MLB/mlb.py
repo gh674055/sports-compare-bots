@@ -99,6 +99,7 @@ subreddits_to_crawl = [
     "nationals",
     "baseballcards",
     "nlbest",
+    "oaklandathletics",
     "orioles"
 ]
 
