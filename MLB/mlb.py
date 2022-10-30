@@ -28023,6 +28023,7 @@ def handle_schedule_stats(player_data, live_game, all_rows, qualifiers, is_playo
                 if row_data["Year"] in team_schedule:
                     for season_obj in team_schedule[row_data["Year"]]:
                         if season_obj["team"] == row_data["Tm"]:
+                            row_data["Opponent"] = row_data["Opponent"].upper()
                             if row_data["is_playoffs"]:
                                 season_obj["playoffs"].append(row_data)
                                 season_obj["playoffs"] = sorted(season_obj["playoffs"], key=lambda row: row["DateTime"])
