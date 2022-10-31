@@ -1,5 +1,4 @@
-import urllib.request
-import urllib.parse
+import requests
 from bs4 import BeautifulSoup, Comment
 import json
 import logging
@@ -15,7 +14,6 @@ import statistics
 import numbers
 import unidecode
 from nameparser import HumanName
-from urllib.parse import urlparse
 import requests
 import threading
 
@@ -77,8 +75,8 @@ def main():
                     if venue_id not in team_venues:
                         try:
                             sub_data = url_request_json(s, "https://statsapi.mlb.com" + game["link"])
-                        except urllib.error.HTTPError as err:
-                            if err.status == 404:
+                        except requests.exceptions.HTTPError as err:
+                            if err.response.status_code == 404:
                                 continue
                             else:
                                 raise
@@ -101,18 +99,32 @@ def main():
     with open("team_venues.json", "w") as file:
         file.write(json.dumps(team_venues, indent=4, sort_keys=True))
 
-def url_request_json(session, url, timeout=30):
+def url_request(url, timeout=30):
     failed_counter = 0
     while(True):
         try:
-            return session.get(url, timeout=timeout).json()
+            response = requests.get(url, timeout=timeout, headers=request_headers)
+            response.raise_for_status()
+            text = response.text
+
+            bs = BeautifulSoup(text, "lxml")
+            if not bs.contents:
+                raise requests.exceptions.HTTPError("Page is empty!")
+            return response, bs
+        except requests.exceptions.HTTPError as err:
+            if err.response.status_code == 403:
+                raise
+            else:
+                failed_counter += 1
+                if failed_counter > max_request_retries:
+                    raise
         except Exception:
             failed_counter += 1
             if failed_counter > max_request_retries:
                 raise
 
         delay_step = 10
-        print("#" + str(threading.get_ident()) + "#   " + "Retrying in " + str(retry_failure_delay) + " seconds to allow " + url + " to chill")
+        print("#" + str(threading.get_ident()) + "#   " + "Retrying in " + str(retry_failure_delay) + " seconds to allow request to " + url + " to chill")
         time_to_wait = int(math.ceil(float(retry_failure_delay)/float(delay_step)))
         for i in range(retry_failure_delay, 0, -time_to_wait):
             print("#" + str(threading.get_ident()) + "#   " + str(i))

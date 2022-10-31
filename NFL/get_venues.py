@@ -1,5 +1,4 @@
-import urllib.request
-import urllib.parse
+import requests
 from bs4 import BeautifulSoup, Comment
 import json
 import logging
@@ -14,10 +13,12 @@ import re
 import statistics
 import numbers
 import unidecode
+import threading
 from nameparser import HumanName
-from urllib.parse import urlparse
 from geopy.geocoders import Nominatim
 from timezonefinder import TimezoneFinder
+from requests_ip_rotator import ApiGateway
+import atexit
 
 nfl_venue_ids_url = "https://www.pro-football-reference.com/stadiums"
 
@@ -30,6 +31,17 @@ request_headers = {
 
 request_headers= {}
 
+gateway = ApiGateway("https://www.pro-football-reference.com", verbose=False)
+gateway.start()
+
+gateway_session = requests.Session()
+gateway_session.mount("https://www.pro-football-reference.com", gateway)
+
+def exit_handler():
+    gateway.shutdown()
+
+atexit.register(exit_handler)
+
 def main():
     id_val = 1
     team_venues = {}
@@ -37,10 +49,9 @@ def main():
     geolocator = Nominatim(user_agent="NFLCompareRedditBot")
     tz_finder = TimezoneFinder()
 
-    request = urllib.request.Request(nfl_venue_ids_url, headers=request_headers)
     try:
-        response = url_request(request)
-    except urllib.error.HTTPError:
+        response = url_request(nfl_venue_ids_url)
+    except requests.exceptions.HTTPError:
         raise
 
     player_page = BeautifulSoup(response, "html.parser")
@@ -93,10 +104,9 @@ def main():
 
                     venue_link = venue_row.find("a")
                     venue_id = venue_link["href"].split("/")[2][:-4].upper()
-                    request = urllib.request.Request(nfl_venue_ids_url + "/" + venue_id + ".htm", headers=request_headers)
                     try:
-                        response = url_request(request)
-                    except urllib.error.HTTPError:
+                        response = url_request(nfl_venue_ids_url)
+                    except requests.exceptions.HTTPError:
                         raise
 
                     sub_player_page = BeautifulSoup(response, "html.parser")
@@ -140,29 +150,37 @@ def main():
     with open("team_venues.json", "w") as file:
         file.write(json.dumps(team_venues, indent=4, sort_keys=True))
 
-def url_request(request):
+def url_request(url, timeout=30):
     failed_counter = 0
     while(True):
         try:
-            return urllib.request.urlopen(request)
-        except urllib.error.HTTPError as err:
-            if err.status == 404:
+            response = gateway_session.get(url, timeout=timeout, headers=request_headers)
+            response.raise_for_status()
+            text = response.text
+
+            bs = BeautifulSoup(text, "lxml")
+            if not bs.contents:
+                raise requests.exceptions.HTTPError("Page is empty!")
+            return response, bs
+        except requests.exceptions.HTTPError as err:
+            if err.response.status_code == 403:
                 raise
-            failed_counter += 1
-            if failed_counter > max_request_retries:
-                raise
-        except urllib.error.URLError:
+            else:
+                failed_counter += 1
+                if failed_counter > max_request_retries:
+                    raise
+        except Exception:
             failed_counter += 1
             if failed_counter > max_request_retries:
                 raise
 
         delay_step = 10
-        print("Retrying in " + str(retry_failure_delay) + " seconds to allow fangraphs to chill")
+        print("#" + str(threading.get_ident()) + "#   " + "Retrying in " + str(retry_failure_delay) + " seconds to allow request to " + url + " to chill")
         time_to_wait = int(math.ceil(float(retry_failure_delay)/float(delay_step)))
         for i in range(retry_failure_delay, 0, -time_to_wait):
-            print(i)
+            print("#" + str(threading.get_ident()) + "#   " + str(i))
             time.sleep(time_to_wait)
-        print("0")
+        print("#" + str(threading.get_ident()) + "#   " + "0")
 
 def geolocate(geolocator, location):
     failed_counter = 0

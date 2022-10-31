@@ -1,5 +1,4 @@
-import urllib.request
-import urllib.parse
+import requests
 from bs4 import BeautifulSoup, Comment
 import json
 import logging
@@ -15,6 +14,8 @@ import threading
 import lxml
 import cchardet
 import ssl
+from requests_ip_rotator import ApiGateway
+import atexit
 
 league_totals_url = "https://www.hockey-reference.com/{}/NHL_{}_{}.html"
 current_year_stats_url = "https://www.hockey-reference.com/{}/NHL_{}.html"
@@ -118,6 +119,17 @@ year_games_played = [
 ]
 
 ssl._create_default_https_context = ssl._create_unverified_context
+
+gateway = ApiGateway("https://www.hockey-reference.com", verbose=False)
+gateway.start()
+
+gateway_session = requests.Session()
+gateway_session.mount("https://www.hockey-reference.com", gateway)
+
+def exit_handler():
+    gateway.shutdown()
+
+atexit.register(exit_handler)
 
 def main():
     year_short = "y"
@@ -256,11 +268,10 @@ def get_totals(specific_year, totals):
                     logger.info("Skipping current year " + str(year) + " as playoffs have not stared yet")
                     continue
 
-                request = urllib.request.Request(league_totals_url.format("playoffs" if over_key == "Playoffs" else "leagues", year + 1, format_strs[key]), headers=request_headers)
                 try:
-                    response, player_page = url_request(request)
-                except urllib.error.HTTPError as err:
-                    if err.status == 404:
+                    response, player_page = url_request(league_totals_url.format("playoffs" if over_key == "Playoffs" else "leagues", year + 1, format_strs[key]))
+                except requests.exceptions.HTTPError as err:
+                    if err.response.status_code == 404:
                         continue
                     else:
                         raise
@@ -416,11 +427,10 @@ def get_totals(specific_year, totals):
 
 def calculate_year_games_by_team(year, for_playoffs):
     teams = {}
-    request = urllib.request.Request(current_year_stats_url.format("playoffs" if for_playoffs else "leagues", year + 1), headers=request_headers)
     try:
-        response, player_page = url_request(request)
-    except urllib.error.HTTPError as err:
-        if err.status == 404:
+        response, player_page = url_request(current_year_stats_url.format("playoffs" if for_playoffs else "leagues", year + 1))
+    except requests.exceptions.HTTPError as err:
+        if err.response.status_code == 404:
             return None
         else:
             raise
@@ -432,11 +442,10 @@ def calculate_year_games_by_team(year, for_playoffs):
     if for_playoffs:
         original_player_page = player_page
 
-        request = urllib.request.Request(current_year_stats_url.format("leagues", year + 1), headers=request_headers)
         try:
-            response, player_page = url_request(request)
-        except urllib.error.HTTPError as err:
-            if err.status == 404:
+            response, player_page = url_request(current_year_stats_url.format("leagues", year + 1))
+        except requests.exceptions.HTTPError as err:
+            if err.response.status_code == 404:
                 return None
             else:
                 raise
@@ -546,25 +555,32 @@ def calculate_year_games_by_team(year, for_playoffs):
 
     return teams
 
-def url_request(request, timeout=30):
+def url_request(url, timeout=30):
     failed_counter = 0
     while(True):
         try:
-            response = urllib.request.urlopen(request, timeout=timeout)
-            text = response.read()
-            try:
-                text = text.decode(response.headers.get_content_charset())
-            except UnicodeDecodeError:
-                return response, BeautifulSoup(text, "html.parser")
+            response = gateway_session.get(url, timeout=timeout, headers=request_headers)
+            response.raise_for_status()
+            text = response.text
 
-            return response, BeautifulSoup(text, "lxml")
+            bs = BeautifulSoup(text, "lxml")
+            if not bs.contents:
+                raise requests.exceptions.HTTPError("Page is empty!")
+            return response, bs
+        except requests.exceptions.HTTPError as err:
+            if err.response.status_code == 403:
+                raise
+            else:
+                failed_counter += 1
+                if failed_counter > max_request_retries:
+                    raise
         except Exception:
             failed_counter += 1
             if failed_counter > max_request_retries:
                 raise
 
         delay_step = 10
-        logger.info("#" + str(threading.get_ident()) + "#   " + "Retrying in " + str(retry_failure_delay) + " seconds to allow request to " + request.get_full_url() + " to chill")
+        logger.info("#" + str(threading.get_ident()) + "#   " + "Retrying in " + str(retry_failure_delay) + " seconds to allow request to " + url + " to chill")
         time_to_wait = int(math.ceil(float(retry_failure_delay)/float(delay_step)))
         for i in range(retry_failure_delay, 0, -time_to_wait):
             logger.info("#" + str(threading.get_ident()) + "#   " + str(i))

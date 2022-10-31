@@ -1,5 +1,4 @@
-import urllib.request
-import urllib.parse
+import requests
 from bs4 import BeautifulSoup, Comment
 import json
 import logging
@@ -13,6 +12,9 @@ import datetime
 import re
 import statistics
 import numbers
+import threading
+from requests_ip_rotator import ApiGateway
+import atexit
 
 sb_winners = "https://www.pro-football-reference.com/years"
 
@@ -25,9 +27,19 @@ request_headers = {
 
 request_headers= {}
 
+gateway = ApiGateway("https://www.pro-football-reference.com", verbose=False)
+gateway.start()
+
+gateway_session = requests.Session()
+gateway_session.mount("https://www.pro-football-reference.com", gateway)
+
+def exit_handler():
+    gateway.shutdown()
+
+atexit.register(exit_handler)
+
 def main():
-    request = urllib.request.Request(sb_winners, headers=request_headers)
-    response = url_request(request)
+    response = url_request(sb_winners)
     table_names = ["years"]
     player_page = BeautifulSoup(response, "html.parser")
     champs = {}
@@ -58,29 +70,37 @@ def main():
     with open("champs.json", "w") as file:
         file.write(json.dumps(champs, indent=4, sort_keys=True))
 
-def url_request(request):
+def url_request(url, timeout=30):
     failed_counter = 0
     while(True):
         try:
-            return urllib.request.urlopen(request)
-        except urllib.error.HTTPError as err:
-            if err.status == 404:
+            response = gateway_session.get(url, timeout=timeout, headers=request_headers)
+            response.raise_for_status()
+            text = response.text
+
+            bs = BeautifulSoup(text, "lxml")
+            if not bs.contents:
+                raise requests.exceptions.HTTPError("Page is empty!")
+            return response, bs
+        except requests.exceptions.HTTPError as err:
+            if err.response.status_code == 403:
                 raise
-            failed_counter += 1
-            if failed_counter > max_request_retries:
-                raise
-        except urllib.error.URLError:
+            else:
+                failed_counter += 1
+                if failed_counter > max_request_retries:
+                    raise
+        except Exception:
             failed_counter += 1
             if failed_counter > max_request_retries:
                 raise
 
         delay_step = 10
-        logger.info("Retrying in " + str(retry_failure_delay) + " seconds to allow fangraphs to chill")
+        print("#" + str(threading.get_ident()) + "#   " + "Retrying in " + str(retry_failure_delay) + " seconds to allow request to " + url + " to chill")
         time_to_wait = int(math.ceil(float(retry_failure_delay)/float(delay_step)))
         for i in range(retry_failure_delay, 0, -time_to_wait):
-            logger.info(i)
+            print("#" + str(threading.get_ident()) + "#   " + str(i))
             time.sleep(time_to_wait)
-        logger.info("0")
+        print("#" + str(threading.get_ident()) + "#   " + "0")
 
 if __name__ == "__main__":
     main()

@@ -1,5 +1,4 @@
-import urllib.request
-import urllib.parse
+import requests
 from bs4 import BeautifulSoup, Comment
 import json
 import logging
@@ -15,8 +14,10 @@ import statistics
 import numbers
 import unidecode
 from nameparser import HumanName
-from urllib.parse import urlparse
 import unidecode
+import threading
+from requests_ip_rotator import ApiGateway
+import atexit
 
 awards_url_format = "https://statsapi.web.nhl.com/api/v1/teams/{}"
 hockeyref_team_ids_url = "https://www.hockey-reference.com/teams"
@@ -38,6 +39,17 @@ request_headers = {
 
 request_headers= {}
 
+gateway = ApiGateway("https://www.hockey-reference.com", verbose=False)
+gateway.start()
+
+gateway_session = requests.Session()
+gateway_session.mount("https://www.hockey-reference.com", gateway)
+
+def exit_handler():
+    gateway.shutdown()
+
+atexit.register(exit_handler)
+
 def main():
     team_info = {}
     team_abr = {}
@@ -45,10 +57,9 @@ def main():
     team_main_abbr = {}
     team_venue_history = {}
 
-    request = urllib.request.Request(hockeyref_team_ids_url, headers=request_headers)
     try:
-        response = url_request(request)
-    except urllib.error.HTTPError as err:
+        response = url_request(hockeyref_team_ids_url)
+    except requests.exceptions.HTTPError as err:
         raise
 
     player_page = BeautifulSoup(response, "html.parser")
@@ -77,10 +88,9 @@ def main():
                             overall_team_abbr = team_link["href"].split("/")[2].upper()
                             print(overall_team_abbr)
                             team_abbr = team_link["href"].split("/")[2].upper()
-                            request = urllib.request.Request("https://www.hockey-reference.com" + team_link["href"], headers=request_headers)
                             try:
-                                response = url_request(request)
-                            except urllib.error.HTTPError as err:
+                                response = url_request("https://www.hockey-reference.com" + team_link["href"])
+                            except requests.exceptions.HTTPError as err:
                                 raise
 
                             sub_player_page = BeautifulSoup(response, "html.parser")
@@ -127,10 +137,9 @@ def main():
                                                 team_name_info[sub_team_row_name][sub_team_row_abbr].append(sub_team_row_year)
                                             
 
-                                            request = urllib.request.Request("https://www.hockey-reference.com" + sub_team_row_link, headers=request_headers)
                                             try:
-                                                response = url_request(request)
-                                            except urllib.error.HTTPError:
+                                                response = url_request("https://www.hockey-reference.com" + sub_team_row_link)
+                                            except requests.exceptions.HTTPError:
                                                 raise
 
                                             sub_sub_player_page = BeautifulSoup(response, "html.parser")
@@ -153,11 +162,10 @@ def main():
                                                                 team_venue_history[overall_team_abbr][stadium_id].append(sub_team_row_year)
 
     for id_val in range(1, 102):
-        request = urllib.request.Request(awards_url_format.format(id_val), headers=request_headers)
         try:
-            response = url_request(request)
-        except urllib.error.HTTPError as err:
-            if err.status == 404:
+            response = url_request(awards_url_format.format(id_val))
+        except requests.exceptions.HTTPError as err:
+            if err.response.status_code == 404:
                 continue
             else:
                 raise
@@ -188,29 +196,32 @@ def main():
     with open("team_venue_history.json", "w") as file:
         file.write(json.dumps(team_venue_history, indent=4, sort_keys=True))
 
-def url_request(request):
+def url_request(url, timeout=30):
     failed_counter = 0
     while(True):
         try:
-            return urllib.request.urlopen(request)
-        except urllib.error.HTTPError as err:
-            if err.status == 404:
+            response = gateway_session.get(url, timeout=timeout, headers=request_headers)
+            response.raise_for_status()
+            return response.content
+        except requests.exceptions.HTTPError as err:
+            if err.response.status_code == 403:
                 raise
-            failed_counter += 1
-            if failed_counter > max_request_retries:
-                raise
-        except urllib.error.URLError:
+            else:
+                failed_counter += 1
+                if failed_counter > max_request_retries:
+                    raise
+        except Exception:
             failed_counter += 1
             if failed_counter > max_request_retries:
                 raise
 
         delay_step = 10
-        print("Retrying in " + str(retry_failure_delay) + " seconds to allow fangraphs to chill")
+        print("#" + str(threading.get_ident()) + "#   " + "Retrying in " + str(retry_failure_delay) + " seconds to allow request to " + url + " to chill")
         time_to_wait = int(math.ceil(float(retry_failure_delay)/float(delay_step)))
         for i in range(retry_failure_delay, 0, -time_to_wait):
-            print(i)
+            print("#" + str(threading.get_ident()) + "#   " + str(i))
             time.sleep(time_to_wait)
-        print("0")
+        print("#" + str(threading.get_ident()) + "#   " + "0")
 
 if __name__ == "__main__":
     main()

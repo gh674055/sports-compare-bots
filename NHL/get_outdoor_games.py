@@ -1,10 +1,10 @@
-import urllib.request
-import urllib.parse
+import requests
 import openpyxl
 import json
 import math
 import time
 import unidecode
+import threading
 
 max_request_retries = 3
 retry_failure_delay = 3
@@ -15,7 +15,7 @@ request_headers = {
     "User-Agent" : "NHLCompareRedditBot"
 }
 
-request_headers= {}
+request_headers= {})
 
 def main():
     outdoor_games = openpyxl.load_workbook("outdoor_games.xlsx")
@@ -45,8 +45,7 @@ def main():
         if outdoor_game["date"]:
             found_match = False
             scheudle_url = nhl_schedule_url_format.format(outdoor_game["date"], outdoor_game["date"])
-            request = urllib.request.Request(scheudle_url, headers=request_headers)
-            response = url_request(request)
+            response = url_request(scheudle_url)
             data = json.load(response)
 
             for date in data["dates"]:
@@ -61,29 +60,32 @@ def main():
     with open("outdoor_games.json", "w") as file:
         file.write(json.dumps(outdoor_game_ids, indent=4, sort_keys=True))
 
-def url_request(request):
+def url_request(url, timeout=30):
     failed_counter = 0
     while(True):
         try:
-            return urllib.request.urlopen(request)
-        except urllib.error.HTTPError as err:
-            if err.status == 404:
+            response = requests.get(url, timeout=timeout, headers=request_headers)
+            response.raise_for_status()
+            return response.content
+        except requests.exceptions.HTTPError as err:
+            if err.response.status_code == 403:
                 raise
-            failed_counter += 1
-            if failed_counter > max_request_retries:
-                raise
-        except urllib.error.URLError:
+            else:
+                failed_counter += 1
+                if failed_counter > max_request_retries:
+                    raise
+        except Exception:
             failed_counter += 1
             if failed_counter > max_request_retries:
                 raise
 
         delay_step = 10
-        print("Retrying in " + str(retry_failure_delay) + " seconds to allow nhl.com to chill")
+        print("#" + str(threading.get_ident()) + "#   " + "Retrying in " + str(retry_failure_delay) + " seconds to allow request to " + url + " to chill")
         time_to_wait = int(math.ceil(float(retry_failure_delay)/float(delay_step)))
         for i in range(retry_failure_delay, 0, -time_to_wait):
-            print(i)
+            print("#" + str(threading.get_ident()) + "#   " + str(i))
             time.sleep(time_to_wait)
-        print("0")
+        print("#" + str(threading.get_ident()) + "#   " + "0")
 
 if __name__ == "__main__":
     main()

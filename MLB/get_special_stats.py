@@ -1,5 +1,3 @@
-import urllib.request
-import urllib.parse
 from bs4 import BeautifulSoup, Comment
 import json
 import logging
@@ -16,7 +14,6 @@ import numbers
 import unidecode
 import dateutil.parser
 from nameparser import HumanName
-from urllib.parse import urlparse, parse_qs
 import mlb
 
 no_hit_format = "https://www.baseball-reference.com/friv/no-hitters-and-perfect-games.shtml"
@@ -62,8 +59,7 @@ with open ("team_name_info.json", "r") as file:
 
 def main():
     print("Starting no hitters")
-    request = urllib.request.Request(no_hit_format, headers=request_headers)
-    response = url_request(request)
+    response = mlb.url_request(no_hit_format)
 
     player_page = BeautifulSoup(response, "html.parser")
 
@@ -108,8 +104,7 @@ def main():
     
     print("Starting cycles")
 
-    request = urllib.request.Request(cycles_format, headers=request_headers)
-    response = url_request(request)
+    response = mlb.url_request(cycles_format)
 
     player_page = BeautifulSoup(response, "html.parser")
 
@@ -256,30 +251,6 @@ def main():
     
     with open("special_stats.json", "w") as file:
         file.write(json.dumps(special_stats, indent=4, sort_keys=True))
- 
-def url_request(request):
-    failed_counter = 0
-    while(True):
-        try:
-            return urllib.request.urlopen(request)
-        except urllib.error.HTTPError as err:
-            if err.status == 404:
-                raise
-            failed_counter += 1
-            if failed_counter > max_request_retries:
-                raise
-        except urllib.error.URLError:
-            failed_counter += 1
-            if failed_counter > max_request_retries:
-                raise
-
-        delay_step = 10
-        print("Retrying in " + str(retry_failure_delay) + " seconds to allow fangraphs to chill")
-        time_to_wait = int(math.ceil(float(retry_failure_delay)/float(delay_step)))
-        for i in range(retry_failure_delay, 0, -time_to_wait):
-            print(i)
-            time.sleep(time_to_wait)
-        print("0")
 
 if __name__ == "__main__":
     main()

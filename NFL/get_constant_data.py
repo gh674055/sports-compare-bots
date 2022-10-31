@@ -1,5 +1,4 @@
-import urllib.request
-import urllib.parse
+import requests
 from bs4 import BeautifulSoup, Comment
 import json
 import logging
@@ -19,6 +18,8 @@ import threading
 import lxml
 import cchardet
 import ssl
+from requests_ip_rotator import ApiGateway
+import atexit
 
 league_totals_url = "https://pro-football-reference.com/years/{}/passing.htm"
 
@@ -35,7 +36,7 @@ start_year = 1936
 end_year = 2022
 skip_current_year = True
 
-current_year_standings_url = "https://www.pro-football-reference.com/years/{}"
+current_year_standings_url = "https://www.pro-football-reference.com/years/{}/games.htm"
 
 logname = "nfl-constants.log"
 logger = logging.getLogger("nfl-constants")
@@ -5566,6 +5567,17 @@ year_games_played = [
 
 ssl._create_default_https_context = ssl._create_unverified_context
 
+gateway = ApiGateway("https://www.pro-football-reference.com", verbose=False)
+gateway.start()
+
+gateway_session = requests.Session()
+gateway_session.mount("https://www.pro-football-reference.com", gateway)
+
+def exit_handler():
+    gateway.shutdown()
+
+atexit.register(exit_handler)
+
 def main():
     year_short = "y"
     year_long = "year"
@@ -5635,11 +5647,10 @@ def get_totals(specific_year, totals):
 
     current_percent = 10
     for index, year in enumerate(years):
-        request = urllib.request.Request(league_totals_url.format(year), headers=request_headers)
         try:
-            response, player_page = url_request(request)
-        except urllib.error.HTTPError as err:
-            if err.status == 404:
+            response, player_page = url_request(league_totals_url.format(year))
+        except requests.exceptions.HTTPError as err:
+            if err.response.status_code == 404:
                 continue
             else:
                 raise
@@ -5762,56 +5773,61 @@ def get_totals(specific_year, totals):
 
 def calculate_current_games_by_team():
     logger.info("Getting current year game data for year " + str(end_year))
-    request = urllib.request.Request(current_year_standings_url.format(end_year), headers=request_headers)
-    response, player_page = url_request(request)
-    table_names = ["AFC", "NFC"]
+    response, player_page = url_request(current_year_standings_url.format(end_year))
+    table_name = "games"
     teams = {}
 
-    for table_name in table_names:
-        table = player_page.find("table", id=table_name)
+    table = player_page.find("table", id=table_name)
 
-        header_columns = table.find("thead").find_all("th")
-        header_values = []
-        for header in header_columns:
-            contents = header.find(text=True)
-            header_values.append(contents)
+    header_columns = table.find("thead").find_all("th")
+    header_values = []
+    for header in header_columns:
+        contents = header.find(text=True)
+        header_values.append(contents)
 
-        standard_table_rows = table.find("tbody").find_all("tr")
-        for row in standard_table_rows:
-            classes = row.get("class")
-            if not classes or not "thead" in classes:
-                games = 0
-                team = None
-                columns = row.find_all("td", recursive=False)
-                columns.insert(0, row.find("th"))
-                for sub_index, column in enumerate(columns):
-                    header_value = header_values[sub_index]
-                    if header_value == "Tm":
-                        team = column.find("a")["href"].split("/")[2].upper()
-                    elif header_value == "W" or header_value == "L" or header_value == "T":
-                        games += int(column.find(text=True))
-                teams[team] = games
+    standard_table_rows = table.find("tbody").find_all("tr")
+    for row in standard_table_rows:
+        classes = row.get("class")
+        if not classes or not "thead" in classes:
+            if row.find("td", {"data-stat" : "pts_win"}).find(text=True):
+                team_1 = row.find("td", {"data-stat" : "winner"}).find("a")["href"].split("/")[2].upper()
+                team_2 = row.find("td", {"data-stat" : "loser"}).find("a")["href"].split("/")[2].upper()
+
+                if team_1 not in teams:
+                    teams[team_1] = 0
+                if team_2 not in teams:
+                    teams[team_2] = 0
+                teams[team_1] += 1
+                teams[team_2] += 1
+
     return teams
 
-def url_request(request, timeout=30):
+def url_request(url, timeout=30):
     failed_counter = 0
     while(True):
         try:
-            response = urllib.request.urlopen(request, timeout=timeout)
-            text = response.read()
-            try:
-                text = text.decode(response.headers.get_content_charset())
-            except UnicodeDecodeError:
-                return response, BeautifulSoup(text, "html.parser")
+            response = gateway_session.get(url, timeout=timeout, headers=request_headers, allow_redirects=False)
+            response.raise_for_status()
+            text = response.text
 
-            return response, BeautifulSoup(text, "lxml")
+            bs = BeautifulSoup(text, "lxml")
+            if not bs.contents:
+                raise requests.exceptions.HTTPError("Page is empty!")
+            return response, bs
+        except requests.exceptions.HTTPError as err:
+            if err.response.status_code == 403:
+                raise
+            else:
+                failed_counter += 1
+                if failed_counter > max_request_retries:
+                    raise
         except Exception:
             failed_counter += 1
             if failed_counter > max_request_retries:
                 raise
 
         delay_step = 10
-        logger.info("#" + str(threading.get_ident()) + "#   " + "Retrying in " + str(retry_failure_delay) + " seconds to allow request to " + request.get_full_url() + " to chill")
+        logger.info("#" + str(threading.get_ident()) + "#   " + "Retrying in " + str(retry_failure_delay) + " seconds to allow request to " + url + " to chill")
         time_to_wait = int(math.ceil(float(retry_failure_delay)/float(delay_step)))
         for i in range(retry_failure_delay, 0, -time_to_wait):
             logger.info("#" + str(threading.get_ident()) + "#   " + str(i))

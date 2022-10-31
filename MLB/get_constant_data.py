@@ -1,5 +1,4 @@
-import urllib.request
-import urllib.parse
+import requests
 from bs4 import BeautifulSoup, Comment
 import json
 import logging
@@ -398,8 +397,7 @@ def get_totals(single_year, totals, log=True):
             for index, year in enumerate(years):
                 if year in league_years[league]:
                     league_str = "ALL" if league == "MLB" else league
-                    request = urllib.request.Request(league_totals_url.format(format_strs[key], league_str.lower(), year, year), headers=request_headers)
-                    response, player_page = url_request(request, log)
+                    response, player_page = url_request(league_totals_url.format(format_strs[key], league_str.lower(), year, year), log)
 
                     table = player_page.find("table", id="LeaderBoard1_dg1_ctl00")
 
@@ -423,8 +421,7 @@ def get_totals(single_year, totals, log=True):
                         if key == "Batter" and league != "MLB":
                             pitcherless_values = {}
 
-                            request = urllib.request.Request(league_excluding_pitchers_url_non_advanced.format(league.lower(), year, year), headers=request_headers)
-                            response, player_page = url_request(request, log)
+                            response, player_page = url_request(league_excluding_pitchers_url_non_advanced.format(league.lower(), year, year), log)
 
                             table = player_page.find("table", id="LeaderBoard1_dg1_ctl00")
 
@@ -442,8 +439,7 @@ def get_totals(single_year, totals, log=True):
                                     column_value = float(column_contents)
                                     pitcherless_values[header_value] = column_value
                             
-                            request = urllib.request.Request(league_excluding_pitchers_url.format(league.lower(), year, year), headers=request_headers)
-                            response, player_page = url_request(request, log)
+                            response, player_page = url_request(league_excluding_pitchers_url.format(league.lower(), year, year), log)
 
                             table = player_page.find("table", id="LeaderBoard1_dg1_ctl00")
 
@@ -479,8 +475,7 @@ def get_constants(year, constants, log=True):
     if not constants:
         constants = {}
     
-    request = urllib.request.Request(constants_url, headers=request_headers)
-    response, player_page = url_request(request, log)
+    response, player_page = url_request(constants_url, log)
 
     table = player_page.find("table", id="GutsBoard1_dg1_ctl00")
 
@@ -534,11 +529,10 @@ def get_park_factors(single_year, park_factors, log=True):
 
     current_percent = 10
     for index, year in enumerate(years):
-        request = urllib.request.Request(park_factors_url.format(year), headers=request_headers)
         try:
-            response, player_page = url_request(request, log)
-        except urllib.error.HTTPError as err:
-            if err.status == 404:
+            response, player_page = url_request(park_factors_url.format(year), log)
+        except requests.exceptions.HTTPError as err:
+            if err.response.status_code == 404:
                 continue
             else:
                 raise
@@ -603,33 +597,37 @@ def get_park_factors(single_year, park_factors, log=True):
 
     return park_factors
 
-def url_request(request, log, timeout=30):
+def url_request(url, log, timeout=30):
     failed_counter = 0
     while(True):
         try:
-            response = urllib.request.urlopen(request, timeout=timeout)
-            text = response.read()
-            try:
-                text = text.decode(response.headers.get_content_charset())
-            except UnicodeDecodeError:
-                return response, BeautifulSoup(text, "html.parser")
+            response = requests.get(url, timeout=timeout, headers=request_headers)
+            response.raise_for_status()
+            text = response.text
 
-            return response, BeautifulSoup(text, "lxml")
+            bs = BeautifulSoup(text, "lxml")
+            if not bs.contents:
+                raise requests.exceptions.HTTPError("Page is empty!")
+            return response, bs
+        except requests.exceptions.HTTPError as err:
+            if err.response.status_code == 403:
+                raise
+            else:
+                failed_counter += 1
+                if failed_counter > max_request_retries:
+                    raise
         except Exception:
             failed_counter += 1
             if failed_counter > max_request_retries:
                 raise
 
         delay_step = 10
-        if log:
-            logger.info("#" + str(threading.get_ident()) + "#   " + "Retrying in " + str(retry_failure_delay) + " seconds to allow request to " + request.get_full_url() + " to chill")
+        logger.info("#" + str(threading.get_ident()) + "#   " + "Retrying in " + str(retry_failure_delay) + " seconds to allow request to " + url + " to chill")
         time_to_wait = int(math.ceil(float(retry_failure_delay)/float(delay_step)))
         for i in range(retry_failure_delay, 0, -time_to_wait):
-            if log:
-                logger.info("#" + str(threading.get_ident()) + "#   " + str(i))
+            logger.info("#" + str(threading.get_ident()) + "#   " + str(i))
             time.sleep(time_to_wait)
-        if log:
-            logger.info("#" + str(threading.get_ident()) + "#   " + "0")
+        logger.info("#" + str(threading.get_ident()) + "#   " + "0")
 
 if __name__ == "__main__":
     main()

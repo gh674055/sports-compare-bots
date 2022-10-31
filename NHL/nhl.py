@@ -5,7 +5,6 @@ import math
 import time
 import sqlite3
 import traceback
-import urllib.request
 import urllib.parse
 from bs4 import BeautifulSoup, Comment, Tag
 from urllib.parse import urlparse
@@ -75,6 +74,8 @@ import mergedeep
 import cProfile
 import pstats
 import collections
+from requests_ip_rotator import ApiGateway
+import atexit
 
 subreddits_to_crawl = [
     "sportscomparebots",
@@ -7321,6 +7322,17 @@ manual_href_links = {
 
 ssl._create_default_https_context = ssl._create_unverified_context
 
+gateway = ApiGateway("https://www.hockey-reference.com", verbose=False)
+gateway.start()
+
+gateway_session = requests.Session()
+gateway_session.mount("https://www.hockey-reference.com", gateway)
+
+def exit_handler():
+    gateway.shutdown()
+
+atexit.register(exit_handler)
+
 def main():
     """The main function."""
 
@@ -7471,7 +7483,7 @@ def sub_parse_input(curr, comment, debug_mode, comment_obj, force_through):
         except CustomMessageException as e:
             reddit_message = "Oh no, I had a problem with your request: " + e.message
             logger.error("#" + str(threading.get_ident()) + "#   " + traceback.format_exc())
-        except (urllib.error.URLError, socket.timeout, requests.exceptions.ConnectionError) as e:
+        except (requests.exceptions.RequestException, socket.timeout, requests.exceptions.ConnectionError) as e:
             reddit_message = "Oh no, I had a problem with your request: Unable to connect to Hockey Reference or NHL.com! Please try again later"
             logger.error("#" + str(threading.get_ident()) + "#   " + traceback.format_exc())
         except BaseException as e:
@@ -14511,9 +14523,6 @@ def handle_name_threads(sub_name, parse_time_frames, index, player_type, remove_
             player_data["sort_index"] = index
         
         return player_datas
-    except urllib.error.URLError as err:
-        logger.error(traceback.format_exc())
-        raise urllib.error.URLError(err.reason)
     except Exception as err:
         logger.error(traceback.format_exc())
         raise err
@@ -15123,31 +15132,32 @@ def handle_the_same_games_quals(sub_name, qual_str, subbb_frames, time_frame, pl
                         "new_qual_type" : new_qual_type
                     }
 
-def url_request(request, timeout=30):
+def url_request(url, timeout=30):
     failed_counter = 0
     while(True):
         try:
-            response = urllib.request.urlopen(request, timeout=timeout)
-            text = response.read()
-            try:
-                text = text.decode(response.headers.get_content_charset())
-            except UnicodeDecodeError:
-                bs = BeautifulSoup(text, "html.parser")
-                if not bs.contents:
-                    raise urllib.error.URLError("Page is empty!")
-                return response, bs
+            response = gateway_session.get(url, timeout=timeout, headers=request_headers)
+            response.raise_for_status()
+            text = response.text
 
             bs = BeautifulSoup(text, "lxml")
             if not bs.contents:
-                raise urllib.error.URLError("Page is empty!")
+                raise requests.exceptions.HTTPError("Page is empty!")
             return response, bs
+        except requests.exceptions.HTTPError as err:
+            if err.response.status_code == 403:
+                raise
+            else:
+                failed_counter += 1
+                if failed_counter > max_request_retries:
+                    raise
         except Exception:
             failed_counter += 1
             if failed_counter > max_request_retries:
                 raise
 
         delay_step = 10
-        logger.info("#" + str(threading.get_ident()) + "#   " + "Retrying in " + str(retry_failure_delay) + " seconds to allow request to " + request.get_full_url() + " to chill")
+        logger.info("#" + str(threading.get_ident()) + "#   " + "Retrying in " + str(retry_failure_delay) + " seconds to allow request to " + url + " to chill")
         time_to_wait = int(math.ceil(float(retry_failure_delay)/float(delay_step)))
         for i in range(retry_failure_delay, 0, -time_to_wait):
             logger.info("#" + str(threading.get_ident()) + "#   " + str(i))
@@ -15158,10 +15168,11 @@ def url_request_lxml(session, url, timeout=30):
     failed_counter = 0
     while(True):
         try:
-            response = session.get(url, timeout=timeout)
+            response = gateway_session.get(url, timeout=timeout, headers=request_headers)
+            response.raise_for_status()
             bs = lxml.html.document_fromstring(response.text)
             if not bs:
-                raise urllib.error.URLError("Page is empty!")
+                raise requests.exceptions.HTTPError("Page is empty!")
             return response, bs
         except Exception:
             failed_counter += 1
@@ -15176,19 +15187,20 @@ def url_request_lxml(session, url, timeout=30):
             time.sleep(time_to_wait)
         logger.info("#" + str(threading.get_ident()) + "#   " + "0")
 
-def url_request_bytes(request, timeout=30):
+def url_request_bytes(url, timeout=30):
     failed_counter = 0
     while(True):
         try:
-            response = urllib.request.urlopen(request, timeout=timeout)
-            return response.read()
+            response = gateway_session.get(url, timeout=timeout, headers=request_headers)
+            response.raise_for_status()
+            return response.content
         except Exception:
             failed_counter += 1
             if failed_counter > max_request_retries:
                 raise
 
         delay_step = 10
-        logger.info("#" + str(threading.get_ident()) + "#   " + "Retrying in " + str(retry_failure_delay) + " seconds to allow request to " + request.get_full_url() + " to chill")
+        logger.info("#" + str(threading.get_ident()) + "#   " + "Retrying in " + str(retry_failure_delay) + " seconds to allow request to " + url + " to chill")
         time_to_wait = int(math.ceil(float(retry_failure_delay)/float(delay_step)))
         for i in range(retry_failure_delay, 0, -time_to_wait):
             logger.info("#" + str(threading.get_ident()) + "#   " + str(i))
@@ -15199,7 +15211,9 @@ def url_request_json(session, url, timeout=30):
     failed_counter = 0
     while(True):
         try:
-            return session.get(url, timeout=timeout).json()
+            response = session.get(url, timeout=timeout, headers=request_headers)
+            response.raise_for_status()
+            return json.loads(response.content)
         except Exception:
             failed_counter += 1
             if failed_counter > max_request_retries:
@@ -15213,18 +15227,20 @@ def url_request_json(session, url, timeout=30):
             time.sleep(time_to_wait)
         logger.info("#" + str(threading.get_ident()) + "#   " + "0")
 
-def url_request_json_urlib(request, timeout=30):
+def url_request_imgur(url, data, timeout=30):
     failed_counter = 0
     while(True):
         try:
-            return json.loads(urllib.request.urlopen(request, timeout=timeout).read())
+            response = requests.post(url, data=data, headers=imgur_headers)
+            response.raise_for_status()
+            return json.loads(response.content)
         except Exception:
             failed_counter += 1
             if failed_counter > max_request_retries:
                 raise
 
         delay_step = 10
-        logger.info("#" + str(threading.get_ident()) + "#   " + "Retrying in " + str(retry_failure_delay) + " seconds to allow " + request.get_full_url() + " to chill")
+        logger.info("#" + str(threading.get_ident()) + "#   " + "Retrying in " + str(retry_failure_delay) + " seconds to allow " + url + " to chill")
         time_to_wait = int(math.ceil(float(retry_failure_delay)/float(delay_step)))
         for i in range(retry_failure_delay, 0, -time_to_wait):
             logger.info("#" + str(threading.get_ident()) + "#   " + str(i))
@@ -15275,29 +15291,39 @@ def get_player(name, time_frames):
     if name_sub in manual_players:
         player_id = manual_players[name_sub]
         player_url = main_page_url_format.format(player_id[0], player_id)
-        request = urllib.request.Request(player_url, headers=request_headers)
         try:
-            response, player_page = url_request(request)
+            response, player_page = url_request(player_url)
             return player_id, player_page
-        except urllib.error.HTTPError as err:
-            if err.status == 404:
+        except requests.exceptions.HTTPError as err:
+            if err.response.status_code == 404:
                 return None, None
             else:
                 raise
 
     search_url = player_search_url_format.format(urllib.parse.quote_plus(name.replace(".", "")))
-    request = urllib.request.Request(search_url, headers=request_headers)
     response = None
     try:
-        response, player_page = url_request(request)
-    except urllib.error.HTTPError as err:
-        if err.status == 404:
+        response, player_page = url_request(search_url)
+    except requests.exceptions.HTTPError as err:
+        if err.response.status_code == 404:
             return None, None
+        elif err.response.status_code == 403:
+            error_split = str(err).split()
+            error_url = error_split[len(error_split) - 1]
+            new_url = "https://www.hockey-reference.com" + urlparse(error_url).path
+            try:
+                response, player_page = url_request(new_url)
+            except requests.exceptions.HTTPError as err:
+                if err.response.status_code == 404:
+                    return None, None
+                else:
+                    raise
         else:
             raise
 
-    url = urlparse(response.geturl())
+    url = urlparse(response.url)
     path = url.path[1:].split("/")
+    path.pop(0)
 
     if path[0] == "players":
         player_id = path[2][:-5]
@@ -15433,12 +15459,11 @@ def get_player(name, time_frames):
                 matching_player = matching_players[0]
 
                 player_url = main_page_url_format.format(matching_player["id"][0], matching_player["id"])
-                request = urllib.request.Request(player_url, headers=request_headers)
                 response = None
                 try:
-                    response, player_page = url_request(request)
-                except urllib.error.HTTPError as err:
-                    if err.status == 404:
+                    response, player_page = url_request(player_url)
+                except requests.exceptions.HTTPError as err:
+                    if err.response.status_code == 404:
                         return None, None
                     else:
                         raise
@@ -17852,11 +17877,10 @@ def get_team_map_info(player_data, player_type, valid_teams, comment_obj):
     }]
 
     player_url = main_page_url_format.format(player_data["id"][0], player_data["id"])
-    request = urllib.request.Request(player_url, headers=request_headers)
     try:
-        player_page = url_request(request)[1]
-    except urllib.error.HTTPError as err:
-        if err.status == 404:
+        player_page = url_request(player_url)[1]
+    except requests.exceptions.HTTPError as err:
+        if err.response.status_code == 404:
             return None, None
         else:
             raise
@@ -17962,11 +17986,10 @@ def get_teammate_info(player_data, player_type, comment_obj):
     }]
 
     player_url = main_page_url_format.format(player_data["id"][0], player_data["id"])
-    request = urllib.request.Request(player_url, headers=request_headers)
     try:
-        player_page = url_request(request)[1]
-    except urllib.error.HTTPError as err:
-        if err.status == 404:
+        player_page = url_request(player_url)[1]
+    except requests.exceptions.HTTPError as err:
+        if err.response.status_code == 404:
             return None, None
         else:
             raise
@@ -18007,8 +18030,8 @@ def get_teammate_data(player_data, row_data, s):
     teammates = set()    
     try:
         sub_data = url_request_json(s, "https://statsapi.web.nhl.com/api/v1/game/" + str(row_data["NHLGameLink"]) + "/feed/live")
-    except urllib.error.HTTPError as err:
-        if err.status == 404:
+    except requests.exceptions.HTTPError as err:
+        if err.response.status_code == 404:
             return teammates
         else:
             raise
@@ -18080,11 +18103,10 @@ def get_all_games(player_data, time_frame, player_type, comment_obj):
     }]
 
     player_url = main_page_url_format.format(player_data["id"][0], player_data["id"])
-    request = urllib.request.Request(player_url, headers=request_headers)
     try:
-        player_page = url_request(request)[1]
-    except urllib.error.HTTPError as err:
-        if err.status == 404:
+        player_page = url_request(player_url)[1]
+    except requests.exceptions.HTTPError as err:
+        if err.response.status_code == 404:
             return None, None
         else:
             raise
@@ -18214,7 +18236,7 @@ def handle_season_stats_game(player_type, player_data, player_link, time_frame, 
                 url_to_use = "https://api.nhle.com/stats/rest/en/" + player_key + "/" + report + "?isAggregate=false&isGame=true&start=" + str(start) +"&factCayenneExp=gamesPlayed>=1&sort=[{\"property\":\"gameDate\",\"direction\":\"ASC\"}]&limit=" + str(limit) + "&cayenneExp=" + urllib.parse.quote_plus("seasonId<=\"" + str(end_date) + "\" and seasonId>=\"" + str(start_date) + "\" and gameTypeId=" + str(game_id) + " and playerId like \"" + str(player_id) + "\"")
             try:
                 sub_data = url_request_json(s, url_to_use)
-            except urllib.error.HTTPError:
+            except requests.exceptions.HTTPError:
                 raise
             games_to_use += sub_data["data"]
             start += limit
@@ -18233,7 +18255,7 @@ def handle_season_stats_game(player_type, player_data, player_link, time_frame, 
                     url_to_use = "https://api.nhle.com/stats/rest/en/" + player_key + "/" + report + "?isAggregate=false&isGame=true&start=" + str(start) +"&factCayenneExp=gamesPlayed>=1&sort=[{\"property\":\"gameDate\",\"direction\":\"ASC\"}]&limit=" + str(limit) + "&cayenneExp=" + urllib.parse.quote_plus("seasonId<=\"" + str(end_date) + "\" and seasonId>=\"" + str(start_date) + "\" and gameTypeId=" + str(game_id) + " and playerId like \"" + str(player_id) + "\"")
                 try:
                     sub_data = url_request_json(s, url_to_use)
-                except urllib.error.HTTPError:
+                except requests.exceptions.HTTPError:
                     raise
                 sub_games += sub_data["data"]
                 start += limit
@@ -20656,11 +20678,10 @@ def get_opponent_schedule(seasons):
     team_obj = {}
 
     for season_obj in seasons:
-        request = urllib.request.Request(opponent_schedule_url_format.format(season_obj["Year"] + 1), headers=request_headers)
         try:
-            response, player_page = url_request(request)
-        except urllib.error.HTTPError as err:
-            if err.status == 404:
+            response, player_page = url_request(opponent_schedule_url_format.format(season_obj["Year"] + 1))
+        except requests.exceptions.HTTPError as err:
+            if err.response.status_code == 404:
                 continue
             else:
                 raise
@@ -24652,8 +24673,8 @@ def setup_game_data(player_data, row_data, player_id, player_type, time_frame, e
     #print("https://statsapi.web.nhl.com/api/v1/game/" + str(row_data["NHLGameLink"]) + "/feed/live")
     try:
         sub_data = url_request_json(s, "https://statsapi.web.nhl.com/api/v1/game/" + str(row_data["NHLGameLink"]) + "/feed/live")
-    except urllib.error.HTTPError as err:
-        if err.status == 404:
+    except requests.exceptions.HTTPError as err:
+        if err.response.status_code == 404:
             missing_games = True
             game_data["missing_data"] = True
             return game_data, missing_games, []
@@ -24845,8 +24866,8 @@ def get_html_game_stats(game_data, missing_games, row_data, s):
         year_str += str(sub_year + 1)
         game_id = game_id[4:]
         response, player_page_xml = url_request_lxml(s, nhl_html_summary_report_format.format(year_str, game_id))
-    except urllib.error.HTTPError as err:
-        if err.status == 404:
+    except requests.exceptions.HTTPError as err:
+        if err.response.status_code == 404:
             missing_games = True
             return missing_games
         else:
@@ -25246,8 +25267,8 @@ def get_html_shift_data(og_game_id, is_home, game_data, player_data, row_year, s
             year_str += str(sub_year + 1)
             game_id = game_id[4:]
             response, player_page_xml = url_request_lxml(s, nhl_html_shifts_report_format.format(year_str, team_str, game_id))
-        except urllib.error.HTTPError as err:
-            if err.status == 404:
+        except requests.exceptions.HTTPError as err:
+            if err.response.status_code == 404:
                 return {}, {}, {}
             else:
                 raise
@@ -25698,8 +25719,8 @@ def get_html_play_data(scoring_plays, player_data, og_game_id, is_home, game_dat
         year_str += str(sub_year + 1)
         game_id = game_id[4:]
         response, player_page_xml = url_request_lxml(s, nhl_html_plays_report_format.format(year_str, game_id))
-    except urllib.error.HTTPError as err:
-        if err.status == 404:
+    except requests.exceptions.HTTPError as err:
+        if err.response.status_code == 404:
             return []
         else:
             raise
@@ -26225,8 +26246,8 @@ def get_old_html_play_data(scoring_plays, player_data, og_game_id, is_home, game
         year_str += str(sub_year + 1)
         game_id = game_id[4:]
         response, player_page_xml = url_request_lxml(s, nhl_html_plays_report_format.format(year_str, game_id))
-    except urllib.error.HTTPError as err:
-        if err.status == 404:
+    except requests.exceptions.HTTPError as err:
+        if err.response.status_code == 404:
             return []
         else:
             raise
@@ -26738,8 +26759,8 @@ def get_older_html_play_data(scoring_plays, player_data, og_game_id, is_home, ga
         year_str += str(sub_year + 1)
         game_id = game_id[4:]
         response, player_page_xml = url_request_lxml(s, nhl_html_summary_report_format.format(year_str, game_id))
-    except urllib.error.HTTPError as err:
-        if err.status == 404:
+    except requests.exceptions.HTTPError as err:
+        if err.response.status_code == 404:
             return []
         else:
             raise
@@ -27106,8 +27127,8 @@ def get_href_html_play_data(scoring_plays, player_data, player_type, time_frame,
 
     try:
         response, player_page_xml = url_request_lxml(s, "https://www.hockey-reference.com" + game_link)
-    except urllib.error.HTTPError as err:
-        if err.status == 404:
+    except requests.exceptions.HTTPError as err:
+        if err.response.status_code == 404:
             return game_data, missing_games
         else:
             raise
@@ -37607,11 +37628,10 @@ def get_player_current_team_number(player_page):
                             numbers_year_map[row_year].add(row_team_str)
                             if row_team_str not in parsed_teams:
                                 team_url = "https://www.hockey-reference.com" + row_team.get("href")
-                                request = urllib.request.Request(team_url, headers=request_headers)
                                 try:
-                                    response, team_page = url_request(request)
-                                except urllib.error.HTTPError as err:
-                                    if err.status == 404:
+                                    response, team_page = url_request(team_url)
+                                except requests.exceptions.HTTPError as err:
+                                    if err.response.status_code == 404:
                                         return []
                                     else:
                                         raise
@@ -37661,11 +37681,10 @@ def get_player_current_team_number(player_page):
                 numbers_year_map[current_season] = set()
             numbers_year_map[current_season].add(row_team_str)
             team_url = "https://www.hockey-reference.com/teams/" + row_team_str
-            request = urllib.request.Request(team_url, headers=request_headers)
             try:
-                response, team_page = url_request(request)
-            except urllib.error.HTTPError as err:
-                if err.status == 404:
+                response, team_page = url_request(team_url)
+            except requests.exceptions.HTTPError as err:
+                if err.response.status_code == 404:
                     return []
                 else:
                     raise
@@ -37681,11 +37700,10 @@ def get_player_current_team_number(player_page):
                     if not numbers_map and not team:
                         row_team_str = str(pot_link.get("href").split("/")[2].upper())
                         team_url = "https://www.hockey-reference.com/teams/" + row_team_str
-                        request = urllib.request.Request(team_url, headers=request_headers)
                         try:
-                            response, team_page = url_request(request)
-                        except urllib.error.HTTPError as err:
-                            if err.status == 404:
+                            response, team_page = url_request(team_url)
+                        except requests.exceptions.HTTPError as err:
+                            if err.response.status_code == 404:
                                 return []
                             else:
                                 raise
@@ -37762,12 +37780,12 @@ def get_nhl_player_link(player_data, s):
                         if len(matching_players) == 1:
                             logger.info("#" + str(threading.get_ident()) + "#   " + "Found NHL Player " + matching_players[0]["fullName"] + " (" + str(matching_players[0]["id"]) + ") by birthdate")
                             return matching_players[0]["link"], matching_players[0]["fullName"], matching_players[0]["primaryPosition"]["abbreviation"], matching_players[0]["shootsCatches"] if ("shootsCatches" in matching_players[0] and matching_players[0]["shootsCatches"]) else None
-                except urllib.error.HTTPError:
+                except requests.exceptions.HTTPError:
                     raise
             else:
                 try:
                     data = url_request_json(s, team_roster_url_format.format(team_id, year_str))
-                except urllib.error.HTTPError:
+                except requests.exceptions.HTTPError:
                     raise
 
                 if "roster" not in data:
@@ -37874,12 +37892,12 @@ def get_nhl_player_link(player_data, s):
 
                             logger.info("#" + str(threading.get_ident()) + "#   " + "Found NHL Player " + player["person"]["fullName"] + " (" + str(player["person"]["id"]) + ") by name")
                             return player["person"]["link"], player["person"]["fullName"], player["person"]["primaryPosition"]["abbreviation"], player["person"]["shootsCatches"] if ("shootsCatches" in player["person"] and player["person"]["shootsCatches"]) else None
-                except urllib.error.HTTPError:
+                except requests.exceptions.HTTPError:
                     raise
             else:
                 try:
                     data = url_request_json(s, team_roster_url_format.format(team_id, year_str))
-                except urllib.error.HTTPError:
+                except requests.exceptions.HTTPError:
                     raise
 
                 if "roster" not in data:
@@ -41860,8 +41878,7 @@ def create_table_html(html_info, player_datas, original_comment, last_updated, c
                 "image" : base64.standard_b64encode(image_file.read()),
                 "title" : comment_id
             }
-            request = urllib.request.Request(url=imgur_upload_url, data=urllib.parse.urlencode(data).encode("utf-8"), headers=imgur_headers)
-            return url_request_json_urlib(request, timeout=30)["data"]["link"]
+            return url_request_imgur(imgur_upload_url, data=data, timeout=30)["data"]["link"]
     finally:
         #logger.info("#" + str(threading.get_ident()) + "# " + dirpath)
         shutil.rmtree(dirpath)
@@ -41870,8 +41887,7 @@ def parse_flag(flag):
     if flag:
         link = flag["link"]
         flag_class = flag["flag_class"]
-        request = urllib.request.Request(link, headers=request_headers)
-        css = url_request_bytes(request).decode("UTF-8")
+        css = url_request_bytes(link).decode("UTF-8")
         stylesheet = tinycss.make_parser().parse_stylesheet(css)
         for rule in stylesheet.rules:
             if isinstance(rule, tinycss.css21.RuleSet):

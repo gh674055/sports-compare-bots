@@ -5,7 +5,6 @@ import math
 import time
 import sqlite3
 import traceback
-import urllib.request
 import urllib.parse
 from bs4 import BeautifulSoup, Comment, Tag
 from urllib.parse import urlparse
@@ -65,6 +64,8 @@ import multiprocessing
 import functools
 import ephem
 import ssl
+from requests_ip_rotator import ApiGateway
+import atexit
 
 subreddits_to_crawl = {
     "sportscomparebots" : False,
@@ -1050,6 +1051,17 @@ with open ("team_venue_history.json", "r") as file:
 
 ssl._create_default_https_context = ssl._create_unverified_context
 
+gateway = ApiGateway("https://www.pro-football-reference.com", verbose=False)
+gateway.start()
+
+gateway_session = requests.Session()
+gateway_session.mount("https://www.pro-football-reference.com", gateway)
+
+def exit_handler():
+    gateway.shutdown()
+
+atexit.register(exit_handler)
+
 def main():
     """The main function."""
 
@@ -1202,7 +1214,7 @@ def sub_parse_input(curr, comment, debug_mode, comment_obj, force_through):
         except get_constant_data.CustomMessageException as e:
             reddit_message = "Oh no, I had a problem with your request: " + e.message
             logger.error("#" + str(threading.get_ident()) + "#   " + traceback.format_exc())
-        except (urllib.error.URLError, socket.timeout, requests.exceptions.ConnectionError) as e:
+        except (requests.exceptions.RequestException, socket.timeout, requests.exceptions.ConnectionError) as e:
             reddit_message = "Oh no, I had a problem with your request: Unable to connect to Pro Football Reference! Please try again later"
             logger.error("#" + str(threading.get_ident()) + "#   " + traceback.format_exc())
         except BaseException as e:
@@ -5991,9 +6003,6 @@ def handle_name_threads(sub_name, parse_time_frames, index, player_type, is_fant
             player_data["sort_index"] = index
         
         return player_datas
-    except urllib.error.URLError as err:
-        logger.error(traceback.format_exc())
-        raise urllib.error.URLError(err.reason)
     except Exception as err:
         logger.error(traceback.format_exc())
         raise err
@@ -6038,8 +6047,7 @@ def calculate_best(player_data, player_datas, player_type, is_fantasy, extra_sta
     return player_data
 
 def get_current_week():
-    request = urllib.request.Request(home_page, headers=request_headers)
-    response, player_page = url_request(request)
+    response, player_page = url_request(home_page)
 
     current_games_per_season = year_weeks_played[len(year_weeks_played) - 1]["weeks"]
 
@@ -6538,31 +6546,32 @@ def handle_the_same_games_quals(sub_name, qual_str, subbb_frames, time_frame, pl
                         "new_qual_type" : new_qual_type
                     }
 
-def url_request(request, timeout=30):
+def url_request(url, timeout=30):
     failed_counter = 0
     while(True):
         try:
-            response = urllib.request.urlopen(request, timeout=timeout)
-            text = response.read()
-            try:
-                text = text.decode(response.headers.get_content_charset())
-            except UnicodeDecodeError:
-                bs = BeautifulSoup(text, "html.parser")
-                if not bs.contents:
-                    raise urllib.error.URLError("Page is empty!")
-                return response, bs
+            response = gateway_session.get(url, timeout=timeout, headers=request_headers)
+            response.raise_for_status()
+            text = response.text
 
             bs = BeautifulSoup(text, "lxml")
             if not bs.contents:
-                raise urllib.error.URLError("Page is empty!")
+                raise requests.exceptions.HTTPError("Page is empty!")
             return response, bs
+        except requests.exceptions.HTTPError as err:
+            if err.response.status_code == 403:
+                raise
+            else:
+                failed_counter += 1
+                if failed_counter > max_request_retries:
+                    raise
         except Exception:
             failed_counter += 1
             if failed_counter > max_request_retries:
                 raise
 
         delay_step = 10
-        logger.info("#" + str(threading.get_ident()) + "#   " + "Retrying in " + str(retry_failure_delay) + " seconds to allow request to " + request.get_full_url() + " to chill")
+        logger.info("#" + str(threading.get_ident()) + "#   " + "Retrying in " + str(retry_failure_delay) + " seconds to allow request to " + url + " to chill")
         time_to_wait = int(math.ceil(float(retry_failure_delay)/float(delay_step)))
         for i in range(retry_failure_delay, 0, -time_to_wait):
             logger.info("#" + str(threading.get_ident()) + "#   " + str(i))
@@ -6573,10 +6582,11 @@ def url_request_lxml(session, url, timeout=30):
     failed_counter = 0
     while(True):
         try:
-            response = session.get(url, timeout=timeout)
+            response = gateway_session.get(url, timeout=timeout, headers=request_headers)
+            response.raise_for_status()
             bs = lxml.html.document_fromstring(response.text)
             if not bs:
-                raise urllib.error.URLError("Page is empty!")
+                raise requests.exceptions.HTTPError("Page is empty!")
             return response, bs
         except Exception:
             failed_counter += 1
@@ -6591,19 +6601,20 @@ def url_request_lxml(session, url, timeout=30):
             time.sleep(time_to_wait)
         logger.info("#" + str(threading.get_ident()) + "#   " + "0")
 
-def url_request_bytes(request, timeout=30):
+def url_request_bytes(url, timeout=30):
     failed_counter = 0
     while(True):
         try:
-            response = urllib.request.urlopen(request, timeout=timeout)
-            return response.read()
+            response = gateway_session.get(url, timeout=timeout, headers=request_headers)
+            response.raise_for_status()
+            return response.content
         except Exception:
             failed_counter += 1
             if failed_counter > max_request_retries:
                 raise
 
         delay_step = 10
-        logger.info("#" + str(threading.get_ident()) + "#   " + "Retrying in " + str(retry_failure_delay) + " seconds to allow request to " + request.get_full_url() + " to chill")
+        logger.info("#" + str(threading.get_ident()) + "#   " + "Retrying in " + str(retry_failure_delay) + " seconds to allow request to " + url + " to chill")
         time_to_wait = int(math.ceil(float(retry_failure_delay)/float(delay_step)))
         for i in range(retry_failure_delay, 0, -time_to_wait):
             logger.info("#" + str(threading.get_ident()) + "#   " + str(i))
@@ -6614,7 +6625,9 @@ def url_request_json(session, url, timeout=30):
     failed_counter = 0
     while(True):
         try:
-            return session.get(url, timeout=timeout).json()
+            response = session.get(url, timeout=timeout, headers=request_headers)
+            response.raise_for_status()
+            return json.loads(response.content)
         except Exception:
             failed_counter += 1
             if failed_counter > max_request_retries:
@@ -6628,18 +6641,20 @@ def url_request_json(session, url, timeout=30):
             time.sleep(time_to_wait)
         logger.info("#" + str(threading.get_ident()) + "#   " + "0")
 
-def url_request_json_urlib(request, timeout=30):
+def url_request_imgur(url, data, timeout=30):
     failed_counter = 0
     while(True):
         try:
-            return json.load(urllib.request.urlopen(request, timeout=timeout))
+            response = requests.post(url, data=data, headers=imgur_headers)
+            response.raise_for_status()
+            return json.loads(response.content)
         except Exception:
             failed_counter += 1
             if failed_counter > max_request_retries:
                 raise
 
         delay_step = 10
-        logger.info("#" + str(threading.get_ident()) + "#   " + "Retrying in " + str(retry_failure_delay) + " seconds to allow " + request.get_full_url() + " to chill")
+        logger.info("#" + str(threading.get_ident()) + "#   " + "Retrying in " + str(retry_failure_delay) + " seconds to allow " + url + " to chill")
         time_to_wait = int(math.ceil(float(retry_failure_delay)/float(delay_step)))
         for i in range(retry_failure_delay, 0, -time_to_wait):
             logger.info("#" + str(threading.get_ident()) + "#   " + str(i))
@@ -6682,29 +6697,39 @@ def get_player(name, player_type, time_frames):
     if name_sub in manual_players:
         player_id = manual_players[name_sub]
         player_url = main_page_url_format.format(player_id[0].upper(), player_id)
-        request = urllib.request.Request(player_url, headers=request_headers)
         try:
-            response, player_page = url_request(request)
+            response, player_page = url_request(player_url)
             return player_id, player_page
-        except urllib.error.HTTPError as err:
-            if err.status == 404:
+        except requests.exceptions.HTTPError as err:
+            if err.response.status_code == 404:
                 return None, None
             else:
                 raise
 
     search_url = player_search_url_format.format(urllib.parse.quote_plus(name.replace(".", "")))
-    request = urllib.request.Request(search_url, headers=request_headers)
     response = None
     try:
-        response, player_page = url_request(request)
-    except urllib.error.HTTPError as err:
-        if err.status == 404:
+        response, player_page = url_request(search_url)
+    except requests.exceptions.HTTPError as err:
+        if err.response.status_code == 404:
             return None, None
+        elif err.response.status_code == 403:
+            error_split = str(err).split()
+            error_url = error_split[len(error_split) - 1]
+            new_url = "https://www.pro-football-reference.com" + urlparse(error_url).path
+            try:
+                response, player_page = url_request(new_url)
+            except requests.exceptions.HTTPError as err:
+                if err.response.status_code == 404:
+                    return None, None
+                else:
+                    raise
         else:
             raise
         
-    url = urlparse(response.geturl())
+    url = urlparse(response.url)
     path = url.path[1:].split("/")
+    path.pop(0)
 
     if path[0] == "players":
         player_id = path[2][:-4]
@@ -6720,11 +6745,10 @@ def get_player(name, player_type, time_frames):
         for i in range(0, 10):
             the_id = pot_id + str(i).zfill(2)
             url = main_page_url_format.format(the_id[0].upper(), the_id)
-            request = urllib.request.Request(url, headers=request_headers)
             try:
-                response, player_page = url_request(request)
-            except urllib.error.HTTPError as err:
-                if err.status == 404:
+                response, player_page = url_request(url)
+            except requests.exceptions.HTTPError as err:
+                if err.response.status_code == 404:
                     return None, None
                 else:
                     raise
@@ -6879,12 +6903,11 @@ def get_player(name, player_type, time_frames):
                 matching_player = matching_players[0]
 
                 player_url = main_page_url_format.format(matching_player["id"][0].upper(), matching_player["id"])
-                request = urllib.request.Request(player_url, headers=request_headers)
                 response = None
                 try:
-                    response, player_page = url_request(request)
-                except urllib.error.HTTPError as err:
-                    if err.status == 404:
+                    response, player_page = url_request(player_url)
+                except requests.exceptions.HTTPError as err:
+                    if err.response.status_code == 404:
                         return None, None
                     else:
                         raise
@@ -8354,11 +8377,10 @@ def handle_player_data(player_data, time_frame, player_type, player_page, is_fan
     og_player_page = player_page
     if (is_fantasy and "Fantasy" in headers[player_type["da_type"]]) or not (time_frame["type"].startswith("season") or (time_frame["type"] == "date" and (isinstance(time_frame["time_start"], int) or isinstance(time_frame["time_end"], int)))) or is_qual_match:
         player_url = game_splits_url_format.format(player_data["id"][0].upper(), player_data["id"])
-        request = urllib.request.Request(player_url, headers=request_headers)
         try:
-            response, player_page = url_request(request)
-        except urllib.error.HTTPError as err:
-            if err.status == 404:
+            response, player_page = url_request(player_url)
+        except requests.exceptions.HTTPError as err:
+            if err.response.status_code == 404:
                 return [], missing_games
             else:
                 raise
@@ -8387,11 +8409,10 @@ def handle_player_data(player_data, time_frame, player_type, player_page, is_fan
     playoff_data = None
     if time_frame["playoffs"]:
         player_url = game_splits_url_format.format(player_data["id"][0].upper(), player_data["id"])
-        request = urllib.request.Request(player_url, headers=request_headers)
         try:
-            response, playoff_player_page = url_request(request)
-        except urllib.error.HTTPError as err:
-            if err.status == 404:
+            response, playoff_player_page = url_request(player_url)
+        except requests.exceptions.HTTPError as err:
+            if err.response.status_code == 404:
                 return [], missing_games
             else:
                 raise
@@ -8943,11 +8964,10 @@ def get_team_map_info(player_data, player_type, valid_teams, comment_obj):
     }]
 
     player_url = main_page_url_format.format(player_data["id"][0].upper(), player_data["id"])
-    request = urllib.request.Request(player_url, headers=request_headers)
     try:
-        player_page = url_request(request)[1]
-    except urllib.error.HTTPError as err:
-        if err.status == 404:
+        player_page = url_request(player_url)[1]
+    except requests.exceptions.HTTPError as err:
+        if err.response.status_code == 404:
             return None, None
         else:
             raise
@@ -9052,11 +9072,10 @@ def get_all_games(player_data, time_frame, player_type, comment_obj):
     }]
 
     player_url = main_page_url_format.format(player_data["id"][0].upper(), player_data["id"])
-    request = urllib.request.Request(player_url, headers=request_headers)
     try:
-        player_page = url_request(request)[1]
-    except urllib.error.HTTPError as err:
-        if err.status == 404:
+        player_page = url_request(player_url)[1]
+    except requests.exceptions.HTTPError as err:
+        if err.response.status_code == 404:
             return None, None
         else:
             raise
@@ -9310,8 +9329,8 @@ def get_game_data(index, player_data, row_data, qualifiers, extra_stats, s):
 
     try:
         response, player_page_xml = url_request_lxml(s, "https://www.pro-football-reference.com" + row_data["Shared"]["GameLink"])
-    except urllib.error.HTTPError as err:
-        if err.status == 404:
+    except requests.exceptions.HTTPError as err:
+        if err.response.status_code == 404:
             missing_games = True
             game_data["missing_data"] = True
             return game_data, row_data, missing_games
@@ -11235,11 +11254,10 @@ def handle_week_qual(all_rows, qualifier, player_data, is_playoffs):
 
 def handle_fumbles_lost(player_data, all_rows, player_type, ind_player_type, time_frame):
     player_url = game_splits_url_format.format(player_data["id"][0].upper(), player_data["id"])
-    request = urllib.request.Request(player_url, headers=request_headers)
     try:
-        response, player_page = url_request(request)
-    except urllib.error.HTTPError as err:
-        if err.status == 404:
+        response, player_page = url_request(player_url)
+    except requests.exceptions.HTTPError as err:
+        if err.response.status_code == 404:
             return
         else:
             raise
@@ -11403,11 +11421,10 @@ def handle_season_only_stats(is_game_page, is_game, player_page, player_data, pl
 
     if is_game_page:
         player_url = advanced_game_splits_url_format.format(player_data["id"][0].upper(), player_data["id"])
-        request = urllib.request.Request(player_url, headers=request_headers)
         try:
-            response, player_page = url_request(request)
-        except urllib.error.HTTPError as err:
-            if err.status == 404:
+            response, player_page = url_request(player_url)
+        except requests.exceptions.HTTPError as err:
+            if err.response.status_code == 404:
                 return
             else:
                 raise
@@ -19259,11 +19276,10 @@ def parse_row(row, table_name, time_frame, year, is_playoffs, player_type, ind_p
 
 def handle_gwd(player_data):
     player_url = gwd_url_format.format(player_data["id"])
-    request = urllib.request.Request(player_url, headers=request_headers)
     try:
-        response, player_page = url_request(request)
-    except urllib.error.HTTPError as err:
-        if err.status == 404:
+        response, player_page = url_request(player_url)
+    except requests.exceptions.HTTPError as err:
+        if err.response.status_code == 404:
             return
         else:
             raise
@@ -19307,11 +19323,10 @@ def handle_penalties(player_data, player_type, ind_player_type, is_game_page):
     playoff_dates = []
     if not is_game_page:
         player_url = game_splits_url_format.format(player_data["id"][0].upper(), player_data["id"])
-        request = urllib.request.Request(player_url, headers=request_headers)
         try:
-            response, player_page = url_request(request)
-        except urllib.error.HTTPError as err:
-            if err.status == 404:
+            response, player_page = url_request(player_url)
+        except requests.exceptions.HTTPError as err:
+            if err.response.status_code == 404:
                 return
             else:
                 raise
@@ -19325,11 +19340,10 @@ def handle_penalties(player_data, player_type, ind_player_type, is_game_page):
             playoff_dates.append(val["Shared"]["Date"])
 
     player_url = penalties_url.format(player_data["id"][0].upper(), player_data["id"])
-    request = urllib.request.Request(player_url, headers=request_headers)
     try:
-        response, player_page = url_request(request)
-    except urllib.error.HTTPError as err:
-        if err.status == 404:
+        response, player_page = url_request(player_url)
+    except requests.exceptions.HTTPError as err:
+        if err.response.status_code == 404:
             return
         else:
             raise
@@ -19390,11 +19404,10 @@ def handle_penalties(player_data, player_type, ind_player_type, is_game_page):
 
 def handle_pick_sixes(player_data):
     player_url = pick6_url.format(player_data["id"][0].upper(), player_data["id"])
-    request = urllib.request.Request(player_url, headers=request_headers)
     try:
-        response, player_page = url_request(request)
-    except urllib.error.HTTPError as err:
-        if err.status == 404:
+        response, player_page = url_request(player_url)
+    except requests.exceptions.HTTPError as err:
+        if err.response.status_code == 404:
             return
         else:
             raise
@@ -19435,11 +19448,10 @@ def handle_fantasy(player_data, all_rows):
 
     for year_need in years_need_data:
         player_url = fantasy_url.format(player_data["id"][0].upper(), player_data["id"], year_need)
-        request = urllib.request.Request(player_url, headers=request_headers)
         try:
-            response, player_page = url_request(request)
-        except urllib.error.HTTPError as err:
-            if err.status == 404:
+            response, player_page = url_request(player_url)
+        except requests.exceptions.HTTPError as err:
+            if err.response.status_code == 404:
                 return
             else:
                 raise
@@ -21571,11 +21583,10 @@ def perform_indv_opponent_schedule_qualifiers(row, qualifiers):
 def get_team_schedule(seasons):
     season_objs = {}
     for season_obj in seasons:
-        request = urllib.request.Request(team_schedule_url_format.format(season_obj["Tm"].lower(), season_obj["Year"]), headers=request_headers)
         try:
-            response, player_page = url_request(request)
-        except urllib.error.HTTPError as err:
-            if err.status == 404:
+            response, player_page = url_request(team_schedule_url_format.format(season_obj["Tm"].lower(), season_obj["Year"]))
+        except requests.exceptions.HTTPError as err:
+            if err.response.status_code == 404:
                 continue
             else:
                 raise
@@ -21737,11 +21748,10 @@ def get_team_schedule(seasons):
 def get_injury_schedule(player_data, seasons):
     season_objs = {}
     for season_obj in seasons:
-        request = urllib.request.Request(team_injury_url_format.format(season_obj["Tm"].lower(), season_obj["Year"]), headers=request_headers)
         try:
-            response, player_page = url_request(request)
-        except urllib.error.HTTPError as err:
-            if err.status == 404:
+            response, player_page = url_request(team_injury_url_format.format(season_obj["Tm"].lower(), season_obj["Year"]))
+        except requests.exceptions.HTTPError as err:
+            if err.response.status_code == 404:
                 continue
             else:
                 raise
@@ -21794,11 +21804,10 @@ def get_injury_schedule(player_data, seasons):
 def get_spread_schedule(player_data, seasons):
     season_objs = {}
     for season_obj in seasons:
-        request = urllib.request.Request(team_spread_url_format.format(season_obj["Tm"].lower(), season_obj["Year"]), headers=request_headers)
         try:
-            response, player_page = url_request(request)
-        except urllib.error.HTTPError as err:
-            if err.status == 404:
+            response, player_page = url_request(team_spread_url_format.format(season_obj["Tm"].lower(), season_obj["Year"]))
+        except requests.exceptions.HTTPError as err:
+            if err.response.status_code == 404:
                 continue
             else:
                 raise
@@ -21838,11 +21847,10 @@ def get_opponent_schedule(seasons, has_offensive_stats, has_defensive_stats, fan
 
     for season_obj in seasons:
         if has_offensive_stats:
-            request = urllib.request.Request(opponent_schedule_url_format.format(season_obj["Year"]), headers=request_headers)
             try:
-                response, player_page = url_request(request)
-            except urllib.error.HTTPError as err:
-                if err.status == 404:
+                response, player_page = url_request(opponent_schedule_url_format.format(season_obj["Year"]))
+            except requests.exceptions.HTTPError as err:
+                if err.response.status_code == 404:
                     continue
                 else:
                     raise
@@ -22120,11 +22128,10 @@ def get_opponent_schedule(seasons, has_offensive_stats, has_defensive_stats, fan
                 team_obj[season_obj["Year"]][team]["ReverseRushTDRankRate"] = all_rush_td_rate[::-1].index(team_obj[season_obj["Year"]][team]["RushTDRate"]) + 1
         
         if has_defensive_stats:
-            request = urllib.request.Request(opponent_defense_schedule_url_format.format(season_obj["Year"]), headers=request_headers)
             try:
-                response, player_page = url_request(request)
-            except urllib.error.HTTPError as err:
-                if err.status == 404:
+                response, player_page = url_request(opponent_defense_schedule_url_format.format(season_obj["Year"]))
+            except requests.exceptions.HTTPError as err:
+                if err.response.status_code == 404:
                     continue
                 else:
                     raise
@@ -22317,11 +22324,10 @@ def get_opponent_schedule(seasons, has_offensive_stats, has_defensive_stats, fan
         
         if fantasy_stats:
             for position in fantasy_stats:
-                request = urllib.request.Request(opponent_fantasy_rank_url_format.format(season_obj["Year"], position), headers=request_headers)
                 try:
-                    response, player_page = url_request(request)
-                except urllib.error.HTTPError as err:
-                    if err.status == 404:
+                    response, player_page = url_request(opponent_fantasy_rank_url_format.format(season_obj["Year"], position))
+                except requests.exceptions.HTTPError as err:
+                    if err.response.status_code == 404:
                         continue
                     else:
                         raise
@@ -23813,8 +23819,7 @@ def create_table_html(html_info, player_datas, original_comment, last_updated, c
                 "image" : base64.standard_b64encode(image_file.read()),
                 "title" : comment_id
             }
-            request = urllib.request.Request(url=imgur_upload_url, data=urllib.parse.urlencode(data).encode("utf-8"), headers=imgur_headers)
-            return url_request_json_urlib(request, timeout=30)["data"]["link"]
+            return url_request_imgur(imgur_upload_url, data=data, timeout=30)["data"]["link"]
     finally:
         #logger.info("#" + str(threading.get_ident()) + "# " + dirpath)
         shutil.rmtree(dirpath)
