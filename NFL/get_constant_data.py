@@ -21,7 +21,7 @@ import ssl
 from requests_ip_rotator import ApiGateway
 import atexit
 
-league_totals_url = "https://pro-football-reference.com/years/{}/passing.htm"
+league_totals_url = "https://www.pro-football-reference.com/years/{}/passing.htm"
 
 max_request_retries = 3
 retry_failure_delay = 3
