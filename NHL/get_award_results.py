@@ -16,7 +16,6 @@ import unidecode
 from nameparser import HumanName
 import threading
 from requests_ip_rotator import ApiGateway
-import atexit
 
 awards_url_format = "https://www.hockey-reference.com/awards/voting-{}.html"
 
@@ -30,17 +29,6 @@ request_headers = {
 }
 
 request_headers= {}
-
-gateway = ApiGateway("https://www.hockey-reference.com", verbose=False)
-gateway.start()
-
-gateway_session = requests.Session()
-gateway_session.mount("https://www.hockey-reference.com", gateway)
-
-def exit_handler():
-    gateway.shutdown()
-
-atexit.register(exit_handler)
 
 def main():
     for season in range(1924, 2022):
@@ -117,6 +105,8 @@ def main():
 
 def url_request(url, timeout=30):
     failed_counter = 0
+    gateway_session = requests.Session()
+    gateway_session.mount("https://www.hockey-reference.com", gateway)
     while(True):
         try:
             response = gateway_session.get(url, timeout=timeout, headers=request_headers)
@@ -129,7 +119,16 @@ def url_request(url, timeout=30):
             return response, bs
         except requests.exceptions.HTTPError as err:
             if err.response.status_code == 403:
-                raise
+                error_string = str(err)
+                if error_string.startswith("403 Client Error: Forbidden for url:"):
+                    error_split = str(err).split()
+                    error_url = error_split[len(error_split) - 1]
+                    new_url = "https://www.hockey-reference.com" + urlparse(error_url).path
+                    return url_request(new_url, timeout)
+                else:
+                    failed_counter += 1
+                    if failed_counter > max_request_retries:
+                        raise
             else:
                 failed_counter += 1
                 if failed_counter > max_request_retries:
@@ -148,4 +147,6 @@ def url_request(url, timeout=30):
         print("#" + str(threading.get_ident()) + "#   " + "0")
 
 if __name__ == "__main__":
-    main()
+    global gateway
+    with ApiGateway("https://www.hockey-reference.com", verbose=False) as gateway:
+        main()

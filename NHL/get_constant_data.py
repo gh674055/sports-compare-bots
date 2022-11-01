@@ -15,7 +15,6 @@ import lxml
 import cchardet
 import ssl
 from requests_ip_rotator import ApiGateway
-import atexit
 
 league_totals_url = "https://www.hockey-reference.com/{}/NHL_{}_{}.html"
 current_year_stats_url = "https://www.hockey-reference.com/{}/NHL_{}.html"
@@ -119,17 +118,6 @@ year_games_played = [
 ]
 
 ssl._create_default_https_context = ssl._create_unverified_context
-
-gateway = ApiGateway("https://www.hockey-reference.com", verbose=False)
-gateway.start()
-
-gateway_session = requests.Session()
-gateway_session.mount("https://www.hockey-reference.com", gateway)
-
-def exit_handler():
-    gateway.shutdown()
-
-atexit.register(exit_handler)
 
 def main():
     year_short = "y"
@@ -557,6 +545,8 @@ def calculate_year_games_by_team(year, for_playoffs):
 
 def url_request(url, timeout=30):
     failed_counter = 0
+    gateway_session = requests.Session()
+    gateway_session.mount("https://www.hockey-reference.com", gateway)
     while(True):
         try:
             response = gateway_session.get(url, timeout=timeout, headers=request_headers)
@@ -569,7 +559,16 @@ def url_request(url, timeout=30):
             return response, bs
         except requests.exceptions.HTTPError as err:
             if err.response.status_code == 403:
-                raise
+                error_string = str(err)
+                if error_string.startswith("403 Client Error: Forbidden for url:"):
+                    error_split = str(err).split()
+                    error_url = error_split[len(error_split) - 1]
+                    new_url = "https://www.hockey-reference.com" + urlparse(error_url).path
+                    return url_request(new_url, timeout)
+                else:
+                    failed_counter += 1
+                    if failed_counter > max_request_retries:
+                        raise
             else:
                 failed_counter += 1
                 if failed_counter > max_request_retries:
@@ -588,4 +587,6 @@ def url_request(url, timeout=30):
         logger.info("#" + str(threading.get_ident()) + "#   " + "0")
 
 if __name__ == "__main__":
-    main()
+    global gateway
+    with ApiGateway("https://www.hockey-reference.com", verbose=False) as gateway:
+        main()

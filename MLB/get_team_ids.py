@@ -15,7 +15,6 @@ import numbers
 import unidecode
 from nameparser import HumanName
 from requests_ip_rotator import ApiGateway
-import atexit
 
 baseballref_team_ids_url = "https://www.baseball-reference.com/teams"
 mlb_teams_url_format = "https://statsapi.mlb.com/api/v1/teams/{}/history"
@@ -88,17 +87,6 @@ add_current_year = False
 manual_team_name_maps = {
     "Cleveland Indians" : "Cleveland Guardians"
 }
-
-gateway = ApiGateway("https://www.baseball-reference.com", verbose=False)
-gateway.start()
-
-gateway_session = requests.Session()
-gateway_session.mount("https://www.baseball-reference.com", gateway)
-
-def exit_handler():
-    gateway.shutdown()
-
-atexit.register(exit_handler)
 
 def main():
     id_val = 1
@@ -415,6 +403,8 @@ def main():
 
 def url_request(url, timeout=30):
     failed_counter = 0
+    gateway_session = requests.Session()
+    gateway_session.mount("https://www.baseball-reference.com", gateway)
     while(True):
         try:
             response = gateway_session.get(url, timeout=timeout, headers=request_headers)
@@ -427,7 +417,16 @@ def url_request(url, timeout=30):
             return response, bs
         except requests.exceptions.HTTPError as err:
             if err.response.status_code == 403:
-                raise
+                error_string = str(err)
+                if error_string.startswith("403 Client Error: Forbidden for url:"):
+                    error_split = str(err).split()
+                    error_url = error_split[len(error_split) - 1]
+                    new_url = "https://www.baseball-reference.com" + urlparse(error_url).path
+                    return url_request(new_url, timeout)
+                else:
+                    failed_counter += 1
+                    if failed_counter > max_request_retries:
+                        raise
             else:
                 failed_counter += 1
                 if failed_counter > max_request_retries:
@@ -446,4 +445,6 @@ def url_request(url, timeout=30):
         logger.info("#" + str(threading.get_ident()) + "#   " + "0")
 
 if __name__ == "__main__":
-    main()
+    global gateway
+    with ApiGateway("https://www.baseball-reference.com", verbose=False) as gateway:
+        main()

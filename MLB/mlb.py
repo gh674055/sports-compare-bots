@@ -78,7 +78,6 @@ import ssl
 import cProfile
 import pstats
 from requests_ip_rotator import ApiGateway
-import atexit
 
 subreddits_to_crawl = [
     "sportscomparebots",
@@ -7087,17 +7086,6 @@ all_event_types_re = r"(?:" + "|".join([all_event_type + ";?" for all_event_type
 
 ssl._create_default_https_context = ssl._create_unverified_context
 
-gateway = ApiGateway("https://www.baseball-reference.com", verbose=False)
-gateway.start()
-
-gateway_session = requests.Session()
-gateway_session.mount("https://www.baseball-reference.com", gateway)
-
-def exit_handler():
-    gateway.shutdown()
-
-atexit.register(exit_handler)
-
 def main():
     """The main function."""
 
@@ -7153,12 +7141,19 @@ def main():
                 parse_input(comment, True, False)
             return
 
-    with ThreadPoolExecutor(max_workers=10) as executor:
+    # arguments = []
+    # for index, sub_name in enumerate(names):
+    #     arguments.append([sub_name, parse_time_frames, index, player_type, remove_duplicates, remove_duplicate_games, is_pitching_jaws, extra_stats, comment_obj])
+    # with multiprocessing.Pool(processes=multiprocessing.cpu_count()) as pool:
+    #     sub_player_datas = pool.starmap(handle_name_threads, arguments)
+    #     for sub_player_data in sub_player_datas:
+    #         player_datas += sub_player_data
+    with multiprocessing.Pool(processes=10) as pool:
         for comment in subreddit.stream.comments():
             if not comment.archived and comment.author and not comment.author.name.lower() in blocked_users:
                 if re.search(r"!\bmlbcompare(?:bot)?\b", comment.body, re.IGNORECASE):
                     logger.info("FOUND COMMENT " + str(comment.id))
-                    executor.submit(parse_input, comment, False, comment.subreddit.display_name in approved_subreddits)
+                    res = pool.apply_async(parse_input, (comment, False, comment.subreddit.display_name in approved_subreddits))
 
 def parse_input(comment, debug_mode, is_approved, existing_cur=None, existing_comment=None):
     try:
@@ -7176,8 +7171,7 @@ def parse_input(comment, debug_mode, is_approved, existing_cur=None, existing_co
         if ignore_approved:
             is_approved = True
 
-        manager = multiprocessing.Manager()
-        comment_obj = manager.dict()
+        comment_obj = {}
         comment_obj["comment"] = comment
         comment_obj["reply"] = existing_comment if not isinstance(existing_comment, Message) else None
         comment_obj["total_players"] = 0
@@ -7186,16 +7180,18 @@ def parse_input(comment, debug_mode, is_approved, existing_cur=None, existing_co
         comment_obj["debug_mode"] = debug_mode
         comment_obj["is_approved"] = is_approved
 
-        if existing_cur:
-            sub_parse_input(existing_cur, comment, debug_mode, comment_obj, True)
-        else:
-            conn = sqlite3.connect("mlb.db")
-            try:
-                with conn:
-                    curr = conn.cursor()
-                    sub_parse_input(curr, comment, debug_mode, comment_obj, False)
-            finally:
-                conn.close()
+        global gateway
+        with ApiGateway("https://www.baseball-reference.com", verbose=False) as gateway:
+            if existing_cur:
+                sub_parse_input(existing_cur, comment, debug_mode, comment_obj, True)
+            else:
+                conn = sqlite3.connect("mlb.db")
+                try:
+                    with conn:
+                        curr = conn.cursor()
+                        sub_parse_input(curr, comment, debug_mode, comment_obj, False)
+                finally:
+                    conn.close()
     except BaseException as e:
         logger.error(traceback.format_exc())
         raise e
@@ -13961,20 +13957,19 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
         extra_stats.add("walk-off")
 
     player_datas = []
-    arguments = []
-    for index, sub_name in enumerate(names):
-        arguments.append([sub_name, parse_time_frames, index, player_type, remove_duplicates, remove_duplicate_games, is_pitching_jaws, extra_stats, comment_obj])
-    with multiprocessing.Pool(processes=multiprocessing.cpu_count()) as pool:
-        sub_player_datas = pool.starmap(handle_name_threads, arguments)
-        for sub_player_data in sub_player_datas:
-            player_datas += sub_player_data
-    # with ThreadPoolExecutor(max_workers=5) as sub_executor:
-    #     futures = []
-    #     for index, sub_name in enumerate(names):
-    #         futures.append(sub_executor.submit(handle_name_threads, sub_name, parse_time_frames, index, player_type, remove_duplicates, remove_duplicate_games, is_pitching_jaws, extra_stats, comment_obj))
-    #     for future in concurrent.futures.as_completed(futures):
-    #         player_datas += future.result()
-    #         gc.collect()
+    # arguments = []
+    # for index, sub_name in enumerate(names):
+    #     arguments.append([sub_name, parse_time_frames, index, player_type, remove_duplicates, remove_duplicate_games, is_pitching_jaws, extra_stats, comment_obj])
+    # with multiprocessing.Pool(processes=multiprocessing.cpu_count()) as pool:
+    #     sub_player_datas = pool.starmap(handle_name_threads, arguments)
+    #     for sub_player_data in sub_player_datas:
+    #         player_datas += sub_player_data
+    with ThreadPoolExecutor(max_workers=5) as sub_executor:
+         futures = []
+         for index, sub_name in enumerate(names):
+             futures.append(sub_executor.submit(handle_name_threads, sub_name, parse_time_frames, index, player_type, remove_duplicates, remove_duplicate_games, is_pitching_jaws, extra_stats, comment_obj))
+         for future in concurrent.futures.as_completed(futures):
+             player_datas += future.result()
 
     # tr = tracker.SummaryTracker()
     # tr.print_diff()
@@ -15044,17 +15039,6 @@ def get_player(name, time_frames):
     except requests.exceptions.HTTPError as err:
         if err.response.status_code == 404:
             return None, None
-        elif err.response.status_code == 403:
-            error_split = str(err).split()
-            error_url = error_split[len(error_split) - 1]
-            new_url = "https://www.baseball-reference.com" + urlparse(error_url).path
-            try:
-                response, player_page = url_request(new_url)
-            except requests.exceptions.HTTPError as err:
-                if err.response.status_code == 404:
-                    return None, None
-                else:
-                    raise
         else:
             raise
         
@@ -26515,6 +26499,8 @@ def fill_row(row, player_data, player_type, lower=True, stats=None):
 
 def url_request(url, timeout=30):
     failed_counter = 0
+    gateway_session = requests.Session()
+    gateway_session.mount("https://www.baseball-reference.com", gateway)
     while(True):
         try:
             response = gateway_session.get(url, timeout=timeout, headers=request_headers)
@@ -26527,7 +26513,16 @@ def url_request(url, timeout=30):
             return response, bs
         except requests.exceptions.HTTPError as err:
             if err.response.status_code == 403:
-                raise
+                error_string = str(err)
+                if error_string.startswith("403 Client Error: Forbidden for url:"):
+                    error_split = str(err).split()
+                    error_url = error_split[len(error_split) - 1]
+                    new_url = "https://www.baseball-reference.com" + urlparse(error_url).path
+                    return url_request(new_url, timeout)
+                else:
+                    failed_counter += 1
+                    if failed_counter > max_request_retries:
+                        raise
             else:
                 failed_counter += 1
                 if failed_counter > max_request_retries:
@@ -26547,6 +26542,8 @@ def url_request(url, timeout=30):
 
 def url_request_lxml(session, url, timeout=30):
     failed_counter = 0
+    gateway_session = requests.Session()
+    gateway_session.mount("https://www.baseball-reference.com", gateway)
     while(True):
         try:
             response = gateway_session.get(url, timeout=timeout, headers=request_headers)
@@ -26555,6 +26552,22 @@ def url_request_lxml(session, url, timeout=30):
             if not bs:
                 raise requests.exceptions.HTTPError("Page is empty!")
             return response, bs
+        except requests.exceptions.HTTPError as err:
+            if err.response.status_code == 403:
+                error_string = str(err)
+                if error_string.startswith("403 Client Error: Forbidden for url:"):
+                    error_split = str(err).split()
+                    error_url = error_split[len(error_split) - 1]
+                    new_url = "https://www.baseball-reference.com" + urlparse(error_url).path
+                    return url_request(new_url, timeout)
+                else:
+                    failed_counter += 1
+                    if failed_counter > max_request_retries:
+                        raise
+            else:
+                failed_counter += 1
+                if failed_counter > max_request_retries:
+                    raise
         except Exception:
             failed_counter += 1
             if failed_counter > max_request_retries:
@@ -26570,11 +26583,29 @@ def url_request_lxml(session, url, timeout=30):
 
 def url_request_bytes(url, timeout=30):
     failed_counter = 0
+    gateway_session = requests.Session()
+    gateway_session.mount("https://www.baseball-reference.com", gateway)
     while(True):
         try:
             response = gateway_session.get(url, timeout=timeout, headers=request_headers)
             response.raise_for_status()
             return response.content
+        except requests.exceptions.HTTPError as err:
+            if err.response.status_code == 403:
+                error_string = str(err)
+                if error_string.startswith("403 Client Error: Forbidden for url:"):
+                    error_split = str(err).split()
+                    error_url = error_split[len(error_split) - 1]
+                    new_url = "https://www.baseball-reference.com" + urlparse(error_url).path
+                    return url_request(new_url, timeout)
+                else:
+                    failed_counter += 1
+                    if failed_counter > max_request_retries:
+                        raise
+            else:
+                failed_counter += 1
+                if failed_counter > max_request_retries:
+                    raises
         except Exception:
             failed_counter += 1
             if failed_counter > max_request_retries:

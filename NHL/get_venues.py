@@ -19,7 +19,6 @@ from geopy.geocoders import Nominatim
 from timezonefinder import TimezoneFinder
 import threading
 from requests_ip_rotator import ApiGateway
-import atexit
 
 hockeyref_team_ids_url = "https://www.hockey-reference.com/teams"
 nhl_teams_url_format = "https://statsapi.web.nhl.com/api/v1/schedule?&season={}&gameType=R,P"
@@ -174,17 +173,6 @@ manual_arenas = {
 
 do_check = True
 end_year = 2022
-
-gateway = ApiGateway("https://www.hockey-reference.com", verbose=False)
-gateway.start()
-
-gateway_session = requests.Session()
-gateway_session.mount("https://www.hockey-reference.com", gateway)
-
-def exit_handler():
-    gateway.shutdown()
-
-atexit.register(exit_handler)
 
 def main():
     team_venues = {}
@@ -352,6 +340,8 @@ def main():
 
 def url_request(url, timeout=30):
     failed_counter = 0
+    gateway_session = requests.Session()
+    gateway_session.mount("https://www.hockey-reference.com", gateway)
     while(True):
         try:
             response = gateway_session.get(url, timeout=timeout, headers=request_headers)
@@ -364,7 +354,16 @@ def url_request(url, timeout=30):
             return response, bs
         except requests.exceptions.HTTPError as err:
             if err.response.status_code == 403:
-                raise
+                error_string = str(err)
+                if error_string.startswith("403 Client Error: Forbidden for url:"):
+                    error_split = str(err).split()
+                    error_url = error_split[len(error_split) - 1]
+                    new_url = "https://www.hockey-reference.com" + urlparse(error_url).path
+                    return url_request(new_url, timeout)
+                else:
+                    failed_counter += 1
+                    if failed_counter > max_request_retries:
+                        raise
             else:
                 failed_counter += 1
                 if failed_counter > max_request_retries:
@@ -401,4 +400,6 @@ def geolocate(geolocator, location):
         print("0")
 
 if __name__ == "__main__":
-    main()
+    global gateway
+    with ApiGateway("https://www.hockey-reference.com", verbose=False) as gateway:
+        main()
