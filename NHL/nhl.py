@@ -7385,7 +7385,7 @@ def main():
     with multiprocessing.Pool(processes=10) as pool:
         for comment in subreddit.stream.comments():
             if not comment.archived and comment.author and not comment.author.name.lower() in blocked_users:
-                if re.search(r"!\bmlbcompare(?:bot)?\b", comment.body, re.IGNORECASE):
+                if re.search(r"!\bnhlcompare(?:bot)?\b", comment.body, re.IGNORECASE):
                     logger.info("FOUND COMMENT " + str(comment.id))
                     res = pool.apply_async(parse_input, (comment, False, comment.subreddit.display_name in approved_subreddits))
 
