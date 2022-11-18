@@ -7125,35 +7125,36 @@ def main():
     finally:
         conn.close()
 
-    for opt, arg in options:
-        if opt in ("-" + manual_comment_short, "--" + manual_comment_long):
-            comment = reddit.comment(id=arg.strip())
-            if not comment.archived and comment.author and not comment.author.name.lower() in blocked_users:
+    global gateway
+    with ApiGateway("https://www.baseball-reference.com", verbose=False) as gateway:
+        for opt, arg in options:
+            if opt in ("-" + manual_comment_short, "--" + manual_comment_long):
+                comment = reddit.comment(id=arg.strip())
+                if not comment.archived and comment.author and not comment.author.name.lower() in blocked_users:
+                    if re.search(r"!\bmlbcompare(?:bot)?\b", comment.body, re.IGNORECASE):
+                        logger.info("FOUND COMMENT " + str(comment.id))
+                        parse_input(comment, False, comment.subreddit.display_name in approved_subreddits)
+                return
+            elif opt in ("-" + debug_mode_short, "--" + debug_mode_long):
+                comment_str = arg.strip()
+                comment = FakeComment(comment_str, "-1", "")
                 if re.search(r"!\bmlbcompare(?:bot)?\b", comment.body, re.IGNORECASE):
                     logger.info("FOUND COMMENT " + str(comment.id))
-                    parse_input(comment, False, comment.subreddit.display_name in approved_subreddits)
-            return
-        elif opt in ("-" + debug_mode_short, "--" + debug_mode_long):
-            comment_str = arg.strip()
-            comment = FakeComment(comment_str, "-1", "")
-            if re.search(r"!\bmlbcompare(?:bot)?\b", comment.body, re.IGNORECASE):
-                logger.info("FOUND COMMENT " + str(comment.id))
-                parse_input(comment, True, False)
-            return
+                    parse_input(comment, True, False)
+                return
 
-    # arguments = []
-    # for index, sub_name in enumerate(names):
-    #     arguments.append([sub_name, parse_time_frames, index, player_type, remove_duplicates, remove_duplicate_games, is_pitching_jaws, extra_stats, comment_obj])
-    # with multiprocessing.Pool(processes=multiprocessing.cpu_count()) as pool:
-    #     sub_player_datas = pool.starmap(handle_name_threads, arguments)
-    #     for sub_player_data in sub_player_datas:
-    #         player_datas += sub_player_data
-    with multiprocessing.Pool(processes=10) as pool:
-        for comment in subreddit.stream.comments():
-            if not comment.archived and comment.author and not comment.author.name.lower() in blocked_users:
-                if re.search(r"!\bmlbcompare(?:bot)?\b", comment.body, re.IGNORECASE):
-                    logger.info("FOUND COMMENT " + str(comment.id))
-                    res = pool.apply_async(parse_input, (comment, False, comment.subreddit.display_name in approved_subreddits))
+        with ThreadPoolExecutor(max_workers=10) as executor:
+            for comment in subreddit.stream.comments():
+                if not comment.archived and comment.author and not comment.author.name.lower() in blocked_users:
+                    if re.search(r"!\bmlbcompare(?:bot)?\b", comment.body, re.IGNORECASE):
+                        logger.info("FOUND COMMENT " + str(comment.id))
+                        executor.submit(parse_input, comment, False, comment.subreddit.display_name in approved_subreddits)
+        # with multiprocessing.Pool(processes=10) as pool:
+        #     for comment in subreddit.stream.comments():
+        #         if not comment.archived and comment.author and not comment.author.name.lower() in blocked_users:
+        #             if re.search(r"!\bmlbcompare(?:bot)?\b", comment.body, re.IGNORECASE):
+        #                 logger.info("FOUND COMMENT " + str(comment.id))
+        #                 res = pool.apply_async(parse_input, (comment, False, comment.subreddit.display_name in approved_subreddits))
 
 def parse_input(comment, debug_mode, is_approved, existing_cur=None, existing_comment=None):
     try:
@@ -7180,18 +7181,16 @@ def parse_input(comment, debug_mode, is_approved, existing_cur=None, existing_co
         comment_obj["debug_mode"] = debug_mode
         comment_obj["is_approved"] = is_approved
 
-        global gateway
-        with ApiGateway("https://www.baseball-reference.com", verbose=False) as gateway:
-            if existing_cur:
-                sub_parse_input(existing_cur, comment, debug_mode, comment_obj, True)
-            else:
-                conn = sqlite3.connect("mlb.db")
-                try:
-                    with conn:
-                        curr = conn.cursor()
-                        sub_parse_input(curr, comment, debug_mode, comment_obj, False)
-                finally:
-                    conn.close()
+        if existing_cur:
+            sub_parse_input(existing_cur, comment, debug_mode, comment_obj, True)
+        else:
+            conn = sqlite3.connect("mlb.db")
+            try:
+                with conn:
+                    curr = conn.cursor()
+                    sub_parse_input(curr, comment, debug_mode, comment_obj, False)
+            finally:
+                conn.close()
     except BaseException as e:
         logger.error(traceback.format_exc())
         raise e
