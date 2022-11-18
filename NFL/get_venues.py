@@ -138,7 +138,7 @@ def main():
     with open("team_venues.json", "w") as file:
         file.write(json.dumps(team_venues, indent=4, sort_keys=True))
 
-def url_request(url, timeout=30):
+def url_request(url, timeout=30, allow_403_retry=True):
     failed_counter = 0
     gateway_session = requests.Session()
     gateway_session.mount("https://www.pro-football-reference.com", gateway)
@@ -153,13 +153,13 @@ def url_request(url, timeout=30):
                 raise requests.exceptions.HTTPError("Page is empty!")
             return response, bs
         except requests.exceptions.HTTPError as err:
-            if err.response.status_code == 403:
+            if err.response.status_code == 403 and allow_403_retry:
                 error_string = str(err)
                 if error_string.startswith("403 Client Error: Forbidden for url:"):
                     error_split = str(err).split()
                     error_url = error_split[len(error_split) - 1]
                     new_url = "https://www.pro-football-reference.com" + urlparse(error_url).path
-                    return url_request(new_url, timeout)
+                    return url_request(new_url, timeout, allow_403_retry=False)
                 else:
                     failed_counter += 1
                     if failed_counter > max_request_retries:
