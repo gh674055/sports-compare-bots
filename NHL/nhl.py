@@ -15146,6 +15146,8 @@ def url_request(url, timeout=30, allow_403_retry=True):
                     error_split = str(err).split()
                     error_url = error_split[len(error_split) - 1]
                     new_url = "https://www.hockey-reference.com" + urlparse(error_url).path
+                    if "/ProxyStage" in new_url:
+                        new_url = url
                     return url_request(new_url, timeout, allow_403_retry=False)
                 else:
                     failed_counter += 1
@@ -15185,6 +15187,8 @@ def url_request_lxml(session, url, timeout=30, allow_403_retry=True):
                     error_split = str(err).split()
                     error_url = error_split[len(error_split) - 1]
                     new_url = "https://www.hockey-reference.com" + urlparse(error_url).path
+                    if "/ProxyStage" in new_url:
+                        new_url = url
                     return url_request(new_url, timeout, allow_403_retry=False)
                 else:
                     failed_counter += 1
@@ -15223,6 +15227,8 @@ def url_request_bytes(url, timeout=30, allow_403_retry=True):
                     error_split = str(err).split()
                     error_url = error_split[len(error_split) - 1]
                     new_url = "https://www.hockey-reference.com" + urlparse(error_url).path
+                    if "/ProxyStage" in new_url:
+                        new_url = url
                     return url_request(new_url, timeout, allow_403_retry=False)
                 else:
                     failed_counter += 1
