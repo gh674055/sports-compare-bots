@@ -1090,7 +1090,7 @@ def main():
         conn.close()
 
     global gateway
-    with ApiGateway("https://www.baseball-reference.com", verbose=False) as gateway:
+    with ApiGateway("https://www.pro-football-reference.com", verbose=False) as gateway:
         for opt, arg in options:
             if opt in ("-" + manual_comment_short, "--" + manual_comment_long):
                 comment = reddit.comment(id=arg.strip())
