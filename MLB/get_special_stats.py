@@ -15,6 +15,7 @@ import unidecode
 import dateutil.parser
 from nameparser import HumanName
 import mlb
+from requests_ip_rotator import ApiGateway
 
 no_hit_format = "https://www.baseball-reference.com/friv/no-hitters-and-perfect-games.shtml"
 cycles_format = "https://www.baseball-almanac.com/hitting/Major_League_Baseball_Players_to_hit_for_the_cycle.shtml"
