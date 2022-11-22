@@ -102,7 +102,7 @@ def main():
             debug_author = arg.strip()
 
     global gateway
-        with ApiGateway("https://www.hockey-reference.com", verbose=False) as gateway:
+    with ApiGateway("https://www.hockey-reference.com", verbose=False) as gateway:
         if manual_message:
             message = reddit.inbox.message(manual_message)
             if message.author and not message.author.name.lower() in nhl.blocked_users:
