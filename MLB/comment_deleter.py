@@ -114,7 +114,7 @@ def main():
                     re_run_message(message, reddit, True)
                 elif re.search(r"!\bmlbcompare(?:bot)?\b", message.body, re.IGNORECASE):
                     logger.info("FOUND COMPARE MESSAGE " + str(message.id))
-                    mlb.parse_input(message, True, False)
+                    mlb.parse_input(gateway, message, True, False)
             return
         elif debug_subject and debug_body and debug_author:
             message = FakeMessage(debug_subject, debug_body, "-1", debug_author)
@@ -126,7 +126,7 @@ def main():
                 re_run_message(message, reddit, True)
             elif re.search(r"!\bmlbcompare(?:bot)?\b", message.body, re.IGNORECASE):
                 logger.info("FOUND COMPARE MESSAGE " + str(message.id))
-                mlb.parse_input(message, True, False)
+                mlb.parse_input(gateway, message, True, False)
             return
 
         with ThreadPoolExecutor(max_workers=5) as executor:
@@ -141,7 +141,7 @@ def main():
                             executor.submit(re_run_message, message, reddit, False)
                         elif re.search(r"!\bmlbcompare(?:bot)?\b", message.body, re.IGNORECASE):
                             logger.info("FOUND COMPARE MESSAGE " + str(message.id))
-                            executor.submit(mlb.parse_input, message, False, False)
+                            executor.submit(mlb.parse_input, gateway, message, False, False)
 
 def parse_message(message, reddit):
     """Parses a message"""
@@ -340,7 +340,7 @@ def parse_comment(reddit, comment_id, reply_comment_id, original_comment, is_exi
                 logger.info("#" + str(threading.get_ident()) + "#   " + "MESSAGE: " + "Starting re-run!")
             except praw.exceptions.APIException as e:
                 logger.error("#" + str(threading.get_ident()) + "#   " + traceback.format_exc())
-            mlb.parse_input(message, debug_mode, False, curr)
+            mlb.parse_input(gateway, message, debug_mode, False, curr)
             was_successful = 1
         else:
             raise CustomMessageException("Message " + comment_id + " does not contain a comparison!")
@@ -367,7 +367,7 @@ def parse_comment(reddit, comment_id, reply_comment_id, original_comment, is_exi
                     logger.info("#" + str(threading.get_ident()) + "#   " + "MESSAGE: " + "Starting re-run!")
                 except praw.exceptions.APIException as e:
                     logger.error("#" + str(threading.get_ident()) + "#   " + traceback.format_exc())
-                mlb.parse_input(comment, debug_mode, comment.subreddit.display_name in mlb.approved_subreddits, curr, comment_obj)
+                mlb.parse_input(gateway, comment, debug_mode, comment.subreddit.display_name in mlb.approved_subreddits, curr, comment_obj)
                 was_successful = 1
             else:
                 raise CustomMessageException("Comment " + comment_id + " does not contain a comparison!")

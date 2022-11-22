@@ -1097,14 +1097,14 @@ def main():
                 if not comment.archived and comment.author and not comment.author.name.lower() in blocked_users:
                     if re.search(r"!\bnflcompare(?:bot)?\b", comment.body, re.IGNORECASE):
                         logger.info("FOUND COMMENT " + str(comment.id))
-                        parse_input(comment, False, comment.subreddit.display_name in approved_subreddits)
+                        parse_input(gateway, comment, False, comment.subreddit.display_name in approved_subreddits)
                 return
             elif opt in ("-" + debug_mode_short, "--" + debug_mode_long):
                 comment_str = arg.strip()
                 comment = FakeComment(comment_str, "-1", "", "nfl")
                 if re.search(r"!\bnflcompare(?:bot)?\b", comment.body, re.IGNORECASE):
                     logger.info("FOUND COMMENT " + str(comment.id))
-                    parse_input(comment, True, False)
+                    parse_input(gateway, comment, True, False)
                 return
 
         with ThreadPoolExecutor(max_workers=10) as executor:
@@ -1112,16 +1112,18 @@ def main():
                 if not comment.archived and comment.author and not comment.author.name.lower() in blocked_users:
                     if re.search(r"!\bnflcompare(?:bot)?\b", comment.body, re.IGNORECASE):
                         logger.info("FOUND COMMENT " + str(comment.id))
-                        executor.submit(parse_input, comment, False, comment.subreddit.display_name in approved_subreddits)
+                        executor.submit(parse_input, gateway, comment, False, comment.subreddit.display_name in approved_subreddits)
         # with multiprocessing.Pool(processes=10) as pool:
         #     for comment in subreddit.stream.comments():
         #         if not comment.archived and comment.author and not comment.author.name.lower() in blocked_users:
         #             if re.search(r"!\bnflcompare(?:bot)?\b", comment.body, re.IGNORECASE):
         #                 logger.info("FOUND COMMENT " + str(comment.id))
-        #                 res = pool.apply_async(parse_input, (comment, False, comment.subreddit.display_name in approved_subreddits))
+        #                 res = pool.apply_async(parse_input, (gateway, comment, False, comment.subreddit.display_name in approved_subreddits))
 
-def parse_input(comment, debug_mode, is_approved, existing_cur=None, existing_comment=None):
+def parse_input(gateway, comment, debug_mode, is_approved, existing_cur=None, existing_comment=None):
     try:
+        global gateway_to_use
+        gateway_to_use = gateway
         start_time = datetime.datetime.now()
         logger.info("#" + str(threading.get_ident()) + "#   " + "THREAD STARTED FOR " + str(comment.id))
         logger.info("#" + str(threading.get_ident()) + "#   " + "COMMENT: " + comment.body)
@@ -6542,7 +6544,7 @@ def handle_the_same_games_quals(sub_name, qual_str, subbb_frames, time_frame, pl
 def url_request(url, timeout=30, allow_403_retry=True):
     failed_counter = 0
     gateway_session = requests.Session()
-    gateway_session.mount("https://www.pro-football-reference.com", gateway)
+    gateway_session.mount("https://www.pro-football-reference.com", gateway_to_use)
     while(True):
         try:
             response = gateway_session.get(url, timeout=timeout, headers=request_headers)
@@ -6587,7 +6589,7 @@ def url_request(url, timeout=30, allow_403_retry=True):
 def url_request_lxml(session, url, timeout=30, allow_403_retry=True):
     failed_counter = 0
     gateway_session = requests.Session()
-    gateway_session.mount("https://www.pro-football-reference.com", gateway)
+    gateway_session.mount("https://www.pro-football-reference.com", gateway_to_use)
     while(True):
         try:
             response = gateway_session.get(url, timeout=timeout, headers=request_headers)
@@ -6630,7 +6632,7 @@ def url_request_lxml(session, url, timeout=30, allow_403_retry=True):
 def url_request_bytes(url, timeout=30, allow_403_retry=True):
     failed_counter = 0
     gateway_session = requests.Session()
-    gateway_session.mount("https://www.pro-football-reference.com", gateway)
+    gateway_session.mount("https://www.pro-football-reference.com", gateway_to_use)
     while(True):
         try:
             response = gateway_session.get(url, timeout=timeout, headers=request_headers)
