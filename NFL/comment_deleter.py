@@ -100,9 +100,23 @@ def main():
         elif opt in ("-" + debug_author_short, "--" + debug_author_long):
             debug_author = arg.strip()
 
-    if manual_message:
-        message = reddit.inbox.message(manual_message)
-        if message.author and not message.author.name.lower() in nfl.blocked_users:
+    global gateway
+    with ApiGateway("https://www.pro-football-reference.com", verbose=False) as gateway:
+        if manual_message:
+            message = reddit.inbox.message(manual_message)
+            if message.author and not message.author.name.lower() in nfl.blocked_users:
+                if message.subject.strip().lower() == "delete":
+                    logger.info("FOUND DELETE MESSAGE " + str(message.id))
+                    parse_message(message, reddit)
+                elif message.subject.strip().lower() == "re-run" or message.subject.strip().lower() == "rerun":
+                    logger.info("FOUND RE-RUN MESSAGE " + str(message.id))
+                    re_run_message(message, reddit, True)
+                elif re.search(r"!\bnflcompare(?:bot)?\b", message.body, re.IGNORECASE):
+                    logger.info("FOUND COMPARE MESSAGE " + str(message.id))
+                    nfl.parse_input(message, True, False)
+            return
+        elif debug_subject and debug_body and debug_author:
+            message = FakeMessage(debug_subject, debug_body, "-1", debug_author)
             if message.subject.strip().lower() == "delete":
                 logger.info("FOUND DELETE MESSAGE " + str(message.id))
                 parse_message(message, reddit)
@@ -112,33 +126,21 @@ def main():
             elif re.search(r"!\bnflcompare(?:bot)?\b", message.body, re.IGNORECASE):
                 logger.info("FOUND COMPARE MESSAGE " + str(message.id))
                 nfl.parse_input(message, True, False)
-        return
-    elif debug_subject and debug_body and debug_author:
-        message = FakeMessage(debug_subject, debug_body, "-1", debug_author)
-        if message.subject.strip().lower() == "delete":
-            logger.info("FOUND DELETE MESSAGE " + str(message.id))
-            parse_message(message, reddit)
-        elif message.subject.strip().lower() == "re-run" or message.subject.strip().lower() == "rerun":
-            logger.info("FOUND RE-RUN MESSAGE " + str(message.id))
-            re_run_message(message, reddit, True)
-        elif re.search(r"!\bnflcompare(?:bot)?\b", message.body, re.IGNORECASE):
-            logger.info("FOUND COMPARE MESSAGE " + str(message.id))
-            nfl.parse_input(message, True, False)
-        return
+            return
 
-    with ThreadPoolExecutor(max_workers=5) as executor:
-        for message in reddit.inbox.stream():
-            if isinstance(message, Message):
-                if message.author and not message.author.name.lower() in nfl.blocked_users:
-                    if message.subject.strip().lower() == "delete":
-                        logger.info("FOUND DELETE MESSAGE " + str(message.id))
-                        executor.submit(parse_message, message, reddit)
-                    elif message.subject.strip().lower() == "re-run" or message.subject.strip().lower() == "rerun":
-                        logger.info("FOUND RE-RUN MESSAGE " + str(message.id))
-                        executor.submit(re_run_message, message, reddit, False)
-                    elif re.search(r"!\bnflcompare(?:bot)?\b", message.body, re.IGNORECASE):
-                        logger.info("FOUND COMPARE MESSAGE " + str(message.id))
-                        executor.submit(nfl.parse_input, message, False, False)
+        with ThreadPoolExecutor(max_workers=5) as executor:
+            for message in reddit.inbox.stream():
+                if isinstance(message, Message):
+                    if message.author and not message.author.name.lower() in nfl.blocked_users:
+                        if message.subject.strip().lower() == "delete":
+                            logger.info("FOUND DELETE MESSAGE " + str(message.id))
+                            executor.submit(parse_message, message, reddit)
+                        elif message.subject.strip().lower() == "re-run" or message.subject.strip().lower() == "rerun":
+                            logger.info("FOUND RE-RUN MESSAGE " + str(message.id))
+                            executor.submit(re_run_message, message, reddit, False)
+                        elif re.search(r"!\bnflcompare(?:bot)?\b", message.body, re.IGNORECASE):
+                            logger.info("FOUND COMPARE MESSAGE " + str(message.id))
+                            executor.submit(nfl.parse_input, message, False, False)
 
 def parse_message(message, reddit):
     """Parses a message"""
