@@ -16,6 +16,7 @@ import unidecode
 import threading
 from nameparser import HumanName
 from requests_ip_rotator import ApiGateway
+from urllib.parse import urlparse, parse_qs
 
 footballref_team_ids_url = "https://www.pro-football-reference.com/teams"
 

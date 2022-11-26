@@ -18,6 +18,7 @@ from nameparser import HumanName
 from geopy.geocoders import Nominatim
 from timezonefinder import TimezoneFinder
 from requests_ip_rotator import ApiGateway
+from urllib.parse import urlparse, parse_qs
 
 nfl_venue_ids_url = "https://www.pro-football-reference.com/stadiums"
 

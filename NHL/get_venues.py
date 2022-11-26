@@ -19,6 +19,7 @@ from geopy.geocoders import Nominatim
 from timezonefinder import TimezoneFinder
 import threading
 from requests_ip_rotator import ApiGateway
+from urllib.parse import urlparse, parse_qs
 
 hockeyref_team_ids_url = "https://www.hockey-reference.com/teams"
 nhl_teams_url_format = "https://statsapi.web.nhl.com/api/v1/schedule?&season={}&gameType=R,P"

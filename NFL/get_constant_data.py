@@ -19,6 +19,7 @@ import lxml
 import cchardet
 import ssl
 from requests_ip_rotator import ApiGateway
+from urllib.parse import urlparse, parse_qs
 
 league_totals_url = "https://www.pro-football-reference.com/years/{}/passing.htm"
 

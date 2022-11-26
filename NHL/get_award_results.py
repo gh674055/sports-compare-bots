@@ -16,6 +16,7 @@ import unidecode
 from nameparser import HumanName
 import threading
 from requests_ip_rotator import ApiGateway
+from urllib.parse import urlparse, parse_qs
 
 awards_url_format = "https://www.hockey-reference.com/awards/voting-{}.html"
 

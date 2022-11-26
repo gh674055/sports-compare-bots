@@ -14,6 +14,7 @@ import statistics
 import numbers
 import threading
 from requests_ip_rotator import ApiGateway
+from urllib.parse import urlparse, parse_qs
 
 sb_winners = "https://www.pro-football-reference.com/years"
 
