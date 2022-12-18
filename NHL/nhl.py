@@ -25204,6 +25204,8 @@ def setup_href_game_data(player_data, row_data, player_id, player_type, time_fra
     for period in range(1, last_period + 1):
         game_data["periods"].append(period)
 
+    game_data["current_period"] = last_period
+
     return game_data, missing_games
 
 def start_time_to_str(time_str):
