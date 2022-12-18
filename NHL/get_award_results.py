@@ -20,7 +20,7 @@ from urllib.parse import urlparse, parse_qs
 
 awards_url_format = "https://www.hockey-reference.com/awards/voting-{}.html"
 
-max_request_retries = 3
+max_request_retries = 10
 retry_failure_delay = 3
 
 award_results = {}
@@ -104,11 +104,19 @@ def main():
     with open("award_results.json", "w") as file:
         file.write(json.dumps(award_results, indent=4, sort_keys=True))
 
-def url_request(url, timeout=30, allow_403_retry=True):
-    failed_counter = 0
+def url_request(url, timeout=30, failed_counter=0):
     gateway_session = requests.Session()
     gateway_session.mount("https://www.hockey-reference.com", gateway)
     while(True):
+        if failed_counter > 0:
+            delay_step = 10
+            logger.info("#" + str(threading.get_ident()) + "#   " + "Retrying in " + str(retry_failure_delay) + " seconds to allow request to " + url + " to chill")
+            time_to_wait = int(math.ceil(float(retry_failure_delay)/float(delay_step)))
+            for i in range(retry_failure_delay, 0, -time_to_wait):
+                logger.info("#" + str(threading.get_ident()) + "#   " + str(i))
+                time.sleep(time_to_wait)
+            logger.info("#" + str(threading.get_ident()) + "#   " + "0")
+
         try:
             response = gateway_session.get(url, timeout=timeout, headers=request_headers)
             response.raise_for_status()
@@ -119,34 +127,29 @@ def url_request(url, timeout=30, allow_403_retry=True):
                 raise requests.exceptions.HTTPError("Page is empty!")
             return response, bs
         except requests.exceptions.HTTPError as err:
-            if err.response.status_code == 403 and allow_403_retry:
+            failed_counter += 1
+            if failed_counter > max_request_retries:
+                raise
+            if err.response.status_code == 403:
                 error_string = str(err)
                 if error_string.startswith("403 Client Error: Forbidden for url:"):
                     error_split = str(err).split()
                     error_url = error_split[len(error_split) - 1]
                     new_url = "https://www.hockey-reference.com" + urlparse(error_url).path
                     new_url = new_url.replace("/ProxyStage", "")
-                    return url_request(new_url, timeout, allow_403_retry=False)
-                else:
-                    failed_counter += 1
-                    if failed_counter > max_request_retries:
-                        raise
-            else:
-                failed_counter += 1
-                if failed_counter > max_request_retries:
-                    raise
+                    return url_request(new_url, timeout, failed_counter=failed_counter)
+        except requests.exceptions.ConnectionError as err:
+            failed_counter += 1
+            if failed_counter > max_request_retries:
+                raise
+            error_url = err.request.url
+            error_url = "https://www.hockey-reference.com" + urlparse(error_url).path
+            error_url = error_url.replace("/ProxyStage", "")
+            return url_request(error_url, timeout, failed_counter=failed_counter)
         except Exception:
             failed_counter += 1
             if failed_counter > max_request_retries:
                 raise
-
-        delay_step = 10
-        print"#" + str(threading.get_ident()) + "#   " + "Retrying in " + str(retry_failure_delay) + " seconds to allow request to " + url + " to chill")
-        time_to_wait = int(math.ceil(float(retry_failure_delay)/float(delay_step)))
-        for i in range(retry_failure_delay, 0, -time_to_wait):
-            print("#" + str(threading.get_ident()) + "#   " + str(i))
-            time.sleep(time_to_wait)
-        print("#" + str(threading.get_ident()) + "#   " + "0")
 
 if __name__ == "__main__":
     global gateway
