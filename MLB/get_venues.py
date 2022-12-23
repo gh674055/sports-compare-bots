@@ -19,7 +19,7 @@ import threading
 
 mlb_teams_url_format = "https://statsapi.mlb.com/api/v1/schedule?&season={}&sportId=1&gameType=R,F,D,L,W"
 
-max_request_retries = 3
+max_request_retries = 10
 retry_failure_delay = 3
 
 request_headers = {

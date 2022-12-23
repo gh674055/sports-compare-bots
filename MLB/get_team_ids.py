@@ -14,13 +14,14 @@ import statistics
 import numbers
 import unidecode
 from nameparser import HumanName
+from requests_ip_rotator import ApiGateway
 from urllib.parse import urlparse, parse_qs
 
 baseballref_team_ids_url = "https://www.baseball-reference.com/teams"
 mlb_teams_url_format = "https://statsapi.mlb.com/api/v1/teams/{}/history"
 mlb_teams_url_format_2 = "https://statsapi.mlb.com/api/v1/teams/{}"
 
-max_request_retries = 3
+max_request_retries = 10
 retry_failure_delay = 3
 
 award_results = {}
@@ -402,7 +403,8 @@ def main():
         file.write(json.dumps(team_venue_history, indent=4, sort_keys=True))
 
 def url_request(url, timeout=30, failed_counter=0):
-    da_session = requests.Session()
+    gateway_session = requests.Session()
+    gateway_session.mount("https://www.baseball-reference.com", gateway)
     while(True):
         if failed_counter > 0:
             delay_step = 10
@@ -414,7 +416,7 @@ def url_request(url, timeout=30, failed_counter=0):
             logger.info("#" + str(threading.get_ident()) + "#   " + "0")
 
         try:
-            response = da_session.get(url, timeout=timeout, headers=request_headers)
+            response = gateway_session.get(url, timeout=timeout, headers=request_headers)
             response.raise_for_status()
             text = response.text
 
@@ -422,10 +424,32 @@ def url_request(url, timeout=30, failed_counter=0):
             if not bs.contents:
                 raise requests.exceptions.HTTPError("Page is empty!")
             return response, bs
+        except requests.exceptions.HTTPError as err:
+            failed_counter += 1
+            if failed_counter > max_request_retries:
+                raise
+            if err.response.status_code == 403:
+                error_string = str(err)
+                if error_string.startswith("403 Client Error: Forbidden for url:"):
+                    error_split = str(err).split()
+                    error_url = error_split[len(error_split) - 1]
+                    new_url = "https://www.baseball-reference.com" + urlparse(error_url).path
+                    new_url = new_url.replace("/ProxyStage", "")
+                    return url_request(new_url, timeout, failed_counter=failed_counter)
+        except requests.exceptions.ConnectionError as err:
+            failed_counter += 1
+            if failed_counter > max_request_retries:
+                raise
+            error_url = err.request.url
+            error_url = "https://www.baseball-reference.com" + urlparse(error_url).path
+            error_url = error_url.replace("/ProxyStage", "")
+            return url_request(error_url, timeout, failed_counter=failed_counter)
         except Exception:
             failed_counter += 1
             if failed_counter > max_request_retries:
                 raise
 
 if __name__ == "__main__":
-    main()
+    global gateway
+    with ApiGateway("https://www.baseball-reference.com", verbose=False) as gateway:
+        main()

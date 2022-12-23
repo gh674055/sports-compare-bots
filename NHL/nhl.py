@@ -74,6 +74,7 @@ import mergedeep
 import cProfile
 import pstats
 import collections
+from requests_ip_rotator import ApiGateway
 
 subreddits_to_crawl = [
     "sportscomparebots",
@@ -106,7 +107,7 @@ request_headers = {
 
 request_headers= {}
 
-max_request_retries = 3
+max_request_retries = 10
 retry_failure_delay = 3
 max_reddit_retries = 3
 
@@ -7359,37 +7360,41 @@ def main():
     finally:
         conn.close()
 
-    for opt, arg in options:
-        if opt in ("-" + manual_comment_short, "--" + manual_comment_long):
-            comment = reddit.comment(id=arg.strip())
-            if not comment.archived and comment.author and not comment.author.name.lower() in blocked_users:
+    global gateway
+    with ApiGateway("https://www.hockey-reference.com", verbose=False) as gateway:
+        for opt, arg in options:
+            if opt in ("-" + manual_comment_short, "--" + manual_comment_long):
+                comment = reddit.comment(id=arg.strip())
+                if not comment.archived and comment.author and not comment.author.name.lower() in blocked_users:
+                    if re.search(r"!\bnhlcompare(?:bot)?\b", comment.body, re.IGNORECASE):
+                        logger.info("FOUND COMMENT " + str(comment.id))
+                        parse_input(gateway, comment, False, comment.subreddit.display_name in approved_subreddits)
+                return
+            elif opt in ("-" + debug_mode_short, "--" + debug_mode_long):
+                comment_str = arg.strip()
+                comment = FakeComment(comment_str, "-1", "", "fantasyhockey")
                 if re.search(r"!\bnhlcompare(?:bot)?\b", comment.body, re.IGNORECASE):
                     logger.info("FOUND COMMENT " + str(comment.id))
-                    parse_input(comment, False, comment.subreddit.display_name in approved_subreddits)
-            return
-        elif opt in ("-" + debug_mode_short, "--" + debug_mode_long):
-            comment_str = arg.strip()
-            comment = FakeComment(comment_str, "-1", "", "fantasyhockey")
-            if re.search(r"!\bnhlcompare(?:bot)?\b", comment.body, re.IGNORECASE):
-                logger.info("FOUND COMMENT " + str(comment.id))
-                parse_input(comment, True, False)
-            return
+                    parse_input(gateway, comment, True, False)
+                return
 
-    with ThreadPoolExecutor(max_workers=10) as executor:
-        for comment in subreddit.stream.comments():
-            if not comment.archived and comment.author and not comment.author.name.lower() in blocked_users:
-                if re.search(r"!\bnhlcompare(?:bot)?\b", comment.body, re.IGNORECASE):
-                    logger.info("FOUND COMMENT " + str(comment.id))
-                    executor.submit(parse_input, comment, False, comment.subreddit.display_name in approved_subreddits)
-    with multiprocessing.Pool(processes=10) as pool:
-        for comment in subreddit.stream.comments():
-            if not comment.archived and comment.author and not comment.author.name.lower() in blocked_users:
-                if re.search(r"!\bnhlcompare(?:bot)?\b", comment.body, re.IGNORECASE):
-                    logger.info("FOUND COMMENT " + str(comment.id))
-                    res = pool.apply_async(parse_input, (comment, False, comment.subreddit.display_name in approved_subreddits))
+        with ThreadPoolExecutor(max_workers=10) as executor:
+            for comment in subreddit.stream.comments():
+                if not comment.archived and comment.author and not comment.author.name.lower() in blocked_users:
+                    if re.search(r"!\bnhlcompare(?:bot)?\b", comment.body, re.IGNORECASE):
+                        logger.info("FOUND COMMENT " + str(comment.id))
+                        executor.submit(parse_input, gateway, comment, False, comment.subreddit.display_name in approved_subreddits)
+        with multiprocessing.Pool(processes=10) as pool:
+            for comment in subreddit.stream.comments():
+                if not comment.archived and comment.author and not comment.author.name.lower() in blocked_users:
+                    if re.search(r"!\bnhlcompare(?:bot)?\b", comment.body, re.IGNORECASE):
+                        logger.info("FOUND COMMENT " + str(comment.id))
+                        res = pool.apply_async(parse_input, (gateway, comment, False, comment.subreddit.display_name in approved_subreddits))
 
-def parse_input(comment, debug_mode, is_approved, existing_cur=None, existing_comment=None):
+def parse_input(gateway, comment, debug_mode, is_approved, existing_cur=None, existing_comment=None):
     try:
+        global gateway_to_use
+        gateway_to_use = gateway
         start_time = datetime.datetime.now()
         logger.info("#" + str(threading.get_ident()) + "#   " + "THREAD STARTED FOR " + str(comment.id))
         logger.info("#" + str(threading.get_ident()) + "#   " + "COMMENT: " + comment.body)
@@ -15123,7 +15128,8 @@ def handle_the_same_games_quals(sub_name, qual_str, subbb_frames, time_frame, pl
                     }
 
 def url_request(url, timeout=30, failed_counter=0):
-    da_session = requests.Session()
+    gateway_session = requests.Session()
+    gateway_session.mount("https://www.hockey-reference.com", gateway_to_use)
     while(True):
         if failed_counter > 0:
             delay_step = 10
@@ -15135,7 +15141,7 @@ def url_request(url, timeout=30, failed_counter=0):
             logger.info("#" + str(threading.get_ident()) + "#   " + "0")
 
         try:
-            response = da_session.get(url, timeout=timeout, headers=request_headers)
+            response = gateway_session.get(url, timeout=timeout, headers=request_headers)
             response.raise_for_status()
             text = response.text
 
@@ -15143,6 +15149,26 @@ def url_request(url, timeout=30, failed_counter=0):
             if not bs.contents:
                 raise requests.exceptions.HTTPError("Page is empty!")
             return response, bs
+        except requests.exceptions.HTTPError as err:
+            failed_counter += 1
+            if failed_counter > max_request_retries:
+                raise
+            if err.response.status_code == 403:
+                error_string = str(err)
+                if error_string.startswith("403 Client Error: Forbidden for url:"):
+                    error_split = str(err).split()
+                    error_url = error_split[len(error_split) - 1]
+                    new_url = "https://www.hockey-reference.com" + urlparse(error_url).path
+                    new_url = new_url.replace("/ProxyStage", "")
+                    return url_request(new_url, timeout, failed_counter=failed_counter)
+        except requests.exceptions.ConnectionError as err:
+            failed_counter += 1
+            if failed_counter > max_request_retries:
+                raise
+            error_url = err.request.url
+            error_url = "https://www.hockey-reference.com" + urlparse(error_url).path
+            error_url = error_url.replace("/ProxyStage", "")
+            return url_request(error_url, timeout, failed_counter=failed_counter)
         except Exception:
             failed_counter += 1
             if failed_counter > max_request_retries:
@@ -15166,13 +15192,34 @@ def url_request_lxml(session, url, timeout=30, failed_counter=0):
             if not bs:
                 raise requests.exceptions.HTTPError("Page is empty!")
             return response, bs
+        except requests.exceptions.HTTPError as err:
+            failed_counter += 1
+            if failed_counter > max_request_retries:
+                raise
+            if err.response.status_code == 403:
+                error_string = str(err)
+                if error_string.startswith("403 Client Error: Forbidden for url:"):
+                    error_split = str(err).split()
+                    error_url = error_split[len(error_split) - 1]
+                    new_url = "https://www.hockey-reference.com" + urlparse(error_url).path
+                    new_url = new_url.replace("/ProxyStage", "")
+                    return url_request(new_url, timeout, failed_counter=failed_counter)
+        except requests.exceptions.ConnectionError as err:
+            failed_counter += 1
+            if failed_counter > max_request_retries:
+                raise
+            error_url = err.request.url
+            error_url = "https://www.hockey-reference.com" + urlparse(error_url).path
+            error_url = error_url.replace("/ProxyStage", "")
+            return url_request(error_url, timeout, failed_counter=failed_counter)
         except Exception:
             failed_counter += 1
             if failed_counter > max_request_retries:
                 raise
 
 def url_request_bytes(url, timeout=30, failed_counter=0):
-    da_session = requests.Session()
+    gateway_session = requests.Session()
+    gateway_session.mount("https://www.hockey-reference.com", gateway_to_use)
     while(True):
         if failed_counter > 0:
             delay_step = 10
@@ -15184,9 +15231,29 @@ def url_request_bytes(url, timeout=30, failed_counter=0):
             logger.info("#" + str(threading.get_ident()) + "#   " + "0")
 
         try:
-            response = da_session.get(url, timeout=timeout, headers=request_headers)
+            response = gateway_session.get(url, timeout=timeout, headers=request_headers)
             response.raise_for_status()
             return response.content
+        except requests.exceptions.HTTPError as err:
+            failed_counter += 1
+            if failed_counter > max_request_retries:
+                raise
+            if err.response.status_code == 403:
+                error_string = str(err)
+                if error_string.startswith("403 Client Error: Forbidden for url:"):
+                    error_split = str(err).split()
+                    error_url = error_split[len(error_split) - 1]
+                    new_url = "https://www.hockey-reference.com" + urlparse(error_url).path
+                    new_url = new_url.replace("/ProxyStage", "")
+                    return url_request(new_url, timeout, failed_counter=failed_counter)
+        except requests.exceptions.ConnectionError as err:
+            failed_counter += 1
+            if failed_counter > max_request_retries:
+                raise
+            error_url = err.request.url
+            error_url = "https://www.hockey-reference.com" + urlparse(error_url).path
+            error_url = error_url.replace("/ProxyStage", "")
+            return url_request(error_url, timeout, failed_counter=failed_counter)
         except Exception:
             failed_counter += 1
             if failed_counter > max_request_retries:
@@ -27101,9 +27168,10 @@ def get_href_html_play_data(scoring_plays, player_data, player_type, time_frame,
     scoring_plays.clear()
     has_initial_plays =  bool(scoring_plays)
 
-    da_session = requests.Session()
+    gateway_session = requests.Session()
+    gateway_session.mount("https://www.hockey-reference.com", gateway_to_use)
     try:
-        response, player_page_xml = url_request_lxml(da_session, "https://www.hockey-reference.com" + game_link)
+        response, player_page_xml = url_request_lxml(gateway_session, "https://www.hockey-reference.com" + game_link)
     except requests.exceptions.HTTPError as err:
         if err.response.status_code == 404:
             return game_data, missing_games
