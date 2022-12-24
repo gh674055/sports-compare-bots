@@ -14178,9 +14178,9 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                         extra_stats.add("Shot By")
 
     player_datas = []
-    # arguments = []
-    # for index, sub_name in enumerate(names):
-    #     arguments.append([sub_name, parse_time_frames, index, player_type, remove_duplicates, remove_duplicate_games, extra_stats, comment_obj])
+    arguments = []
+    for index, sub_name in enumerate(names):
+        arguments.append([sub_name, parse_time_frames, index, player_type, remove_duplicates, remove_duplicate_games, extra_stats, comment_obj])
     with multiprocessing.Pool(processes=multiprocessing.cpu_count()) as pool:
         sub_player_datas = pool.starmap(handle_name_threads, arguments)
         for sub_player_data in sub_player_datas:
