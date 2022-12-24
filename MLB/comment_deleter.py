@@ -101,23 +101,9 @@ def main():
         elif opt in ("-" + debug_author_short, "--" + debug_author_long):
             debug_author = arg.strip()
 
-    global gateway
-    with ApiGateway("https://www.baseball-reference.com", verbose=False) as gateway:
-        if manual_message:
-            message = reddit.inbox.message(manual_message)
-            if message.author and not message.author.name.lower() in mlb.blocked_users:
-                if message.subject.strip().lower() == "delete":
-                    logger.info("FOUND DELETE MESSAGE " + str(message.id))
-                    parse_message(message, reddit)
-                elif message.subject.strip().lower() == "re-run" or message.subject.strip().lower() == "rerun":
-                    logger.info("FOUND RE-RUN MESSAGE " + str(message.id))
-                    re_run_message(message, reddit, True)
-                elif re.search(r"!\bmlbcompare(?:bot)?\b", message.body, re.IGNORECASE):
-                    logger.info("FOUND COMPARE MESSAGE " + str(message.id))
-                    mlb.parse_input(gateway, message, True, False)
-            return
-        elif debug_subject and debug_body and debug_author:
-            message = FakeMessage(debug_subject, debug_body, "-1", debug_author)
+    if manual_message:
+        message = reddit.inbox.message(manual_message)
+        if message.author and not message.author.name.lower() in mlb.blocked_users:
             if message.subject.strip().lower() == "delete":
                 logger.info("FOUND DELETE MESSAGE " + str(message.id))
                 parse_message(message, reddit)
@@ -126,22 +112,34 @@ def main():
                 re_run_message(message, reddit, True)
             elif re.search(r"!\bmlbcompare(?:bot)?\b", message.body, re.IGNORECASE):
                 logger.info("FOUND COMPARE MESSAGE " + str(message.id))
-                mlb.parse_input(gateway, message, True, False)
-            return
+                mlb.parse_input(message, True, False)
+        return
+    elif debug_subject and debug_body and debug_author:
+        message = FakeMessage(debug_subject, debug_body, "-1", debug_author)
+        if message.subject.strip().lower() == "delete":
+            logger.info("FOUND DELETE MESSAGE " + str(message.id))
+            parse_message(message, reddit)
+        elif message.subject.strip().lower() == "re-run" or message.subject.strip().lower() == "rerun":
+            logger.info("FOUND RE-RUN MESSAGE " + str(message.id))
+            re_run_message(message, reddit, True)
+        elif re.search(r"!\bmlbcompare(?:bot)?\b", message.body, re.IGNORECASE):
+            logger.info("FOUND COMPARE MESSAGE " + str(message.id))
+            mlb.parse_input(message, True, False)
+        return
 
-        with ThreadPoolExecutor(max_workers=5) as executor:
-            for message in reddit.inbox.stream():
-                if isinstance(message, Message):
-                    if message.author and not message.author.name.lower() in mlb.blocked_users:
-                        if message.subject.strip().lower() == "delete":
-                            logger.info("FOUND DELETE MESSAGE " + str(message.id))
-                            executor.submit(parse_message, message, reddit)
-                        elif message.subject.strip().lower() == "re-run" or message.subject.strip().lower() == "rerun":
-                            logger.info("FOUND RE-RUN MESSAGE " + str(message.id))
-                            executor.submit(re_run_message, message, reddit, False)
-                        elif re.search(r"!\bmlbcompare(?:bot)?\b", message.body, re.IGNORECASE):
-                            logger.info("FOUND COMPARE MESSAGE " + str(message.id))
-                            executor.submit(mlb.parse_input, gateway, message, False, False)
+    with ThreadPoolExecutor(max_workers=5) as executor:
+        for message in reddit.inbox.stream():
+            if isinstance(message, Message):
+                if message.author and not message.author.name.lower() in mlb.blocked_users:
+                    if message.subject.strip().lower() == "delete":
+                        logger.info("FOUND DELETE MESSAGE " + str(message.id))
+                        executor.submit(parse_message, message, reddit)
+                    elif message.subject.strip().lower() == "re-run" or message.subject.strip().lower() == "rerun":
+                        logger.info("FOUND RE-RUN MESSAGE " + str(message.id))
+                        executor.submit(re_run_message, message, reddit, False)
+                    elif re.search(r"!\bmlbcompare(?:bot)?\b", message.body, re.IGNORECASE):
+                        logger.info("FOUND COMPARE MESSAGE " + str(message.id))
+                        executor.submit(mlb.parse_input, message, False, False)
 
 def parse_message(message, reddit):
     """Parses a message"""
@@ -340,7 +338,7 @@ def parse_comment(reddit, comment_id, reply_comment_id, original_comment, is_exi
                 logger.info("#" + str(threading.get_ident()) + "#   " + "MESSAGE: " + "Starting re-run!")
             except praw.exceptions.APIException as e:
                 logger.error("#" + str(threading.get_ident()) + "#   " + traceback.format_exc())
-            mlb.parse_input(gateway, message, debug_mode, False, curr)
+            mlb.parse_input(message, debug_mode, False, curr)
             was_successful = 1
         else:
             raise CustomMessageException("Message " + comment_id + " does not contain a comparison!")
@@ -367,7 +365,7 @@ def parse_comment(reddit, comment_id, reply_comment_id, original_comment, is_exi
                     logger.info("#" + str(threading.get_ident()) + "#   " + "MESSAGE: " + "Starting re-run!")
                 except praw.exceptions.APIException as e:
                     logger.error("#" + str(threading.get_ident()) + "#   " + traceback.format_exc())
-                mlb.parse_input(gateway, comment, debug_mode, comment.subreddit.display_name in mlb.approved_subreddits, curr, comment_obj)
+                mlb.parse_input(comment, debug_mode, comment.subreddit.display_name in mlb.approved_subreddits, curr, comment_obj)
                 was_successful = 1
             else:
                 raise CustomMessageException("Comment " + comment_id + " does not contain a comparison!")

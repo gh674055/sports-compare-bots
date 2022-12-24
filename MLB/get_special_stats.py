@@ -22,7 +22,7 @@ no_hit_format = "https://www.baseball-reference.com/friv/no-hitters-and-perfect-
 cycles_format = "https://www.baseball-almanac.com/hitting/Major_League_Baseball_Players_to_hit_for_the_cycle.shtml"
 player_search_url_format = "https://www.baseball-reference.com/search/search.fcgi?search={}"
 
-max_request_retries = 10
+max_request_retries = 3
 retry_failure_delay = 3
 
 playoff_no_hitters = [
@@ -62,7 +62,7 @@ with open ("team_name_info.json", "r") as file:
 def main():
     print("Starting no hitters")
     global gateway
-    with ApiGateway("https://www.baseball-reference.com", verbose=False) as gateway:
+    with ApiGateway("https://www.baseball-reference.com", verbose=True) as gateway:
         response = mlb.url_request(no_hit_format)
 
         player_page = BeautifulSoup(response, "html.parser")

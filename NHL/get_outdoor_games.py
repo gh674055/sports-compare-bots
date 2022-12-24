@@ -6,7 +6,7 @@ import time
 import unidecode
 import threading
 
-max_request_retries = 10
+max_request_retries = 3
 retry_failure_delay = 3
 
 nhl_schedule_url_format = "https://statsapi.web.nhl.com/api/v1/schedule?startDate={}&endDate={}&gameType=P,R"

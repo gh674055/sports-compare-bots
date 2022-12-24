@@ -267,7 +267,7 @@ teams_to_abbr = {
     "Ruby Legs" : "WOR"
 }
 
-max_request_retries = 10
+max_request_retries = 3
 retry_failure_delay = 3
 
 request_headers = {
