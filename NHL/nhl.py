@@ -7381,12 +7381,12 @@ def main():
                 if re.search(r"!\bnhlcompare(?:bot)?\b", comment.body, re.IGNORECASE):
                     logger.info("FOUND COMMENT " + str(comment.id))
                     executor.submit(parse_input, comment, False, comment.subreddit.display_name in approved_subreddits)
-    with multiprocessing.Pool(processes=10) as pool:
-        for comment in subreddit.stream.comments():
-            if not comment.archived and comment.author and not comment.author.name.lower() in blocked_users:
-                if re.search(r"!\bnhlcompare(?:bot)?\b", comment.body, re.IGNORECASE):
-                    logger.info("FOUND COMMENT " + str(comment.id))
-                    res = pool.apply_async(parse_input, (comment, False, comment.subreddit.display_name in approved_subreddits))
+    # with multiprocessing.Pool(processes=10) as pool:
+    #     for comment in subreddit.stream.comments():
+    #         if not comment.archived and comment.author and not comment.author.name.lower() in blocked_users:
+    #             if re.search(r"!\bnhlcompare(?:bot)?\b", comment.body, re.IGNORECASE):
+    #                 logger.info("FOUND COMMENT " + str(comment.id))
+    #                 res = pool.apply_async(parse_input, (comment, False, comment.subreddit.display_name in approved_subreddits))
 
 def parse_input(comment, debug_mode, is_approved, existing_cur=None, existing_comment=None):
     try:
@@ -14181,16 +14181,16 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
     # arguments = []
     # for index, sub_name in enumerate(names):
     #     arguments.append([sub_name, parse_time_frames, index, player_type, remove_duplicates, remove_duplicate_games, extra_stats, comment_obj])
-    # with multiprocessing.Pool(processes=multiprocessing.cpu_count()) as pool:
-    #     sub_player_datas = pool.starmap(handle_name_threads, arguments)
-    #     for sub_player_data in sub_player_datas:
-    #         player_datas += sub_player_data
-    with ThreadPoolExecutor(max_workers=5) as sub_executor:
-        futures = []
-        for index, sub_name in enumerate(names):
-            futures.append(sub_executor.submit(handle_name_threads, sub_name, parse_time_frames, index, player_type, remove_duplicates, remove_duplicate_games, extra_stats, comment_obj))
-        for future in concurrent.futures.as_completed(futures):
-            player_datas += future.result()
+    with multiprocessing.Pool(processes=multiprocessing.cpu_count()) as pool:
+        sub_player_datas = pool.starmap(handle_name_threads, arguments)
+        for sub_player_data in sub_player_datas:
+            player_datas += sub_player_data
+    # with ThreadPoolExecutor(max_workers=5) as sub_executor:
+    #     futures = []
+    #     for index, sub_name in enumerate(names):
+    #         futures.append(sub_executor.submit(handle_name_threads, sub_name, parse_time_frames, index, player_type, remove_duplicates, remove_duplicate_games, extra_stats, comment_obj))
+    #     for future in concurrent.futures.as_completed(futures):
+    #         player_datas += future.result()
 
     for player_data in player_datas:
         if player_data["stat_values"]["LastUpdated"] and (not last_updated or player_data["stat_values"]["LastUpdated"] < last_updated):
