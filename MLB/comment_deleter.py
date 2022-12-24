@@ -13,7 +13,6 @@ import mlb
 import math
 import re
 import ssl
-from requests_ip_rotator import ApiGateway
 
 logname = "mlb_comment_deleter.log"
 logger = logging.getLogger("mlb_comment_deleter")

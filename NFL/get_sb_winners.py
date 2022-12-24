@@ -106,5 +106,9 @@ def url_request(url, timeout=30, retry_403=True):
 
 if __name__ == "__main__":
     global gateway
-    with ApiGateway("https://www.pro-football-reference.com", verbose=True) as gateway:
+    gateway =  ApiGateway("https://www.pro-football-reference.com", verbose=True)
+    endpoints = gateway.start()
+    try:
         main()
+    finally:
+        gateway.shutdown(endpoints)

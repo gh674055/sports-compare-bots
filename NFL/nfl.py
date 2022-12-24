@@ -1120,12 +1120,12 @@ def main():
     #                 res = pool.apply_async(parse_input, (comment, False, comment.subreddit.display_name in approved_subreddits))
 
 def get_api_gateway(url):
+    global gateway
     failed_counter = 0
     while True:
         try:
             gateway = ApiGateway(url, verbose=True)
-            gateway.start()
-            return gateway
+            return gateway.start()
         except botocore.exceptions.ClientError as e:
                 err_code = e.response["Error"]["Code"]
                 if err_code == "TooManyRequestsException":
@@ -1167,7 +1167,7 @@ def parse_input(comment, debug_mode, is_approved, existing_cur=None, existing_co
         comment_obj["is_approved"] = is_approved
 
         global gateway
-        gateway = get_api_gateway("https://www.pro-football-reference.com")
+        endpoints = get_api_gateway("https://www.pro-football-reference.com")
         try:
             if existing_cur:
                 sub_parse_input(existing_cur, comment, debug_mode, comment_obj, True)
@@ -1180,7 +1180,7 @@ def parse_input(comment, debug_mode, is_approved, existing_cur=None, existing_co
                 finally:
                     conn.close()
         finally:
-            gateway.shutdown()
+            gateway.shutdown(endpoints)
     except BaseException as e:
         logger.error(traceback.format_exc())
         raise e

@@ -62,7 +62,9 @@ with open ("team_name_info.json", "r") as file:
 def main():
     print("Starting no hitters")
     global gateway
-    with ApiGateway("https://www.baseball-reference.com", verbose=True) as gateway:
+    gateway =  ApiGateway("https://www.baseball-reference.com", verbose=True)
+    endpoints = gateway.start()
+    try:
         response = mlb.url_request(no_hit_format)
 
         player_page = BeautifulSoup(response, "html.parser")
@@ -255,6 +257,8 @@ def main():
         
         with open("special_stats.json", "w") as file:
             file.write(json.dumps(special_stats, indent=4, sort_keys=True))
+    finally:
+        gateway.shutdown(endpoints)
 
 if __name__ == "__main__":
     main()

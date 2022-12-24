@@ -404,5 +404,9 @@ def geolocate(geolocator, location):
 
 if __name__ == "__main__":
     global gateway
-    with ApiGateway("https://www.hockey-reference.com", verbose=True) as gateway:
+    gateway =  ApiGateway("https://www.hockey-reference.com", verbose=True)
+    endpoints = gateway.start()
+    try:
         main()
+    finally:
+        gateway.shutdown(endpoints)

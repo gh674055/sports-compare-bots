@@ -13,7 +13,6 @@ import nfl
 import math
 import re
 import ssl
-from requests_ip_rotator import ApiGateway
 
 logname = "nfl_comment_deleter.log"
 logger = logging.getLogger("nfl_comment_deleter")
