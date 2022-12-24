@@ -63,7 +63,7 @@ def main():
     print("Starting no hitters")
     global gateway
     gateway =  ApiGateway("https://www.baseball-reference.com", verbose=True)
-    endpoints = gateway.start()
+    endpoints = gateway.start(force=True)
     try:
         response = mlb.url_request(no_hit_format)
 

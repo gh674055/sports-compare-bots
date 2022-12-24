@@ -7396,7 +7396,7 @@ def get_api_gateway(url):
     while True:
         try:
             gateway = ApiGateway(url, verbose=True)
-            return gateway.start()
+            return gateway.start(force=True)
         except botocore.exceptions.ClientError as e:
                 err_code = e.response["Error"]["Code"]
                 if err_code == "TooManyRequestsException":
