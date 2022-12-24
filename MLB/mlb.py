@@ -7126,34 +7126,40 @@ def main():
     finally:
         conn.close()
 
-    for opt, arg in options:
-        if opt in ("-" + manual_comment_short, "--" + manual_comment_long):
-            comment = reddit.comment(id=arg.strip())
-            if not comment.archived and comment.author and not comment.author.name.lower() in blocked_users:
+    global gateway
+    gateway = ApiGateway("https://www.baseball-reference.com", verbose=True)
+    endpoints = gateway.start(force=True)
+    try:
+        for opt, arg in options:
+            if opt in ("-" + manual_comment_short, "--" + manual_comment_long):
+                comment = reddit.comment(id=arg.strip())
+                if not comment.archived and comment.author and not comment.author.name.lower() in blocked_users:
+                    if re.search(r"!\bmlbcompare(?:bot)?\b", comment.body, re.IGNORECASE):
+                        logger.info("FOUND COMMENT " + str(comment.id))
+                        parse_input(gateway, comment, False, comment.subreddit.display_name in approved_subreddits)
+                return
+            elif opt in ("-" + debug_mode_short, "--" + debug_mode_long):
+                comment_str = arg.strip()
+                comment = FakeComment(comment_str, "-1", "")
                 if re.search(r"!\bmlbcompare(?:bot)?\b", comment.body, re.IGNORECASE):
                     logger.info("FOUND COMMENT " + str(comment.id))
-                    parse_input(comment, False, comment.subreddit.display_name in approved_subreddits)
-            return
-        elif opt in ("-" + debug_mode_short, "--" + debug_mode_long):
-            comment_str = arg.strip()
-            comment = FakeComment(comment_str, "-1", "")
-            if re.search(r"!\bmlbcompare(?:bot)?\b", comment.body, re.IGNORECASE):
-                logger.info("FOUND COMMENT " + str(comment.id))
-                parse_input(comment, True, False)
-            return
+                    parse_input(gateway, comment, True, False)
+                return
 
-    with ThreadPoolExecutor(max_workers=10) as executor:
-        for comment in subreddit.stream.comments():
-            if not comment.archived and comment.author and not comment.author.name.lower() in blocked_users:
-                if re.search(r"!\bmlbcompare(?:bot)?\b", comment.body, re.IGNORECASE):
-                    logger.info("FOUND COMMENT " + str(comment.id))
-                    executor.submit(parse_input, comment, False, comment.subreddit.display_name in approved_subreddits)
-    # with multiprocessing.Pool(processes=10) as pool:
-    #     for comment in subreddit.stream.comments():
-    #         if not comment.archived and comment.author and not comment.author.name.lower() in blocked_users:
-    #             if re.search(r"!\bmlbcompare(?:bot)?\b", comment.body, re.IGNORECASE):
-    #                 logger.info("FOUND COMMENT " + str(comment.id))
-    #                 res = pool.apply_async(parse_input, (comment, False, comment.subreddit.display_name in approved_subreddits))
+        with ThreadPoolExecutor(max_workers=10) as executor:
+            for comment in subreddit.stream.comments():
+                if not comment.archived and comment.author and not comment.author.name.lower() in blocked_users:
+                    if re.search(r"!\bmlbcompare(?:bot)?\b", comment.body, re.IGNORECASE):
+                        logger.info("FOUND COMMENT " + str(comment.id))
+                        executor.submit(parse_input, gateway, comment, False, comment.subreddit.display_name in approved_subreddits)
+        # with multiprocessing.Pool(processes=10) as pool:
+        #     for comment in subreddit.stream.comments():
+        #         if not comment.archived and comment.author and not comment.author.name.lower() in blocked_users:
+        #             if re.search(r"!\bmlbcompare(?:bot)?\b", comment.body, re.IGNORECASE):
+        #                 logger.info("FOUND COMMENT " + str(comment.id))
+        #                 res = pool.apply_async(parse_input, (gateway, comment, False, comment.subreddit.display_name in approved_subreddits))
+    finally:
+        gateway.shutdown(endpoints)
 
 def get_api_gateway(url):
     global gateway
@@ -7163,21 +7169,23 @@ def get_api_gateway(url):
             gateway = ApiGateway(url, verbose=True)
             return gateway.start(force=True)
         except botocore.exceptions.ClientError as e:
-                err_code = e.response["Error"]["Code"]
-                if err_code == "TooManyRequestsException":
-                    failed_counter += 1
-                    if failed_counter > 10:
-                        raise
-
-                    logger.info("#" + str(threading.get_ident()) + "#   " + "Retrying in 10 seconds to allow us to create a new api gateway")
-                    for i in range(10, 0, -1):
-                        logger.info("#" + str(threading.get_ident()) + "#   " + str(i))
-                        time.sleep(1)
-                    logger.info("#" + str(threading.get_ident()) + "#   " + "0")
-                else:
+            err_code = e.response["Error"]["Code"]
+            if err_code == "TooManyRequestsException":
+                failed_counter += 1
+                if failed_counter > 10:
                     raise
 
-def parse_input(comment, debug_mode, is_approved, existing_cur=None, existing_comment=None):
+                logger.info("#" + str(threading.get_ident()) + "#   " + "Retrying in 10 seconds to allow us to create a new api gateway")
+                for i in range(10, 0, -1):
+                    logger.info("#" + str(threading.get_ident()) + "#   " + str(i))
+                    time.sleep(1)
+                logger.info("#" + str(threading.get_ident()) + "#   " + "0")
+            else:
+                raise
+
+def parse_input(gateway_to_use, comment, debug_mode, is_approved, existing_cur=None, existing_comment=None):
+    global gateway
+    gateway = gateway_to_use
     try:
         start_time = datetime.datetime.now()
         logger.info("#" + str(threading.get_ident()) + "#   " + "THREAD STARTED FOR " + str(comment.id))
@@ -7202,20 +7210,21 @@ def parse_input(comment, debug_mode, is_approved, existing_cur=None, existing_co
         comment_obj["debug_mode"] = debug_mode
         comment_obj["is_approved"] = is_approved
 
-        endpoints = get_api_gateway("https://www.baseball-reference.com")
-        try:
-            if existing_cur:
-                sub_parse_input(existing_cur, comment, debug_mode, comment_obj, True)
-            else:
-                conn = sqlite3.connect("mlb.db")
-                try:
-                    with conn:
-                        curr = conn.cursor()
-                        sub_parse_input(curr, comment, debug_mode, comment_obj, False)
-                finally:
-                    conn.close()
-        finally:
-            gateway.shutdown(endpoints)
+        #global gateway
+        #endpoints = get_api_gateway("https://www.baseball-reference.com")
+        #try:
+        if existing_cur:
+            sub_parse_input(existing_cur, comment, debug_mode, comment_obj, True)
+        else:
+            conn = sqlite3.connect("mlb.db")
+            try:
+                with conn:
+                    curr = conn.cursor()
+                    sub_parse_input(curr, comment, debug_mode, comment_obj, False)
+            finally:
+                conn.close()
+        #finally:
+            #gateway.shutdown(endpoints)
     except BaseException as e:
         logger.error(traceback.format_exc())
         raise e
