@@ -14,13 +14,12 @@ import threading
 import lxml
 import cchardet
 import ssl
-from requests_ip_rotator import ApiGateway
 from urllib.parse import urlparse, parse_qs
 
 league_totals_url = "https://www.hockey-reference.com/{}/NHL_{}_{}.html"
 current_year_stats_url = "https://www.hockey-reference.com/{}/NHL_{}.html"
 
-max_request_retries = 10
+max_request_retries = 3
 retry_failure_delay = 3
 
 request_headers = {
@@ -545,8 +544,7 @@ def calculate_year_games_by_team(year, for_playoffs):
     return teams
 
 def url_request(url, timeout=30, failed_counter=0):
-    gateway_session = requests.Session()
-    gateway_session.mount("https://www.hockey-reference.com", gateway)
+    da_session = requests.Session()
     while(True):
         if failed_counter > 0:
             delay_step = 10
@@ -558,7 +556,7 @@ def url_request(url, timeout=30, failed_counter=0):
             logger.info("#" + str(threading.get_ident()) + "#   " + "0")
 
         try:
-            response = gateway_session.get(url, timeout=timeout, headers=request_headers)
+            response = da_session.get(url, timeout=timeout, headers=request_headers)
             response.raise_for_status()
             text = response.text
 
@@ -566,32 +564,10 @@ def url_request(url, timeout=30, failed_counter=0):
             if not bs.contents:
                 raise requests.exceptions.HTTPError("Page is empty!")
             return response, bs
-        except requests.exceptions.HTTPError as err:
-            failed_counter += 1
-            if failed_counter > max_request_retries:
-                raise
-            if err.response.status_code == 403:
-                error_string = str(err)
-                if error_string.startswith("403 Client Error: Forbidden for url:"):
-                    error_split = str(err).split()
-                    error_url = error_split[len(error_split) - 1]
-                    new_url = "https://www.hockey-reference.com" + urlparse(error_url).path
-                    new_url = new_url.replace("/ProxyStage", "")
-                    return url_request(new_url, timeout, failed_counter=failed_counter)
-        except requests.exceptions.ConnectionError as err:
-            failed_counter += 1
-            if failed_counter > max_request_retries:
-                raise
-            error_url = err.request.url
-            error_url = "https://www.hockey-reference.com" + urlparse(error_url).path
-            error_url = error_url.replace("/ProxyStage", "")
-            return url_request(error_url, timeout, failed_counter=failed_counter)
         except Exception:
             failed_counter += 1
             if failed_counter > max_request_retries:
                 raise
 
 if __name__ == "__main__":
-    global gateway
-    with ApiGateway("https://www.hockey-reference.com", verbose=False) as gateway:
-        main()
+    main()
