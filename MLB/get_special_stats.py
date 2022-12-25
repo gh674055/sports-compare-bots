@@ -17,6 +17,7 @@ from nameparser import HumanName
 import mlb
 from requests_ip_rotator import ApiGateway
 from urllib.parse import urlparse, parse_qs
+import signal
 
 no_hit_format = "https://www.baseball-reference.com/friv/no-hitters-and-perfect-games.shtml"
 cycles_format = "https://www.baseball-almanac.com/hitting/Major_League_Baseball_Players_to_hit_for_the_cycle.shtml"
@@ -64,6 +65,12 @@ def main():
     global gateway
     gateway =  ApiGateway("https://www.baseball-reference.com", verbose=True)
     endpoints = gateway.start(force=True)
+
+    def exit_gracefully(signum, frame):
+        sys.exit(0)
+    signal.signal(signal.SIGINT, exit_gracefully)
+    signal.signal(signal.SIGTERM, exit_gracefully)
+
     try:
         response = mlb.url_request(no_hit_format)
 

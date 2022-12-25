@@ -18,6 +18,7 @@ from nameparser import HumanName
 from requests_ip_rotator import ApiGateway
 import urllib.parse
 from urllib.parse import urlparse, parse_qs
+import signal
 
 footballref_team_ids_url = "https://www.pro-football-reference.com/teams"
 
@@ -165,6 +166,12 @@ if __name__ == "__main__":
     global gateway
     gateway =  ApiGateway("https://www.pro-football-reference.com", verbose=True)
     endpoints = gateway.start(force=True)
+
+    def exit_gracefully(signum, frame):
+        sys.exit(0)
+    signal.signal(signal.SIGINT, exit_gracefully)
+    signal.signal(signal.SIGTERM, exit_gracefully)
+
     try:
         main()
     finally:

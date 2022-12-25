@@ -17,6 +17,7 @@ from nameparser import HumanName
 from requests_ip_rotator import ApiGateway
 import urllib.parse
 from urllib.parse import urlparse, parse_qs
+import signal
 
 baseballref_team_ids_url = "https://www.baseball-reference.com/teams"
 mlb_teams_url_format = "https://statsapi.mlb.com/api/v1/teams/{}/history"
@@ -451,6 +452,12 @@ if __name__ == "__main__":
     global gateway
     gateway = ApiGateway("https://www.baseball-reference.com", verbose=False)
     endpoints = gateway.start(force=True)
+
+    def exit_gracefully(signum, frame):
+        sys.exit(0)
+    signal.signal(signal.SIGINT, exit_gracefully)
+    signal.signal(signal.SIGTERM, exit_gracefully)
+
     try:
         main()
     finally:

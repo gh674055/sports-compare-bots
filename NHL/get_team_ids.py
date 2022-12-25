@@ -19,6 +19,7 @@ import threading
 from requests_ip_rotator import ApiGateway
 import urllib.parse
 from urllib.parse import urlparse, parse_qs
+import signal
 
 awards_url_format = "https://statsapi.web.nhl.com/api/v1/teams/{}"
 hockeyref_team_ids_url = "https://www.hockey-reference.com/teams"
@@ -234,6 +235,12 @@ if __name__ == "__main__":
     global gateway
     gateway =  ApiGateway("https://www.hockey-reference.com", verbose=True)
     endpoints = gateway.start(force=True)
+
+    def exit_gracefully(signum, frame):
+        sys.exit(0)
+    signal.signal(signal.SIGINT, exit_gracefully)
+    signal.signal(signal.SIGTERM, exit_gracefully)
+
     try:
         main()
     finally:

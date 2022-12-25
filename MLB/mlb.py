@@ -79,6 +79,7 @@ import cProfile
 import pstats
 from requests_ip_rotator import ApiGateway
 import botocore.exceptions
+import signal
 
 subreddits_to_crawl = [
     "sportscomparebots",
@@ -7129,6 +7130,12 @@ def main():
     global gateway
     gateway = ApiGateway("https://www.baseball-reference.com", verbose=True)
     endpoints = gateway.start(force=True)
+
+    def exit_gracefully(signum, frame):
+        sys.exit(0)
+    signal.signal(signal.SIGINT, exit_gracefully)
+    signal.signal(signal.SIGTERM, exit_gracefully)
+
     try:
         for opt, arg in options:
             if opt in ("-" + manual_comment_short, "--" + manual_comment_long):

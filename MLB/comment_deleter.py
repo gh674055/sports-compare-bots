@@ -15,6 +15,7 @@ import re
 import ssl
 from requests_ip_rotator import ApiGateway
 import botocore.exceptions
+import signal
 
 logname = "mlb_comment_deleter.log"
 logger = logging.getLogger("mlb_comment_deleter")
@@ -105,6 +106,12 @@ def main():
     global gateway
     gateway = ApiGateway("https://www.baseball-reference.com", verbose=True)
     endpoints = gateway.start(force=True)
+    
+    def exit_gracefully(signum, frame):
+        sys.exit(0)
+    signal.signal(signal.SIGINT, exit_gracefully)
+    signal.signal(signal.SIGTERM, exit_gracefully)
+
     try:
         if manual_message:
             message = reddit.inbox.message(manual_message)

@@ -14,6 +14,7 @@ import math
 import re
 import ssl
 from requests_ip_rotator import ApiGateway
+import signal
 
 logname = "nhl_comment_deleter.log"
 logger = logging.getLogger("nhl_comment_deleter")
@@ -104,6 +105,12 @@ def main():
     global gateway
     gateway = ApiGateway("https://www.hockey-reference.com", verbose=True)
     endpoints = gateway.start(force=True)
+
+    def exit_gracefully(signum, frame):
+        sys.exit(0)
+    signal.signal(signal.SIGINT, exit_gracefully)
+    signal.signal(signal.SIGTERM, exit_gracefully)
+
     try:
         if manual_message:
             message = reddit.inbox.message(manual_message)
