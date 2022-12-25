@@ -7132,7 +7132,7 @@ def main():
     endpoints = gateway.start(force=True)
 
     def exit_gracefully(signum, frame):
-        sys.exit(0)
+        sys.exit(signum)
     signal.signal(signal.SIGINT, exit_gracefully)
     signal.signal(signal.SIGTERM, exit_gracefully)
 
