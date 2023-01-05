@@ -4770,7 +4770,7 @@ formulas = {
         "Chase%" : "Chase / PitBall",
         "1stStr%" : "1stStr / PA",
         "Whiff%" : "SwStr / (CntStr + SwStr)",
-        "SB%" : "SB / (SB + CS)",
+        "SB%" : "Special",
         "AB/HR" : "AB / HR",
         "HR%" : "HR / PA",
         "XBH%" : "XBH / PA",
@@ -4933,7 +4933,7 @@ formulas = {
         "Chase%" : "Chase / PitBall",
         "1stStr%" : "1stStr / BF",
         "Whiff%" : "SwStr / (CntStr + SwStr)",
-        "SB%" : "SB / (SB + CS)",
+        "SB%" : "Special",
         "GB%" : "GB / InPly",
         "FB%" : "FB / InPly",
         "LD%" : "LD / InPly",
@@ -44571,6 +44571,17 @@ def calculate_formula(stat, player_data, player_type, formula, data, all_rows, s
             
             if total_innings:
                 return total_drs / (total_innings / 1200)
+            else:
+                return 0
+        elif stat == "SB%":
+            sb = 0
+            cs = 0
+            for row in all_rows:
+                if "SB" in row and "CS" in row:
+                    sb += row["SB"]
+                    cs += row["CS"]
+            if sb + cs:
+                return sb / (sb + cs)
             else:
                 return 0
     elif formula == "MAX":
