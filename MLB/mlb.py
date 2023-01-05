@@ -28031,7 +28031,8 @@ def calculate_sum_stats(player_type, row_data):
         row_data["1B"] = row_data.get("H", 0) - (row_data.get("2B", 0) + row_data.get("3B", 0) + row_data.get("HR", 0))
         row_data["TB"] = row_data["1B"] + 2 * row_data.get("2B", 0) + 3 * row_data.get("3B", 0) + 4 * row_data.get("HR", 0)
         row_data["XBH"] = row_data.get("2B", 0) + row_data.get("3B", 0) + row_data.get("HR", 0)
-        row_data["NS"] = row_data.get("SB", 0) - row_data.get("CS", 0)
+        if "SB" in row_data and "CS" in row_data:
+            row_data["NS"] = row_data.get("SB", 0) - row_data.get("CS", 0)
         row_data["TOB"] = row_data.get("H", 0) + row_data.get("BB", 0) + row_data.get("HBP", 0)
     else:
         row_data["1B"] = row_data.get("H", 0) - (row_data.get("2B", 0) + row_data.get("3B", 0) + row_data.get("HR", 0))
@@ -28039,7 +28040,8 @@ def calculate_sum_stats(player_type, row_data):
         row_data["XBH"] = row_data.get("2B", 0) + row_data.get("3B", 0) + row_data.get("HR", 0)
         if row_data.get("GS", 0) and not row_data.get("W", 0) and not row_data.get("L", 0) and not ("InProgress" in row_data and row_data["InProgress"]):
             row_data["ND"] = 1
-        row_data["NS"] = row_data.get("SB", 0) - row_data.get("CS", 0)
+        if "SB" in row_data and "CS" in row_data:
+            row_data["NS"] = row_data.get("SB", 0) - row_data.get("CS", 0)
         row_data["TOB"] = row_data.get("H", 0) + row_data.get("BB", 0) + row_data.get("HBP", 0)
         row_data["InPly"] = row_data.get("GB", 0) + row_data.get("FB", 0) + row_data.get("LD", 0) + row_data.get("PU", 0) + row_data.get("Unk", 0)
 
