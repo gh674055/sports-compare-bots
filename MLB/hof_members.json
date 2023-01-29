@@ -1,0 +1,2178 @@
+{
+    "110001": {
+        "bref_id": "aaronha01",
+        "inducted_as": "Player",
+        "per": 0.97831325301,
+        "voted_by": "BBWAA",
+        "votes": 406,
+        "year": 1982
+    },
+    "110127": {
+        "bref_id": "alexape01",
+        "inducted_as": "Player",
+        "per": 0.80916030534,
+        "voted_by": "BBWAA",
+        "votes": 212,
+        "year": 1938
+    },
+    "110183": {
+        "bref_id": "alomaro01",
+        "inducted_as": "Player",
+        "per": 0.90017211704,
+        "voted_by": "BBWAA",
+        "votes": 523,
+        "year": 2011
+    },
+    "110193": {
+        "bref_id": "alstowa01",
+        "inducted_as": "Manager",
+        "per": null,
+        "voted_by": "Veterans",
+        "votes": null,
+        "year": 1983
+    },
+    "110238": {
+        "bref_id": "andersp01",
+        "inducted_as": "Manager",
+        "per": null,
+        "voted_by": "Veterans",
+        "votes": null,
+        "year": 2000
+    },
+    "110284": {
+        "bref_id": "ansonca01",
+        "inducted_as": "Player",
+        "per": null,
+        "voted_by": "Old Timers",
+        "votes": null,
+        "year": 1939
+    },
+    "110290": {
+        "bref_id": "aparilu01",
+        "inducted_as": "Player",
+        "per": 0.84615384615,
+        "voted_by": "BBWAA",
+        "votes": 341,
+        "year": 1984
+    },
+    "110297": {
+        "bref_id": "applilu01",
+        "inducted_as": "Player",
+        "per": 0.94029850746,
+        "voted_by": "Run Off",
+        "votes": 189,
+        "year": 1964
+    },
+    "110349": {
+        "bref_id": "ashburi01",
+        "inducted_as": "Player",
+        "per": null,
+        "voted_by": "Veterans",
+        "votes": null,
+        "year": 1995
+    },
+    "110396": {
+        "bref_id": "averiea01",
+        "inducted_as": "Player",
+        "per": null,
+        "voted_by": "Veterans",
+        "votes": null,
+        "year": 1975
+    },
+    "110432": {
+        "bref_id": "bagweje01",
+        "inducted_as": "Player",
+        "per": 0.86199095023,
+        "voted_by": "BBWAA",
+        "votes": 381,
+        "year": 2017
+    },
+    "110456": {
+        "bref_id": "baineha01",
+        "inducted_as": "Player",
+        "per": null,
+        "voted_by": "Today's Game Era",
+        "votes": null,
+        "year": 2019
+    },
+    "110480": {
+        "bref_id": "bakerfr01",
+        "inducted_as": "Player",
+        "per": null,
+        "voted_by": "Veterans",
+        "votes": null,
+        "year": 1955
+    },
+    "110524": {
+        "bref_id": "bancrda01",
+        "inducted_as": "Player",
+        "per": null,
+        "voted_by": "Veterans",
+        "votes": null,
+        "year": 1971
+    },
+    "110533": {
+        "bref_id": "bankser01",
+        "inducted_as": "Player",
+        "per": 0.83812010444,
+        "voted_by": "BBWAA",
+        "votes": 321,
+        "year": 1977
+    },
+    "110776": {
+        "bref_id": "becklja01",
+        "inducted_as": "Player",
+        "per": null,
+        "voted_by": "Veterans",
+        "votes": null,
+        "year": 1971
+    },
+    "110849": {
+        "bref_id": "benchjo01",
+        "inducted_as": "Player",
+        "per": 0.96420581655,
+        "voted_by": "BBWAA",
+        "votes": 431,
+        "year": 1989
+    },
+    "110850": {
+        "bref_id": "bendech01",
+        "inducted_as": "Player",
+        "per": null,
+        "voted_by": "Veterans",
+        "votes": null,
+        "year": 1953
+    },
+    "110925": {
+        "bref_id": "berrayo01",
+        "inducted_as": "Player",
+        "per": 0.85606060606,
+        "voted_by": "BBWAA",
+        "votes": 339,
+        "year": 1972
+    },
+    "110987": {
+        "bref_id": "biggicr01",
+        "inducted_as": "Player",
+        "per": 0.82695810565,
+        "voted_by": "BBWAA",
+        "votes": 454,
+        "year": 2015
+    },
+    "111126": {
+        "bref_id": "blylebe01",
+        "inducted_as": "Player",
+        "per": 0.79690189329,
+        "voted_by": "BBWAA",
+        "votes": 463,
+        "year": 2011
+    },
+    "111153": {
+        "bref_id": "boggswa01",
+        "inducted_as": "Player",
+        "per": 0.91860465116,
+        "voted_by": "BBWAA",
+        "votes": 474,
+        "year": 2005
+    },
+    "111266": {
+        "bref_id": "bottoji01",
+        "inducted_as": "Player",
+        "per": null,
+        "voted_by": "Veterans",
+        "votes": null,
+        "year": 1974
+    },
+    "111272": {
+        "bref_id": "boudrlo01",
+        "inducted_as": "Player",
+        "per": 0.77333333333,
+        "voted_by": "BBWAA",
+        "votes": 232,
+        "year": 1970
+    },
+    "111433": {
+        "bref_id": "bresnro01",
+        "inducted_as": "Player",
+        "per": null,
+        "voted_by": "Old Timers",
+        "votes": null,
+        "year": 1945
+    },
+    "111437": {
+        "bref_id": "brettge01",
+        "inducted_as": "Player",
+        "per": 0.98189134809,
+        "voted_by": "BBWAA",
+        "votes": 488,
+        "year": 1999
+    },
+    "111495": {
+        "bref_id": "brocklo01",
+        "inducted_as": "Player",
+        "per": 0.79746835443,
+        "voted_by": "BBWAA",
+        "votes": 315,
+        "year": 1985
+    },
+    "111524": {
+        "bref_id": "broutda01",
+        "inducted_as": "Player",
+        "per": null,
+        "voted_by": "Old Timers",
+        "votes": null,
+        "year": 1945
+    },
+    "111577": {
+        "bref_id": "brownmo01",
+        "inducted_as": "Player",
+        "per": null,
+        "voted_by": "Old Timers",
+        "votes": null,
+        "year": 1949
+    },
+    "111600": {
+        "bref_id": "brownwi02",
+        "inducted_as": "Player",
+        "per": null,
+        "voted_by": "Negro League",
+        "votes": null,
+        "year": 2006
+    },
+    "111691": {
+        "bref_id": "bunniji01",
+        "inducted_as": "Player",
+        "per": null,
+        "voted_by": "Veterans",
+        "votes": null,
+        "year": 1996
+    },
+    "111733": {
+        "bref_id": "burkeje01",
+        "inducted_as": "Player",
+        "per": null,
+        "voted_by": "Old Timers",
+        "votes": null,
+        "year": 1946
+    },
+    "111915": {
+        "bref_id": "camparo01",
+        "inducted_as": "Player",
+        "per": 0.79411764706,
+        "voted_by": "BBWAA",
+        "votes": 270,
+        "year": 1969
+    },
+    "111986": {
+        "bref_id": "carewro01",
+        "inducted_as": "Player",
+        "per": 0.90519187359,
+        "voted_by": "BBWAA",
+        "votes": 401,
+        "year": 1991
+    },
+    "111989": {
+        "bref_id": "careyma01",
+        "inducted_as": "Player",
+        "per": null,
+        "voted_by": "Veterans",
+        "votes": null,
+        "year": 1961
+    },
+    "112008": {
+        "bref_id": "carltst01",
+        "inducted_as": "Player",
+        "per": 0.95614035088,
+        "voted_by": "BBWAA",
+        "votes": 436,
+        "year": 1994
+    },
+    "112061": {
+        "bref_id": "cartega01",
+        "inducted_as": "Player",
+        "per": 0.78024193548,
+        "voted_by": "BBWAA",
+        "votes": 387,
+        "year": 2003
+    },
+    "112157": {
+        "bref_id": "cepedor01",
+        "inducted_as": "Player",
+        "per": null,
+        "voted_by": "Veterans",
+        "votes": null,
+        "year": 1999
+    },
+    "112183": {
+        "bref_id": "chancfr01",
+        "inducted_as": "Player",
+        "per": null,
+        "voted_by": "Old Timers",
+        "votes": null,
+        "year": 1946
+    },
+    "112233": {
+        "bref_id": "chesbja01",
+        "inducted_as": "Player",
+        "per": null,
+        "voted_by": "Old Timers",
+        "votes": null,
+        "year": 1946
+    },
+    "112352": {
+        "bref_id": "clarkfr01",
+        "inducted_as": "Player",
+        "per": null,
+        "voted_by": "Old Timers",
+        "votes": null,
+        "year": 1945
+    },
+    "112369": {
+        "bref_id": "clarkjo01",
+        "inducted_as": "Player",
+        "per": null,
+        "voted_by": "Veterans",
+        "votes": null,
+        "year": 1963
+    },
+    "112391": {
+        "bref_id": "clemero01",
+        "inducted_as": "Player",
+        "per": null,
+        "voted_by": "Special Election",
+        "votes": null,
+        "year": 1973
+    },
+    "112431": {
+        "bref_id": "cobbty01",
+        "inducted_as": "Player",
+        "per": 0.98230088496,
+        "voted_by": "BBWAA",
+        "votes": 222,
+        "year": 1936
+    },
+    "112437": {
+        "bref_id": "cochrmi01",
+        "inducted_as": "Player",
+        "per": 0.7950310559,
+        "voted_by": "BBWAA",
+        "votes": 128,
+        "year": 1947
+    },
+    "112506": {
+        "bref_id": "collied01",
+        "inducted_as": "Player",
+        "per": 0.77737226277,
+        "voted_by": "BBWAA",
+        "votes": 213,
+        "year": 1939
+    },
+    "112511": {
+        "bref_id": "colliji01",
+        "inducted_as": "Player",
+        "per": null,
+        "voted_by": "Old Timers",
+        "votes": null,
+        "year": 1945
+    },
+    "112533": {
+        "bref_id": "combsea01",
+        "inducted_as": "Player",
+        "per": null,
+        "voted_by": "Veterans",
+        "votes": null,
+        "year": 1970
+    },
+    "112539": {
+        "bref_id": "comisch01",
+        "inducted_as": "Pioneer/Executive",
+        "per": null,
+        "voted_by": "Old Timers",
+        "votes": null,
+        "year": 1939
+    },
+    "112561": {
+        "bref_id": "conlajo01",
+        "inducted_as": "Umpire",
+        "per": null,
+        "voted_by": "Veterans",
+        "votes": null,
+        "year": 1974
+    },
+    "112589": {
+        "bref_id": "connoro01",
+        "inducted_as": "Player",
+        "per": null,
+        "voted_by": "Veterans",
+        "votes": null,
+        "year": 1976
+    },
+    "112743": {
+        "bref_id": "covelst01",
+        "inducted_as": "Player",
+        "per": null,
+        "voted_by": "Veterans",
+        "votes": null,
+        "year": 1969
+    },
+    "112764": {
+        "bref_id": "coxbo01",
+        "inducted_as": "Manager",
+        "per": null,
+        "voted_by": "Expansion Era",
+        "votes": null,
+        "year": 2014
+    },
+    "112806": {
+        "bref_id": "crawfsa01",
+        "inducted_as": "Player",
+        "per": null,
+        "voted_by": "Veterans",
+        "votes": null,
+        "year": 1957
+    },
+    "112854": {
+        "bref_id": "cronijo01",
+        "inducted_as": "Player",
+        "per": 0.78756476684,
+        "voted_by": "BBWAA",
+        "votes": 152,
+        "year": 1956
+    },
+    "112939": {
+        "bref_id": "cummica01",
+        "inducted_as": "Pioneer/Executive",
+        "per": null,
+        "voted_by": "Old Timers",
+        "votes": null,
+        "year": 1939
+    },
+    "112979": {
+        "bref_id": "cuyleki01",
+        "inducted_as": "Player",
+        "per": null,
+        "voted_by": "Veterans",
+        "votes": null,
+        "year": 1968
+    },
+    "113106": {
+        "bref_id": "davisge01",
+        "inducted_as": "Player",
+        "per": null,
+        "voted_by": "Veterans",
+        "votes": null,
+        "year": 1998
+    },
+    "113151": {
+        "bref_id": "dawsoan01",
+        "inducted_as": "Player",
+        "per": 0.77922077922,
+        "voted_by": "BBWAA",
+        "votes": 420,
+        "year": 2010
+    },
+    "113168": {
+        "bref_id": "deandi01",
+        "inducted_as": "Player",
+        "per": 0.79166666667,
+        "voted_by": "BBWAA",
+        "votes": 209,
+        "year": 1953
+    },
+    "113218": {
+        "bref_id": "delahed01",
+        "inducted_as": "Player",
+        "per": null,
+        "voted_by": "Old Timers",
+        "votes": null,
+        "year": 1945
+    },
+    "113340": {
+        "bref_id": "dickebi01",
+        "inducted_as": "Player",
+        "per": 0.80158730159,
+        "voted_by": "BBWAA",
+        "votes": 202,
+        "year": 1954
+    },
+    "113376": {
+        "bref_id": "dimagjo01",
+        "inducted_as": "Player",
+        "per": 0.88844621514,
+        "voted_by": "BBWAA",
+        "votes": 223,
+        "year": 1955
+    },
+    "113411": {
+        "bref_id": "dobyla01",
+        "inducted_as": "Player",
+        "per": null,
+        "voted_by": "Veterans",
+        "votes": null,
+        "year": 1998
+    },
+    "113419": {
+        "bref_id": "doerrbo01",
+        "inducted_as": "Player",
+        "per": null,
+        "voted_by": "Veterans",
+        "votes": null,
+        "year": 1986
+    },
+    "113581": {
+        "bref_id": "drysddo01",
+        "inducted_as": "Player",
+        "per": 0.7841191067,
+        "voted_by": "BBWAA",
+        "votes": 316,
+        "year": 1984
+    },
+    "113598": {
+        "bref_id": "duffyhu01",
+        "inducted_as": "Player",
+        "per": null,
+        "voted_by": "Old Timers",
+        "votes": null,
+        "year": 1945
+    },
+    "113664": {
+        "bref_id": "durocle01",
+        "inducted_as": "Manager",
+        "per": null,
+        "voted_by": "Veterans",
+        "votes": null,
+        "year": 1994
+    },
+    "113726": {
+        "bref_id": "eckerde01",
+        "inducted_as": "Player",
+        "per": 0.83201581028,
+        "voted_by": "BBWAA",
+        "votes": 421,
+        "year": 2004
+    },
+    "113949": {
+        "bref_id": "eversjo01",
+        "inducted_as": "Player",
+        "per": null,
+        "voted_by": "Old Timers",
+        "votes": null,
+        "year": 1946
+    },
+    "113959": {
+        "bref_id": "ewingbu01",
+        "inducted_as": "Player",
+        "per": null,
+        "voted_by": "Old Timers",
+        "votes": null,
+        "year": 1939
+    },
+    "113965": {
+        "bref_id": "faberre01",
+        "inducted_as": "Player",
+        "per": null,
+        "voted_by": "Veterans",
+        "votes": null,
+        "year": 1964
+    },
+    "114055": {
+        "bref_id": "fellebo01",
+        "inducted_as": "Player",
+        "per": 0.9375,
+        "voted_by": "BBWAA",
+        "votes": 150,
+        "year": 1962
+    },
+    "114086": {
+        "bref_id": "ferreri01",
+        "inducted_as": "Player",
+        "per": null,
+        "voted_by": "Veterans",
+        "votes": null,
+        "year": 1984
+    },
+    "114129": {
+        "bref_id": "fingero01",
+        "inducted_as": "Player",
+        "per": 0.81162790698,
+        "voted_by": "BBWAA",
+        "votes": 349,
+        "year": 1992
+    },
+    "114182": {
+        "bref_id": "fiskca01",
+        "inducted_as": "Player",
+        "per": 0.79559118236,
+        "voted_by": "BBWAA",
+        "votes": 397,
+        "year": 2000
+    },
+    "114241": {
+        "bref_id": "flickel01",
+        "inducted_as": "Player",
+        "per": null,
+        "voted_by": "Veterans",
+        "votes": null,
+        "year": 1963
+    },
+    "114299": {
+        "bref_id": "fordwh01",
+        "inducted_as": "Player",
+        "per": 0.77808219178,
+        "voted_by": "BBWAA",
+        "votes": 284,
+        "year": 1974
+    },
+    "114361": {
+        "bref_id": "foxne01",
+        "inducted_as": "Player",
+        "per": null,
+        "voted_by": "Veterans",
+        "votes": null,
+        "year": 1997
+    },
+    "114367": {
+        "bref_id": "foxxji01",
+        "inducted_as": "Player",
+        "per": 0.79203539823,
+        "voted_by": "BBWAA",
+        "votes": 179,
+        "year": 1951
+    },
+    "114448": {
+        "bref_id": "friscfr01",
+        "inducted_as": "Player",
+        "per": 0.84472049689,
+        "voted_by": "BBWAA",
+        "votes": 136,
+        "year": 1947
+    },
+    "114552": {
+        "bref_id": "galvipu01",
+        "inducted_as": "Player",
+        "per": null,
+        "voted_by": "Veterans",
+        "votes": null,
+        "year": 1965
+    },
+    "114680": {
+        "bref_id": "gehrilo01",
+        "inducted_as": "Player",
+        "per": null,
+        "voted_by": "Special Election",
+        "votes": null,
+        "year": 1939
+    },
+    "114682": {
+        "bref_id": "gehrich01",
+        "inducted_as": "Player",
+        "per": 0.85026737968,
+        "voted_by": "Run Off",
+        "votes": 159,
+        "year": 1949
+    },
+    "114756": {
+        "bref_id": "gibsobo01",
+        "inducted_as": "Player",
+        "per": 0.84039900249,
+        "voted_by": "BBWAA",
+        "votes": 337,
+        "year": 1981
+    },
+    "114849": {
+        "bref_id": "glavito02",
+        "inducted_as": "Player",
+        "per": 0.91943957968,
+        "voted_by": "BBWAA",
+        "votes": 525,
+        "year": 2014
+    },
+    "114917": {
+        "bref_id": "gomezle01",
+        "inducted_as": "Player",
+        "per": null,
+        "voted_by": "Veterans",
+        "votes": null,
+        "year": 1972
+    },
+    "114967": {
+        "bref_id": "gordojo01",
+        "inducted_as": "Player",
+        "per": null,
+        "voted_by": "Veterans",
+        "votes": null,
+        "year": 2009
+    },
+    "114987": {
+        "bref_id": "gosligo01",
+        "inducted_as": "Player",
+        "per": null,
+        "voted_by": "Veterans",
+        "votes": null,
+        "year": 1968
+    },
+    "114989": {
+        "bref_id": "gossari01",
+        "inducted_as": "Player",
+        "per": 0.85819521179,
+        "voted_by": "BBWAA",
+        "votes": 466,
+        "year": 2008
+    },
+    "115096": {
+        "bref_id": "greenha01",
+        "inducted_as": "Player",
+        "per": 0.84974093264,
+        "voted_by": "BBWAA",
+        "votes": 164,
+        "year": 1956
+    },
+    "115135": {
+        "bref_id": "griffke02",
+        "inducted_as": "Player",
+        "per": 0.99318181818,
+        "voted_by": "BBWAA",
+        "votes": 437,
+        "year": 2016
+    },
+    "115150": {
+        "bref_id": "griffcl01",
+        "inducted_as": "Pioneer/Executive",
+        "per": null,
+        "voted_by": "Old Timers",
+        "votes": null,
+        "year": 1946
+    },
+    "115162": {
+        "bref_id": "grimebu01",
+        "inducted_as": "Player",
+        "per": null,
+        "voted_by": "Veterans",
+        "votes": null,
+        "year": 1964
+    },
+    "115201": {
+        "bref_id": "grovele01",
+        "inducted_as": "Player",
+        "per": 0.76397515528,
+        "voted_by": "BBWAA",
+        "votes": 123,
+        "year": 1947
+    },
+    "115223": {
+        "bref_id": "guerrvl01",
+        "inducted_as": "Player",
+        "per": 0.92890995261,
+        "voted_by": "BBWAA",
+        "votes": 392,
+        "year": 2018
+    },
+    "115270": {
+        "bref_id": "gwynnto01",
+        "inducted_as": "Player",
+        "per": 0.97614678899,
+        "voted_by": "BBWAA",
+        "votes": 532,
+        "year": 2007
+    },
+    "115295": {
+        "bref_id": "hafeych01",
+        "inducted_as": "Player",
+        "per": null,
+        "voted_by": "Veterans",
+        "votes": null,
+        "year": 1971
+    },
+    "115314": {
+        "bref_id": "haineje01",
+        "inducted_as": "Player",
+        "per": null,
+        "voted_by": "Veterans",
+        "votes": null,
+        "year": 1970
+    },
+    "115386": {
+        "bref_id": "hamilbi01",
+        "inducted_as": "Player",
+        "per": null,
+        "voted_by": "Veterans",
+        "votes": null,
+        "year": 1961
+    },
+    "115424": {
+        "bref_id": "hanlone01",
+        "inducted_as": "Manager",
+        "per": null,
+        "voted_by": "Veterans",
+        "votes": null,
+        "year": 1996
+    },
+    "115534": {
+        "bref_id": "harribu01",
+        "inducted_as": "Manager",
+        "per": null,
+        "voted_by": "Veterans",
+        "votes": null,
+        "year": 1975
+    },
+    "115572": {
+        "bref_id": "hartnga01",
+        "inducted_as": "Player",
+        "per": 0.77689243028,
+        "voted_by": "BBWAA",
+        "votes": 195,
+        "year": 1955
+    },
+    "115705": {
+        "bref_id": "heilmha01",
+        "inducted_as": "Player",
+        "per": 0.86752136752,
+        "voted_by": "BBWAA",
+        "votes": 203,
+        "year": 1952
+    },
+    "115749": {
+        "bref_id": "henderi01",
+        "inducted_as": "Player",
+        "per": 0.94805194805,
+        "voted_by": "BBWAA",
+        "votes": 511,
+        "year": 2009
+    },
+    "115809": {
+        "bref_id": "hermabi01",
+        "inducted_as": "Player",
+        "per": null,
+        "voted_by": "Veterans",
+        "votes": null,
+        "year": 1975
+    },
+    "115865": {
+        "bref_id": "herzowh01",
+        "inducted_as": "Manager",
+        "per": null,
+        "voted_by": "Veterans",
+        "votes": null,
+        "year": 2010
+    },
+    "116008": {
+        "bref_id": "hodgegi01",
+        "inducted_as": "Player",
+        "per": null,
+        "voted_by": "Golden Days Era",
+        "votes": null,
+        "year": 2022
+    },
+    "116034": {
+        "bref_id": "hoffmtr01",
+        "inducted_as": "Player",
+        "per": 0.79857819905,
+        "voted_by": "BBWAA",
+        "votes": 337,
+        "year": 2018
+    },
+    "116127": {
+        "bref_id": "hoopeha01",
+        "inducted_as": "Player",
+        "per": null,
+        "voted_by": "Veterans",
+        "votes": null,
+        "year": 1971
+    },
+    "116156": {
+        "bref_id": "hornsro01",
+        "inducted_as": "Player",
+        "per": 0.78111587983,
+        "voted_by": "BBWAA",
+        "votes": 182,
+        "year": 1942
+    },
+    "116241": {
+        "bref_id": "hoytwa01",
+        "inducted_as": "Player",
+        "per": null,
+        "voted_by": "Veterans",
+        "votes": null,
+        "year": 1969
+    },
+    "116249": {
+        "bref_id": "hubbeca01",
+        "inducted_as": "Player",
+        "per": 0.86956521739,
+        "voted_by": "BBWAA",
+        "votes": 140,
+        "year": 1947
+    },
+    "116275": {
+        "bref_id": "huggimi01",
+        "inducted_as": "Manager",
+        "per": null,
+        "voted_by": "Veterans",
+        "votes": null,
+        "year": 1964
+    },
+    "116334": {
+        "bref_id": "hunteca01",
+        "inducted_as": "Player",
+        "per": 0.76271186441,
+        "voted_by": "BBWAA",
+        "votes": 315,
+        "year": 1987
+    },
+    "116403": {
+        "bref_id": "irvinmo01",
+        "inducted_as": "Player",
+        "per": null,
+        "voted_by": "Negro League",
+        "votes": null,
+        "year": 1973
+    },
+    "116439": {
+        "bref_id": "jacksre01",
+        "inducted_as": "Player",
+        "per": 0.93617021277,
+        "voted_by": "BBWAA",
+        "votes": 396,
+        "year": 1993
+    },
+    "116445": {
+        "bref_id": "jackstr01",
+        "inducted_as": "Player",
+        "per": null,
+        "voted_by": "Veterans",
+        "votes": null,
+        "year": 1982
+    },
+    "116522": {
+        "bref_id": "jenkife01",
+        "inducted_as": "Player",
+        "per": 0.7539503386,
+        "voted_by": "BBWAA",
+        "votes": 334,
+        "year": 1991
+    },
+    "116528": {
+        "bref_id": "jennihu01",
+        "inducted_as": "Player",
+        "per": null,
+        "voted_by": "Old Timers",
+        "votes": null,
+        "year": 1945
+    },
+    "116539": {
+        "bref_id": "jeterde01",
+        "inducted_as": "Player",
+        "per": 0.99748110831,
+        "voted_by": "BBWAA",
+        "votes": 396,
+        "year": 2020
+    },
+    "116615": {
+        "bref_id": "johnsra05",
+        "inducted_as": "Player",
+        "per": 0.97267759563,
+        "voted_by": "BBWAA",
+        "votes": 534,
+        "year": 2015
+    },
+    "116635": {
+        "bref_id": "johnswa01",
+        "inducted_as": "Player",
+        "per": 0.83628318584,
+        "voted_by": "BBWAA",
+        "votes": 189,
+        "year": 1936
+    },
+    "116706": {
+        "bref_id": "jonesch06",
+        "inducted_as": "Player",
+        "per": 0.97156398104,
+        "voted_by": "BBWAA",
+        "votes": 410,
+        "year": 2018
+    },
+    "116772": {
+        "bref_id": "jossad01",
+        "inducted_as": "Player",
+        "per": null,
+        "voted_by": "Veterans",
+        "votes": null,
+        "year": 1978
+    },
+    "116803": {
+        "bref_id": "kaatji01",
+        "inducted_as": "Player",
+        "per": null,
+        "voted_by": "Golden Days Era",
+        "votes": null,
+        "year": 2022
+    },
+    "116822": {
+        "bref_id": "kalinal01",
+        "inducted_as": "Player",
+        "per": 0.88311688312,
+        "voted_by": "BBWAA",
+        "votes": 340,
+        "year": 1980
+    },
+    "116888": {
+        "bref_id": "keefeti01",
+        "inducted_as": "Player",
+        "per": null,
+        "voted_by": "Veterans",
+        "votes": null,
+        "year": 1964
+    },
+    "116891": {
+        "bref_id": "keelewi01",
+        "inducted_as": "Player",
+        "per": 0.75547445255,
+        "voted_by": "BBWAA",
+        "votes": 207,
+        "year": 1939
+    },
+    "116913": {
+        "bref_id": "kellge01",
+        "inducted_as": "Player",
+        "per": null,
+        "voted_by": "Veterans",
+        "votes": null,
+        "year": 1983
+    },
+    "116926": {
+        "bref_id": "kellejo01",
+        "inducted_as": "Player",
+        "per": null,
+        "voted_by": "Veterans",
+        "votes": null,
+        "year": 1971
+    },
+    "116942": {
+        "bref_id": "kellyge01",
+        "inducted_as": "Player",
+        "per": null,
+        "voted_by": "Veterans",
+        "votes": null,
+        "year": 1973
+    },
+    "116953": {
+        "bref_id": "kellyki01",
+        "inducted_as": "Player",
+        "per": null,
+        "voted_by": "Old Timers",
+        "votes": null,
+        "year": 1945
+    },
+    "117051": {
+        "bref_id": "killeha01",
+        "inducted_as": "Player",
+        "per": 0.83126550868,
+        "voted_by": "BBWAA",
+        "votes": 335,
+        "year": 1984
+    },
+    "117072": {
+        "bref_id": "kinerra01",
+        "inducted_as": "Player",
+        "per": 0.75414364641,
+        "voted_by": "BBWAA",
+        "votes": 273,
+        "year": 1975
+    },
+    "117141": {
+        "bref_id": "kleinch01",
+        "inducted_as": "Player",
+        "per": null,
+        "voted_by": "Veterans",
+        "votes": null,
+        "year": 1980
+    },
+    "117277": {
+        "bref_id": "koufasa01",
+        "inducted_as": "Player",
+        "per": 0.86868686869,
+        "voted_by": "BBWAA",
+        "votes": 344,
+        "year": 1972
+    },
+    "117414": {
+        "bref_id": "lajoina01",
+        "inducted_as": "Player",
+        "per": 0.83582089552,
+        "voted_by": "BBWAA",
+        "votes": 168,
+        "year": 1937
+    },
+    "117501": {
+        "bref_id": "larkiba01",
+        "inducted_as": "Player",
+        "per": 0.86387434555,
+        "voted_by": "BBWAA",
+        "votes": 495,
+        "year": 2012
+    },
+    "117517": {
+        "bref_id": "larusto01",
+        "inducted_as": "Manager",
+        "per": null,
+        "voted_by": "Expansion Era",
+        "votes": null,
+        "year": 2014
+    },
+    "117524": {
+        "bref_id": "lasorto01",
+        "inducted_as": "Manager",
+        "per": null,
+        "voted_by": "Veterans",
+        "votes": null,
+        "year": 1997
+    },
+    "117577": {
+        "bref_id": "lazzeto01",
+        "inducted_as": "Player",
+        "per": null,
+        "voted_by": "Veterans",
+        "votes": null,
+        "year": 1991
+    },
+    "117671": {
+        "bref_id": "lemonbo01",
+        "inducted_as": "Player",
+        "per": 0.78608247423,
+        "voted_by": "BBWAA",
+        "votes": 305,
+        "year": 1976
+    },
+    "117793": {
+        "bref_id": "lindsfr01",
+        "inducted_as": "Player",
+        "per": null,
+        "voted_by": "Veterans",
+        "votes": null,
+        "year": 1976
+    },
+    "117880": {
+        "bref_id": "lombaer01",
+        "inducted_as": "Player",
+        "per": null,
+        "voted_by": "Veterans",
+        "votes": null,
+        "year": 1986
+    },
+    "117914": {
+        "bref_id": "lopezal01",
+        "inducted_as": "Manager",
+        "per": null,
+        "voted_by": "Veterans",
+        "votes": null,
+        "year": 1977
+    },
+    "118055": {
+        "bref_id": "lyonste01",
+        "inducted_as": "Player",
+        "per": 0.86454183267,
+        "voted_by": "BBWAA",
+        "votes": 217,
+        "year": 1955
+    },
+    "118082": {
+        "bref_id": "mackco01",
+        "inducted_as": "Manager",
+        "per": null,
+        "voted_by": "Centennial",
+        "votes": null,
+        "year": 1937
+    },
+    "118120": {
+        "bref_id": "maddugr01",
+        "inducted_as": "Player",
+        "per": 0.97197898424,
+        "voted_by": "BBWAA",
+        "votes": 555,
+        "year": 2014
+    },
+    "118258": {
+        "bref_id": "mantlmi01",
+        "inducted_as": "Player",
+        "per": 0.88219178082,
+        "voted_by": "BBWAA",
+        "votes": 322,
+        "year": 1974
+    },
+    "118265": {
+        "bref_id": "manushe01",
+        "inducted_as": "Player",
+        "per": null,
+        "voted_by": "Veterans",
+        "votes": null,
+        "year": 1964
+    },
+    "118276": {
+        "bref_id": "maranra01",
+        "inducted_as": "Player",
+        "per": 0.82936507937,
+        "voted_by": "BBWAA",
+        "votes": 209,
+        "year": 1954
+    },
+    "118283": {
+        "bref_id": "maricju01",
+        "inducted_as": "Player",
+        "per": 0.83689839572,
+        "voted_by": "BBWAA",
+        "votes": 313,
+        "year": 1983
+    },
+    "118295": {
+        "bref_id": "marquru01",
+        "inducted_as": "Player",
+        "per": null,
+        "voted_by": "Veterans",
+        "votes": null,
+        "year": 1971
+    },
+    "118365": {
+        "bref_id": "martied01",
+        "inducted_as": "Player",
+        "per": 0.85411764706,
+        "voted_by": "BBWAA",
+        "votes": 363,
+        "year": 2019
+    },
+    "118377": {
+        "bref_id": "martipe02",
+        "inducted_as": "Player",
+        "per": 0.91074681239,
+        "voted_by": "BBWAA",
+        "votes": 500,
+        "year": 2015
+    },
+    "118416": {
+        "bref_id": "matheed01",
+        "inducted_as": "Player",
+        "per": 0.79419525066,
+        "voted_by": "BBWAA",
+        "votes": 301,
+        "year": 1978
+    },
+    "118422": {
+        "bref_id": "mathech01",
+        "inducted_as": "Player",
+        "per": 0.90707964602,
+        "voted_by": "BBWAA",
+        "votes": 205,
+        "year": 1936
+    },
+    "118495": {
+        "bref_id": "mayswi01",
+        "inducted_as": "Player",
+        "per": 0.94675925926,
+        "voted_by": "BBWAA",
+        "votes": 409,
+        "year": 1979
+    },
+    "118497": {
+        "bref_id": "mazerbi01",
+        "inducted_as": "Player",
+        "per": null,
+        "voted_by": "Veterans",
+        "votes": null,
+        "year": 2001
+    },
+    "118554": {
+        "bref_id": "mccarto01",
+        "inducted_as": "Player",
+        "per": null,
+        "voted_by": "Old Timers",
+        "votes": null,
+        "year": 1946
+    },
+    "118605": {
+        "bref_id": "mccovwi01",
+        "inducted_as": "Player",
+        "per": 0.81411764706,
+        "voted_by": "BBWAA",
+        "votes": 346,
+        "year": 1986
+    },
+    "118713": {
+        "bref_id": "mcginjo01",
+        "inducted_as": "Player",
+        "per": null,
+        "voted_by": "Old Timers",
+        "votes": null,
+        "year": 1946
+    },
+    "118726": {
+        "bref_id": "mcgrajo01",
+        "inducted_as": "Manager",
+        "per": null,
+        "voted_by": "Centennial",
+        "votes": null,
+        "year": 1937
+    },
+    "118730": {
+        "bref_id": "mcgrifr01",
+        "inducted_as": "Player",
+        "per": null,
+        "voted_by": "Contemporary Era",
+        "votes": null,
+        "year": 2023
+    },
+    "118766": {
+        "bref_id": "mckecbi01",
+        "inducted_as": "Manager",
+        "per": null,
+        "voted_by": "Veterans",
+        "votes": null,
+        "year": 1962
+    },
+    "118860": {
+        "bref_id": "mcphebi01",
+        "inducted_as": "Player",
+        "per": null,
+        "voted_by": "Veterans",
+        "votes": null,
+        "year": 2000
+    },
+    "118904": {
+        "bref_id": "medwijo01",
+        "inducted_as": "Player",
+        "per": 0.8480565371,
+        "voted_by": "BBWAA",
+        "votes": 240,
+        "year": 1968
+    },
+    "119176": {
+        "bref_id": "minosmi01",
+        "inducted_as": "Player",
+        "per": null,
+        "voted_by": "Golden Days Era",
+        "votes": null,
+        "year": 2022
+    },
+    "119207": {
+        "bref_id": "mizejo01",
+        "inducted_as": "Player",
+        "per": null,
+        "voted_by": "Veterans",
+        "votes": null,
+        "year": 1981
+    },
+    "119236": {
+        "bref_id": "molitpa01",
+        "inducted_as": "Player",
+        "per": 0.85177865613,
+        "voted_by": "BBWAA",
+        "votes": 431,
+        "year": 2004
+    },
+    "119371": {
+        "bref_id": "morgajo02",
+        "inducted_as": "Player",
+        "per": 0.81756756757,
+        "voted_by": "BBWAA",
+        "votes": 363,
+        "year": 1990
+    },
+    "119399": {
+        "bref_id": "morrija02",
+        "inducted_as": "Player",
+        "per": null,
+        "voted_by": "Modern Baseball Era",
+        "votes": null,
+        "year": 2018
+    },
+    "119579": {
+        "bref_id": "murraed02",
+        "inducted_as": "Player",
+        "per": 0.85282258065,
+        "voted_by": "BBWAA",
+        "votes": 423,
+        "year": 2003
+    },
+    "119602": {
+        "bref_id": "musiast01",
+        "inducted_as": "Player",
+        "per": 0.93235294118,
+        "voted_by": "BBWAA",
+        "votes": 317,
+        "year": 1969
+    },
+    "119608": {
+        "bref_id": "mussimi01",
+        "inducted_as": "Player",
+        "per": 0.76705882353,
+        "voted_by": "BBWAA",
+        "votes": 326,
+        "year": 2019
+    },
+    "119739": {
+        "bref_id": "newhoha01",
+        "inducted_as": "Player",
+        "per": null,
+        "voted_by": "Veterans",
+        "votes": null,
+        "year": 1992
+    },
+    "119761": {
+        "bref_id": "nichoki01",
+        "inducted_as": "Player",
+        "per": null,
+        "voted_by": "Old Timers",
+        "votes": null,
+        "year": 1949
+    },
+    "119786": {
+        "bref_id": "niekrph01",
+        "inducted_as": "Player",
+        "per": 0.80338266385,
+        "voted_by": "BBWAA",
+        "votes": 380,
+        "year": 1997
+    },
+    "119928": {
+        "bref_id": "o'dayha01",
+        "inducted_as": "Umpire",
+        "per": null,
+        "voted_by": "Pre-Integration Era",
+        "votes": null,
+        "year": 2013
+    },
+    "119980": {
+        "bref_id": "olivato01",
+        "inducted_as": "Player",
+        "per": null,
+        "voted_by": "Golden Days Era",
+        "votes": null,
+        "year": 2022
+    },
+    "120054": {
+        "bref_id": "o'rouji01",
+        "inducted_as": "Player",
+        "per": null,
+        "voted_by": "Old Timers",
+        "votes": null,
+        "year": 1945
+    },
+    "120074": {
+        "bref_id": "ortizda01",
+        "inducted_as": "Player",
+        "per": 0.77918781726,
+        "voted_by": "BBWAA",
+        "votes": 307,
+        "year": 2022
+    },
+    "120117": {
+        "bref_id": "ottme01",
+        "inducted_as": "Player",
+        "per": 0.87168141593,
+        "voted_by": "BBWAA",
+        "votes": 197,
+        "year": 1951
+    },
+    "120181": {
+        "bref_id": "paigesa01",
+        "inducted_as": "Player",
+        "per": null,
+        "voted_by": "Negro League",
+        "votes": null,
+        "year": 1971
+    },
+    "120196": {
+        "bref_id": "palmeji01",
+        "inducted_as": "Player",
+        "per": 0.92567567568,
+        "voted_by": "BBWAA",
+        "votes": 411,
+        "year": 1990
+    },
+    "120386": {
+        "bref_id": "pennohe01",
+        "inducted_as": "Player",
+        "per": 0.77685950413,
+        "voted_by": "BBWAA",
+        "votes": 94,
+        "year": 1948
+    },
+    "120404": {
+        "bref_id": "perezto01",
+        "inducted_as": "Player",
+        "per": 0.77154308617,
+        "voted_by": "BBWAA",
+        "votes": 385,
+        "year": 2000
+    },
+    "120438": {
+        "bref_id": "perryga01",
+        "inducted_as": "Player",
+        "per": 0.77200902935,
+        "voted_by": "BBWAA",
+        "votes": 342,
+        "year": 1991
+    },
+    "120536": {
+        "bref_id": "piazzmi01",
+        "inducted_as": "Player",
+        "per": 0.82954545455,
+        "voted_by": "BBWAA",
+        "votes": 365,
+        "year": 2016
+    },
+    "120616": {
+        "bref_id": "planked01",
+        "inducted_as": "Player",
+        "per": null,
+        "voted_by": "Old Timers",
+        "votes": null,
+        "year": 1946
+    },
+    "120790": {
+        "bref_id": "puckeki01",
+        "inducted_as": "Player",
+        "per": 0.8213592233,
+        "voted_by": "BBWAA",
+        "votes": 423,
+        "year": 2001
+    },
+    "120867": {
+        "bref_id": "radboch01",
+        "inducted_as": "Player",
+        "per": null,
+        "voted_by": "Old Timers",
+        "votes": null,
+        "year": 1939
+    },
+    "120891": {
+        "bref_id": "raineti01",
+        "inducted_as": "Player",
+        "per": 0.85972850679,
+        "voted_by": "BBWAA",
+        "votes": 380,
+        "year": 2017
+    },
+    "121010": {
+        "bref_id": "reesepe01",
+        "inducted_as": "Player",
+        "per": null,
+        "voted_by": "Veterans",
+        "votes": null,
+        "year": 1984
+    },
+    "121137": {
+        "bref_id": "ricesa01",
+        "inducted_as": "Player",
+        "per": null,
+        "voted_by": "Veterans",
+        "votes": null,
+        "year": 1963
+    },
+    "121140": {
+        "bref_id": "riceji01",
+        "inducted_as": "Player",
+        "per": 0.76437847866,
+        "voted_by": "BBWAA",
+        "votes": 412,
+        "year": 2009
+    },
+    "121181": {
+        "bref_id": "rickebr01",
+        "inducted_as": "Pioneer/Executive",
+        "per": null,
+        "voted_by": "Veterans",
+        "votes": null,
+        "year": 1967
+    },
+    "121222": {
+        "bref_id": "ripkeca01",
+        "inducted_as": "Player",
+        "per": 0.98532110092,
+        "voted_by": "BBWAA",
+        "votes": 537,
+        "year": 2007
+    },
+    "121250": {
+        "bref_id": "riverma01",
+        "inducted_as": "Player",
+        "per": 1.0,
+        "voted_by": "BBWAA",
+        "votes": 425,
+        "year": 2019
+    },
+    "121255": {
+        "bref_id": "rixeyep01",
+        "inducted_as": "Player",
+        "per": null,
+        "voted_by": "Veterans",
+        "votes": null,
+        "year": 1963
+    },
+    "121257": {
+        "bref_id": "rizzuph01",
+        "inducted_as": "Player",
+        "per": null,
+        "voted_by": "Veterans",
+        "votes": null,
+        "year": 1994
+    },
+    "121283": {
+        "bref_id": "roberro01",
+        "inducted_as": "Player",
+        "per": 0.86855670103,
+        "voted_by": "BBWAA",
+        "votes": 337,
+        "year": 1976
+    },
+    "121301": {
+        "bref_id": "robinbr01",
+        "inducted_as": "Player",
+        "per": 0.91978609626,
+        "voted_by": "BBWAA",
+        "votes": 344,
+        "year": 1983
+    },
+    "121311": {
+        "bref_id": "robinfr02",
+        "inducted_as": "Player",
+        "per": 0.89156626506,
+        "voted_by": "BBWAA",
+        "votes": 370,
+        "year": 1982
+    },
+    "121314": {
+        "bref_id": "robinja02",
+        "inducted_as": "Player",
+        "per": 0.775,
+        "voted_by": "BBWAA",
+        "votes": 124,
+        "year": 1962
+    },
+    "121322": {
+        "bref_id": "robinwi01",
+        "inducted_as": "Manager",
+        "per": null,
+        "voted_by": "Old Timers",
+        "votes": null,
+        "year": 1945
+    },
+    "121358": {
+        "bref_id": "rodriiv01",
+        "inducted_as": "Player",
+        "per": 0.76018099548,
+        "voted_by": "BBWAA",
+        "votes": 336,
+        "year": 2017
+    },
+    "121409": {
+        "bref_id": "rolensc01",
+        "inducted_as": "Player",
+        "per": 0.76349614396,
+        "voted_by": "BBWAA",
+        "votes": 297,
+        "year": 2023
+    },
+    "121497": {
+        "bref_id": "roushed01",
+        "inducted_as": "Player",
+        "per": null,
+        "voted_by": "Veterans",
+        "votes": null,
+        "year": 1962
+    },
+    "121547": {
+        "bref_id": "ruffire01",
+        "inducted_as": "Player",
+        "per": 0.86928104575,
+        "voted_by": "Run Off",
+        "votes": 266,
+        "year": 1967
+    },
+    "121559": {
+        "bref_id": "rusieam01",
+        "inducted_as": "Player",
+        "per": null,
+        "voted_by": "Veterans",
+        "votes": null,
+        "year": 1977
+    },
+    "121578": {
+        "bref_id": "ruthba01",
+        "inducted_as": "Player",
+        "per": 0.95132743363,
+        "voted_by": "BBWAA",
+        "votes": 215,
+        "year": 1936
+    },
+    "121597": {
+        "bref_id": "ryanno01",
+        "inducted_as": "Player",
+        "per": 0.98792756539,
+        "voted_by": "BBWAA",
+        "votes": 491,
+        "year": 1999
+    },
+    "121665": {
+        "bref_id": "sandbry01",
+        "inducted_as": "Player",
+        "per": 0.76162790698,
+        "voted_by": "BBWAA",
+        "votes": 393,
+        "year": 2005
+    },
+    "121697": {
+        "bref_id": "santoro01",
+        "inducted_as": "Player",
+        "per": null,
+        "voted_by": "Golden Era",
+        "votes": null,
+        "year": 2012
+    },
+    "121766": {
+        "bref_id": "schalra01",
+        "inducted_as": "Player",
+        "per": null,
+        "voted_by": "Veterans",
+        "votes": null,
+        "year": 1955
+    },
+    "121836": {
+        "bref_id": "schmimi01",
+        "inducted_as": "Player",
+        "per": 0.9652173913,
+        "voted_by": "BBWAA",
+        "votes": 444,
+        "year": 1995
+    },
+    "121851": {
+        "bref_id": "schoere01",
+        "inducted_as": "Player",
+        "per": null,
+        "voted_by": "Veterans",
+        "votes": null,
+        "year": 1989
+    },
+    "121961": {
+        "bref_id": "seaveto01",
+        "inducted_as": "Player",
+        "per": 0.98837209302,
+        "voted_by": "BBWAA",
+        "votes": 425,
+        "year": 1992
+    },
+    "122023": {
+        "bref_id": "seweljo01",
+        "inducted_as": "Player",
+        "per": null,
+        "voted_by": "Veterans",
+        "votes": null,
+        "year": 1977
+    },
+    "122240": {
+        "bref_id": "simmoal01",
+        "inducted_as": "Player",
+        "per": 0.75378787879,
+        "voted_by": "BBWAA",
+        "votes": 199,
+        "year": 1953
+    },
+    "122247": {
+        "bref_id": "simmote01",
+        "inducted_as": "Player",
+        "per": null,
+        "voted_by": "Veterans",
+        "votes": null,
+        "year": 2020
+    },
+    "122280": {
+        "bref_id": "sislege01",
+        "inducted_as": "Player",
+        "per": 0.85766423358,
+        "voted_by": "BBWAA",
+        "votes": 235,
+        "year": 1939
+    },
+    "122319": {
+        "bref_id": "slaugen01",
+        "inducted_as": "Player",
+        "per": null,
+        "voted_by": "Veterans",
+        "votes": null,
+        "year": 1985
+    },
+    "122426": {
+        "bref_id": "smithle02",
+        "inducted_as": "Player",
+        "per": null,
+        "voted_by": "Today's Game Era",
+        "votes": null,
+        "year": 2019
+    },
+    "122439": {
+        "bref_id": "smithoz01",
+        "inducted_as": "Player",
+        "per": 0.91737288136,
+        "voted_by": "BBWAA",
+        "votes": 433,
+        "year": 2002
+    },
+    "122477": {
+        "bref_id": "smoltjo01",
+        "inducted_as": "Player",
+        "per": 0.82877959927,
+        "voted_by": "BBWAA",
+        "votes": 455,
+        "year": 2015
+    },
+    "122488": {
+        "bref_id": "snidedu01",
+        "inducted_as": "Player",
+        "per": 0.86493506494,
+        "voted_by": "BBWAA",
+        "votes": 333,
+        "year": 1980
+    },
+    "122551": {
+        "bref_id": "southbi01",
+        "inducted_as": "Manager",
+        "per": null,
+        "voted_by": "Veterans",
+        "votes": null,
+        "year": 2008
+    },
+    "122557": {
+        "bref_id": "spahnwa01",
+        "inducted_as": "Player",
+        "per": 0.83157894737,
+        "voted_by": "BBWAA",
+        "votes": 316,
+        "year": 1973
+    },
+    "122558": {
+        "bref_id": "spaldal01",
+        "inducted_as": "Pioneer/Executive",
+        "per": null,
+        "voted_by": "Old Timers",
+        "votes": null,
+        "year": 1939
+    },
+    "122566": {
+        "bref_id": "speaktr01",
+        "inducted_as": "Player",
+        "per": 0.82089552239,
+        "voted_by": "BBWAA",
+        "votes": 165,
+        "year": 1937
+    },
+    "122685": {
+        "bref_id": "stargwi01",
+        "inducted_as": "Player",
+        "per": 0.8243559719,
+        "voted_by": "BBWAA",
+        "votes": 352,
+        "year": 1988
+    },
+    "122737": {
+        "bref_id": "stengca01",
+        "inducted_as": "Manager",
+        "per": null,
+        "voted_by": "Veterans",
+        "votes": null,
+        "year": 1966
+    },
+    "123004": {
+        "bref_id": "suttebr01",
+        "inducted_as": "Player",
+        "per": 0.76923076923,
+        "voted_by": "BBWAA",
+        "votes": 400,
+        "year": 2006
+    },
+    "123006": {
+        "bref_id": "suttodo01",
+        "inducted_as": "Player",
+        "per": 0.81606765328,
+        "voted_by": "BBWAA",
+        "votes": 386,
+        "year": 1998
+    },
+    "123203": {
+        "bref_id": "terrybi01",
+        "inducted_as": "Player",
+        "per": 0.77380952381,
+        "voted_by": "BBWAA",
+        "votes": 195,
+        "year": 1954
+    },
+    "123245": {
+        "bref_id": "thomafr04",
+        "inducted_as": "Player",
+        "per": 0.83712784588,
+        "voted_by": "BBWAA",
+        "votes": 478,
+        "year": 2014
+    },
+    "123272": {
+        "bref_id": "thomeji01",
+        "inducted_as": "Player",
+        "per": 0.8981042654,
+        "voted_by": "BBWAA",
+        "votes": 379,
+        "year": 2018
+    },
+    "123303": {
+        "bref_id": "thompsa01",
+        "inducted_as": "Player",
+        "per": null,
+        "voted_by": "Veterans",
+        "votes": null,
+        "year": 1974
+    },
+    "123353": {
+        "bref_id": "tinkejo01",
+        "inducted_as": "Player",
+        "per": null,
+        "voted_by": "Old Timers",
+        "votes": null,
+        "year": 1946
+    },
+    "123406": {
+        "bref_id": "torrejo01",
+        "inducted_as": "Manager",
+        "per": null,
+        "voted_by": "Expansion Era",
+        "votes": null,
+        "year": 2014
+    },
+    "123437": {
+        "bref_id": "trammal01",
+        "inducted_as": "Player",
+        "per": null,
+        "voted_by": "Modern Baseball Era",
+        "votes": null,
+        "year": 2018
+    },
+    "123446": {
+        "bref_id": "traynpi01",
+        "inducted_as": "Player",
+        "per": 0.76859504132,
+        "voted_by": "BBWAA",
+        "votes": 93,
+        "year": 1948
+    },
+    "123630": {
+        "bref_id": "vanceda01",
+        "inducted_as": "Player",
+        "per": 0.81673306773,
+        "voted_by": "BBWAA",
+        "votes": 205,
+        "year": 1955
+    },
+    "123671": {
+        "bref_id": "vaughar01",
+        "inducted_as": "Player",
+        "per": null,
+        "voted_by": "Veterans",
+        "votes": null,
+        "year": 1985
+    },
+    "123767": {
+        "bref_id": "wadderu01",
+        "inducted_as": "Player",
+        "per": null,
+        "voted_by": "Old Timers",
+        "votes": null,
+        "year": 1946
+    },
+    "123784": {
+        "bref_id": "wagneho01",
+        "inducted_as": "Player",
+        "per": 0.95132743363,
+        "voted_by": "BBWAA",
+        "votes": 215,
+        "year": 1936
+    },
+    "123833": {
+        "bref_id": "walkela01",
+        "inducted_as": "Player",
+        "per": 0.76574307305,
+        "voted_by": "BBWAA",
+        "votes": 304,
+        "year": 2020
+    },
+    "123864": {
+        "bref_id": "wallabo01",
+        "inducted_as": "Player",
+        "per": null,
+        "voted_by": "Veterans",
+        "votes": null,
+        "year": 1953
+    },
+    "123878": {
+        "bref_id": "walshed01",
+        "inducted_as": "Player",
+        "per": null,
+        "voted_by": "Old Timers",
+        "votes": null,
+        "year": 1946
+    },
+    "123904": {
+        "bref_id": "wanerll01",
+        "inducted_as": "Player",
+        "per": null,
+        "voted_by": "Veterans",
+        "votes": null,
+        "year": 1967
+    },
+    "123905": {
+        "bref_id": "wanerpa01",
+        "inducted_as": "Player",
+        "per": 0.83333333333,
+        "voted_by": "BBWAA",
+        "votes": 195,
+        "year": 1952
+    },
+    "123921": {
+        "bref_id": "wardjo01",
+        "inducted_as": "Player",
+        "per": null,
+        "voted_by": "Veterans",
+        "votes": null,
+        "year": 1964
+    },
+    "124062": {
+        "bref_id": "welchmi01",
+        "inducted_as": "Player",
+        "per": null,
+        "voted_by": "Veterans",
+        "votes": null,
+        "year": 1973
+    },
+    "124134": {
+        "bref_id": "wheatza01",
+        "inducted_as": "Player",
+        "per": null,
+        "voted_by": "Veterans",
+        "votes": null,
+        "year": 1959
+    },
+    "124175": {
+        "bref_id": "whitede01",
+        "inducted_as": "Player",
+        "per": null,
+        "voted_by": "Pre-Integration Era",
+        "votes": null,
+        "year": 2013
+    },
+    "124261": {
+        "bref_id": "wilheho01",
+        "inducted_as": "Player",
+        "per": 0.83797468354,
+        "voted_by": "BBWAA",
+        "votes": 331,
+        "year": 1985
+    },
+    "124290": {
+        "bref_id": "willibi01",
+        "inducted_as": "Player",
+        "per": 0.85714285714,
+        "voted_by": "BBWAA",
+        "votes": 354,
+        "year": 1987
+    },
+    "124335": {
+        "bref_id": "willidi02",
+        "inducted_as": "Manager",
+        "per": null,
+        "voted_by": "Veterans",
+        "votes": null,
+        "year": 2008
+    },
+    "124341": {
+        "bref_id": "willite01",
+        "inducted_as": "Player",
+        "per": 0.93377483444,
+        "voted_by": "BBWAA",
+        "votes": 282,
+        "year": 1966
+    },
+    "124364": {
+        "bref_id": "willivi01",
+        "inducted_as": "Player",
+        "per": null,
+        "voted_by": "Veterans",
+        "votes": null,
+        "year": 1995
+    },
+    "124412": {
+        "bref_id": "wilsoha01",
+        "inducted_as": "Player",
+        "per": null,
+        "voted_by": "Veterans",
+        "votes": null,
+        "year": 1979
+    },
+    "124448": {
+        "bref_id": "winfida01",
+        "inducted_as": "Player",
+        "per": 0.84466019417,
+        "voted_by": "BBWAA",
+        "votes": 435,
+        "year": 2001
+    },
+    "124597": {
+        "bref_id": "wrighge01",
+        "inducted_as": "Pioneer/Executive",
+        "per": null,
+        "voted_by": "Centennial",
+        "votes": null,
+        "year": 1937
+    },
+    "124633": {
+        "bref_id": "wynnea01",
+        "inducted_as": "Player",
+        "per": 0.7601010101,
+        "voted_by": "BBWAA",
+        "votes": 301,
+        "year": 1972
+    },
+    "124650": {
+        "bref_id": "yastrca01",
+        "inducted_as": "Player",
+        "per": 0.94630872483,
+        "voted_by": "BBWAA",
+        "votes": 423,
+        "year": 1989
+    },
+    "124692": {
+        "bref_id": "youngcy01",
+        "inducted_as": "Player",
+        "per": 0.76119402985,
+        "voted_by": "BBWAA",
+        "votes": 153,
+        "year": 1937
+    },
+    "124717": {
+        "bref_id": "youngro01",
+        "inducted_as": "Player",
+        "per": null,
+        "voted_by": "Veterans",
+        "votes": null,
+        "year": 1972
+    },
+    "124721": {
+        "bref_id": "yountro01",
+        "inducted_as": "Player",
+        "per": 0.77464788732,
+        "voted_by": "BBWAA",
+        "votes": 385,
+        "year": 1999
+    },
+    "136880": {
+        "bref_id": "hallaro01",
+        "inducted_as": "Player",
+        "per": 0.85411764706,
+        "voted_by": "BBWAA",
+        "votes": 363,
+        "year": 2019
+    }
+}
