@@ -134,7 +134,7 @@ ignore_approved = True
 
 current_season = 2022
 show_title_current_season = True
-season_in_progress = True
+season_in_progress = False
 
 alert_message_no_approved = "Comparison received! The comment reply will be made with the comparison is finished\n\nComparisons may be slow due to recent Reddit API changes\n\n---"
 alert_message = "Comparison received! Updates will be provided as players finish\n\n---"
@@ -18583,25 +18583,21 @@ def get_live_game(player_link, player_data, player_type, time_frame, do_live, s)
         ids_to_header = {}
         for game in sub_game["games"]:
             if game["officialDate"] != sub_game["date"]:
-                # if game["doubleHeader"] == "N":
-                #     continue
-                continue
+                if game["doubleHeader"] == "N":
+                    continue
             if "resumedFromDate" in game and game["resumedFromDate"] != sub_game["date"]:
-                # if game["doubleHeader"] == "N":
-                #     continue
-                continue
+                if game["doubleHeader"] == "N":
+                    continue
             game_type = game["gameType"]
             if game_type != "R" and game_type != "F" and game_type != "D" and game_type != "L" and game_type != "W":
                 continue
             if game["status"]["detailedState"]:
                 if game["status"]["detailedState"] == "Cancelled" or game["status"]["detailedState"] == "Warmup" or game["status"]["detailedState"] == "Postponed" or game["status"]["detailedState"].startswith("Suspended"):
-                    # if game["doubleHeader"] == "N":
-                    #     continue
-                    continue
+                    if game["doubleHeader"] == "N":
+                        continue
             if not "score" in game["teams"]["home"]:
-                # if game["doubleHeader"] == "N":
-                #     continue
-                continue
+                if game["doubleHeader"] == "N":
+                    continue
             ids_to_header[game["gamePk"]] = len(ids_to_header)
 
         if len(ids_to_header) > 1:
@@ -40164,25 +40160,21 @@ def parse_mlb_team_year_link(team_id, sub_year, qualifiers, all_rows, team, s):
         ids_to_header = {}
         for game in sub_game["games"]:
             if game["officialDate"] != sub_game["date"]:
-                # if game["doubleHeader"] == "N":
-                #     continue
-                continue
+                if game["doubleHeader"] == "N":
+                    continue
             if "resumedFromDate" in game and game["resumedFromDate"] != sub_game["date"]:
-                # if game["doubleHeader"] == "N":
-                #     continue
-                continue
+                if game["doubleHeader"] == "N":
+                    continue
             game_type = game["gameType"]
             if game_type != "R" and game_type != "F" and game_type != "D" and game_type != "L" and game_type != "W":
                 continue
             if game["status"]["detailedState"]:
                 if game["status"]["detailedState"] == "Cancelled" or game["status"]["detailedState"] == "Warmup" or game["status"]["detailedState"] == "Postponed" or game["status"]["detailedState"].startswith("Suspended"):
-                   # if game["doubleHeader"] == "N":
-                    #     continue
-                    continue
+                   if game["doubleHeader"] == "N":
+                        continue
             if not "score" in game["teams"]["home"]:
-                # if game["doubleHeader"] == "N":
-                #     continue
-                continue
+                if game["doubleHeader"] == "N":
+                    continue
             ids_to_header[game["gamePk"]] = len(ids_to_header)
         
         if len(ids_to_header) > 1:
