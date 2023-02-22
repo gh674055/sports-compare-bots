@@ -15118,14 +15118,6 @@ def get_player(name, time_frames):
                     raise
             return player_id, player_page
         else:
-            response = None
-            try:
-                response, player_page = url_request(response.url)
-            except requests.exceptions.HTTPError as err:
-                if err.response.status_code == 404:
-                    return None, None
-                else:
-                    raise
             return parse_qs(url.query)["id"][0], player_page
     elif path[0] == "search":
         player_div = player_page.find("div", {"id" : "players"})
