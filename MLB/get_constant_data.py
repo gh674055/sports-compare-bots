@@ -24,6 +24,13 @@ start_year = 1871
 end_year = datetime.date.today().year
 
 league_years = {
+    "NNL" : range(1920, 1932),
+    "ECL" : range(1923, 1929),
+    "ANL" : range(1929, 1930),
+    "EWL" : range(1932, 1933),
+    "NSL" : range(1932, 1933),
+    "NN2" : range(1933, 1949),
+    "NAL" : range(1937, 1949),
     "AA" : range(1882, 1892),
     "FL" : range(1914, 1916),
     "PL" : range(1890, 1891),
@@ -375,7 +382,31 @@ def get_totals(single_year, totals, log=True):
                 "Batter" : {},
                 "Pitcher" : {}
             },
-            "NA" : {
+            "NNL" : {
+                "Batter" : {},
+                "Pitcher" : {}
+            },
+            "ECL" : {
+                "Batter" : {},
+                "Pitcher" : {}
+            },
+            "ANL" : {
+                "Batter" : {},
+                "Pitcher" : {}
+            },
+            "EWL" : {
+                "Batter" : {},
+                "Pitcher" : {}
+            },
+            "NSL" : {
+                "Batter" : {},
+                "Pitcher" : {}
+            },
+            "NN2" : {
+                "Batter" : {},
+                "Pitcher" : {}
+            },
+            "NAL" : {
                 "Batter" : {},
                 "Pitcher" : {}
             }
@@ -579,14 +610,13 @@ def get_park_factors(single_year, park_factors, log=True):
                         else:
                             break
                     else:
-                        column_value = 0
                         if column_contents:
                             column_value = int(column_contents)
-                        if isinstance(row_team, list):
-                            for ind_row_team in row_team:
-                                park_factors[str(year)][ind_row_team][header_value] = column_value 
-                        else:
-                            park_factors[str(year)][row_team][header_value] = column_value
+                            if isinstance(row_team, list):
+                                for ind_row_team in row_team:
+                                    park_factors[str(year)][ind_row_team][header_value] = column_value 
+                            else:
+                                park_factors[str(year)][row_team][header_value] = column_value
 
         count = index + 1
         percent_complete = 100 * (count / total_years)
