@@ -187,7 +187,7 @@ position_map = {
 position_map_reversed = {v: k for k, v in position_map.items()}
 
 count_stats = ["Pit", "PitBall", "Chase", "PitStrike", "LkStr", "Str", "1stStr", "SwStr", "SwgStr", "Swg", "Take", "SwgMiss", "CntStr", "FoulStr", "TipStr", "SwingStr", "Bal", "2StrPit"]
-non_rate_stats = ["IP", "BF", "Pit", "PO", "ER", "AB", "H", "1B", "2B", "3B", "HR", "XBH", "TB", "Cycle", "SO", "GDP", "GDPO", "PA", "BB", "IBB", "HBP", "Slam", "WalkOff", "R", "RBI", "GWRBI", "SB", "CS", "TOB", "SH", "SF", "Pit", "PitBall", "Chase", "PitStrike", "LkStr", "Str", "1stStr", "SwStr", "SwgStr", "SwgMiss", "Swg", "Take", "CntStr", "FoulStr", "TipStr", "SwingStr", "Bal", "2StrPit"]
+non_rate_stats = ["IP", "BF", "Pit", "PO", "ER", "AB", "H", "1B", "2B", "3B", "HR", "XBH", "TB", "Cycle", "SO", "GDP", "GDPO", "PA", "BB", "IBB", "HBP", "Slam", "WalkOff", "Clock", "R", "RBI", "GWRBI", "SB", "CS", "TOB", "SH", "SF", "Pit", "PitBall", "Chase", "PitStrike", "LkStr", "Str", "1stStr", "SwStr", "SwgStr", "SwgMiss", "Swg", "Take", "CntStr", "FoulStr", "TipStr", "SwingStr", "Bal", "2StrPit"]
 non_rate_stats_lower = [non_rate_stat.lower() for non_rate_stat in non_rate_stats]
 
 headers = {
@@ -973,6 +973,14 @@ headers = {
             "positive" : True,
             "display" : False
         },
+        "Clock" : {
+            "positive" : False,
+            "display" : False,
+            "valid_since" : {
+                "game" : 2023,
+                "season" : 2023
+            }
+        },
         "R": {
             "positive" : True
         },
@@ -1324,6 +1332,16 @@ headers = {
                 "season-np" : 1915,
                 "season" : 1915,
                 "game" : 1901
+            }
+        },
+        "Clock%" : {
+            "positive" : False,
+            "display" : False,
+            "round" : "percent",
+            "type" : "Per Game/Advanced",
+            "valid_since" : {
+                "game" : 2023,
+                "season" : 2023
             }
         },
         "HR%" : {
@@ -3432,6 +3450,16 @@ headers = {
             "display" : False,
             "type" : "Adjusted"
         },
+        "Clock9" : {
+            "positive" : False,
+            "display" : False,
+            "round" : 2,
+            "type" : "Per Game/Advanced",
+            "valid_since" : {
+                "game" : 2023,
+                "season" : 2023
+            }
+        },
         "SO9": {
             "positive" : True,
             "round" : 2,
@@ -3529,6 +3557,14 @@ headers = {
             "positive" : False,
             "display" : False
         },
+        "Clock" : {
+            "positive" : False,
+            "display" : False,
+            "valid_since" : {
+                "game" : 2023,
+                "season" : 2023
+            }
+        },
         "SH": {
             "positive" : False,
             "display" : False,
@@ -3550,6 +3586,16 @@ headers = {
             "valid_since" : {
                 "season" : 1927,
                 "game" : 1927
+            }
+        },
+        "Clock%" : {
+            "positive" : False,
+            "display" : False,
+            "round" : "percent",
+            "type" : "Per Game/Advanced",
+            "valid_since" : {
+                "game" : 2023,
+                "season" : 2023
             }
         },
         "SO%" : {
@@ -4772,6 +4818,7 @@ formulas = {
         "Whiff%" : "SwStr / (CntStr + SwStr)",
         "SB%" : "Special",
         "AB/HR" : "AB / HR",
+        "Clock%" : "Clock / PA",
         "HR%" : "HR / PA",
         "XBH%" : "XBH / PA",
         "X/H%" : "XBH / H",
@@ -4909,9 +4956,11 @@ formulas = {
         "IS%" : "IS / IR",
         "H9" : "(9 * H) / (IP)",
         "HR9" : "(9 * HR) / (IP)",
+        "Clock%" : "Clock / BF",
         "HR%" : "HR / BF",
         "XBH%" : "XBH / BF",
         "X/H%" : "XBH / H",
+        "Clock9" : "(9 * Clock) / (IP)",
         "BB9" : "(9 * BB) / (IP)",
         "BB%" : "BB / BF",
         "SO/BB" : "SO / BB",
@@ -8752,7 +8801,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                             extra_stats.add(m.group(1))
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
                         
-                        last_match = re.finditer(r"\bshow(?: |-)?(only(?: |-)?)?(player-count|pitcher-record|record|slash|score|year|pitch-type|games?-count|seasons-leading|season|dates?-count|game-link|date|missing-games-count|missing-pitches-count|missing-game-count|missing-pitches-count|missing-pitch-count|missing-game|missing-pitches|missing-pitch|per-game|game|play|run-support|run-support-record|exit-record|statcast|advanced-runner|advanced|best-season|worst-season|team|franchise|number|award|driven-in|mlb-link|event-id)s?\b", time_frame)
+                        last_match = re.finditer(r"\bshow(?: |-)?(only(?: |-)?)?(player-count|pitcher-record|record|clock|slash|score|year|pitch-type|games?-count|seasons-leading|season|dates?-count|game-link|date|missing-games-count|missing-pitches-count|missing-game-count|missing-pitches-count|missing-pitch-count|missing-game|missing-pitches|missing-pitch|per-game|game|play|run-support|run-support-record|exit-record|statcast|advanced-runner|advanced|best-season|worst-season|team|franchise|number|award|driven-in|mlb-link|event-id)s?\b", time_frame)
                         for m in last_match:
                             if m.group(2) == "date":
                                 extra_stats.add("game-link")
@@ -8764,6 +8813,11 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                     extra_stats.add("current-stats")
                                     extra_stats.add("show-stat-pit")
                                     extra_stats.add("show-stat-pit%")
+                                elif m.group(2) == "clock":
+                                    extra_stats.add("current-stats")
+                                    extra_stats.add("show-stat-clock")
+                                    extra_stats.add("show-stat-clock%")
+                                    extra_stats.add("show-stat-clock9")
                                 elif m.group(2) == "season":
                                     extra_stats.add("year")
                                 elif m.group(2) == "dates-count":
@@ -8836,6 +8890,11 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                 elif m.group(2) == "advanced-runner":
                                     for header in ("BQS", "IS", "IR", "IS%"):
                                         extra_stats.add("show-only-stat-" + header.lower())
+                                elif m.group(2) == "clock":
+                                    extra_stats.add("current-stats")
+                                    extra_stats.add("show-only-stat-clock")
+                                    extra_stats.add("show-only-stat-clock%")
+                                    extra_stats.add("show-only-stat-clock9")
 
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
 
@@ -43468,6 +43527,7 @@ def clear_data(row):
     row["SwingStr"] = 0
     row["1stStr"] = 0
     row["WalkOff"] = 0
+    row["Clock"] = 0
     row["Pit"] = 0
     row["TtlPit"] = 0
     row["MPHRaw"] = 0
