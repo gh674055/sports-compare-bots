@@ -38102,9 +38102,9 @@ def handle_da_pitch_quals(row, event_name, at_bat_event, qualifiers, player_data
                 first_pitch = False
             if "type" in play["details"] and play["details"]["type"] and play["details"]["type"]["description"]:
                 the_description = play["details"]["type"]["description"]
-                if the_description = "Automatic Strike - Batter Pitch Timer Violation":
+                if the_description == "Automatic Strike - Batter Pitch Timer Violation":
                     the_description = "Batter Clock Violation"
-                elif the_description = "Automatic Ball - Pitcher Pitch Timer Violation":
+                elif the_description == "Automatic Ball - Pitcher Pitch Timer Violation":
                     the_description = "Pitcher Clock Violation"
                 sub_pitch_types.append(the_description)
             else:
@@ -41638,9 +41638,9 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
 
                     if "type" in play["details"] and play["details"]["type"] and play["details"]["type"]["description"]:
                         the_description = play["details"]["type"]["description"]
-                        if the_description = "Automatic Strike - Batter Pitch Timer Violation":
+                        if the_description == "Automatic Strike - Batter Pitch Timer Violation":
                             the_description = "Batter Clock Violation"
-                        elif the_description = "Automatic Ball - Pitcher Pitch Timer Violation":
+                        elif the_description == "Automatic Ball - Pitcher Pitch Timer Violation":
                             the_description = "Pitcher Clock Violation"
                         pitch_types.append(the_description)
                     else:
@@ -42657,9 +42657,9 @@ def get_live_game_data(row_index, has_count_stat, player_data, row_data, player_
                             first_pitch = False
                         if "type" in play["details"] and play["details"]["type"] and play["details"]["type"]["description"]:
                             the_description = play["details"]["type"]["description"]
-                            if the_description = "Automatic Strike - Batter Pitch Timer Violation":
+                            if the_description == "Automatic Strike - Batter Pitch Timer Violation":
                                 the_description = "Batter Clock Violation"
-                            elif the_description = "Automatic Ball - Pitcher Pitch Timer Violation":
+                            elif the_description == "Automatic Ball - Pitcher Pitch Timer Violation":
                                 the_description = "Pitcher Clock Violation"
                             sub_pitch_types.append(the_description)
                         else:
