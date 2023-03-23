@@ -42764,7 +42764,7 @@ def handle_string_year(string_year, playoffs, is_first, replace_first_year):
         if string_year == "min":
             return datetime.date.min.year
         elif string_year == "max" or string_year == "now" or string_year == "present":
-            return current_season
+            return current_season + 1
         elif string_year == "today":
             return datetime.date.today()
         elif string_year == "yesterday":
