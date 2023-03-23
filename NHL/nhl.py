@@ -13737,9 +13737,9 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                     elif isinstance(time_end, int) and not isinstance(time_start, int):
                                         string_year = time_frame_range[1].strip().replace("'", "")
                                         if string_year == "max" or string_year == "now" or string_year == "present":
-                                            time_end = datetime.date(year=time_end, month=12, day=31)
-                                        else:
                                             time_end = datetime.date(year=time_end + 1, month=12, day=31)
+                                        else:
+                                            time_end = datetime.date(year=time_end, month=12, day=31)
 
                         da_time_frames.append({
                             "time_start" : time_start,
