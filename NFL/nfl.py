@@ -1574,7 +1574,7 @@ def handle_player_string(comment, player_type, is_fantasy, last_updated, hide_ta
 
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
 
-                        last_match = re.finditer(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?((?:w|(?:playing|starting)-with|a|(?:playing|starting)-against|(?:playing|starting)-same-game|prv-w|previous-playing-with|prv-a|previous-playing-against|upc-w|upcoming-playing-with|upc-a|upcoming-playing-against|(?:playing|starting)-same-opponents?|(?:playing|starting)-same-dates?|holidays?|dts|dates|stadium|exact-stadium|arena|exact-arena|opponent-city|opponent-exact-city|team-city|team-exact-city|city|exact-city|surface|roof|thrown-to|injury|exact-official|exact-referee|exact-umpire|exact-team-head-coach|exact-opponent-head-coach|official|referee|umpire|team-head-coach|opponent-head-coach|start-time):(?<!\\)\(.*?(?<!\\)\))", time_frame)
+                        last_match = re.finditer(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?((?:w|(?:playing|starting)-with|a|(?:playing|starting)-against|(?:playing|starting)-same-game|prv-w|previous-playing-with|prv-a|previous-playing-against|upc-w|upcoming-playing-with|upc-a|upcoming-playing-against|(?:playing|starting)-same-opponents?|(?:playing|starting)-same-dates?|holidays?|dts|dates|stadium|exact-stadium|arena|exact-arena|opponent-city|opponent-exact-city|team-city|team-exact-city|city|exact-city|surface|roof|thrown-to|injury|exact-official|exact-referee|exact-umpire|exact-team-head-coach|exact-opponent-head-coach|exact-head-coach|official|referee|umpire|team-head-coach|opponent-head-coach|head-coach|start-time):(?<!\\)\(.*?(?<!\\)\))", time_frame)
                         for m in last_match:
                             qualifier_obj = {}
                             negate_str = m.group(1)
@@ -1716,6 +1716,9 @@ def handle_player_string(comment, player_type, is_fantasy, last_updated, hide_ta
                             elif qualifier_str.startswith("opponent-head-coach:"):
                                 qual_str = "opponent-head-coach:"
                                 qual_type = "Opponent Head Coach"
+                            elif qualifier_str.startswith("head-coach:"):
+                                qual_str = "head-coach:"
+                                qual_type = "Team Head Coach"
                             elif qualifier_str.startswith("official:"):
                                 qual_str = "official:"
                                 qual_type = "Exact Official"
@@ -1731,6 +1734,9 @@ def handle_player_string(comment, player_type, is_fantasy, last_updated, hide_ta
                             elif qualifier_str.startswith("exact-opponent-head-coach:"):
                                 qual_str = "exact-opponent-head-coach:"
                                 qual_type = "Exact Opponent Head Coach"
+                            elif qualifier_str.startswith("exact-head-coach:"):
+                                qual_str = "exact-head-coach:"
+                                qual_type = "Exact Team Head Coach"
                             elif qualifier_str.startswith("start-time:"):
                                 if qualifier_str.startswith("start-time:"):
                                     qual_str = "start-time:"

@@ -7841,7 +7841,7 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
 
                             time_frame = re.sub(r"\s+", " ", time_frame.replace(m.group(0), "", 1)).strip()
                                                 
-                        last_match = re.finditer(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?((?:exact-penalty-type|exact-penalty-severity|penalty-type|penalty-severity|w|(?:playing|starting)-with|a|(?:playing|starting)-against|(?:playing|starting)-same-game|prv-w|previous-playing-with|prv-a|previous-playing-against|upc-w|upcoming-playing-with|upc-a|upcoming-playing-against|(?:playing|starting)-same-opponents?|(?:playing|starting)-same-dates?|holidays?|dts|dates|arena|exact-arena|stadium|exact-stadium|opponent-city|opponent-exact-city|team-city|team-exact-city|city|exact-city|event-description|exact-event-description|outoor-event|exact-outoor-event|shot-on-first-name|shot-by-first-name|shot-on-last-name|shot-by-last-name|shot-on|shot-by|on-ice-with|on-ice-against|on-ice-together|on-line-with|on-line-against|on-line-together|assisted-on-first-name|assisted-on-last-name|assisted-on|assisted-with|points-with|assisted-by|primary-assisted-on|primary-assisted-with|primary-points-with|primary-assisted-by|hit-on|penalty-on|faceoff-against|fight-against|fighting-against|exact-official|exact-referee|exact-linesman|exact-team-head-coach|exact-opponent-head-coach|official|referee|linesman|team-head-coach|opponent-head-coach|event-time|event-datetime|event-date-time|local-event-datetime|local-event-date-time|team-event-datetime|opponent-event-datetime|team-event-date-time|opponent-event-date-time|start-time):(?<!\\)\(.*?(?<!\\)\))", time_frame)
+                        last_match = re.finditer(r"\b(no(?:t|n)?(?: |-))?(?:only ?)?((?:exact-penalty-type|exact-penalty-severity|penalty-type|penalty-severity|w|(?:playing|starting)-with|a|(?:playing|starting)-against|(?:playing|starting)-same-game|prv-w|previous-playing-with|prv-a|previous-playing-against|upc-w|upcoming-playing-with|upc-a|upcoming-playing-against|(?:playing|starting)-same-opponents?|(?:playing|starting)-same-dates?|holidays?|dts|dates|arena|exact-arena|stadium|exact-stadium|opponent-city|opponent-exact-city|team-city|team-exact-city|city|exact-city|event-description|exact-event-description|outoor-event|exact-outoor-event|shot-on-first-name|shot-by-first-name|shot-on-last-name|shot-by-last-name|shot-on|shot-by|on-ice-with|on-ice-against|on-ice-together|on-line-with|on-line-against|on-line-together|assisted-on-first-name|assisted-on-last-name|assisted-on|assisted-with|points-with|assisted-by|primary-assisted-on|primary-assisted-with|primary-points-with|primary-assisted-by|hit-on|penalty-on|faceoff-against|fight-against|fighting-against|exact-official|exact-referee|exact-linesman|exact-team-head-coach|exact-opponent-head-coach|exact-head-coach|official|referee|linesman|team-head-coach|opponent-head-coach|head-coach|event-time|event-datetime|event-date-time|local-event-datetime|local-event-date-time|team-event-datetime|opponent-event-datetime|team-event-date-time|opponent-event-date-time|start-time):(?<!\\)\(.*?(?<!\\)\))", time_frame)
                         for m in last_match:
                             qualifier_obj = {}
                             negate_str = m.group(1)
@@ -8271,6 +8271,9 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                             elif qualifier_str.startswith("opponent-head-coach:"):
                                 qual_str = "opponent-head-coach:"
                                 qual_type = "Opponent Head Coach"
+                            elif qualifier_str.startswith("head-coach:"):
+                                qual_str = "head-coach:"
+                                qual_type = "Team Head Coach"
                             elif qualifier_str.startswith("official:"):
                                 qual_str = "official:"
                                 qual_type = "Exact Official"
@@ -8286,6 +8289,9 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                             elif qualifier_str.startswith("exact-opponent-head-coach:"):
                                 qual_str = "exact-opponent-head-coach:"
                                 qual_type = "Exact Opponent Head Coach"
+                            elif qualifier_str.startswith("exact-head-coach:"):
+                                qual_str = "exact-head-coach:"
+                                qual_type = "Exact Team Head Coach"
                             elif qualifier_str.startswith("exact-penalty-severity:"):
                                 qual_str = "exact-penalty-severity:"
                                 qual_type = "Exact Penalty Severity"
