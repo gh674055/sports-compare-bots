@@ -13681,7 +13681,11 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                     if isinstance(sub_time_start, int) and not isinstance(sub_time_end, int):
                                         sub_time_start = datetime.date(year=sub_time_start, month=1, day=1)
                                     elif isinstance(sub_time_end, int) and not isinstance(sub_time_start, int):
-                                        sub_time_end = datetime.date(year=sub_time_end, month=12, day=31)
+                                        string_year = time_frame_range[1].strip().replace("'", "")
+                                        if string_year == "max" or string_year == "now" or string_year == "present":
+                                            sub_time_end = datetime.date(year=sub_time_end + 1, month=12, day=31)
+                                        else:
+                                            sub_time_end = datetime.date(year=sub_time_end, month=12, day=31)
 
                                     qualifier_obj = {}
                                     qualifier_obj["negate"] = True
@@ -13731,8 +13735,12 @@ def handle_player_string(comment, player_type, last_updated, hide_table, comment
                                     if isinstance(time_start, int) and not isinstance(time_end, int):
                                         time_start = datetime.date(year=time_start, month=1, day=1)
                                     elif isinstance(time_end, int) and not isinstance(time_start, int):
-                                        time_end = datetime.date(year=time_end, month=12, day=31)
-                        
+                                        string_year = time_frame_range[1].strip().replace("'", "")
+                                        if string_year == "max" or string_year == "now" or string_year == "present":
+                                            time_end = datetime.date(year=time_end, month=12, day=31)
+                                        else:
+                                            time_end = datetime.date(year=time_end + 1, month=12, day=31)
+
                         da_time_frames.append({
                             "time_start" : time_start,
                             "time_end" : time_end,
@@ -42764,7 +42772,7 @@ def handle_string_year(string_year, playoffs, is_first, replace_first_year):
         if string_year == "min":
             return datetime.date.min.year
         elif string_year == "max" or string_year == "now" or string_year == "present":
-            return current_season + 1
+            return current_season
         elif string_year == "today":
             return datetime.date.today()
         elif string_year == "yesterday":
