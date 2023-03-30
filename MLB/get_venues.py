@@ -28,7 +28,7 @@ request_headers = {
 
 request_headers= {}
 
-end_year = 2022
+end_year = 2023
 
 country_codes = { 
     "USA" : "US",
@@ -125,6 +125,26 @@ def url_request(url, timeout=30):
 
         delay_step = 10
         print("#" + str(threading.get_ident()) + "#   " + "Retrying in " + str(retry_failure_delay) + " seconds to allow request to " + url + " to chill")
+        time_to_wait = int(math.ceil(float(retry_failure_delay)/float(delay_step)))
+        for i in range(retry_failure_delay, 0, -time_to_wait):
+            print("#" + str(threading.get_ident()) + "#   " + str(i))
+            time.sleep(time_to_wait)
+        print("#" + str(threading.get_ident()) + "#   " + "0")
+
+def url_request_json(session, url, timeout=30):
+    failed_counter = 0
+    while(True):
+        try:
+            response = session.get(url, timeout=timeout, headers=request_headers)
+            response.raise_for_status()
+            return json.loads(response.content)
+        except Exception:
+            failed_counter += 1
+            if failed_counter > max_request_retries:
+                raise
+
+        delay_step = 10
+        print("#" + str(threading.get_ident()) + "#   " + "Retrying in " + str(retry_failure_delay) + " seconds to allow " + url + " to chill")
         time_to_wait = int(math.ceil(float(retry_failure_delay)/float(delay_step)))
         for i in range(retry_failure_delay, 0, -time_to_wait):
             print("#" + str(threading.get_ident()) + "#   " + str(i))

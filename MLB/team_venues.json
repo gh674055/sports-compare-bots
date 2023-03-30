@@ -197,7 +197,7 @@
     "2397": {
         "city": "Tokyo",
         "country": "JP",
-        "state": "JP",
+        "state": null,
         "time_zone": "Asia/Tokyo",
         "values": [
             "Tokyo Dome"
@@ -236,7 +236,7 @@
         "state": "FL",
         "time_zone": "America/New_York",
         "values": [
-            "Disney's Wide World of Sports",
+            "The Ballpark at Disney's Wide World of Sports",
             "Champion Stadium"
         ]
     },
@@ -854,6 +854,15 @@
             "Oriole Park"
         ]
     },
+    "3165": {
+        "city": "Grand Rapids",
+        "country": "US",
+        "state": "MI",
+        "time_zone": "America/Detroit",
+        "values": [
+            "Ramona Park"
+        ]
+    },
     "3166": {
         "city": "Warwick",
         "country": "US",
@@ -1020,6 +1029,15 @@
         "time_zone": "America/Chicago",
         "values": [
             "Globe Life Field"
+        ]
+    },
+    "5340": {
+        "city": "Mexico City",
+        "country": "MX",
+        "state": "MX",
+        "time_zone": "America/Chicago",
+        "values": [
+            "Estadio Alfredo Harp Helu"
         ]
     },
     "5365": {
