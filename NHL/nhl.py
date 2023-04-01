@@ -7175,7 +7175,10 @@ bye_mapping = {
 }
 
 manual_awards_map = {}
-manual_players = {}
+manual_players = {
+    "mads sogaard" : "sogaama01",
+    "mads søgaard" : "sogaama01"
+}
 
 logname = "nhl.log"
 logger = logging.getLogger("nhl")
