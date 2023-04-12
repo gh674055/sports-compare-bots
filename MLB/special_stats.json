@@ -1,5 +1,12 @@
 {
     "cycle": {
+        "arraelu01" : [
+            {
+                "date": "2022-04-12",
+                "is_playoffs": false,
+                "team": "MIA"
+            }
+        ],
         "haysau01" : [
             {
                 "date": "2022-06-22",
