@@ -7338,17 +7338,17 @@ mlb_player_schedule_url_format = "https://statsapi.mlb.com/api/v1/people/{}/stat
 mlb_leaderboard_query = "https://bdfed.stitch.mlbinfra.com/bdfed/stats/player?stitch_env=prod&&season={}&playerPool={}&sportId=1&stats=season&group={}&gameType=R&limit={}&offset={}&sortStat={}&order={}"
 mlb_leaderboard_query_no_sort = "https://bdfed.stitch.mlbinfra.com/bdfed/stats/player?stitch_env=prod&&season={}&playerPool={}&sportId=1&stats=season&group={}&gameType=R&limit={}&offset={}"
 
-totals = None
+da_totals = None
 with open("yearly_totals.json", "r") as file:
-    totals = json.load(file)
+    da_totals = json.load(file)
 
-constants = None
+da_constants = None
 with open("yearly_constants.json", "r") as file:
-    constants = json.load(file)
+    da_constants = json.load(file)
 
-park_factors = None
+da_park_factors = None
 with open("yearly_park_factors.json", "r") as file:
-    park_factors = json.load(file)
+    da_park_factors = json.load(file)
 
 all_star_games = None
 with open("all_star_games.json", "r") as file:
@@ -43625,17 +43625,17 @@ def get_opponent_schedule(seasons, is_schedule_diff, is_runs_diff):
             break
     
     if not has_live:
-        global totals
-        global constants
-        global park_factors
+        totals = da_totals
+        constants = da_constants
+        park_factors = da_park_factors
     else:
-        totals = copy.deepcopy(totals)
+        totals = copy.deepcopy(da_totals)
         get_constant_data.get_totals(current_season, totals, log=False)
 
-        constants = copy.deepcopy(constants)
+        constants = copy.deepcopy(da_constants)
         get_constant_data.get_constants(current_season, constants, log=False)
 
-        park_factors = copy.deepcopy(park_factors)
+        park_factors = copy.deepcopy(da_park_factors)
         get_constant_data.get_park_factors(current_season, park_factors, log=False)
 
     for season_obj in seasons:
@@ -44014,17 +44014,17 @@ def calculate_advanced_stats(data, all_rows, player_type, time_frames):
             break
     
     if not has_live:
-        global totals
-        global constants
-        global park_factors
+        totals = da_totals
+        constants = da_constants
+        park_factors = da_park_factors
     else:
-        totals = copy.deepcopy(totals)
+        totals = copy.deepcopy(da_totals)
         get_constant_data.get_totals(current_season, totals, log=False)
 
-        constants = copy.deepcopy(constants)
+        constants = copy.deepcopy(da_constants)
         get_constant_data.get_constants(current_season, constants, log=False)
 
-        park_factors = copy.deepcopy(park_factors)
+        park_factors = copy.deepcopy(da_park_factors)
         get_constant_data.get_park_factors(current_season, park_factors, log=False)
 
     if data["PA"] if player_type["da_type"] == "Batter" else data["BF"]:
@@ -46738,8 +46738,8 @@ def handle_table_data(over_header, player_data, player_datas, player_type, heade
                         value += player
         else:
             has_valid_stat = False
-            has_missing_park_factors = False
-            has_any_park_factors = False
+            # has_missing_park_factors = False
+            # has_any_park_factors = False
             has_live_stats = False
             has_non_live_stats = False
             if "all_rows" in player_data["stat_values"]:
@@ -46753,14 +46753,14 @@ def handle_table_data(over_header, player_data, player_datas, player_type, heade
                     if not is_invalid_stat(header, player_type, row, False)["all_invalid"]:
                         has_valid_stat = True   
 
-                    constant_year = str(row["Year"])
-                    if constant_year not in totals["MLB"]["Batter"] or not totals["MLB"]["Batter"][constant_year]:
-                        constant_year = str(int(current_season) - 1)
+                    # constant_year = str(row["Year"])
+                    # if constant_year not in da_totals["MLB"]["Batter"] or not da_totals["MLB"]["Batter"][constant_year]:
+                    #     constant_year = str(int(current_season) - 1)
 
-                    if row["Tm"] in park_factors[constant_year]:
-                        has_any_park_factors = True
-                    else:
-                        has_missing_park_factors = True
+                    # if row["Tm"] in da_park_factors[constant_year]:
+                    #     has_any_park_factors = True
+                    # else:
+                    #     has_missing_park_factors = True
                     
                     if "MLBLiveGame" in row and row["MLBLiveGame"]:
                         has_live_stats = True
