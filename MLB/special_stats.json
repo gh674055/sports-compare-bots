@@ -1,5 +1,12 @@
 {
     "cycle": {
+        "mullice01" : [
+            {
+                "date": "2023-05-12",
+                "is_playoffs": false,
+                "team": "BAL"
+            }
+        ],
         "arraelu01" : [
             {
                 "date": "2023-04-11",
