@@ -44193,7 +44193,10 @@ def calculate_advanced_stats(data, all_rows, player_type, time_frames):
                     woba_weight = yearly_woba_stats[year][team][is_playoffs]["AB"] + yearly_woba_stats[year][team][is_playoffs]["BB"] - yearly_woba_stats[year][team][is_playoffs]["IBB"] + yearly_woba_stats[year][team][is_playoffs]["SF"] + yearly_woba_stats[year][team][is_playoffs]["HBP"]
                     wrcplus_weight = yearly_woba_stats[year][team][is_playoffs]["PA"]
             
-                    total_wRCPlus += wRCPlus * (wrcplus_weight / total_wrcplus_weight)
+                    try:
+                        total_wRCPlus += wRCPlus * (wrcplus_weight / total_wrcplus_weight)
+                    except ZeroDivisionError:
+                        pass
 
                     try:
                         total_wOBA += wOBA * (woba_weight / total_woba_weight)
@@ -44714,7 +44717,10 @@ def calculate_advanced_stats(data, all_rows, player_type, time_frames):
                         eraminus *= 100
 
                         eraminus_weight = yearly_woba_stats[year][team]["IP"]
-                        total_ERAMinus += eraminus * (eraminus_weight / total_eraminus_weight)
+                        try:
+                            total_ERAMinus += eraminus * (eraminus_weight / total_eraminus_weight)
+                        except ZeroDivisionError:
+                            pass
 
                         if "HR" in totals[sleague]["Pitcher"][constant_year]:
                             total_ERA = (9 * totals["MLB"]["Pitcher"][constant_year]["ER"]) / (league_innings)
@@ -44734,7 +44740,10 @@ def calculate_advanced_stats(data, all_rows, player_type, time_frames):
                             fipminus *= 100
 
                             fipminus_weight = yearly_woba_stats[year][team]["IP"]
-                            total_FIPMinus += fipminus * (fipminus_weight / total_fipminus_weight)
+                            try:
+                                total_FIPMinus += fipminus * (fipminus_weight / total_fipminus_weight)
+                            except ZeroDivisionError:
+                                pass
 
                         wrcplus_weight = yearly_woba_stats[year][team]["BF"]
                         
