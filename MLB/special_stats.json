@@ -1,5 +1,12 @@
 {
     "cycle": {
+        "realmjt01" : [
+            {
+                "date": "2023-06-12",
+                "is_playoffs": false,
+                "team": "PHI"
+            }
+        ],
         "mullice01" : [
             {
                 "date": "2023-05-12",
