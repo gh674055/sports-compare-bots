@@ -9419,8 +9419,8 @@ def get_game_data(index, player_data, row_data, qualifiers, extra_stats, s):
     
     scorebox = player_page_xml.xpath("//div[@class = 'scorebox']")[0]
     scor_divs = scorebox.xpath("./div")
-    home_team_div = scor_divs[0]
-    away_team_div = scor_divs[1]
+    home_team_div = scor_divs[1]
+    away_team_div = scor_divs[0]
 
     home_team_divs = home_team_div.xpath("./div")
     away_team_divs = away_team_div.xpath("./div")
@@ -18752,7 +18752,6 @@ def parse_table(player_page, player_data, time_frame, year, player_type, ind_pla
                 match = False
                 if row_id:
                     if table_name.endswith("_playoffs") and not table_name == "stats_playoffs":
-                        print(row_id)
                         match = re.match(r"^" + table_name[:-9] + r"\.\d+$", row_id)
                     else:
                         match = re.match(r"^" + table_name + r"\.\d+$", row_id)
