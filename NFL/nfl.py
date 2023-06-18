@@ -6670,6 +6670,10 @@ def url_request_lxml(session, url, timeout=2, retry_403=True):
             time.sleep(time_to_wait)
         logger.info("#" + str(threading.get_ident()) + "#   " + "0")
 
+        if failed_counter == max_request_retries:
+            logger.info("#" + str(threading.get_ident()) + "#   " + "Last retry, will use a timeout of 10 seconds")
+            timeout = 10
+
 def url_request_bytes(url, timeout=30):
     gateway_session = requests.Session()
     gateway_session.mount("https://www.pro-football-reference.com", gateway)
@@ -6722,6 +6726,10 @@ def url_request_json(session, url, timeout=2):
                 raise
 
         logger.info("#" + str(threading.get_ident()) + "#   " + "Retrying to allow request to " + url + " to chill")
+
+        if failed_counter == max_request_retries:
+            logger.info("#" + str(threading.get_ident()) + "#   " + "Last retry, will use a timeout of 10 seconds")
+            timeout = 10
 
 def url_request_imgur(url, data, timeout=30):
     failed_counter = 0
