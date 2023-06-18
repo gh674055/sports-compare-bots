@@ -27023,13 +27023,7 @@ def url_request_json(session, url, timeout=2):
             if failed_counter > max_request_retries:
                 raise
 
-        delay_step = 10
-        logger.info("#" + str(threading.get_ident()) + "#   " + "Retrying in " + str(retry_failure_delay) + " seconds to allow " + url + " to chill")
-        time_to_wait = int(math.ceil(float(retry_failure_delay)/float(delay_step)))
-        for i in range(retry_failure_delay, 0, -time_to_wait):
-            logger.info("#" + str(threading.get_ident()) + "#   " + str(i))
-            time.sleep(time_to_wait)
-        logger.info("#" + str(threading.get_ident()) + "#   " + "0")
+        logger.info("#" + str(threading.get_ident()) + "#   " + "Retrying to allow request to " + url + " to chill")
 
 def url_request_imgur(url, data, timeout=30):
     failed_counter = 0
