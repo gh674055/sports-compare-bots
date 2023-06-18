@@ -26932,7 +26932,7 @@ def url_request(url, timeout=30, retry_403=True):
             time.sleep(time_to_wait)
         logger.info("#" + str(threading.get_ident()) + "#   " + "0")
 
-def url_request_lxml(session, url, timeout=30, retry_403=True):
+def url_request_lxml(session, url, timeout=2, retry_403=True):
     failed_counter = 0
     while(True):
         try:
@@ -27011,7 +27011,7 @@ def url_request_bytes(url, timeout=30):
             time.sleep(time_to_wait)
         logger.info("#" + str(threading.get_ident()) + "#   " + "0")
 
-def url_request_json(session, url, timeout=30):
+def url_request_json(session, url, timeout=2):
     failed_counter = 0
     while(True):
         try:
@@ -39126,6 +39126,10 @@ def get_href_mlb_game_stats(all_rows, s):
         get_href_game_data(row_data, s)
 
 def get_mlb_game_stats_single_thread(all_rows, has_count_stat, qualifiers, games_to_skip, player_data, missing_games, missing_pitch, player_type, extra_stats, s):
+    # profile = cProfile.Profile()
+    # profile.enable()
+
+    # try:
     logger.info("#" + str(threading.get_ident()) + "#   " + player_data["id"] + " starting game data")
     count_info = {
         "current_percent" : 10,
@@ -39315,6 +39319,10 @@ def get_mlb_game_stats_single_thread(all_rows, has_count_stat, qualifiers, games
     logger.info("#" + str(threading.get_ident()) + "#   " + player_data["id"] + " completed game data")
 
     return sorted(new_rows, key=lambda row: row["DateTime"]), count_info["missing_games"], count_info["missing_pitch"]
+    # finally:
+    #      ps = pstats.Stats(profile)
+    #      ps.sort_stats(pstats.SortKey.TIME)
+    #      ps.print_stats()
 
 def handle_mlb_schedule_stats(all_rows, qualifiers, player_data, player_type, missing_games, extra_stats):
     new_rows = []

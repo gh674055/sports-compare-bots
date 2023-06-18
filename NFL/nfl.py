@@ -6630,7 +6630,7 @@ def url_request(url, timeout=30, retry_403=True):
             time.sleep(time_to_wait)
         logger.info("#" + str(threading.get_ident()) + "#   " + "0")
 
-def url_request_lxml(session, url, timeout=30, retry_403=True):
+def url_request_lxml(session, url, timeout=2, retry_403=True):
     failed_counter = 0
     while(True):
         try:
@@ -6709,7 +6709,7 @@ def url_request_bytes(url, timeout=30):
             time.sleep(time_to_wait)
         logger.info("#" + str(threading.get_ident()) + "#   " + "0")
 
-def url_request_json(session, url, timeout=30):
+def url_request_json(session, url, timeout=2):
     failed_counter = 0
     while(True):
         try:
