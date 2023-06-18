@@ -18919,7 +18919,7 @@ def get_live_game(player_link, player_data, player_type, time_frame, do_live, s)
         ids_to_header = {}
         for game in sub_game["games"]:
             if game["officialDate"] != sub_game["date"]:
-                if game["doubleHeader"] == "N":
+                if game["doubleHeader"] == "N" or (game["status"]["detailedState"] == "Cancelled" or game["status"]["detailedState"] == "Warmup" or game["status"]["detailedState"] == "Postponed" or game["status"]["detailedState"].startswith("Suspended")):
                     continue
             if "resumedFromDate" in game and game["resumedFromDate"] != sub_game["date"]:
                 if game["doubleHeader"] == "N":
@@ -40519,7 +40519,7 @@ def parse_mlb_team_year_link(team_id, sub_year, qualifiers, all_rows, team, s):
         ids_to_header = {}
         for game in sub_game["games"]:
             if game["officialDate"] != sub_game["date"]:
-                if game["doubleHeader"] == "N":
+                if game["doubleHeader"] == "N" or (game["status"]["detailedState"] == "Cancelled" or game["status"]["detailedState"] == "Warmup" or game["status"]["detailedState"] == "Postponed" or game["status"]["detailedState"].startswith("Suspended")):
                     continue
             if "resumedFromDate" in game and game["resumedFromDate"] != sub_game["date"]:
                 if game["doubleHeader"] == "N":
@@ -40529,7 +40529,7 @@ def parse_mlb_team_year_link(team_id, sub_year, qualifiers, all_rows, team, s):
                 continue
             if game["status"]["detailedState"]:
                 if game["status"]["detailedState"] == "Cancelled" or game["status"]["detailedState"] == "Warmup" or game["status"]["detailedState"] == "Postponed" or game["status"]["detailedState"].startswith("Suspended"):
-                   if game["doubleHeader"] == "N":
+                    if game["doubleHeader"] == "N":
                         continue
             if not "score" in game["teams"]["home"]:
                 if game["doubleHeader"] == "N":
