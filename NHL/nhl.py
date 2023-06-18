@@ -18363,7 +18363,7 @@ def handle_season_stats_game(player_type, player_data, player_link, time_frame, 
             else:
                 url_to_use = "https://api.nhle.com/stats/rest/en/" + player_key + "/" + report + "?isAggregate=false&isGame=true&start=" + str(start) +"&factCayenneExp=gamesPlayed>=1&sort=[{\"property\":\"gameDate\",\"direction\":\"ASC\"}]&limit=" + str(limit) + "&cayenneExp=" + urllib.parse.quote_plus("seasonId<=\"" + str(end_date) + "\" and seasonId>=\"" + str(start_date) + "\" and gameTypeId=" + str(game_id) + " and playerId like \"" + str(player_id) + "\"")
             try:
-                sub_data = url_request_json(s, url_to_use)
+                sub_data = url_request_json(s, url_to_use, timeout=10)
             except requests.exceptions.HTTPError:
                 raise
             games_to_use += sub_data["data"]
@@ -18382,7 +18382,7 @@ def handle_season_stats_game(player_type, player_data, player_link, time_frame, 
                 else:
                     url_to_use = "https://api.nhle.com/stats/rest/en/" + player_key + "/" + report + "?isAggregate=false&isGame=true&start=" + str(start) +"&factCayenneExp=gamesPlayed>=1&sort=[{\"property\":\"gameDate\",\"direction\":\"ASC\"}]&limit=" + str(limit) + "&cayenneExp=" + urllib.parse.quote_plus("seasonId<=\"" + str(end_date) + "\" and seasonId>=\"" + str(start_date) + "\" and gameTypeId=" + str(game_id) + " and playerId like \"" + str(player_id) + "\"")
                 try:
-                    sub_data = url_request_json(s, url_to_use)
+                    sub_data = url_request_json(s, url_to_use, timeout=10)
                 except requests.exceptions.HTTPError:
                     raise
                 sub_games += sub_data["data"]
@@ -20461,7 +20461,7 @@ def handle_facing_stat_rank_qual(qual_obj, stat_mapping, call_type, all_filters,
                 if filter_str:
                     url_to_use += "&factCayenneExp=" + filter_str
 
-                data = url_request_json(s, url_to_use)
+                data = url_request_json(s, url_to_use, timeout=10)
                     
                 for player in data["data"]:
                     games_to_use.append(player)
@@ -20600,7 +20600,7 @@ def handle_facing_stat_percent_qual(qual_obj, stat_mapping, call_type, all_filte
                 if filter_str:
                     url_to_use += "&factCayenneExp=" + filter_str
                     
-                data = url_request_json(s, url_to_use)
+                data = url_request_json(s, url_to_use, timeout=10)
                     
                 games_to_use += data["data"]
                 start += limit
@@ -20770,7 +20770,7 @@ def handle_facing_stat_qual(qual_obj, stat_mapping, call_type, all_filters, all_
                 if filter_str:
                     url_to_use += "&factCayenneExp=" + filter_str
                     
-                data = url_request_json(s, url_to_use)
+                data = url_request_json(s, url_to_use, timeout=10)
                     
                 games_to_use += data["data"]
                 start += limit
