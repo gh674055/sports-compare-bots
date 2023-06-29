@@ -2312,6 +2312,13 @@
         ]
     },
     "no_hit": {
+        "germado01": [
+            {
+                "date": "2023-06-28",
+                "is_playoffs": false,
+                "team": "NYY"
+            }
+        ],
         "detmere01" : [
             {
                 "date": "2022-05-10 00:00:00",
@@ -4329,6 +4336,13 @@
         ]
     },
     "perfect": {
+        "germado01": [
+            {
+                "date": "2023-06-28",
+                "is_playoffs": false,
+                "team": "NYY"
+            }
+        ],
         "barkele01": [
             {
                 "date": "1981-05-15 00:00:00",
