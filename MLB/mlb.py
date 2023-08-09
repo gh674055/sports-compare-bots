@@ -16927,7 +16927,7 @@ def handle_multi_player_data(player_id, time_frames, player_type, player_page, r
     player_data["player_jaws_position"] = get_player_jaws_position(player_page)
     player_data["player_flag"] = get_player_country(player_page)
     player_data["player_hof"] = get_player_hof(player_page)
-    player_data["year_valid_years"], player_data["reg_year_valid_years"], player_data["playoff_valid_years"], player_data["game_valid_years"], player_data["total_game_valid_years"], player_data["pitch_valid_years"], player_data["catch_valid_years"], valid_teams, valid_teams_raw_key, valid_year_teams = get_valid_years(player_page, player_type)
+    player_data["year_valid_years"], player_data["reg_year_valid_years"], player_data["playoff_valid_years"], player_data["game_valid_years"], player_data["total_game_valid_years"], player_data["pitch_valid_years"], player_data["catch_valid_years"], valid_teams, valid_teams_raw_key, valid_year_teams = get_valid_years(player_page, player_type, player_id)
     player_data["has_season_stats"] = True
     player_data["has_award_stats"] = True
     player_data["is_only_ws"] = True
@@ -27156,7 +27156,7 @@ def get_last_updated(player_page):
     localtz = timezone("US/Eastern")
     return localtz.localize(date)
 
-def get_valid_years(player_page, player_type):
+def get_valid_years(player_page, player_type, player_id):
     total_valid_years = set()
     reg_valid_years = set()
     playoff_valid_years = set()
@@ -27168,105 +27168,106 @@ def get_valid_years(player_page, player_type):
     valid_teams_raw_key = {}
     valid_year_teams = {}
 
-    table_names = ["batting_standard", "pitching_standard", "standard_fielding", "batting_postseason", "pitching_postseason"]
-    comments = None
-    for table_name in table_names:
-        table = player_page.find("table", id=table_name)
+    if player_id[len(player_id) - 1].isdigit():
+        table_names = ["batting_standard", "pitching_standard", "standard_fielding", "batting_postseason", "pitching_postseason"]
+        comments = None
+        for table_name in table_names:
+            table = player_page.find("table", id=table_name)
 
-        if not table:
-            if not comments:
-                comments = player_page.find_all(string=lambda text: isinstance(text, Comment))
-            for c in comments:
-                temp_soup = BeautifulSoup(c, "lxml")
-                temp_table = temp_soup.find("table", id=table_name)
-                if temp_table:
-                    table = temp_table
-                    break
+            if not table:
+                if not comments:
+                    comments = player_page.find_all(string=lambda text: isinstance(text, Comment))
+                for c in comments:
+                    temp_soup = BeautifulSoup(c, "lxml")
+                    temp_table = temp_soup.find("table", id=table_name)
+                    if temp_table:
+                        table = temp_table
+                        break
 
-        if table:
-            standard_table_rows = table.find_all("tr")
-            for row in standard_table_rows:
-                row_id = row.get("id")
-                match = False
-                if row_id:
-                    if table_name in ["standard_fielding", "advanced_fielding"]:
-                        match = re.match(r"^\d+\:" + table_name + "$", row_id)
-                    else:
-                        match = re.match(r"^" + table_name + r"\.\d+$", row_id)
-                elif row.get("class") and "partial_table" in row.get("class") and not "spacer" in row.get("class"):
-                    match = True
-                if match or (table_name.endswith("postseason") and not row.get("class")) and row.parent.name != "thead" and row.parent.name != "tfoot":
-                    row_year = int(str(re.sub("[^0-9]", "", row.find("th").find(text=True))))
-                    total_valid_years.add(row_year)
-                    if not table_name.endswith("_postseason"):
-                        reg_valid_years.add(row_year)
-                    else:
-                        playoff_valid_years.add(row_year)
-                    if table_name == "pitching_standard":
-                        pitch_valid_years.add(row_year)
-                    elif table_name == "standard_fielding":
-                        if row.find("td", {"data-stat" : "pos"}) and str(row.find("td", {"data-stat" : "pos"}).find(text=True)) == "C":
-                            catch_valid_years.add(row_year)
+            if table:
+                standard_table_rows = table.find_all("tr")
+                for row in standard_table_rows:
+                    row_id = row.get("id")
+                    match = False
+                    if row_id:
+                        if table_name in ["standard_fielding", "advanced_fielding"]:
+                            match = re.match(r"^\d+\:" + table_name + "$", row_id)
+                        else:
+                            match = re.match(r"^" + table_name + r"\.\d+$", row_id)
+                    elif row.get("class") and "partial_table" in row.get("class") and not "spacer" in row.get("class"):
+                        match = True
+                    if match or (table_name.endswith("postseason") and not row.get("class")) and row.parent.name != "thead" and row.parent.name != "tfoot":
+                        row_year = int(str(re.sub("[^0-9]", "", row.find("th").find(text=True))))
+                        total_valid_years.add(row_year)
+                        if not table_name.endswith("_postseason"):
+                            reg_valid_years.add(row_year)
+                        else:
+                            playoff_valid_years.add(row_year)
+                        if table_name == "pitching_standard":
+                            pitch_valid_years.add(row_year)
+                        elif table_name == "standard_fielding":
+                            if row.find("td", {"data-stat" : "pos"}) and str(row.find("td", {"data-stat" : "pos"}).find(text=True)) == "C":
+                                catch_valid_years.add(row_year)
 
-                    row_team = row.find("td", {"data-stat" : "team_ID"}).find("a")
-                    if row_team:
-                        row_abbr = str(row_team.find(text=True)).upper()
-                        if row_abbr not in valid_teams_key:
-                            valid_teams_key[row_abbr] = set()
-                        valid_teams_key[row_abbr].add(row_year)
+                        row_team = row.find("td", {"data-stat" : "team_ID"}).find("a")
+                        if row_team:
+                            row_abbr = str(row_team.find(text=True)).upper()
+                            if row_abbr not in valid_teams_key:
+                                valid_teams_key[row_abbr] = set()
+                            valid_teams_key[row_abbr].add(row_year)
 
-                        if row.find("td", {"data-stat" : "G"}) and row.find("td", {"data-stat" : "G"}).find(text=True) and int(row.find("td", {"data-stat" : "G"}).find(text=True)):
-                            if row_abbr not in valid_teams_raw_key:
-                                valid_teams_raw_key[row_abbr] = set()
-                            valid_teams_raw_key[row_abbr].add(row_year)
+                            if row.find("td", {"data-stat" : "G"}) and row.find("td", {"data-stat" : "G"}).find(text=True) and int(row.find("td", {"data-stat" : "G"}).find(text=True)):
+                                if row_abbr not in valid_teams_raw_key:
+                                    valid_teams_raw_key[row_abbr] = set()
+                                valid_teams_raw_key[row_abbr].add(row_year)
 
-                        if not row_year in valid_year_teams:
-                            valid_year_teams[row_year] = []
-                        if not row_abbr in valid_year_teams[row_year]:
-                            valid_year_teams[row_year].append(row_abbr)
+                            if not row_year in valid_year_teams:
+                                valid_year_teams[row_year] = []
+                            if not row_abbr in valid_year_teams[row_year]:
+                                valid_year_teams[row_year].append(row_abbr)
 
-        bottom_nav_container = player_page.find("div", id="bottom_nav_container")
-        if bottom_nav_container:
-            element_name = "Batting Game Logs" if player_type["da_type"] == "Batter" else "Pitching Game Logs"
-            bottom_nav_element = bottom_nav_container.find("p", text=element_name)
-            if bottom_nav_element:
-                bottom_nav_sibling = bottom_nav_element.find_next_sibling()
-                if bottom_nav_sibling:
-                    year_elements = bottom_nav_element.find_next_sibling().find_all("a")
-                    for year_element in year_elements:
-                        row_year = str(year_element.find(text=True))
-                        if row_year != "Postseason":
-                            row_year = int(row_year)
-                            total_game_valid_years.add(row_year)
-                            game_valid_years.add(row_year)
-            
-            element_name = "Batting Game Logs" if player_type["da_type"] != "Batter" else "Pitching Game Logs"
-            bottom_nav_element = bottom_nav_container.find("p", text=element_name)
-            if bottom_nav_element:
-                bottom_nav_sibling = bottom_nav_element.find_next_sibling()
-                if bottom_nav_sibling:
-                    year_elements = bottom_nav_element.find_next_sibling().find_all("a")
-                    for year_element in year_elements:
-                        row_year = str(year_element.find(text=True))
-                        if row_year != "Postseason":
-                            row_year = int(row_year)
-                            total_game_valid_years.add(row_year)
-    
-    total_valid_years = list(total_valid_years)
-    reg_valid_years = list(reg_valid_years)
-    playoff_valid_years = list(playoff_valid_years)
-    game_valid_years = list(game_valid_years)
-    total_game_valid_years = list(total_game_valid_years)
-    pitch_valid_years = list(pitch_valid_years)
-    catch_valid_years = list(catch_valid_years)
+            bottom_nav_container = player_page.find("div", id="bottom_nav_container")
+            if bottom_nav_container:
+                element_name = "Batting Game Logs" if player_type["da_type"] == "Batter" else "Pitching Game Logs"
+                bottom_nav_element = bottom_nav_container.find("p", text=element_name)
+                if bottom_nav_element:
+                    bottom_nav_sibling = bottom_nav_element.find_next_sibling()
+                    if bottom_nav_sibling:
+                        year_elements = bottom_nav_element.find_next_sibling().find_all("a")
+                        for year_element in year_elements:
+                            row_year = str(year_element.find(text=True))
+                            if row_year != "Postseason":
+                                row_year = int(row_year)
+                                total_game_valid_years.add(row_year)
+                                game_valid_years.add(row_year)
+                
+                element_name = "Batting Game Logs" if player_type["da_type"] != "Batter" else "Pitching Game Logs"
+                bottom_nav_element = bottom_nav_container.find("p", text=element_name)
+                if bottom_nav_element:
+                    bottom_nav_sibling = bottom_nav_element.find_next_sibling()
+                    if bottom_nav_sibling:
+                        year_elements = bottom_nav_element.find_next_sibling().find_all("a")
+                        for year_element in year_elements:
+                            row_year = str(year_element.find(text=True))
+                            if row_year != "Postseason":
+                                row_year = int(row_year)
+                                total_game_valid_years.add(row_year)
+        
+        total_valid_years = list(total_valid_years)
+        reg_valid_years = list(reg_valid_years)
+        playoff_valid_years = list(playoff_valid_years)
+        game_valid_years = list(game_valid_years)
+        total_game_valid_years = list(total_game_valid_years)
+        pitch_valid_years = list(pitch_valid_years)
+        catch_valid_years = list(catch_valid_years)
 
-    total_valid_years.sort()
-    reg_valid_years.sort()
-    playoff_valid_years.sort()
-    game_valid_years.sort()
-    total_game_valid_years.sort()
-    pitch_valid_years.sort()
-    catch_valid_years.sort()
+        total_valid_years.sort()
+        reg_valid_years.sort()
+        playoff_valid_years.sort()
+        game_valid_years.sort()
+        total_game_valid_years.sort()
+        pitch_valid_years.sort()
+        catch_valid_years.sort()
 
     return total_valid_years, reg_valid_years, playoff_valid_years, game_valid_years, total_game_valid_years, pitch_valid_years, catch_valid_years, valid_teams_key, valid_teams_raw_key, valid_year_teams
 
