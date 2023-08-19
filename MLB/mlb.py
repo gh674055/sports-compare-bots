@@ -44640,7 +44640,7 @@ def calculate_advanced_stats(data, all_rows, player_type, time_frames):
                     constant_year = str(int(current_season) - 1)
                 for team in yearly_woba_stats[year]:
                     sleague = yearly_woba_stats[year][team]["TmLg"]
-                    if int(year) < 1916:
+                    if int(year) < 1916 or "TBF" not in totals[sleague]["Pitcher"][constant_year]:
                         total_wrcplus_weight -= yearly_woba_stats[year][team]["BF"]
                     if "HR" not in totals[sleague]["Pitcher"][constant_year]:
                         total_fip_weight -= yearly_woba_stats[year][team]["IP"]
@@ -44808,41 +44808,42 @@ def calculate_advanced_stats(data, all_rows, player_type, time_frames):
                         pass
 
                     if int(year) >= 1916:
-                        if "HR" in totals[sleague]["Pitcher"][constant_year]:
+                        if "TBF" in totals[sleague]["Pitcher"][constant_year]:
+                            if "HR" in totals[sleague]["Pitcher"][constant_year]:
+                                try:
+                                    hr_per = yearly_woba_stats[year][team]["HR"] / yearly_woba_stats[year][team]["BF"]
+                                    league_hr_per = totals[sleague]["Pitcher"][constant_year]["HR"] / totals[sleague]["Pitcher"][constant_year]["TBF"]
+                                    hr_plus = 100 + (((hr_per - league_hr_per) / league_hr_per) * 100)
+                                    total_HRPlus += hr_plus * (wrcplus_weight / total_hr_weight)
+                                except ZeroDivisionError:
+                                    pass
+
                             try:
-                                hr_per = yearly_woba_stats[year][team]["HR"] / yearly_woba_stats[year][team]["BF"]
-                                league_hr_per = totals[sleague]["Pitcher"][constant_year]["HR"] / totals[sleague]["Pitcher"][constant_year]["TBF"]
-                                hr_plus = 100 + (((hr_per - league_hr_per) / league_hr_per) * 100)
-                                total_HRPlus += hr_plus * (wrcplus_weight / total_hr_weight)
+                                k_per = yearly_woba_stats[year][team]["SO"] / yearly_woba_stats[year][team]["BF"]
+                                league_k_per = totals[sleague]["Pitcher"][constant_year]["SO"] / totals[sleague]["Pitcher"][constant_year]["TBF"]
+                                k_plus = 100 + (((k_per - league_k_per) / league_k_per) * 100)
+                                total_KPlus += k_plus * (wrcplus_weight / total_wrcplus_weight)
                             except ZeroDivisionError:
                                 pass
 
-                        try:
-                            k_per = yearly_woba_stats[year][team]["SO"] / yearly_woba_stats[year][team]["BF"]
-                            league_k_per = totals[sleague]["Pitcher"][constant_year]["SO"] / totals[sleague]["Pitcher"][constant_year]["TBF"]
-                            k_plus = 100 + (((k_per - league_k_per) / league_k_per) * 100)
-                            total_KPlus += k_plus * (wrcplus_weight / total_wrcplus_weight)
-                        except ZeroDivisionError:
-                            pass
-
-                        try:
-                            bb_per = yearly_woba_stats[year][team]["BB"] / yearly_woba_stats[year][team]["BF"]
-                            league_bb_per = totals[sleague]["Pitcher"][constant_year]["BB"] / totals[sleague]["Pitcher"][constant_year]["TBF"]
-                            bb_plus = 100 + (((bb_per - league_bb_per) / league_bb_per) * 100)
-                            total_BBPlus += bb_plus * (wrcplus_weight / total_wrcplus_weight)
-                        except ZeroDivisionError:
-                            pass
-
-
-                        if yearly_woba_stats[year][team]["BF"]:
                             try:
-                                kmbb_per = k_per - bb_per
-                                if kmbb_per:
-                                    league_kmbb_per = league_k_per - league_bb_per
-                                    kmbb_per_plus = 100 + (((kmbb_per - league_kmbb_per) / abs(league_kmbb_per)) * 100)
-                                    total_KMBBPlus += kmbb_per_plus * (wrcplus_weight / total_wrcplus_weight)
+                                bb_per = yearly_woba_stats[year][team]["BB"] / yearly_woba_stats[year][team]["BF"]
+                                league_bb_per = totals[sleague]["Pitcher"][constant_year]["BB"] / totals[sleague]["Pitcher"][constant_year]["TBF"]
+                                bb_plus = 100 + (((bb_per - league_bb_per) / league_bb_per) * 100)
+                                total_BBPlus += bb_plus * (wrcplus_weight / total_wrcplus_weight)
                             except ZeroDivisionError:
                                 pass
+
+
+                            if yearly_woba_stats[year][team]["BF"]:
+                                try:
+                                    kmbb_per = k_per - bb_per
+                                    if kmbb_per:
+                                        league_kmbb_per = league_k_per - league_bb_per
+                                        kmbb_per_plus = 100 + (((kmbb_per - league_kmbb_per) / abs(league_kmbb_per)) * 100)
+                                        total_KMBBPlus += kmbb_per_plus * (wrcplus_weight / total_wrcplus_weight)
+                                except ZeroDivisionError:
+                                    pass
             
             data["HR%+"] = total_HRPlus
             data["SO%+"] = total_KPlus
