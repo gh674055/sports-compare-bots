@@ -14,11 +14,11 @@ import lxml
 import cchardet
 import ssl
 
-league_totals_url = "https://www.fangraphs.com/leaders.aspx?pos=all&stats={}&lg={}&qual=0&type=0&season={}&month=0&season1={}&ind=0&team=0,ss&rost=0&age=0&filter=&players=0"
+league_totals_url = "https://www.fangraphs.com/leaders-legacy.aspx?pos=all&stats={}&lg={}&qual=0&type=0&season={}&month=0&season1={}&ind=0&team=0,ss&rost=0&age=0&filter=&players=0"
 constants_url = "https://www.fangraphs.com/guts.aspx?type=cn"
 park_factors_url = "https://www.fangraphs.com/guts.aspx?type=pf&teamid=0&season={}"
-league_excluding_pitchers_url = "https://www.fangraphs.com/leaders.aspx?pos=np&stats=bat&lg={}&qual=0&type=1&season={}&month=0&season1={}&ind=0&team=0,ss&rost=0&age=0&filter=&players=0"
-league_excluding_pitchers_url_non_advanced = "https://www.fangraphs.com/leaders.aspx?pos=np&stats=bat&lg={}&qual=0&type=0&season={}&month=0&season1={}&ind=0&team=0,ss&rost=0&age=0&filter=&players=0"
+league_excluding_pitchers_url = "https://www.fangraphs.com/leaders-legacy.aspx?pos=np&stats=bat&lg={}&qual=0&type=1&season={}&month=0&season1={}&ind=0&team=0,ss&rost=0&age=0&filter=&players=0"
+league_excluding_pitchers_url_non_advanced = "https://www.fangraphs.com/leaders-legacy.aspx?pos=np&stats=bat&lg={}&qual=0&type=0&season={}&month=0&season1={}&ind=0&team=0,ss&rost=0&age=0&filter=&players=0"
 
 start_year = 1871
 end_year = datetime.date.today().year
