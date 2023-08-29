@@ -18163,6 +18163,73 @@ def fill_row(row, player_data, player_type, lower=True, stats=None):
     else:
         return row
 
+def get_latest_player_pos(player_page):
+    player_pos_map = {}
+
+    table_names = ["passing", "receiving_and_rushing", "rushing_and_receiving", "scoring", "defense", "kicking", "returns", "snap_counts", "games_played", "passing_playoffs", "receiving_and_rushing_playoffs", "rushing_and_receiving_playoffs", "scoring_playoffs", "defense_playoffs", "kicking_playoffs", "returns_playoffs", "snap_counts_playoffs", "games_played_playoffs"]
+    comments = None
+    for table_name in table_names:
+        table = player_page.find("table", id=table_name)
+        if not table:
+            if not comments:
+                comments = player_page.find_all(string=lambda text: isinstance(text, Comment))
+            for c in comments:
+                temp_soup = BeautifulSoup(c, "lxml")
+                temp_table = temp_soup.find("table", id=table_name)
+                if temp_table:
+                    table = temp_table
+                    break
+
+        if table:
+            standard_table_rows = table.find("tbody").find_all("tr")
+            for row in standard_table_rows:
+                row_id = row.get("id")
+                match = False
+                if row_id:
+                    if table_name.endswith("_playoffs") and not table_name == "stats_playoffs":
+                        match = re.match(r"^" + table_name[:-9] + r"\.\d+$", row_id)
+                    else:
+                        match = re.match(r"^" + table_name + r"\.\d+$", row_id)
+                    if not match and row.get("class") and "partial_table" in row.get("class") and not "spacer" in row.get("class"):
+                        match = True
+                if match:
+                    row_team = row.find("td", {"data-stat" : "team"}).find("a")
+                    if row_team:
+                        pos = row.find("td", {"data-stat" : "pos"})
+                        if pos:
+                            pos_text = pos.find(text=True)
+                            if pos_text:
+                                year_row = row.find("th")
+                                year_str = year_row.find(text=True)
+                                if year_str:
+                                    season_year = re.sub("[^0-9]", "", str(year_str).split("-")[0])
+                                    if season_year:
+                                        season_year = int(season_year)
+                                    else:
+                                        season_year_str = year_row.get("csk", None)
+                                        if season_year_str:
+                                            season_year = int(season_year_str.split(".")[0])
+                                        else:
+                                            season_year = int(year_row.find("a").get("href").split("/")[2])
+                                else:
+                                    season_year_str = year_row.get("csk", None)
+                                    if season_year_str:
+                                        season_year = int(season_year_str.split(".")[0])
+                                    else:
+                                        season_year = int(year_row.find("a").get("href").split("/")[2])
+                                
+                                if not season_year in player_pos_map:
+                                    player_pos_map[season_year] = []
+                                player_pos_map[season_year].append(str(pos_text))
+
+    if player_pos_map:
+        the_years = sorted(player_pos_map.keys())
+        years_pos = player_pos_map[the_years[len(the_years) - 1]]
+
+        return years_pos[len(years_pos) - 1]
+    else:
+        return None
+
 def get_valid_years(player_page):
     total_valid_years = set()
     reg_valid_years = set()
@@ -18440,19 +18507,19 @@ def calculate_advanced_stats(data, all_rows, player_data, player_type):
                     data["Era Adjusted Passing"][adj_stat] += total_plus_value
 
 def get_player_type(player_page):
-    player_info = player_page.find("div", {"id" : "meta"})
-    player_type_el = player_info.find("strong", text="Position").parent
-    player_types = re.split('-|,', player_type_el.contents[2].strip()[1:].strip()) 
-    player_type = player_types[0].strip().upper()
+    player_type = get_player_position(player_page)
     if not player_type in headers:
         return "PEN"
     return player_type
 
 def get_player_position(player_page):
     player_info = player_page.find("div", {"id" : "meta"})
-    player_type_el = player_info.find("strong", text="Position").parent
-    player_types =  re.split('-|,', player_type_el.contents[2].strip()[1:].strip()) 
-    return player_types[0].strip().upper()
+    player_type_el = player_info.find("strong", text="Position")
+    if not player_type_el:
+        return get_latest_player_pos(player_page)
+    else:
+        player_types =  re.split('-|,', player_type_el.parent.contents[2].strip()[1:].strip()) 
+        return player_types[0].strip().upper()
 
 def get_player_name(player_page):
     player_info = player_page.find("div", {"id" : "meta"})
