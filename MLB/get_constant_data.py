@@ -14,11 +14,9 @@ import lxml
 import cchardet
 import ssl
 
-league_totals_url = "https://www.fangraphs.com/leaders-legacy.aspx?pos=all&stats={}&lg={}&qual=0&type=0&season={}&month=0&season1={}&ind=0&team=0,ss&rost=0&age=0&filter=&players=0"
+league_totals_url = "https://www.fangraphs.com/api/leaders/major-league/data?age=0&pos={}&stats={}&lg={}&qual=0&season={}&season1={}&month=0&hand=&team=0%2Css&pageitems=30&pagenum=1&ind=0&rost=0&players=0&type={}"
 constants_url = "https://www.fangraphs.com/guts.aspx?type=cn"
 park_factors_url = "https://www.fangraphs.com/guts.aspx?type=pf&teamid=0&season={}"
-league_excluding_pitchers_url = "https://www.fangraphs.com/leaders-legacy.aspx?pos=np&stats=bat&lg={}&qual=0&type=1&season={}&month=0&season1={}&ind=0&team=0,ss&rost=0&age=0&filter=&players=0"
-league_excluding_pitchers_url_non_advanced = "https://www.fangraphs.com/leaders-legacy.aspx?pos=np&stats=bat&lg={}&qual=0&type=0&season={}&month=0&season1={}&ind=0&team=0,ss&rost=0&age=0&filter=&players=0"
 
 start_year = 1871
 end_year = datetime.date.today().year
@@ -281,7 +279,7 @@ request_headers = {
     "User-Agent" : "MLBCompareRedditBot"
 }
 
-request_headers= {}
+#request_headers= {}
 
 logname = "mlb-constants.log"
 logger = logging.getLogger("mlb-constants")
@@ -420,82 +418,32 @@ def get_totals(single_year, totals, log=True):
 
     total_years = len(years)
 
-    for league in list(totals):
-        for key in list(totals[league]):
-            if log:
-                logger.info("Getting league total data for " + league + " : " + key)
-            current_percent = 10
-            for index, year in enumerate(years):
-                if year in league_years[league]:
-                    league_str = "ALL" if league == "MLB" else league
-                    response, player_page = url_request(league_totals_url.format(format_strs[key], league_str.lower(), year, year), log)
+    with requests.Session() as s:
+        for league in list(totals):
+            for key in list(totals[league]):
+                if log:
+                    logger.info("Getting league total data for " + league + " : " + key)
+                current_percent = 10
+                for index, year in enumerate(years):
+                    if year in league_years[league]:
+                        league_str = "ALL" if league == "MLB" else league
 
-                    table = player_page.find("table", id="LeaderBoard1_dg1_ctl00")
+                        league_totals_url = "https://www.fangraphs.com/api/leaders/major-league/data?age=0&pos={}&stats={}&lg={}&qual=0&season={}&season1={}&month=0&hand=&team=0%2Css&pageitems=30&pagenum=1&ind=0&rost=0&players=0&type={}"
+                        league_excluding_pitchers_url = "https://www.fangraphs.com/api/leaders/major-league/data?age=0&pos=np&stats=bat&lg={}&qual=0&season={}&season1={}&month=0&hand=&team=0%2Css&pageitems=30&pagenum=1&ind=0&rost=0&players=0&type=0"
 
-                    header_columns = table.find("thead").find_all("th")
-                    header_values = []
-                    for header in header_columns:
-                        header_values.append(header.find(text=True).strip())
+                        data = url_request_json(s, league_totals_url.format("all", format_strs[key], league_str.lower(), year, year, "0"), log)["data"][0]
+                        totals[league][key][str(year)] = data
 
-                    row = table.find("tbody").find("tr")
-                    columns = row.find_all("td", recursive=False)
-
-                    if columns[0].find(text=True).strip() != "No records to display.":            
-                        totals[league][key][str(year)] = {}
-                        for sub_index, column in enumerate(columns):
-                            header_value = header_values[sub_index]
-                            column_contents = column.find(text=True).strip()
-                            if column_contents:
-                                column_value = float(column_contents)
-                                totals[league][key][str(year)][header_value] = column_value
-
-                        if key == "Batter" and league != "MLB":
-                            pitcherless_values = {}
-
-                            response, player_page = url_request(league_excluding_pitchers_url_non_advanced.format(league.lower(), year, year), log)
-
-                            table = player_page.find("table", id="LeaderBoard1_dg1_ctl00")
-
-                            sub_header_columns = table.find("thead").find_all("th")
-                            sub_header_values = []
-                            for header in sub_header_columns:
-                                sub_header_values.append(header.find(text=True).strip())
-
-                            row = table.find("tbody").find("tr")
-                            columns = row.find_all("td", recursive=False)
-                            for sub_sub_index, column in enumerate(columns):
-                                header_value = sub_header_values[sub_sub_index]
-                                column_contents = column.find(text=True)
-                                if column_contents.strip() and not column_contents.endswith("%"):
-                                    column_value = float(column_contents)
-                                    pitcherless_values[header_value] = column_value
-                            
-                            response, player_page = url_request(league_excluding_pitchers_url.format(league.lower(), year, year), log)
-
-                            table = player_page.find("table", id="LeaderBoard1_dg1_ctl00")
-
-                            sub_header_columns = table.find("thead").find_all("th")
-                            sub_header_values = []
-                            for header in sub_header_columns:
-                                sub_header_values.append(header.find(text=True).strip())
-
-                            row = table.find("tbody").find("tr")
-                            columns = row.find_all("td", recursive=False)
-                            for sub_sub_index, column in enumerate(columns):
-                                header_value = sub_header_values[sub_sub_index]
-                                column_contents = column.find(text=True)
-                                if column_contents.strip() and not column_contents.endswith("%"):
-                                    column_value = float(column_contents)
-                                    pitcherless_values[header_value] = column_value
-
+                        if key == "Batter" and league != "MLB":                            
+                            pitcherless_values = url_request_json(s,league_totals_url.format("np", "bat", league_str.lower(), year, year, "0"), log)["data"][0]
                             totals[league][key][str(year)]["pitcherless_values"] = pitcherless_values
 
-                count = index + 1
-                percent_complete = 100 * (count / total_years)
-                if not single_year and count != 1 and percent_complete >= current_percent:
-                    if log:
-                        logger.info(str(current_percent) + "%")
-                    current_percent += 10
+                    count = index + 1
+                    percent_complete = 100 * (count / total_years)
+                    if not single_year and count != 1 and percent_complete >= current_percent:
+                        if log:
+                            logger.info(str(current_percent) + "%")
+                        current_percent += 10
 
     return totals
 
@@ -626,6 +574,26 @@ def get_park_factors(single_year, park_factors, log=True):
             current_percent += 10
 
     return park_factors
+
+def url_request_json(session, url, log, timeout=30):
+    failed_counter = 0
+    while(True):
+        try:
+            response = session.get(url, timeout=timeout, headers=request_headers)
+            response.raise_for_status()
+            return json.loads(response.content)
+        except Exception:
+            failed_counter += 1
+            if failed_counter > max_request_retries:
+                raise
+
+        delay_step = 10
+        logger.info("#" + str(threading.get_ident()) + "#   " + "Retrying in " + str(retry_failure_delay) + " seconds to allow request to " + url + " to chill")
+        time_to_wait = int(math.ceil(float(retry_failure_delay)/float(delay_step)))
+        for i in range(retry_failure_delay, 0, -time_to_wait):
+            logger.info("#" + str(threading.get_ident()) + "#   " + str(i))
+            time.sleep(time_to_wait)
+        logger.info("#" + str(threading.get_ident()) + "#   " + "0")
 
 def url_request(url, log, timeout=30):
     failed_counter = 0

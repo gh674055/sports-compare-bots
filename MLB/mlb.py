@@ -44216,8 +44216,8 @@ def calculate_advanced_stats(data, all_rows, player_type, time_frames):
 
                     league_total_singles = totals["MLB"]["Batter"][constant_year]["H"] - (totals["MLB"]["Batter"][constant_year]["2B"] + totals["MLB"]["Batter"][constant_year]["3B"] + totals["MLB"]["Batter"][constant_year]["HR"])
 
-                    lgwSB = ((totals["MLB"]["Batter"][constant_year]["SB"] * constants[constant_year]["runSB"]) + ((totals["MLB"]["Batter"][constant_year]["CS"] if "CS" in totals["MLB"]["Batter"][constant_year] else 0) * constants[constant_year]["runCS"])) / (league_total_singles + totals["MLB"]["Batter"][constant_year]["BB"] + totals["MLB"]["Batter"][constant_year]["HBP"] - (totals["MLB"]["Batter"][constant_year]["IBB"] if int(constant_year) >= 1955 else 0))
-                    wSB = (yearly_woba_stats[year][team][is_playoffs]["SB"] * constants[constant_year]["runSB"]) + ((yearly_woba_stats[year][team][is_playoffs]["CS"] if "CS" in totals["MLB"]["Batter"][constant_year] else 0) * constants[constant_year]["runCS"]) - (lgwSB * (yearly_woba_stats[year][team][is_playoffs]["1B"] + yearly_woba_stats[year][team][is_playoffs]["BB"] + yearly_woba_stats[year][team][is_playoffs]["HBP"] - (yearly_woba_stats[year][team][is_playoffs]["IBB"] if (int(constant_year) >= 1955 or is_playoffs) else 0)))
+                    lgwSB = ((totals["MLB"]["Batter"][constant_year]["SB"] * constants[constant_year]["runSB"]) + ((totals["MLB"]["Batter"][constant_year]["CS"] if ("CS" in totals["MLB"]["Batter"][constant_year] and totals["MLB"]["Batter"][constant_year]["CS"] != None) else 0) * constants[constant_year]["runCS"])) / (league_total_singles + totals["MLB"]["Batter"][constant_year]["BB"] + totals["MLB"]["Batter"][constant_year]["HBP"] - (totals["MLB"]["Batter"][constant_year]["IBB"] if int(constant_year) >= 1955 else 0))
+                    wSB = (yearly_woba_stats[year][team][is_playoffs]["SB"] * constants[constant_year]["runSB"]) + ((yearly_woba_stats[year][team][is_playoffs]["CS"] if ("CS" in totals["MLB"]["Batter"][constant_year] and totals["MLB"]["Batter"][constant_year]["CS"] != None) else 0) * constants[constant_year]["runCS"]) - (lgwSB * (yearly_woba_stats[year][team][is_playoffs]["1B"] + yearly_woba_stats[year][team][is_playoffs]["BB"] + yearly_woba_stats[year][team][is_playoffs]["HBP"] - (yearly_woba_stats[year][team][is_playoffs]["IBB"] if (int(constant_year) >= 1955 or is_playoffs) else 0)))
                     total_wSB += wSB
                     
                     try:
@@ -44232,7 +44232,7 @@ def calculate_advanced_stats(data, all_rows, player_type, time_frames):
                         if int(year) >= 1954:
                             obp = (yearly_woba_stats[year][team][is_playoffs]["H"] + yearly_woba_stats[year][team][is_playoffs]["BB"] + yearly_woba_stats[year][team][is_playoffs]["HBP"]) / (yearly_woba_stats[year][team][is_playoffs]["AB"] + yearly_woba_stats[year][team][is_playoffs]["BB"] + yearly_woba_stats[year][team][is_playoffs]["HBP"] + yearly_woba_stats[year][team][is_playoffs]["SF"])
                             league_obp = (totals[sleague]["Batter"][constant_year]["pitcherless_values"]["H"] + totals[sleague]["Batter"][constant_year]["pitcherless_values"]["BB"] + totals[sleague]["Batter"][constant_year]["pitcherless_values"]["HBP"]) / (totals[sleague]["Batter"][constant_year]["pitcherless_values"]["AB"] + totals[sleague]["Batter"][constant_year]["pitcherless_values"]["BB"] + totals[sleague]["Batter"][constant_year]["pitcherless_values"]["HBP"] + totals[sleague]["Batter"][constant_year]["pitcherless_values"]["SF"])
-                        elif "HBP" in totals[sleague]["Batter"][constant_year]["pitcherless_values"]:
+                        elif "HBP" in totals[sleague]["Batter"][constant_year]["pitcherless_values"] and totals[sleague]["Batter"][constant_year]["pitcherless_values"]["HBP"] != None:
                             obp = (yearly_woba_stats[year][team][is_playoffs]["H"] + yearly_woba_stats[year][team][is_playoffs]["BB"] + yearly_woba_stats[year][team][is_playoffs]["HBP"]) / (yearly_woba_stats[year][team][is_playoffs]["AB"] + yearly_woba_stats[year][team][is_playoffs]["BB"] + yearly_woba_stats[year][team][is_playoffs]["HBP"])
                             league_obp = (totals[sleague]["Batter"][constant_year]["pitcherless_values"]["H"] + totals[sleague]["Batter"][constant_year]["pitcherless_values"]["BB"] + totals[sleague]["Batter"][constant_year]["pitcherless_values"]["HBP"]) / (totals[sleague]["Batter"][constant_year]["pitcherless_values"]["AB"] + totals[sleague]["Batter"][constant_year]["pitcherless_values"]["BB"] + totals[sleague]["Batter"][constant_year]["pitcherless_values"]["HBP"])
                         else:
@@ -44522,7 +44522,7 @@ def calculate_advanced_stats(data, all_rows, player_type, time_frames):
                     constant_year = str(int(current_season) - 1)
                 for team in yearly_woba_stats[year]:
                     sleague = yearly_woba_stats[year][team]["TmLg"]
-                    if "HR" in totals[sleague]["Pitcher"][constant_year]:
+                    if "HR" in totals[sleague]["Pitcher"][constant_year] and totals[sleague]["Pitcher"][constant_year]["HR"] != None:
                         for key in yearly_woba_stats[year][team]:
                             if key != "TmLg":
                                 if key not in real_yearly_woba_stats[year]:
@@ -44653,7 +44653,7 @@ def calculate_advanced_stats(data, all_rows, player_type, time_frames):
                     constant_year = str(int(current_season) - 1)
 
                 if data["IP"] and real_yearly_woba_stats[year]:
-                    if "HR" in totals[sleague]["Pitcher"][constant_year]:
+                    if "HR" in totals[sleague]["Pitcher"][constant_year] and totals[sleague]["Pitcher"][constant_year]["HR"] != None:
                         league_innings = totals["MLB"]["Pitcher"][constant_year]["IP"]
                         league_innings_split = str(league_innings).split(".")
                         league_innings = float(league_innings_split[0])
@@ -44733,7 +44733,7 @@ def calculate_advanced_stats(data, all_rows, player_type, time_frames):
                         except ZeroDivisionError:
                             pass
 
-                        if "HR" in totals[sleague]["Pitcher"][constant_year]:
+                        if "HR" in totals[sleague]["Pitcher"][constant_year] and totals[sleague]["Pitcher"][constant_year]["HR"] != None:
                             total_ERA = (9 * totals["MLB"]["Pitcher"][constant_year]["ER"]) / (league_innings)
                             cFIP = total_ERA - (((13 * totals["MLB"]["Pitcher"][constant_year]["HR"]) + (3 * (totals["MLB"]["Pitcher"][constant_year]["BB"] + totals["MLB"]["Pitcher"][constant_year]["HBP"])) - (2 * totals["MLB"]["Pitcher"][constant_year]["SO"])) / league_innings)
 
@@ -44782,7 +44782,7 @@ def calculate_advanced_stats(data, all_rows, player_type, time_frames):
                         except ZeroDivisionError:
                             pass
 
-                        if "HR" in totals[sleague]["Pitcher"][constant_year]:
+                        if "HR" in totals[sleague]["Pitcher"][constant_year] and totals[sleague]["Pitcher"][constant_year]["HR"] != None:
                             try:
                                 hr9 = (yearly_woba_stats[year][team]["HR_IP"] * 9) / (yearly_woba_stats[year][team]["IP"])
                                 league_hr9 = (totals[sleague]["Pitcher"][constant_year]["HR"] * 9) / (totals[sleague]["Pitcher"][constant_year]["IP"])
@@ -44808,8 +44808,8 @@ def calculate_advanced_stats(data, all_rows, player_type, time_frames):
                         pass
 
                     if int(year) >= 1916:
-                        if "TBF" in totals[sleague]["Pitcher"][constant_year]:
-                            if "HR" in totals[sleague]["Pitcher"][constant_year]:
+                        if "TBF" in totals[sleague]["Pitcher"][constant_year] and totals[sleague]["Pitcher"][constant_year]["TBF"] != None:
+                            if "HR" in totals[sleague]["Pitcher"][constant_year] and totals[sleague]["Pitcher"][constant_year]["HR"] != None:
                                 try:
                                     hr_per = yearly_woba_stats[year][team]["HR"] / yearly_woba_stats[year][team]["BF"]
                                     league_hr_per = totals[sleague]["Pitcher"][constant_year]["HR"] / totals[sleague]["Pitcher"][constant_year]["TBF"]
