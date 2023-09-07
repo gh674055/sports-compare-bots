@@ -44640,9 +44640,9 @@ def calculate_advanced_stats(data, all_rows, player_type, time_frames):
                     constant_year = str(int(current_season) - 1)
                 for team in yearly_woba_stats[year]:
                     sleague = yearly_woba_stats[year][team]["TmLg"]
-                    if int(year) < 1916 or "TBF" not in totals[sleague]["Pitcher"][constant_year]:
+                    if int(year) < 1916 or "TBF" not in totals[sleague]["Pitcher"][constant_year] or totals[sleague]["Pitcher"][constant_year]["TBF"] == None:
                         total_wrcplus_weight -= yearly_woba_stats[year][team]["BF"]
-                    if "HR" not in totals[sleague]["Pitcher"][constant_year]:
+                    if "HR" not in totals[sleague]["Pitcher"][constant_year] or totals[sleague]["Pitcher"][constant_year]["HR"] == None:
                         total_fip_weight -= yearly_woba_stats[year][team]["IP"]
                         total_fipminus_weight -= yearly_woba_stats[year][team]["IP"]
                         total_hr_weight -= yearly_woba_stats[year][team]["IP"]
