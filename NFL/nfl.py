@@ -19253,6 +19253,8 @@ def parse_row(row, table_name, time_frame, year, is_playoffs, player_type, ind_p
                             header_value = "YBContact"
                         elif header_value == "YAC":
                             header_value = "YAContact"
+                        elif header_value == "Att":
+                            header_value = "Rush"
                     elif over_header_value == "Receiving":
                         if header_value == "YBC":
                             header_value = "YBCatch"
