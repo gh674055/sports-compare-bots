@@ -44,8 +44,8 @@ streamhandler.setLevel(logging.DEBUG)
 logger.addHandler(streamhandler)
 
 start_year = 1917
-end_year = 2022
-current_year_playoffs_started = True
+end_year = 2023
+current_year_playoffs_started = False
 
 year_games_played = [
     {
