@@ -19265,6 +19265,18 @@ def parse_row(row, table_name, time_frame, year, is_playoffs, player_type, ind_p
                         over_header_value = advanced_over_header
                     else:
                         continue
+            
+            if over_header_value == "Defense":
+                if header_value == "IntTD":
+                    header_value = "Int TD"
+                elif header_value == "FRTD":
+                    header_value = "FR TD"
+            elif over_header_value == "Punt Returns":
+                if header_value == "PRTD":
+                    header_value = "TD"
+            elif over_header_value == "Kick Returns":
+                if header_value == "KRTD":
+                    header_value = "TD"
 
             if header_value == "AV":
                 if awards_over_header:
@@ -23930,12 +23942,14 @@ def create_table_html(html_info, player_datas, original_comment, last_updated, c
             options = {
                 "quiet" : "",
                 "page-width": "417",
-                "page-height": "420"
+                "page-height": "420",
+                "enable-local-file-access" : ""
             }
         else:
             options = {
                 "quiet" : "",
-                "page-size": "A3"
+                "page-size": "A3",
+                "enable-local-file-access" : ""
             }
 
         img = pdfkit.from_string(str(soup), False, options)

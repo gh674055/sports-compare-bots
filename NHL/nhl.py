@@ -41980,12 +41980,14 @@ def create_table_html(html_info, player_datas, original_comment, last_updated, c
             options = {
                 "quiet" : "",
                 "page-width": "417",
-                "page-height": "420"
+                "page-height": "420",
+                "enable-local-file-access" : ""
             }
         else:
             options = {
                 "quiet" : "",
-                "page-size": "A3"
+                "page-size": "A3",
+                "enable-local-file-access" : ""
             }
 
         img = pdfkit.from_string(str(soup), False, options)
