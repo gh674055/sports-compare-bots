@@ -133,8 +133,8 @@ display_progress_as_edit = True
 ignore_approved = True
 
 current_season = 2023
-show_title_current_season = False
-season_in_progress = True
+show_title_current_season = True
+season_in_progress = False
 
 alert_message_no_approved = "Comparison received! The comment reply will be made with the comparison is finished\n\nComparisons may be slow due to recent Reddit API changes\n\n---"
 alert_message = "Comparison received! Updates will be provided as players finish\n\n---"
@@ -7464,6 +7464,10 @@ def main():
     gateway = ApiGateway("https://www.baseball-reference.com", verbose=True)
     endpoints = gateway.start(force=True)
 
+    global fangraphs_gateway
+    fangraphs_gateway = ApiGateway("https://www.fangraphs.com", verbose=True)
+    fangraphs_endpoints = fangraphs_gateway.start(force=True)
+
     def exit_gracefully(signum, frame):
         sys.exit(signum)
     signal.signal(signal.SIGINT, exit_gracefully)
@@ -7500,6 +7504,7 @@ def main():
         #                 res = pool.apply_async(parse_input, (gateway, comment, False, comment.subreddit.display_name in approved_subreddits))
     finally:
         gateway.shutdown(endpoints)
+        fangraphs_gateway.shutdown(fangraphs_endpoints)
 
 def get_api_gateway(url):
     global gateway
@@ -43641,13 +43646,13 @@ def get_opponent_schedule(seasons, is_schedule_diff, is_runs_diff):
         park_factors = da_park_factors
     else:
         totals = copy.deepcopy(da_totals)
-        get_constant_data.get_totals(current_season, totals, log=False)
+        get_constant_data.get_totals(current_season, totals, fangraphs_gateway, log=False)
 
         constants = copy.deepcopy(da_constants)
-        get_constant_data.get_constants(current_season, constants, log=False)
+        get_constant_data.get_constants(current_season, constants, fangraphs_gateway, log=False)
 
         park_factors = copy.deepcopy(da_park_factors)
-        get_constant_data.get_park_factors(current_season, park_factors, log=False)
+        get_constant_data.get_park_factors(current_season, park_factors, fangraphs_gateway, log=False)
 
     for season_obj in seasons:
         year = str(season_obj["Year"])
@@ -44030,13 +44035,13 @@ def calculate_advanced_stats(data, all_rows, player_type, time_frames):
         park_factors = da_park_factors
     else:
         totals = copy.deepcopy(da_totals)
-        get_constant_data.get_totals(current_season, totals, log=False)
+        get_constant_data.get_totals(current_season, totals, fangraphs_gateway, log=False)
 
         constants = copy.deepcopy(da_constants)
-        get_constant_data.get_constants(current_season, constants, log=False)
+        get_constant_data.get_constants(current_season, constants, fangraphs_gateway, log=False)
 
         park_factors = copy.deepcopy(da_park_factors)
-        get_constant_data.get_park_factors(current_season, park_factors, log=False)
+        get_constant_data.get_park_factors(current_season, park_factors, fangraphs_gateway, log=False)
 
     if data["PA"] if player_type["da_type"] == "Batter" else data["BF"]:
         total_woba_weight = 0

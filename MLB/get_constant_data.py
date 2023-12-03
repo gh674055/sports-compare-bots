@@ -10,9 +10,10 @@ import socket
 import getopt
 import datetime
 import threading
-import lxml
 import cchardet
 import ssl
+from requests_ip_rotator import ApiGateway
+import signal
 
 league_totals_url = "https://www.fangraphs.com/api/leaders/major-league/data?age=0&pos={}&stats={}&lg={}&qual=0&season={}&season1={}&month=0&hand=&team=0%2Css&pageitems=30&pagenum=1&ind=0&rost=0&players=0&type={}"
 constants_url = "https://www.fangraphs.com/guts.aspx?type=cn"
@@ -295,7 +296,7 @@ logger.addHandler(streamhandler)
 
 ssl._create_default_https_context = ssl._create_unverified_context
 
-def main():
+def main(gateway):
     year_short = "y"
     year_long = "year"
     try:
@@ -313,9 +314,9 @@ def main():
     if year:
         with open("yearly_totals.json", "r") as file:
             totals = json.load(file)
-        get_totals(year, totals)
+        get_totals(year, totals, gateway)
     else:
-        totals = get_totals(None, None)
+        totals = get_totals(None, None, gateway)
 
     with open("yearly_totals.json", "w") as file:
         file.write(json.dumps(totals, indent=4, sort_keys=True))
@@ -324,9 +325,9 @@ def main():
     if year:
         with open("yearly_constants.json", "r") as file:
             constants = json.load(file)
-        get_constants(year, constants)
+        get_constants(year, constants, gateway)
     else:
-        constants = get_constants(None, constants)
+        constants = get_constants(None, constants, gateway)
 
     with open("yearly_constants.json", "w") as file:
         file.write(json.dumps(constants, indent=4, sort_keys=True))
@@ -334,14 +335,14 @@ def main():
     if year:
         with open("yearly_park_factors.json", "r") as file:
             park_factors = json.load(file)
-        get_park_factors(year, park_factors)
+        get_park_factors(year, park_factors, gateway)
     else:
-        park_factors = get_park_factors(None, None)
+        park_factors = get_park_factors(None, None, gateway)
 
     with open("yearly_park_factors.json", "w") as file:
         file.write(json.dumps(park_factors, indent=4, sort_keys=True))
 
-def get_totals(single_year, totals, log=True):
+def get_totals(single_year, totals, gateway, log=True):
     if log:
         logger.info("Getting league total data for year " + str(single_year))
 
@@ -418,7 +419,9 @@ def get_totals(single_year, totals, log=True):
 
     total_years = len(years)
 
-    with requests.Session() as s:
+    with requests.Session() as gateway_session:
+        gateway_session.mount("https://www.fangraphs.com", gateway)
+
         for league in list(totals):
             for key in list(totals[league]):
                 if log:
@@ -431,11 +434,11 @@ def get_totals(single_year, totals, log=True):
                         league_totals_url = "https://www.fangraphs.com/api/leaders/major-league/data?age=0&pos={}&stats={}&lg={}&qual=0&season={}&season1={}&month=0&hand=&team=0%2Css&pageitems=30&pagenum=1&ind=0&rost=0&players=0&type={}"
                         league_excluding_pitchers_url = "https://www.fangraphs.com/api/leaders/major-league/data?age=0&pos=np&stats=bat&lg={}&qual=0&season={}&season1={}&month=0&hand=&team=0%2Css&pageitems=30&pagenum=1&ind=0&rost=0&players=0&type=0"
 
-                        data = url_request_json(s, league_totals_url.format("all", format_strs[key], league_str.lower(), year, year, "0"), log)["data"][0]
+                        data = url_request_json(gateway_session, league_totals_url.format("all", format_strs[key], league_str.lower(), year, year, "0"), log)["data"][0]
                         totals[league][key][str(year)] = data
 
                         if key == "Batter" and league != "MLB":                            
-                            pitcherless_values = url_request_json(s,league_totals_url.format("np", "bat", league_str.lower(), year, year, "0"), log)["data"][0]
+                            pitcherless_values = url_request_json(gateway_session, league_totals_url.format("np", "bat", league_str.lower(), year, year, "0"), log)["data"][0]
                             totals[league][key][str(year)]["pitcherless_values"] = pitcherless_values
 
                     count = index + 1
@@ -447,14 +450,14 @@ def get_totals(single_year, totals, log=True):
 
     return totals
 
-def get_constants(year, constants, log=True):
+def get_constants(year, constants, gateway, log=True):
     if log:
         logger.info("Getting league constants data for year " + str(year))
 
     if not constants:
         constants = {}
     
-    response, player_page = url_request(constants_url, log)
+    response, player_page = url_request(constants_url, gateway, log)
 
     table = player_page.find("table", id="GutsBoard1_dg1_ctl00")
 
@@ -491,7 +494,7 @@ def get_constants(year, constants, log=True):
 
     return constants
 
-def get_park_factors(single_year, park_factors, log=True):
+def get_park_factors(single_year, park_factors, gateway, log=True):
     if log:
         logger.info("Getting league park factors data for year " + str(single_year))
 
@@ -509,7 +512,7 @@ def get_park_factors(single_year, park_factors, log=True):
     current_percent = 10
     for index, year in enumerate(years):
         try:
-            response, player_page = url_request(park_factors_url.format(year), log)
+            response, player_page = url_request(park_factors_url.format(year), gateway, log)
         except requests.exceptions.HTTPError as err:
             if err.response.status_code == 404:
                 continue
@@ -595,15 +598,18 @@ def url_request_json(session, url, log, timeout=30):
             time.sleep(time_to_wait)
         logger.info("#" + str(threading.get_ident()) + "#   " + "0")
 
-def url_request(url, log, timeout=30):
+def url_request(url, gateway, log, timeout=30):
+    gateway_session = requests.Session()
+    gateway_session.mount("https://www.fangraphs.com", gateway)
     failed_counter = 0
     while(True):
         try:
-            response = requests.get(url, timeout=timeout, headers=request_headers)
+            response = gateway_session.get(url, timeout=timeout, headers=request_headers)
             response.raise_for_status()
             text = response.text
 
-            bs = BeautifulSoup(text, "lxml")
+            bs = BeautifulSoup(text, "html5lib")
+
             if not bs.contents:
                 raise requests.exceptions.HTTPError("Page is empty!")
             return response, bs
@@ -628,4 +634,15 @@ def url_request(url, log, timeout=30):
         logger.info("#" + str(threading.get_ident()) + "#   " + "0")
 
 if __name__ == "__main__":
-    main()
+    gateway =  ApiGateway("https://www.fangraphs.com", verbose=True)
+    endpoints = gateway.start(force=True)
+
+    def exit_gracefully(signum, frame):
+        sys.exit(signum)
+    signal.signal(signal.SIGINT, exit_gracefully)
+    signal.signal(signal.SIGTERM, exit_gracefully)
+
+    try:
+        main(gateway)
+    finally:
+        gateway.shutdown(endpoints)
