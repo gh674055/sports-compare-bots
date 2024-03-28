@@ -43656,9 +43656,6 @@ def get_opponent_schedule(seasons, is_schedule_diff, is_runs_diff):
 
     for season_obj in seasons:
         year = str(season_obj["Year"])
-        constant_year = year
-        if constant_year == current_season and season_in_progress and (constant_year not in totals["MLB"]["Batter"] or not totals["MLB"]["Batter"][constant_year] or constant_year not in totals["AL"]["Batter"] or not totals["AL"]["Batter"][constant_year] or constant_year not in totals["NL"]["Batter"] or not totals["NL"]["Batter"][constant_year]):
-            constant_year = str(int(current_season) - 1)
         if is_schedule_diff:
             try:
                 response, player_page = url_request(opponent_schedule_url_format.format(season_obj["Year"]))
@@ -43847,7 +43844,12 @@ def get_opponent_schedule(seasons, is_schedule_diff, is_runs_diff):
                             row_data["Runs"] = runs
                             all_runs.append(row_data["Runs"])
                             
-                            sleague = get_team_league(tm_text, constant_year)
+                            sleague = get_team_league(tm_text, year)
+
+                            constant_year = year
+                            if int(current_season) == int(constant_year) and show_title_current_season and (constant_year not in totals["MLB"]["Batter"] or not totals["MLB"]["Batter"][constant_year] or constant_year not in totals[sleague]["Batter"] or not totals[sleague]["Batter"][constant_year]):
+                                constant_year = str(int(current_season) - 1)
+
                             park_factor = park_factors[constant_year][tm_text]["Basic (5yr)"] if tm_text in park_factors[constant_year] else 100
 
                             yearly_woba_stats = {
@@ -43897,7 +43899,12 @@ def get_opponent_schedule(seasons, is_schedule_diff, is_runs_diff):
                             all_runs_allowed.append(row_data["RunsAllowed"])
                             all_runs_diff.append(row_data["RunDiff"])
 
-                            sleague = get_team_league(tm_text, constant_year)
+                            sleague = get_team_league(tm_text, year)
+
+                            constant_year = year
+                            if int(current_season) == int(constant_year) and show_title_current_season and (constant_year not in totals["MLB"]["Batter"] or not totals["MLB"]["Batter"][constant_year] or constant_year not in totals[sleague]["Batter"] or not totals[sleague]["Batter"][constant_year]):
+                                constant_year = str(int(current_season) - 1)
+
                             park_factor = park_factors[constant_year][tm_text]["Basic (5yr)"] if tm_text in park_factors[constant_year] else 100
 
                             innings_pitches = 0
@@ -44064,10 +44071,7 @@ def calculate_advanced_stats(data, all_rows, player_type, time_frames):
                 if player_type["da_type"] != "Batter" and year < 1915 and not is_playoffs:
                     continue
                 year = str(year)
-                constant_year = year
-                if constant_year == current_season and season_in_progress and (constant_year not in totals["MLB"]["Batter"] or not totals["MLB"]["Batter"][constant_year] or constant_year not in totals["AL"]["Batter"] or not totals["AL"]["Batter"][constant_year] or constant_year not in totals["NL"]["Batter"] or not totals["NL"]["Batter"][constant_year]):
-                    constant_year = str(int(current_season) - 1)
-
+                
                 if not year in yearly_woba_stats:
                     yearly_woba_stats[year] = {}
                 if not year in yearly_woba_stats:
@@ -44097,7 +44101,7 @@ def calculate_advanced_stats(data, all_rows, player_type, time_frames):
                 yearly_woba_stats[year][team][is_playoffs]["BB"] += row_data.get("BB", 0)
                 yearly_woba_stats[year][team][is_playoffs]["BB_SO"] += row_data.get("BB", 0)
                 yearly_woba_stats[year][team][is_playoffs]["SO"] += row_data.get("SO", 0)
-                yearly_woba_stats[year][team][is_playoffs]["IBB"] += row_data.get("IBB", 0) if (int(constant_year) >= 1955 or is_playoffs) else 0
+                yearly_woba_stats[year][team][is_playoffs]["IBB"] += row_data.get("IBB", 0) if (int(year) >= 1955 or is_playoffs) else 0
                 yearly_woba_stats[year][team][is_playoffs]["HBP"] += row_data.get("HBP", 0)
                 yearly_woba_stats[year][team][is_playoffs]["1B"] += row_data.get("H", 0) - (row_data.get("2B", 0) + row_data.get("3B", 0) + row_data.get("HR", 0))
                 yearly_woba_stats[year][team][is_playoffs]["2B"] += row_data.get("2B", 0)
@@ -44150,12 +44154,13 @@ def calculate_advanced_stats(data, all_rows, player_type, time_frames):
                     season_index += 1
 
         for year in yearly_woba_stats:
-            constant_year = year
-            if constant_year == current_season and season_in_progress and (constant_year not in totals["MLB"]["Batter"] or not totals["MLB"]["Batter"][constant_year] or constant_year not in totals["AL"]["Batter"] or not totals["AL"]["Batter"][constant_year] or constant_year not in totals["NL"]["Batter"] or not totals["NL"]["Batter"][constant_year]):
-                constant_year = str(int(current_season) - 1)
             for team in yearly_woba_stats[year]:
                 for is_playoffs in yearly_woba_stats[year][team]:
                     sleague = yearly_woba_stats[year][team][is_playoffs]["TmLg"]
+                    constant_year = year
+                    if int(current_season) == int(constant_year) and show_title_current_season and (constant_year not in totals["MLB"]["Batter"] or not totals["MLB"]["Batter"][constant_year] or constant_year not in totals[sleague]["Batter"] or not totals[sleague]["Batter"][constant_year]):
+                        constant_year = str(int(current_season) - 1)
+
                     if int(year) < 1913 and (sleague == "AL" or int(year) < 1910):
                         total_k_weight -= yearly_woba_stats[year][team][is_playoffs]["PA"]
                         total_babip_weight -= yearly_woba_stats[year][team][is_playoffs]["AB"] - yearly_woba_stats[year][team][is_playoffs]["SO"] - yearly_woba_stats[year][team][is_playoffs]["HR"]
@@ -44164,13 +44169,13 @@ def calculate_advanced_stats(data, all_rows, player_type, time_frames):
                         total_sb_weight -= yearly_woba_stats[year][team][is_playoffs]["SB"] + yearly_woba_stats[year][team][is_playoffs]["CS"]
                     
         for year in yearly_woba_stats:
-            constant_year = year
-            if constant_year == current_season and season_in_progress and (constant_year not in totals["MLB"]["Batter"] or not totals["MLB"]["Batter"][constant_year] or constant_year not in totals["AL"]["Batter"] or not totals["AL"]["Batter"][constant_year] or constant_year not in totals["NL"]["Batter"] or not totals["NL"]["Batter"][constant_year]):
-                constant_year = str(int(current_season) - 1)
-
             for team in yearly_woba_stats[year]:
                 for is_playoffs in yearly_woba_stats[year][team]:
                     sleague = yearly_woba_stats[year][team][is_playoffs]["TmLg"]
+
+                    constant_year = year
+                    if int(current_season) == int(constant_year) and show_title_current_season and (constant_year not in totals["MLB"]["Batter"] or not totals["MLB"]["Batter"][constant_year] or constant_year not in totals[sleague]["Batter"] or not totals[sleague]["Batter"][constant_year]):
+                        constant_year = str(int(current_season) - 1)
 
                     park_factor = park_factors[constant_year][team]["Basic (5yr)"] if team in park_factors[constant_year] else 100
                     if is_location:
@@ -44522,11 +44527,11 @@ def calculate_advanced_stats(data, all_rows, player_type, time_frames):
             real_yearly_woba_stats = {}
             for year in yearly_woba_stats:
                 real_yearly_woba_stats[year] = {}
-                constant_year = year
-                if constant_year == current_season and season_in_progress and (constant_year not in totals["MLB"]["Batter"] or not totals["MLB"]["Batter"][constant_year] or constant_year not in totals["AL"]["Batter"] or not totals["AL"]["Batter"][constant_year] or constant_year not in totals["NL"]["Batter"] or not totals["NL"]["Batter"][constant_year]):
-                    constant_year = str(int(current_season) - 1)
                 for team in yearly_woba_stats[year]:
                     sleague = yearly_woba_stats[year][team]["TmLg"]
+                    constant_year = year
+                    if int(current_season) == int(constant_year) and show_title_current_season and (constant_year not in totals["MLB"]["Batter"] or not totals["MLB"]["Batter"][constant_year] or constant_year not in totals[sleague]["Batter"] or not totals[sleague]["Batter"][constant_year]):
+                        constant_year = str(int(current_season) - 1)
                     if "HR" in totals[sleague]["Pitcher"][constant_year] and totals[sleague]["Pitcher"][constant_year]["HR"] != None:
                         for key in yearly_woba_stats[year][team]:
                             if key != "TmLg":
@@ -44585,17 +44590,11 @@ def calculate_advanced_stats(data, all_rows, player_type, time_frames):
             if data["IP"]:
                 season_index = 0
                 for year in yearly_woba_stats:
-                    constant_year = year
-                    if constant_year == current_season and season_in_progress and (constant_year not in totals["MLB"]["Batter"] or not totals["MLB"]["Batter"][constant_year] or constant_year not in totals["AL"]["Batter"] or not totals["AL"]["Batter"][constant_year] or constant_year not in totals["NL"]["Batter"] or not totals["NL"]["Batter"][constant_year]):
-                        constant_year = str(int(current_season) - 1)
                     for team in yearly_woba_stats[year]:
                         if not yearly_woba_stats[year][team]["IP"]:
                             nearest_match = {}
                             sub_season_index = 0
                             for sub_year in yearly_woba_stats:
-                                constant_year = sub_year
-                                if constant_year == current_season and season_in_progress and (constant_year not in totals["MLB"]["Batter"] or not totals["MLB"]["Batter"][constant_year] or constant_year not in totals["AL"]["Batter"] or not totals["AL"]["Batter"][constant_year] or constant_year not in totals["NL"]["Batter"] or not totals["NL"]["Batter"][constant_year]):
-                                    constant_year = str(int(current_season) - 1)
                                 for sub_team in yearly_woba_stats[sub_year]:
                                     if yearly_woba_stats[sub_year][sub_team]["IP"]:
                                         if not nearest_match or abs(sub_season_index - season_index) <= abs(nearest_match["index"] - season_index):
@@ -44640,11 +44639,11 @@ def calculate_advanced_stats(data, all_rows, player_type, time_frames):
                     season_index += 1
 
             for year in yearly_woba_stats:
-                constant_year = year
-                if constant_year == current_season and season_in_progress and (constant_year not in totals["MLB"]["Batter"] or not totals["MLB"]["Batter"][constant_year] or constant_year not in totals["AL"]["Batter"] or not totals["AL"]["Batter"][constant_year] or constant_year not in totals["NL"]["Batter"] or not totals["NL"]["Batter"][constant_year]):
-                    constant_year = str(int(current_season) - 1)
                 for team in yearly_woba_stats[year]:
                     sleague = yearly_woba_stats[year][team]["TmLg"]
+                    constant_year = year
+                    if int(current_season) == int(constant_year) and show_title_current_season and (constant_year not in totals["MLB"]["Batter"] or not totals["MLB"]["Batter"][constant_year] or constant_year not in totals[sleague]["Batter"] or not totals[sleague]["Batter"][constant_year]):
+                        constant_year = str(int(current_season) - 1)
                     if int(year) < 1916 or "TBF" not in totals[sleague]["Pitcher"][constant_year] or totals[sleague]["Pitcher"][constant_year]["TBF"] == None:
                         total_wrcplus_weight -= yearly_woba_stats[year][team]["BF"]
                     if "HR" not in totals[sleague]["Pitcher"][constant_year] or totals[sleague]["Pitcher"][constant_year]["HR"] == None:
@@ -44653,12 +44652,12 @@ def calculate_advanced_stats(data, all_rows, player_type, time_frames):
                         total_hr_weight -= yearly_woba_stats[year][team]["IP"]
 
             for year in real_yearly_woba_stats:
-                constant_year = year
-                if constant_year == current_season and season_in_progress and (constant_year not in totals["MLB"]["Batter"] or not totals["MLB"]["Batter"][constant_year] or constant_year not in totals["AL"]["Batter"] or not totals["AL"]["Batter"][constant_year] or constant_year not in totals["NL"]["Batter"] or not totals["NL"]["Batter"][constant_year]):
-                    constant_year = str(int(current_season) - 1)
-
                 if data["IP"] and real_yearly_woba_stats[year]:
-                    if "HR" in totals[sleague]["Pitcher"][constant_year] and totals[sleague]["Pitcher"][constant_year]["HR"] != None:
+                    constant_year = year
+                    if int(current_season) == int(constant_year) and show_title_current_season and (constant_year not in totals["MLB"]["Batter"] or not totals["MLB"]["Batter"][constant_year]):
+                        constant_year = str(int(current_season) - 1)
+
+                    if "HR" in totals["MLB"]["Pitcher"][constant_year] and totals["MLB"]["Pitcher"][constant_year]["HR"] != None:
                         league_innings = totals["MLB"]["Pitcher"][constant_year]["IP"]
                         league_innings_split = str(league_innings).split(".")
                         league_innings = float(league_innings_split[0])
@@ -44679,12 +44678,12 @@ def calculate_advanced_stats(data, all_rows, player_type, time_frames):
                         total_FIP += FIP * (fip_weight / total_fip_weight)
 
             for year in yearly_woba_stats:
-                constant_year = year
-                if constant_year == current_season and season_in_progress and (constant_year not in totals["MLB"]["Batter"] or not totals["MLB"]["Batter"][constant_year] or constant_year not in totals["AL"]["Batter"] or not totals["AL"]["Batter"][constant_year] or constant_year not in totals["NL"]["Batter"] or not totals["NL"]["Batter"][constant_year]):
-                    constant_year = str(int(current_season) - 1)
-
                 for team in yearly_woba_stats[year]:
                     sleague = yearly_woba_stats[year][team]["TmLg"]
+
+                    constant_year = year
+                    if int(current_season) == int(constant_year) and show_title_current_season and (constant_year not in totals["MLB"]["Batter"] or not totals["MLB"]["Batter"][constant_year] or constant_year not in totals[sleague]["Batter"] or not totals[sleague]["Batter"][constant_year]):
+                        constant_year = str(int(current_season) - 1)
                     
                     park_factor = park_factors[constant_year][team]["Basic (5yr)"] if team in park_factors[constant_year] else 100
                     if team in park_factors[constant_year] and "FIP" in park_factors[constant_year][team]:
@@ -46779,16 +46778,7 @@ def handle_table_data(over_header, player_data, player_datas, player_type, heade
                         row["is_playoffs"] = None
 
                     if not is_invalid_stat(header, player_type, row, False)["all_invalid"]:
-                        has_valid_stat = True   
-
-                    # constant_year = str(row["Year"])
-                    # if constant_year == current_season and season_in_progress and (constant_year not in da_totals["MLB"]["Batter"] or not da_totals["MLB"]["Batter"][constant_year] or constant_year not in da_totals["AL"]["Batter"] or not da_totals["AL"]["Batter"][constant_year] or constant_year not in da_totals["NL"]["Batter"] or not da_totals["NL"]["Batter"][constant_year]):
-                    #     constant_year = str(int(current_season) - 1)
-
-                    # if row["Tm"] in da_park_factors[constant_year]:
-                    #     has_any_park_factors = True
-                    # else:
-                    #     has_missing_park_factors = True
+                        has_valid_stat = True
                     
                     if "MLBLiveGame" in row and row["MLBLiveGame"]:
                         has_live_stats = True
