@@ -44174,9 +44174,6 @@ def calculate_advanced_stats(data, all_rows, player_type, time_frames):
                     sleague = yearly_woba_stats[year][team][is_playoffs]["TmLg"]
 
                     constant_year = year
-                    print(int(current_season) == int(constant_year))
-                    print(show_title_current_season)
-                    print(constant_year not in totals["MLB"]["Batter"] or not totals["MLB"]["Batter"][constant_year] or constant_year not in totals[sleague]["Batter"] or not totals[sleague]["Batter"][constant_year])
                     if int(current_season) == int(constant_year) and not show_title_current_season and (constant_year not in totals["MLB"]["Batter"] or not totals["MLB"]["Batter"][constant_year] or constant_year not in totals[sleague]["Batter"] or not totals[sleague]["Batter"][constant_year]):
                         constant_year = str(int(current_season) - 1)
 
