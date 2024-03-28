@@ -18,6 +18,7 @@ from requests_ip_rotator import ApiGateway
 import urllib.parse
 from urllib.parse import urlparse, parse_qs
 import signal
+import threading
 
 baseballref_team_ids_url = "https://www.baseball-reference.com/teams"
 mlb_teams_url_format = "https://statsapi.mlb.com/api/v1/teams/{}/history"
@@ -425,7 +426,7 @@ def url_request(url, timeout=30, retry_403=True):
                 if path != "ProxyStage":
                     replaced = url_parsed._replace(path="/ProxyStage" + url_parsed.path)
                     rebuilt_url = urllib.parse.urlunparse(replaced)
-                    logger.info("#" + str(threading.get_ident()) + "#   " + "Rebuilt URL on 403 and retrying from " + response.url + " to " + rebuilt_url)
+                    print("#" + str(threading.get_ident()) + "#   " + "Rebuilt URL on 403 and retrying from " + response.url + " to " + rebuilt_url)
                     return url_request(rebuilt_url, timeout=timeout, retry_403=False)
                 else:
                     failed_counter += 1
@@ -441,12 +442,12 @@ def url_request(url, timeout=30, retry_403=True):
                 raise
         
         delay_step = 10
-        logger.info("#" + str(threading.get_ident()) + "#   " + "Retrying in " + str(retry_failure_delay) + " seconds to allow request to " + url + " to chill")
+        print("#" + str(threading.get_ident()) + "#   " + "Retrying in " + str(retry_failure_delay) + " seconds to allow request to " + url + " to chill")
         time_to_wait = int(math.ceil(float(retry_failure_delay)/float(delay_step)))
         for i in range(retry_failure_delay, 0, -time_to_wait):
-            logger.info("#" + str(threading.get_ident()) + "#   " + str(i))
+            print("#" + str(threading.get_ident()) + "#   " + str(i))
             time.sleep(time_to_wait)
-        logger.info("#" + str(threading.get_ident()) + "#   " + "0")
+        print("#" + str(threading.get_ident()) + "#   " + "0")
 
 if __name__ == "__main__":
     global gateway

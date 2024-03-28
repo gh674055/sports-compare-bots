@@ -434,12 +434,14 @@ def get_totals(single_year, totals, gateway, log=True):
                         league_totals_url = "https://www.fangraphs.com/api/leaders/major-league/data?age=0&pos={}&stats={}&lg={}&qual=0&season={}&season1={}&month=0&hand=&team=0%2Css&pageitems=30&pagenum=1&ind=0&rost=0&players=0&type={}"
                         league_excluding_pitchers_url = "https://www.fangraphs.com/api/leaders/major-league/data?age=0&pos=np&stats=bat&lg={}&qual=0&season={}&season1={}&month=0&hand=&team=0%2Css&pageitems=30&pagenum=1&ind=0&rost=0&players=0&type=0"
 
-                        data = url_request_json(gateway_session, league_totals_url.format("all", format_strs[key], league_str.lower(), year, year, "0"), log)["data"][0]
-                        totals[league][key][str(year)] = data
+                        data = url_request_json(gateway_session, league_totals_url.format("all", format_strs[key], league_str.lower(), year, year, "0"), log)["data"]
+                        if data:
+                            totals[league][key][str(year)] = data[0]
 
                         if key == "Batter" and league != "MLB":                            
-                            pitcherless_values = url_request_json(gateway_session, league_totals_url.format("np", "bat", league_str.lower(), year, year, "0"), log)["data"][0]
-                            totals[league][key][str(year)]["pitcherless_values"] = pitcherless_values
+                            pitcherless_values = url_request_json(gateway_session, league_totals_url.format("np", "bat", league_str.lower(), year, year, "0"), log)["data"]
+                            if pitcherless_values:
+                                totals[league][key][str(year)]["pitcherless_values"] = pitcherless_values[0]
 
                     count = index + 1
                     percent_complete = 100 * (count / total_years)

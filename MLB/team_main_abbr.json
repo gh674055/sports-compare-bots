@@ -1677,6 +1677,23 @@
             "TBR": "TBD",
             "TEX": "TEX",
             "TOR": "TOR"
+        },
+        "2024": {
+            "BAL": "BAL",
+            "BOS": "BOS",
+            "CHW": "CHW",
+            "CLE": "CLE",
+            "DET": "DET",
+            "HOU": "HOU",
+            "KCR": "KCR",
+            "LAA": "ANA",
+            "MIN": "MIN",
+            "NYY": "NYY",
+            "OAK": "OAK",
+            "SEA": "SEA",
+            "TBR": "TBD",
+            "TEX": "TEX",
+            "TOR": "TOR"
         }
     },
     "ANL": {
@@ -3776,6 +3793,23 @@
             "WSN": "WSN"
         },
         "2023": {
+            "ARI": "ARI",
+            "ATL": "ATL",
+            "CHC": "CHC",
+            "CIN": "CIN",
+            "COL": "COL",
+            "LAD": "LAD",
+            "MIA": "FLA",
+            "MIL": "MIL",
+            "NYM": "NYM",
+            "PHI": "PHI",
+            "PIT": "PIT",
+            "SDP": "SDP",
+            "SFG": "SFG",
+            "STL": "STL",
+            "WSN": "WSN"
+        },
+        "2024": {
             "ARI": "ARI",
             "ATL": "ATL",
             "CHC": "CHC",
