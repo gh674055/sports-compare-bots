@@ -106,6 +106,10 @@ def main():
     global gateway
     gateway = ApiGateway("https://www.baseball-reference.com", verbose=True)
     endpoints = gateway.start(force=True)
+
+    global fangraphs_gateway
+    fangraphs_gateway = ApiGateway("https://www.fangraphs.com", verbose=True)
+    fangraphs_endpoints = fangraphs_gateway.start(force=True)
     
     def exit_gracefully(signum, frame):
         sys.exit(signum)
@@ -154,6 +158,7 @@ def main():
                             executor.submit(mlb.parse_input, gateway, message, False, False)
     finally:
         gateway.shutdown(endpoints)
+        fangraphs_gateway.shutdown(fangraphs_endpoints)
 
 def parse_message(message, reddit):
     """Parses a message"""
