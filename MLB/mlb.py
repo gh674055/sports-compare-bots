@@ -7480,14 +7480,14 @@ def main():
                 if not comment.archived and comment.author and not comment.author.name.lower() in blocked_users:
                     if re.search(r"!\bmlbcompare(?:bot)?\b", comment.body, re.IGNORECASE):
                         logger.info("FOUND COMMENT " + str(comment.id))
-                        parse_input(gateway, comment, False, comment.subreddit.display_name in approved_subreddits)
+                        parse_input(gateway, fangraphs_gateway, comment, False, comment.subreddit.display_name in approved_subreddits)
                 return
             elif opt in ("-" + debug_mode_short, "--" + debug_mode_long):
                 comment_str = arg.strip()
                 comment = FakeComment(comment_str, "-1", "")
                 if re.search(r"!\bmlbcompare(?:bot)?\b", comment.body, re.IGNORECASE):
                     logger.info("FOUND COMMENT " + str(comment.id))
-                    parse_input(gateway, comment, True, False)
+                    parse_input(gateway, fangraphs_gateway, comment, True, False)
                 return
 
         with ThreadPoolExecutor(max_workers=10) as executor:
@@ -7495,13 +7495,13 @@ def main():
                 if not comment.archived and comment.author and not comment.author.name.lower() in blocked_users:
                     if re.search(r"!\bmlbcompare(?:bot)?\b", comment.body, re.IGNORECASE):
                         logger.info("FOUND COMMENT " + str(comment.id))
-                        executor.submit(parse_input, gateway, comment, False, comment.subreddit.display_name in approved_subreddits)
+                        executor.submit(parse_input, gateway, fangraphs_gateway, comment, False, comment.subreddit.display_name in approved_subreddits)
         # with multiprocessing.Pool(processes=10) as pool:
         #     for comment in subreddit.stream.comments():
         #         if not comment.archived and comment.author and not comment.author.name.lower() in blocked_users:
         #             if re.search(r"!\bmlbcompare(?:bot)?\b", comment.body, re.IGNORECASE):
         #                 logger.info("FOUND COMMENT " + str(comment.id))
-        #                 res = pool.apply_async(parse_input, (gateway, comment, False, comment.subreddit.display_name in approved_subreddits))
+        #                 res = pool.apply_async(parse_input, (gateway, fangraphs_gateway, comment, False, comment.subreddit.display_name in approved_subreddits))
     finally:
         gateway.shutdown(endpoints)
         fangraphs_gateway.shutdown(fangraphs_endpoints)
@@ -7528,9 +7528,11 @@ def get_api_gateway(url):
             else:
                 raise
 
-def parse_input(gateway_to_use, comment, debug_mode, is_approved, existing_cur=None, existing_comment=None):
+def parse_input(gateway_to_use, fangraphs_gateway_to_use, comment, debug_mode, is_approved, existing_cur=None, existing_comment=None):
     global gateway
     gateway = gateway_to_use
+    global fangraphs_gateway
+    fangraphs_gateway = fangraphs_gateway_to_use
     try:
         start_time = datetime.datetime.now()
         logger.info("#" + str(threading.get_ident()) + "#   " + "THREAD STARTED FOR " + str(comment.id))
