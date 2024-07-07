@@ -16,7 +16,6 @@ import decimal
 import numexpr
 import threading
 import lxml
-import cchardet
 import ssl
 from requests_ip_rotator import ApiGateway
 import urllib.parse
@@ -5801,7 +5800,7 @@ def url_request(url, timeout=30, retry_403=True):
         try:
             response = gateway_session.get(url, timeout=timeout, headers=request_headers)
             response.raise_for_status()
-            text = response.text
+            text = response.content
 
             bs = BeautifulSoup(text, "lxml")
             if not bs.contents:

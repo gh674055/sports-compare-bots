@@ -68,7 +68,6 @@ import numpy
 import lxml
 import lxml.html
 from lxml import etree
-import cchardet
 import multiprocessing
 import functools
 import get_constant_data
@@ -26903,7 +26902,7 @@ def url_request(url, timeout=30, retry_403=True):
         try:
             response = gateway_session.get(url, timeout=timeout, headers=request_headers)
             response.raise_for_status()
-            text = response.text
+            text = response.content
 
             bs = BeautifulSoup(text, "lxml")
             if not bs.contents:
@@ -26945,7 +26944,7 @@ def url_request_lxml(session, url, timeout=2, retry_403=True):
         try:
             response = session.get(url, timeout=timeout, headers=request_headers)
             response.raise_for_status()
-            bs = lxml.html.document_fromstring(response.text)
+            bs = lxml.html.document_fromstring(response.content)
             if not bs:
                 raise requests.exceptions.HTTPError("Page is empty!")
             return response, bs

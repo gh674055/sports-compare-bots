@@ -105,7 +105,7 @@ def url_request(url, timeout=30):
         try:
             response = requests.get(url, timeout=timeout, headers=request_headers)
             response.raise_for_status()
-            text = response.text
+            text = response.content
 
             bs = BeautifulSoup(text, "lxml")
             if not bs.contents:

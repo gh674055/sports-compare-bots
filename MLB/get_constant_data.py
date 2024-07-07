@@ -10,7 +10,6 @@ import socket
 import getopt
 import datetime
 import threading
-import cchardet
 import ssl
 from requests_ip_rotator import ApiGateway
 import signal
@@ -608,7 +607,7 @@ def url_request(url, gateway, log, timeout=30):
         try:
             response = gateway_session.get(url, timeout=timeout, headers=request_headers)
             response.raise_for_status()
-            text = response.text
+            text = response.content
 
             bs = BeautifulSoup(text, "html5lib")
 
