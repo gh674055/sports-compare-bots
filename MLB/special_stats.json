@@ -1,5 +1,19 @@
 {
     "cycle": {
+        "alvaryo01" : [
+            {
+                "date": "2024-07-21",
+                "is_playoffs": false,
+                "team": "HOU"
+            }
+        ],
+        "langfwy01" : [
+            {
+                "date": "2024-06-30",
+                "is_playoffs": false,
+                "team": "TEX"
+            }
+        ],
         "altuvjo01" : [
             {
                 "date": "2023-08-28",
