@@ -2333,6 +2333,13 @@
         ]
     },
     "no_hit": {
+        "ceasedy01": [
+            {
+                "date": "2024-07-25",
+                "is_playoffs": false,
+                "team": "SDP"
+            }
+        ],
         "blancro01": [
             {
                 "date": "2024-04-01",
