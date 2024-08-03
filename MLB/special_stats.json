@@ -2333,6 +2333,13 @@
         ]
     },
     "no_hit": {
+        "snellbl01": [
+            {
+                "date": "2024-08-02",
+                "is_playoffs": false,
+                "team": "SFG"
+            }
+        ],
         "ceasedy01": [
             {
                 "date": "2024-07-25",
