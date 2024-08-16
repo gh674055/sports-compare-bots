@@ -1,5 +1,12 @@
 {
     "cycle": {
+        "wilsowe01" : [
+            {
+                "date": "2024-08-15",
+                "is_playoffs": false,
+                "team": "PHI"
+            }
+        ],
         "alvaryo01" : [
             {
                 "date": "2024-07-21",
