@@ -5687,15 +5687,13 @@ def get_totals(specific_year, totals):
                     else:
                         column_contents = column.find(text=True)
                         if column_contents:
+                            if column.get("data-stat") == "pass_sacked_yds":
+                                header_value = "SkYds"
                             
-                            else:
-                                if column.get("data-stat") == "pass_sacked_yds":
-                                    header_value = "SkYds"
-                                
-                                if header_value in headers_to_read:
-                                    column_value = float(column_contents)
-                                    ind_year_totals[str(year)][header_value] += column_value
-                                    player_stats["Passing"].update({header_value : column_value})
+                            if header_value in headers_to_read:
+                                column_value = float(column_contents)
+                                ind_year_totals[str(year)][header_value] += column_value
+                                player_stats["Passing"].update({header_value : column_value})
 
                 games_per_season = None
                 for year_game_played in year_games_played:
