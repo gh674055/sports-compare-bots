@@ -5678,7 +5678,7 @@ def get_totals(specific_year, totals):
                 for sub_index, column in enumerate(columns):
                     real_index = sub_index + 1
                     header_value = header_values[real_index]
-                    if header_value == "Tm":
+                    if column.get("data-stat") == "team_name_abbr":
                         link = column.find("a")
                         if link:
                             player_stats["Passing"]["Tm"] = link["href"].split("/")[2].upper()
@@ -5687,13 +5687,15 @@ def get_totals(specific_year, totals):
                     else:
                         column_contents = column.find(text=True)
                         if column_contents:
-                            if column.get("data-stat") == "pass_sacked_yds":
-                                header_value = "SkYds"
                             
-                            if header_value in headers_to_read:
-                                column_value = float(column_contents)
-                                ind_year_totals[str(year)][header_value] += column_value
-                                player_stats["Passing"].update({header_value : column_value})
+                            else:
+                                if column.get("data-stat") == "pass_sacked_yds":
+                                    header_value = "SkYds"
+                                
+                                if header_value in headers_to_read:
+                                    column_value = float(column_contents)
+                                    ind_year_totals[str(year)][header_value] += column_value
+                                    player_stats["Passing"].update({header_value : column_value})
 
                 games_per_season = None
                 for year_game_played in year_games_played:
