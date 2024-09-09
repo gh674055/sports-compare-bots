@@ -34,8 +34,8 @@ request_headers = {
 request_headers= {}
 
 start_year = 1936
-end_year = 2023
-skip_current_year = False
+end_year = 2024
+skip_current_year = True
 
 current_year_standings_url = "https://www.pro-football-reference.com/years/{}/games.htm"
 
