@@ -11969,7 +11969,7 @@ def handle_awards(player_page, player_data, player_type, ind_player_type, time_f
                 if year_str and str(year_str).isdigit():
                     year = int(str(year_str))
                     if int(year) not in years_to_skip:
-                        team_str = str(all_pro_row.find(attrs={"data-stat" : "team"}).find(text=True))
+                        team_str = str(get_team_column(all_pro_row).find(text=True))
                         voter_str = str(all_pro_row.find(attrs={"data-stat" : "voters"}).find(text=True))
                         level_str = all_pro_row.find(attrs={"data-stat" : "level"}).find(text=True)
                         if voter_str == "Associated Press" and not level_str:
@@ -18192,7 +18192,7 @@ def get_latest_player_pos(player_page):
                     if not match and row.get("class") and "partial_table" in row.get("class") and not "spacer" in row.get("class"):
                         match = True
                 if match:
-                    row_team = row.find("td", {"data-stat" : "team"}).find("a")
+                    row_team = get_team_column(row).find("a")
                     if row_team:
                         pos = row.find("td", {"data-stat" : "pos"})
                         if pos:
@@ -18265,7 +18265,7 @@ def get_valid_years(player_page):
                     if not match and row.get("class") and "partial_table" in row.get("class") and not "spacer" in row.get("class"):
                         match = True
                 if match:
-                    row_team = row.find("td", {"data-stat" : "team"}).find("a")
+                    row_team = get_team_column(row).find("a")
                     if row_team:
                         year_row = row.find("th")
                         year_str = year_row.find(text=True)
@@ -18632,7 +18632,7 @@ def get_player_current_team_number(player_page, needs_numbers):
                         if not match and row.get("class") and "partial_table" in row.get("class") and not "spacer" in row.get("class"):
                             match = True
                     if match:
-                        row_team = row.find("td", {"data-stat" : "team"}).find("a")
+                        row_team = get_team_column(row).find("a")
                         if row_team:
                             row_team_str = row_team["title"]
                             year_row = row.find("th")
@@ -18929,10 +18929,21 @@ def parse_row(row, table_name, time_frame, year, is_playoffs, player_type, ind_p
                 included_table = date >= time_frame["time_start"] and date <= time_frame["time_end"]
 
     if included_table:
-        columns = row.find_all("td", recursive=False)
         row_data = {}
+
+        team_column = get_team_column(row)
+        if team_column:
+            if not "Shared" in row_data:
+                row_data["Shared"] = {}
+            row_data["Shared"]["Tm"] = team_column.find(text=True)
+            row_data["Shared"]["RawTm"] = team_column.find("a")["href"].split("/")[2].upper()
+
+        columns = row.find_all("td", recursive=False)
         is_start = False
         for index, column in enumerate(columns):
+            if column == team_column:
+                continue
+
             real_index = index + 1
             over_header_value = over_header_values[real_index]
             header_value = header_values[real_index]
@@ -19320,8 +19331,6 @@ def parse_row(row, table_name, time_frame, year, is_playoffs, player_type, ind_p
                             column_value = float(column_value)
                         elif not column.find("a"):
                             column_value = "TOT"
-                        else:
-                            row_data[over_header_value]["RawTm"] = column.find("a")["href"].split("/")[2].upper()
 
                         if ((table_name == "detailed_rushing_and_receiving" or table_name == "detailed_receiving_and_rushing" or table_name.startswith("advanced_rushing_and_receiving")) and over_header_value != "Shared") or (header_value == "Pass1D" or header_value == "Rush1D" or header_value == "Rec1D"):
                             if not header_value in row_data[over_header_value]:
@@ -19456,7 +19465,7 @@ def handle_gwd(player_data):
                 if match:
                     season_year = int(str(row.find(attrs={"data-stat" : "year_id"}).find(text=True)))
                     date = dateutil.parser.parse(str(row.find("td", {"data-stat" : "game_date"}).find(text=True))).date()
-                    team = str(row.find("td", {"data-stat" : "team"}).find(text=True))
+                    team = str(get_team_column(row).find(text=True))
 
                     comback_row = str(row.find("td", {"data-stat" : "comeback_notes"}).find(text=True))
 
@@ -19522,7 +19531,7 @@ def handle_penalties(player_data, player_type, ind_player_type, is_game_page):
                     if season_year_row:
                         season_year = int(str(season_year_row))
                         date = dateutil.parser.parse(str(row.find("td", {"data-stat" : "game_date"}).find(text=True))).date()
-                        team = str(row.find("td", {"data-stat" : "team"}).find(text=True))
+                        team = str(get_team_column(row).find(text=True))
                         
                         acpt_pen = False
                         pen_yds = 0
@@ -19622,7 +19631,7 @@ def handle_fantasy(player_data, all_rows):
             if standard_table_rows:
                 for row in standard_table_rows:
                     date = dateutil.parser.parse(str(row.find("td", {"data-stat" : "game_date"}).find(text=True))).date()
-                    team = str(row.find("td", {"data-stat" : "team"}).find(text=True))
+                    team = str(get_team_column(row).find(text=True))
 
                     fant_points = row.find("td", {"data-stat" : "fantasy_points"}).find(text=True)
                     if not fant_points:
@@ -22094,7 +22103,7 @@ def get_opponent_schedule(seasons, has_offensive_stats, has_defensive_stats, fan
                     classes = row.get("class")
                     if (not classes or not "thead" in classes) and hasattr(row, "data-row"):
                         if table_name == "team_stats":
-                            team = row.find("td", {"data-stat" : "team"}).find("a")["href"].split("/")[2].upper()
+                            team = get_team_column(row).find("a")["href"].split("/")[2].upper()
                             row_data = team_obj[season_obj["Year"]][team]
 
                             row_data["Points"] = float(str(row.find("td", {"data-stat" : "points"}).find(text=True)))
@@ -22136,7 +22145,7 @@ def get_opponent_schedule(seasons, has_offensive_stats, has_defensive_stats, fan
                             all_pass_td_rate.append(row_data["PassTDRate"])
                             all_rush_td_rate.append(row_data["RushTDRate"])
                         elif table_name == "passing":
-                            team = row.find("td", {"data-stat" : "team"}).find("a")["href"].split("/")[2].upper()
+                            team = get_team_column(row).find("a")["href"].split("/")[2].upper()
                             row_data = team_obj[season_obj["Year"]][team]
 
                             row_data["PassInt"] = int(str(row.find("td", {"data-stat" : "pass_int"}).find(text=True)))
@@ -22158,7 +22167,7 @@ def get_opponent_schedule(seasons, has_offensive_stats, has_defensive_stats, fan
                         else:
                             row_data = {}
                             row_data["Year"] = season_obj["Year"]
-                            tm_text = str(row.find("th", {"data-stat" : "team"}).text).strip().upper()
+                            tm_text = str(get_team_column(row).text).strip().upper()
 
                             if tm_text.endswith("*"):
                                 has_division_winner = True
@@ -22174,7 +22183,7 @@ def get_opponent_schedule(seasons, has_offensive_stats, has_defensive_stats, fan
                                 row_data["DivisionWinner"] = False
                                 row_data["WildCard"] = False
 
-                            row_data["Tm"] = row.find("th", {"data-stat" : "team"}).find("a")["href"].split("/")[2].upper()
+                            row_data["Tm"] = get_team_column(row).find("a")["href"].split("/")[2].upper()
                             row_data["Wins"] = int(str(row.find("td", {"data-stat" : "wins"}).find(text=True)))
                             row_data["Losses"] = int(str(row.find("td", {"data-stat" : "losses"}).find(text=True)))
                             ties_el = row.find("td", {"data-stat" : "ties"})
@@ -22341,7 +22350,7 @@ def get_opponent_schedule(seasons, has_offensive_stats, has_defensive_stats, fan
                     classes = row.get("class")
                     if (not classes or not "thead" in classes) and hasattr(row, "data-row"):
                         if table_name == "passing":
-                            team = row.find("td", {"data-stat" : "team"}).find("a")["href"].split("/")[2].upper()
+                            team = get_team_column(row).find("a")["href"].split("/")[2].upper()
                             row_data = team_obj[season_obj["Year"]][team]
 
                             row_data["PassIntAllowed"] = int(str(row.find("td", {"data-stat" : "pass_int"}).find(text=True)))
@@ -22361,7 +22370,7 @@ def get_opponent_schedule(seasons, has_offensive_stats, has_defensive_stats, fan
                             all_anya_allowed.append(row_data["ANY/AAllowed"])
                             all_passer_rating_allowed.append(row_data["PasserRatingAllowed"])
                         else:
-                            team = row.find("td", {"data-stat" : "team"}).find("a")["href"].split("/")[2].upper()
+                            team = get_team_column(row).find("a")["href"].split("/")[2].upper()
                             if not has_offensive_stats:
                                 row_data = {}
                             else:
@@ -22516,7 +22525,7 @@ def get_opponent_schedule(seasons, has_offensive_stats, has_defensive_stats, fan
                 for row in standard_table_rows:
                     classes = row.get("class")
                     if (not classes or not "thead" in classes) and hasattr(row, "data-row"):
-                        team = row.find("th", {"data-stat" : "team"}).find("a")["href"].split("/")[2].upper()
+                        team = get_team_column(row).find("a")["href"].split("/")[2].upper()
                         if not has_offensive_stats and not has_defensive_stats:
                             row_data = {}
                         else:
@@ -22551,6 +22560,21 @@ def get_opponent_schedule(seasons, has_offensive_stats, has_defensive_stats, fan
                     team_obj[season_obj["Year"]][team]["ReverseFantasyPositionRankRate" + position] = all_fantasy_points_rate[::-1].index(team_obj[season_obj["Year"]][team]["FantasyPositionPointsRate" + position]) + 1
 
     return team_obj
+
+def get_team_column(row):
+    team_row = row.find("th", {"data-stat" : "team"})
+    if team_row:
+        return team_row
+    team_row = row.find("td", {"data-stat" : "team"})
+    if team_row:
+        return team_row
+    team_row = row.find("th", {"data-stat" : "team_name_abbr"})
+    if team_row:
+        return team_row
+    team_row = row.find("td", {"data-stat" : "team_name_abbr"})
+    if team_row:
+        return team_row
+    return None
 
 def calculate_fantasy_formula(stat, formula, data, header):
     for sub_stat in get_constant_data.stat_groups[header]:
