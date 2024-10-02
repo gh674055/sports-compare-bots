@@ -1,0 +1,857 @@
+{
+    "AKR": [
+        {
+            "end_year": 1925,
+            "name": "Akron Pros",
+            "start_year": 1920
+        },
+        {
+            "end_year": 1926,
+            "name": "Akron Indians",
+            "start_year": 1926
+        }
+    ],
+    "ATL": [
+        {
+            "end_year": 2024,
+            "name": "Atlanta Falcons",
+            "start_year": 1966
+        }
+    ],
+    "BBA": [
+        {
+            "end_year": 1946,
+            "name": "Buffalo Bisons",
+            "start_year": 1946
+        },
+        {
+            "end_year": 1949,
+            "name": "Buffalo Bills",
+            "start_year": 1947
+        }
+    ],
+    "BCL": [
+        {
+            "end_year": 1950,
+            "name": "Baltimore Colts",
+            "start_year": 1947
+        }
+    ],
+    "BDA": [
+        {
+            "end_year": 1948,
+            "name": "Brooklyn Dodgers",
+            "start_year": 1946
+        }
+    ],
+    "BFF": [
+        {
+            "end_year": 1923,
+            "name": "Buffalo All-Americans",
+            "start_year": 1920
+        },
+        {
+            "end_year": 1925,
+            "name": "Buffalo Bisons",
+            "start_year": 1924
+        },
+        {
+            "end_year": 1926,
+            "name": "Buffalo Rangers",
+            "start_year": 1926
+        },
+        {
+            "end_year": 1929,
+            "name": "Buffalo Bisons",
+            "start_year": 1927
+        }
+    ],
+    "BKN": [
+        {
+            "end_year": 1943,
+            "name": "Brooklyn Dodgers",
+            "start_year": 1930
+        },
+        {
+            "end_year": 1944,
+            "name": "Brooklyn Tigers",
+            "start_year": 1944
+        }
+    ],
+    "BRL": [
+        {
+            "end_year": 1926,
+            "name": "Brooklyn Lions",
+            "start_year": 1926
+        }
+    ],
+    "BUF": [
+        {
+            "end_year": 2024,
+            "name": "Buffalo Bills",
+            "start_year": 1960
+        }
+    ],
+    "BYK": [
+        {
+            "end_year": 1944,
+            "name": "Boston Yanks",
+            "start_year": 1944
+        },
+        {
+            "end_year": 1945,
+            "name": "Bos/Bkn Yanks/Tigers",
+            "start_year": 1945
+        },
+        {
+            "end_year": 1948,
+            "name": "Boston Yanks",
+            "start_year": 1946
+        }
+    ],
+    "CAR": [
+        {
+            "end_year": 2024,
+            "name": "Carolina Panthers",
+            "start_year": 1995
+        }
+    ],
+    "CBD": [
+        {
+            "end_year": 1926,
+            "name": "Canton Bulldogs",
+            "start_year": 1920
+        }
+    ],
+    "CCL": [
+        {
+            "end_year": 1921,
+            "name": "Cincinnati Celts",
+            "start_year": 1921
+        }
+    ],
+    "CHI": [
+        {
+            "end_year": 1920,
+            "name": "Decatur Staleys",
+            "start_year": 1920
+        },
+        {
+            "end_year": 1921,
+            "name": "Chicago Staleys",
+            "start_year": 1921
+        },
+        {
+            "end_year": 2024,
+            "name": "Chicago Bears",
+            "start_year": 1922
+        }
+    ],
+    "CHT": [
+        {
+            "end_year": 1920,
+            "name": "Chicago Tigers",
+            "start_year": 1920
+        }
+    ],
+    "CIB": [
+        {
+            "end_year": 1923,
+            "name": "Cleveland Indians",
+            "start_year": 1923
+        },
+        {
+            "end_year": 1927,
+            "name": "Cleveland Bulldogs",
+            "start_year": 1924
+        }
+    ],
+    "CIN": [
+        {
+            "end_year": 2024,
+            "name": "Cincinnati Bengals",
+            "start_year": 1968
+        }
+    ],
+    "CLE": [
+        {
+            "end_year": 2024,
+            "name": "Cleveland Browns",
+            "start_year": 1946
+        }
+    ],
+    "CLI": [
+        {
+            "end_year": 1931,
+            "name": "Cleveland Indians",
+            "start_year": 1931
+        }
+    ],
+    "CLT": [
+        {
+            "end_year": 1983,
+            "name": "Baltimore Colts",
+            "start_year": 1953
+        },
+        {
+            "end_year": 2024,
+            "name": "Indianapolis Colts",
+            "start_year": 1984
+        }
+    ],
+    "COL": [
+        {
+            "end_year": 1922,
+            "name": "Columbus Panhandles",
+            "start_year": 1920
+        },
+        {
+            "end_year": 1926,
+            "name": "Columbus Tigers",
+            "start_year": 1923
+        }
+    ],
+    "CRA": [
+        {
+            "end_year": 1948,
+            "name": "Chicago Rockets",
+            "start_year": 1946
+        },
+        {
+            "end_year": 1949,
+            "name": "Chicago Hornets",
+            "start_year": 1949
+        }
+    ],
+    "CRD": [
+        {
+            "end_year": 1943,
+            "name": "Chicago Cardinals",
+            "start_year": 1920
+        },
+        {
+            "end_year": 1944,
+            "name": "Chi/Pit Cards/Steelers",
+            "start_year": 1944
+        },
+        {
+            "end_year": 1959,
+            "name": "Chicago Cardinals",
+            "start_year": 1945
+        },
+        {
+            "end_year": 1987,
+            "name": "St. Louis Cardinals",
+            "start_year": 1960
+        },
+        {
+            "end_year": 1993,
+            "name": "Phoenix Cardinals",
+            "start_year": 1988
+        },
+        {
+            "end_year": 2024,
+            "name": "Arizona Cardinals",
+            "start_year": 1994
+        }
+    ],
+    "CTI": [
+        {
+            "end_year": 1920,
+            "name": "Cleveland Tigers",
+            "start_year": 1920
+        },
+        {
+            "end_year": 1921,
+            "name": "Cleveland Indians",
+            "start_year": 1921
+        }
+    ],
+    "DAL": [
+        {
+            "end_year": 2024,
+            "name": "Dallas Cowboys",
+            "start_year": 1960
+        }
+    ],
+    "DAY": [
+        {
+            "end_year": 1929,
+            "name": "Dayton Triangles",
+            "start_year": 1920
+        }
+    ],
+    "DEN": [
+        {
+            "end_year": 2024,
+            "name": "Denver Broncos",
+            "start_year": 1960
+        }
+    ],
+    "DET": [
+        {
+            "end_year": 1933,
+            "name": "Portsmouth Spartans",
+            "start_year": 1930
+        },
+        {
+            "end_year": 2024,
+            "name": "Detroit Lions",
+            "start_year": 1934
+        }
+    ],
+    "DHR": [
+        {
+            "end_year": 1920,
+            "name": "Detroit Heralds",
+            "start_year": 1920
+        }
+    ],
+    "DPN": [
+        {
+            "end_year": 1926,
+            "name": "Detroit Panthers",
+            "start_year": 1925
+        }
+    ],
+    "DTI": [
+        {
+            "end_year": 1921,
+            "name": "Detroit Tigers",
+            "start_year": 1921
+        }
+    ],
+    "DTX": [
+        {
+            "end_year": 1952,
+            "name": "Dallas Texans",
+            "start_year": 1952
+        }
+    ],
+    "DUL": [
+        {
+            "end_year": 1925,
+            "name": "Duluth Kelleys",
+            "start_year": 1923
+        },
+        {
+            "end_year": 1927,
+            "name": "Duluth Eskimos",
+            "start_year": 1926
+        }
+    ],
+    "DWL": [
+        {
+            "end_year": 1928,
+            "name": "Detroit Wolverines",
+            "start_year": 1928
+        }
+    ],
+    "ECG": [
+        {
+            "end_year": 1922,
+            "name": "Evansville Crimson Giants",
+            "start_year": 1921
+        }
+    ],
+    "FYJ": [
+        {
+            "end_year": 1931,
+            "name": "Frankford Yellow Jackets",
+            "start_year": 1924
+        }
+    ],
+    "GNB": [
+        {
+            "end_year": 2024,
+            "name": "Green Bay Packers",
+            "start_year": 1921
+        }
+    ],
+    "GUN": [
+        {
+            "end_year": 1934,
+            "name": "St. Louis Gunners",
+            "start_year": 1934
+        }
+    ],
+    "HAM": [
+        {
+            "end_year": 1926,
+            "name": "Hammond Pros",
+            "start_year": 1920
+        }
+    ],
+    "HRT": [
+        {
+            "end_year": 1926,
+            "name": "Hartford Blues",
+            "start_year": 1926
+        }
+    ],
+    "HTX": [
+        {
+            "end_year": 2024,
+            "name": "Houston Texans",
+            "start_year": 2002
+        }
+    ],
+    "JAX": [
+        {
+            "end_year": 2024,
+            "name": "Jacksonville Jaguars",
+            "start_year": 1995
+        }
+    ],
+    "KAN": [
+        {
+            "end_year": 1962,
+            "name": "Dallas Texans",
+            "start_year": 1960
+        },
+        {
+            "end_year": 2024,
+            "name": "Kansas City Chiefs",
+            "start_year": 1963
+        }
+    ],
+    "KCB": [
+        {
+            "end_year": 1924,
+            "name": "Kansas City Blues",
+            "start_year": 1924
+        },
+        {
+            "end_year": 1926,
+            "name": "Kansas City Cowboys",
+            "start_year": 1925
+        }
+    ],
+    "KEN": [
+        {
+            "end_year": 1924,
+            "name": "Kenosha Maroons",
+            "start_year": 1924
+        }
+    ],
+    "LAB": [
+        {
+            "end_year": 1926,
+            "name": "Los Angeles Buccaneers",
+            "start_year": 1926
+        }
+    ],
+    "LDA": [
+        {
+            "end_year": 1949,
+            "name": "Los Angeles Dons",
+            "start_year": 1946
+        }
+    ],
+    "LOU": [
+        {
+            "end_year": 1923,
+            "name": "Louisville Brecks",
+            "start_year": 1921
+        },
+        {
+            "end_year": 1926,
+            "name": "Louisville Colonels",
+            "start_year": 1926
+        }
+    ],
+    "MIA": [
+        {
+            "end_year": 2024,
+            "name": "Miami Dolphins",
+            "start_year": 1966
+        }
+    ],
+    "MIL": [
+        {
+            "end_year": 1926,
+            "name": "Milwaukee Badgers",
+            "start_year": 1922
+        }
+    ],
+    "MIN": [
+        {
+            "end_year": 2024,
+            "name": "Minnesota Vikings",
+            "start_year": 1961
+        }
+    ],
+    "MNN": [
+        {
+            "end_year": 1924,
+            "name": "Minneapolis Marines",
+            "start_year": 1921
+        },
+        {
+            "end_year": 1930,
+            "name": "Minneapolis Red Jackets",
+            "start_year": 1929
+        }
+    ],
+    "MSA": [
+        {
+            "end_year": 1946,
+            "name": "Miami Seahawks",
+            "start_year": 1946
+        }
+    ],
+    "MUN": [
+        {
+            "end_year": 1921,
+            "name": "Muncie Flyers",
+            "start_year": 1920
+        }
+    ],
+    "NAA": [
+        {
+            "end_year": 1949,
+            "name": "New York Yankees",
+            "start_year": 1946
+        }
+    ],
+    "NG1": [
+        {
+            "end_year": 1921,
+            "name": "New York Brickley Giants",
+            "start_year": 1921
+        }
+    ],
+    "NOR": [
+        {
+            "end_year": 2024,
+            "name": "New Orleans Saints",
+            "start_year": 1967
+        }
+    ],
+    "NWE": [
+        {
+            "end_year": 1970,
+            "name": "Boston Patriots",
+            "start_year": 1960
+        },
+        {
+            "end_year": 2024,
+            "name": "New England Patriots",
+            "start_year": 1971
+        }
+    ],
+    "NYA": [
+        {
+            "end_year": 1928,
+            "name": "New York Yankees",
+            "start_year": 1927
+        }
+    ],
+    "NYG": [
+        {
+            "end_year": 2024,
+            "name": "New York Giants",
+            "start_year": 1925
+        }
+    ],
+    "NYJ": [
+        {
+            "end_year": 1962,
+            "name": "New York Titans",
+            "start_year": 1960
+        },
+        {
+            "end_year": 2024,
+            "name": "New York Jets",
+            "start_year": 1963
+        }
+    ],
+    "NYY": [
+        {
+            "end_year": 1949,
+            "name": "New York Bulldogs",
+            "start_year": 1949
+        },
+        {
+            "end_year": 1951,
+            "name": "New York Yanks",
+            "start_year": 1950
+        }
+    ],
+    "OOR": [
+        {
+            "end_year": 1923,
+            "name": "Oorang Indians",
+            "start_year": 1922
+        }
+    ],
+    "OTI": [
+        {
+            "end_year": 1996,
+            "name": "Houston Oilers",
+            "start_year": 1960
+        },
+        {
+            "end_year": 1998,
+            "name": "Tennessee Oilers",
+            "start_year": 1997
+        },
+        {
+            "end_year": 2024,
+            "name": "Tennessee Titans",
+            "start_year": 1999
+        }
+    ],
+    "PHI": [
+        {
+            "end_year": 1942,
+            "name": "Philadelphia Eagles",
+            "start_year": 1933
+        },
+        {
+            "end_year": 1943,
+            "name": "Phi/Pit Eagles/Steelers",
+            "start_year": 1943
+        },
+        {
+            "end_year": 2024,
+            "name": "Philadelphia Eagles",
+            "start_year": 1944
+        }
+    ],
+    "PIT": [
+        {
+            "end_year": 1939,
+            "name": "Pittsburgh Pirates",
+            "start_year": 1933
+        },
+        {
+            "end_year": 1942,
+            "name": "Pittsburgh Steelers",
+            "start_year": 1940
+        },
+        {
+            "end_year": 1943,
+            "name": "Phi/Pit Eagles/Steelers*",
+            "start_year": 1943
+        },
+        {
+            "end_year": 1944,
+            "name": "Chi/Pit Cards/Steelers*",
+            "start_year": 1944
+        },
+        {
+            "end_year": 2024,
+            "name": "Pittsburgh Steelers",
+            "start_year": 1945
+        }
+    ],
+    "PRV": [
+        {
+            "end_year": 1931,
+            "name": "Providence Steam Roller",
+            "start_year": 1925
+        }
+    ],
+    "PTB": [
+        {
+            "end_year": 1928,
+            "name": "Pottsville Maroons",
+            "start_year": 1925
+        },
+        {
+            "end_year": 1929,
+            "name": "Boston Bulldogs",
+            "start_year": 1929
+        }
+    ],
+    "RAC": [
+        {
+            "end_year": 1924,
+            "name": "Racine Legion",
+            "start_year": 1922
+        },
+        {
+            "end_year": 1926,
+            "name": "Racine Tornadoes",
+            "start_year": 1926
+        }
+    ],
+    "RAI": [
+        {
+            "end_year": 1981,
+            "name": "Oakland Raiders",
+            "start_year": 1960
+        },
+        {
+            "end_year": 1994,
+            "name": "Los Angeles Raiders",
+            "start_year": 1982
+        },
+        {
+            "end_year": 2019,
+            "name": "Oakland Raiders",
+            "start_year": 1995
+        },
+        {
+            "end_year": 2024,
+            "name": "Las Vegas Raiders",
+            "start_year": 2020
+        }
+    ],
+    "RAM": [
+        {
+            "end_year": 1945,
+            "name": "Cleveland Rams",
+            "start_year": 1937
+        },
+        {
+            "end_year": 1994,
+            "name": "Los Angeles Rams",
+            "start_year": 1946
+        },
+        {
+            "end_year": 2015,
+            "name": "St. Louis Rams",
+            "start_year": 1995
+        },
+        {
+            "end_year": 2024,
+            "name": "Los Angeles Rams",
+            "start_year": 2016
+        }
+    ],
+    "RAV": [
+        {
+            "end_year": 2024,
+            "name": "Baltimore Ravens",
+            "start_year": 1996
+        }
+    ],
+    "RCH": [
+        {
+            "end_year": 1925,
+            "name": "Rochester Jeffersons",
+            "start_year": 1920
+        }
+    ],
+    "RED": [
+        {
+            "end_year": 1934,
+            "name": "Cincinnati Reds",
+            "start_year": 1933
+        }
+    ],
+    "RII": [
+        {
+            "end_year": 1925,
+            "name": "Rock Island Independents",
+            "start_year": 1920
+        }
+    ],
+    "SDG": [
+        {
+            "end_year": 1960,
+            "name": "Los Angeles Chargers",
+            "start_year": 1960
+        },
+        {
+            "end_year": 2016,
+            "name": "San Diego Chargers",
+            "start_year": 1961
+        },
+        {
+            "end_year": 2024,
+            "name": "Los Angeles Chargers",
+            "start_year": 2017
+        }
+    ],
+    "SEA": [
+        {
+            "end_year": 2024,
+            "name": "Seattle Seahawks",
+            "start_year": 1976
+        }
+    ],
+    "SFO": [
+        {
+            "end_year": 2024,
+            "name": "San Francisco 49ers",
+            "start_year": 1946
+        }
+    ],
+    "SIS": [
+        {
+            "end_year": 1932,
+            "name": "Staten Island Stapletons",
+            "start_year": 1929
+        }
+    ],
+    "SLA": [
+        {
+            "end_year": 1923,
+            "name": "St. Louis All-Stars",
+            "start_year": 1923
+        }
+    ],
+    "TAM": [
+        {
+            "end_year": 2024,
+            "name": "Tampa Bay Buccaneers",
+            "start_year": 1976
+        }
+    ],
+    "TOL": [
+        {
+            "end_year": 1923,
+            "name": "Toledo Maroons",
+            "start_year": 1922
+        }
+    ],
+    "TON": [
+        {
+            "end_year": 1921,
+            "name": "Tonawanda Kardex",
+            "start_year": 1921
+        }
+    ],
+    "TOR": [
+        {
+            "end_year": 1929,
+            "name": "Orange Tornadoes",
+            "start_year": 1929
+        },
+        {
+            "end_year": 1930,
+            "name": "Newark Tornadoes",
+            "start_year": 1930
+        }
+    ],
+    "WAS": [
+        {
+            "end_year": 1932,
+            "name": "Boston Braves",
+            "start_year": 1932
+        },
+        {
+            "end_year": 1936,
+            "name": "Boston Redskins",
+            "start_year": 1933
+        },
+        {
+            "end_year": 2019,
+            "name": "Washington Redskins",
+            "start_year": 1937
+        },
+        {
+            "end_year": 2021,
+            "name": "Washington Football Team",
+            "start_year": 2020
+        },
+        {
+            "end_year": 2024,
+            "name": "Washington Commanders",
+            "start_year": 2022
+        }
+    ]
+}

@@ -1049,6 +1049,10 @@ team_venue_history = None
 with open ("team_venue_history.json", "r") as file:
     team_venue_history = json.load(file)
 
+team_name_history = None
+with open ("team_name_history.json", "r") as file:
+    team_name_history = json.load(file)
+
 ssl._create_default_https_context = ssl._create_unverified_context
 
 def main():
@@ -18631,11 +18635,13 @@ def get_player_current_team_number(player_page, needs_numbers):
                             match = re.match(r"^" + table_name + r"\.\d+$", row_id)
                         if not match and row.get("class") and "partial_table" in row.get("class") and not "spacer" in row.get("class"):
                             match = True
+                    
                     if match:
                         row_team = get_team_column(row).find("a")
                         if row_team:
-                            row_team_str = row_team["title"]
+                            row_team_id = row_team["href"].split("/")[2].upper()
                             year_row = row.find("th")
+
                             year_str = year_row.find(text=True)
                             if year_str:
                                 season_year = re.sub("[^0-9]", "", str(year_str).split("-")[0])
@@ -18653,6 +18659,9 @@ def get_player_current_team_number(player_page, needs_numbers):
                                     season_year = int(season_year_str.split(".")[0])
                                 else:
                                     season_year = int(year_row.find("a").get("href").split("/")[2])
+
+                            row_team_str = get_valid_row_team_str(row_team_id, season_year)
+                            
                             if row_team_str not in valid_teams:
                                 valid_teams[row_team_str] = {"years" : set(), "order" : len(valid_teams)}
                             valid_teams[row_team_str]["years"].add(season_year)
@@ -18719,6 +18728,14 @@ def get_player_current_team_number(player_page, needs_numbers):
                         })
 
     return team, team_link, number, numbers_map
+
+def get_valid_row_team_str(row_team_id, year_row):
+    if row_team_id in team_name_history:
+        for team_option in team_name_history[row_team_id]:
+            if year_row >= team_option["start_year"] and year_row <= team_option["end_year"]:
+                return team_option["name"]
+    
+    raise Exception("No name for team " + row_team_id + " and year " + str(year_row))
 
 def get_player_hof(player_page):
     hof_info = player_page.find("ul", id="bling")
