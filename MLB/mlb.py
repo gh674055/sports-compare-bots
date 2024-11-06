@@ -17987,8 +17987,8 @@ def handle_player_data(player_data, time_frame, player_type, player_page, valid_
                         match = True
                         
                     if match:
-                        field_year = int(get_year_column(row)).find(text=True))
-                        field_team = str(get_team_column(row)).find(text=True))
+                        field_year = int(get_year_column(row).find(text=True))
+                        field_team = str(get_team_column(row).find(text=True))
                         if str(row.find("td", {"data-stat" : "pos"}).find(text=True)) == "C":
                             if field_year >= 2003:
                                 if field_year not in calling_catching_years:
@@ -27440,7 +27440,7 @@ def get_player_current_team_number(player_id, player_page):
                         numbers_year_map[row_year] = set()
                     if row_team:
                         row_team_str = row_team["title"]
-                        numbers_year_map[row_year].add(get_team_column(row)).find(text=True))
+                        numbers_year_map[row_year].add(get_team_column(row).find(text=True))
                         if row_team_str not in valid_teams:
                             valid_teams[row_team_str] = {"years" : set(), "order" : len(valid_teams)}
                         valid_teams[row_team_str]["years"].add(row_year)
