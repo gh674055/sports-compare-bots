@@ -17987,8 +17987,8 @@ def handle_player_data(player_data, time_frame, player_type, player_page, valid_
                         match = True
                         
                     if match:
-                        field_year = int(row.find("th", {"data-stat" : "year_ID"}).find(text=True))
-                        field_team = str(row.find("td", {"data-stat" : "team_ID"}).find(text=True))
+                        field_year = int(get_year_column(row)).find(text=True))
+                        field_team = str(get_team_column(row)).find(text=True))
                         if str(row.find("td", {"data-stat" : "pos"}).find(text=True)) == "C":
                             if field_year >= 2003:
                                 if field_year not in calling_catching_years:
@@ -19927,7 +19927,7 @@ def handle_season_only_stats(player_page, field_player_page, player_data, player
                         continue
                 
                     if stat_sum_range and not table_has_teeam_quals:
-                        row_year = row.find("th", {"data-stat" : "year_ID"})
+                        row_year = get_year_column(row)
                         year_to_set = str(row_year.find(text=True)).split("-")[1]
                         row_year.string = year_to_set
 
@@ -20768,7 +20768,7 @@ def handle_awards(player_page, player_data, player_type, time_frame, is_full_car
         if table:
             standard_table_rows = table.find_all("tr")
             for row in standard_table_rows:
-                row_year = row.find("th", {"data-stat" : "year_ID"})
+                row_year = get_year_column(row)
                 if row_year:
                     world_series = row_year.find("span", {"class" : "sr_ring"})
                     if world_series:
@@ -27215,7 +27215,7 @@ def get_valid_years(player_page, player_type, player_id):
                             if row.find("td", {"data-stat" : "pos"}) and str(row.find("td", {"data-stat" : "pos"}).find(text=True)) == "C":
                                 catch_valid_years.add(row_year)
 
-                        row_team = row.find("td", {"data-stat" : "team_ID"}).find("a")
+                        row_team = get_team_column(row).find("a")
                         if row_team:
                             row_abbr = str(row_team.find(text=True)).upper()
                             if row_abbr not in valid_teams_key:
@@ -27276,6 +27276,20 @@ def get_valid_years(player_page, player_type, player_id):
     catch_valid_years.sort()
 
     return total_valid_years, reg_valid_years, playoff_valid_years, game_valid_years, total_game_valid_years, pitch_valid_years, catch_valid_years, valid_teams_key, valid_teams_raw_key, valid_year_teams
+
+def get_team_column(row):
+    column = row.find("td", {"data-stat" : "team_ID"})
+    if column:
+        return column
+    else:
+        return row.find("td", {"data-stat" : "team_name_abbr"})
+
+def get_year_column(row):
+    column = row.find("th", {"data-stat" : "year_ID"})
+    if column:
+        return column
+    else:
+        return row.find("th", {"data-stat" : "year_id"})
 
 def add_valid_playoff_years(valid_years, playoff_data, time_frame):
     if time_frame["playoffs"] == "Only":
@@ -27420,13 +27434,13 @@ def get_player_current_team_number(player_id, player_page):
                 elif row.get("class") and "partial_table" in row.get("class") and not "spacer" in row.get("class"):
                     match = True
                 if match or (table_name.endswith("postseason") and not row.get("class")) and row.parent.name != "thead" and row.parent.name != "tfoot":
-                    row_team = row.find("td", {"data-stat" : "team_ID"}).find("a")
+                    row_team = get_team_column(row).find("a")
                     row_year = int(str(row.find("th").find(text=True)).strip()[:4])
                     if row_year not in numbers_year_map:
                         numbers_year_map[row_year] = set()
                     if row_team:
                         row_team_str = row_team["title"]
-                        numbers_year_map[row_year].add(row.find("td", {"data-stat" : "team_ID"}).find(text=True))
+                        numbers_year_map[row_year].add(get_team_column(row)).find(text=True))
                         if row_team_str not in valid_teams:
                             valid_teams[row_team_str] = {"years" : set(), "order" : len(valid_teams)}
                         valid_teams[row_team_str]["years"].add(row_year)
@@ -45247,7 +45261,7 @@ def calculate_manual_war_7yr(all_rows, player_data, player_type, time_frame, is_
             for i in range(len(standard_table_rows)):
                 row = standard_table_rows[i]
 
-                row_year = row.find("th", {"data-stat" : "year_ID"})
+                row_year = get_year_column(row)
                 year_to_set = str(row_year.find(text=True)).split("-")[1]
                 row_year.string = year_to_set
 
