@@ -17982,7 +17982,7 @@ def handle_player_data(player_data, time_frame, player_type, player_page, valid_
                     match = False
                     row_id = row.get("id")
                     if row_id:
-                        match = re.match(r"^\d+\:standard_fielding$", row_id)
+                        match = re.match(r"^\d+\:players_standard_fielding$", row_id)
                     elif row.get("class") and "partial_table" in row.get("class") and not "spacer" in row.get("class"):
                         match = True
                         
@@ -19543,7 +19543,7 @@ def fix_seasons(all_rows):
                     years.add(row["Year"])
 
 def handle_missing_reg_rows(player_page, player_data, all_rows, player_type, time_frame):
-    table_names = ["batting_standard"] if player_type["da_type"] != "Batter" else ["pitching_standard"]
+    table_names = ["players_standard_batting"] if player_type["da_type"] != "Batter" else ["pitching_standard"]
 
     if time_frame["playoffs"]:
         if time_frame["playoffs"] == "Only":
@@ -19698,7 +19698,7 @@ def handle_season_only_stats(player_page, field_player_page, player_data, player
     if not all_rows:
         return False
         
-    table_names = ["batting_value", "pitching_value", "standard_fielding", "appearances"]
+    table_names = ["batting_value", "pitching_value", "players_standard_fielding", "appearances"]
     split_table_names = ["batting_value", "pitching_value"]
 
     if field_player_page:
@@ -19760,7 +19760,7 @@ def handle_season_only_stats(player_page, field_player_page, player_data, player
     
     if stat_sum_range and (not has_team_quals or is_full_teams or all_teams_unique):
         if player_type["da_type"] != "Batter":
-            split_table_names.append("pitching_start")
+            split_table_names.append("pitching_starter")
             split_table_names.append("pitching_win_probability")
         else:
             split_table_names.append("batting_win_probability")
@@ -19915,15 +19915,15 @@ def handle_season_only_stats(player_page, field_player_page, player_data, player
                     match = True
 
                 if row_id:
-                    if table_name in ["standard_fielding", "advanced_fielding"]:
-                        match = re.match(r"^\d+\:standard_fielding$", row_id)
+                    if table_name in ["players_standard_fielding", "advanced_fielding"]:
+                        match = re.match(r"^\d+\:players_standard_fielding$", row_id)
                     else:
                         match = re.match(r"^" + table_name + r"\.\d+$", row_id)
                 elif row.get("class") and "partial_table" in row.get("class") and not "spacer" in row.get("class"):
                     match = True
 
                 if match:
-                    if table_name in ["standard_fielding", "advanced_fielding"] and str(row.find("td", {"data-stat" : "pos"}).find(text=True)) in positions_to_skip:
+                    if table_name in ["players_standard_fielding", "advanced_fielding"] and str(row.find("td", {"data-stat" : "pos"}).find(text=True)) in positions_to_skip:
                         continue
                 
                     if stat_sum_range and not table_has_teeam_quals:
@@ -20072,8 +20072,8 @@ def handle_season_only_stats(player_page, field_player_page, player_data, player
                 row_id = row.get("id")
                 match = False
                 if row_id:
-                    if table_name in ["standard_fielding", "advanced_fielding"]:
-                        match = re.match(r"^\d+\:standard_fielding$", row_id)
+                    if table_name in ["players_standard_fielding", "advanced_fielding"]:
+                        match = re.match(r"^\d+\:players_standard_fielding$", row_id)
                     else:
                         match = re.match(r"^" + table_name + r"\.\d+$", row_id)
                 elif row.get("class") and "partial_table" in row.get("class") and not "spacer" in row.get("class"):
@@ -20082,7 +20082,7 @@ def handle_season_only_stats(player_page, field_player_page, player_data, player
                     match = True
 
                 if match:
-                    if table_name in ["standard_fielding", "advanced_fielding"] and str(row.find("td", {"data-stat" : "pos"}).find(text=True)) in positions_to_skip:
+                    if table_name in ["players_standard_fielding", "advanced_fielding"] and str(row.find("td", {"data-stat" : "pos"}).find(text=True)) in positions_to_skip:
                         continue
 
                     row_data = parse_row(row, time_frame, False, False, player_type, header_values, previous_headers, table_index, table_name)
@@ -20104,7 +20104,7 @@ def handle_season_only_stats(player_page, field_player_page, player_data, player
                                                 years_have_salary[row_data["Tm"]] = set()
                                             years_have_salary[row_data["Tm"]].add(row_data["Year"])
                                         
-                                        if stat == "Salary" or table_name in ["standard_fielding", "advanced_fielding"]:
+                                        if stat == "Salary" or table_name in ["players_standard_fielding", "advanced_fielding"]:
                                             if stat == "Rdrs/yr":
                                                 drs_year_values.append({
                                                     "pos" : str(row.find("td", {"data-stat" : "pos"}).find(text=True)),
@@ -20151,13 +20151,13 @@ def handle_season_only_stats(player_page, field_player_page, player_data, player
             previous_headers.update(header_values)
     
     if is_full_career_drs:
-        table = player_page.find("table", id="standard_fielding")
+        table = player_page.find("table", id="players_standard_fielding")
         if not table:
             if not comments:
                 comments = player_page.find_all(string=lambda text: isinstance(text, Comment))
             for c in comments:
                 temp_soup = BeautifulSoup(c, "lxml")
-                temp_table = temp_soup.find("table", id="standard_fielding")
+                temp_table = temp_soup.find("table", id="players_standard_fielding")
                 if temp_table:
                     table = temp_table
                     break
@@ -20262,7 +20262,7 @@ def handle_season_only_stats(player_page, field_player_page, player_data, player
                 field_comments = field_player_page.find_all(string=lambda text: isinstance(text, Comment))
             for c in field_comments:
                 temp_soup = BeautifulSoup(c, "lxml")
-                temp_table = temp_soup.find("table", id="standard_fielding")
+                temp_table = temp_soup.find("table", id="players_standard_fielding")
                 if temp_table:
                     table = temp_table
                     break
@@ -20616,7 +20616,7 @@ def handle_awards(player_page, player_data, player_type, time_frame, is_full_car
                                 row["AllMLB:2nd"] = 1
                             break
         
-    table_name = "pitching_standard" if player_type["da_type"] != "Batter" else "batting_standard"
+    table_name = "pitching_standard" if player_type["da_type"] != "Batter" else "players_standard_batting"
     standard_table = player_page.find("table", id=table_name)
     if not standard_table:
         if not comments:
@@ -27175,7 +27175,7 @@ def get_valid_years(player_page, player_type, player_id):
     valid_year_teams = {}
 
     if player_id[len(player_id) - 1].isdigit():
-        table_names = ["batting_standard", "pitching_standard", "standard_fielding", "batting_postseason", "pitching_postseason"]
+        table_names = ["players_standard_batting", "pitching_standard", "players_standard_fielding", "batting_postseason", "pitching_postseason"]
         comments = None
         for table_name in table_names:
             table = player_page.find("table", id=table_name)
@@ -27196,7 +27196,7 @@ def get_valid_years(player_page, player_type, player_id):
                     row_id = row.get("id")
                     match = False
                     if row_id:
-                        if table_name in ["standard_fielding", "advanced_fielding"]:
+                        if table_name in ["players_standard_fielding", "advanced_fielding"]:
                             match = re.match(r"^\d+\:" + table_name + "$", row_id)
                         else:
                             match = re.match(r"^" + table_name + r"\.\d+$", row_id)
@@ -27211,7 +27211,7 @@ def get_valid_years(player_page, player_type, player_id):
                             playoff_valid_years.add(row_year)
                         if table_name == "pitching_standard":
                             pitch_valid_years.add(row_year)
-                        elif table_name == "standard_fielding":
+                        elif table_name == "players_standard_fielding":
                             if row.find("td", {"data-stat" : "pos"}) and str(row.find("td", {"data-stat" : "pos"}).find(text=True)) == "C":
                                 catch_valid_years.add(row_year)
 
@@ -27297,7 +27297,7 @@ def determine_rookie_years(player_page, player_type, rookie_quals):
     else:
         rookie_year = None
 
-    table_names = ["batting_standard", "pitching_standard"]
+    table_names = ["players_standard_batting", "pitching_standard"]
     for table_name in table_names:
         table = player_page.find("table", id=table_name)
 
@@ -27395,7 +27395,7 @@ def get_player_current_team_number(player_id, player_page):
     numbers_year_map = {}
     comments = None
 
-    table_names = ["batting_standard", "pitching_standard", "standard_fielding", "batting_postseason", "pitching_postseason"]
+    table_names = ["players_standard_batting", "pitching_standard", "players_standard_fielding", "batting_postseason", "pitching_postseason"]
     valid_teams = {}
     for table_name in table_names:
         table = player_page.find("table", id=table_name)
@@ -27881,7 +27881,7 @@ def parse_table(player_data, time_frame, year, player_type):
         player_url = playoffs_url_format.format(player_data["id"], format_str)
     elif not year:
         format_str = "bat"
-        table_names = ["batting_standard", "batting_win_probability"]
+        table_names = ["players_standard_batting", "batting_win_probability"]
         if player_type["da_type"] != "Batter":
             table_names = ["pitching_standard", "pitching_starter", "pitching_reliever", "pitching_batting", "pitching_pitches", "pitching_basesituation", "pitching_win_probability"]
             format_str = "pitch"
@@ -28297,7 +28297,7 @@ def parse_row(row, time_frame, year, is_playoffs, player_type, header_values, pr
                     if not is_playoffs:
                         row_data.update({"RawCrGm" : int(column.find(text=True))})
             
-            if table_name == "standard_fielding":
+            if table_name == "players_standard_fielding":
                 if header_value == "SB" or header_value == "CS":
                     header_value = "FldStolenBases" if header_value == "SB" else "FldCaughtStealing"
                 elif header_value == "PO":
