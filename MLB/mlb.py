@@ -27409,7 +27409,7 @@ def get_player_current_team_number(player_id, player_page):
     numbers_year_map = {}
     comments = None
 
-    table_names = ["batting_value", "pitching_value", "players_standard_fielding", "batting_postseason", "pitching_postseason"]
+    table_names = ["batting_value", "pitching_value", "batting_postseason", "pitching_postseason"]
     valid_teams = {}
     for table_name in table_names:
         table = player_page.find("table", id=table_name)
