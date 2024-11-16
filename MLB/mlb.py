@@ -20059,13 +20059,17 @@ def handle_season_only_stats(player_page, field_player_page, player_data, player
                         break
 
         if table:
-            header_columns = table.find("thead").find_all("th")
-
+            header_rows = table.find("thead").find_all("tr")
             header_values = []
-            for header in header_columns:
-                contents = header.find(text=True)
-                if contents:
-                    header_values.append(str(contents))
+            for header_row in header_rows:
+                if not (header_row.get("class") and "over_header" in header_row.get("class")):
+                    header_columns = header_row.find_all("th")
+
+                    for header in header_columns:
+                        contents = header.find(text=True)
+                        if contents:
+                            header_values.append(str(contents))
+                    break
 
             standard_table_rows = table.find("tbody").find_all("tr")
 
@@ -28354,6 +28358,11 @@ def parse_row(row, time_frame, year, is_playoffs, player_type, header_values, pr
 
                     if header_value == "Tm" and re.match(r"^\d+TM$", column_value):
                         column_value = "TOT"
+
+                    if header_value == "Tm" and str(column_value) == "38":
+                        print(column)
+                        print(real_index)
+                        print(header_values)
 
                     row_data.update({header_value : column_value})
 
