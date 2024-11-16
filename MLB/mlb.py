@@ -28349,6 +28349,10 @@ def parse_row(row, time_frame, year, is_playoffs, player_type, header_values, pr
                                     column_value += 1/3
                                 elif column_value_split[1] == "2":
                                     column_value += 2/3
+
+                    if header_value == "Tm" and re.match(r"^\d+TM$", column_value):
+                        column_value = "TOT"
+
                     row_data.update({header_value : column_value})
 
                     if is_start and (header_value == "IP" or header_value == "Pit"):
