@@ -17982,7 +17982,7 @@ def handle_player_data(player_data, time_frame, player_type, player_page, valid_
                     match = False
                     row_id = row.get("id")
                     if row_id:
-                        match = re.match(r"^\d+\:players_standard_fielding$", row_id)
+                        match = re.match(r"^\d+\:standard_fielding$", row_id)
                     elif row.get("class") and "partial_table" in row.get("class") and not "spacer" in row.get("class"):
                         match = True
                         
@@ -19915,8 +19915,8 @@ def handle_season_only_stats(player_page, field_player_page, player_data, player
                     match = True
 
                 if row_id:
-                    if table_name in ["players_standard_fielding", "advanced_fielding"]:
-                        match = re.match(r"^\d+\:players_standard_fielding$", row_id)
+                    if table_name in ["advanced_fielding"]:
+                        match = re.match(r"^\d+\:standard_fielding$", row_id)
                     else:
                         match = re.match(r"^" + table_name + r"\.\d+$", row_id)
                 elif row.get("class") and "partial_table" in row.get("class") and not "spacer" in row.get("class"):
@@ -20271,6 +20271,7 @@ def handle_season_only_stats(player_page, field_player_page, player_data, player
                                         all_rows[len(all_rows) - 1]["WAR7yr"] = float(war_7yr_strong)
                                         all_rows[len(all_rows) - 1]["JAWS"] = float(jaws_strong)
     
+
     if player_data["catch_valid_years"] and (is_full_career_calling_catch or is_full_career_framing_catch):
         table = field_player_page.find("table", id="advanced_fielding")
         if not table:
@@ -20283,6 +20284,7 @@ def handle_season_only_stats(player_page, field_player_page, player_data, player
                     table = temp_table
                     break
 
+        print(table)
         if table:
             total_rows = table.find("tfoot").find_all("tr")
             if total_rows:
@@ -27212,12 +27214,16 @@ def get_valid_years(player_page, player_type, player_id):
                     row_id = row.get("id")
                     match = False
                     if row_id:
-                        if table_name in ["players_standard_fielding", "advanced_fielding"]:
-                            match = re.match(r"^\d+\:" + table_name + "$", row_id)
+                        if table_name in ["advanced_fielding"]:
+                            match = re.match(r"^\d+\:standard_fielding$", row_id)
                         else:
                             match = re.match(r"^" + table_name + r"\.\d+$", row_id)
                     elif row.get("class") and "partial_table" in row.get("class") and not "spacer" in row.get("class"):
                         match = True
+
+                    if table_name == "players_standard_fielding":
+                        print(match)
+
                     if match or (table_name.endswith("postseason") and not row.get("class")) and row.parent.name != "thead" and row.parent.name != "tfoot":
                         row_year = int(str(re.sub("[^0-9]", "", row.find("th").find(text=True))))
                         total_valid_years.add(row_year)
@@ -27228,6 +27234,7 @@ def get_valid_years(player_page, player_type, player_id):
                         if table_name == "pitching_standard":
                             pitch_valid_years.add(row_year)
                         elif table_name == "players_standard_fielding":
+                            print(row.find("td", {"data-stat" : "f_position"}))
                             if row.find("td", {"data-stat" : "f_position"}) and str(row.find("td", {"data-stat" : "f_position"}).find(text=True)) == "C":
                                 catch_valid_years.add(row_year)
 
