@@ -19927,7 +19927,7 @@ def handle_season_only_stats(player_page, field_player_page, player_data, player
                         pos_column_str = "pos" if table_name == "advanced_fielding" else "f_position"
                         pos_column = row.find("td", {"data-stat" : pos_column_str})
                         if not pos_column:
-                            continue:
+                            continue
                         elif str(pos_column.find(text=True)) in positions_to_skip:
                             continue
                 
@@ -20097,7 +20097,7 @@ def handle_season_only_stats(player_page, field_player_page, player_data, player
                         pos_column_str = "pos" if table_name == "advanced_fielding" else "f_position"
                         pos_column = row.find("td", {"data-stat" : pos_column_str})
                         if not pos_column:
-                            continue:
+                            continue
                         elif str(pos_column.find(text=True)) in positions_to_skip:
                             continue
 
