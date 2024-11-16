@@ -45274,7 +45274,7 @@ def calculate_manual_war_7yr(all_rows, player_data, player_type, time_frame, is_
 
                 row_data = parse_row(row, time_frame, False, False, player_type, header_values, previous_headers, table_index, table_names[table_index])
                 
-                if not row_data or not "Tm" in row_data:
+                if not row_data:
                     continue
                 
                 if stat_sum_range:
