@@ -19589,7 +19589,7 @@ def handle_missing_reg_rows(player_page, player_data, all_rows, player_type, tim
                 if match or (table_name.endswith("postseason") and not row.get("class")) and row.parent.name != "thead" and row.parent.name != "tfoot":
                     row_data = parse_row(row, time_frame, None, False, player_type, header_values, previous_headers, 0, table_name)
                     
-                    if not row_data:
+                    if not row_data or not "Tm" in row_data:
                         continue
                 
                     if row_data["Tm"] != "TOT":
@@ -19629,7 +19629,7 @@ def handle_missing_playoff_rows(player_page, player_data, valid_years, all_rows,
                 if not row.get("class") and row.parent.name != "thead" and row.parent.name != "tfoot":
                     row_data = parse_row(row, time_frame, None, False, player_type, header_values, previous_headers, table_index, table_name)
                     
-                    if not row_data:
+                    if not row_data or not "Tm" in row_data:
                         continue
                 
                     if not perform_qualifier(player_data, player_type, row_data, time_frame, all_rows):
@@ -19933,7 +19933,7 @@ def handle_season_only_stats(player_page, field_player_page, player_data, player
 
                     row_data = parse_row(row, time_frame, False, False, player_type, header_values, previous_headers, table_index, split_table_names[table_index])
                     
-                    if not row_data:
+                    if not row_data or not "Tm" in row_data:
                         continue
 
                     if (stat_sum_range and not table_has_teeam_quals) or row_data["Tm"] != "TOT":
@@ -20087,7 +20087,7 @@ def handle_season_only_stats(player_page, field_player_page, player_data, player
 
                     row_data = parse_row(row, time_frame, False, False, player_type, header_values, previous_headers, table_index, table_name)
                     
-                    if not row_data:
+                    if not row_data or not "Tm" in row_data:
                         continue
                     
                     if row_data["Tm"] != "TOT":
@@ -27962,7 +27962,7 @@ def parse_table(player_data, time_frame, year, player_type):
                 if match:
                     row_data = parse_row(row, time_frame, year, is_playoffs, player_type, header_values, previous_headers, table_index, table_name)
                     
-                    if not row_data:
+                    if not row_data or not "Tm" in row_data:
                         continue
 
                     if row_data["Tm"] != "TOT":
@@ -45274,7 +45274,7 @@ def calculate_manual_war_7yr(all_rows, player_data, player_type, time_frame, is_
 
                 row_data = parse_row(row, time_frame, False, False, player_type, header_values, previous_headers, table_index, table_names[table_index])
                 
-                if not row_data:
+                if not row_data or not "Tm" in row_data:
                     continue
                 
                 if stat_sum_range:
