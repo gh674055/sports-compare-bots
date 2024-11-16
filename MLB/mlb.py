@@ -19933,7 +19933,9 @@ def handle_season_only_stats(player_page, field_player_page, player_data, player
 
                     row_data = parse_row(row, time_frame, False, False, player_type, header_values, previous_headers, table_index, split_table_names[table_index])
                     
-                    if not row_data or not "Tm" in row_data:
+                    if not row_data:
+                        continue
+                    elif not (stat_sum_range and not table_has_teeam_quals) and not "Tm" in row_data:
                         continue
 
                     if (stat_sum_range and not table_has_teeam_quals) or row_data["Tm"] != "TOT":
@@ -20072,8 +20074,8 @@ def handle_season_only_stats(player_page, field_player_page, player_data, player
                 row_id = row.get("id")
                 match = False
                 if row_id:
-                    if table_name in ["players_standard_fielding", "advanced_fielding"]:
-                        match = re.match(r"^\d+\:players_standard_fielding$", row_id)
+                    if table_name in ["advanced_fielding"]:
+                        match = re.match(r"^\d+\:standard_fielding$", row_id)
                     else:
                         match = re.match(r"^" + table_name + r"\.\d+$", row_id)
                 elif row.get("class") and "partial_table" in row.get("class") and not "spacer" in row.get("class"):
