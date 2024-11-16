@@ -20182,10 +20182,10 @@ def handle_season_only_stats(player_page, field_player_page, player_data, player
             total_rows = table.find("tfoot").find_all("tr")
             if total_rows:
                 total_row = total_rows[len(total_rows) - 1]
-                drs_col = total_row.find("td", {"data-stat" : "bis_runs_total"})
+                drs_col = total_row.find("td", {"data-stat" : "f_drs_total"})
                 if not drs_col:
                     total_row = total_rows[len(total_rows) - 2]
-                    drs_col = total_row.find("td", {"data-stat" : "bis_runs_total"})
+                    drs_col = total_row.find("td", {"data-stat" : "f_drs_total"})
                 if drs_col:
                     drs_value = drs_col.find(text=True)
                     if drs_value:
@@ -20194,10 +20194,10 @@ def handle_season_only_stats(player_page, field_player_page, player_data, player
                                 row["Rdrs"] = 0
 
                         all_rows[len(all_rows) - 1]["Rdrs"] = int(str(drs_value))
-                drs_col = total_row.find("td", {"data-stat" : "bis_runs_total_per_season"})
+                drs_col = total_row.find("td", {"data-stat" : "f_drs_total_per_year"})
                 if not drs_col:
                     total_row = total_rows[len(total_rows) - 2]
-                    drs_col = total_row.find("td", {"data-stat" : "bis_runs_total_per_season"})
+                    drs_col = total_row.find("td", {"data-stat" : "f_drs_total_per_year"})
                 if drs_col:
                     drs_value = drs_col.find(text=True)
                     if drs_value:
