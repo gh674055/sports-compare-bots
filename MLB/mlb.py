@@ -17989,7 +17989,7 @@ def handle_player_data(player_data, time_frame, player_type, player_page, valid_
                     if match:
                         field_year = int(get_year_column(row).find(text=True))
                         field_team = str(get_team_column(row).find(text=True))
-                        if str(row.find("td", {"data-stat" : "pos"}).find(text=True)) == "C":
+                        if row.find("td", {"data-stat" : "pos"}) and str(row.find("td", {"data-stat" : "pos"}).find(text=True)) == "C":
                             if field_year >= 2003:
                                 if field_year not in calling_catching_years:
                                     calling_catching_years[field_year] = set()
@@ -19923,8 +19923,13 @@ def handle_season_only_stats(player_page, field_player_page, player_data, player
                     match = True
 
                 if match:
-                    if table_name in ["players_standard_fielding", "advanced_fielding"] and str(row.find("td", {"data-stat" : ("pos" if table_name == "advanced_fielding" else "f_position")}).find(text=True)) in positions_to_skip:
-                        continue
+                    if table_name in ["players_standard_fielding", "advanced_fielding"]:
+                        pos_column_str = "pos" if table_name == "advanced_fielding" else "f_position"
+                        pos_column = row.find("td", {"data-stat" : pos_column_str})
+                        if not pos_column:
+                            continue:
+                        elif str(pos_column.find(text=True)) in positions_to_skip:
+                            continue
                 
                     if stat_sum_range and not table_has_teeam_quals:
                         row_year = get_year_column(row)
@@ -20088,8 +20093,13 @@ def handle_season_only_stats(player_page, field_player_page, player_data, player
                     match = True
 
                 if match:
-                    if table_name in ["players_standard_fielding", "advanced_fielding"] and str(row.find("td", {"data-stat" : ("pos" if table_name == "advanced_fielding" else "f_position")}).find(text=True)) in positions_to_skip:
-                        continue
+                    if table_name in ["players_standard_fielding", "advanced_fielding"]:
+                        pos_column_str = "pos" if table_name == "advanced_fielding" else "f_position"
+                        pos_column = row.find("td", {"data-stat" : pos_column_str})
+                        if not pos_column:
+                            continue:
+                        elif str(pos_column.find(text=True)) in positions_to_skip:
+                            continue
 
                     row_data = parse_row(row, time_frame, False, False, player_type, header_values, previous_headers, table_index, table_name)
                     
