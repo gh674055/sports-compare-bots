@@ -19923,7 +19923,7 @@ def handle_season_only_stats(player_page, field_player_page, player_data, player
                     match = True
 
                 if match:
-                    if table_name in ["players_standard_fielding", "advanced_fielding"] and str(row.find("td", {"data-stat" : "pos"}).find(text=True)) in positions_to_skip:
+                    if table_name in ["players_standard_fielding", "advanced_fielding"] and str(row.find("td", {"data-stat" : ("pos" if table_name == "advanced_fielding" else "f_position")}).find(text=True)) in positions_to_skip:
                         continue
                 
                     if stat_sum_range and not table_has_teeam_quals:
@@ -20084,7 +20084,7 @@ def handle_season_only_stats(player_page, field_player_page, player_data, player
                     match = True
 
                 if match:
-                    if table_name in ["players_standard_fielding", "advanced_fielding"] and str(row.find("td", {"data-stat" : "pos"}).find(text=True)) in positions_to_skip:
+                    if table_name in ["players_standard_fielding", "advanced_fielding"] and str(row.find("td", {"data-stat" : ("pos" if table_name == "advanced_fielding" else "f_position")}).find(text=True)) in positions_to_skip:
                         continue
 
                     row_data = parse_row(row, time_frame, False, False, player_type, header_values, previous_headers, table_index, table_name)
@@ -20109,7 +20109,7 @@ def handle_season_only_stats(player_page, field_player_page, player_data, player
                                         if stat == "Salary" or table_name in ["players_standard_fielding", "advanced_fielding"]:
                                             if stat == "Rdrs/yr":
                                                 drs_year_values.append({
-                                                    "pos" : str(row.find("td", {"data-stat" : "pos"}).find(text=True)),
+                                                    "pos" : str(row.find("td", {"data-stat" : ("pos" if table_name == "advanced_fielding" else "f_position")}).find(text=True)),
                                                     "val" : row_data[stat]
                                                 })
                                                 continue
@@ -27214,7 +27214,7 @@ def get_valid_years(player_page, player_type, player_id):
                         if table_name == "pitching_standard":
                             pitch_valid_years.add(row_year)
                         elif table_name == "players_standard_fielding":
-                            if row.find("td", {"data-stat" : "pos"}) and str(row.find("td", {"data-stat" : "pos"}).find(text=True)) == "C":
+                            if row.find("td", {"data-stat" : "f_position"}) and str(row.find("td", {"data-stat" : "f_position"}).find(text=True)) == "C":
                                 catch_valid_years.add(row_year)
 
                         row_team = get_team_column(row).find("a")
