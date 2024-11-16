@@ -28348,6 +28348,8 @@ def parse_row(row, time_frame, year, is_playoffs, player_type, header_values, pr
             
             if header_value == "Team":
                 header_value = "Tm"
+            elif header_value == "GIDP":
+                header_value = "GDP"
 
             if header_value == "WAR" and table_name in ["players_standard_batting", "pitching_standard"]:
                 continue
