@@ -20284,7 +20284,6 @@ def handle_season_only_stats(player_page, field_player_page, player_data, player
                     table = temp_table
                     break
 
-        print(table)
         if table:
             total_rows = table.find("tfoot").find_all("tr")
             if total_rows:
@@ -27221,9 +27220,6 @@ def get_valid_years(player_page, player_type, player_id):
                     elif row.get("class") and "partial_table" in row.get("class") and not "spacer" in row.get("class"):
                         match = True
 
-                    if table_name == "players_standard_fielding":
-                        print(match)
-
                     if match or (table_name.endswith("postseason") and not row.get("class")) and row.parent.name != "thead" and row.parent.name != "tfoot":
                         row_year = int(str(re.sub("[^0-9]", "", row.find("th").find(text=True))))
                         total_valid_years.add(row_year)
@@ -27234,7 +27230,6 @@ def get_valid_years(player_page, player_type, player_id):
                         if table_name == "pitching_standard":
                             pitch_valid_years.add(row_year)
                         elif table_name == "players_standard_fielding":
-                            print(row.find("td", {"data-stat" : "f_position"}))
                             if row.find("td", {"data-stat" : "f_position"}) and str(row.find("td", {"data-stat" : "f_position"}).find(text=True)) == "C":
                                 catch_valid_years.add(row_year)
 
