@@ -20338,7 +20338,7 @@ def handle_season_only_stats(player_page, field_player_page, player_data, player
                             if is_full_current_year and is_pitching_jaws:
                                 all_rows[len(all_rows) - 1]["WAR7yr"] = float(str(war_value))
                                 all_rows[len(all_rows) - 1]["JAWS"] = float(str(war_value))
-    
+
     if stat_sum_range and (not has_team_quals or is_full_teams or all_teams_unique):
         total_salary_stats = {}
         total_infl_salary_stats = {}
@@ -28348,6 +28348,9 @@ def parse_row(row, time_frame, year, is_playoffs, player_type, header_values, pr
             
             if header_value == "Team":
                 header_value = "Tm"
+
+            if header_value == "WAR" and table_name in ["players_standard_batting", "pitching_standard"]:
+                continue
             
             if header_value in headers[player_type["da_type"]] and ((not header_value in formulas[player_type["da_type"]] and not header_value in advanced_stats["Batter"] and not header_value in advanced_stats["Pitcher"]) or header_value == "Rdrs/yr") and (not header_value in previous_headers or header_value == "Tm" or header_value == "Salary"):
                 column_value = column.find(text=True)
