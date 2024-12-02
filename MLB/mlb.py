@@ -19543,7 +19543,7 @@ def fix_seasons(all_rows):
                     years.add(row["Year"])
 
 def handle_missing_reg_rows(player_page, player_data, all_rows, player_type, time_frame):
-    table_names = ["players_standard_batting"] if player_type["da_type"] != "Batter" else ["pitching_standard"]
+    table_names = ["players_standard_batting"] if player_type["da_type"] != "Batter" else ["players_standard_pitching"]
 
     if time_frame["playoffs"]:
         if time_frame["playoffs"] == "Only":
@@ -19698,8 +19698,8 @@ def handle_season_only_stats(player_page, field_player_page, player_data, player
     if not all_rows:
         return False
         
-    table_names = ["batting_value", "pitching_value", "players_standard_fielding", "appearances"]
-    split_table_names = ["batting_value", "pitching_value"]
+    table_names = ["players_value_batting", "players_value_pitching", "players_standard_fielding", "appearances"]
+    split_table_names = ["players_value_batting", "players_value_pitching"]
 
     if field_player_page:
         table_names.append("advanced_fielding")
@@ -19874,7 +19874,7 @@ def handle_season_only_stats(player_page, field_player_page, player_data, player
                             header_values.append(str(contents))
 
                     standard_table_rows = table.find("tbody").find_all("tr")
-            elif is_single_team and table_name in ("batting_value", "pitching_value"):
+            elif is_single_team and table_name in ("players_value_batting", "players_value_pitching"):
                 len_team = len(teams_map[team_franchise])
                 last_year = max(teams_map[team_franchise].keys())
                 single_team = teams_map[team_franchise][last_year]
@@ -20109,7 +20109,7 @@ def handle_season_only_stats(player_page, field_player_page, player_data, player
                     if row_data["Tm"] != "TOT":
                         for pot_row in reversed(all_rows):
                             if pot_row["Year"] == row_data["Year"] and pot_row["Tm"] == row_data["Tm"]:
-                                if table_name == "pitching_value":
+                                if table_name == "players_value_pitching":
                                     handle_season_only_stats = True
                                 for stat in row_data:
                                     if stat in headers[player_type["da_type"]] and "type" in headers[player_type["da_type"]][stat] and headers[player_type["da_type"]][stat]["type"].startswith("Defense"):
@@ -20208,13 +20208,13 @@ def handle_season_only_stats(player_page, field_player_page, player_data, player
         all_rows[len(all_rows) - 1]["Rdrs/yr"] = int(drs_year_values[0]["val"])
 
     if player_type["da_type"] == "Batter" and is_full_career:
-        table = player_page.find("table", id="batting_value")
+        table = player_page.find("table", id="players_value_batting")
         if not table:
             if not comments:
                 comments = player_page.find_all(string=lambda text: isinstance(text, Comment))
             for c in comments:
                 temp_soup = BeautifulSoup(c, "lxml")
-                temp_table = temp_soup.find("table", id="batting_value")
+                temp_table = temp_soup.find("table", id="players_value_batting")
                 if temp_table:
                     table = temp_table
                     break
@@ -20627,7 +20627,7 @@ def handle_awards(player_page, player_data, player_type, time_frame, is_full_car
                                 row["AllMLB:2nd"] = 1
                             break
         
-    table_name = "pitching_standard" if player_type["da_type"] != "Batter" else "players_standard_batting"
+    table_name = "players_standard_pitching" if player_type["da_type"] != "Batter" else "players_standard_batting"
     standard_table = player_page.find("table", id=table_name)
     if not standard_table:
         if not comments:
@@ -27186,7 +27186,7 @@ def get_valid_years(player_page, player_type, player_id):
     valid_year_teams = {}
 
     if player_id[len(player_id) - 1].isdigit():
-        table_names = ["players_standard_batting", "pitching_standard", "players_standard_fielding", "batting_postseason", "pitching_postseason"]
+        table_names = ["players_standard_batting", "players_standard_pitching", "players_standard_fielding", "batting_postseason", "pitching_postseason"]
         comments = None
         for table_name in table_names:
             table = player_page.find("table", id=table_name)
@@ -27221,7 +27221,7 @@ def get_valid_years(player_page, player_type, player_id):
                             reg_valid_years.add(row_year)
                         else:
                             playoff_valid_years.add(row_year)
-                        if table_name == "pitching_standard":
+                        if table_name == "players_standard_pitching":
                             pitch_valid_years.add(row_year)
                         elif table_name == "players_standard_fielding":
                             if row.find("td", {"data-stat" : "f_position"}) and str(row.find("td", {"data-stat" : "f_position"}).find(text=True)) == "C":
@@ -27296,6 +27296,13 @@ def get_team_column(row):
     else:
         return row.find("td", {"data-stat" : "team_name_abbr"})
 
+def get_league_column(row):
+    column = row.find("td", {"data-stat" : "lg_ID"})
+    if column:
+        return column
+    else:
+        return row.find("td", {"data-stat" : "comp_name_abbr"})
+
 def get_year_column(row):
     column = row.find("th", {"data-stat" : "year_ID"})
     if column:
@@ -27323,7 +27330,7 @@ def determine_rookie_years(player_page, player_type, rookie_quals):
     else:
         rookie_year = None
 
-    table_names = ["players_standard_batting", "pitching_standard"]
+    table_names = ["players_standard_batting", "players_standard_pitching"]
     for table_name in table_names:
         table = player_page.find("table", id=table_name)
 
@@ -27421,7 +27428,7 @@ def get_player_current_team_number(player_id, player_page):
     numbers_year_map = {}
     comments = None
 
-    table_names = ["batting_value", "pitching_value", "batting_postseason", "pitching_postseason"]
+    table_names = ["players_value_batting", "players_value_pitching", "batting_postseason", "pitching_postseason"]
     valid_teams = {}
     for table_name in table_names:
         table = player_page.find("table", id=table_name)
@@ -27451,12 +27458,16 @@ def get_player_current_team_number(player_id, player_page):
                     if row_year not in numbers_year_map:
                         numbers_year_map[row_year] = set()
                     if row_team:
-                        row_team_str = row_team["title"]
+                        row_league = get_league_column(row).find("a")
+                        row_team_abbr_str = str(row_team.find(text=True))
+                        row_lg_abbr_str = str(row_league.find(text=True))
+                        row_team_str = get_team_name(row_year, row_team_abbr_str, row_lg_abbr_str)
+                        
                         numbers_year_map[row_year].add(get_team_column(row).find(text=True))
                         if row_team_str not in valid_teams:
                             valid_teams[row_team_str] = {"years" : set(), "order" : len(valid_teams)}
                         valid_teams[row_team_str]["years"].add(row_year)
-                        numbers_team_map[row_team_str] = str(row_team.find(text=True))
+                        numbers_team_map[row_team_str] = row_team_abbr_str
 
     team_info = player_page.find("div", {"id" : "meta"}).find("strong", text="Team:")
     number_info = player_page.find("div", {"class" : "uni_holder"})
@@ -27555,6 +27566,14 @@ def get_player_current_team_number(player_id, player_page):
             numbers_year_map[current_season].add(team_abbr)
 
     return team, number, numbers_map, {v: k for k, v in numbers_team_map.items()}, numbers_year_map
+
+def get_team_name(the_year, the_abbr, the_league):
+    for parsed_team_name in team_name_info:
+        if the_abbr in team_name_info[parsed_team_name]:
+            if the_year in team_name_info[parsed_team_name][the_abbr][the_league]:
+                return parsed_team_name
+    
+    raise Exception("Unknown team abbreviation: " + the_abbr + " for year " + the_year + " and league " + the_league)
 
 def get_player_hof(player_page):
     hof_info = player_page.find("ul", id="bling")
@@ -27909,7 +27928,7 @@ def parse_table(player_data, time_frame, year, player_type):
         format_str = "bat"
         table_names = ["players_standard_batting", "batting_win_probability"]
         if player_type["da_type"] != "Batter":
-            table_names = ["pitching_standard", "pitching_starter", "pitching_reliever", "pitching_batting", "pitching_pitches", "pitching_basesituation", "pitching_win_probability"]
+            table_names = ["players_standard_pitching", "pitching_starter", "pitching_reliever", "pitching_batting", "pitching_pitches", "pitching_basesituation", "pitching_win_probability"]
             format_str = "pitch"
         player_url = advanced_page_url_format.format(player_data["id"][0], player_data["id"], format_str)
     else:
@@ -28330,10 +28349,10 @@ def parse_row(row, time_frame, year, is_playoffs, player_type, header_values, pr
                     if hasattr(column, "data-stat") and column["data-stat"] == "PO":
                         header_value = "PutOut"
             
-            if table_name == "pitching_value":
+            if table_name == "players_value_pitching":
                 if header_value == "WAA" or header_value == "WAR":
                     header_value += "Pitch"
-            elif table_name == "batting_value":
+            elif table_name == "players_value_batting":
                 if header_value == "WAA" or header_value == "WAR":
                     header_value += "Pos"
             elif table_name == "appearances":
@@ -28345,7 +28364,7 @@ def parse_row(row, time_frame, year, is_playoffs, player_type, header_values, pr
             elif header_value == "GIDP":
                 header_value = "GDP"
 
-            if header_value == "WAR" and table_name in ["players_standard_batting", "pitching_standard"]:
+            if header_value == "WAR" and table_name in ["players_standard_batting", "players_standard_pitching"]:
                 continue
             
             if header_value in headers[player_type["da_type"]] and ((not header_value in formulas[player_type["da_type"]] and not header_value in advanced_stats["Batter"] and not header_value in advanced_stats["Pitcher"]) or header_value == "Rdrs/yr") and (not header_value in previous_headers or header_value == "Tm" or header_value == "Salary"):
@@ -45248,7 +45267,7 @@ def calculate_manual_war_7yr(all_rows, player_data, player_type, time_frame, is_
 
     stat_sum_range = ",".join(years_to_sum) if len(years_to_sum) > 1 else list(years_to_sum)[0] + "-" + list(years_to_sum)[0]
 
-    table_names = ["batting_value", "pitching_value"] if is_pitching_jaws else ["batting_value"]
+    table_names = ["players_value_batting", "players_value_pitching"] if is_pitching_jaws else ["players_value_batting"]
 
     comments = None
     previous_headers = set()
