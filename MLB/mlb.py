@@ -27570,8 +27570,9 @@ def get_player_current_team_number(player_id, player_page):
 def get_team_name(the_year, the_abbr, the_league):
     for parsed_team_name in team_name_info:
         if the_abbr in team_name_info[parsed_team_name]:
-            if the_year in team_name_info[parsed_team_name][the_abbr][the_league]:
-                return parsed_team_name
+            if the_league in team_name_info[parsed_team_name][the_abbr]:
+                if the_year in team_name_info[parsed_team_name][the_abbr][the_league]:
+                    return parsed_team_name
     
     raise Exception("Unknown team abbreviation: " + the_abbr + " for year " + the_year + " and league " + the_league)
 
