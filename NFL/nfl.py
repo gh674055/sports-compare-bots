@@ -18322,7 +18322,7 @@ def get_valid_years(player_page):
                 year_elements = bottom_nav_element.find_next_sibling().find_all("a")
                 for year_element in year_elements:
                     row_year = str(year_element.find(text=True))
-                    if row_year != "Career" and row_year != "Postseason" and row_year != "Player Game Finder":
+                    if row_year.isdigit():
                         row_year = int(row_year)
                         game_valid_years.add(row_year)
 
