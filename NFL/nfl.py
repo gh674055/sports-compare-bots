@@ -11525,13 +11525,13 @@ def handle_season_only_stats(is_game_page, is_game, player_page, player_data, pl
             table_names = []
     else:
         if the_over_header == "Advanced/Passing":
-            table_names = ["advanced_air_yards", "advanced_accuracy", "advanced_pressure", "detailed_rushing_and_receiving", "detailed_receiving_and_rushing"]
+            table_names = ["passing_advanced_soc", "adv_rushing_and_receiving", "adv_receiving_and_rushing"]
         elif the_over_header == "Advanced/Rushing":
-            table_names = ["detailed_rushing_and_receiving", "detailed_receiving_and_rushing"]
+            table_names = ["adv_rushing_and_receiving", "adv_receiving_and_rushing"]
         elif the_over_header == "Advanced/Receiving":
-            table_names = ["detailed_rushing_and_receiving", "detailed_receiving_and_rushing"]
+            table_names = ["adv_rushing_and_receiving", "adv_receiving_and_rushing"]
         elif the_over_header.startswith("Advanced/Defense"):
-            table_names = ["detailed_defense"]
+            table_names = ["adv_defense"]
         else:
             table_names = []
         
@@ -11604,7 +11604,7 @@ def handle_season_only_stats(is_game_page, is_game, player_page, player_data, pl
                         match = True
                     elif table_name.startswith("advanced_") and (row_id.startswith("stats.") or row_id.startswith("stats_playoffs.")):
                         match = True
-                elif ((table_name == "advanced_air_yards" or table_name == "advanced_accuracy" or table_name == "advanced_pressure") or table_name.startswith("detailed_")) and row.get("class") and ("full_table" in row.get("class") or ("partial_table" in row.get("class") and not "spacer" in row.get("class"))):
+                elif ((table_name == "passing_advanced_soc") or table_name.startswith("adv_")) and row.get("class") and ("full_table" in row.get("class") or ("partial_table" in row.get("class") and not "spacer" in row.get("class"))):
                     match = True
 
                 if match:
@@ -11805,7 +11805,7 @@ def handle_season_only_stats(is_game_page, is_game, player_page, player_data, pl
                                 match = True
                             elif table_name.startswith("advanced_") and (row_id.startswith("stats.") or row_id.startswith("stats_playoffs.")):
                                 match = True
-                        elif ((table_name == "advanced_air_yards" or table_name == "advanced_accuracy" or table_name == "advanced_pressure") or table_name.startswith("detailed_")) and row.get("class") and ("full_table" in row.get("class") or ("partial_table" in row.get("class") and not "spacer" in row.get("class"))):
+                        elif ((table_name == "passing_advanced_soc") or table_name.startswith("adv_")) and row.get("class") and ("full_table" in row.get("class") or ("partial_table" in row.get("class") and not "spacer" in row.get("class"))):
                             match = True
 
                         if match:
@@ -18953,7 +18953,11 @@ def parse_row(row, table_name, time_frame, year, is_playoffs, player_type, ind_p
             if not "Shared" in row_data:
                 row_data["Shared"] = {}
             row_data["Shared"]["Tm"] = team_column.find(text=True)
-            row_data["Shared"]["RawTm"] = team_column.find("a")["href"].split("/")[2].upper()
+            team_link = team_column.find("a")
+            if not team_link:
+                return
+
+            row_data["Shared"]["RawTm"] = team_link["href"].split("/")[2].upper()
 
         columns = row.find_all("td", recursive=False)
         is_start = False
@@ -19132,7 +19136,7 @@ def parse_row(row, table_name, time_frame, year, is_playoffs, player_type, ind_p
                 
             if over_header_value == "Rushing":
                 if header_value == "Rush":
-                    if not table_name.startswith("detailed_") and not table_name.startswith("advanced_"):
+                    if not table_name.startswith("adv_") and not table_name.startswith("advanced_"):
                         header_value = "Att"
                 elif header_value == "Lng":
                     header_value = "LngRush"
@@ -19144,7 +19148,7 @@ def parse_row(row, table_name, time_frame, year, is_playoffs, player_type, ind_p
                     if table_name.startswith("advanced_"):
                         header_value = "Rush"
 
-            elif not table_name.startswith("detailed_") and not table_name.startswith("advanced_") and (over_header_value == "Def Interceptions" or over_header_value == "Fumbles" or over_header_value == "Def. Snaps" or over_header_value == "Tackles"):
+            elif not table_name.startswith("adv_") and not table_name.startswith("advanced_") and (over_header_value == "Def Interceptions" or over_header_value == "Fumbles" or over_header_value == "Def. Snaps" or over_header_value == "Tackles"):
                 if header_value == "TD":
                     if over_header_value == "Fumbles":
                         header_value = "FR TD"
@@ -19207,7 +19211,7 @@ def parse_row(row, table_name, time_frame, year, is_playoffs, player_type, ind_p
                 over_header_value = "Advanced/Kicking"
             elif over_header_value == "Punting" and header_value == "Lng":
                 over_header_value = "Advanced/Punting"
-            elif table_name.startswith("detailed_") or table_name.startswith("advanced_") and (over_header_value == "Pass Coverage" or over_header_value == "Pass Rush" or over_header_value == "Tackles" or header_value == "Sk" or header_value == "Prss"):
+            elif table_name.startswith("adv_") or table_name.startswith("advanced_") and (over_header_value == "Pass Coverage" or over_header_value == "Pass Rush" or over_header_value == "Tackles" or header_value == "Sk" or header_value == "Prss"):
                 over_header_value = "Advanced/Defense"
                 if header_value == "Tgt":
                     header_value = "Tgt"
@@ -19239,7 +19243,7 @@ def parse_row(row, table_name, time_frame, year, is_playoffs, player_type, ind_p
 
             if over_header_value != "Shared":
                 if header_value == "1D":
-                    if table_name.startswith("detailed_"):
+                    if table_name.startswith("adv_"):
                         continue
                     if over_header_value == "Passing":
                         header_value = "Pass1D"
@@ -19252,7 +19256,7 @@ def parse_row(row, table_name, time_frame, year, is_playoffs, player_type, ind_p
                     else:
                         continue
                 elif header_value == "Yds":
-                    if column.get("data-stat") == "rec_yds" and (table_name.startswith("advanced_") or table_name.startswith("detailed_")):
+                    if column.get("data-stat") == "rec_yds" and (table_name.startswith("advanced_") or table_name.startswith("adv_")):
                         header_value = "RecYds"
                         if advanced_over_header:
                             over_header_value = advanced_over_header
@@ -19267,14 +19271,14 @@ def parse_row(row, table_name, time_frame, year, is_playoffs, player_type, ind_p
                         over_header_value = advanced_over_header
                     else:
                         continue
-                elif (table_name == "advanced_air_yards" or table_name == "advanced_accuracy" or table_name == "advanced_pressure") or table_name.startswith("advanced_passing"):
+                elif (table_name == "passing_advanced_soc") or table_name.startswith("advanced_passing"):
                     if header_value == "CAY" or header_value == "IAY" or header_value == "YAC":
                         header_value += "RAW"
                     if advanced_over_header:
                         over_header_value = advanced_over_header
                     else:
                         continue
-                elif table_name.startswith("detailed_") or (table_name.startswith("advanced_") and not table_name.startswith("advanced_passing")):
+                elif table_name.startswith("adv_") or (table_name.startswith("advanced_") and not table_name.startswith("advanced_passing")):
                     if over_header_value == "Rushing":
                         if header_value == "YBC":
                             header_value = "YBContact"
@@ -19349,7 +19353,7 @@ def parse_row(row, table_name, time_frame, year, is_playoffs, player_type, ind_p
                         elif not column.find("a"):
                             column_value = "TOT"
 
-                        if ((table_name == "detailed_rushing_and_receiving" or table_name == "detailed_receiving_and_rushing" or table_name.startswith("advanced_rushing_and_receiving")) and over_header_value != "Shared") or (header_value == "Pass1D" or header_value == "Rush1D" or header_value == "Rec1D"):
+                        if ((table_name == "adv_rushing_and_receiving" or table_name == "adv_receiving_and_rushing" or table_name.startswith("advanced_rushing_and_receiving")) and over_header_value != "Shared") or (header_value == "Pass1D" or header_value == "Rush1D" or header_value == "Rec1D"):
                             if not header_value in row_data[over_header_value]:
                                 row_data[over_header_value][header_value] = 0.0
                             row_data[over_header_value][header_value] += column_value
