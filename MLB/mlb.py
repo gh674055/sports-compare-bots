@@ -20236,10 +20236,10 @@ def handle_season_only_stats(player_page, field_player_page, player_data, player
             total_rows = table.find("tfoot").find_all("tr")
             if total_rows:
                 total_row = total_rows[1]
-                all_rows[len(all_rows) - 1]["WAAPos/162"] = float(total_row.find("td", {"data-stat" : "WAA"}).find(text=True))
-                all_rows[len(all_rows) - 1]["oWAR/162"] = float(total_row.find("td", {"data-stat" : "WAR_off"}).find(text=True))
-                all_rows[len(all_rows) - 1]["dWAR/162"] = float(total_row.find("td", {"data-stat" : "WAR_def"}).find(text=True))
-                all_rows[len(all_rows) - 1]["WARPos/162"] = float(total_row.find("td", {"data-stat" : "WAR"}).find(text=True))
+                all_rows[len(all_rows) - 1]["WAAPos/162"] = float(total_row.find("td", {"data-stat" : "b_waa"}).find(text=True))
+                all_rows[len(all_rows) - 1]["oWAR/162"] = float(total_row.find("td", {"data-stat" : "b_war_off"}).find(text=True))
+                all_rows[len(all_rows) - 1]["dWAR/162"] = float(total_row.find("td", {"data-stat" : "b_war_def"}).find(text=True))
+                all_rows[len(all_rows) - 1]["WARPos/162"] = float(total_row.find("td", {"data-stat" : "b_war"}).find(text=True))
     
     if is_full_career and player_data["player_jaws_position"]:
         allowed_car_war = False
