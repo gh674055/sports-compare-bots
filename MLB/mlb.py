@@ -19780,8 +19780,15 @@ def handle_season_only_stats(player_page, field_player_page, player_data, player
 
         player_page_to_use = player_page
         if stat_sum_range and not table_has_teeam_quals:
+
+            split_table_name = table_name
+            if split_table_name == "players_value_batting":
+                split_table_name = "batting_value"
+            elif split_table_name == "players_value_pitching":
+                split_table_name = "pitching_value"
+
             try:
-                response, player_page_to_use = url_request(sum_stats_format.format(player_data["id"], table_name, stat_sum_range))
+                response, player_page_to_use = url_request(sum_stats_format.format(player_data["id"], split_table_name, stat_sum_range))
             except requests.exceptions.HTTPError:
                 raise
 
@@ -19844,8 +19851,14 @@ def handle_season_only_stats(player_page, field_player_page, player_data, player
                         new_row.insert(0, new_tag)
                     standard_table_rows = [team_row for index, team_row in enumerate(standard_table_rows) if index not in rows_to_remove]
                 else:
+                    split_table_name = table_name
+                    if split_table_name == "players_value_batting":
+                        split_table_name = "batting_value"
+                    elif split_table_name == "players_value_pitching":
+                        split_table_name = "pitching_value"
+
                     try:
-                        response, player_page_to_use = url_request(sum_stats_format.format(player_data["id"], table_name, stat_sum_range))
+                        response, player_page_to_use = url_request(sum_stats_format.format(player_data["id"], split_table_name, stat_sum_range))
                     except requests.exceptions.HTTPError:
                         raise
 
@@ -20654,9 +20667,9 @@ def handle_awards(player_page, player_data, player_type, time_frame, is_full_car
                 if int(year) not in years_to_skip:
                     if year < current_season or show_title_current_season:
                         if player_type["da_type"] != "Batter":
-                            era_row = row.find("td", {"data-stat" : "earned_run_avg"})
-                            wins_row = row.find("td", {"data-stat" : "W"})
-                            strikeouts_row = row.find("td", {"data-stat" : "SO"})
+                            era_row = row.find("td", {"data-stat" : "p_earned_run_avg"})
+                            wins_row = row.find("td", {"data-stat" : "p_w"})
+                            strikeouts_row = row.find("td", {"data-stat" : "p_so"})
 
                             if era_row and era_row.find("strong"):
                                 is_trip_crown = wins_row and wins_row.find("strong") and strikeouts_row and strikeouts_row.find("strong")
@@ -20671,9 +20684,9 @@ def handle_awards(player_page, player_data, player_type, time_frame, is_full_car
                                             row["TripCrown"] += 1
                                         break
                         else:
-                            avg_row = row.find("td", {"data-stat" : "batting_avg"})
-                            hrs_row = row.find("td", {"data-stat" : "HR"})
-                            rbis_row = row.find("td", {"data-stat" : "RBI"})
+                            avg_row = row.find("td", {"data-stat" : "b_batting_avg"})
+                            hrs_row = row.find("td", {"data-stat" : "b_hr"})
+                            rbis_row = row.find("td", {"data-stat" : "b_rbi"})
 
                             if avg_row and avg_row.find("strong"):
                                 is_trip_crown = hrs_row and hrs_row.find("strong") and rbis_row and rbis_row.find("strong")
@@ -28105,8 +28118,14 @@ def handle_prob_data(player_type, all_season_ranges, player_data, all_rows, is_p
         else:
             stat_sum_range = ",".join([str(season_range) for season_range in season_ranges]) if len(season_ranges) > 1 else str(season_ranges[0]) + "-" + str(season_ranges[0])
 
+        split_table_name = the_table_name
+        if split_table_name == "players_value_batting":
+            split_table_name = "batting_value"
+        elif split_table_name == "players_value_pitching":
+            split_table_name = "pitching_value"
+
         try:
-            response, player_page = url_request(sum_stats_format.format(player_data["id"], the_table_name, stat_sum_range))
+            response, player_page = url_request(sum_stats_format.format(player_data["id"], split_table_name, stat_sum_range))
         except requests.exceptions.HTTPError:
             raise
 
@@ -28156,8 +28175,14 @@ def handle_season_prob_data(player_type, all_season_ranges, player_data, all_row
     
     stat_sum_range = ",".join([str(season_range) for season_range in all_season_ranges]) if len(all_season_ranges) > 1 else str(all_season_ranges[0]) + "-" + str(all_season_ranges[0])
 
+    split_table_name = the_table_name
+    if split_table_name == "players_value_batting":
+        split_table_name = "batting_value"
+    elif split_table_name == "players_value_pitching":
+        split_table_name = "pitching_value"
+
     try:
-        response, player_page = url_request(sum_stats_format.format(player_data["id"], the_table_name, stat_sum_range))
+        response, player_page = url_request(sum_stats_format.format(player_data["id"], split_table_name, stat_sum_range))
     except requests.exceptions.HTTPError:
         raise
 
@@ -45273,8 +45298,14 @@ def calculate_manual_war_7yr(all_rows, player_data, player_type, time_frame, is_
     comments = None
     previous_headers = set()
     for table_index, table_name in enumerate(table_names):
+        split_table_name = table_name
+        if split_table_name == "players_value_batting":
+            split_table_name = "batting_value"
+        elif split_table_name == "players_value_pitching":
+            split_table_name = "pitching_value"
+
         try:
-            response, player_page = url_request(sum_stats_format.format(player_data["id"], table_name, stat_sum_range))
+            response, player_page = url_request(sum_stats_format.format(player_data["id"], split_table_name, stat_sum_range))
         except requests.exceptions.HTTPError:
             raise
 
