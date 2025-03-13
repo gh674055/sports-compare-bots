@@ -11553,7 +11553,7 @@ def handle_season_only_stats(is_game_page, is_game, player_page, player_data, pl
         if table:
             over_header_values = []
             over_header_columns = []
-            if table_name != "passing" and table_name != "scoring" and table_name != "games_played":
+            if table_name != "passing" and table_name != "games_played":
                 over_header_columns = table.find("thead").find("tr", {"class" : "over_header"})
                 for over_header_column in over_header_columns.find_all("th"):
                     colspan = over_header_column.get("colspan")
@@ -11582,7 +11582,7 @@ def handle_season_only_stats(is_game_page, is_game, player_page, player_data, pl
                 else:
                     header_values.append(None)
             
-            if (table_name == "passing" or table_name == "scoring" or table_name == "games_played"):
+            if (table_name == "passing" or table_name == "games_played"):
                 for x in range(len(header_values)):
                     if table_name == "passing":
                         over_header_values.append("Passing")
@@ -11754,7 +11754,7 @@ def handle_season_only_stats(is_game_page, is_game, player_page, player_data, pl
                 if table:
                     over_header_values = []
                     over_header_columns = []
-                    if table_name != "passing" and table_name != "scoring" and table_name != "games_played":
+                    if table_name != "passing" and table_name != "games_played":
                         over_header_columns = table.find("thead").find("tr", {"class" : "over_header"})
                         for over_header_column in over_header_columns.find_all("th"):
                             colspan = over_header_column.get("colspan")
@@ -11783,7 +11783,7 @@ def handle_season_only_stats(is_game_page, is_game, player_page, player_data, pl
                         else:
                             header_values.append(None)
                     
-                    if (table_name == "passing" or table_name == "scoring" or table_name == "games_played"):
+                    if (table_name == "passing" or table_name == "games_played"):
                         for x in range(len(header_values)):
                             if table_name == "passing":
                                 over_header_values.append("Passing")
@@ -18791,7 +18791,7 @@ def parse_table(player_page, player_data, time_frame, year, player_type, ind_pla
         if table:
             over_header_values = []
             over_header_columns = []
-            if (table_name != "passing" and table_name != "scoring" and table_name != "games_played") or (year or is_playoffs):
+            if (table_name != "passing" and table_name != "games_played") or (year or is_playoffs):
                 over_header_columns = table.find("thead").find("tr", {"class" : "over_header"})
                 for over_header_column in over_header_columns.find_all("th"):
                     colspan = over_header_column.get("colspan")
@@ -18820,7 +18820,7 @@ def parse_table(player_page, player_data, time_frame, year, player_type, ind_pla
                 else:
                     header_values.append(None)
             
-            if (table_name == "passing" or table_name == "scoring" or table_name == "games_played") and not (year or is_playoffs):
+            if (table_name == "passing" or table_name == "games_played") and not (year or is_playoffs):
                 for x in range(len(header_values)):
                     if table_name == "passing":
                         over_header_values.append("Passing")

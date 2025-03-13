@@ -27933,7 +27933,7 @@ def parse_table(player_data, time_frame, year, player_type):
     
     if is_playoffs:
         format_str = "b"
-        table_names = ["batting_gamelogs_post"]
+        table_names = ["players_standard_batting"]
         if player_type["da_type"] != "Batter":
             table_names = ["pitching_gamelogs_post"]
             format_str = "p"
@@ -27947,7 +27947,7 @@ def parse_table(player_data, time_frame, year, player_type):
         player_url = advanced_page_url_format.format(player_data["id"][0], player_data["id"], format_str)
     else:
         format_str = "b"
-        table_names = ["batting_gamelogs"]
+        table_names = ["players_standard_batting"]
         if player_type["da_type"] != "Batter":
             table_names = ["pitching_gamelogs"]
             format_str = "p"
@@ -28099,7 +28099,7 @@ def fix_prob_data(all_rows, player_data, player_type, all_teams_unique):
             handle_season_prob_data(player_type, full_season_ranges, player_data, all_rows)
         
 def handle_prob_data(player_type, all_season_ranges, player_data, all_rows, is_post):
-    the_table_name = "batting_gamelogs" if player_type["da_type"] == "Batter" else "pitching_gamelogs"
+    the_table_name = "players_standard_batting" if player_type["da_type"] == "Batter" else "pitching_gamelogs"
     if is_post:
         the_table_name += "_post"
 
@@ -28235,9 +28235,20 @@ def parse_row(row, time_frame, year, is_playoffs, player_type, header_values, pr
             included_table = row_year >= time_frame["time_start"] and row_year <= time_frame["time_end"]
     else:
         date_row = row.find("td", {"data-stat" : "date_game"})
-        date_row_arr = date_row.get("csk").split(".")
-        time_int = int(date_row_arr[1][-1])
-        date_time = dateutil.parser.parse(date_row_arr[0]).replace(hour=time_int)
+        if date_row:
+            date_row_arr = date_row.get("csk").split(".")
+            time_int = int(date_row_arr[1][-1])
+            date_time = dateutil.parser.parse(date_row_arr[0]).replace(hour=time_int)
+        else:
+            date_row = row.find("td", {"data-stat" : "date"})
+            date_text = str(date_row.find(text=True))
+            match = re.match(r"^(\d{4}-\d{2}-\d{2})( \((\d)\))?$", date_text)
+            date_str = match.group(1)
+            time_int = 0
+            if match.group(3):
+                time_int = int(match.group(3))
+            date_time = dateutil.parser.parse(date_str).replace(hour=time_int)
+
         date = date_time.date()
         if is_playoffs:
             included_table = True
@@ -28334,7 +28345,7 @@ def parse_row(row, time_frame, year, is_playoffs, player_type, header_values, pr
                         if "GF" in result:
                             is_finished = True
                     continue
-                elif hasattr(column, "data-stat") and column["data-stat"] == "date_game":
+                elif hasattr(column, "data-stat") and (column["data-stat"] == "date_game" or column["data-stat"] == "date"):
                     result = column.find("a").get("href")
                     row_data.update({"GameLink" : result})
                     row_data.update({"GameID" : result})
@@ -28355,7 +28366,7 @@ def parse_row(row, time_frame, year, is_playoffs, player_type, header_values, pr
                         if len(result_split) == 2:
                             scores = result_split[1].strip().split("-")
                             row_data.update({"Team Score" : int(scores[0])})
-                            row_data.update({"Opponent Score" : int(scores[1])})
+                            row_data.update({"Opponent Score" : int(scores[1].split(" ", 1)[0])})
                         else:
                             row_data.update({"Team Score" : None})
                             row_data.update({"Opponent Score" : None})
