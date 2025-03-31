@@ -131,7 +131,7 @@ use_threads_for_game = False
 display_progress_as_edit = True
 ignore_approved = True
 
-current_season = 2024
+current_season = 2025
 show_title_current_season = False
 season_in_progress = True
 
