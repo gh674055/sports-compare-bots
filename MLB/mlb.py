@@ -27587,7 +27587,7 @@ def get_team_name(the_year, the_abbr, the_league):
                 if the_year in team_name_info[parsed_team_name][the_abbr][the_league]:
                     return parsed_team_name
     
-    raise Exception("Unknown team abbreviation: " + the_abbr + " for year " + the_year + " and league " + the_league)
+    raise Exception("Unknown team abbreviation: " + the_abbr + " for year " + str(the_year) + " and league " + the_league)
 
 def get_player_hof(player_page):
     hof_info = player_page.find("ul", id="bling")
