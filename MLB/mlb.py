@@ -28285,7 +28285,7 @@ def parse_row(row, time_frame, year, is_playoffs, player_type, header_values, pr
                 game_number = int(game_number_str[1])
                 row_data.update({"RoundGame" : game_number})
                 continue
-            elif hasattr(column, "data-stat") and column["data-stat"] == "game_location":
+            elif hasattr(column, "data-stat") and column["data-stat"] in ["team_homeORaway", "game_location"]:
                 home = True
                 text = column.find(text=True)
                 if text:
