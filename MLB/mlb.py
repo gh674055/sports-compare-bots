@@ -28276,10 +28276,10 @@ def parse_row(row, time_frame, year, is_playoffs, player_type, header_values, pr
             header_value = header_values[real_index]
 
             if header_value == "Series" and is_playoffs:
-                series_str = str(column.text)
+                series_str = str(column.text).lower()
                 game_number_str = series_str.split("g")
 
-                series = game_number_str[0].strip()[-2:].lower()
+                series = game_number_str[0].strip()[-2:]
                 row_data.update({"Round" : series})
                 
                 game_number = int(game_number_str[1])
