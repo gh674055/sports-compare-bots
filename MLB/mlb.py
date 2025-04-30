@@ -28296,13 +28296,13 @@ def parse_row(row, time_frame, year, is_playoffs, player_type, header_values, pr
                         home = False
                 row_data.update({"Location" : home})
                 continue
-            elif hasattr(column, "data-stat") and column["data-stat"] == "opp_ID" and (year or is_playoffs):
+            elif hasattr(column, "data-stat") and column["data-stat"] in ["opp_ID", "opp_name_abbr"] and (year or is_playoffs):
                 opponent = str(column.find("a").find(text=True)).lower()
                 row_data.update({"Opponent" : opponent})
                 continue
 
             if (year or is_playoffs):
-                if hasattr(column, "data-stat") and column["data-stat"] == "player_game_result" and player_type["da_type"] != "Batter":
+                if hasattr(column, "data-stat") and column["data-stat"] in ["player_game_result", "game_result"] and player_type["da_type"] != "Batter":
                     result = column.find(text=True)
                     if result:
                         result = str(result.strip())
@@ -28327,7 +28327,7 @@ def parse_row(row, time_frame, year, is_playoffs, player_type, header_values, pr
                         elif result == "H":
                             row_data.update({"Hold" : 1})
                     continue
-                elif hasattr(column, "data-stat") and column["data-stat"] == "player_game_span":
+                elif hasattr(column, "data-stat") and column["data-stat"] in ["player_game_span", "b_player_game_span", "p_player_game_span"]:
                     result = column.find(text=True)
                     if result:
                         result = str(result).strip().upper()
@@ -28375,7 +28375,7 @@ def parse_row(row, time_frame, year, is_playoffs, player_type, header_values, pr
                         row_data.update({"Team Score" : None})
                         row_data.update({"Opponent Score" : None})
                     continue
-                elif hasattr(column, "data-stat") and column["data-stat"] == "career_game_num":
+                elif hasattr(column, "data-stat") and column["data-stat"] in ["career_game_num", "player_game_num_career"]:
                     if not is_playoffs:
                         row_data.update({"RawCrGm" : int(column.find(text=True))})
             
