@@ -7329,7 +7329,7 @@ opponent_schedule_url_format = "https://www.baseball-reference.com/leagues/MLB/{
 opponent_schedule_main_url_format = "https://www.baseball-reference.com/leagues/MLB/{}.shtml"
 bref_team_roster_url_format = "https://www.baseball-reference.com/teams/{}/{}-roster.shtml"
 sum_stats_format = "https://www.baseball-reference.com/tools/span_stats.cgi?html=1&page_id={}&table_id={}&range={}&plink=1"
-game_sum_stats_format = "https://www.baseball-reference.com/tools/soc_player_game_summing.cgi?html=1&page_id={}&table_id={}&range={}&plink=1&phase_type=reg&table_type={}&entity_id={}&stats=null&addl_params=null"
+game_sum_stats_format = "https://www.baseball-reference.com/tools/soc_player_game_summing.cgi?html=1&page_id={}&table_id={}&range={}&plink=1&phase_type={}&table_type={}&entity_id={}&stats=null&addl_params=null"
 total_schedule_url = "https://www.baseball-reference.com/leagues/MLB/{}-schedule.shtml"
 team_roster_url_format = "https://statsapi.mlb.com/api/v1/teams/{}/roster?season={}&hydrate=person"
 mlb_team_schedule_url_format = "https://statsapi.mlb.com/api/v1/schedule?teamId={}&season={}&sportId=1&gameType=R,F,D,L,W"
@@ -28110,8 +28110,77 @@ def fix_prob_data(all_rows, player_data, player_type, all_teams_unique):
             handle_season_prob_data(player_type, full_season_ranges, player_data, all_rows)
         
 def handle_prob_data(player_type, all_season_ranges, player_data, all_rows, is_post):
-    the_table_name = "players_standard_batting" if player_type["da_type"] == "Batter" else "pitching_gamelogs"
-    stats_type = "Batting::BattingStandard" if player_type["da_type"] == "Batter" else "Pitching::PitchingStandard"
+    if player_type["da_type"] == "Batter":
+        handle_prob_data_bat(all_season_ranges, player_data, all_rows, is_post)
+    else:
+        handle_prob_data_pitch(all_season_ranges, player_data, all_rows, is_post)
+
+def handle_prob_data_bat(all_season_ranges, player_data, all_rows, is_post):
+    table_name = "players_standard_batting_sum"
+    stats_type = "Batting::BattingStandard"
+    phase_type = "post" if is_post else "reg"
+
+    all_season_ranges = sorted(all_season_ranges)
+    
+    is_consec = False
+    if sorted(all_season_ranges) == list(range(min(all_season_ranges), max(all_season_ranges) + 1)):
+        season_ranges_split = [all_season_ranges]
+        is_consec = True
+    else:
+        season_ranges_split = calculate_even_chunks(all_season_ranges, 1000)
+        
+    for season_ranges in season_ranges_split:
+        if len(season_ranges) > 1 and is_consec:
+            stat_sum_range = str(season_ranges[0]) + "-" + str(season_ranges[len(season_ranges) - 1])
+        else:
+            stat_sum_range = ",".join([str(season_range) for season_range in season_ranges]) if len(season_ranges) > 1 else str(season_ranges[0]) + "-" + str(season_ranges[0])
+
+        url_to_use = url_to_use = game_sum_stats_format.format(player_data["id"], table_name, stat_sum_range, phase_type, stats_type, player_data["entity_id"])
+        try:
+            response, player_page = url_request(url_to_use)
+        except requests.exceptions.HTTPError:
+            raise
+
+        comments = None
+        table = player_page.find("table", id=table_name)
+        if not table:
+            if not comments:
+                comments = player_page.find_all(string=lambda text: isinstance(text, Comment))
+            for c in comments:
+                temp_soup = BeautifulSoup(c, "lxml")
+                temp_table = temp_soup.find("table", id=table_name)
+                if temp_table:
+                    table = temp_table
+                    break
+
+        if table:
+            standard_table_rows = table.find("tbody").find_all("tr")
+            for i in range(len(standard_table_rows)):
+                row = standard_table_rows[i]
+                for pot_row in all_rows:
+                    if "MLBLiveGame" in pot_row and pot_row["MLBLiveGame"]:
+                        continue
+                    
+                    if pot_row["Year"] >= (1901 if is_post else 1915) and pot_row["is_playoffs"] == is_post:
+                        wpa_str = row.find("td", {"data-stat" : "b_wpa"}).find(text=True)
+                        if wpa_str:
+                            if "WPA" not in pot_row:
+                                pot_row["WPA"] = 0
+                            pot_row["WPA"] += float(wpa_str)
+                        cwpa_str = row.find("td", {"data-stat" : "b_cwpa"}).find(text=True)
+                        if cwpa_str:
+                            if "cWPA" not in pot_row:
+                                pot_row["cWPA"] = 0
+                            pot_row["cWPA"] += float(cwpa_str[:-1]) / 100
+                        re24_str = row.find("td", {"data-stat" : "b_baseout_runs"}).find(text=True)
+                        if re24_str:
+                            if "RE24" not in pot_row:
+                                pot_row["RE24"] = 0
+                            pot_row["RE24"] += float(re24_str)
+                        break
+
+def handle_prob_data_pitch(all_season_ranges, player_data, all_rows, is_post):
+    the_table_name = "pitching_gamelogs"
     if is_post:
         the_table_name += "_post"
 
@@ -28131,19 +28200,10 @@ def handle_prob_data(player_type, all_season_ranges, player_data, all_rows, is_p
             stat_sum_range = ",".join([str(season_range) for season_range in season_ranges]) if len(season_ranges) > 1 else str(season_ranges[0]) + "-" + str(season_ranges[0])
 
         split_table_name = the_table_name
-        if split_table_name == "players_value_batting":
-            split_table_name = "batting_value"
-        elif split_table_name == "players_value_pitching":
-            split_table_name = "pitching_value"
-
-        url_to_use = None
-        if player_type["da_type"] == "Batter":
-            url_to_use = game_sum_stats_format.format(player_data["id"], split_table_name, stat_sum_range, stats_type, player_data["entity_id"])
-        else:
-            url_to_use = sum_stats_format.format(player_data["id"], split_table_name, stat_sum_range)
+        url_to_use = sum_stats_format.format(player_data["id"], split_table_name, stat_sum_range)
 
         try:
-            response, player_page = url_request(game_sum_stats_format.format(player_data["id"], split_table_name, stat_sum_range, stats_type, player_data["entity_id"]))
+            response, player_page = url_request(url_to_use)
         except requests.exceptions.HTTPError:
             raise
 
@@ -28170,17 +28230,17 @@ def handle_prob_data(player_type, all_season_ranges, player_data, all_rows, is_p
                         continue
                     
                     if pot_row["Year"] >= (1901 if is_post else 1915) and pot_row["is_playoffs"] == is_post:
-                        wpa_str = row.find("td", {"data-stat" : "wpa_" + ("bat" if player_type["da_type"] == "Batter" else "def")}).find(text=True)
+                        wpa_str = row.find("td", {"data-stat" : "wpa_def"}).find(text=True)
                         if wpa_str:
                             if "WPA" not in pot_row:
                                 pot_row["WPA"] = 0
                             pot_row["WPA"] += float(wpa_str)
-                        cwpa_str = row.find("td", {"data-stat" : "cwpa_" + ("bat" if player_type["da_type"] == "Batter" else "def")}).find(text=True)
+                        cwpa_str = row.find("td", {"data-stat" : "cwpa_def"}).find(text=True)
                         if cwpa_str:
                             if "cWPA" not in pot_row:
                                 pot_row["cWPA"] = 0
                             pot_row["cWPA"] += float(cwpa_str[:-1]) / 100
-                        re24_str = row.find("td", {"data-stat" : "re24_" + ("bat" if player_type["da_type"] == "Batter" else "def")}).find(text=True)
+                        re24_str = row.find("td", {"data-stat" : "re24_def"}).find(text=True)
                         if re24_str:
                             if "RE24" not in pot_row:
                                 pot_row["RE24"] = 0
