@@ -7040,6 +7040,7 @@ missing_player_data = {
     "player_flag" : [],
     "player_current_number" : [],
     "player_hof" : [],
+    "entity_id" : [],
     "has_season_stats" : True,
     "has_season_pitch_stats" : False,
     "has_award_stats" : True,
@@ -7328,6 +7329,7 @@ opponent_schedule_url_format = "https://www.baseball-reference.com/leagues/MLB/{
 opponent_schedule_main_url_format = "https://www.baseball-reference.com/leagues/MLB/{}.shtml"
 bref_team_roster_url_format = "https://www.baseball-reference.com/teams/{}/{}-roster.shtml"
 sum_stats_format = "https://www.baseball-reference.com/tools/span_stats.cgi?html=1&page_id={}&table_id={}&range={}&plink=1"
+game_sum_stats_format = "https://www.baseball-reference.com/tools/soc_player_game_summing.cgi?html=1&page_id={}&table_id={}&range={}&plink=1&phase_type=reg&table_type={}&entity_id={}&stats=null&addl_params=null"
 total_schedule_url = "https://www.baseball-reference.com/leagues/MLB/{}-schedule.shtml"
 team_roster_url_format = "https://statsapi.mlb.com/api/v1/teams/{}/roster?season={}&hydrate=person"
 mlb_team_schedule_url_format = "https://statsapi.mlb.com/api/v1/schedule?teamId={}&season={}&sportId=1&gameType=R,F,D,L,W"
@@ -16181,6 +16183,7 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
     player_flags = []
     player_numbers = []
     player_hofs = []
+    entity_ids = []
     has_one_player = False
     for sub_player_data in player_datas:
         sub_range = ""
@@ -16412,6 +16415,7 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
         player_numbers.append(sub_player_data["player_current_number"])
         player_flags.append(sub_player_data["player_flag"])
         player_hofs.append(sub_player_data["player_hof"])
+        entity_ids.append(sub_player_data["entity_id"])
 
     if has_reg_season and has_playoffs:
         has_award_stats = False
@@ -16428,6 +16432,7 @@ def combine_player_datas(player_datas, player_type, any_missing_games, any_missi
     player_data["player_flag"] = player_flags
     player_data["player_current_number"] = player_numbers
     player_data["player_hof"] = player_hofs
+    player_data["entity_id"] = entity_ids
 
     player_data["stat_values"]["Raw Player"] = player_data["stat_values"]["Raw Player"][:(-6 if add_type == "minus" else -3)]
     player_data["stat_values"]["Raw Range"] = player_data["stat_values"]["Raw Range"][:(-6 if add_type == "minus" else -3)]
@@ -16922,6 +16927,7 @@ def handle_multi_player_data(player_id, time_frames, player_type, player_page, r
     player_data["player_image_url"] = get_player_image(player_page)
     player_data["player_current_team"], player_data["player_current_number"], player_data["player_all_numbers"], player_data["player_team_map"], player_data["numbers_year_map"] = get_player_current_team_number(player_id, player_page)
     player_data["player_position"] = get_player_position(player_page)
+    player_data["player_position"] = get_player_position(player_page)
     if not player_data["player_position"]:
         try:
             minor_league_link = player_page.find("div", {"id" : "bottom_nav"}).find("a", text="Minor Lg Stats")
@@ -16933,6 +16939,7 @@ def handle_multi_player_data(player_id, time_frames, player_type, player_page, r
     player_data["player_jaws_position"] = get_player_jaws_position(player_page)
     player_data["player_flag"] = get_player_country(player_page)
     player_data["player_hof"] = get_player_hof(player_page)
+    player_data["entity_id"] = get_player_entity_id(player_page)
     player_data["year_valid_years"], player_data["reg_year_valid_years"], player_data["playoff_valid_years"], player_data["game_valid_years"], player_data["total_game_valid_years"], player_data["pitch_valid_years"], player_data["catch_valid_years"], valid_teams, valid_teams_raw_key, valid_year_teams = get_valid_years(player_page, player_type, player_id)
     player_data["has_season_stats"] = True
     player_data["has_award_stats"] = True
@@ -27596,6 +27603,10 @@ def get_player_hof(player_page):
     else:
         return False
 
+def get_player_entity_id(player_page):
+    entity_id_el = player_page.find("meta", {"name" : "sr-person-id"})
+    return entity_id_el.get("content")
+
 def get_mlb_player_link(player_data, s):
     if player_data["id"] in manual_id_maps:
         return "/api/v1/people/" +  str(manual_id_maps[player_data["id"]])
@@ -28100,6 +28111,7 @@ def fix_prob_data(all_rows, player_data, player_type, all_teams_unique):
         
 def handle_prob_data(player_type, all_season_ranges, player_data, all_rows, is_post):
     the_table_name = "players_standard_batting" if player_type["da_type"] == "Batter" else "pitching_gamelogs"
+    stats_type = "Batting::BattingStandard" if player_type["da_type"] == "Batter" else "Pitching::PitchingStandard"
     if is_post:
         the_table_name += "_post"
 
@@ -28124,13 +28136,20 @@ def handle_prob_data(player_type, all_season_ranges, player_data, all_rows, is_p
         elif split_table_name == "players_value_pitching":
             split_table_name = "pitching_value"
 
+        url_to_use = None
+        if player_type["da_type"] == "Batter":
+            url_to_use = game_sum_stats_format.format(player_data["id"], split_table_name, stat_sum_range, stats_type, player_data["entity_id"])
+        else:
+            url_to_use = sum_stats_format.format(player_data["id"], split_table_name, stat_sum_range)
+
         try:
-            response, player_page = url_request(sum_stats_format.format(player_data["id"], split_table_name, stat_sum_range))
+            response, player_page = url_request(game_sum_stats_format.format(player_data["id"], split_table_name, stat_sum_range, stats_type, player_data["entity_id"]))
         except requests.exceptions.HTTPError:
             raise
 
         table_name = "span_stats"
 
+        comments = None
         table = player_page.find("table", id=table_name)
         if not table:
             if not comments:
