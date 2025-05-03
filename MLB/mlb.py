@@ -18504,7 +18504,8 @@ def handle_player_data(player_data, time_frame, player_type, player_page, valid_
 
     if not has_against_quals(extra_stats):
         if is_game_page:
-            fix_prob_data(all_rows, player_data, player_type, all_teams_unique)
+            if player_type["da_type"] != "Batter":
+                fix_prob_data(all_rows, player_data, player_type, all_teams_unique)
         
     seasons_leading_start = 0
     seasons_leading_end = 0
