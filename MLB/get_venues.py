@@ -28,16 +28,18 @@ request_headers = {
 
 request_headers= {}
 
-end_year = 2023
+end_year = 2025
 
 country_codes = { 
     "USA" : "US",
     "Canada" : "CA",
+    "CAN" : "CA",
     "Japan" : "JP",
     "Puerto Rico" : "PR",
     "Mexico" : "MX",
     "Australia" : "AU",
-    "United Kingdom" : "UK"
+    "United Kingdom" : "UK",
+    "Republic of Korea" : "KR"
 }
 
 def main():
@@ -69,6 +71,9 @@ def main():
             data = url_request_json(s, mlb_teams_url_format.format(sub_year))
             for date in data["dates"]:
                 for game in date["games"]:
+                    if "name" not in game["venue"] or not game["venue"]["name"]:
+                        continue
+
                     team_name = unidecode.unidecode(game["venue"]["name"]).strip()
                     venue_id = str(game["venue"]["id"])
 
@@ -76,13 +81,15 @@ def main():
                         try:
                             sub_data = url_request_json(s, "https://statsapi.mlb.com" + game["link"])
                         except requests.exceptions.HTTPError as err:
-                            if err.response.status_code == 404:
+                            if err.response.status_code in [404, 500]:
                                 continue
                             else:
                                 raise
 
                         if "message" in sub_data:
                             continue
+
+                        #print(sub_data["gameData"]["venue"])
 
                         team_venues[venue_id] = {
                             "values" : [],
