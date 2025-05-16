@@ -419,7 +419,7 @@ def get_totals(single_year, totals, gateway, log=True):
     total_years = len(years)
 
     with requests.Session() as gateway_session:
-        gateway_session.mount("https://www.fangraphs.com", gateway)
+        #gateway_session.mount("https://www.fangraphs.com", gateway)
 
         for league in list(totals):
             for key in list(totals[league]):
@@ -601,7 +601,7 @@ def url_request_json(session, url, log, timeout=30):
 
 def url_request(url, gateway, log, timeout=30):
     gateway_session = requests.Session()
-    gateway_session.mount("https://www.fangraphs.com", gateway)
+    #gateway_session.mount("https://www.fangraphs.com", gateway)
     failed_counter = 0
     while(True):
         try:
@@ -635,8 +635,9 @@ def url_request(url, gateway, log, timeout=30):
         logger.info("#" + str(threading.get_ident()) + "#   " + "0")
 
 if __name__ == "__main__":
-    gateway =  ApiGateway("https://www.fangraphs.com", verbose=True)
-    endpoints = gateway.start(force=True)
+    #gateway =  ApiGateway("https://www.fangraphs.com", verbose=True)
+    #endpoints = gateway.start(force=True)
+    gateway = None
 
     def exit_gracefully(signum, frame):
         sys.exit(signum)
@@ -646,4 +647,5 @@ if __name__ == "__main__":
     try:
         main(gateway)
     finally:
-        gateway.shutdown(endpoints)
+        #gateway.shutdown(endpoints)
+        pass

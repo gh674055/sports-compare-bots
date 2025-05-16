@@ -7465,9 +7465,10 @@ def main():
     gateway = ApiGateway("https://www.baseball-reference.com", verbose=True)
     endpoints = gateway.start(force=True)
 
-    global fangraphs_gateway
-    fangraphs_gateway = ApiGateway("https://www.fangraphs.com", verbose=True)
-    fangraphs_endpoints = fangraphs_gateway.start(force=True)
+    #global fangraphs_gateway
+    #fangraphs_gateway = ApiGateway("https://www.fangraphs.com", verbose=True)
+    #fangraphs_endpoints = fangraphs_gateway.start(force=True)
+    fangraphs_gateway = None
 
     def exit_gracefully(signum, frame):
         sys.exit(signum)
@@ -7505,7 +7506,7 @@ def main():
         #                 res = pool.apply_async(parse_input, (gateway, fangraphs_gateway, comment, False, comment.subreddit.display_name in approved_subreddits))
     finally:
         gateway.shutdown(endpoints)
-        fangraphs_gateway.shutdown(fangraphs_endpoints)
+        #fangraphs_gateway.shutdown(fangraphs_endpoints)
 
 def get_api_gateway(url):
     global gateway
