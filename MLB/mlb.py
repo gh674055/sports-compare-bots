@@ -17990,7 +17990,8 @@ def handle_player_data(player_data, time_frame, player_type, player_page, valid_
                     match = False
                     row_id = row.get("id")
                     if row_id:
-                        match = re.match(r"^\d+\:standard_fielding$", row_id)
+                        if not row.get("class") or not "spacer" in row.get("class"):
+                            match = re.match(r"^\d+\:standard_fielding$", row_id)
                     elif row.get("class") and "partial_table" in row.get("class") and not "spacer" in row.get("class"):
                         match = True
                         
@@ -19591,7 +19592,8 @@ def handle_missing_reg_rows(player_page, player_data, all_rows, player_type, tim
                 row_id = row.get("id")
                 match = False
                 if row_id:
-                    match = re.match(r"^" + table_name + r"\.\d+$", row_id)
+                    if not row.get("class") or not "spacer" in row.get("class"):
+                        match = re.match(r"^" + table_name + r"\.\d+$", row_id)
                 elif row.get("class") and "partial_table" in row.get("class") and not "spacer" in row.get("class"):
                     match = True
                 
@@ -19937,10 +19939,11 @@ def handle_season_only_stats(player_page, field_player_page, player_data, player
                     match = True
 
                 if row_id:
-                    if table_name in ["advanced_fielding"]:
-                        match = re.match(r"^\d+\:standard_fielding$", row_id)
-                    else:
-                        match = re.match(r"^" + table_name + r"\.\d+$", row_id)
+                    if not row.get("class") or not "spacer" in row.get("class"):
+                        if table_name in ["advanced_fielding"]:
+                            match = re.match(r"^\d+\:standard_fielding$", row_id)
+                        else:
+                            match = re.match(r"^" + table_name + r"\.\d+$", row_id)
                 elif row.get("class") and "partial_table" in row.get("class") and not "spacer" in row.get("class"):
                     match = True
 
@@ -20105,10 +20108,11 @@ def handle_season_only_stats(player_page, field_player_page, player_data, player
                 row_id = row.get("id")
                 match = False
                 if row_id:
-                    if table_name in ["advanced_fielding"]:
-                        match = re.match(r"^\d+\:standard_fielding$", row_id)
-                    else:
-                        match = re.match(r"^" + table_name + r"\.\d+$", row_id)
+                    if not row.get("class") or not "spacer" in row.get("class"):
+                        if table_name in ["advanced_fielding"]:
+                            match = re.match(r"^\d+\:standard_fielding$", row_id)
+                        else:
+                            match = re.match(r"^" + table_name + r"\.\d+$", row_id)
                 elif row.get("class") and "partial_table" in row.get("class") and not "spacer" in row.get("class"):
                     match = True
                 elif table_name == "appearances":
@@ -20667,7 +20671,8 @@ def handle_awards(player_page, player_data, player_type, time_frame, is_full_car
             row_id = row.get("id")
             match = False
             if row_id:
-                match = re.match(r"^" + table_name + r"\.\d+$", row_id)
+                if not row.get("class") or not "spacer" in row.get("class"):
+                    match = re.match(r"^" + table_name + r"\.\d+$", row_id)
             elif row.get("class") and "partial_table" in row.get("class") and not "spacer" in row.get("class"):
                 match = True
 
@@ -27229,10 +27234,11 @@ def get_valid_years(player_page, player_type, player_id):
                     row_id = row.get("id")
                     match = False
                     if row_id:
-                        if table_name in ["advanced_fielding"]:
-                            match = re.match(r"^\d+\:standard_fielding$", row_id)
-                        else:
-                            match = re.match(r"^" + table_name + r"\.\d+$", row_id)
+                        if not row.get("class") or not "spacer" in row.get("class"):
+                            if table_name in ["advanced_fielding"]:
+                                match = re.match(r"^\d+\:standard_fielding$", row_id)
+                            else:
+                                match = re.match(r"^" + table_name + r"\.\d+$", row_id)
                     elif row.get("class") and "partial_table" in row.get("class") and not "spacer" in row.get("class"):
                         match = True
 
@@ -27376,7 +27382,8 @@ def determine_rookie_years(player_page, player_type, rookie_quals):
                 row_id = row.get("id")
                 match = False
                 if row_id:
-                    match = re.match(r"^" + table_name + r"\.\d+$", row_id)
+                    if not row.get("class") or not "spacer" in row.get("class"):
+                        match = re.match(r"^" + table_name + r"\.\d+$", row_id)
                 elif row.get("class") and "partial_table" in row.get("class") and not "spacer" in row.get("class"):
                     match = True
                 if match:
@@ -27474,9 +27481,11 @@ def get_player_current_team_number(player_id, player_page):
                 row_id = row.get("id")
                 match = False
                 if row_id:
-                    match = re.match(r"^" + table_name + r"\.\d+$", row_id)
+                    if not row.get("class") or not "spacer" in row.get("class"):
+                        match = re.match(r"^" + table_name + r"\.\d+$", row_id)
                 elif row.get("class") and "partial_table" in row.get("class") and not "spacer" in row.get("class"):
                     match = True
+                    
                 if match or (table_name.endswith("postseason") and not row.get("class")) and row.parent.name != "thead" and row.parent.name != "tfoot":
                     row_team = get_team_column(row).find("a")
                     row_year = int(str(row.find("th").find(text=True)).strip()[:4])
@@ -28016,7 +28025,8 @@ def parse_table(player_data, time_frame, year, player_type):
                 row_id = row.get("id")
                 match = False
                 if row_id:
-                    match = re.match(r"^" + table_name + r"\.\d+$", row_id)
+                    if not row.get("class") or not "spacer" in row.get("class"):
+                        match = re.match(r"^" + table_name + r"\.\d+$", row_id)
                 elif not (year or is_playoffs) and row.get("class") and "partial_table" in row.get("class") and not "spacer" in row.get("class"):
                     match = True
 
