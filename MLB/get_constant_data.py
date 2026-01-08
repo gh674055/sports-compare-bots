@@ -539,7 +539,11 @@ def get_park_factors(single_year, park_factors, gateway, log=True):
             for sub_index, column in enumerate(columns):
                 header_value = header_values[sub_index]
                 if header_value != "Season":
-                    column_contents = column.find(text=True).strip()
+                    column_contents = column.find(text=True)
+                    if not column_contents:
+                        continue
+                    
+                    column_contents = column_contents.strip()
                     if header_value == "Team":
                         if column_contents in teams_to_abbr:
                             row_team = teams_to_abbr[column_contents]
