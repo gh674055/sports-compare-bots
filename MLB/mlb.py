@@ -27236,6 +27236,9 @@ def get_valid_years(player_page, player_type, player_id):
                     elif row.get("class") and "partial_table" in row.get("class") and not "spacer" in row.get("class"):
                         match = True
 
+                    if table_name == "players_standard_fielding" and get_team_column(row) == None:
+                        continue
+
                     if match or (table_name.endswith("postseason") and not row.get("class")) and row.parent.name != "thead" and row.parent.name != "tfoot":
                         row_year = int(str(re.sub("[^0-9]", "", row.find("th").find(text=True))))
                         total_valid_years.add(row_year)

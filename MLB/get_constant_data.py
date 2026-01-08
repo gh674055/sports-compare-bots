@@ -460,7 +460,7 @@ def get_constants(year, constants, gateway, log=True):
     
     response, player_page = url_request(constants_url, gateway, log)
 
-    table = player_page.find("table", id="GutsBoard1_dg1_ctl00")
+    table = player_page.find("div", id="content").find("table")
 
     header_columns = table.find("thead").find_all("th")
     header_values = []
@@ -520,7 +520,7 @@ def get_park_factors(single_year, park_factors, gateway, log=True):
             else:
                 raise
 
-        table = player_page.find("table", id="GutsBoard1_dg1_ctl00")
+        table = player_page.find("div", id="content").find("table")
         if not table:
             continue
 
