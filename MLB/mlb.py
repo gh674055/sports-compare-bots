@@ -27960,7 +27960,7 @@ def parse_table(player_data, time_frame, year, player_type):
         format_str = "b"
         table_names = ["players_standard_batting"]
         if player_type["da_type"] != "Batter":
-            table_names = ["pitching_gamelogs_post"]
+            table_names = ["players_standard_pitching"]
             format_str = "p"
         player_url = playoffs_url_format.format(player_data["id"], format_str)
     elif not year:
@@ -27974,7 +27974,7 @@ def parse_table(player_data, time_frame, year, player_type):
         format_str = "b"
         table_names = ["players_standard_batting"]
         if player_type["da_type"] != "Batter":
-            table_names = ["pitching_gamelogs"]
+            table_names = ["players_standard_pitching"]
             format_str = "p"
         player_url = game_splits_url_format.format(player_data["id"], format_str, year)
 
@@ -28195,7 +28195,7 @@ def handle_prob_data_bat(all_season_ranges, player_data, all_rows, is_post):
                         break
 
 def handle_prob_data_pitch(all_season_ranges, player_data, all_rows, is_post):
-    the_table_name = "pitching_gamelogs"
+    the_table_name = "players_standard_pitching"
     if is_post:
         the_table_name += "_post"
 
