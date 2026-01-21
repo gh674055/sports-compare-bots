@@ -116,8 +116,8 @@ request_headers = {
 
 request_headers= {}
 
-max_request_retries = 5
-retry_failure_delay = 10
+max_request_retries = 10
+retry_failure_delay = 3
 max_reddit_retries = 3
 
 player_season_age_date = datetime.datetime(1, 6, 30)

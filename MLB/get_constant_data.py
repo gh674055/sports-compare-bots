@@ -272,8 +272,8 @@ teams_to_abbr = {
     "Ruby Legs" : "WOR"
 }
 
-max_request_retries = 5
-retry_failure_delay = 10
+max_request_retries = 10
+retry_failure_delay = 3
 
 request_headers = {
     "User-Agent" : "MLBCompareRedditBot"
