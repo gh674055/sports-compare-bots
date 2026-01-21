@@ -116,8 +116,8 @@ request_headers = {
 
 request_headers= {}
 
-max_request_retries = 3
-retry_failure_delay = 3
+max_request_retries = 5
+retry_failure_delay = 10
 max_reddit_retries = 3
 
 player_season_age_date = datetime.datetime(1, 6, 30)
@@ -3059,7 +3059,7 @@ headers = {
                 "season" : 1988
             }
         },
-        "GSc": {
+        "GmSc": {
             "positive" : True,
             "display" : False,
             "display-value" : "GmScr",
@@ -3068,7 +3068,7 @@ headers = {
                 "inconsistent" : 1913
             }
         },
-        "GSc/GS": {
+        "GmSc/GS": {
             "positive" : True,
             "type" : "Per Game/Advanced",
             "round" : 2,
@@ -4935,7 +4935,7 @@ formulas = {
         "HitDist" : "HitDistRaw / HitDistPit",
         "Pit/BF" : "Pit / BF",
         "Pit%" : "Pit / TtlPit",
-        "GSc/GS" : "GSc / GS",
+        "GmSc/GS" : "GmSc / GS",
         "IP/GS" : "IPStart / GS",
         "Pit/GS" : "PitStart / StartsPit",
         "BA" : "H / AB",
@@ -5667,13 +5667,13 @@ league_data_mapping = {
                 "season" : 1949
             }
         },
-        "GSc" : {
+        "GmSc" : {
             "NNL-ECL-ANL-NSL-EWL-NN2-NAL" : {
                 "game" : 1949,
                 "season" : 1949
             }
         },
-        "GSc/GS" : {
+        "GmSc/GS" : {
             "NNL-ECL-ANL-NSL-EWL-NN2-NAL" : {
                 "game" : 1949,
                 "season" : 1949
@@ -19307,10 +19307,10 @@ def determine_row_data(game_data, player_type, player_data, player_id, current_t
             row_data["Start"] = True
             row_data["IPStart"] = row_data["IP"]
             row_data["PitStart"] = row_data["Pit"]
-            row_data["GSc"] = 50 + (row_data["IP"] * 3) + (row_data["SO"]) - (2 * row_data["H"]) - (4 * row_data["ER"]) - (2 * (row_data["R"] - row_data["ER"])) - row_data["BB"]
+            row_data["GmSc"] = 50 + (row_data["IP"] * 3) + (row_data["SO"]) - (2 * row_data["H"]) - (4 * row_data["ER"]) - (2 * (row_data["R"] - row_data["ER"])) - row_data["BB"]
             points_after_fourth = (2 * (math.floor(row_data["IP"]) - 4))
             if points_after_fourth > 0:
-                row_data["GSc"] += points_after_fourth
+                row_data["GmSc"] += points_after_fourth
             if row_data["IP"] >= 6 and row_data["ER"] <= 3:
                 row_data["QS"] = 1
             if is_final:
@@ -19557,9 +19557,9 @@ def handle_missing_reg_rows(player_page, player_data, all_rows, player_type, tim
 
     if time_frame["playoffs"]:
         if time_frame["playoffs"] == "Only":
-            table_names = ["batting_postseason"] if player_type["da_type"] != "Batter" else ["pitching_postseason"]
+            table_names = ["players_batting_postseason"] if player_type["da_type"] != "Batter" else ["players_pitching_postseason"]
         else:
-            table_names.extend(["batting_postseason"]) if player_type["da_type"] != "Batter" else table_names.extend(["pitching_postseason"])
+            table_names.extend(["players_batting_postseason"]) if player_type["da_type"] != "Batter" else table_names.extend(["players_pitching_postseason"])
 
 
     seasons = set([row["Year"] for row in all_rows])
@@ -19610,7 +19610,7 @@ def handle_missing_reg_rows(player_page, player_data, all_rows, player_type, tim
                             all_rows.append({"Year" : row_data["Year"], "Date" : row_data["Date"], "DateTime" : row_data["DateTime"], "Tm" : row_data["Tm"], "TmLg" : get_team_league(row_data["Tm"], row_data["Year"]), "is_playoffs" : False, "fake_reg_row" : True})
 
 def handle_missing_playoff_rows(player_page, player_data, valid_years, all_rows, player_type, time_frame):     
-    table_names = ["batting_postseason", "pitching_postseason"]
+    table_names = ["players_batting_postseason", "players_pitching_postseason"]
     comments = None
     previous_headers = set()
     for table_index, table_name in enumerate(table_names):
@@ -20788,7 +20788,7 @@ def handle_awards(player_page, player_data, player_type, time_frame, is_full_car
                                     row["CyShares"] += share
                                     break
 
-    table_names = ["batting_postseason", "pitching_postseason"]
+    table_names = ["players_batting_postseason", "players_pitching_postseason"]
     ps_years_parsed = set()
     for table_name in table_names:
         table = player_page.find("table", id=table_name)
@@ -20808,7 +20808,7 @@ def handle_awards(player_page, player_data, player_type, time_frame, is_full_car
             for row in standard_table_rows:
                 row_year = get_year_column(row)
                 if row_year:
-                    world_series = row_year.find("span", {"class" : "sr_ring"})
+                    world_series = row_year.get("class") and "trophy" in row_year.get("class")
                     if world_series:
                         row_year = int(str(row_year.find(text=True)))
                         if row_year not in ps_years_parsed:
@@ -27213,7 +27213,7 @@ def get_valid_years(player_page, player_type, player_id):
     valid_year_teams = {}
 
     if player_id[len(player_id) - 1].isdigit():
-        table_names = ["players_standard_batting", "players_standard_pitching", "players_standard_fielding", "batting_postseason", "pitching_postseason"]
+        table_names = ["players_standard_batting", "players_standard_pitching", "players_standard_fielding", "players_batting_postseason", "players_pitching_postseason"]
         comments = None
         for table_name in table_names:
             table = player_page.find("table", id=table_name)
@@ -27460,7 +27460,7 @@ def get_player_current_team_number(player_id, player_page):
     numbers_year_map = {}
     comments = None
 
-    table_names = ["players_value_batting", "players_value_pitching", "batting_postseason", "pitching_postseason"]
+    table_names = ["players_value_batting", "players_value_pitching", "players_batting_postseason", "players_pitching_postseason"]
     valid_teams = {}
     for table_name in table_names:
         table = player_page.find("table", id=table_name)
@@ -27492,9 +27492,8 @@ def get_player_current_team_number(player_id, player_page):
                     if row_year not in numbers_year_map:
                         numbers_year_map[row_year] = set()
                     if row_team:
-                        row_league = get_league_column(row).find("a")
                         row_team_abbr_str = str(row_team.find(text=True))
-                        row_lg_abbr_str = str(row_league.find(text=True))
+                        row_lg_abbr_str = get_team_league(row_team_abbr_str, row_year)
                         row_team_str = get_team_name(row_year, row_team_abbr_str, row_lg_abbr_str)
                         
                         numbers_year_map[row_year].add(get_team_column(row).find(text=True))
@@ -28057,11 +28056,11 @@ def handle_missing_game_data(all_rows, player_data, player_type, time_frame, val
                             row_data["IPStart"] = 0
                         if "PitStart" not in row_data:
                             row_data["PitStart"] = 0
-                        if "GSc" not in row_data:
-                            row_data["GSc"] = 0
+                        if "GmSc" not in row_data:
+                            row_data["GmSc"] = 0
                         row_data["IPStart"] += year_row.get("IP", 0)
                         row_data["PitStart"] += year_row.get("Pit", 0)
-                        row_data["GSc"] += year_row.get("GSc", 0)
+                        row_data["GmSc"] += year_row.get("GmSc", 0)
                         
                     if year_row.get("Pit", 0):
                         if "GamesPit" not in row_data:
@@ -47109,7 +47108,7 @@ def is_against_header(header, over_header, extra_stats, player_type):
     else:
         if "no-steals" in extra_stats and header in ("SB", "CS", "NS", "SB%", "wSB", "PO"):
             return True
-        return header in ("WPA", "cWPA", "RE24", "WPA/162", "cWPA/162", "GS", "W", "L", "W/L%", "QS", "QS%", "CG", "CG%", "SHO", "SHO%", "Hold", "SV", "BSv", "SV%", "HLD", "NoHit", "Prfct", "IP/GS", "Pit/GS", "GSc/GS") or header.startswith("GS/") or header.startswith("GS_") or "162" in header
+        return header in ("WPA", "cWPA", "RE24", "WPA/162", "cWPA/162", "GS", "W", "L", "W/L%", "QS", "QS%", "CG", "CG%", "SHO", "SHO%", "Hold", "SV", "BSv", "SV%", "HLD", "NoHit", "Prfct", "IP/GS", "Pit/GS", "GmSc/GS") or header.startswith("GS/") or header.startswith("GS_") or "162" in header
 
 def is_invalid_stat(stat, player_type, data, count_inconsistent):
     invalid_data = {}

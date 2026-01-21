@@ -24,8 +24,8 @@ import signal
 
 league_totals_url = "https://www.pro-football-reference.com/years/{}/passing.htm"
 
-max_request_retries = 3
-retry_failure_delay = 3
+max_request_retries = 5
+retry_failure_delay = 10
 
 request_headers = {
     "User-Agent" : "NFLCompareRedditBot"
