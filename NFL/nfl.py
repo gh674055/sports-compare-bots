@@ -18955,8 +18955,7 @@ def parse_row(row, table_name, time_frame, year, is_playoffs, player_type, ind_p
                         if len(result_split) == 2:
                             scores = result_split[1].strip().split("-")
                             row_data["Shared"].update({"Team Score" : int(scores[0])})
-                            if scores[1].endswith("(OT)"):
-                                scores[1] = scores[1][:-4].strip()
+                            scores[1] = scores[1].split(" ")[0]
                             row_data["Shared"].update({"Opponent Score" : int(scores[1])})
                         else:
                             row_data["Shared"].update({"Team Score" : None})
