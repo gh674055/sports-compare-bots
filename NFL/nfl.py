@@ -8716,23 +8716,9 @@ def handle_player_data(player_data, time_frame, player_type, player_page, is_fan
             if perform_qualifier(player_data, player_type, ind_player_type, row_data, time_frame, all_rows):
                 new_rows.append(row_data)
         all_rows = new_rows
-
-    needs_qb_starts = "Era Adjusted Passing" in headers[player_type["da_type"]] and "Era Adjusted Passing" in headers[ind_player_type] and is_game_page
     
-    if "Start Position" in time_frame["qualifiers"] or "Exact Official" in time_frame["qualifiers"] or "Exact Referee" in time_frame["qualifiers"] or "Exact Umpire" in time_frame["qualifiers"] or "Exact Team Head Coach" in time_frame["qualifiers"] or "Exact Opponent Head Coach" in time_frame["qualifiers"] or "Official" in time_frame["qualifiers"] or "Referee" in time_frame["qualifiers"] or "Umpire" in time_frame["qualifiers"] or "Team Head Coach" in time_frame["qualifiers"] or "Opponent Head Coach" in time_frame["qualifiers"] or "Franchise Stadium" in time_frame["qualifiers"] or "Stadium" in time_frame["qualifiers"] or "Exact Stadium" in time_frame["qualifiers"] or "Local Start Time" in time_frame["qualifiers"] or "Exact City" in time_frame["qualifiers"] or "City" in time_frame["qualifiers"] or "Exact State" in time_frame["qualifiers"] or "State" in time_frame["qualifiers"] or "Exact Time Zone" in time_frame["qualifiers"] or "Time Zone" in time_frame["qualifiers"] or "Exact Country" in time_frame["qualifiers"] or "Country" in time_frame["qualifiers"] or "Surface" in time_frame["qualifiers"] or "Roof" in time_frame["qualifiers"] or "Temperature" in time_frame["qualifiers"] or "Wind" in time_frame["qualifiers"] or "Wind Chill" in time_frame["qualifiers"] or "Humidity" in time_frame["qualifiers"] or "Current Winning Opponent" in time_frame["qualifiers"] or "Current Losing Opponent" in time_frame["qualifiers"] or "Current Tied Opponent" in time_frame["qualifiers"] or "Current Winning Or Tied Opponent" in time_frame["qualifiers"] or "Current Losing Or Tied Opponent" in time_frame["qualifiers"] or "Current Winning Team" in time_frame["qualifiers"] or "Current Losing Team" in time_frame["qualifiers"] or "Current Tied Team" in time_frame["qualifiers"] or "Current Winning Or Tied Team" in time_frame["qualifiers"] or "Current Losing Or Tied Team" in time_frame["qualifiers"] or "Current Team Win Percentage" in time_frame["qualifiers"] or "Current Opponent Win Percentage" in time_frame["qualifiers"] or "Current Team Wins" in time_frame["qualifiers"] or "Current Team Losses" in time_frame["qualifiers"] or "Current Team Ties" in time_frame["qualifiers"] or "Current Opponent Wins" in time_frame["qualifiers"] or "Current Opponent Losses" in time_frame["qualifiers"] or "Current Opponent Ties" in time_frame["qualifiers"] or "Attendance" in time_frame["qualifiers"] or "Quarter" in time_frame["qualifiers"] or "Down" in time_frame["qualifiers"] or "Down Distance" in time_frame["qualifiers"] or "Field Position" in time_frame["qualifiers"] or "Quarter Time" in time_frame["qualifiers"] or "Quarter Time Remaining" in time_frame["qualifiers"] or "Pass Distance" in time_frame["qualifiers"] or "Pass Direction" in time_frame["qualifiers"] or "Current Team Score" in time_frame["qualifiers"] or "Current Opponent Score" in time_frame["qualifiers"] or "Current Score Margin" in time_frame["qualifiers"] or "Current Score Difference" in time_frame["qualifiers"] or "Thrown To" in time_frame["qualifiers"] or "Overtime" in time_frame["qualifiers"] or "RedZone" in time_frame["qualifiers"] or "Current Team Games Over 500" in time_frame["qualifiers"] or "Current Opponent Games Over 500" in time_frame["qualifiers"] or needs_qb_starts or "current-stats" in extra_stats:
+    if "Start Position" in time_frame["qualifiers"] or "Exact Official" in time_frame["qualifiers"] or "Exact Referee" in time_frame["qualifiers"] or "Exact Umpire" in time_frame["qualifiers"] or "Exact Team Head Coach" in time_frame["qualifiers"] or "Exact Opponent Head Coach" in time_frame["qualifiers"] or "Official" in time_frame["qualifiers"] or "Referee" in time_frame["qualifiers"] or "Umpire" in time_frame["qualifiers"] or "Team Head Coach" in time_frame["qualifiers"] or "Opponent Head Coach" in time_frame["qualifiers"] or "Franchise Stadium" in time_frame["qualifiers"] or "Stadium" in time_frame["qualifiers"] or "Exact Stadium" in time_frame["qualifiers"] or "Local Start Time" in time_frame["qualifiers"] or "Exact City" in time_frame["qualifiers"] or "City" in time_frame["qualifiers"] or "Exact State" in time_frame["qualifiers"] or "State" in time_frame["qualifiers"] or "Exact Time Zone" in time_frame["qualifiers"] or "Time Zone" in time_frame["qualifiers"] or "Exact Country" in time_frame["qualifiers"] or "Country" in time_frame["qualifiers"] or "Surface" in time_frame["qualifiers"] or "Roof" in time_frame["qualifiers"] or "Temperature" in time_frame["qualifiers"] or "Wind" in time_frame["qualifiers"] or "Wind Chill" in time_frame["qualifiers"] or "Humidity" in time_frame["qualifiers"] or "Current Winning Opponent" in time_frame["qualifiers"] or "Current Losing Opponent" in time_frame["qualifiers"] or "Current Tied Opponent" in time_frame["qualifiers"] or "Current Winning Or Tied Opponent" in time_frame["qualifiers"] or "Current Losing Or Tied Opponent" in time_frame["qualifiers"] or "Current Winning Team" in time_frame["qualifiers"] or "Current Losing Team" in time_frame["qualifiers"] or "Current Tied Team" in time_frame["qualifiers"] or "Current Winning Or Tied Team" in time_frame["qualifiers"] or "Current Losing Or Tied Team" in time_frame["qualifiers"] or "Current Team Win Percentage" in time_frame["qualifiers"] or "Current Opponent Win Percentage" in time_frame["qualifiers"] or "Current Team Wins" in time_frame["qualifiers"] or "Current Team Losses" in time_frame["qualifiers"] or "Current Team Ties" in time_frame["qualifiers"] or "Current Opponent Wins" in time_frame["qualifiers"] or "Current Opponent Losses" in time_frame["qualifiers"] or "Current Opponent Ties" in time_frame["qualifiers"] or "Attendance" in time_frame["qualifiers"] or "Quarter" in time_frame["qualifiers"] or "Down" in time_frame["qualifiers"] or "Down Distance" in time_frame["qualifiers"] or "Field Position" in time_frame["qualifiers"] or "Quarter Time" in time_frame["qualifiers"] or "Quarter Time Remaining" in time_frame["qualifiers"] or "Pass Distance" in time_frame["qualifiers"] or "Pass Direction" in time_frame["qualifiers"] or "Current Team Score" in time_frame["qualifiers"] or "Current Opponent Score" in time_frame["qualifiers"] or "Current Score Margin" in time_frame["qualifiers"] or "Current Score Difference" in time_frame["qualifiers"] or "Thrown To" in time_frame["qualifiers"] or "Overtime" in time_frame["qualifiers"] or "RedZone" in time_frame["qualifiers"] or "Current Team Games Over 500" in time_frame["qualifiers"] or "Current Opponent Games Over 500" in time_frame["qualifiers"] or "current-stats" in extra_stats:
         all_rows, missing_games = handle_nfl_game_stats(player_data, all_rows, time_frame["qualifiers"], extra_stats, missing_games, player_type)
-
-    if needs_qb_starts:
-        for row_data in all_rows:
-            if "Start-QB" in row_data["Shared"] and row_data["Shared"]["Start-QB"]:
-                if not "Era Adjusted Passing" in row_data:
-                    row_data["Era Adjusted Passing"] = {}
-                if row_data["Shared"]["Result"] == "W":
-                    row_data["Era Adjusted Passing"].update({"QBW" : 1})
-                elif row_data["Shared"]["Result"] == "L":
-                    row_data["Era Adjusted Passing"].update({"QBL" : 1})
-                else:
-                    row_data["Era Adjusted Passing"].update({"QBT" : 1})
 
     if time_frame["qualifiers"]:
         new_rows = []
@@ -11418,7 +11404,7 @@ def handle_fumbles_lost(player_data, all_rows, player_type, ind_player_type, tim
                             break
 
 def handle_missing_playoff_rows(player_page, player_data, valid_years, all_rows, player_type, ind_player_type, time_frame):     
-    table_names = ["passing_playoffs", "receiving_and_rushing_playoffs", "rushing_and_receiving_playoffs", "scoring_playoffs", "defense_playoffs", "kicking_playoffs", "returns_playoffs", "snap_counts_playoffs", "games_played_playoffs"]
+    table_names = ["passing_post", "receiving_and_rushing_post", "rushing_and_receiving_post", "scoring_post", "defense_post", "kicking_post", "returns_post", "snap_counts_post", "games_played_post"]
     comments = None
     previous_headers = set()
     game_map = {}
@@ -11437,7 +11423,7 @@ def handle_missing_playoff_rows(player_page, player_data, valid_years, all_rows,
         if table:
             over_header_values = []
             over_header_columns = []
-            if table_name != "passing_playoffs" and table_name != "scoring_playoffs" and table_name != "games_played_playoffs":
+            if table_name != "passing_post" and table_name != "scoring_post" and table_name != "games_played_post":
                 over_header_columns = table.find("thead").find("tr", {"class" : "over_header"})
                 for over_header_column in over_header_columns.find_all("th"):
                     colspan = over_header_column.get("colspan")
@@ -11466,9 +11452,9 @@ def handle_missing_playoff_rows(player_page, player_data, valid_years, all_rows,
                 else:
                     header_values.append(None)
             
-            if (table_name == "passing_playoffs" or table_name == "scoring_playoffs" or table_name == "games_played_playoffs"):
+            if (table_name == "passing_post" or table_name == "scoring_post" or table_name == "games_played_post"):
                 for x in range(len(header_values)):
-                    if table_name == "passing_playoffs":
+                    if table_name == "passing_post":
                         over_header_values.append("Passing")
                     else:
                         over_header_values.append("Rushing")
@@ -11514,13 +11500,13 @@ def handle_season_only_stats(is_game_page, is_game, player_page, player_data, pl
 
     if is_game_page:
         if the_over_header == "Advanced/Passing":
-            table_names = ["advanced_passing", "advanced_passing_playoffs", "advanced_rushing_and_receiving", "advanced_rushing_and_receiving_playoffs"]
+            table_names = ["passing_advanced", "passing_advanced_post", "adv_rushing_and_receiving", "adv_rushing_and_receiving_post", "adv_receiving_and_rushing", "adv_receiving_and_rushing_post"]
         elif the_over_header == "Advanced/Rushing":
-            table_names = ["advanced_rushing_and_receiving", "advanced_rushing_and_receiving_playoffs"]
+            table_names = ["adv_rushing_and_receiving", "adv_rushing_and_receiving_post", "adv_receiving_and_rushing", "adv_receiving_and_rushing_post"]
         elif the_over_header == "Advanced/Receiving":
-            table_names = ["advanced_rushing_and_receiving", "advanced_rushing_and_receiving_playoffs"]
+            table_names = ["adv_rushing_and_receiving", "adv_rushing_and_receiving_post", "adv_receiving_and_rushing", "adv_receiving_and_rushing_post"]
         elif the_over_header.startswith("Advanced/Defense"):
-            table_names = ["advanced_defense", "advanced_defense_playoffs"]
+            table_names = ["adv_defense", "adv_defense_post"]
         else:
             table_names = []
     else:
@@ -11596,20 +11582,17 @@ def handle_season_only_stats(is_game_page, is_game, player_page, player_data, pl
                 row_id = row.get("id")
                 match = False
                 if row_id:
-                    if table_name.endswith("_playoffs") and not table_name == "stats_playoffs":
-                        match = re.match(r"^" + table_name[:-9] + r"\.\d+$", row_id)
-                    else:
-                        match = re.match(r"^" + table_name + r"\.\d+$", row_id)
+                    match = re.match(r"^" + table_name + r"\.\d+$", row_id)
                     if not match and (row.get("class") and "partial_table" in row.get("class") and not "spacer" in row.get("class")):
                         match = True
                     elif table_name.startswith("advanced_") and (row_id.startswith("stats.") or row_id.startswith("stats_playoffs.")):
                         match = True
-                elif ((table_name == "passing_advanced") or table_name.startswith("adv_")) and row.get("class") and ("full_table" in row.get("class") or ("partial_table" in row.get("class") and not "spacer" in row.get("class"))):
+                elif ((table_name.startswith("passing_advanced")) or table_name.startswith("adv_")) and row.get("class") and ("full_table" in row.get("class") or ("partial_table" in row.get("class") and not "spacer" in row.get("class"))):
                     match = True
 
                 if match:
                     row_data = parse_row(row, table_name, time_frame, is_game_page, False, player_type, ind_player_type, header_values, over_header_values, previous_headers, game_map, None, None, None)
-                    
+
                     if not row_data:
                         continue
 
@@ -11650,7 +11633,7 @@ def handle_season_only_stats(is_game_page, is_game, player_page, player_data, pl
                     pot_row[the_over_header]["RecTD"] = pot_row["Receiving"]["TD"]
     
     if not is_game:
-        table_names = ["passing_playoffs", "receiving_and_rushing_playoffs", "rushing_and_receiving_playoffs"]
+        table_names = ["passing_post", "receiving_and_rushing_post", "rushing_and_receiving_post"]
 
         comments = None
         previous_headers = set()
@@ -11729,13 +11712,13 @@ def handle_season_only_stats(is_game_page, is_game, player_page, player_data, pl
 
         if [row for row in all_rows if not row["Shared"]["is_playoffs"] and row["Shared"]["Year"] >= 2018] and [year for year in pre_qual_teams_map if year >= 2018 and len(pre_qual_teams_map[year]) > 1]:
             if the_over_header == "Advanced/Passing":
-                table_names = ["advanced_passing", "advanced_passing_playoffs", "advanced_rushing_and_receiving", "advanced_rushing_and_receiving_playoffs"]
+                table_names = ["passing_advanced", "passing_advanced_post", "adv_rushing_and_receiving", "adv_rushing_and_receiving_post", "adv_receiving_and_rushing", "adv_receiving_and_rushing_post"]
             elif the_over_header == "Advanced/Rushing":
-                table_names = ["advanced_rushing_and_receiving", "advanced_rushing_and_receiving_playoffs"]
+                table_names = ["adv_rushing_and_receiving", "adv_rushing_and_receiving_post", "adv_receiving_and_rushing", "adv_receiving_and_rushing_post"]
             elif the_over_header == "Advanced/Receiving":
-                table_names = ["advanced_rushing_and_receiving", "advanced_rushing_and_receiving_playoffs"]
+                table_names = ["adv_rushing_and_receiving", "adv_rushing_and_receiving_post", "adv_receiving_and_rushing", "adv_receiving_and_rushing_post"]
             elif the_over_header.startswith("Advanced/Defense"):
-                table_names = ["advanced_defense", "advanced_defense_playoffs"]
+                table_names = ["adv_defense", "adv_defense_post"]
             else:
                 table_names = []
 
@@ -11797,15 +11780,12 @@ def handle_season_only_stats(is_game_page, is_game, player_page, player_data, pl
                         row_id = row.get("id")
                         match = False
                         if row_id:
-                            if table_name.endswith("_playoffs") and not table_name == "stats_playoffs":
-                                match = re.match(r"^" + table_name[:-9] + r"\.\d+$", row_id)
-                            else:
-                                match = re.match(r"^" + table_name + r"\.\d+$", row_id)
+                            match = re.match(r"^" + table_name + r"\.\d+$", row_id)
                             if not match and (row.get("class") and "partial_table" in row.get("class") and not "spacer" in row.get("class")):
                                 match = True
                             elif table_name.startswith("advanced_") and (row_id.startswith("stats.") or row_id.startswith("stats_playoffs.")):
                                 match = True
-                        elif ((table_name == "passing_advanced") or table_name.startswith("adv_")) and row.get("class") and ("full_table" in row.get("class") or ("partial_table" in row.get("class") and not "spacer" in row.get("class"))):
+                        elif ((table_name.startswith("passing_advanced")) or table_name.startswith("adv_")) and row.get("class") and ("full_table" in row.get("class") or ("partial_table" in row.get("class") and not "spacer" in row.get("class"))):
                             match = True
 
                         if match:
@@ -12029,31 +12009,15 @@ def handle_awards(player_page, player_data, player_type, ind_player_type, time_f
                     row_id = row.get("id")
                     match = False
                     if row_id:
-                        if table_name.endswith("_playoffs") and not table_name == "stats_playoffs":
-                            match = re.match(r"^" + table_name[:-9] + r"\.\d+$", row_id)
-                        else:
-                            match = re.match(r"^" + table_name + r"\.\d+$", row_id)
+                        match = re.match(r"^" + table_name + r"\.\d+$", row_id)
                     elif row.get("class") and "partial_table" in row.get("class") and not "spacer" in row.get("class"):
                         match = True
                     if match:
-                        year_row = row.find("th")
-                        year_str = year_row.find(text=True)
-                        if year_str:
-                            year = re.sub("[^0-9]", "", str(year_str).split("-")[0])
-                            if year:
-                                year = int(year)
-                            else:
-                                season_year_str = year_row.get("csk", None)
-                                if season_year_str:
-                                    year = int(season_year_str.split(".")[0])
-                                else:
-                                    year = int(year_row.find("a").get("href").split("/")[2])
-                        else:
-                            season_year_str = year_row.get("csk", None)
-                            if season_year_str:
-                                year = int(season_year_str.split(".")[0])
-                            else:
-                                year = int(year_row.find("a").get("href").split("/")[2])
+                        team_column = get_team_column(row)
+                        if not team_column.find("a"):
+                            continue
+                        team_column_link = str(team_column.find("a")["href"])
+                        year = int(team_column_link.split("/")[-1].split(".")[0])
 
                         if int(year) not in years_to_skip:
                             if year < current_season or show_title_current_season:
@@ -18169,7 +18133,7 @@ def fill_row(row, player_data, player_type, lower=True, stats=None):
 def get_latest_player_pos(player_page):
     player_pos_map = {}
 
-    table_names = ["passing", "receiving_and_rushing", "rushing_and_receiving", "scoring", "defense", "kicking", "returns", "snap_counts", "games_played", "passing_playoffs", "receiving_and_rushing_playoffs", "rushing_and_receiving_playoffs", "scoring_playoffs", "defense_playoffs", "kicking_playoffs", "returns_playoffs", "snap_counts_playoffs", "games_played_playoffs"]
+    table_names = ["passing", "receiving_and_rushing", "rushing_and_receiving", "scoring", "defense", "kicking", "returns", "snap_counts", "games_played", "passing_post", "receiving_and_rushing_post", "rushing_and_receiving_post", "scoring_post", "defense_post", "kicking_post", "returns_post", "snap_counts_post", "games_played_post"]
     comments = None
     for table_name in table_names:
         table = player_page.find("table", id=table_name)
@@ -18189,10 +18153,7 @@ def get_latest_player_pos(player_page):
                 row_id = row.get("id")
                 match = False
                 if row_id:
-                    if table_name.endswith("_playoffs") and not table_name == "stats_playoffs":
-                        match = re.match(r"^" + table_name[:-9] + r"\.\d+$", row_id)
-                    else:
-                        match = re.match(r"^" + table_name + r"\.\d+$", row_id)
+                    match = re.match(r"^" + table_name + r"\.\d+$", row_id)
                     if not match and row.get("class") and "partial_table" in row.get("class") and not "spacer" in row.get("class"):
                         match = True
                 if match:
@@ -18203,6 +18164,8 @@ def get_latest_player_pos(player_page):
                             pos_text = pos.find(text=True)
                             if pos_text:
                                 team_column = get_team_column(row)
+                                if not team_column.find("a"):
+                                    continue
                                 team_column_link = str(team_column.find("a")["href"])
                                 season_year = int(team_column_link.split("/")[-1].split(".")[0])
                                 
@@ -18227,7 +18190,7 @@ def get_valid_years(player_page):
     valid_teams_raw_key = {}
     valid_year_teams = {}
 
-    table_names = ["passing", "receiving_and_rushing", "rushing_and_receiving", "scoring", "defense", "kicking", "returns", "snap_counts", "games_played", "passing_playoffs", "receiving_and_rushing_playoffs", "rushing_and_receiving_playoffs", "scoring_playoffs", "defense_playoffs", "kicking_playoffs", "returns_playoffs", "snap_counts_playoffs", "games_played_playoffs"]
+    table_names = ["passing", "receiving_and_rushing", "rushing_and_receiving", "scoring", "defense", "kicking", "returns", "snap_counts", "games_played", "passing_post", "receiving_and_rushing_post", "rushing_and_receiving_post", "scoring_post", "defense_post", "kicking_post", "returns_post", "snap_counts_post", "games_played_post"]
     comments = None
     for table_name in table_names:
         table = player_page.find("table", id=table_name)
@@ -18247,21 +18210,20 @@ def get_valid_years(player_page):
                 row_id = row.get("id")
                 match = False
                 if row_id:
-                    if table_name.endswith("_playoffs") and not table_name == "stats_playoffs":
-                        match = re.match(r"^" + table_name[:-9] + r"\.\d+$", row_id)
-                    else:
-                        match = re.match(r"^" + table_name + r"\.\d+$", row_id)
+                    match = re.match(r"^" + table_name + r"\.\d+$", row_id)
                     if not match and row.get("class") and "partial_table" in row.get("class") and not "spacer" in row.get("class"):
                         match = True
                 if match:
                     row_team = get_team_column(row).find("a")
                     if row_team:
                         team_column = get_team_column(row)
+                        if not team_column.find("a"):
+                            continue
                         team_column_link = str(team_column.find("a")["href"])
                         season_year = int(team_column_link.split("/")[-1].split(".")[0])
                         
                         total_valid_years.add(season_year)
-                        if not table_name.endswith("_playoffs"):
+                        if not table_name.endswith("_post"):
                             reg_valid_years.add(season_year)
                         else:
                             playoff_valid_years.add(season_year)
@@ -18344,31 +18306,15 @@ def determine_rookie_years(player_page, rookie_quals):
                 row_id = row.get("id")
                 match = False
                 if row_id:
-                    if table_name.endswith("_playoffs") and not table_name == "stats_playoffs":
-                        match = re.match(r"^" + table_name[:-9] + r"\.\d+$", row_id)
-                    else:
-                        match = re.match(r"^" + table_name + r"\.\d+$", row_id)
+                    match = re.match(r"^" + table_name + r"\.\d+$", row_id)
                 elif row.get("class") and "partial_table" in row.get("class") and not "spacer" in row.get("class"):
                     match = True
                 if match:
-                    year_row = row.find("th")
-                    year_str = year_row.find(text=True)
-                    if year_str:
-                        year = re.sub("[^0-9]", "", str(year_str).split("-")[0])
-                        if year:
-                            year = int(year)
-                        else:
-                            season_year_str = year_row.get("csk", None)
-                            if season_year_str:
-                                year = int(season_year_str.split(".")[0])
-                            else:
-                                year = int(year_row.find("a").get("href").split("/")[2])
-                    else:
-                        season_year_str = year_row.get("csk", None)
-                        if season_year_str:
-                            year = int(season_year_str.split(".")[0])
-                        else:
-                            year = int(year_row.find("a").get("href").split("/")[2])
+                    team_column = get_team_column(row)
+                    if not team_column.find("a"):
+                        continue
+                    team_column_link = str(team_column.find("a")["href"])
+                    year = int(team_column_link.split("/")[-1].split(".")[0])
 
                     row_games = row.find("td", {"data-stat" : "g"})
                     if row_games and row_games.find(text=True) and int(str(row_games.find(text=True))) > 0:
@@ -18579,7 +18525,7 @@ def get_player_current_team_number(player_page, needs_numbers):
         team = str(team_info.find_next_sibling().find(text=True))
         team_link = team_info.find_next_sibling().find("a")["href"].split("/")[2].upper()
     else:
-        table_names = ["passing", "receiving_and_rushing", "rushing_and_receiving", "scoring", "defense", "kicking", "returns", "snap_counts", "games_played", "passing_playoffs", "receiving_and_rushing_playoffs", "rushing_and_receiving_playoffs", "scoring_playoffs", "defense_playoffs", "kicking_playoffs", "returns_playoffs", "snap_counts_playoffs", "games_played_playoffs"]
+        table_names = ["passing", "receiving_and_rushing", "rushing_and_receiving", "scoring", "defense", "kicking", "returns", "snap_counts", "games_played", "passing_post", "receiving_and_rushing_post", "rushing_and_receiving_post", "scoring_post", "defense_post", "kicking_post", "returns_post", "snap_counts_post", "games_played_post"]
         valid_teams = {}
         for table_name in table_names:
             table = player_page.find("table", id=table_name)
@@ -18599,10 +18545,7 @@ def get_player_current_team_number(player_page, needs_numbers):
                     row_id = row.get("id")
                     match = False
                     if row_id:
-                        if table_name.endswith("_playoffs") and not table_name == "stats_playoffs":
-                            match = re.match(r"^" + table_name[:-9] + r"\.\d+$", row_id)
-                        else:
-                            match = re.match(r"^" + table_name + r"\.\d+$", row_id)
+                        match = re.match(r"^" + table_name + r"\.\d+$", row_id)
                         if not match and row.get("class") and "partial_table" in row.get("class") and not "spacer" in row.get("class"):
                             match = True
                     
@@ -18612,6 +18555,8 @@ def get_player_current_team_number(player_page, needs_numbers):
                             row_team_id = row_team["href"].split("/")[2].upper()
 
                             team_column = get_team_column(row)
+                            if not team_column.find("a"):
+                                continue
                             team_column_link = str(team_column.find("a")["href"])
                             season_year = int(team_column_link.split("/")[-1].split(".")[0])
 
@@ -18789,10 +18734,7 @@ def parse_table(player_page, player_data, time_frame, year, player_type, ind_pla
                 row_id = row.get("id")
                 match = False
                 if row_id:
-                    if table_name.endswith("_playoffs") and not table_name == "stats_playoffs":
-                        match = re.match(r"^" + table_name[:-9] + r"\.\d+$", row_id)
-                    else:
-                        match = re.match(r"^" + table_name + r"\.\d+$", row_id)
+                    match = re.match(r"^" + table_name + r"\.\d+$", row_id)
                     if not match and (not (year or is_playoffs) and row.get("class") and "partial_table" in row.get("class") and not "spacer" in row.get("class")):
                         match = True
 
@@ -18856,12 +18798,11 @@ def parse_row(row, table_name, time_frame, year, is_playoffs, player_type, ind_p
     the_snap_header = "Penalties/Snaps" if "Penalties/Snaps" in headers[player_type["da_type"]] else ("Snaps" if "Snaps" in headers[player_type["da_type"]] else None)
 
     date = None
-    if (year):
-        season_year = int(str(row.find("td").find(text=True)).split("-")[0])
-    else:
-        team_column = get_team_column(row)
-        team_column_link = str(team_column.find("a")["href"])
-        season_year = int(team_column_link.split("/")[-1].split(".")[0])
+    team_column = get_team_column(row)
+    if not team_column.find("a"):
+        return
+    team_column_link = str(team_column.find("a")["href"])
+    season_year = int(team_column_link.split("/")[-1].split(".")[0])
 
     if not is_playoffs and (time_frame["type"] == "date" and (isinstance(time_frame["time_start"], int) or isinstance(time_frame["time_end"], int))):
         if not time_frame["time_start"] and not time_frame["time_end"]:
@@ -19210,7 +19151,7 @@ def parse_row(row, table_name, time_frame, year, is_playoffs, player_type, ind_p
                         over_header_value = advanced_over_header
                     else:
                         continue
-                elif (table_name == "passing_advanced") or table_name.startswith("advanced_passing"):
+                elif (table_name.startswith("passing_advanced")) or table_name.startswith("advanced_passing"):
                     if header_value == "CAY" or header_value == "IAY" or header_value == "YAC":
                         header_value += "RAW"
                     if advanced_over_header:
@@ -19550,7 +19491,7 @@ def handle_pick_sixes(player_data):
         else:
             raise
 
-    table_names = ["scores", "scores_playoffs"]
+    table_names = ["scores", "scores_post"]
 
     pick_six_data = {}
 
