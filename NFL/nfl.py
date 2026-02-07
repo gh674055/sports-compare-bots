@@ -1009,7 +1009,7 @@ player_search_url_format = "https://www.pro-football-reference.com/search/search
 game_splits_url_format = "https://www.pro-football-reference.com/players/{}/{}/gamelog"
 advanced_game_splits_url_format = "https://www.pro-football-reference.com/players/{}/{}/gamelog/advanced"
 yearly_game_splits_url_format = "https://www.pro-football-reference.com/players/{}/{}/gamelog/{}"
-gwd_url_format = "https://www.pro-football-reference.com/play-index/comeback.cgi?player={}"
+gwd_url_format = "https://www.pro-football-reference.com/players/comeback.cgi?player={}"
 penalties_url = "https://www.pro-football-reference.com/players/{}/{}/penalties"
 pick6_url = "https://www.pro-football-reference.com/players/{}/{}/pick-sixes"
 fantasy_url = "https://www.pro-football-reference.com/players/{}/{}/fantasy/{}"
@@ -8498,7 +8498,7 @@ def handle_player_data(player_data, time_frame, player_type, player_page, is_fan
                 return [], missing_games
             else:
                 raise
-            
+        
         playoff_data = parse_table(playoff_player_page, player_data, None, None, player_type, ind_player_type, gwd_data, pick_six_data, penalty_data)
     
     # if time_frame["playoffs"]:
@@ -18202,24 +18202,9 @@ def get_latest_player_pos(player_page):
                         if pos:
                             pos_text = pos.find(text=True)
                             if pos_text:
-                                year_row = row.find("th")
-                                year_str = year_row.find(text=True)
-                                if year_str:
-                                    season_year = re.sub("[^0-9]", "", str(year_str).split("-")[0])
-                                    if season_year:
-                                        season_year = int(season_year)
-                                    else:
-                                        season_year_str = year_row.get("csk", None)
-                                        if season_year_str:
-                                            season_year = int(season_year_str.split(".")[0])
-                                        else:
-                                            season_year = int(year_row.find("a").get("href").split("/")[2])
-                                else:
-                                    season_year_str = year_row.get("csk", None)
-                                    if season_year_str:
-                                        season_year = int(season_year_str.split(".")[0])
-                                    else:
-                                        season_year = int(year_row.find("a").get("href").split("/")[2])
+                                team_column = get_team_column(row)
+                                team_column_link = str(team_column.find("a")["href"])
+                                season_year = int(team_column_link.split("/")[-1].split(".")[0])
                                 
                                 if not season_year in player_pos_map:
                                     player_pos_map[season_year] = []
@@ -18271,24 +18256,9 @@ def get_valid_years(player_page):
                 if match:
                     row_team = get_team_column(row).find("a")
                     if row_team:
-                        year_row = row.find("th")
-                        year_str = year_row.find(text=True)
-                        if year_str:
-                            season_year = re.sub("[^0-9]", "", str(year_str).split("-")[0])
-                            if season_year:
-                                season_year = int(season_year)
-                            else:
-                                season_year_str = year_row.get("csk", None)
-                                if season_year_str:
-                                    season_year = int(season_year_str.split(".")[0])
-                                else:
-                                    season_year = int(year_row.find("a").get("href").split("/")[2])
-                        else:
-                            season_year_str = year_row.get("csk", None)
-                            if season_year_str:
-                                season_year = int(season_year_str.split(".")[0])
-                            else:
-                                season_year = int(year_row.find("a").get("href").split("/")[2])
+                        team_column = get_team_column(row)
+                        team_column_link = str(team_column.find("a")["href"])
+                        season_year = int(team_column_link.split("/")[-1].split(".")[0])
                         
                         total_valid_years.add(season_year)
                         if not table_name.endswith("_playoffs"):
@@ -18640,25 +18610,10 @@ def get_player_current_team_number(player_page, needs_numbers):
                         row_team = get_team_column(row).find("a")
                         if row_team:
                             row_team_id = row_team["href"].split("/")[2].upper()
-                            year_row = row.find("th")
 
-                            year_str = year_row.find(text=True)
-                            if year_str:
-                                season_year = re.sub("[^0-9]", "", str(year_str).split("-")[0])
-                                if season_year:
-                                    season_year = int(season_year)
-                                else:
-                                    season_year_str = year_row.get("csk", None)
-                                    if season_year_str:
-                                        season_year = int(season_year_str.split(".")[0])
-                                    else:
-                                        season_year = int(year_row.find("a").get("href").split("/")[2])
-                            else:
-                                season_year_str = year_row.get("csk", None)
-                                if season_year_str:
-                                    season_year = int(season_year_str.split(".")[0])
-                                else:
-                                    season_year = int(year_row.find("a").get("href").split("/")[2])
+                            team_column = get_team_column(row)
+                            team_column_link = str(team_column.find("a")["href"])
+                            season_year = int(team_column_link.split("/")[-1].split(".")[0])
 
                             row_team_str = get_valid_row_team_str(row_team_id, season_year)
                             
@@ -18901,27 +18856,12 @@ def parse_row(row, table_name, time_frame, year, is_playoffs, player_type, ind_p
     the_snap_header = "Penalties/Snaps" if "Penalties/Snaps" in headers[player_type["da_type"]] else ("Snaps" if "Snaps" in headers[player_type["da_type"]] else None)
 
     date = None
-    if (year or is_playoffs):
+    if (year):
         season_year = int(str(row.find("td").find(text=True)).split("-")[0])
     else:
-        year_row = row.find("th")
-        year_str = year_row.find(text=True)
-        if year_str:
-            season_year = re.sub("[^0-9]", "", str(year_str).split("-")[0])
-            if season_year:
-                season_year = int(season_year)
-            else:
-                season_year_str = year_row.get("csk", None)
-                if season_year_str:
-                    season_year = int(season_year_str.split(".")[0])
-                else:
-                    season_year = int(year_row.find("a").get("href").split("/")[2])
-        else:
-            season_year_str = year_row.get("csk", None)
-            if season_year_str:
-                season_year = int(season_year_str.split(".")[0])
-            else:
-                season_year = int(year_row.find("a").get("href").split("/")[2])
+        team_column = get_team_column(row)
+        team_column_link = str(team_column.find("a")["href"])
+        season_year = int(team_column_link.split("/")[-1].split(".")[0])
 
     if not is_playoffs and (time_frame["type"] == "date" and (isinstance(time_frame["time_start"], int) or isinstance(time_frame["time_end"], int))):
         if not time_frame["time_start"] and not time_frame["time_end"]:
@@ -18930,13 +18870,11 @@ def parse_row(row, table_name, time_frame, year, is_playoffs, player_type, ind_p
             included_table = season_year >= time_frame["time_start"] and season_year <= time_frame["time_end"]
         
         if (year or is_playoffs):
-            date_row = row.find("td", {"data-stat" : "game_date"})
-            date = dateutil.parser.parse(str(date_row.find(text=True))).date()
+            date = get_game_date(row)
         else:
             date = season_year
     else:
-        date_row = row.find("td", {"data-stat" : "game_date"})
-        date = dateutil.parser.parse(str(date_row.find(text=True))).date()
+        date = get_game_date(row)
         if is_playoffs:
             included_table = True
         else:
@@ -18983,14 +18921,14 @@ def parse_row(row, table_name, time_frame, year, is_playoffs, player_type, ind_p
                             row_data["Shared"] = {}
                     row_data["Shared"].update({"Location" : location})
                     continue
-                elif column["data-stat"] == "opp":
+                elif column["data-stat"] == "opp" or column["data-stat"] == "opp_name_abbr":
                     opponent = str(column.find("a").find(text=True)).lower()
                     if not "Shared" in row_data:
                         row_data["Shared"] = {}
                     row_data["Shared"].update({"Opponent" : opponent})
                     row_data["Shared"].update({"RawOpponent" : column.find("a")["href"].split("/")[2].upper()})
                     continue
-                elif column["data-stat"] == "gs":
+                elif column["data-stat"] == "gs" or column["data-stat"] == "is_starter":
                     start_txt = column.find(text=True)
                     if start_txt:
                         if (year or is_playoffs):
@@ -19017,6 +18955,8 @@ def parse_row(row, table_name, time_frame, year, is_playoffs, player_type, ind_p
                         if len(result_split) == 2:
                             scores = result_split[1].strip().split("-")
                             row_data["Shared"].update({"Team Score" : int(scores[0])})
+                            if scores[1].endswith("(OT)"):
+                                scores[1] = scores[1][:-4].strip()
                             row_data["Shared"].update({"Opponent Score" : int(scores[1])})
                         else:
                             row_data["Shared"].update({"Team Score" : None})
@@ -19463,6 +19403,16 @@ def parse_row(row, table_name, time_frame, year, is_playoffs, player_type, ind_p
 
         return row_data
 
+def get_game_date_row(row):
+    date_row = row.find("td", {"data-stat" : "game_date"})
+    if not date_row:
+        date_row = row.find("td", {"data-stat" : "date"})
+    return date_row
+
+def get_game_date(row):
+    date_row = get_game_date_row(row)
+    return dateutil.parser.parse(str(date_row.find(text=True))).date()
+
 def handle_gwd(player_data):
     player_url = gwd_url_format.format(player_data["id"])
     try:
@@ -19485,7 +19435,7 @@ def handle_gwd(player_data):
                 match = not row.has_attr("class") or "thead" not in row.get("class")
                 if match:
                     season_year = int(str(row.find(attrs={"data-stat" : "year_id"}).find(text=True)))
-                    date = dateutil.parser.parse(str(row.find("td", {"data-stat" : "game_date"}).find(text=True))).date()
+                    date = get_game_date(row)
                     team = str(get_team_column(row).find(text=True))
 
                     comback_row = str(row.find("td", {"data-stat" : "comeback_notes"}).find(text=True))
@@ -19551,7 +19501,7 @@ def handle_penalties(player_data, player_type, ind_player_type, is_game_page):
                     season_year_row = row.find(attrs={"data-stat" : "year_id"}).find(text=True)
                     if season_year_row:
                         season_year = int(str(season_year_row))
-                        date = dateutil.parser.parse(str(row.find("td", {"data-stat" : "game_date"}).find(text=True))).date()
+                        date = get_game_date(row)
                         team = str(get_team_column(row).find(text=True))
                         
                         acpt_pen = False
@@ -19615,7 +19565,7 @@ def handle_pick_sixes(player_data):
                     match = not row.has_attr("class") or "thead" not in row.get("class")
                     if match:
                         season_year = int(str(row.find(attrs={"data-stat" : "year_id"}).find(text=True)))
-                        date = dateutil.parser.parse(str(row.find("td", {"data-stat" : "game_date"}).find(text=True))).date()
+                        date = get_game_date(row)
                         team = str(row.find("td", {"data-stat" : "opp"}).find(text=True))
 
                         date_type = "Regular Season" if table_name == "scores" else "Playoffs"
@@ -19651,7 +19601,7 @@ def handle_fantasy(player_data, all_rows):
             standard_table_rows = table.find("tbody").find_all("tr")
             if standard_table_rows:
                 for row in standard_table_rows:
-                    date = dateutil.parser.parse(str(row.find("td", {"data-stat" : "game_date"}).find(text=True))).date()
+                    date = get_game_date(row)
                     team = str(get_team_column(row).find(text=True))
 
                     fant_points = row.find("td", {"data-stat" : "fantasy_points"}).find(text=True)
@@ -19728,7 +19678,12 @@ def handle_playoffs_data(all_rows, player_data, player_type, ind_player_type, pl
                         is_qual_match = True
 
     for data in playoff_data:
-        data = copy.deepcopy(data)
+        new_data_obj = {}
+        for over_key in data:
+            new_data_obj[over_key] = {}
+            for raw_key in data[over_key]:
+                new_data_obj[over_key][raw_key] = data[over_key][raw_key]
+        data = new_data_obj
 
         if time_frame["type"] == "date" and (isinstance(time_frame["time_start"], int) or isinstance(time_frame["time_end"], int)):
             year = data["Shared"]["Year"]
@@ -21829,7 +21784,7 @@ def get_team_schedule(seasons):
                             bye_week = int(str(row.find("th", {"data-stat" : "week_num"}).find(text=True)))
                             continue
 
-                        row_date = row.find("td", {"data-stat" : "game_date"})
+                        row_date = get_game_date_row(row)
                         row_date_str = row_date.find(text=True)
                         if not row_date_str:
                             continue
